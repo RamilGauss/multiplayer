@@ -1235,10 +1235,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\KeyDX.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\DirectX\LayerBetween_QT_DirectX.cpp"
 					>
 				</File>
@@ -1271,15 +1267,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\MouseDX.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\DirectX\SoundDX.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\VisualDX.cpp"
 					>
 				</File>
 			</Filter>
@@ -1292,10 +1280,6 @@
 				</File>
 				<File
 					RelativePath="..\DirectX\DX_main.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\KeyDX.h"
 					>
 				</File>
 				<File
@@ -1331,10 +1315,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\MouseDX.h"
-					>
-				</File>
-				<File
 					RelativePath="..\DirectX\SoundDX.h"
 					>
 				</File>
@@ -1342,11 +1322,15 @@
 					RelativePath="..\DirectX\StructDirectX.h"
 					>
 				</File>
-				<File
-					RelativePath="..\DirectX\VisualDX.h"
-					>
-				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="Shader"
+			>
+			<File
+				RelativePath="..\Shader\SimpleSample.fx"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

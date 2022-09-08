@@ -51,6 +51,8 @@ public:
   void PushButton(int button);
 
   void SendRequestCorrectPacket();
+  
+  void SendOrientAim(float x,float y,float z);
 //--------------------------------------------------------------------
 protected:
 	friend void* ClientThreadDefDisconnect(void*p);
@@ -70,6 +72,7 @@ protected:
 
 
   void WriteTransport(TBasePacket* packet);
+  void WriteStream(TBasePacket* packet);
 };
 
 extern ClientTank GlobalClientTank;

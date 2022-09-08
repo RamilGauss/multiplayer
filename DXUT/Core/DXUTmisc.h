@@ -1,4 +1,7 @@
 #include "DefineUnicode.h"
+#include <xinput.h>
+#include <dxgitype.h>
+#include "DXUT.h"
 //--------------------------------------------------------------------------------------
 // File: DXUTMisc.h
 //

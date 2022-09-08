@@ -102,6 +102,7 @@ public:
 
   unsigned short mMaxCntShell;
   unsigned char mTypeCurShell;
+  unsigned char mTypeNextShell;
 
   float mTimeReload;               // время перезарядки, сек
   float mSpeedReductionAim;        // скорость наведения
@@ -136,6 +137,8 @@ public:
   // установленные модули
   unsigned int maskModule;
 
+  guint32 mTimeRefreshOrientAim;
+
   // параметры перемещения
   float mCoordX;//координата центра танка
   float mCoordY;
@@ -148,6 +151,7 @@ public:
   float mCoordZ_Vector;
 
   // маска нажатых клавиш
+  guint32 mTimeRefreshPushButton;// когда последний раз менялась маска
   unsigned int mMaskPushButton; // см. ePushButton
   guint32 mRestReload;
 

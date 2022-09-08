@@ -7,6 +7,7 @@
 #include "ApplicationProtocolPacketRequest.h"
 #include "ApplicationProtocolPacketCmd.h"
 #include "LogerDX.h"
+#include "ApplicationProtocolPacketStream.h"
 
 
 ClientTank GlobalClientTank;
@@ -221,6 +222,17 @@ void ClientTank::WriteTransport(TBasePacket* packet)
   mTransport.write(infoData);
 }
 //--------------------------------------------------------------
+void ClientTank::WriteStream(TBasePacket* packet)
+{
+  TransportProtocolTank::InfoData* infoData = new TransportProtocolTank::InfoData;
+  infoData->ip_dst   = mIP_server;
+  infoData->port_dst = ServerLocalPort;
+  infoData->packet   = packet->getData();
+  infoData->size     = packet->getSize();
+
+  mTransport.write(infoData,false);
+}
+//--------------------------------------------------------------
 void ClientTank::SendRequestCorrectPacket()
 {
   TR_Correct_Packet R_Correct_Packet;
@@ -231,5 +243,12 @@ void ClientTank::SendRequestExitFromFight()
 {
   TR_Exit_Fight R_Exit_Fight;
   WriteTransport(&R_Exit_Fight);
+}
+//--------------------------------------------------------------
+void ClientTank::SendOrientAim(float x,float y,float z)
+{
+  TS_Orient_Aim packet;
+  packet.setXYZ(0,0,1);
+  WriteStream(&packet);
 }
 //--------------------------------------------------------------

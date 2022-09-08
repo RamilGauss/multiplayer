@@ -407,7 +407,7 @@ public:
   TA_Correct_Packet_State_Tank()
   {
     mType = APPL_TYPE_A_CORRECT_PACKET_STATE_TANK;
-    mSize = sizeof(mType);
+    mSize = sizeof(mType)+sizeof(unsigned char);
     mData = (char*)malloc(mSize);
     setType();
   }
@@ -422,7 +422,7 @@ public:
     *pCnt = cnt;
   }
   unsigned char  getCountTank(){return *getPointerCountTank();}
-  unsigned char* getPointerCountTank(){return (unsigned char*)(mData+sizeof(mType)+sizeof(unsigned char));}
+  unsigned char* getPointerCountTank(){return (unsigned char*)(mData+sizeof(mType));}
   //----------------------------------------------------------------------
   unsigned char* getPointerID(int i)
   {return (unsigned char*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefTank);}
@@ -503,18 +503,48 @@ public:
 //APPL_TYPE_A_EVENT_IN_FIGHT
 class TA_Event_In_Fight : public TBasePacket
 {
+  //### в будущем будет меняться
+
   // ushort type
+  // uchar  cnt
+    // ushort id_obj
+    // uint   state
 
 public:
+  enum{
+    eSizeDefEvent = sizeof(unsigned short)+sizeof(unsigned int),
+  };
+
   TA_Event_In_Fight()
   {
     mType = APPL_TYPE_A_EVENT_IN_FIGHT;
-    mSize = sizeof(mType);
+    mSize = sizeof(mType)+sizeof(unsigned char);
     mData = (char*)malloc(mSize);
     setType();
   }
-  // .....###
+  //-----------------------------------------------------------------------------
+  void setCnt(unsigned char cnt)
+  {
+    int new_size = sizeof(mType)+sizeof(unsigned char)+cnt*eSizeDefEvent;
+    mData = (char*)mo_realloc(mData,mSize,new_size);
+    mSize = new_size;
 
+    unsigned char* pCnt = getPointerCnt();
+    *pCnt = cnt;
+  }
+  unsigned char getCnt(){return *getPointerCnt();}
+  unsigned char* getPointerCnt(){return (unsigned char*)(mData+sizeof(mType));}
+  //-----------------------------------------------------------------------------
+  void setID(int i, unsigned short id){*getPointerID(i)=id;}
+  unsigned short getID(int i){return *getPointerID(i);}
+  unsigned short* getPointerID(int i)
+  {return (unsigned short*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefEvent);}
+  //-----------------------------------------------------------------------------
+  void setState(int i, unsigned short state){*getPointerID(i)=state;}
+  unsigned short getState(int i){return *getPointerState(i);}
+  unsigned short* getPointerState(int i)
+  {return (unsigned short*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefEvent+sizeof(unsigned short));}
+  //-----------------------------------------------------------------------------
 };
 //-----------------------------------------------------------------------------
 //APPL_TYPE_A_EXIT_FIGHT

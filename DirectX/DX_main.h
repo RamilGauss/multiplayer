@@ -17,7 +17,6 @@ protected:
 
   TCallBackExit mCallBackExit;
 
-  CModelViewerCamera          g_Camera;                // A model viewing camera
   CDXUTDialogResourceManager  g_DialogResourceManager; // manager for shared resources of dialogs
   CD3DSettingsDlg             g_SettingsDlg;           // Device settings dialog
   CDXUTTextHelper*            g_pTxtHelper;
@@ -27,11 +26,6 @@ protected:
   // Direct3D 9 resources
   ID3DXFont*                  g_pFont9;
   ID3DXSprite*                g_pSprite9;
-  ID3DXEffect*                g_pEffect9;
-  D3DXHANDLE                  g_hmWorldViewProjection;
-  D3DXHANDLE                  g_hmWorld;
-  D3DXHANDLE                  g_hfTime;
-  
   HWND hWnd;// хэндл окна
 
   bool flgWasStop;

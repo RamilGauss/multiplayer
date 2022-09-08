@@ -87,10 +87,14 @@ void TBufferizator2Thread::RegisterToClientTank()
 {
   GlobalClientTank.Register(CallBackPacketInterpretator,nsCallBackType::eRcvPacket);
   GlobalClientTank.Register(CallBackStreamInterpretator,nsCallBackType::eRcvStream);
+  
+  flgWasRegisterCallback = true;
 }
 //------------------------------------------------------------------------
 void TBufferizator2Thread::UnregisterFromClientTank()
 {
+  if(flgWasRegisterCallback==false) return;
+
   GlobalClientTank.Unregister(CallBackPacketInterpretator,nsCallBackType::eRcvPacket);
   GlobalClientTank.Unregister(CallBackStreamInterpretator,nsCallBackType::eRcvStream);
 }

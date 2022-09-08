@@ -5,8 +5,8 @@
 
 #define VERSION_PROGRAMM ((unsigned short)24) // unsigned short
 
-#define STR_VERSION_CLIENT "Клиент \"WarTanks\" v0.024 NET DX9"
-#define STR_VERSION_SERVER "Сервер \"WarTanks\" v0.024 NET DX9"
+#define STR_VERSION_CLIENT "Клиент \"Tanks\" v0.024 NET DX9"
+#define STR_VERSION_SERVER "Сервер \"Tanks\" v0.024 NET DX9"
 
 #define DURATION_FIGHT_MINUTE 5//### 15 // длительность боя,минут
 #define DURATION_FIGHT_MS (DURATION_FIGHT_MINUTE*60*1000) // длительность боя, мс
@@ -23,7 +23,7 @@ namespace nsCallBackType
 	};
 }
 
-#define NAME_TITTLE "Клиент \"WarTanks\""
+#define NAME_TITTLE "Клиент \"Tanks\""
 #define Q_MESSAGE(sError) \
 QMessageBox::warning( NULL, QObject::tr(NAME_TITTLE),sError );
 

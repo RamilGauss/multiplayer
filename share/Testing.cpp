@@ -21,12 +21,20 @@ public:
 
 void Testing(void* p, int* size)
 {
-  TA_End_Fight a;
-  a.setMsg("Привет :))");
-
-  char s[400];
-  a.getMsg(s);
-  int ab = 0;
+  TA_Correct_Packet_State_Tank packet;
+  // расчет координат возможен до загрузки карты, все данные хранятся у предсказателя
+  int cnt = 2;
+  packet.setCountTank(cnt);
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    packet.setID(i,i);
+    packet.setX(i,0);
+    packet.setY(i,1);  
+    packet.setZ(i,2);
+    packet.setXV(i,3);
+    packet.setYV(i,4);
+    packet.setZV(i,5);
+  }
 
   return ;
 

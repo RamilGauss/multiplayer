@@ -49,8 +49,6 @@ TDX::TDX()
   g_pTxtHelper = NULL;
   g_pFont9 = NULL;
   g_pSprite9 = NULL;
-  g_pEffect9 = NULL;
-
   mCallBackExit = NULL;
 }
 //-------------------------------------------------------------------------------
@@ -75,6 +73,7 @@ void TDX::Work(void* pFuncCallExit)
 //--------------------------------------------------------------------------------------
 int TDX::MainLoop()
 {
+  GlobalBufferizator2Thread.ClearWasRegisterCallback();
   GlobalManagerDirectX.flgNeedSendCorrectPacket = false;//начало
   // DXUT will create and use the best device (either D3D9 or D3D10) 
   // that is available on the system depending on which D3D callbacks are set below
@@ -241,8 +240,6 @@ HRESULT CALLBACK OnD3D9CreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURF
 HRESULT TDX::OnD3D9CreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
                                     void* pUserContext )
 {
-  HRESULT hr;
-
   V_RETURN( g_DialogResourceManager.OnD3D9CreateDevice( pd3dDevice ) );
   V_RETURN( g_SettingsDlg.OnD3D9CreateDevice( pd3dDevice ) );
 
@@ -250,34 +247,7 @@ HRESULT TDX::OnD3D9CreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_
     OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
     L"Arial", &g_pFont9 ) );
 
-  // Read the D3DX effect file
-  WCHAR str[MAX_PATH];
-  DWORD dwShaderFlags = D3DXFX_NOT_CLONEABLE;
-
-#ifdef DEBUG_VS
-  dwShaderFlags |= D3DXSHADER_FORCE_VS_SOFTWARE_NOOPT;
-#endif
-#ifdef DEBUG_PS
-  dwShaderFlags |= D3DXSHADER_FORCE_PS_SOFTWARE_NOOPT;
-#endif
-#ifdef D3DXFX_LARGEADDRESS_HANDLE
-  dwShaderFlags |= D3DXFX_LARGEADDRESSAWARE;
-#endif
-
-  V_RETURN( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, L"..\\Shader\\SimpleSample.fx" ) );
-  V_RETURN( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
-    NULL, &g_pEffect9, NULL ) );
-
-  g_hmWorldViewProjection = g_pEffect9->GetParameterByName( NULL, "g_mWorldViewProjection" );
-  g_hmWorld = g_pEffect9->GetParameterByName( NULL, "g_mWorld" );
-  g_hfTime = g_pEffect9->GetParameterByName( NULL, "g_fTime" );
-
-  // Setup the camera's view parameters
-  D3DXVECTOR3 vecEye( 0.0f, 0.0f, -5.0f );
-  D3DXVECTOR3 vecAt ( 0.0f, 0.0f, -0.0f );
-  g_Camera.SetViewParams( &vecEye, &vecAt );
-
-  return S_OK;
+  return GlobalManagerDirectX.CreateDeviceEvent(pd3dDevice, pBackBufferSurfaceDesc, pUserContext);
 }
 //--------------------------------------------------------------------------------------
 // Create any D3D9 resources that won't live through a device reset (D3DPOOL_DEFAULT) 
@@ -308,8 +278,8 @@ HRESULT TDX::OnD3D9ResetDevice( IDirect3DDevice9* pd3dDevice,
 
   // Setup the camera's projection parameters
   float fAspectRatio = pBackBufferSurfaceDesc->Width / ( FLOAT )pBackBufferSurfaceDesc->Height;
-  g_Camera.SetProjParams( D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f );
-  g_Camera.SetWindow( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
+  GlobalManagerDirectX.getCamera()->SetProjParams( D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f );
+  GlobalManagerDirectX.getCamera()->SetWindow( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
 
   g_HUD.SetLocation( pBackBufferSurfaceDesc->Width - 170, 0 );
   g_HUD.SetSize( 170, 170 );
@@ -330,7 +300,8 @@ void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext 
 void TDX::OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
 {
   // Update the camera's position based on user input 
-  g_Camera.FrameMove( fElapsedTime );
+  GlobalManagerDirectX.getCamera()->FrameMove( fElapsedTime );
+  GlobalManagerDirectX.MouseEvent(fTime, fElapsedTime, pUserContext);
 }
 //--------------------------------------------------------------------------------------
 // Render the scene using the D3D9 device
@@ -343,7 +314,7 @@ void CALLBACK OnD3D9FrameRender( IDirect3DDevice9* pd3dDevice, double fTime, flo
 //--------------------------------------------------------------------------------------
 void TDX::OnD3D9FrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
 {
-#ifdef VISUAL_HANDLER
+#if 0
   HRESULT hr;
   D3DXMATRIXA16 mWorld;
   D3DXMATRIXA16 mView;
@@ -385,43 +356,8 @@ void TDX::OnD3D9FrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float f
 
     V( pd3dDevice->EndScene() );
   }
-#else
-  HRESULT hr;
-  D3DXMATRIXA16 mWorld;
-  D3DXMATRIXA16 mView;
-  D3DXMATRIXA16 mProj;
-  D3DXMATRIXA16 mWorldViewProjection;
-
-  // Clear the render target and the zbuffer 
-  V( pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB( 0, 45, 45, 255 ), 1.0f, 0 ) );
-
-  // Render the scene
-  if( SUCCEEDED( pd3dDevice->BeginScene() ) )
-  {
-    // Get the projection & view matrix from the camera class
-    mWorld = *g_Camera.GetWorldMatrix();
-    mProj = *g_Camera.GetProjMatrix();
-    mView = *g_Camera.GetViewMatrix();
-
-    mWorldViewProjection = mWorld * mView * mProj;
-
-    // Update the effect's variables.  Instead of using strings, it would 
-    // be more efficient to cache a handle to the parameter by calling 
-    // ID3DXEffect::GetParameterByName
-    V( g_pEffect9->SetMatrix( g_hmWorldViewProjection, &mWorldViewProjection ) );
-    V( g_pEffect9->SetMatrix( g_hmWorld, &mWorld ) );
-    V( g_pEffect9->SetFloat( g_hfTime, ( float )fTime ) );
-
-    DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" ); // These events are to help PIX identify what the code is doing
-    RenderText();
-    V( g_HUD.OnRender( fElapsedTime ) );
-    V( g_SampleUI.OnRender( fElapsedTime ) );
-    DXUT_EndPerfEvent();
-
-    V( pd3dDevice->EndScene() );
-  }
 #endif
-  GlobalManagerDirectX.Work();
+  GlobalManagerDirectX.VisualEvent(pd3dDevice, fTime, fElapsedTime, pUserContext);
 }
 //--------------------------------------------------------------------------------------
 // Handle messages to the application
@@ -458,7 +394,7 @@ LRESULT TDX::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* 
     return 0;
 
   // Pass all remaining windows messages to camera so it can respond to user input
-  g_Camera.HandleMessages( hWnd, uMsg, wParam, lParam );
+  GlobalManagerDirectX.getCamera()->HandleMessages( hWnd, uMsg, wParam, lParam );
 
   return 0;
 }
@@ -473,7 +409,7 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 //--------------------------------------------------------------------------------------
 void TDX::OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
 {
-  GlobalManagerDirectX.mKey.Work(nChar, bKeyDown, bAltDown, pUserContext);
+  GlobalManagerDirectX.KeyEvent(nChar, bKeyDown, bAltDown, pUserContext);
 }
 //--------------------------------------------------------------------------------------
 // Handles the GUI events

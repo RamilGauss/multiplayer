@@ -11,7 +11,7 @@ using namespace nsServerStruct;
 TRoom::TRoom()
 {
   mTransport          = NULL;
-  mTimeBeginCountDown  = guint32(-1);
+  mTimeBeginCountDown = guint32(-1);
   mTimeAfterCountDown = guint32(-1);
   mState              = eLoad;
   flgEventReconnect   = false;
@@ -187,9 +187,11 @@ void TRoom::WorkFight()
   std::list<TPrediction::TEvent*>::iterator it = mPrediction.mListFreshEvent.begin();
   std::list<TPrediction::TEvent*>::iterator eit = mPrediction.mListFreshEvent.end();
   TA_Event_In_Fight event_packet;
+  event_packet.setCnt(mPrediction.mListFreshEvent.size());
   while(it!=eit)// формирование пакета
   {
-    // event_packet.setXXX(...);
+    //event_packet.setID((*it)->id);
+    //event_packet.setID((*it)->state);
     it++;
   }
   //------------------------------------------------------------------------------------

@@ -7,6 +7,7 @@
 
 class TBufferizator2Thread
 {
+  bool flgWasRegisterCallback;
 
   enum{
        eCntElemStream   = 200,
@@ -22,6 +23,8 @@ class TBufferizator2Thread
 public:
   TBufferizator2Thread();
   ~TBufferizator2Thread();
+
+  void ClearWasRegisterCallback(){flgWasRegisterCallback=false;}
 
   void RcvPacket(void* dataPacket, int sizePacket);
   void RcvStream(void* dataPacket, int sizePacket);

@@ -1,4 +1,7 @@
 #include "DefineUnicode.h"
+#include <wtypes.h>
+#include <d3dx9math.h>
+#include "DXUTmisc.h"
 //--------------------------------------------------------------------------------------
 // File: Camera.h
 //

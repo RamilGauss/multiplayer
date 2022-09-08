@@ -3,6 +3,8 @@
 
 #include "StructDirectX.h"
 #include <list>
+class TManagerObjectDX;
+class TManagerModel;
 
 class TLoaderMap
 {
@@ -15,11 +17,13 @@ class TLoaderMap
     nsStructDirectX::TOrient3 Orient;
   };
 
-  std::list<TDescObject> listObject;
+  std::list<TDescObject> mListObject;
 
+  TManagerObjectDX* mMO; 
+  TManagerModel* mMM;
 
 public:
-  TLoaderMap();
+  TLoaderMap(TManagerObjectDX* pMO, TManagerModel* pMM);
   ~TLoaderMap();
 
   enum{
