@@ -7,3 +7,5 @@ D:\MyProjects\multiPlayer\bin\wottools\obj\Debug\wottools.Properties.Resources.r
 D:\MyProjects\multiPlayer\bin\wottools\obj\Debug\wottools.csproj.GenerateResource.Cache
 D:\MyProjects\multiPlayer\bin\wottools\obj\Debug\wottools.exe
 D:\MyProjects\multiPlayer\bin\wottools\obj\Debug\wottools.pdb
+D:\Temp\multiPlayer\bin\wottools\obj\Debug\wottools.exe
+D:\Temp\multiPlayer\bin\wottools\obj\Debug\wottools.pdb

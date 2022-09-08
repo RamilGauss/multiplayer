@@ -667,6 +667,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\share\SelfTank.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\share\Testing.cpp"
 					>
 				</File>
@@ -764,6 +768,10 @@
 				</File>
 				<File
 					RelativePath="..\share\SaveOnHDD.h"
+					>
+				</File>
+				<File
+					RelativePath="..\share\SelfTank.h"
 					>
 				</File>
 				<File
