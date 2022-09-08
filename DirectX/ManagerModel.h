@@ -71,6 +71,4 @@ protected:
 
 };
 
-extern TManagerModel GlobalManagerModel;
-
 #endif

@@ -44,6 +44,10 @@ TObjectDX::TObjectDX()
   SetOneMatrix(mWorld);
   
   mArrMatrixSubset = NULL;
+
+  flgShow = true;// показан ли объект на сцене
+
+  sName = NULL;//имя объекта
 }
 //------------------------------------------------------------------------------------------------
 TObjectDX::~TObjectDX()
@@ -52,7 +56,8 @@ TObjectDX::~TObjectDX()
 }
 //------------------------------------------------------------------------------------------------
 void TObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj)
-{                    
+{          
+  if(flgShow==false) return;
   mModel->Draw(mState,             //                           (От ObjectDX)
                mArrMatrixSubset,//кол-во совпадает с cSubset (От ObjectDX)
                &mWorld,// где и как расположен объект         (От ObjectDX)
@@ -90,6 +95,8 @@ void TObjectDX::Done()
 {
   delete[] mArrMatrixSubset;
   mArrMatrixSubset = NULL;
+  delete sName;
+  sName = NULL;
 }
 //------------------------------------------------------------------------------------------------
 void TObjectDX::SetOneMatrix(D3DXMATRIXA16& matrix)
@@ -98,5 +105,13 @@ void TObjectDX::SetOneMatrix(D3DXMATRIXA16& matrix)
   matrix._21 = 0;matrix._22 = 1;matrix._23 = 0;matrix._24 = 0;
   matrix._31 = 0;matrix._32 = 0;matrix._33 = 1;matrix._34 = 0;
   matrix._41 = 0;matrix._42 = 0;matrix._43 = 0;matrix._44 = 1;
+}
+//------------------------------------------------------------------------------------------------
+void TObjectDX::SetName(const char* name)
+{
+  int len = strlen(name)+1;
+  delete sName;
+  sName = new char[len];
+  strcpy(sName,name);
 }
 //------------------------------------------------------------------------------------------------

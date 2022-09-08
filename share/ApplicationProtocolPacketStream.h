@@ -91,13 +91,13 @@ public:
 
 };
 //-----------------------------------------------------------------------------
-// APPL_TYPE_S_COUNT_DOWN
+// APPL_TYPE_G_S_COUNT_DOWN
 class TS_Count_Down : public TBasePacket
 {
 	// ushort type, float second_rest
 
 public:
-	TS_Count_Down(){mType=APPL_TYPE_S_COUNT_DOWN;
+	TS_Count_Down(){mType=APPL_TYPE_G_S_COUNT_DOWN;
 	mSize = sizeof(mType)+sizeof(float);
 	mData = (char*)malloc(mSize);
 	setType();

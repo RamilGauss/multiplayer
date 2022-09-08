@@ -94,10 +94,10 @@ void CallBackPacketManagerGUI(void* data, int size)
   // фильтр
   switch(type)
   {
-    case APPL_TYPE_A_CORRECT_PACKET_STATE_OBJECT:
-    case APPL_TYPE_A_CORRECT_PACKET_STATE_TANK:
-    case APPL_TYPE_A_SCORE:
-    case APPL_TYPE_A_EVENT_IN_FIGHT:
+    case APPL_TYPE_G_A_CORRECT_PACKET_STATE_OBJECT:
+    case APPL_TYPE_G_A_CORRECT_PACKET_STATE_TANK:
+    case APPL_TYPE_G_A_SCORE:
+    case APPL_TYPE_G_A_EVENT_IN_FIGHT:
       return;
   }
   //---------------------------------------------------------------
@@ -121,9 +121,9 @@ void CallBackStreamManagerGUI(void* data, int size)
   // фильтр
   switch(type)
   {
-    case APPL_TYPE_S_LOAD_MAP:
-    case APPL_TYPE_S_COUNT_DOWN:
-    case APPL_TYPE_S_FIGHT_COORD_BULLET:
+    case APPL_TYPE_G_S_LOAD_MAP:
+    case APPL_TYPE_G_S_COUNT_DOWN:
+    case APPL_TYPE_G_S_FIGHT_COORD_BULLET:
       // обработка возложена на буфферизатор
       return;
   }
@@ -148,10 +148,8 @@ void CallBackDisconnectManagerGUI(void* data, int size)// оставить
 }
 //-------------------------------------------------------------------------------------------
 
-
 TManagerGUI::TManagerGUI(QWidget* parent):QObject(parent)
 {
-  mGameForm.setCallbackDirectX(CallBackExitDirectX);
   pManagerGUI = this;
 
   GlobalClientTank.Register(CallBackPacketManagerGUI,nsCallBackType::eRcvPacket);
@@ -168,16 +166,26 @@ TManagerGUI::~TManagerGUI()
   GlobalClientTank.Unregister(CallBackDisconnectManagerGUI,nsCallBackType::eDisconnect);
   
   pManagerGUI = NULL;
+  Done();
 }
 //-----------------------------------------------------------------------
 void TManagerGUI::start()
 {
+  pManagerDirectX = new TManagerDirectX;
+  pManagerDirectX->Start(CallBackExitDirectX);
+  pManagerDirectX->SetKeyHandler(&mKeyHandler);
+  pManagerDirectX->SetMouseHandler(&mMouseHandler);
+  mKeyHandler.SetManagerDirectX(pManagerDirectX);
+
+  mGameForm.SetManagerDirectX(pManagerDirectX);// дать информацию о ManagerDirectX
+
   if(pCurrentForm)
     pCurrentForm->showGUI();
 }
 //-----------------------------------------------------------------------
 void TManagerGUI::stop()
 {
+  Done();
   _exit(0);
 }
 //-----------------------------------------------------------------------
@@ -313,7 +321,7 @@ void TManagerGUI::AnalizCode_A_In_Fight(char* pData, int size)
     case TA_In_Fight::eFight:
       OpenGameForm();
       // загрузка карты по коду
-      GlobalManagerDirectX.LoadMap(packet);
+      pManagerDirectX->LoadMap(packet);
       break;
     case TA_In_Fight::eWait:
       OpenWaitForm();
@@ -379,5 +387,11 @@ void TManagerGUI::ExitFromFight()
 void TManagerGUI::ExitFromWait()
 {
   OpenRoomForm();
+}
+//---------------------------------------------------------------------------------------------
+void TManagerGUI::Done()
+{
+  delete pManagerDirectX;
+  pManagerDirectX = NULL;
 }
 //---------------------------------------------------------------------------------------------

@@ -45,6 +45,9 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Struct3D.h"
 #include "LoaderMap.h"
 #include "DXUTcamera.h"
+#include "Bufferizator2Thread.h"
+#include "ManagerModel.h"
+#include "ManagerObjectDX.h"
 #ifndef EDITOR_MODEL
   #include "Prediction.h"
 #endif
@@ -52,7 +55,12 @@ you may contact in writing [ramil2085@gmail.com].
 class TDX;
 struct IDirect3DDevice9;
 class TObjectDX;
+class IMouseHandler;
+class IKeyHandler;
 
+#define WM_STOP_DXUT (WM_USER+1)
+
+// BigJack - графический движок
 class TManagerDirectX
 {
 #ifndef EDITOR_MODEL
@@ -76,7 +84,6 @@ class TManagerDirectX
   GThread* threadLoadMap;
   bool flgNeedLoadMap;
   bool flgLoadingMap;
-  bool flgNeedLoadModel;
   enum{
     eWaitLoadModel=100
   };
@@ -107,10 +114,54 @@ class TManagerDirectX
   D3DXHANDLE         hmWorld;
   D3DXHANDLE         hfTime;
 
-public:
+  IDirect3DDevice9* mD3DDevice;
+  
+  TDX* pDX;// поставщик событий Windows, 
+  // !!! НЕ править на объект, т.к. нельзя включать в этот файл #include "DX_main.h"
+  TBufferizator2Thread mBufferizator2Thread;// буфер, отсюда берем задания для движка
+  TManagerModel        mManagerModel;
+  TManagerObjectDX     mManagerObjectDX;
 
+  IKeyHandler*   mKeyHandler;
+  IMouseHandler* mMouseHandler;
+
+public:
+  //----------------------------------------------------------------
+  //                              INTERFACE
+  //----------------------------------------------------------------
   TManagerDirectX();
   ~TManagerDirectX();
+
+  // основной интерфейс
+  // активация событий винды
+  bool Start(void *pFuncCallExit);
+  void Stop();
+  
+  void Show();// показать окно
+  void Hide();// скрыть окно
+
+  // без PipeLine
+  void LoadMap(TA_In_Fight& packet);
+  TObjectDX* LoadObjectDX(unsigned int id/*уникальный идентификатор, не карта*/,bool flgNeedClear = false);// потом как правило идет настройка объекта
+
+  TBufferizator2Thread* GetPipeLine(){return &mBufferizator2Thread;}// для управления ManagerDirectX
+  //------------------------------------------------
+  // а теперь немного расширим функционал движка:
+  // контроль над событиями клавиатуры
+  void SetKeyHandler(IKeyHandler* pKeyHandler);
+  // контроль над событиями мышки
+  void SetMouseHandler(IMouseHandler* pMouseHandler);
+  //----------------------------------------------------------------
+  //                             ~INTERFACE
+  //----------------------------------------------------------------
+protected:
+  // вызывается из DXUT либо на отрисовку либо для очистки буфера
+  void Refresh();
+
+protected:
+  friend class TDX;
+  friend void* ThreadLoadMap(void* p);
+  friend HRESULT WINAPI DXUTMainLoop( TManagerDirectX* pObjRefresh, HACCEL hAccel);
 
   CModelViewerCamera* getCamera(){return &mCamera;}
 
@@ -118,14 +169,9 @@ public:
   D3DXHANDLE* getWorld(){return &hmWorld;}
   D3DXHANDLE* getTime(){return &hfTime;}
 
-
   void VisualEvent(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext);
   void KeyEvent(unsigned int nChar, bool bKeyDown, bool bAltDown, void* pUserContext);
   void MouseEvent(double fTime, float fElapsedTime, void* pUserContext);
-  void LoadMap(TA_In_Fight& packet);
-
-  // вызывается из DXUT либо на отрисовку либо для очистки буфера
-  void Refresh();
 
   void CreateDeviceEvent(IDirect3DDevice9* pd3dDevice, 
     const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
@@ -136,9 +182,6 @@ public:
 
 protected:
 
-  friend class TDX;
-  friend void* ThreadLoadMap(void* p);
-
   void Calc();
   void Optimize();
   void Render(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext);
@@ -146,10 +189,10 @@ protected:
 
   void ThreadLoadMap();
 
+  void ParserPacket();// обработка пакета
+
 protected:
   TSoundDX  mSound;
 };
-
-extern TManagerDirectX GlobalManagerDirectX;
 
 #endif

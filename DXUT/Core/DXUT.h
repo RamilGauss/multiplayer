@@ -284,7 +284,8 @@ HRESULT WINAPI DXUTSetD3D9Device( IDirect3DDevice9* pd3dDevice );
 HRESULT WINAPI DXUTSetD3D10Device( ID3D10Device* pd3dDevice, IDXGISwapChain* pSwapChain );
 
 // Choose either DXUTMainLoop or implement your own main loop 
-HRESULT WINAPI DXUTMainLoop( HACCEL hAccel = NULL );
+class TManagerDirectX;
+HRESULT WINAPI DXUTMainLoop( TManagerDirectX* pObjRefresh = NULL,HACCEL hAccel = NULL );
 
 // If not using DXUTMainLoop consider using DXUTRender3DEnvironment
 void WINAPI DXUTRender3DEnvironment(); 

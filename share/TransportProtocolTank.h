@@ -46,7 +46,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "hArray.h"
 #include "GCS.h"
 
-
+// Melissa - транспорт
 class TransportProtocolTank 
 {
   // для сервера, в клиенте такая ситуация маловероятна

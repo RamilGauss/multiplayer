@@ -42,6 +42,12 @@ you may contact in writing [ramil2085@gmail.com].
 #include "hArray.h"
 #include "HiTimer.h"
 
+#ifdef _MSC_VER
+# pragma warning(push)
+# pragma warning( disable : 4150 )
+#endif
+
+
 class TBasePacket;
 class TRoom;
 class TTank;
@@ -115,7 +121,6 @@ namespace nsServerStruct
     unsigned short port;
     guint32        ms_time;
 
-    //int* packet;
     TBasePacket* packet;
   
     TPacketServer(){packet=NULL;}
@@ -124,5 +129,10 @@ namespace nsServerStruct
   //---------------------------------------------------------------
 
 }
+#ifdef _MSC_VER
+# pragma warning(pop)
+#endif
+
+
 #endif
 

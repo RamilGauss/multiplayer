@@ -43,14 +43,13 @@ you may contact in writing [ramil2085@gmail.com].
 #include <QTimer>
 #include "ApplicationProtocolMainPacket.h"
 #include "ApplicationProtocolPacketStream.h"
-#include "LayerBetween_QT_DirectX.h"
-#include "Bufferizator2Thread.h"
+#include "ManagerDirectX.h"
 
 //-------------------------------------------------------------------------------------------
 GameForm::GameForm(QWidget *parent)
 : TBaseGUI(parent)
 {
-  pCallBackExitDirectX = NULL;
+  pManagerDirectX = NULL;
 }
 //---------------------------------------------------------------------------------------------
 GameForm::~GameForm()
@@ -90,22 +89,11 @@ void GameForm::Translate(unsigned short type, char*pData, int size)
 //---------------------------------------------------------------------------------------------
 void GameForm::showGUI()
 {
-  startDX();
+  pManagerDirectX->Show();
 }
 //---------------------------------------------------------------------------------------------
 void GameForm::hideGUI()
 {
-  stopDX();
+  pManagerDirectX->Hide();
 }
 //---------------------------------------------------------------------------------------------
-void GameForm::startDX()
-{
-  g_LB_QT_DX.StartDirectX(pCallBackExitDirectX);
-}
-//---------------------------------------------------------------------------------------------
-void GameForm::stopDX()
-{
-  g_LB_QT_DX.StopDirectX();
-}
-//---------------------------------------------------------------------------------------------
-

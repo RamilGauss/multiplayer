@@ -38,7 +38,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "SDKmisc.h"
 #include "LoaderModelDX.h"
 #include "LoggerDX.h"
-#include "LoaderModelDXTest.h"
+#include "LoaderModelDX.h"
 #include "BL_Debug.h"
 
 
@@ -272,11 +272,7 @@ void TModelDX::ResetDevice()
 bool TModelDX::Load(LPCWSTR strFilenameData)
 {
   ILoaderModelDX* pLoadModel;
-#if 1
-  pLoadModel = new TLoaderModelDXTest(m_pd3dDevice);//в основном для экспериментов
-#else
   pLoadModel = new TLoaderModelDX(m_pd3dDevice);
-#endif
   if(pLoadModel->Load(strFilenameData)==false)
   {
     USES_CONVERSION;

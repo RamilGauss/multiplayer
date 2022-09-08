@@ -34,13 +34,20 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#ifndef LoaderObjectDXH
-#define LoaderObjectDXH
+#ifndef LoaderModelDXTestH
+#define LoaderModelDXTestH
+
+#include "DefineUnicode.h"
 
 #include "ILoaderModelDX.h"
+#include "MeshLoader.h"
+
+// для экспериментов (для WoT)
 
 class TLoaderModelDX : public ILoaderModelDX
 {
+
+  CMeshLoader mMeshLoader;
 
 public:
   TLoaderModelDX(IDirect3DDevice9* _m_pd3dDevice);
@@ -56,8 +63,7 @@ protected:
   bool LoadPart(int i);
   bool LoadVector(char* strNumPart,char* key,D3DXVECTOR3& vector);
 
-  bool LoadVertex(char* strNumPart, TEffectDX::VERTEX* vertex, int cnt);
-  bool LoadIndexes(char* strNumPart, DWORD *indexes, int cnt);
+  bool LoadMesh(char* strNumPart, TDefGroup *mArrDefGroup);
 
 
 protected:

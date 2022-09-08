@@ -44,7 +44,9 @@ you may contact in writing [ramil2085@gmail.com].
   #include "Bufferizator2Thread.h"
 #endif
 #include <atlconv.h>
+#include "LoggerDX.h"
 
+#define LOG_DX
 
 //--------------------------------------------------------------------------------------
 // UI control IDs
@@ -84,6 +86,7 @@ TDX::TDX()
   g_pFont9 = NULL;
   g_pSprite9 = NULL;
   mCallBackExit = NULL;
+  pManagerDirectX = NULL;
 }
 //-------------------------------------------------------------------------------
 TDX::~TDX()
@@ -91,15 +94,54 @@ TDX::~TDX()
   g_pDX = NULL;
 }
 //-------------------------------------------------------------------------------
-void TDX::Work(void* pFuncCallExit)
+DWORD WINAPI ThreadDirectX(LPVOID pDX)
 {
+  // начали отрисовывать видео, озвучивать сцену, отлавливать события Key и Mouse
+  ((TDX*)pDX)->Work();
+  return 0;
+}
+//---------------------------------------------
+bool TDX::Start(TManagerDirectX* pMDX, void* pFuncCallExit)
+{
+  hWnd = NULL;
   flgWasStop = false;
   mCallBackExit = (TCallBackExit)pFuncCallExit;
+  pManagerDirectX = pMDX;
+  DWORD ThreadId;
+  HANDLE handle = CreateThread(NULL, // default security attributes
+    0,                               // use default stack size  
+    ThreadDirectX,                   // thread function 
+    this,                            // argument to thread function 
+    0,                               // use default creation flags 
+    &ThreadId);                      // returns the thread identifier 
+  if(handle==NULL)
+    return false;
+  while(flgActive==false||hWnd==NULL)
+  {
+    ht_msleep(eTimeWaitStart);// ждем запуска 
+  }
+  return (handle!=NULL);
+}
+//-------------------------------------------------------------------------------
+void TDX::Work()
+{
+  flgActive  = true;
   MainLoop();
   if(mCallBackExit&&!flgWasStop)
     mCallBackExit();
+  flgActive = false;
 }
 //-------------------------------------------------------------------------------
+void TDX::Show()
+{
+  ShowWindow(hWnd,SW_SHOW);
+} 
+//--------------------------------------------------------------------------------------------------------
+void TDX::Hide()
+{
+  ShowWindow(hWnd,SW_HIDE);
+}
+//--------------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
 // Entry point to the program. Initializes everything and goes into a message processing 
@@ -108,44 +150,40 @@ void TDX::Work(void* pFuncCallExit)
 int TDX::MainLoop()
 {
 #ifndef EDITOR_MODEL
-  GlobalBufferizator2Thread.ClearWasRegisterCallback();
+  pManagerDirectX->GetPipeLine()->ClearWasRegisterCallback();
 #endif
-  GlobalManagerDirectX.flgNeedSendCorrectPacket = false;//начало
+  pManagerDirectX->flgNeedSendCorrectPacket = false;//начало
   // DXUT will create and use the best device (either D3D9 or D3D10) 
   // that is available on the system depending on which D3D callbacks are set below
 
-  // Set DXUT callbacks
-  //for(int i = 0 ; i < 2 ; i++)
-  {
-    DXUTSetCallbackMsgProc( ::MsgProc );
+  DXUTSetCallbackMsgProc( ::MsgProc );
 
-    DXUTSetCallbackKeyboard( ::OnKeyboard );
-    DXUTSetCallbackFrameMove( ::OnFrameMove );
-    DXUTSetCallbackDeviceChanging( ::ModifyDeviceSettings );
+  DXUTSetCallbackKeyboard( ::OnKeyboard );
+  DXUTSetCallbackFrameMove( ::OnFrameMove );
+  DXUTSetCallbackDeviceChanging( ::ModifyDeviceSettings );
 
-    DXUTSetCallbackD3D9DeviceAcceptable( ::IsD3D9DeviceAcceptable );
-    DXUTSetCallbackD3D9DeviceCreated( ::OnD3D9CreateDevice );
-    DXUTSetCallbackD3D9DeviceReset( ::OnD3D9ResetDevice );
-    DXUTSetCallbackD3D9DeviceLost( ::OnD3D9LostDevice );
-    DXUTSetCallbackD3D9DeviceDestroyed( ::OnD3D9DestroyDevice );
-    DXUTSetCallbackD3D9FrameRender( ::OnD3D9FrameRender );
+  DXUTSetCallbackD3D9DeviceAcceptable( ::IsD3D9DeviceAcceptable );
+  DXUTSetCallbackD3D9DeviceCreated( ::OnD3D9CreateDevice );
+  DXUTSetCallbackD3D9DeviceReset( ::OnD3D9ResetDevice );
+  DXUTSetCallbackD3D9DeviceLost( ::OnD3D9LostDevice );
+  DXUTSetCallbackD3D9DeviceDestroyed( ::OnD3D9DestroyDevice );
+  DXUTSetCallbackD3D9FrameRender( ::OnD3D9FrameRender );
 
-    InitApp();
-    DXUTInit( true, true, NULL ); // Parse the command line, show msgboxes on error, no extra command line params
-    DXUTSetCursorSettings( true, true );
-    USES_CONVERSION;
+  InitApp();
+  DXUTInit( true, true, NULL ); // Parse the command line, show msgboxes on error, no extra command line params
+  DXUTSetCursorSettings( true, true );
+  USES_CONVERSION;
 #ifndef EDITOR_MODEL    
-    DXUTCreateWindow( &hWnd, A2W(STR_VERSION_CLIENT) );
+  DXUTCreateWindow( &hWnd, A2W(STR_VERSION_CLIENT) );
 #else
-    DXUTCreateWindow( &hWnd, A2W(STR_VERSION_EDITOR) );
+  DXUTCreateWindow( &hWnd, A2W(STR_VERSION_EDITOR) );
 #endif
-    DXUTCreateDevice( true, 640, 480 );
-    DXUTMainLoop(); // Enter into the DXUT render loop
-    DXUTDestroyState();// уничтожить DXUT
+  DXUTCreateDevice( true, 640, 480 );
+  DXUTMainLoop(pManagerDirectX); // Enter into the DXUT render loop
+  DXUTDestroyState();// уничтожить DXUT
 #ifndef EDITOR_MODEL    
-    GlobalBufferizator2Thread.UnregisterFromClientTank();
+  pManagerDirectX->GetPipeLine()->UnregisterFromClientTank();
 #endif
-  }
   //--------------------------------------------------
   return 0;
 }
@@ -154,7 +192,19 @@ bool TDX::Stop()
 {
   flgWasStop = true;
 
-  return PostMessage( hWnd,WM_QUIT,0,NULL);
+  if(flgActive==false) return true;
+#ifdef LOG_DX
+  GlobalLoggerDX.WriteF_time("TDX::Stop(): PostMessage().\n");
+#endif
+  bool res = PostMessage( hWnd,WM_STOP_DXUT/*WM_QUIT*/,0,NULL);
+  hWnd = NULL;
+  if(res==false) return false;
+
+  while(flgActive)
+  {
+    ht_msleep(eTimeWaitStop);
+  }
+  return true;
 }
 //--------------------------------------------------------------------------------------
 // Initialize the app 
@@ -290,7 +340,7 @@ HRESULT TDX::OnD3D9CreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_
     OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
     L"Arial", &g_pFont9 ) );
 
-  GlobalManagerDirectX.CreateDeviceEvent(pd3dDevice, pBackBufferSurfaceDesc, pUserContext);
+  pManagerDirectX->CreateDeviceEvent(pd3dDevice, pBackBufferSurfaceDesc, pUserContext);
   return S_OK;
 }
 //--------------------------------------------------------------------------------------
@@ -319,7 +369,7 @@ HRESULT TDX::OnD3D9ResetDevice( IDirect3DDevice9* pd3dDevice,
   V_RETURN( D3DXCreateSprite( pd3dDevice, &g_pSprite9 ) );
   g_pTxtHelper = new CDXUTTextHelper( g_pFont9, g_pSprite9, NULL, NULL, 15 );
 
-  GlobalManagerDirectX.ResetDevice(pd3dDevice,pBackBufferSurfaceDesc, pUserContext);
+  pManagerDirectX->ResetDevice(pd3dDevice,pBackBufferSurfaceDesc, pUserContext);
 
   g_HUD.SetLocation( pBackBufferSurfaceDesc->Width - 170, 0 );
   g_HUD.SetSize( 170, 170 );
@@ -340,8 +390,8 @@ void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext 
 void TDX::OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
 {
   // Update the camera's position based on user input 
-  GlobalManagerDirectX.getCamera()->FrameMove( fElapsedTime );
-  GlobalManagerDirectX.MouseEvent(fTime, fElapsedTime, pUserContext);
+  pManagerDirectX->getCamera()->FrameMove( fElapsedTime );
+  pManagerDirectX->MouseEvent(fTime, fElapsedTime, pUserContext);
 }
 //--------------------------------------------------------------------------------------
 // Render the scene using the D3D9 device
@@ -397,7 +447,7 @@ void TDX::OnD3D9FrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float f
     V( pd3dDevice->EndScene() );
   }
 #endif
-  GlobalManagerDirectX.VisualEvent(pd3dDevice, fTime, fElapsedTime, pUserContext);
+  pManagerDirectX->VisualEvent(pd3dDevice, fTime, fElapsedTime, pUserContext);
 }
 //--------------------------------------------------------------------------------------
 // Handle messages to the application
@@ -434,7 +484,7 @@ LRESULT TDX::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* 
     return 0;
 
   // Pass all remaining windows messages to camera so it can respond to user input
-  GlobalManagerDirectX.getCamera()->HandleMessages( hWnd, uMsg, wParam, lParam );
+  pManagerDirectX->getCamera()->HandleMessages( hWnd, uMsg, wParam, lParam );
 
   return 0;
 }
@@ -449,7 +499,7 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 //--------------------------------------------------------------------------------------
 void TDX::OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
 {
-  GlobalManagerDirectX.KeyEvent(nChar, bKeyDown, bAltDown, pUserContext);
+  pManagerDirectX->KeyEvent(nChar, bKeyDown, bAltDown, pUserContext);
 }
 //--------------------------------------------------------------------------------------
 // Handles the GUI events
@@ -487,7 +537,7 @@ void TDX::OnD3D9LostDevice( void* pUserContext )
   g_SettingsDlg.OnD3D9LostDevice();
   if( g_pFont9 ) g_pFont9->OnLostDevice();
   
-  GlobalManagerDirectX.OnLostDevice();
+  pManagerDirectX->OnLostDevice();
 
   SAFE_RELEASE( g_pSprite9 );
   SAFE_DELETE( g_pTxtHelper );
@@ -506,7 +556,7 @@ void TDX::OnD3D9DestroyDevice( void* pUserContext )
   g_DialogResourceManager.OnD3D9DestroyDevice();
   g_SettingsDlg.OnD3D9DestroyDevice();
 
-  GlobalManagerDirectX.OnDestroyDevice();
+  pManagerDirectX->OnDestroyDevice();
   SAFE_RELEASE( g_pFont9 );
 }
 //--------------------------------------------------------------------------------------

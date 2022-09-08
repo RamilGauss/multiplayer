@@ -50,7 +50,7 @@ public:
   ~TManagerObjectDX();
 
   // список объектов загруженной карты
-  // статические, серверные(разрушаемые неподвижные, танки, снаряды), клиентские объекты
+  // статические, серверные(разрушаемые неподвижные, танки, снаряды), клиентские объекты(анимация)
 
   void Clean();
   void Add(TObjectDX* pObj);
@@ -61,7 +61,5 @@ public:
 protected:
 
 };
-
-extern TManagerObjectDX GlobalManagerObjectDX;
 
 #endif

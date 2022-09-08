@@ -45,7 +45,7 @@ you may contact in writing [ramil2085@gmail.com].
 #endif
 
 
-//APPL_TYPE_S_FIGHT_COORD_BULLET
+//APPL_TYPE_G_S_FIGHT_COORD_BULLET
 class TS_Fight_Coord_Bullet : public TBasePacket
 {
   // ushort type, 
@@ -90,7 +90,7 @@ public:
 public:
   TS_Fight_Coord_Bullet()
   {
-    mType=APPL_TYPE_S_FIGHT_COORD_BULLET;
+    mType=APPL_TYPE_G_S_FIGHT_COORD_BULLET;
     mSize = eSizeHeader;
     mData = (char*)malloc(mSize);
     setType();

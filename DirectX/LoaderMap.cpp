@@ -60,17 +60,17 @@ int TLoaderMap::LoadMap(unsigned int id_map, bool flgCleanObject)
 {
   mListObject.clear();
                                             ht_msleep(5000);//### симул€ци€
-  LoadMapObject();
+  LoadMapObject();// загрузить список объектов карты
 
   if(flgCleanObject)
     mMO->Clean();
 
-  LoadObjectDX();
+  LoadObjectDX();// загрузить объекты
 
   return eSuccess;
 }
 //----------------------------------------------------------------------------------
-bool TLoaderMap::LoadObjectDX(TDescObject * pDescObjDX, bool flgCleanObject)
+TObjectDX* TLoaderMap::LoadObjectDX(TDescObject * pDescObjDX, bool flgCleanObject)
 {
   if(flgCleanObject)
     mMO->Clean();
@@ -81,12 +81,10 @@ bool TLoaderMap::LoadObjectDX(TDescObject * pDescObjDX, bool flgCleanObject)
   *pDesc = *pDescObjDX;
   mListObject.push_back(pDesc);
 
-  LoadObjectDX();
-
-  return true;
+  return LoadObjectDX();
 }
 //----------------------------------------------------------------------------------
-void TLoaderMap::LoadObjectDX()
+TObjectDX* TLoaderMap::LoadObjectDX()
 {
   // пробежка по объектам и их загрузка 
   std::list<TDescObject*>::iterator it = mListObject.begin();
@@ -104,6 +102,7 @@ void TLoaderMap::LoadObjectDX()
       pObjectDX->SetOrient(pDesc->orient);
       pObjectDX->SetState(pDesc->state);
       mMO->Add(pObjectDX);
+      return pObjectDX;
     }
     else
     {
@@ -112,6 +111,7 @@ void TLoaderMap::LoadObjectDX()
     }
     it++;
   }
+  return NULL;
 }
 //----------------------------------------------------------------------------------
 void TLoaderMap::LoadMapObject()//###

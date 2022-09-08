@@ -74,6 +74,4 @@ public:
 
 };
 
-extern TBufferizator2Thread GlobalBufferizator2Thread;
-
 #endif

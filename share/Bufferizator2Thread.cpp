@@ -39,7 +39,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ApplicationProtocolDef.h"
 #include "ClientTank.h"
 
-TBufferizator2Thread GlobalBufferizator2Thread;
+TBufferizator2Thread* pBufferizator2Thread = NULL;
 
 void CallBackPacketInterpretator(void* data, int size)
 {
@@ -48,14 +48,15 @@ void CallBackPacketInterpretator(void* data, int size)
   switch(type)
   {
     // фильтр пакетов
-    case APPL_TYPE_A_CORRECT_PACKET_STATE_OBJECT:
-    case APPL_TYPE_A_CORRECT_PACKET_STATE_TANK:
-    case APPL_TYPE_A_SCORE:
-    case APPL_TYPE_A_EVENT_IN_FIGHT:
+    case APPL_TYPE_G_A_CORRECT_PACKET_STATE_OBJECT:
+    case APPL_TYPE_G_A_CORRECT_PACKET_STATE_TANK:
+    case APPL_TYPE_G_A_SCORE:
+    case APPL_TYPE_G_A_EVENT_IN_FIGHT:
     {
       char* dataPacket = (char*)data + sizeof(TIP_Port);
       int sizePacket   = size - sizeof(TIP_Port);
-      GlobalBufferizator2Thread.RcvPacket(dataPacket,sizePacket);
+      BL_ASSERT(pBufferizator2Thread);
+      pBufferizator2Thread->RcvPacket(dataPacket,sizePacket);
       break;
     }
     default:;
@@ -70,14 +71,15 @@ void CallBackStreamInterpretator(void* data, int size)
   switch(type)
   {
     // фильтр пакетов
-    case APPL_TYPE_S_LOAD_MAP:
+    case APPL_TYPE_G_S_LOAD_MAP:
       break;
-    case APPL_TYPE_S_COUNT_DOWN:
-    case APPL_TYPE_S_FIGHT_COORD_BULLET:
+    case APPL_TYPE_G_S_COUNT_DOWN:
+    case APPL_TYPE_G_S_FIGHT_COORD_BULLET:
     {
       char* dataPacket = (char*)data + sizeof(TIP_Port);
       int sizePacket   = size - sizeof(TIP_Port);
-      GlobalBufferizator2Thread.RcvStream(dataPacket,sizePacket);
+      BL_ASSERT(pBufferizator2Thread);
+      pBufferizator2Thread->RcvStream(dataPacket,sizePacket);
       break;
     }
     default:;
@@ -91,12 +93,12 @@ TBufferizator2Thread::TBufferizator2Thread()
   mQueuePacket(eCntElemPacket,eSizeElemPacket),
   mQueueStream(eCntElemStream,eSizeElemStream)
 {
-
+  pBufferizator2Thread = this;
 }
 //------------------------------------------------------------------------
 TBufferizator2Thread::~TBufferizator2Thread()
 {
-
+  pBufferizator2Thread = NULL;
 }
 //------------------------------------------------------------------------
 void TBufferizator2Thread::RcvPacket(void* dataPacket, int sizePacket)
@@ -121,9 +123,10 @@ bool TBufferizator2Thread::GetStream(void* dataPacket, int& sizePacket,guint32 &
 //------------------------------------------------------------------------
 void TBufferizator2Thread::RegisterToClientTank()
 {
+#ifndef EDITOR_MODEL
   GlobalClientTank.Register(CallBackPacketInterpretator,nsCallBackType::eRcvPacket);
   GlobalClientTank.Register(CallBackStreamInterpretator,nsCallBackType::eRcvStream);
-  
+#endif
   flgWasRegisterCallback = true;
 }
 //------------------------------------------------------------------------
@@ -131,7 +134,9 @@ void TBufferizator2Thread::UnregisterFromClientTank()
 {
   if(flgWasRegisterCallback==false) return;
 
+#ifndef EDITOR_MODEL
   GlobalClientTank.Unregister(CallBackPacketInterpretator,nsCallBackType::eRcvPacket);
   GlobalClientTank.Unregister(CallBackStreamInterpretator,nsCallBackType::eRcvStream);
+#endif
 }
 //------------------------------------------------------------------------

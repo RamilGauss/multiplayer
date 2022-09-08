@@ -70,6 +70,12 @@ public:
 
   TPoint3& Min(){return mMin;};
   TPoint3& Max(){return mMax;};
+
+  bool IsCorrect();
+
+  bool Contains(TPoint3& point);
+  bool Collision(TBoundingBox& bb);
+  float VolumeCollision(TBoundingBox& bb);// у.е. в кубе
 };
 
 #if defined( WIN32 )

@@ -97,7 +97,7 @@ public:
 class TA_In_Fight : public TBasePacket
 {
 	// ushort type, 
-  // uchar code, 
+  // uchar code (см. enum{eFight..), 
   // ushort codeMap - код карты только если code==eFight
   // uchar - кол-во танков в команде
   // массив длинной CountTankInCommand*sizeof(DefTank)
@@ -111,9 +111,9 @@ class TA_In_Fight : public TBasePacket
   };
 public:
   enum{eFight=0,// в бой
-    eWait,   // ждите
-    eFailBlockTank, // танк нельзя использовать т.к. он еще находится в бою
-    eFail,   // отказ выйти в бой, сбой в протоколе (отладка)
+       eWait,   // ждите
+       eFailBlockTank, // танк нельзя использовать т.к. он еще находится в бою
+       eFail,   // отказ выйти в бой, сбой в протоколе (отладка)
   };
   //-------------------------------------------------------------------------------------------
   TA_In_Fight()
@@ -270,13 +270,13 @@ protected:
   //-------------------------------------------------------------------------------------------
 };
 //-----------------------------------------------------------------------------
-//APPL_TYPE_A_FIRE_RELOAD
+//APPL_TYPE_G_A_FIRE_RELOAD
 class TA_Fire_Reload : public TBasePacket
 {
 	// ushort type, float time_sec
 	float mTime_sec;
 public:
-	TA_Fire_Reload(){mType=APPL_TYPE_A_FIRE_RELOAD;};
+	TA_Fire_Reload(){mType=APPL_TYPE_G_A_FIRE_RELOAD;};
 
 	float getTime(){return mTime_sec;}; 
 	float* getPointerTime(){return (float*)(mData+sizeof(mType));}; 
@@ -388,7 +388,7 @@ public:
 
   TA_Correct_Packet_State_Object()
   {
-    mType = APPL_TYPE_A_CORRECT_PACKET_STATE_OBJECT;
+    mType = APPL_TYPE_G_A_CORRECT_PACKET_STATE_OBJECT;
     mSize = sizeof(mType);
     mData = (char*)malloc(mSize);
     setType();
@@ -442,7 +442,7 @@ public:
 
   TA_Correct_Packet_State_Tank()
   {
-    mType = APPL_TYPE_A_CORRECT_PACKET_STATE_TANK;
+    mType = APPL_TYPE_G_A_CORRECT_PACKET_STATE_TANK;
     mSize = sizeof(mType)+sizeof(unsigned char);
     mData = (char*)malloc(mSize);
     setType();
@@ -516,7 +516,7 @@ class TA_Score : public TBasePacket
 public:
   TA_Score()
   {
-    mType = APPL_TYPE_A_SCORE;
+    mType = APPL_TYPE_G_A_SCORE;
     mSize = sizeof(mType)+sizeof(unsigned char)+sizeof(unsigned char)+sizeof(unsigned int);
     mData = (char*)malloc(mSize);
     setType();
@@ -553,7 +553,7 @@ public:
 
   TA_Event_In_Fight()
   {
-    mType = APPL_TYPE_A_EVENT_IN_FIGHT;
+    mType = APPL_TYPE_G_A_EVENT_IN_FIGHT;
     mSize = sizeof(mType)+sizeof(unsigned char);
     mData = (char*)malloc(mSize);
     setType();

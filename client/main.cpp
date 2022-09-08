@@ -49,8 +49,6 @@ you may contact in writing [ramil2085@gmail.com].
 
 int main(int argc, char *argv[])
 {
-  //Testing();
-
   g_thread_init( NULL );
   err_Init();
   errSTR_Init();

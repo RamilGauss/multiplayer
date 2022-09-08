@@ -65,15 +65,27 @@ protected:
   HWND hWnd;// хэндл окна
 
   bool flgWasStop;
+  bool flgActive;
+  TManagerDirectX* pManagerDirectX;
+
+  enum{eTimeWaitStop=50,// мс
+       eTimeWaitStart=50,
+  };
+
 public:
   TDX();
   ~TDX();
 
-  void Work(void* pFuncCallExit);
+  bool Start(TManagerDirectX* pMDX, void* pFuncCallExit);
   bool Stop();
+  void Show();
+  void Hide();
+
 
 protected:
-
+  friend DWORD WINAPI ThreadDirectX(LPVOID pDX);
+  void Work();
+protected:
   //----------------------------------------------------------------------------
   // friend functions
   //----------------------------------------------------------------------------

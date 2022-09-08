@@ -176,6 +176,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\KeyHandlerEditorModel.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\mainEditor.cpp"
 				>
 			</File>
@@ -185,6 +189,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\KeyHandlerEditorModel.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -355,6 +363,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\share\Bufferizator2Thread.h"
+					>
+				</File>
+				<File
 					RelativePath="..\share\CallBackRegistrator.h"
 					>
 				</File>
@@ -432,6 +444,10 @@
 				>
 				<File
 					RelativePath="..\share\BoundingBox.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\share\Bufferizator2Thread.cpp"
 					>
 				</File>
 				<File
@@ -795,11 +811,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\DirectX\IKeyHandler.h"
+					>
+				</File>
+				<File
 					RelativePath="..\DirectX\ILoaderModelDX.h"
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\LayerBetween_QT_DirectX.h"
+					RelativePath="..\DirectX\IMouseHandler.h"
 					>
 				</File>
 				<File
@@ -812,10 +832,6 @@
 				</File>
 				<File
 					RelativePath="..\DirectX\LoaderModelDX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\LoaderModelDXTest.h"
 					>
 				</File>
 				<File
@@ -871,10 +887,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\LayerBetween_QT_DirectX.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\DirectX\LoaderListModel.cpp"
 					>
 				</File>
@@ -884,10 +896,6 @@
 				</File>
 				<File
 					RelativePath="..\DirectX\LoaderModelDX.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\LoaderModelDXTest.cpp"
 					>
 				</File>
 				<File

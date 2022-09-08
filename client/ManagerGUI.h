@@ -43,13 +43,19 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ClientMain.h"
 #include <QObject>
 #include "SaveOnHDD.h"
+#include "KeyHandler.h"
+#include "MouseHandler.h"
 
 class TManagerGUIEvent;
+class TManagerDirectX;
 
 class TManagerGUI : public QObject
 {
 
   Q_OBJECT
+
+  TKeyHandler   mKeyHandler;
+  TMouseHandler mMouseHandler;
 
 public:
   TManagerGUI(QWidget* parent=NULL);
@@ -62,6 +68,8 @@ public:
 
 protected:
   
+  TManagerDirectX* pManagerDirectX;
+
   TBaseGUI* pCurrentForm;
 
 
@@ -87,6 +95,7 @@ protected:
   void OpenRoomForm();
   void OpenClientMainForm();
 
+  void Done();
 
   void LoadMap(TA_In_Fight& packet);
 };

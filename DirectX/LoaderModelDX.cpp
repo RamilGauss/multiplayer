@@ -38,10 +38,11 @@ you may contact in writing [ramil2085@gmail.com].
 #include "LoggerDX.h"
 #include "BL_Debug.h"
 #include "glib\gmem.h"
+#include "DefineUnicode.h"
 
 using namespace nsStruct3D;
 
-TLoaderModelDX::TLoaderModelDX(IDirect3DDevice9* _m_pd3dDevice):
+TLoaderModelDX::TLoaderModelDX(  IDirect3DDevice9* _m_pd3dDevice):
 ILoaderModelDX(_m_pd3dDevice)
 {
 
@@ -111,7 +112,7 @@ bool TLoaderModelDX::LoadFileResource()
   mFileIniRes.Open(pStrPathPrimitive);
   if(mFileIniRes.IsOpen()==false)
     return false;
-  
+
   for(int i = 0 ; i < mCntGroup ; i++)
     if(LoadPart(i)==false) return false;
 
@@ -123,7 +124,7 @@ bool TLoaderModelDX::LoadPart(int i)
 {
   char strNumPart[20];
   sprintf(strNumPart,"PART%d",i);
-  
+
   mArrDefGroup[i].mIndex = mFileIniRes.GetInteger(strNumPart,"Index",0);
   //------------------------------------------------------------
   char * str = mFileIniRes.GetValue(strNumPart,"strPathShader");
@@ -180,15 +181,8 @@ bool TLoaderModelDX::LoadPart(int i)
   mArrDefGroup[i].mTypeLOD   = mFileIniRes.GetInteger(strNumPart,"mTypeLOD",0);
   mArrDefGroup[i].mflgNormal = mFileIniRes.GetInteger(strNumPart,"mflgNormal",1);
   //-----------------------------------------------------------------------
-  //mArrDefGroup[i].cntIndexes = mFileIniRes.GetInteger(strNumPart,"cntIndexes",0);
-  //mArrDefGroup[i].cntVertex  = mFileIniRes.GetInteger(strNumPart,"cntVertex",0);
-  //if(mArrDefGroup[i].cntIndexes==0||mArrDefGroup[i].cntVertex==0) return false;
-  //mArrDefGroup[i].indexes = new DWORD[mArrDefGroup[i].cntIndexes];
-  //mArrDefGroup[i].vertex  = new TEffectDX::VERTEX[mArrDefGroup[i].cntVertex];
-  //if(LoadVertex(strNumPart,mArrDefGroup[i].vertex,mArrDefGroup[i].cntVertex)==false)
-    //return false;
-  //if(LoadIndexes(strNumPart,mArrDefGroup[i].indexes,mArrDefGroup[i].cntIndexes)==false)
-    //return false;
+  if(LoadMesh(strNumPart,&mArrDefGroup[i])==false)
+    return false;
   return true;
 }
 //--------------------------------------------------------------------------------
@@ -244,48 +238,82 @@ float TLoaderModelDX::FindFloat_Semicolon(char** buffer,bool* ok)
   return res; 
 }
 //--------------------------------------------------------------------------------
-bool TLoaderModelDX::LoadVertex(char* strNumPart, TEffectDX::VERTEX* vertex, int cnt)
+bool TLoaderModelDX::LoadMesh(char* strNumPart,TDefGroup *mArrDefGroup)
 {
-  char *str = mFileIniRes.GetValue(strNumPart,"vertex");
+  HRESULT hr;
+  char strPathPrimitives[MAX_PATH];
+  char* str = mFileIniRes.GetValue(strNumPart,"primitives");
+  if(str)
+  {
+    strcpy(strPathPrimitives,pStrFilenameData);
+    strcat(strPathPrimitives,"\\");
+    strcat(strPathPrimitives,str);
+    g_free(str);
+  }
+  else return false;
 
-  char* buffer = str;
-  for(int i = 0 ; i < cnt ; i++ )
-  {
-    bool ok;
-    vertex[i].position.x = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str); return false;}
-    vertex[i].position.y = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str); return false;}
-    vertex[i].position.z = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str); return false;}
-    //-----------------------------------------------------------------
-    vertex[i].normal.x = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str); return false;}
-    vertex[i].normal.y = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str); return false;}
-    vertex[i].normal.z = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str); return false;}
-    //-----------------------------------------------------------------
-    vertex[i].texcoord.x = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str); return false;}
-    vertex[i].texcoord.y = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str); return false;}
-  }
-  g_free(str);
+  USES_CONVERSION;
+  V(mMeshLoader.Create(m_pd3dDevice,A2W(strPathPrimitives)));
+  mArrDefGroup->pMesh = mMeshLoader.GetMesh();
+  mMeshLoader.ZeroMesh();// отвязаться
+
   return true;
-}
-//--------------------------------------------------------------------------------
-bool TLoaderModelDX::LoadIndexes(char* strNumPart, DWORD* indexes, int cnt)
-{
-  char *str = mFileIniRes.GetValue(strNumPart,"indexes");
-  char* buffer = str;
-  for(int i = 0 ; i < cnt ; i++ )
-  {
-    bool ok;
-    indexes[i] = FindInt_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str); return false;}
-  }
-  g_free(str);
+//  HRESULT hr;
+//  LPD3DXMESH pMesh = NULL;
+//  LPD3DXBUFFER bufEffectInstances = NULL;
+//  LPD3DXBUFFER bufAdjacency = NULL;
+//  DWORD dwMaterials = 0;
+//
+//  V( D3DXLoadMeshFromX( strPathPrimitives,
+//                        D3DXMESH_SYSTEMMEM,
+//                        m_pd3dDevice,
+//                        NULL,//&bufAdjacency,
+//                        NULL,
+//                        NULL,//&bufEffectInstances,
+//                        NULL,//&dwMaterials,
+//                        &pMesh
+//                        ) );
+//  mArrDefGroup->cntVertex  = 3;//###pMesh->GetNumVertices();
+//  mArrDefGroup->vertex  = new TEffectDX::VERTEX[mArrDefGroup->cntVertex];
+//  mArrDefGroup->cntIndexes = 3;//###3*pMesh->GetNumFaces();
+//  mArrDefGroup->indexes = new DWORD[mArrDefGroup->cntIndexes];
+//#if 0
+//  //###
+//  mArrDefGroup->indexes[0]=0;
+//  mArrDefGroup->indexes[1]=1;
+//  mArrDefGroup->indexes[2]=2;
+//  //###
+//#endif
+//#if 1
+//  DWORD size = pMesh->GetNumBytesPerVertex();
+//  // копировать из меша
+//#pragma pack(push, 1)
+//  struct TPosText
+//  {
+//    D3DXVECTOR3 position;
+//    D3DXVECTOR2 texcoord;
+//  };
+//#pragma pack(pop)
+//  TPosText* pVertex;
+//  V( pMesh->LockVertexBuffer( 0 , ( void** )&pVertex ) );
+//  for(int i = 0 ; i < mArrDefGroup->cntVertex ; i++ )
+//  {
+//    mArrDefGroup->vertex[i].position = pVertex[i].position;
+//    mArrDefGroup->vertex[i].normal   = D3DXVECTOR3(0,0,1);
+//    mArrDefGroup->vertex[i].texcoord = pVertex[i].texcoord;
+//  }
+//  //memcpy( mArrDefGroup->vertex, pVertex, /*mArrDefGroup->cntVertex **/ sizeof( TEffectDX::VERTEX ) );
+//  pMesh->UnlockVertexBuffer();
+//
+//  // Copy the index data
+//  DWORD* pIndex;
+//  V( pMesh->LockIndexBuffer( 0 , ( void** )&pIndex ) );
+//  memcpy( mArrDefGroup->indexes, pIndex, mArrDefGroup->cntIndexes * sizeof( DWORD ) );
+//  pMesh->UnlockIndexBuffer();
+//
+//#endif
+//  // уничтожить меш и другие ресурсы
+//  SAFE_RELEASE(pMesh);
   return true;
 }
 //--------------------------------------------------------------------------------

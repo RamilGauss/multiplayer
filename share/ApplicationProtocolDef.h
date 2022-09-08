@@ -69,36 +69,43 @@ you may contact in writing [ramil2085@gmail.com].
 // ANSWER - A
 
 #define APPL_TYPE_BASE_ANSWER             200
+// Client protocol (Client GUI)
 #define APPL_TYPE_A_TRY_CONNECT_TO_SERVER (APPL_TYPE_BASE_ANSWER+0) // попытка соединиться 
 #define APPL_TYPE_A_ECHO                  (APPL_TYPE_BASE_ANSWER+1) // эхо,пустышка
-#define APPL_TYPE_A_FIRE_RELOAD           (APPL_TYPE_BASE_ANSWER+2) // в ответ на выстрел, время перезарядки
-#define APPL_TYPE_A_IN_FIGHT              (APPL_TYPE_BASE_ANSWER+3) // ответ на запрос войти в бой
-#define APPL_TYPE_A_GET_LIST_TANK         (APPL_TYPE_BASE_ANSWER+4) // дать список танков
+#define APPL_TYPE_A_IN_FIGHT              (APPL_TYPE_BASE_ANSWER+2) // ответ на запрос войти в бой
+#define APPL_TYPE_A_GET_LIST_TANK         (APPL_TYPE_BASE_ANSWER+3) // дать список танков
 
-#define APPL_TYPE_A_EXIT_WAIT             (APPL_TYPE_BASE_ANSWER+5) // ответ на желание выйти из очереди на ожидание
-#define APPL_TYPE_A_EXIT_FIGHT            (APPL_TYPE_BASE_ANSWER+6) // ответ на желание выйти из боя
+#define APPL_TYPE_A_EXIT_WAIT             (APPL_TYPE_BASE_ANSWER+4) // ответ на желание выйти из очереди на ожидание
+#define APPL_TYPE_A_EXIT_FIGHT            (APPL_TYPE_BASE_ANSWER+5) // ответ на желание выйти из боя
 
-#define APPL_TYPE_A_END_FIGHT             (APPL_TYPE_BASE_ANSWER+7) // конец битвы, пока не знаю что передавать (результат боя, КЭП)
+#define APPL_TYPE_A_END_FIGHT             (APPL_TYPE_BASE_ANSWER+6) // конец битвы, результат боя
 
+// Graphic Engine (BigJack)
+
+#define APPL_TYPE_G_A_FIRE_RELOAD                 (APPL_TYPE_BASE_ANSWER+7) // в ответ на выстрел, время перезарядки
 // в общем виде события боя, может быть несколько событий в одном пакете:
-#define APPL_TYPE_A_CORRECT_PACKET_STATE_OBJECT  (APPL_TYPE_BASE_ANSWER+8)  // корректирующий пакет, не требует эффектов DX
-#define APPL_TYPE_A_CORRECT_PACKET_STATE_TANK    (APPL_TYPE_BASE_ANSWER+9)  // корректирующий пакет, не требует эффектов DX
+#define APPL_TYPE_G_A_CORRECT_PACKET_STATE_OBJECT (APPL_TYPE_BASE_ANSWER+8)  // корректирующий пакет, не требует эффектов DX
+#define APPL_TYPE_G_A_CORRECT_PACKET_STATE_TANK   (APPL_TYPE_BASE_ANSWER+9)  // корректирующий пакет, не требует эффектов DX
 
-#define APPL_TYPE_A_SCORE                        (APPL_TYPE_BASE_ANSWER+10)  // и корректирующий пакет и просто пакет
+#define APPL_TYPE_G_A_SCORE                       (APPL_TYPE_BASE_ANSWER+10)  // и корректирующий пакет и просто пакет
 // как ответ на пустой вопрос - вопроса не было
-#define APPL_TYPE_A_EVENT_IN_FIGHT               (APPL_TYPE_BASE_ANSWER+11) // событие, показать на экране
+#define APPL_TYPE_G_A_EVENT_IN_FIGHT              (APPL_TYPE_BASE_ANSWER+11) // событие, показать на экране
 
 //-----------------------------------------------------------------------------
 // STREAM - S
 // информация о танках, снарядах
 
 #define APPL_TYPE_BASE_STREAM           300
+// Client protocol (Client GUI)
+
 #define APPL_TYPE_S_GARAGE              (APPL_TYPE_BASE_STREAM+0) // статистика: клиентов в бою и общее кол-во
 #define APPL_TYPE_S_WAIT                (APPL_TYPE_BASE_STREAM+1) // статистика: кол-во ожидающих в очереди, в бою и общее кол-во
+
+// Graphic Engine (BigJack)
 // размер пакета будет уточнятся
-#define APPL_TYPE_S_LOAD_MAP            (APPL_TYPE_BASE_STREAM+2)// во время загрузки карты на сервере
-#define APPL_TYPE_S_COUNT_DOWN          (APPL_TYPE_BASE_STREAM+3) // статистика обратного отсчета в начале боя
-#define APPL_TYPE_S_FIGHT_COORD_BULLET  (APPL_TYPE_BASE_STREAM+4) // ориентация и скорости танков, снарядов
+#define APPL_TYPE_G_S_LOAD_MAP            (APPL_TYPE_BASE_STREAM+2) // во время загрузки карты на сервере
+#define APPL_TYPE_G_S_COUNT_DOWN          (APPL_TYPE_BASE_STREAM+3) // статистика обратного отсчета в начале боя
+#define APPL_TYPE_G_S_FIGHT_COORD_BULLET  (APPL_TYPE_BASE_STREAM+4) // ориентация и скорости танков, снарядов
 
 #define APPL_TYPE_S_ORIENT_AIM          (APPL_TYPE_BASE_STREAM+5) 
 // приходит с клиента 10 раз в секунду, инфо по ориентации прицела, существует 3 вида: серверный, клиентский, мышиный текущий

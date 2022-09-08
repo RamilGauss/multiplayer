@@ -41,6 +41,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <list>
 class TManagerObjectDX;
 class TManagerModel;
+class TObjectDX;
 
 class TLoaderMap
 {
@@ -69,11 +70,11 @@ public:
   // читает карту: координаты, ориентацию и состояние объектов в менеджер объектов
   int LoadMap(unsigned int id_map, bool flgCleanObject = true);
 
-  bool LoadObjectDX(TDescObject * pDescObjDX, bool clean_MO = false);
+  TObjectDX* LoadObjectDX(TDescObject * pDescObjDX, bool clean_MO = false);
 
 protected:
   void LoadMapObject();
-  void LoadObjectDX();
+  TObjectDX* LoadObjectDX();
 
 
 };

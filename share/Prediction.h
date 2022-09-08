@@ -42,6 +42,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <list>
 
 // предсказатель
+// Robert - физический движок
 class TPrediction
 {
 

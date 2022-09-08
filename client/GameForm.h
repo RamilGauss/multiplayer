@@ -39,11 +39,13 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "BaseGUI.h"
 
+class TManagerDirectX;
+
 class GameForm : public TBaseGUI
 {
   Q_OBJECT
 
-  void* pCallBackExitDirectX;
+  TManagerDirectX *pManagerDirectX;
 
 public:
   GameForm(QWidget *parent = NULL);
@@ -51,7 +53,7 @@ public:
 
   virtual void Translate(unsigned short type, char*pData, int size);
 
-  void setCallbackDirectX(void* _pCallBackExitDirectX){pCallBackExitDirectX=_pCallBackExitDirectX;}
+  void SetManagerDirectX(TManagerDirectX* pMDX){pManagerDirectX=pMDX;}
 
 protected:
   friend void CallBackPacketGameForm(void* data, int size);

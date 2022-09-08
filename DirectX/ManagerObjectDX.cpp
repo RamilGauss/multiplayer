@@ -37,9 +37,6 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ManagerObjectDX.h"
 
 
-TManagerObjectDX GlobalManagerObjectDX;
-
-
 TManagerObjectDX::TManagerObjectDX()
 {
 

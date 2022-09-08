@@ -176,11 +176,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\KeyHandler.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\ManagerGUI.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MouseHandler.cpp"
 				>
 			</File>
 			<File
@@ -276,6 +284,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\KeyHandler.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerGUI.h"
 				>
 				<FileConfiguration
@@ -300,6 +312,10 @@
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\MouseHandler.h"
+				>
 			</File>
 			<File
 				RelativePath=".\WaitForm.h"
@@ -1259,10 +1275,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\LayerBetween_QT_DirectX.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\DirectX\LoaderListModel.cpp"
 					>
 				</File>
@@ -1272,10 +1284,6 @@
 				</File>
 				<File
 					RelativePath="..\DirectX\LoaderModelDX.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\LoaderModelDXTest.cpp"
 					>
 				</File>
 				<File
@@ -1335,10 +1343,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\LayerBetween_QT_DirectX.h"
-					>
-				</File>
-				<File
 					RelativePath="..\DirectX\LoaderListModel.h"
 					>
 				</File>
@@ -1348,10 +1352,6 @@
 				</File>
 				<File
 					RelativePath="..\DirectX\LoaderModelDX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\LoaderModelDXTest.h"
 					>
 				</File>
 				<File

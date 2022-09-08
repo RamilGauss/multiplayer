@@ -44,6 +44,11 @@ class TManagerObjectDX;
 
 class TObjectDX : public TObject
 {
+protected:
+
+  bool flgShow;// показан ли объект на сцене
+  
+  char* sName;//имя объекта
 
 public:
   TObjectDX();
@@ -57,6 +62,8 @@ public:
   void SetOrient(nsStruct3D::TOrient3 orient);
   void SetState(unsigned int state);
 
+  void SetShow(bool show){flgShow=show;}
+  void SetName(const char* name);
 
 protected:
   void Done();
@@ -64,7 +71,7 @@ protected:
 
   friend class TManagerObjectDX;
 
-  TModelDX* mModel; 
+  TModelDX* mModel;// внешний вид 
   unsigned int ID_map;// идентификатор на карте
 
   unsigned int mState;

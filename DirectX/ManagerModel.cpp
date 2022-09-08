@@ -45,8 +45,6 @@ you may contact in writing [ramil2085@gmail.com].
 #include <atlconv.h>
 
 
-TManagerModel GlobalManagerModel;
-
 TManagerModel::TManagerModel()
 {
   mArrPathModel = NULL;
@@ -108,6 +106,7 @@ void TManagerModel::OnDestroyDevice()
     if(pModel)
       pModel->Destroy();
   }
+  mArrModel.Clear();
 }
 //--------------------------------------------------------------------------------------
 bool TManagerModel::LoadListPath()

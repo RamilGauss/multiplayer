@@ -35,6 +35,10 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "DXUT.h"
 #include "ManagerDirectX.h"
+#include "LoggerDX.h"
+
+//#define LOG_DX
+
 #define DXUT_MIN_WINDOW_SIZE_X 200
 #define DXUT_MIN_WINDOW_SIZE_Y 200
 #define DXUT_COUNTER_STAT_LENGTH 2048
@@ -1795,13 +1799,28 @@ LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     else
         return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
-
-
+//--------------------------------------------------------------------------------------
+void Log(MSG &msg)
+{
+#ifdef LOG_DX
+  if(msg.message!=WM_PAINT&&
+     msg.message!=WM_NCMOUSEMOVE&&
+     msg.message!=WM_NCLBUTTONDOWN&&
+     msg.message!=WM_MOUSEFIRST&&
+     msg.message!=WM_KEYFIRST&&
+     msg.message!=WM_KEYDOWN&&
+     msg.message!=WM_KEYUP&&
+     msg.message!=WM_CHAR&&
+     msg.message!=WM_TIMER
+    )
+    GlobalLoggerDX.WriteF_time("Event Win:%u\n",msg.message);
+#endif
+}
 //--------------------------------------------------------------------------------------
 // Handles app's message loop and rendering when idle.  If DXUTCreateDevice() or DXUTSetD3D*Device() 
 // has not already been called, it will call DXUTCreateWindow() with the default parameters.  
 //--------------------------------------------------------------------------------------
-HRESULT WINAPI DXUTMainLoop( HACCEL hAccel )
+HRESULT WINAPI DXUTMainLoop( TManagerDirectX* pObjRefresh, HACCEL hAccel)// передать объект для рефреша
 {
     HRESULT hr;
 
@@ -1853,11 +1872,12 @@ HRESULT WINAPI DXUTMainLoop( HACCEL hAccel )
     msg.message = WM_NULL;
     PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
 
-    while( WM_QUIT != msg.message )
-    //while( WM_DESTROY != msg.message )
+    while(msg.message!=WM_STOP_DXUT&&msg.message!=WM_QUIT)
+    //while(!(msg.message&WM_STOP_DXUT))
     {
         // Use PeekMessage() so we can use idle time to render the scene. 
         bGotMsg = ( PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) != 0 );
+        Log(msg);
 
         if( bGotMsg )
         {
@@ -1871,8 +1891,9 @@ HRESULT WINAPI DXUTMainLoop( HACCEL hAccel )
         }
         else
         {
-            // Render a frame during idle time (no messages are waiting)
-            DXUTRender3DEnvironment();
+          if(pObjRefresh) pObjRefresh->Refresh();
+          // Render a frame during idle time (no messages are waiting)
+          DXUTRender3DEnvironment();
         }
     }
 
@@ -2648,8 +2669,8 @@ HRESULT DXUTChangeDevice( DXUTDeviceSettings* pNewDeviceSettings,
     }
 
     // Make the window visible
-    if( !IsWindowVisible( DXUTGetHWND() ) )
-        ShowWindow( DXUTGetHWND(), SW_SHOW );
+    //if( !IsWindowVisible( DXUTGetHWND() ) )
+        //ShowWindow( DXUTGetHWND(), SW_SHOW );
 
     // Ensure that the display doesn't power down when fullscreen but does when windowed
     if( !DXUTIsWindowed() )
@@ -3144,8 +3165,6 @@ void DXUTRender3DEnvironment9()
 {
     HRESULT hr;
 
-    GlobalManagerDirectX.Refresh();
-
     if( GetDXUTState().GetDeviceLost() || DXUTIsRenderingPaused() || !DXUTIsActive() )
     {
         // Window is minimized or paused so yield CPU time to other processes
@@ -3371,8 +3390,6 @@ void DXUTRender3DEnvironment9()
 
     return;
 }
-
-
 //--------------------------------------------------------------------------------------
 // Cleans up the 3D environment by:
 //      - Calls the device lost callback 

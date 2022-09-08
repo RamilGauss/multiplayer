@@ -42,9 +42,12 @@ you may contact in writing [ramil2085@gmail.com].
 #include "DXUT.h"
 #include "ObjectDX.h"
 
+#include "DX_main.h"
+#include "IKeyHandler.h"
+#include "IMouseHandler.h"
+
 #ifndef EDITOR_MODEL
   #include "ClientTank.h"
-  #include "Bufferizator2Thread.h"
 #endif
 
 #define LOG_DX
@@ -52,18 +55,22 @@ you may contact in writing [ramil2085@gmail.com].
 
 using namespace nsStruct3D;
 
-TManagerDirectX GlobalManagerDirectX;
-
 TManagerDirectX::TManagerDirectX():
-mLoaderMap(&GlobalManagerObjectDX,&GlobalManagerModel)
+mLoaderMap(&mManagerObjectDX,&mManagerModel)
 {
+  mD3DDevice = NULL;
+  pDX = new TDX;
   mLastTimeSendMouseStream = 0;
-  flgNeedLoadModel         = true;
+
+  mKeyHandler   = NULL;
+  mMouseHandler = NULL;
 }
 //--------------------------------------------------------------------------------------------------------
 TManagerDirectX::~TManagerDirectX()
 {
-
+  Stop();
+  delete pDX;
+  pDX = NULL;
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::VisualEvent(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext)
@@ -80,19 +87,27 @@ void TManagerDirectX::Refresh()
   if(flgNeedSendCorrectPacket)
   {
     flgNeedSendCorrectPacket = false;
-    GlobalBufferizator2Thread.RegisterToClientTank();
+    mBufferizator2Thread.RegisterToClientTank();
     GlobalClientTank.SendRequestCorrectPacket();
 #ifdef LOG_DX
     GlobalLoggerDX.WriteF_time("Отослан корректирующий пакет.\n");
-#endif
+#endif // LOG_DX
   }
 
   mSizeStream = eSizeBufferStream;
   mSizePacket = eSizeBufferPacket;
-  
+
+  // цикл обработки заданий для движка
+  bool getPacket = true;
+  while(getPacket)
+  {
+    getPacket = mBufferizator2Thread.GetPacket(mBufferPacket,mSizePacket,mTimePacket_ms);
+    if(getPacket)
+      ParserPacket();// обработка пакета
+  }
+
   // достает только 1 пакет за раз
-  bool getPacket = GlobalBufferizator2Thread.GetPacket(mBufferPacket,mSizePacket,mTimePacket_ms);
-  bool getStream = GlobalBufferizator2Thread.GetStream(mBufferStream,mSizeStream,mTimeStream_ms);
+  bool getStream = mBufferizator2Thread.GetStream(mBufferStream,mSizeStream,mTimeStream_ms);
   
   // изменить состояние в соответствии со стримом от сервера
   if(getStream)
@@ -105,13 +120,12 @@ void TManagerDirectX::Refresh()
     GlobalLoggerDX.WriteF_time("Получен стрим.\n");
   else
     GlobalLoggerDX.WriteF_time("-----------------------------------------------\n");
-#endif
+#endif // LOG_DX_STREAM
 #endif
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::Calc()
 {
-  
 #ifndef EDITOR_MODEL
   //------------------------------------------------------------------------
   // заполнить предсказатель данными
@@ -120,8 +134,8 @@ void TManagerDirectX::Calc()
   mPrediction.Calc();
   //------------------------------------------------------------------------
 #else
-  TObjectDX* pObjectDX = GlobalManagerObjectDX.Get(0);
-  if(false)//pObjectDX)
+  TObjectDX* pObjectDX = mManagerObjectDX.Get(0);
+  if(pObjectDX)
   {  
     nsStruct3D::TCoord3 coord;
     coord.y = 2*sin(float(ht_GetMSCount()/200.0f));
@@ -137,15 +151,19 @@ void TManagerDirectX::Optimize()
   while(mListReadyRender.size())
   {mListReadyRender.pop_back();}
 
-  int cnt = GlobalManagerObjectDX.GetCnt();
+  int cnt = mManagerObjectDX.GetCnt();
   for(int i = 0; i < cnt ; i++)
   {
-    TObjectDX* pObjectDX = GlobalManagerObjectDX.Get(i);
+    TObjectDX* pObjectDX = mManagerObjectDX.Get(i);
     if(pObjectDX)
     {  
       mListReadyRender.push_back(pObjectDX);
     }
   }
+  // собственно сам процесс оптимизации (подсказка: процесс оптимизации заключается в выкидывании лишних
+  // не рисуемых и не задействованных объектов)
+  /*...*/
+
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::Render(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext)
@@ -182,12 +200,6 @@ void* ThreadLoadMap(void* p)
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::ThreadLoadMap()
 {
-  // дождаться загрузки моделей
-  while(flgNeedLoadModel)
-  {
-    ht_msleep(eWaitLoadModel);
-  }
-
   mLoaderMap.LoadMap(mPacket.getCodeMap());
   flgLoadingMap = false;
   flgNeedSendCorrectPacket = true;
@@ -208,56 +220,15 @@ void TManagerDirectX::LoadMap(TA_In_Fight& packet)
   threadLoadMap = g_thread_create(::ThreadLoadMap, (gpointer)this, true, NULL);
 }
 //--------------------------------------------------------------------------------------------------------
+void TManagerDirectX::KeyEvent(unsigned int nChar, bool bKeyDown, bool bAltDown, void* pUserContext)
+{
 #ifndef EDITOR_MODEL
-void TManagerDirectX::KeyEvent(unsigned int nChar, bool bKeyDown, bool bAltDown, void* pUserContext)
-{
   if(mState==eLoadMap) return;
-
-  switch(nChar)
-  {
-    case 0x1B://VK_ESCAPE:
-
-      GlobalClientTank.SendRequestExitFromFight();
-      GlobalLoggerDX.WriteF_time("Escape.\n");
-      break;
-    default:;
-  }
-  GlobalLoggerDX.WriteF_time("Нажатие кнопки: %u.\n",nChar);
-}
-#else
-void TManagerDirectX::KeyEvent(unsigned int nChar, bool bKeyDown, bool bAltDown, void* pUserContext)
-{
-  switch(nChar)
-  {
-    case 0x1B://VK_ESCAPE:
-    {
-      TLoaderMap loaderMap(&GlobalManagerObjectDX,&GlobalManagerModel);
-      TLoaderMap::TDescObject oDesc;
-      oDesc.id = 1;// cube_pro
-      oDesc.state = 1;
-      oDesc.coord.x = 0;
-      oDesc.coord.y = 0;
-      oDesc.coord.z = 0;
-      oDesc.orient.vx = 0;
-      oDesc.orient.vy = 0;
-      oDesc.orient.vz = 0;
-      loaderMap.LoadObjectDX(&oDesc,true);
-      oDesc.id = 1;// cube_pro
-      oDesc.state = 1;
-      oDesc.coord.x = 0;
-      oDesc.coord.y = 0;
-      oDesc.coord.z = 0;
-      oDesc.orient.vx = 0;
-      oDesc.orient.vy = 0;
-      oDesc.orient.vz = 0;
-      loaderMap.LoadObjectDX(&oDesc,false);
-      break;
-    }
-    default:;
-  }
-  GlobalLoggerDX.WriteF_time("Нажатие кнопки: %u.\n",nChar);
-}
 #endif
+  if(mKeyHandler)
+    mKeyHandler->Work(nChar, bKeyDown, bAltDown, pUserContext);
+  GlobalLoggerDX.WriteF_time("Нажатие кнопки: %u.\n",nChar);
+}
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::MouseEvent(double fTime, float fElapsedTime, void* pUserContext)
 {
@@ -269,8 +240,9 @@ void TManagerDirectX::MouseEvent(double fTime, float fElapsedTime, void* pUserCo
 
     D3DXVECTOR3 view = *mCamera.GetLookAtPt();
     //view.y
+    if(mMouseHandler)
+      mMouseHandler->Work(fTime, fElapsedTime, pUserContext);
 
-    GlobalClientTank.SendOrientAim(0,0,1);//###
     mLastTimeSendMouseStream = now_ms;
   }
 #endif
@@ -284,7 +256,7 @@ void TManagerDirectX::SetStateByTypeStream()
       unsigned short type = *((unsigned short*)mBufferStream);
       switch(type)
       {
-        case APPL_TYPE_S_COUNT_DOWN:
+        case APPL_TYPE_G_S_COUNT_DOWN:
           if(mState!=eCountDown)
           {
             mState = eCountDown;
@@ -293,7 +265,7 @@ void TManagerDirectX::SetStateByTypeStream()
 #endif
           }
           break;
-        case APPL_TYPE_S_FIGHT_COORD_BULLET:
+        case APPL_TYPE_G_S_FIGHT_COORD_BULLET:
           if(mState!=eFight)
           {
             mState = eFight;
@@ -307,8 +279,9 @@ void TManagerDirectX::SetStateByTypeStream()
     }
 }
 //--------------------------------------------------------------------------------------------------------
-void TManagerDirectX::CreateDeviceEvent(IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
-                                           void* pUserContext )
+void TManagerDirectX::CreateDeviceEvent(IDirect3DDevice9* pd3dDevice, 
+                                        const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
+                                        void* pUserContext )
 {
   HRESULT hr;
 
@@ -326,13 +299,14 @@ void TManagerDirectX::CreateDeviceEvent(IDirect3DDevice9* pd3dDevice, const D3DS
   dwShaderFlags |= D3DXFX_LARGEADDRESSAWARE;
 #endif
 
+  mD3DDevice = pd3dDevice;
+
 #ifdef LOG_DX
   GlobalLoggerDX.WriteF_time("Началась загрузка моделей.\n");
 #endif
 
   // загрузка меша, текстур и шейдеров
-  GlobalManagerModel.Load(pd3dDevice,pBackBufferSurfaceDesc,pUserContext);
-  flgNeedLoadModel = false;
+  mManagerModel.Load(pd3dDevice,pBackBufferSurfaceDesc,pUserContext);
 
 #ifdef LOG_DX
   GlobalLoggerDX.WriteF_time("Загрузка моделей завершена.\n");
@@ -342,28 +316,86 @@ void TManagerDirectX::CreateDeviceEvent(IDirect3DDevice9* pd3dDevice, const D3DS
   D3DXVECTOR3 vecEye( 0.0f, 0.0f, -5.0f );
   D3DXVECTOR3 vecAt ( 0.0f, 0.0f, -0.0f );
 
-  GlobalManagerDirectX.getCamera()->SetViewParams( &vecEye, &vecAt );
+  mCamera.SetViewParams( &vecEye, &vecAt );
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::ResetDevice(IDirect3DDevice9* pd3dDevice,
                                      const D3DSURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
 {
   HRESULT hr;
-  GlobalManagerModel.ResetDevice();
+  mManagerModel.ResetDevice();
   
   // Setup the camera's projection parameters
   float fAspectRatio = pBackBufferSurfaceDesc->Width / ( FLOAT )pBackBufferSurfaceDesc->Height;
-  getCamera()->SetProjParams( D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f );
-  getCamera()->SetWindow( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
+  mCamera.SetProjParams( D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f );
+  mCamera.SetWindow( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
+  mD3DDevice = pd3dDevice;
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::OnLostDevice()
 {
-  GlobalManagerModel.OnLostDevice();
+  mManagerModel.OnLostDevice();
+  mD3DDevice = NULL;
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::OnDestroyDevice()
 {
-  GlobalManagerModel.OnDestroyDevice();
+  mManagerModel.OnDestroyDevice();
+  mManagerObjectDX.Clean();
+
+  mD3DDevice = NULL;
 }
 //--------------------------------------------------------------------------------------------------------
+bool TManagerDirectX::Start(void *pFuncCallExit)
+{
+  return pDX->Start(this,pFuncCallExit);
+}
+//--------------------------------------------------------------------------------------------------------
+void TManagerDirectX::Stop()
+{
+  if(pDX->Stop()==false)
+    BL_FIX_BUG();
+}
+//--------------------------------------------------------------------------------------------------------
+void TManagerDirectX::Show()
+{
+  pDX->Show();
+} 
+//--------------------------------------------------------------------------------------------------------
+void TManagerDirectX::Hide()
+{
+  pDX->Hide();
+}
+//--------------------------------------------------------------------------------------------------------
+void TManagerDirectX::ParserPacket()// обработка пакета
+{
+
+}
+//--------------------------------------------------------------------------------------------------------
+TObjectDX* TManagerDirectX::LoadObjectDX(unsigned int id/*уникальный идентификатор, не карта*/,bool flgNeedClear)// потом как правило идет настройка объекта
+{
+  //TLoaderMap loaderMap(&mManagerObjectDX,&mManagerModel);
+  TLoaderMap::TDescObject oDesc;
+  oDesc.id = id;// cube_pro
+  oDesc.state = 1;
+  oDesc.coord.x = 0;
+  oDesc.coord.y = 0;
+  oDesc.coord.z = 0;
+  oDesc.orient.vx = 0;
+  oDesc.orient.vy = 0;
+  oDesc.orient.vz = 0;
+  return mLoaderMap.LoadObjectDX(&oDesc,flgNeedClear);
+}
+//--------------------------------------------------------------------------------------------------------
+void TManagerDirectX::SetKeyHandler(IKeyHandler* pKeyHandler)
+{
+  mKeyHandler = pKeyHandler;
+}
+//--------------------------------------------------------------------------------------------------------
+// контроль над событиями мышки
+void TManagerDirectX::SetMouseHandler(IMouseHandler* pMouseHandler)
+{
+  mMouseHandler = pMouseHandler;
+}
+//--------------------------------------------------------------------------------------------------------
+
