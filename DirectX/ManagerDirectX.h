@@ -48,10 +48,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Bufferizator2Thread.h"
 #include "ManagerModel.h"
 #include "ManagerObjectDX.h"
-#ifndef EDITOR_MODEL
-  #include "Prediction.h"
-#endif
 
+class TPrediction;
 class TDX;
 struct IDirect3DDevice9;
 class TObjectDX;
@@ -63,9 +61,8 @@ class IKeyHandler;
 // BigJack - графический движок
 class TManagerDirectX
 {
-#ifndef EDITOR_MODEL
-  TPrediction mPrediction;
-#endif
+  TPrediction* pPrediction;
+
   enum{
       eSizeBufferStream = 4000,
       eSizeBufferPacket = 4000,

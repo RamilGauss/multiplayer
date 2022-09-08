@@ -2,10 +2,21 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "client", "client\client.vcproj", "{A4EE1FDE-FDDC-4CE4-AC31-71559907C174}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "server", "server\server.vcproj", "{4D2DD4B8-016F-44E8-85A2-C0F40A53251B}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EditorModel", "EditorModel\EditorModel.vcproj", "{BDD111C0-97AC-463E-92BA-99E3EF7CF500}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "qt_directx", "qt_directx\qt_directx.vcproj", "{6119E6C3-5F0F-49AD-846C-FBA7DEF3A007}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,14 +36,12 @@ Global
 		{BDD111C0-97AC-463E-92BA-99E3EF7CF500}.Debug|Win32.Build.0 = Debug|Win32
 		{BDD111C0-97AC-463E-92BA-99E3EF7CF500}.Release|Win32.ActiveCfg = Release|Win32
 		{BDD111C0-97AC-463E-92BA-99E3EF7CF500}.Release|Win32.Build.0 = Release|Win32
+		{6119E6C3-5F0F-49AD-846C-FBA7DEF3A007}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6119E6C3-5F0F-49AD-846C-FBA7DEF3A007}.Debug|Win32.Build.0 = Debug|Win32
+		{6119E6C3-5F0F-49AD-846C-FBA7DEF3A007}.Release|Win32.ActiveCfg = Release|Win32
+		{6119E6C3-5F0F-49AD-846C-FBA7DEF3A007}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
-	GlobalSection(Qt) = preSolution
-		Integration = True
 	EndGlobalSection
 EndGlobal

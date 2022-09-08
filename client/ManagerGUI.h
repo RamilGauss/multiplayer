@@ -48,6 +48,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 class TManagerGUIEvent;
 class TManagerDirectX;
+class TPrediction;
 
 class TManagerGUI : public QObject
 {
@@ -68,6 +69,7 @@ public:
 
 protected:
   
+  TPrediction    * pPrediction;
   TManagerDirectX* pManagerDirectX;
 
   TBaseGUI* pCurrentForm;

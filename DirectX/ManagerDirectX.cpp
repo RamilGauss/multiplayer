@@ -45,6 +45,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "DX_main.h"
 #include "IKeyHandler.h"
 #include "IMouseHandler.h"
+#include "Prediction.h"
 
 #ifndef EDITOR_MODEL
   #include "ClientTank.h"
@@ -129,9 +130,11 @@ void TManagerDirectX::Calc()
 #ifndef EDITOR_MODEL
   //------------------------------------------------------------------------
   // заполнить предсказатель данными
-  mPrediction.SetState();
+  if(pPrediction)
+    pPrediction->SetState();
   // расчет
-  mPrediction.Calc();
+  if(pPrediction)
+    pPrediction->Calc();
   //------------------------------------------------------------------------
 #else
   TObjectDX* pObjectDX = mManagerObjectDX.Get(0);

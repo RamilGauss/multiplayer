@@ -1,0 +1,5 @@
+*.ilk
+*.pdb
+Debug
+Release
+*.ncb

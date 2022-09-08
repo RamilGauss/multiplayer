@@ -40,9 +40,6 @@ you may contact in writing [ramil2085@gmail.com].
 
 int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow )
 {
-  
-
-
   InitLoggerDX("Editor");
 
   TManagerDirectX mdx;

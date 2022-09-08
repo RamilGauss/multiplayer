@@ -38,6 +38,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ClientTank.h"
 #include <QMessageBox>
 #include "ManagerDirectX.h"
+#include "Prediction.h"
 
 
 class TManagerGUIEvent: public QEvent
@@ -150,6 +151,9 @@ void CallBackDisconnectManagerGUI(void* data, int size)// оставить
 
 TManagerGUI::TManagerGUI(QWidget* parent):QObject(parent)
 {
+  pPrediction     = NULL;
+  pManagerDirectX = NULL;
+
   pManagerGUI = this;
 
   GlobalClientTank.Register(CallBackPacketManagerGUI,nsCallBackType::eRcvPacket);
@@ -171,6 +175,8 @@ TManagerGUI::~TManagerGUI()
 //-----------------------------------------------------------------------
 void TManagerGUI::start()
 {
+  pPrediction = new TPrediction;
+
   pManagerDirectX = new TManagerDirectX;
   pManagerDirectX->Start(CallBackExitDirectX);
   pManagerDirectX->SetKeyHandler(&mKeyHandler);
@@ -393,5 +399,7 @@ void TManagerGUI::Done()
 {
   delete pManagerDirectX;
   pManagerDirectX = NULL;
+  delete pPrediction;
+  pPrediction = NULL;
 }
 //---------------------------------------------------------------------------------------------
