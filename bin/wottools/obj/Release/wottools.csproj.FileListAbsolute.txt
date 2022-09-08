@@ -1,8 +1,0 @@
-D:\MyProjects\multiPlayer\bin\wottools\obj\Release\ResolveAssemblyReference.cache
-D:\MyProjects\multiPlayer\bin\wottools\obj\Release\wottools.AboutBox.resources
-D:\MyProjects\multiPlayer\bin\wottools\obj\Release\wottools.MainForm.resources
-D:\MyProjects\multiPlayer\bin\wottools\obj\Release\wottools.Properties.Resources.resources
-D:\MyProjects\multiPlayer\bin\wottools\obj\Release\wottools.csproj.GenerateResource.Cache
-D:\MyProjects\multiPlayer\bin\wottools\obj\Release\wottools.exe
-D:\MyProjects\multiPlayer\bin\wottools\obj\Release\wottools.pdb
-D:\MyProjects\multiPlayer\bin\wottools.exe

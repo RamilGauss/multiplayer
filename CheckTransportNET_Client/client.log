@@ -1,7 +1,0 @@
-end(63 ms):
-	Make NET=0
-	InitLog=0
-	Open=47
-	Start=0
-	Before send=0
-	Send=16 

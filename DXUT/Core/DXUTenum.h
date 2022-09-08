@@ -1,3 +1,4 @@
+#include "DefineUnicode.h"
 //--------------------------------------------------------------------------------------
 // File: DXUTEnum.h
 //
@@ -5,10 +6,9 @@
 //
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //--------------------------------------------------------------------------------------
+#pragma once
 #ifndef DXUT_ENUM_H
 #define DXUT_ENUM_H
-
-#include "DXUTmisc.h"
 
 //--------------------------------------------------------------------------------------
 // Finding valid device settings
@@ -97,13 +97,12 @@ public:
                                                              bool* pbPureHarewareVP, bool* pbMixedVP );
     void                    SetPossibleVertexProcessingList( bool bSoftwareVP, bool bHardwareVP, bool bPureHarewareVP,
                                                              bool bMixedVP );
+    CGrowableArray <D3DFORMAT>* GetPossibleDepthStencilFormatList();
+    CGrowableArray <D3DMULTISAMPLE_TYPE>* GetPossibleMultisampleTypeList();
+    CGrowableArray <UINT>* GetPossiblePresentIntervalList();
     void                    ResetPossibleDepthStencilFormats();
     void                    ResetPossibleMultisampleTypeList();
     void                    ResetPossiblePresentIntervalList();
-
-    CGrowableArray <D3DMULTISAMPLE_TYPE>* GetPossibleMultisampleTypeList();
-    CGrowableArray <D3DFORMAT>* GetPossibleDepthStencilFormatList();
-    CGrowableArray <UINT>* GetPossiblePresentIntervalList();
 
     // Call Enumerate() to enumerate available D3D adapters, devices, modes, etc.
     bool                    HasEnumerated()

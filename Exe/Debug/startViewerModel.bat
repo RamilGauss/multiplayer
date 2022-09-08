@@ -1,1 +1,0 @@
-start Tornado.exe -con ..\..\DeveloperToolDLL\ViewerModel.dll

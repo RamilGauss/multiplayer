@@ -1,3 +1,4 @@
+#include "DefineUnicode.h"
 //--------------------------------------------------------------------------------------
 // File: Camera.h
 //
@@ -121,8 +122,6 @@ public:
     void SetResetCursorAfterMove( bool bResetCursorAfterMove ) { m_bResetCursorAfterMove = bResetCursorAfterMove; }
 
     // Functions to get state
-    void SetViewMatrix(D3DXMATRIX* matrix){m_mView = *matrix;}
-
     const D3DXMATRIX*  GetViewMatrix() const { return &m_mView; }
     const D3DXMATRIX*  GetProjMatrix() const { return &m_mProj; }
     const D3DXVECTOR3* GetEyePt() const      { return &m_vEye; }

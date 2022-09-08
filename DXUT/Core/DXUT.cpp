@@ -589,7 +589,7 @@ DXUTMemoryHelper()
 }
 ~DXUTMemoryHelper()
 {
-    DXUTDestroyState();
+    //DXUTDestroyState();// Gauss: я сам убью DXUT в цикле отрисовки по мере необходимости
 }
 };
 
@@ -598,7 +598,7 @@ DXUTState& GetDXUTState()
 {
     // This class will auto create the memory when its first accessed and delete it after the program exits WinMain.
     // However the application can also call DXUTCreateState() & DXUTDestroyState() independantly if its wants 
-    static DXUTMemoryHelper memory;
+    /*static*/ DXUTMemoryHelper memory;// заботится о том существует ли DXUTState.
     assert( g_pDXUTState != NULL );
     return *g_pDXUTState;
 }
@@ -714,7 +714,7 @@ IDXGIFactory* WINAPI DXUTGetDXGIFactory()                  { DXUTDelayLoadDXGI()
 bool WINAPI DXUTIsD3D10Available()                         { DXUTDelayLoadDXGI(); return GetDXUTState().GetD3D10Available(); }
 bool WINAPI DXUTIsAppRenderingWithD3D9()                   { return (GetDXUTState().GetD3D9Device() != NULL); }
 bool WINAPI DXUTIsAppRenderingWithD3D10()                  { return (GetDXUTState().GetD3D10Device() != NULL); }
-
+void WINAPI DXUTDestroy()                                  { GetDXUTState().Destroy();}
 
 //--------------------------------------------------------------------------------------
 // External callback setup functions
@@ -1101,7 +1101,7 @@ bool DXUTGetCmdParam( WCHAR*& strCmdLine, WCHAR* strFlag )
 // call it with the default parameters.  Instead of calling this, you can 
 // call DXUTSetWindow() to use an existing window.  
 //--------------------------------------------------------------------------------------
-HRESULT WINAPI DXUTCreateWindow( const WCHAR* strWindowTitle, HINSTANCE hInstance,
+HRESULT WINAPI DXUTCreateWindow( HWND* phWnd, const WCHAR* strWindowTitle, HINSTANCE hInstance,
                                  HICON hIcon, HMENU hMenu, int x, int y )
 {
     HRESULT hr;
@@ -1186,6 +1186,7 @@ HRESULT WINAPI DXUTCreateWindow( const WCHAR* strWindowTitle, HINSTANCE hInstanc
         HWND hWnd = CreateWindow( L"Direct3DWindowClass", strWindowTitle, WS_OVERLAPPEDWINDOW,
                                   x, y, ( rc.right - rc.left ), ( rc.bottom - rc.top ), 0,
                                   hMenu, hInstance, 0 );
+        if(phWnd) *phWnd = hWnd;
         if( hWnd == NULL )
         {
             DWORD dwError = GetLastError();
@@ -1197,7 +1198,7 @@ HRESULT WINAPI DXUTCreateWindow( const WCHAR* strWindowTitle, HINSTANCE hInstanc
         GetDXUTState().SetHWNDDeviceFullScreen( hWnd );
         GetDXUTState().SetHWNDDeviceWindowed( hWnd );
     }
-
+    
     return S_OK;
 }
 
@@ -1335,11 +1336,9 @@ LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         bMouseButtons[3] = bSideButton1;
         bMouseButtons[4] = bSideButton2;
 
-        UINT state = uMsg;
-
         LPDXUTCALLBACKMOUSE pCallbackMouse = GetDXUTState().GetMouseFunc();
         if( pCallbackMouse )
-            pCallbackMouse( state, bLeftButton, bRightButton, bMiddleButton, bSideButton1, bSideButton2, nMouseWheelDelta,
+            pCallbackMouse( bLeftButton, bRightButton, bMiddleButton, bSideButton1, bSideButton2, nMouseWheelDelta,
                             xPos, yPos, GetDXUTState().GetMouseFuncUserContext() );
     }
 
@@ -1718,6 +1717,7 @@ LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                         SendMessage( hWnd, WM_CLOSE, 0, 0 );
                     break;
                 }
+
                 case VK_PAUSE:
                 {
                     if( GetDXUTState().GetHandlePause() )
@@ -1763,6 +1763,8 @@ LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     else
         return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
+
+
 //--------------------------------------------------------------------------------------
 // Handles app's message loop and rendering when idle.  If DXUTCreateDevice() or DXUTSetD3D*Device() 
 // has not already been called, it will call DXUTCreateWindow() with the default parameters.  
@@ -1820,6 +1822,7 @@ HRESULT WINAPI DXUTMainLoop( HACCEL hAccel )
     PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
 
     while( WM_QUIT != msg.message )
+    //while( WM_DESTROY != msg.message )
     {
         // Use PeekMessage() so we can use idle time to render the scene. 
         bGotMsg = ( PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) != 0 );
@@ -3112,7 +3115,7 @@ void DXUTRender3DEnvironment9()
     if( GetDXUTState().GetDeviceLost() || DXUTIsRenderingPaused() || !DXUTIsActive() )
     {
         // Window is minimized or paused so yield CPU time to other processes
-      Sleep( 50 );
+        Sleep( 50 );
     }
 
     // If no device created yet because device was lost (ie. another fullscreen exclusive device exists), 
@@ -3286,28 +3289,28 @@ void DXUTRender3DEnvironment9()
         hr = pd3dDevice->Present( NULL, NULL, NULL, NULL );
         if( FAILED( hr ) )
         {
-          if( D3DERR_DEVICELOST == hr )
-          {
-            GetDXUTState().SetDeviceLost( true );
-          }
-          else if( D3DERR_DRIVERINTERNALERROR == hr )
-          {
-            // When D3DERR_DRIVERINTERNALERROR is returned from Present(),
-            // the application can do one of the following:
-            // 
-            // - End, with the pop-up window saying that the application cannot continue 
-            //   because of problems in the display adapter and that the user should 
-            //   contact the adapter manufacturer.
-            //
-            // - Attempt to restart by calling IDirect3DDevice9::Reset, which is essentially the same 
-            //   path as recovering from a lost device. If IDirect3DDevice9::Reset fails with 
-            //   D3DERR_DRIVERINTERNALERROR, the application should end immediately with the message 
-            //   that the user should contact the adapter manufacturer.
-            // 
-            // The framework attempts the path of resetting the device
-            // 
-            GetDXUTState().SetDeviceLost( true );
-          }
+            if( D3DERR_DEVICELOST == hr )
+            {
+                GetDXUTState().SetDeviceLost( true );
+            }
+            else if( D3DERR_DRIVERINTERNALERROR == hr )
+            {
+                // When D3DERR_DRIVERINTERNALERROR is returned from Present(),
+                // the application can do one of the following:
+                // 
+                // - End, with the pop-up window saying that the application cannot continue 
+                //   because of problems in the display adapter and that the user should 
+                //   contact the adapter manufacturer.
+                //
+                // - Attempt to restart by calling IDirect3DDevice9::Reset, which is essentially the same 
+                //   path as recovering from a lost device. If IDirect3DDevice9::Reset fails with 
+                //   D3DERR_DRIVERINTERNALERROR, the application should end immediately with the message 
+                //   that the user should contact the adapter manufacturer.
+                // 
+                // The framework attempts the path of resetting the device
+                // 
+                GetDXUTState().SetDeviceLost( true );
+            }
         }
     }
 
@@ -6475,6 +6478,7 @@ void WINAPI DXUTShutdown( int nExitCode )
     if( GetDXUTState().GetOverrideRelaunchMCE() )
         DXUTReLaunchMediaCenter();
 }
+
 //--------------------------------------------------------------------------------------
 // Tells DXUT whether to operate in gamma correct mode
 //--------------------------------------------------------------------------------------
@@ -6482,507 +6486,4 @@ void WINAPI DXUTSetIsInGammaCorrectMode( bool bGammaCorrect )
 {
     GetDXUTState().SetIsInGammaCorrectMode( bGammaCorrect );
 }
-//--------------------------------------------------------------------------------------
-// Tells DXUT whether to operate in gamma correct mode
-//--------------------------------------------------------------------------------------
-LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
-{
-  // Consolidate the keyboard messages and pass them to the app's keyboard callback
-  if( uMsg == WM_KEYDOWN    ||
-      uMsg == WM_SYSKEYDOWN ||
-      uMsg == WM_KEYUP      ||
-      uMsg == WM_SYSKEYUP )
-  {
-    bool bKeyDown = ( uMsg == WM_KEYDOWN || uMsg == WM_SYSKEYDOWN );
-    DWORD dwMask = ( 1 << 29 );
-    bool bAltDown = ( ( lParam & dwMask ) != 0 );
 
-    bool* bKeys = GetDXUTState().GetKeys();
-    bKeys[ ( BYTE )( wParam & 0xFF ) ] = bKeyDown;
-
-    LPDXUTCALLBACKKEYBOARD pCallbackKeyboard = GetDXUTState().GetKeyboardFunc();
-    if( pCallbackKeyboard )
-      pCallbackKeyboard( ( UINT )wParam, bKeyDown, bAltDown, GetDXUTState().GetKeyboardFuncUserContext() );
-  }
-
-  // Consolidate the mouse button messages and pass them to the app's mouse callback
-  if( uMsg == WM_LBUTTONDOWN   ||
-      uMsg == WM_LBUTTONUP     ||
-      uMsg == WM_LBUTTONDBLCLK ||
-      uMsg == WM_MBUTTONDOWN   ||
-      uMsg == WM_MBUTTONUP     ||
-      uMsg == WM_MBUTTONDBLCLK ||
-      uMsg == WM_RBUTTONDOWN   ||
-      uMsg == WM_RBUTTONUP     ||
-      uMsg == WM_RBUTTONDBLCLK ||
-      uMsg == WM_XBUTTONDOWN   ||
-      uMsg == WM_XBUTTONUP     ||
-      uMsg == WM_XBUTTONDBLCLK ||
-      uMsg == WM_MOUSEWHEEL    ||
-    ( GetDXUTState().GetNotifyOnMouseMove() && uMsg == WM_MOUSEMOVE ) )
-  {
-    int xPos = ( short )LOWORD( lParam );
-    int yPos = ( short )HIWORD( lParam );
-
-    if( uMsg == WM_MOUSEWHEEL )
-    {
-      // WM_MOUSEWHEEL passes screen mouse coords
-      // so convert them to client coords
-      POINT pt;
-      pt.x = xPos; pt.y = yPos;
-      ScreenToClient( hWnd, &pt );
-      xPos = pt.x; yPos = pt.y;
-    }
-
-    int nMouseWheelDelta = 0;
-    if( uMsg == WM_MOUSEWHEEL )
-      nMouseWheelDelta = ( short )HIWORD( wParam );
-
-    int nMouseButtonState = LOWORD( wParam );
-    bool bLeftButton = ( ( nMouseButtonState & MK_LBUTTON ) != 0 );
-    bool bRightButton = ( ( nMouseButtonState & MK_RBUTTON ) != 0 );
-    bool bMiddleButton = ( ( nMouseButtonState & MK_MBUTTON ) != 0 );
-    bool bSideButton1 = ( ( nMouseButtonState & MK_XBUTTON1 ) != 0 );
-    bool bSideButton2 = ( ( nMouseButtonState & MK_XBUTTON2 ) != 0 );
-
-    bool* bMouseButtons = GetDXUTState().GetMouseButtons();
-    bMouseButtons[0] = bLeftButton;
-    bMouseButtons[1] = bMiddleButton;
-    bMouseButtons[2] = bRightButton;
-    bMouseButtons[3] = bSideButton1;
-    bMouseButtons[4] = bSideButton2;
-    
-    UINT state = uMsg;
-
-    LPDXUTCALLBACKMOUSE pCallbackMouse = GetDXUTState().GetMouseFunc();
-    if( pCallbackMouse )
-      pCallbackMouse( state ,bLeftButton, bRightButton, bMiddleButton, bSideButton1, bSideButton2, nMouseWheelDelta,
-      xPos, yPos, GetDXUTState().GetMouseFuncUserContext() );
-  }
-
-  // Pass all messages to the app's MsgProc callback, and don't 
-  // process further messages if the apps says not to.
-  LPDXUTCALLBACKMSGPROC pCallbackMsgProc = GetDXUTState().GetWindowMsgFunc();
-  if( pCallbackMsgProc )
-  {
-    bool bNoFurtherProcessing = false;
-    LRESULT nResult = pCallbackMsgProc( hWnd, uMsg, wParam, lParam, &bNoFurtherProcessing,
-      GetDXUTState().GetWindowMsgFuncUserContext() );
-    if( bNoFurtherProcessing )
-      return nResult;
-  }
-
-  switch( uMsg )
-  {
-    case WM_PAINT:
-    {
-      // Handle paint messages when the app is paused
-      if( DXUTIsRenderingPaused() &&
-        GetDXUTState().GetDeviceObjectsCreated() && GetDXUTState().GetDeviceObjectsReset() )
-      {
-        HRESULT hr;
-        double fTime = DXUTGetTime();
-        float fElapsedTime = DXUTGetElapsedTime();
-
-        if( DXUTIsCurrentDeviceD3D9() )
-        {
-          IDirect3DDevice9* pd3dDevice = DXUTGetD3D9Device();
-          if( pd3dDevice )
-          {
-            LPDXUTCALLBACKD3D9FRAMERENDER pCallbackFrameRender = GetDXUTState().GetD3D9FrameRenderFunc();
-            if( pCallbackFrameRender != NULL )
-              pCallbackFrameRender( pd3dDevice, fTime, fElapsedTime,
-              GetDXUTState().GetD3D9FrameRenderFuncUserContext() );
-
-            hr = pd3dDevice->Present( NULL, NULL, NULL, NULL );
-            if( D3DERR_DEVICELOST == hr )
-            {
-              GetDXUTState().SetDeviceLost( true );
-            }
-            else if( D3DERR_DRIVERINTERNALERROR == hr )
-            {
-              // When D3DERR_DRIVERINTERNALERROR is returned from Present(),
-              // the application can do one of the following:
-              // 
-              // - End, with the pop-up window saying that the application cannot continue 
-              //   because of problems in the display adapter and that the user should 
-              //   contact the adapter manufacturer.
-              //
-              // - Attempt to restart by calling IDirect3DDevice9::Reset, which is essentially the same 
-              //   path as recovering from a lost device. If IDirect3DDevice9::Reset fails with 
-              //   D3DERR_DRIVERINTERNALERROR, the application should end immediately with the message 
-              //   that the user should contact the adapter manufacturer.
-              // 
-              // The framework attempts the path of resetting the device
-              // 
-              GetDXUTState().SetDeviceLost( true );
-            }
-          }
-        }
-        else
-        {
-          ID3D10Device* pd3dDevice = DXUTGetD3D10Device();
-          if( pd3dDevice )
-          {
-            LPDXUTCALLBACKD3D10FRAMERENDER pCallbackFrameRender = GetDXUTState().GetD3D10FrameRenderFunc();
-            if( pCallbackFrameRender != NULL &&
-              !GetDXUTState().GetRenderingOccluded() )
-            {
-              pCallbackFrameRender( pd3dDevice, fTime, fElapsedTime,
-                GetDXUTState().GetD3D10FrameRenderFuncUserContext() );
-            }
-
-            DWORD dwFlags = 0;
-            if( GetDXUTState().GetRenderingOccluded() )
-              dwFlags = DXGI_PRESENT_TEST;
-            else
-              dwFlags = GetDXUTState().GetCurrentDeviceSettings()->d3d10.PresentFlags;
-
-            IDXGISwapChain* pSwapChain = DXUTGetDXGISwapChain();
-            hr = pSwapChain->Present( 0, GetDXUTState().GetCurrentDeviceSettings()->d3d10.PresentFlags );
-            if( DXGI_STATUS_OCCLUDED == hr )
-            {
-              // There is a window covering our entire rendering area.
-              // Don't render until we're visible again.
-              GetDXUTState().SetRenderingOccluded( true );
-            }
-            else if( SUCCEEDED( hr ) )
-            {
-              if( GetDXUTState().GetRenderingOccluded() )
-              {
-                // Now that we're no longer occluded
-                // allow us to render again
-                GetDXUTState().SetRenderingOccluded( false );
-              }
-            }
-          }
-        }
-      }
-      break;
-    }
-
-  case WM_SIZE:
-    if( SIZE_MINIMIZED == wParam )
-    {
-      DXUTPause( true, true ); // Pause while we're minimized
-
-      GetDXUTState().SetMinimized( true );
-      GetDXUTState().SetMaximized( false );
-    }
-    else
-    {
-      RECT rcCurrentClient;
-      GetClientRect( DXUTGetHWND(), &rcCurrentClient );
-      if( rcCurrentClient.top == 0 && rcCurrentClient.bottom == 0 )
-      {
-        // Rapidly clicking the task bar to minimize and restore a window
-        // can cause a WM_SIZE message with SIZE_RESTORED when 
-        // the window has actually become minimized due to rapid change
-        // so just ignore this message
-      }
-      else if( SIZE_MAXIMIZED == wParam )
-      {
-        if( GetDXUTState().GetMinimized() )
-          DXUTPause( false, false ); // Unpause since we're no longer minimized
-        GetDXUTState().SetMinimized( false );
-        GetDXUTState().SetMaximized( true );
-        DXUTCheckForWindowSizeChange();
-        DXUTCheckForWindowChangingMonitors();
-      }
-      else if( SIZE_RESTORED == wParam )
-      {
-        //DXUTCheckForDXGIFullScreenSwitch();
-        if( GetDXUTState().GetMaximized() )
-        {
-          GetDXUTState().SetMaximized( false );
-          DXUTCheckForWindowSizeChange();
-          DXUTCheckForWindowChangingMonitors();
-        }
-        else if( GetDXUTState().GetMinimized() )
-        {
-          DXUTPause( false, false ); // Unpause since we're no longer minimized
-          GetDXUTState().SetMinimized( false );
-          DXUTCheckForWindowSizeChange();
-          DXUTCheckForWindowChangingMonitors();
-        }
-        else if( GetDXUTState().GetInSizeMove() )
-        {
-          // If we're neither maximized nor minimized, the window size 
-          // is changing by the user dragging the window edges.  In this 
-          // case, we don't reset the device yet -- we wait until the 
-          // user stops dragging, and a WM_EXITSIZEMOVE message comes.
-        }
-        else
-        {
-          // This WM_SIZE come from resizing the window via an API like SetWindowPos() so 
-          // resize and reset the device now.
-          DXUTCheckForWindowSizeChange();
-          DXUTCheckForWindowChangingMonitors();
-        }
-      }
-    }
-    break;
-
-  case WM_GETMINMAXINFO:
-    ( ( MINMAXINFO* )lParam )->ptMinTrackSize.x = DXUT_MIN_WINDOW_SIZE_X;
-    ( ( MINMAXINFO* )lParam )->ptMinTrackSize.y = DXUT_MIN_WINDOW_SIZE_Y;
-    break;
-
-  case WM_ENTERSIZEMOVE:
-    // Halt frame movement while the app is sizing or moving
-    DXUTPause( true, true );
-    GetDXUTState().SetInSizeMove( true );
-    break;
-
-  case WM_EXITSIZEMOVE:
-    DXUTPause( false, false );
-    DXUTCheckForWindowSizeChange();
-    DXUTCheckForWindowChangingMonitors();
-    GetDXUTState().SetInSizeMove( false );
-    break;
-
-  case WM_MOUSEMOVE:
-    if( DXUTIsActive() && !DXUTIsWindowed() )
-    {
-      if( DXUTIsCurrentDeviceD3D9() )
-      {
-        IDirect3DDevice9* pd3dDevice = DXUTGetD3D9Device();
-        if( pd3dDevice )
-        {
-          POINT ptCursor;
-          GetCursorPos( &ptCursor );
-          pd3dDevice->SetCursorPosition( ptCursor.x, ptCursor.y, 0 );
-        }
-      }
-      else
-      {
-        // For D3D10, no processing is necessary.  D3D10 cursor
-        // is handled in the traditional Windows manner.
-      }
-    }
-    break;
-
-  case WM_SETCURSOR:
-    if( DXUTIsActive() && !DXUTIsWindowed() )
-    {
-      if( DXUTIsCurrentDeviceD3D9() )
-      {
-        IDirect3DDevice9* pd3dDevice = DXUTGetD3D9Device();
-        if( pd3dDevice && GetDXUTState().GetShowCursorWhenFullScreen() )
-          pd3dDevice->ShowCursor( true );
-      }
-      else
-      {
-        if( !GetDXUTState().GetShowCursorWhenFullScreen() )
-          SetCursor( NULL );
-      }
-
-      return true; // prevent Windows from setting cursor to window class cursor
-    }
-    break;
-
-  case WM_ACTIVATEAPP:
-    if( wParam == TRUE && !DXUTIsActive() ) // Handle only if previously not active 
-    {
-      GetDXUTState().SetActive( true );
-
-      // Enable controller rumble & input when activating app
-      DXUTEnableXInput( true );
-
-      // The GetMinimizedWhileFullscreen() varible is used instead of !DXUTIsWindowed()
-      // to handle the rare case toggling to windowed mode while the fullscreen application 
-      // is minimized and thus making the pause count wrong
-      if( GetDXUTState().GetMinimizedWhileFullscreen() )
-      {
-        if( DXUTIsD3D9( GetDXUTState().GetCurrentDeviceSettings() ) )
-          DXUTPause( false, false ); // Unpause since we're no longer minimized
-        GetDXUTState().SetMinimizedWhileFullscreen( false );
-
-        if( DXUTIsAppRenderingWithD3D10() )
-        {
-          DXUTToggleFullScreen();
-        }
-      }
-
-      // Upon returning to this app, potentially disable shortcut keys 
-      // (Windows key, accessibility shortcuts) 
-      DXUTAllowShortcutKeys( ( DXUTIsWindowed() ) ? GetDXUTState().GetAllowShortcutKeysWhenWindowed() :
-        GetDXUTState().GetAllowShortcutKeysWhenFullscreen() );
-
-    }
-    else if( wParam == FALSE && DXUTIsActive() ) // Handle only if previously active 
-    {
-      GetDXUTState().SetActive( false );
-
-      // Disable any controller rumble & input when de-activating app
-      DXUTEnableXInput( false );
-
-      if( !DXUTIsWindowed() )
-      {
-        // Going from full screen to a minimized state 
-        ClipCursor( NULL );      // don't limit the cursor anymore
-        if( DXUTIsD3D9( GetDXUTState().GetCurrentDeviceSettings() ) )
-          DXUTPause( true, true ); // Pause while we're minimized (take care not to pause twice by handling this message twice)
-        GetDXUTState().SetMinimizedWhileFullscreen( true );
-      }
-
-      // Restore shortcut keys (Windows key, accessibility shortcuts) to original state
-      //
-      // This is important to call here if the shortcuts are disabled, 
-      // because if this is not done then the Windows key will continue to 
-      // be disabled while this app is running which is very bad.
-      // If the app crashes, the Windows key will return to normal.
-      DXUTAllowShortcutKeys( true );
-    }
-    break;
-
-  case WM_ENTERMENULOOP:
-    // Pause the app when menus are displayed
-    DXUTPause( true, true );
-    break;
-
-  case WM_EXITMENULOOP:
-    DXUTPause( false, false );
-    break;
-
-  case WM_MENUCHAR:
-    // A menu is active and the user presses a key that does not correspond to any mnemonic or accelerator key
-    // So just ignore and don't beep
-    return MAKELRESULT( 0, MNC_CLOSE );
-    break;
-
-  case WM_NCHITTEST:
-    // Prevent the user from selecting the menu in full screen mode
-    if( !DXUTIsWindowed() )
-      return HTCLIENT;
-    break;
-
-  case WM_POWERBROADCAST:
-    switch( wParam )
-    {
-#ifndef PBT_APMQUERYSUSPEND
-#define PBT_APMQUERYSUSPEND 0x0000
-#endif
-  case PBT_APMQUERYSUSPEND:
-    // At this point, the app should save any data for open
-    // network connections, files, etc., and prepare to go into
-    // a suspended mode.  The app can use the MsgProc callback
-    // to handle this if desired.
-    return true;
-
-#ifndef PBT_APMRESUMESUSPEND
-#define PBT_APMRESUMESUSPEND 0x0007
-#endif
-  case PBT_APMRESUMESUSPEND:
-    // At this point, the app should recover any data, network
-    // connections, files, etc., and resume running from when
-    // the app was suspended. The app can use the MsgProc callback
-    // to handle this if desired.
-
-    // QPC may lose consistency when suspending, so reset the timer
-    // upon resume.
-    DXUTGetGlobalTimer()->Reset();
-    GetDXUTState().SetLastStatsUpdateTime( 0 );
-    return true;
-    }
-    break;
-
-  case WM_SYSCOMMAND:
-    // Prevent moving/sizing in full screen mode
-    switch( ( wParam & 0xFFF0 ) )
-    {
-    case SC_MOVE:
-    case SC_SIZE:
-    case SC_MAXIMIZE:
-    case SC_KEYMENU:
-      if( !DXUTIsWindowed() )
-        return 0;
-      break;
-    }
-    break;
-
-  case WM_SYSKEYDOWN:
-    {
-      switch( wParam )
-      {
-        case VK_RETURN:
-        {
-          if( GetDXUTState().GetHandleAltEnter() && DXUTIsAppRenderingWithD3D9() )
-          {
-            // Toggle full screen upon alt-enter 
-            DWORD dwMask = ( 1 << 29 );
-            if( ( lParam & dwMask ) != 0 ) // Alt is down also
-            {
-              // Toggle the full screen/window mode
-              DXUTPause( true, true );
-              DXUTToggleFullScreen();
-              DXUTPause( false, false );
-              return 0;
-            }
-          }
-        }
-      }
-      break;
-    }
-
-    case WM_KEYDOWN:
-    {
-      switch( wParam )
-      {
-        case VK_ESCAPE:
-        {
-          if( GetDXUTState().GetHandleEscape() )
-            SendMessage( hWnd, WM_CLOSE, 0, 0 );
-          break;
-        }
-        case VK_PAUSE:
-        {
-          if( GetDXUTState().GetHandlePause() )
-          {
-            bool bTimePaused = DXUTIsTimePaused();
-            bTimePaused = !bTimePaused;
-            if( bTimePaused )
-              DXUTPause( true, false );
-            else
-              DXUTPause( false, false );
-          }
-          break;
-        }
-      }
-      break;
-    }
-
-    case WM_CLOSE:
-    {
-      HMENU hMenu;
-      hMenu = GetMenu( hWnd );
-      if( hMenu != NULL )
-        DestroyMenu( hMenu );
-      DestroyWindow( hWnd );
-      UnregisterClass( L"Direct3DWindowClass", NULL );
-      GetDXUTState().SetHWNDFocus( NULL );
-      GetDXUTState().SetHWNDDeviceFullScreen( NULL );
-      GetDXUTState().SetHWNDDeviceWindowed( NULL );
-      return 0;
-    }
-
-    case WM_DESTROY:
-      PostQuitMessage( 0 );
-      break;
-  }
-
-  // Don't allow the F10 key to act as a shortcut to the menu bar
-  // by not passing these messages to the DefWindowProc only when
-  // there's no menu present
-  if( !GetDXUTState().GetCallDefWindowProc() || GetDXUTState().GetMenu() == NULL &&
-    ( uMsg == WM_SYSKEYDOWN || uMsg == WM_SYSKEYUP ) && wParam == VK_F10 )
-    return 0;
-  else
-    return DefWindowProc( hWnd, uMsg, wParam, lParam );
-}
-//----------------------------------------------------------------------------------------------------
-void* WINAPI DXUTGetStaticWndProc()
-{
-  return DXUTStaticWndProc_Changed;
-}
-//----------------------------------------------------------------------------------------------------

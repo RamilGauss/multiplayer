@@ -1,3 +1,4 @@
+#include "DefineUnicode.h"
 //--------------------------------------------------------------------------------------
 // File: DXUTMisc.h
 //
@@ -5,13 +6,9 @@
 //
 // Copyright (c) Microsoft Corporation. All rights reserved
 //--------------------------------------------------------------------------------------
-//#pragma once
+#pragma once
 #ifndef DXUT_MISC_H
 #define DXUT_MISC_H
-
-//#include <xinput.h>
-//#include <dxgitype.h>
-#include "DXUT.h"
 
 #ifndef MAX_FVF_DECL_SIZE
 #define MAX_FVF_DECL_SIZE MAXD3DDECLLENGTH + 1 // +1 for END

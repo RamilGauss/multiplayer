@@ -1,0 +1,212 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="..\Exe\GBaseLib.dll"/>
+    <OBJFILES value="..\Temp\GBaseLib\GBaseLibWin.obj ..\Temp\GBaseLib\UIDobject.obj 
+      ..\Temp\GBaseLib\ArrUIDobject.obj ..\Temp\GBaseLib\BL_AppFile.obj 
+      ..\Temp\GBaseLib\BL_ConfigFile.obj ..\Temp\GBaseLib\BL_Conv.obj 
+      ..\Temp\GBaseLib\BL_Debug.obj ..\Temp\GBaseLib\BL_Thread.obj 
+      ..\Temp\GBaseLib\BL_Time.obj ..\Temp\GBaseLib\BL_Log.obj 
+      ..\Temp\GBaseLib\ErrNotify_File.obj ..\Temp\GBaseLib\ErrorDesc.obj 
+      ..\Temp\GBaseLib\ErrorReg.obj ..\Temp\GBaseLib\errSDK.obj 
+      ..\Temp\GBaseLib\errSTD.obj ..\Temp\GBaseLib\errStr.obj 
+      ..\Temp\GBaseLib\errWAVE.obj ..\Temp\GBaseLib\FileShare.obj 
+      ..\Temp\GBaseLib\GCS.obj ..\Temp\GBaseLib\hArray.obj 
+      ..\Temp\GBaseLib\HiTimer.obj ..\Temp\GBaseLib\ImageFile.obj 
+      ..\Temp\GBaseLib\ToStr.obj ..\Temp\GBaseLib\LogStd.obj 
+      ..\Temp\GBaseLib\ILogConsole.obj ..\Temp\GBaseLib\LogFile.obj 
+      ..\Temp\GBaseLib\LogManager.obj ..\Temp\GBaseLib\FileError.obj 
+      ..\Temp\GBaseLib\BL_IOStreamMem.obj ..\Temp\GBaseLib\BL_IOStream.obj 
+      ..\Temp\GBaseLib\BL_IOStreamFile.obj ..\Temp\GBaseLib\TimerLog.obj"/>
+    <RESFILES value="GBaseLib.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value="libglib-2.0-0.lib libgthread-2.0-0.lib shlwapi.lib"/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value=""/>
+    <PACKAGES value="vcl.bpi rtl.bpi dbrtl.bpi adortl.bpi vcldb.bpi vclx.bpi bdertl.bpi 
+      vcldbx.bpi ibxpress.bpi dsnap.bpi cds.bpi bdecds.bpi qrpt.bpi teeui.bpi 
+      teedb.bpi tee.bpi dss.bpi teeqr.bpi visualclx.bpi visualdbclx.bpi 
+      dsnapcrba.bpi dsnapcon.bpi bcbsmp.bpi vclie.bpi xmlrtl.bpi inet.bpi 
+      inetdbbde.bpi inetdbxpress.bpi inetdb.bpi nmfast.bpi webdsnap.bpi 
+      bcbie.bpi websnap.bpi soaprtl.bpi dclocx.bpi dbexpress.bpi dbxcds.bpi 
+      indy.bpi vclZipForgeb6.bpi bcb2kaxserver.bpi KIT_VCL.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value="_DEBUG;TD_CROSSPLATFORM;GBASELIB_EI=__declspec(dllexport)"/>
+    <SYSDEFINES value="NO_STRICT;_NO_VCL;_RTLDLL"/>
+    <MAINSOURCE value="GBaseLib.bpf"/>
+    <INCLUDEPATH value="$(BCB)\include;..\glib-2.0"/>
+    <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;..\Exe"/>
+    <WARNINGS value="-wprc -wuse -wstu -wsig -wpin -w-pch -wnod -wnak -wdef -wamp -wamb"/>
+    <OTHERFILES value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I$(BCB)\include -I..\glib-2.0 -src_suffix cpp -D_DEBUG -DTD_CROSSPLATFORM 
+      -DGBASELIB_EI=__declspec(dllexport) -boa"/>
+    <CFLAG1 value="-WD -Od -H=$(BCB)\lib\vcl60.csm -Hc -w- -X- -r- -a8 -b -k -y -v -vi- -tWD 
+      -tWM -c"/>
+    <PFLAGS value="-N2..\Temp\GBaseLib -N0..\Temp\GBaseLib -$YD -$W -$O- -$A8 -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-I..\Temp\GBaseLib -D&quot;&quot; -aa -Tpd -x -Gn -Gi -v"/>
+    <OTHERFILES value=""/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0d32.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32mti.lib"/>
+    <OTHERFILES value=""/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="TypeDef.h" FORMNAME="" UNITNAME="TypeDef.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="TObject.h" FORMNAME="" UNITNAME="TObject.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="RWLock.h" FORMNAME="" UNITNAME="RWLock.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BL_CycleBuffer.h" FORMNAME="" UNITNAME="BL_CycleBuffer.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="GTime.h" FORMNAME="" UNITNAME="GTime.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="AutoCreateVar.h" FORMNAME="" UNITNAME="AutoCreateVar.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="GBaseLib.res" FORMNAME="" UNITNAME="GBaseLib.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="GBaseLib.bpf" FORMNAME="" UNITNAME="GBaseLib" CONTAINERID="BPF" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="GBaseLibWin.cpp" FORMNAME="" UNITNAME="GBaseLibWin" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="UIDobject.cpp" FORMNAME="" UNITNAME="UIDobject.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ArrUIDobject.cpp" FORMNAME="" UNITNAME="ArrUIDobject.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BL_AppFile.cpp" FORMNAME="" UNITNAME="BL_AppFile.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BL_ConfigFile.cpp" FORMNAME="" UNITNAME="BL_ConfigFile.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BL_Conv.cpp" FORMNAME="" UNITNAME="BL_Conv.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BL_Debug.cpp" FORMNAME="" UNITNAME="BL_Debug.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BL_Thread.cpp" FORMNAME="" UNITNAME="BL_Thread.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BL_Time.cpp" FORMNAME="" UNITNAME="BL_Time.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BL_Log.cpp" FORMNAME="" UNITNAME="BL_Log.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ErrNotify_File.cpp" FORMNAME="" UNITNAME="ErrNotify_File.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ErrorDesc.cpp" FORMNAME="" UNITNAME="ErrorDesc.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ErrorReg.cpp" FORMNAME="" UNITNAME="ErrorReg.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="errSDK.cpp" FORMNAME="" UNITNAME="errSDK.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="errSTD.cpp" FORMNAME="" UNITNAME="errSTD.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="errStr.cpp" FORMNAME="" UNITNAME="errStr.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="errWAVE.cpp" FORMNAME="" UNITNAME="errWAVE.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="FileShare.cpp" FORMNAME="" UNITNAME="FileShare.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="GCS.cpp" FORMNAME="" UNITNAME="GCS.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="hArray.cpp" FORMNAME="" UNITNAME="hArray.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="HiTimer.cpp" FORMNAME="" UNITNAME="HiTimer.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ImageFile.cpp" FORMNAME="" UNITNAME="ImageFile.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ToStr.cpp" FORMNAME="" UNITNAME="ToStr.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="libglib-2.0-0.lib" FORMNAME="" UNITNAME="" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="libgthread-2.0-0.lib" FORMNAME="" UNITNAME="" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="shlwapi.lib" FORMNAME="" UNITNAME="" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="List_SingleLink.h" FORMNAME="" UNITNAME="List_SingleLink.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ListMem_SingleLink.h" FORMNAME="" UNITNAME="ListMem_SingleLink.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="LogStd.cpp" FORMNAME="" UNITNAME="LogStd.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ILogConsole.cpp" FORMNAME="" UNITNAME="ILogConsole.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="LogFile.cpp" FORMNAME="" UNITNAME="LogFile.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="LogManager.cpp" FORMNAME="" UNITNAME="LogManager.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="FileError.cpp" FORMNAME="" UNITNAME="FileError" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BL_IOStreamMem.cpp" FORMNAME="" UNITNAME="BL_IOStreamMem.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BL_IOStream.cpp" FORMNAME="" UNITNAME="BL_IOStream.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BL_IOStreamFile.cpp" FORMNAME="" UNITNAME="BL_IOStreamFile.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="TimerLog.cpp" FORMNAME="" UNITNAME="TimerLog" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1049
+CodePage=1251
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=2
+Item0=$(BCB)\include;..\glib-2.0
+Item1=GBaseLib;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=6
+Item0=$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;..\Exe
+Item1=$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;../Exe
+Item2=$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk
+Item3=$(BCB)\lib\obj;$(BCB)\lib
+Item4=C:\Program Files\Borland\ZipForge\Lib\C++ Builder 6;$(BCB)\lib\obj;$(BCB)\lib
+Item5=GBaseLib;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=4
+Item0=_DEBUG;TD_CROSSPLATFORM;GBASELIB_EI=__declspec(dllexport)
+Item1=_DEBUG;TD_CROSSPLATFORM;GBASELIB=__declspec(dllexport)
+Item2=_DEBUG;TD_CROSSPLATFORM
+Item3=_DEBUG
+
+[HistoryLists\hlIntOutputDir]
+Count=1
+Item0=..\Temp\GBaseLib
+
+[HistoryLists\hlFinalOutputDir]
+Count=2
+Item0=..\Exe\
+Item1=..\Exe
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=1
+LinkDebugVcl=0
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+
+[Linker]
+LibPrefix=
+LibSuffix=
+LibVersion=
+  </IDEOPTIONS>
+</PROJECT>

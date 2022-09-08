@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="12.0"
+	Name="GBaseLib"
+	ProjectGUID="{426636A6-483F-4838-A4F1-A4CAD311742F}"
+	VCNestedProjectGUID="{9BC4F14D-EB20-4424-A058-FAC230DA51AD}"
+	VCNestedProjectFileName="GBaseLib.vcproj"
+	>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			>
+			<Tool
+				Name="CppCmplrTool"
+				DisableSpecificDiagnostics="177"
+			/>
+		</Configuration>
+	</Configurations>
+	<Files/>
+</VisualStudioProject>

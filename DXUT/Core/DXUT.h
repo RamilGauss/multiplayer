@@ -1,3 +1,4 @@
+#include "DefineUnicode.h"
 //--------------------------------------------------------------------------------------
 // File: DXUT.h
 //
@@ -183,7 +184,7 @@ struct DXUTDeviceSettings
 // General callbacks
 typedef void    (CALLBACK *LPDXUTCALLBACKFRAMEMOVE)( double fTime, float fElapsedTime, void* pUserContext );
 typedef void    (CALLBACK *LPDXUTCALLBACKKEYBOARD)( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext );
-typedef void    (CALLBACK *LPDXUTCALLBACKMOUSE)( UINT state, bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext );
+typedef void    (CALLBACK *LPDXUTCALLBACKMOUSE)( bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext );
 typedef LRESULT (CALLBACK *LPDXUTCALLBACKMSGPROC)( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing, void* pUserContext );
 typedef void    (CALLBACK *LPDXUTCALLBACKTIMER)( UINT idEvent, void* pUserContext );
 typedef bool    (CALLBACK *LPDXUTCALLBACKMODIFYDEVICESETTINGS)( DXUTDeviceSettings* pDeviceSettings, void* pUserContext );
@@ -239,12 +240,11 @@ HRESULT WINAPI DXUTInit( bool bParseCommandLine = true,
                         bool bThreadSafeDXUT = false );
 
 // Choose either DXUTCreateWindow or DXUTSetWindow.  If using DXUTSetWindow, consider using DXUTStaticWndProc
-HRESULT WINAPI DXUTCreateWindow( const WCHAR* strWindowTitle = L"Direct3D Window", 
+HRESULT WINAPI DXUTCreateWindow( HWND* hWnd = NULL, const WCHAR* strWindowTitle = L"Direct3D Window", 
                                 HINSTANCE hInstance = NULL, HICON hIcon = NULL, HMENU hMenu = NULL,
                                 int x = CW_USEDEFAULT, int y = CW_USEDEFAULT );
 HRESULT WINAPI DXUTSetWindow( HWND hWndFocus, HWND hWndDeviceFullScreen, HWND hWndDeviceWindowed, bool bHandleMessages = true );
 LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 // Choose either DXUTCreateDevice or DXUTSetD3D*Device or DXUTCreateD3DDeviceFromSettings
 HRESULT WINAPI DXUTCreateDevice( bool bWindowed = true, int nSuggestedWidth = 0, int nSuggestedHeight = 0 );
@@ -321,7 +321,7 @@ RECT      WINAPI DXUTGetFullsceenClientRectAtModeChange(); // Useful for returni
 double    WINAPI DXUTGetTime();
 float     WINAPI DXUTGetElapsedTime();
 bool      WINAPI DXUTIsWindowed();
-bool	  WINAPI DXUTIsInGammaCorrectMode();
+bool	    WINAPI DXUTIsInGammaCorrectMode();
 float     WINAPI DXUTGetFPS();
 LPCWSTR   WINAPI DXUTGetWindowTitle();
 LPCWSTR   WINAPI DXUTGetFrameStats( bool bIncludeFPS = false );
@@ -339,8 +339,7 @@ bool      WINAPI DXUTWasKeyPressed( BYTE vKey );  // Like DXUTIsKeyDown() but re
 bool      WINAPI DXUTIsMouseButtonDown( BYTE vButton ); // Pass a virtual-key code: VK_LBUTTON, VK_RBUTTON, VK_MBUTTON, VK_XBUTTON1, VK_XBUTTON2
 HRESULT   WINAPI DXUTCreateState(); // Optional method to create DXUT's memory.  If its not called by the application it will be automatically called when needed
 void      WINAPI DXUTDestroyState(); // Optional method to destroy DXUT's memory.  If its not called by the application it will be automatically called after the application exits WinMain 
-// Gauss 1.11.2012
-void* WINAPI DXUTGetStaticWndProc();
+void      WINAPI DXUTDestroy();
 //--------------------------------------------------------------------------------------
 // DXUT core layer includes
 //--------------------------------------------------------------------------------------

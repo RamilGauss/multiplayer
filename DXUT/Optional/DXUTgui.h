@@ -1,3 +1,4 @@
+#include "DefineUnicode.h"
 //--------------------------------------------------------------------------------------
 // File: DXUTgui.h
 //
@@ -736,8 +737,6 @@ public:
     }
 
     virtual void    Render( float fElapsedTime );
-
-    bool IsPressed()const {return m_bPressed;}// Gauss 27.11.2012
 
 protected:
     bool m_bPressed;

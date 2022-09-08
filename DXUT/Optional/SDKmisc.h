@@ -1,3 +1,4 @@
+#include "DefineUnicode.h"
 //--------------------------------------------------------------------------------------
 // File: SDKMisc.h
 //
@@ -266,11 +267,9 @@ void WINAPI DXUTDisplaySwitchingToREFWarning( DXUTDeviceVersion ver );
 //--------------------------------------------------------------------------------------
 // Tries to finds a media file by searching in common locations
 //--------------------------------------------------------------------------------------
-
 HRESULT WINAPI DXUTFindDXSDKMediaFileCch( __out_ecount(cchDest) WCHAR* strDestPath,
                                           __in int cchDest, 
                                           __in LPCWSTR strFilename );
-
 HRESULT WINAPI DXUTSetMediaSearchPath( LPCWSTR strPath );
 LPCWSTR WINAPI DXUTGetMediaSearchPath();
 
@@ -286,9 +285,6 @@ D3DXMATRIX WINAPI DXUTGetCubeMapViewMatrix( DWORD dwFace );
 //--------------------------------------------------------------------------------------
 HRESULT DXUTSnapD3D9Screenshot( LPCTSTR szFileName );
 HRESULT DXUTSnapD3D10Screenshot( LPCTSTR szFileName );
-
-HRESULT DXUTSnapD3D9Screenshot_Surface( LPCTSTR szFileName, IDirect3DSurface9* pSurf );
-HRESULT DXUTSnapD3D9Screenshot_Texture( LPCTSTR szFileName, IDirect3DTexture9* pText );
 
 //--------------------------------------------------------------------------------------
 // Simple helper stack class

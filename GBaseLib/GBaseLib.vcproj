@@ -3,10 +3,10 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="GBaseLib"
-	ProjectGUID="{D1CB233F-5E45-4024-95D2-C5EEDD07D20E}"
+	ProjectGUID="{9BC4F14D-EB20-4424-A058-FAC230DA51AD}"
 	RootNamespace="GBaseLib"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="196613"
+	TargetFrameworkVersion="196608"
 	>
 	<Platforms>
 		<Platform
@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\Exe\$(ConfigurationName)"
-			IntermediateDirectory="..\Temp\$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Temp\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="0"
 			>
@@ -40,16 +40,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/wd4996"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\glib-2.0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;GBASELIB_EI=__declspec(dllexport);GBASELIB_EXPORTS"
+				AdditionalIncludeDirectories="..\include\glib-2.0"
+				PreprocessorDefinitions="_DEBUG;TD_CROSSPLATFORM;CONSOLE;GBASELIB_EI=__declspec(dllexport)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -62,13 +62,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib glib-2.0.lib gthread-2.0.lib"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
+				AdditionalDependencies="glib-2.0.lib gthread-2.0.lib shlwapi.lib Winmm.lib"
+				AdditionalLibraryDirectories="$(SolutionDir)\Lib"
 				GenerateDebugInformation="true"
-				SubSystem="2"
-				ImportLibrary="..\Lib\$(ConfigurationName)\$(TargetName).lib"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -94,8 +90,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\Exe\$(ConfigurationName)"
-			IntermediateDirectory="..\Temp\$(ConfigurationName)\$(ProjectName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Temp\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="0"
 			WholeProgramOptimization="1"
@@ -119,13 +115,14 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\glib-2.0"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;GBASELIB_EI=__declspec(dllexport);GBASELIB_EXPORTS"
+				AdditionalIncludeDirectories="..\include\glib-2.0"
+				PreprocessorDefinitions="TD_CROSSPLATFORM;GBASELIB_EI=__declspec(dllexport)"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -138,22 +135,159 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib glib-2.0.lib gthread-2.0.lib"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
+				AdditionalDependencies="glib-2.0.lib gthread-2.0.lib shlwapi.lib Winmm.lib"
+				AdditionalLibraryDirectories="$(SolutionDir)\Lib"
 				GenerateDebugInformation="true"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				ImportLibrary="..\Lib\$(ConfigurationName)\$(TargetName).lib"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
 			/>
 			<Tool
 				Name="VCManifestTool"
-				AdditionalManifestFiles="..\Exe\Release.manifest"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="static_debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)\Temp\$(ProjectName)\$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\include\glib-2.0"
+				PreprocessorDefinitions="_DEBUG;TD_CROSSPLATFORM;CONSOLE;GBASELIB_EI=__declspec(dllexport)"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="glib-2.0.lib gthread-2.0.lib shlwapi.lib Winmm.lib"
+				AdditionalLibraryDirectories="$(SolutionDir)\Lib"
+				GenerateDebugInformation="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="static_release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="0"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\include\glib-2.0"
+				PreprocessorDefinitions="TD_CROSSPLATFORM;GBASELIB_EI=__declspec(dllexport)"
+				RuntimeLibrary="0"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="glib-2.0.lib gthread-2.0.lib shlwapi.lib Winmm.lib"
+				AdditionalLibraryDirectories="$(SolutionDir)\Lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -241,6 +375,42 @@
 				>
 			</File>
 			<File
+				RelativePath=".\errSND.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="static_debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="static_release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\errSTD.cpp"
 				>
 			</File>
@@ -249,15 +419,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\errWAVE.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\FileError.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\FileShare.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\GBaseLibWin.cpp"
 				>
 			</File>
 			<File
@@ -447,10 +617,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\MultiThreadQueue.h"
-				>
-			</File>
-			<File
 				RelativePath=".\RWLock.h"
 				>
 			</File>
@@ -479,6 +645,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\ClassDiagram1.cd"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

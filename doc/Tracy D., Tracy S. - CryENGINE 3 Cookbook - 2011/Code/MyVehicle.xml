@@ -1,0 +1,180 @@
+<Vehicle name="MyVehicle" actionMap="landvehicle" >
+ <Physics pushable="0" collDamageThreshold="0">
+  <Buoyancy waterDensity="0" waterResistance="0" />
+  <Simulation maxTimeStep="0.02" minEnergy="0.0020000001" maxLoggedCollisions="2"/>
+ </Physics>
+ <Damages submergedRatioMax="0.64999998" submergedDamageMult="1" collDamageThreshold="10" groundCollisionMinMult="1.3" groundCollisionMaxMult="1.4" groundCollisionMinSpeed="8" groundCollisionMaxSpeed="22">
+  <DamageMultipliers>
+   <DamageMultiplier damageType="bullet" multiplier="0.125"/>
+   <DamageMultiplier damageType="collision" multiplier="1"/>
+  </DamageMultipliers>
+  <DamagesGroups>
+   <DamagesGroup name="Destroy" useTemplate="CarDestroy">
+    <DamagesSubGroups>
+     <DamagesSubGroup delay="0.3" randomness="0.5">
+      <DamageBehaviors>
+       <DamageBehavior class="Impulse" damageRatioMin="1" ignoreVehicleDestruction="1">
+        <Impulse forceMin="2" forceMax="3" direction="0.05,0.1,1" momentum="0.2,0,0" worldSpace="1"/>
+       </DamageBehavior>
+      </DamageBehaviors>
+     </DamagesSubGroup>
+    </DamagesSubGroups>
+   </DamagesGroup>
+  </DamagesGroups>
+ </Damages>
+ <Components>
+  <Component name="Hull" damageMax="1000" position="0,0,1" size="2,5,2" useBoundsFromParts="0" useDamageLevels="0" id="idHull">
+   <DamageMultipliers>
+    <DamageMultiplier damageType="bullet" multiplier="0.2"/>
+    <DamageMultiplier damageType="collision" multiplier="1" />
+   </DamageMultipliers>
+   <DamageBehaviors>
+    <DamageBehavior class="Effect" damageRatioMin="0.5" damageRatioMax="1">
+     <Effect effect="HullDamaged50" disableAfterExplosion="1"/>
+    </DamageBehavior>
+    <DamageBehavior class="Effect" damageRatioMin="0.75" damageRatioMax="1">
+     <Effect effect="HullDamaged75" disableAfterExplosion="1"/>
+    </DamageBehavior>
+   <DamageBehavior class="Group" damageRatioMin="1">
+    <Group name="Destroy"/>
+    </DamageBehavior>
+   </DamageBehaviors>
+  </Component>
+  <Component name="wheel_1" damageMax="150" position="0,0,0" size="0,0,0" useBoundsFromParts="1" hullAffection="0" isOnlyDamageableByPlayer="1">
+   <DamageMultipliers>
+    <DamageMultiplier damageType="bullet" multiplier="1"/>
+    <DamageMultiplier damageType="collision" multiplier="0.1"/>
+   </DamageMultipliers>
+   <DamageBehaviors>
+    <DamageBehavior class="BlowTire" damageRatioMin="1">
+     <BlowTire />
+    </DamageBehavior>
+   </DamageBehaviors>
+  </Component>
+  <Component name="wheel_2" damageMax="150" position="0,0,0" size="0,0,0" useBoundsFromParts="1" hullAffection="0" isOnlyDamageableByPlayer="1">
+   <DamageMultipliers>
+    <DamageMultiplier damageType="bullet" multiplier="1"/>
+    <DamageMultiplier damageType="collision" multiplier="0.1"/>
+   </DamageMultipliers>
+   <DamageBehaviors>
+    <DamageBehavior class="BlowTire" damageRatioMin="1">
+     <BlowTire />
+    </DamageBehavior>
+   </DamageBehaviors>
+  </Component>
+  <Component name="wheel_3" damageMax="150" position="0,0,0" size="0,0,0" useBoundsFromParts="1" hullAffection="0" isOnlyDamageableByPlayer="1">
+   <DamageMultipliers>
+    <DamageMultiplier damageType="bullet" multiplier="1"/>
+    <DamageMultiplier damageType="collision" multiplier="0.1"/>
+   </DamageMultipliers>
+   <DamageBehaviors>
+    <DamageBehavior class="BlowTire" damageRatioMin="1">
+     <BlowTire />
+    </DamageBehavior>
+   </DamageBehaviors>
+  </Component>
+  <Component name="wheel_4" damageMax="150" position="0,0,0" size="0,0,0" useBoundsFromParts="1" hullAffection="0" isOnlyDamageableByPlayer="1">
+   <DamageMultipliers>
+    <DamageMultiplier damageType="bullet" multiplier="1"/>
+    <DamageMultiplier damageType="collision" multiplier="0.1"/>
+   </DamageMultipliers>
+   <DamageBehaviors>
+    <DamageBehavior class="BlowTire" damageRatioMin="1">
+     <BlowTire />
+    </DamageBehavior>
+   </DamageBehaviors>
+  </Component>
+ </Components>
+ <Parts>
+  <Part name="body" class="Animated" mass="100" component="Hull">
+   <Parts>
+    <Part name="wheel1" class="SubPartWheel" component="wheel_1" mass="80">
+     <SubPartWheel axle="0" density="0" damping="-0.69999999" driving="1" lenMax="0.40000001" maxFriction="1" minFriction="1" slipFrictionMod="0.30000001" stiffness="0" suspLength="0.25" rimRadius="0.31999999" torqueScale="1.1"/>
+    </Part>
+    <Part name="wheel2" class="SubPartWheel" component="wheel_2" mass="80">
+     <SubPartWheel axle="0" density="0" damping="-0.69999999" driving="1" lenMax="0.40000001" maxFriction="1" minFriction="1" slipFrictionMod="0.30000001" stiffness="0" suspLength="0.25" rimRadius="0.31999999" torqueScale="1.1"/>
+    </Part>
+    <Part name="wheel3" class="SubPartWheel" component="wheel_3" mass="80">
+     <SubPartWheel axle="1" density="0" damping="-0.69999999" driving="1" lenMax="0.40000001" maxFriction="1" minFriction="1" slipFrictionMod="0.34999999" stiffness="0" suspLength="0.25" rimRadius="0.31999999" torqueScale="1.1"/>
+    </Part>
+    <Part name="wheel4" class="SubPartWheel" component="wheel_4" mass="80">
+     <SubPartWheel axle="1" density="0" damping="-0.69999999" driving="1" lenMax="0.40000001" maxFriction="1" minFriction="1" slipFrictionMod="0.34999999" stiffness="0" suspLength="0.25" rimRadius="0.31999999" torqueScale="1.1"/>
+    </Part>
+   </Parts>
+   <Animated filename="objects/vehicles/MyVehicle/MyVehicle.cga" filenameDestroyed="objects/vehicles/HMMWV/HMMWV_damaged.cga" id="idAnimatedPart"/>
+  </Part>
+  <Part name="massBox" class="MassBox" mass="1500" position="0,0,1." disablePhysics="0" disableCollision="0" isHidden="0">
+   <MassBox size="1.25,2,1" drivingOffset="-0.69999999"/>
+  </Part>
+ </Parts>
+ <Helpers>
+  <Helper name="driver_eye_pos" position="-0.66000003,0.27500001,1.5" direction="0,1,0" part="body"/>
+  <Helper name="driver_sit_pos" position="-0.75,0.21,0.75" direction="0,1,0" part="body"/>
+  <Helper name="burningPos" position="0,0,1" direction="0,1,0" part="body"/>
+ </Helpers>
+ <Actions />
+ <Seats>
+  <Seat name="driver" part="body" AimPart="" enterHelper="" isDriver="1" sitHelper="driver_sit_pos" agVehicleName="HMMWV" useBoundsForEntering="1" >
+   <Views>
+    <View class="FirstPerson" canRotate="0">
+     <FirstPerson helper="driver_eye_pos" />
+    </View>
+	<View class="ActionThirdPerson" canRotate="0">
+     <ActionThirdPerson cameraPosOffset="0,-1.25,0" cameraAimOffset="0,0,0.5" lagSpeed="3" velocityMult="-2,0.029999999,2"/>
+    </View>
+   </Views>
+   <Weapons>
+    <Primary />
+   </Weapons>
+   <ActionParts />
+  </Seat>
+ </Seats>
+ <DamageExtensions fallingDamageThreshold="-15" />
+ <MovementParams>
+  <StdWheeled vMaxSteerMax="20" steerSpeed="70" steerSpeedMin="100" steerSpeedScale="1" steerSpeedScaleMin="1" v0SteerMax="33" kvSteerMax="4" steerRelaxation="500" pedalLimitMax="0.1" rpmInterpSpeed="4" rpmRelaxSpeed="2" rpmGearShiftSpeed="3">
+   <Wheeled axleFriction="700" axleFrictionMax="2000" brakeTorque="5000" brakeImpulse="0.5" clutchSpeed="2.3" damping="0" engineIdleRPM="500" engineMaxRPM="3050" engineMinRPM="100" enginePower="160" engineShiftDownRPM="1300" engineShiftUpRPM="2000" engineStartRPM="500" stabilizer="0.2" maxBrakingFriction="0.60000002" maxSteer="0.44999999" maxSpeed="23" maxTimeStep="0.02" minEnergy="0.012" slipThreshold="0.02" suspDampingMin="-0.18000001" suspDampingMax="-0.5" suspDampingMaxSpeed="15" gearDirSwitchRPM="1000" dynFriction="1.1" latFriction="1">
+    <gearRatios>
+     <gearRatio value="-20"/>
+     <gearRatio value="0"/>
+     <gearRatio value="8.5"/>
+     <gearRatio value="6"/>
+     <gearRatio value="5.5"/>
+    </gearRatios>
+   </Wheeled>
+   <SoundParams engineSoundPosition="engineSmokeOut" runSoundDelay="1" roadBumpMinSusp="10" roadBumpMinSpeed="6" roadBumpIntensity="0.30000001" maxSlipSpeed="11"/>
+   <TweakGroups>
+    <TweakGroup name="ai">
+     <Tweaks>
+      <Tweak name="enginePower" value="1" op="1"/>
+      <Tweak name="engineMaxRPM" value="1" op="1"/>
+      <Tweak name="brakeTorque" value="1" op="1"/>
+      <Tweak name="dynFriction" value="1" op="1"/>
+     </Tweaks>
+    </TweakGroup>
+    <TweakGroup name="player_boost">
+     <Tweaks>
+      <Tweak name="enginePower" value="1.4" op="1"/>
+      <Tweak name="engineMaxRPM" value="1.25" op="1"/>
+      <Tweak name="axleFriction" value="0.75" op="1"/>
+     </Tweaks>
+    </TweakGroup>
+   </TweakGroups>
+   <AirDamp dampAngle="1.2,0.75,0" dampAngVel="1.5,0.80000001,0.80000001"/>
+  </StdWheeled>
+ </MovementParams>
+ <Particles>
+  <Exhaust insideWater="0" outsideWater="1">
+   <Helpers>
+    <Helper value="exhaust_pos_left"/>
+   </Helpers>
+   <EngineStart effect="vehicle_fx.vehicle_exhaust.smoke"/>
+   <EngineStop effect="vehicle_fx.vehicle_exhaust.smoke_dark"/>
+   <EngineRunning effect="vehicle_fx.vehicle_exhaust.smoke_white" boostEffect="vehicle_fx.vehicle_exhaust.boost" baseSizeScale="1" minSpeed="0" minSpeedSizeScale="1" minSpeedCountScale="1" minSpeedSpeedScale="1" maxSpeed="15" maxSpeedSizeScale="1" maxSpeedCountScale="1" maxSpeedSpeedScale="1" minPower="0" minPowerSizeScale="0.5" minPowerCountScale="1" minPowerSpeedScale="1" maxPower="1" maxPowerSizeScale="1.5" maxPowerCountScale="1.5" maxPowerSpeedScale="1"/>
+  </Exhaust>
+  <DamageEffects>
+   <DamageEffect name="HullDamaged50" helper="burningPos" effect="smoke_and_fire.jeep.hull_smoke"/>
+   <DamageEffect name="HullDamaged75" helper="burningPos" effect="smoke_and_fire.jeep.dash_smoke"/>
+   <DamageEffect name="VehicleDestroyed" helper="burningPos" effect="explosions.jeep_explosion.a" scaleMax="1" gravityDirection="0,0,1"/>
+  </DamageEffects>
+ </Particles>
+</Vehicle>
