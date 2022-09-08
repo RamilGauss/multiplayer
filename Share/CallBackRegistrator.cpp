@@ -33,8 +33,7 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
-#include "ClientTank.h"
+#include "CallBackRegistrator.h"
 #include <stddef.h>
 #include "memory_operation.h"
 #include <string.h>

@@ -64,9 +64,9 @@ class TA_Try_Connect_To_Server : public TBasePacket
 	// ushort type, uchar code
 	unsigned char mCode;
 public:
-	enum{eConnectGarage=nsServerStruct::TClient::eGarage, // есть соединение! в гараже
-		eConnectWait=nsServerStruct::TClient::eWait,     // ждет
-		eConnectFight=nsServerStruct::TClient::eFight,    // в бою
+	enum{eConnectGarage=0, /*nsServerStruct::TClient::eGarage,*/ // есть соединение! в гараже
+		eConnectWait/*=nsServerStruct::TClient::eWait*/,     // ждет
+		eConnectFight/*=nsServerStruct::TClient::eFight*/,    // в бою
 		eWasConnect,      // повторная попытка
 		eBlackList,       // клиент в черном списке
 		eOldVersion,      // старая версия клиента

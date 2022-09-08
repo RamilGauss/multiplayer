@@ -1,44 +1,9 @@
-/*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
-Гудаков Рамиль Сергеевич 
-2011, 2012
-===========================================================================
-                        Common Information
-"Tanks" GPL Source Code
-
-This file is part of the "Tanks" GPL Source Code.
-
-"Tanks" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"Tanks" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "Tanks" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
-===========================================================================
-*/ 
-
+//--------------------------------------------------------------------------------------
+// File: DXUT.cpp
+//
+// Copyright (c) Microsoft Corporation. All rights reserved.
+//--------------------------------------------------------------------------------------
 #include "DXUT.h"
-#include "ManagerDirectX.h"
-#include "LoggerDX.h"
-
-//#define LOG_DX
-
 #define DXUT_MIN_WINDOW_SIZE_X 200
 #define DXUT_MIN_WINDOW_SIZE_Y 200
 #define DXUT_COUNTER_STAT_LENGTH 2048
@@ -624,7 +589,7 @@ DXUTMemoryHelper()
 }
 ~DXUTMemoryHelper()
 {
-    //DXUTDestroyState();// Gauss: я сам убью DXUT в цикле отрисовки по мере необходимости
+    //DXUTDestroyState();
 }
 };
 
@@ -633,7 +598,7 @@ DXUTState& GetDXUTState()
 {
     // This class will auto create the memory when its first accessed and delete it after the program exits WinMain.
     // However the application can also call DXUTCreateState() & DXUTDestroyState() independantly if its wants 
-    /*static*/ DXUTMemoryHelper memory;// заботится о том существует ли DXUTState.
+    /*static*/ DXUTMemoryHelper memory;
     assert( g_pDXUTState != NULL );
     return *g_pDXUTState;
 }
@@ -749,7 +714,7 @@ IDXGIFactory* WINAPI DXUTGetDXGIFactory()                  { DXUTDelayLoadDXGI()
 bool WINAPI DXUTIsD3D10Available()                         { DXUTDelayLoadDXGI(); return GetDXUTState().GetD3D10Available(); }
 bool WINAPI DXUTIsAppRenderingWithD3D9()                   { return (GetDXUTState().GetD3D9Device() != NULL); }
 bool WINAPI DXUTIsAppRenderingWithD3D10()                  { return (GetDXUTState().GetD3D10Device() != NULL); }
-void WINAPI DXUTDestroy()                                  { GetDXUTState().Destroy();}
+
 
 //--------------------------------------------------------------------------------------
 // External callback setup functions
@@ -1136,7 +1101,7 @@ bool DXUTGetCmdParam( WCHAR*& strCmdLine, WCHAR* strFlag )
 // call it with the default parameters.  Instead of calling this, you can 
 // call DXUTSetWindow() to use an existing window.  
 //--------------------------------------------------------------------------------------
-HRESULT WINAPI DXUTCreateWindow( HWND* phWnd, const WCHAR* strWindowTitle, HINSTANCE hInstance,
+HRESULT WINAPI DXUTCreateWindow( const WCHAR* strWindowTitle, HINSTANCE hInstance,
                                  HICON hIcon, HMENU hMenu, int x, int y )
 {
     HRESULT hr;
@@ -1221,7 +1186,6 @@ HRESULT WINAPI DXUTCreateWindow( HWND* phWnd, const WCHAR* strWindowTitle, HINST
         HWND hWnd = CreateWindow( L"Direct3DWindowClass", strWindowTitle, WS_OVERLAPPEDWINDOW,
                                   x, y, ( rc.right - rc.left ), ( rc.bottom - rc.top ), 0,
                                   hMenu, hInstance, 0 );
-        if(phWnd) *phWnd = hWnd;
         if( hWnd == NULL )
         {
             DWORD dwError = GetLastError();
@@ -1233,7 +1197,7 @@ HRESULT WINAPI DXUTCreateWindow( HWND* phWnd, const WCHAR* strWindowTitle, HINST
         GetDXUTState().SetHWNDDeviceFullScreen( hWnd );
         GetDXUTState().SetHWNDDeviceWindowed( hWnd );
     }
-    
+
     return S_OK;
 }
 
@@ -1746,13 +1710,12 @@ LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         {
             switch( wParam )
             {
-                /*### Gauss 09.05.2012
                 case VK_ESCAPE:
                 {
                     if( GetDXUTState().GetHandleEscape() )
                         SendMessage( hWnd, WM_CLOSE, 0, 0 );
                     break;
-                }*/
+                }
 
                 case VK_PAUSE:
                 {
@@ -1799,28 +1762,13 @@ LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     else
         return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
-//--------------------------------------------------------------------------------------
-void Log(MSG &msg)
-{
-#ifdef LOG_DX
-  if(msg.message!=WM_PAINT&&
-     msg.message!=WM_NCMOUSEMOVE&&
-     msg.message!=WM_NCLBUTTONDOWN&&
-     msg.message!=WM_MOUSEFIRST&&
-     msg.message!=WM_KEYFIRST&&
-     msg.message!=WM_KEYDOWN&&
-     msg.message!=WM_KEYUP&&
-     msg.message!=WM_CHAR&&
-     msg.message!=WM_TIMER
-    )
-    GlobalLoggerDX.WriteF_time("Event Win:%u\n",msg.message);
-#endif
-}
+
+
 //--------------------------------------------------------------------------------------
 // Handles app's message loop and rendering when idle.  If DXUTCreateDevice() or DXUTSetD3D*Device() 
 // has not already been called, it will call DXUTCreateWindow() with the default parameters.  
 //--------------------------------------------------------------------------------------
-HRESULT WINAPI DXUTMainLoop( TManagerDirectX* pObjRefresh, HACCEL hAccel)// передать объект для рефреша
+HRESULT WINAPI DXUTMainLoop( HACCEL hAccel )
 {
     HRESULT hr;
 
@@ -1872,12 +1820,10 @@ HRESULT WINAPI DXUTMainLoop( TManagerDirectX* pObjRefresh, HACCEL hAccel)// пере
     msg.message = WM_NULL;
     PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
 
-    while(msg.message!=WM_STOP_DXUT&&msg.message!=WM_QUIT)
-    //while(!(msg.message&WM_STOP_DXUT))
+    while( WM_QUIT != msg.message )
     {
         // Use PeekMessage() so we can use idle time to render the scene. 
         bGotMsg = ( PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) != 0 );
-        Log(msg);
 
         if( bGotMsg )
         {
@@ -1891,9 +1837,8 @@ HRESULT WINAPI DXUTMainLoop( TManagerDirectX* pObjRefresh, HACCEL hAccel)// пере
         }
         else
         {
-          if(pObjRefresh) pObjRefresh->Refresh();
-          // Render a frame during idle time (no messages are waiting)
-          DXUTRender3DEnvironment();
+            // Render a frame during idle time (no messages are waiting)
+            DXUTRender3DEnvironment();
         }
     }
 
@@ -2669,8 +2614,8 @@ HRESULT DXUTChangeDevice( DXUTDeviceSettings* pNewDeviceSettings,
     }
 
     // Make the window visible
-    //if( !IsWindowVisible( DXUTGetHWND() ) )
-        //ShowWindow( DXUTGetHWND(), SW_SHOW );
+    if( !IsWindowVisible( DXUTGetHWND() ) )
+        ShowWindow( DXUTGetHWND(), SW_SHOW );
 
     // Ensure that the display doesn't power down when fullscreen but does when windowed
     if( !DXUTIsWindowed() )
@@ -2994,9 +2939,14 @@ HRESULT DXUTCreate3DEnvironment9( IDirect3DDevice9* pd3dDeviceFromApp )
         // Try to create the device with the chosen settings
         IDirect3D9* pD3D = DXUTGetD3D9Object();
         assert( pD3D != NULL );
+
+
+        HWND hw = DXUTGetHWNDFocus();
+
         hr = pD3D->CreateDevice( pNewDeviceSettings->d3d9.AdapterOrdinal, pNewDeviceSettings->d3d9.DeviceType,
-                                 DXUTGetHWNDFocus(), pNewDeviceSettings->d3d9.BehaviorFlags,
-                                 &pNewDeviceSettings->d3d9.pp, &pd3dDevice );
+          DXUTGetHWNDFocus(), pNewDeviceSettings->d3d9.BehaviorFlags,
+          &pNewDeviceSettings->d3d9.pp, &pd3dDevice );
+
         if( hr == D3DERR_DEVICELOST )
         {
             GetDXUTState().SetDeviceLost( true );
@@ -3390,6 +3340,8 @@ void DXUTRender3DEnvironment9()
 
     return;
 }
+
+
 //--------------------------------------------------------------------------------------
 // Cleans up the 3D environment by:
 //      - Calls the device lost callback 
@@ -6235,8 +6187,7 @@ void DXUTUpdateFrameStats()
 LPCWSTR WINAPI DXUTGetFrameStats( bool bShowFPS )
 {
     WCHAR* pstrFrameStats = GetDXUTState().GetFrameStats();
-    //WCHAR* pstrFPS = ( bShowFPS ) ? GetDXUTState().GetFPSStats() : L"";
-    WCHAR* pstrFPS = GetDXUTState().GetFPSStats();
+    WCHAR* pstrFPS = ( bShowFPS ) ? GetDXUTState().GetFPSStats() : L"";
     swprintf_s( pstrFrameStats, 256, GetDXUTState().GetStaticFrameStats(), pstrFPS );
     return pstrFrameStats;
 }

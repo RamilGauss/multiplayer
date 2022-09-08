@@ -35,11 +35,11 @@ you may contact in writing [ramil2085@gmail.com].
 
 
 #include "Bufferizator2Thread.h"
-#include "TransportProtocolPacket.h"
+//#include "TransportProtocolPacket.h"
 #include "ApplicationProtocolDef.h"
-#include "ClientTank.h"
+//#include "ClientTank.h"
 
-TBufferizator2Thread* pBufferizator2Thread = NULL;
+#if 0
 
 void CallBackPacketInterpretator(void* data, int size)
 {
@@ -87,18 +87,18 @@ void CallBackStreamInterpretator(void* data, int size)
   //--------------------------------------------------------
 }
 //-------------------------------------------------------------------------------------------
-
+#endif
 TBufferizator2Thread::TBufferizator2Thread()
 :
   mQueuePacket(eCntElemPacket,eSizeElemPacket),
   mQueueStream(eCntElemStream,eSizeElemStream)
 {
-  pBufferizator2Thread = this;
+  //pBufferizator2Thread = this;
 }
 //------------------------------------------------------------------------
 TBufferizator2Thread::~TBufferizator2Thread()
 {
-  pBufferizator2Thread = NULL;
+  //pBufferizator2Thread = NULL;
 }
 //------------------------------------------------------------------------
 void TBufferizator2Thread::RcvPacket(void* dataPacket, int sizePacket)
@@ -123,7 +123,7 @@ bool TBufferizator2Thread::GetStream(void* dataPacket, int& sizePacket,guint32 &
 //------------------------------------------------------------------------
 void TBufferizator2Thread::RegisterToClientTank()
 {
-#ifndef EDITOR_MODEL
+#if 0
   GlobalClientTank.Register(CallBackPacketInterpretator,nsCallBackType::eRcvPacket);
   GlobalClientTank.Register(CallBackStreamInterpretator,nsCallBackType::eRcvStream);
 #endif
@@ -134,7 +134,7 @@ void TBufferizator2Thread::UnregisterFromClientTank()
 {
   if(flgWasRegisterCallback==false) return;
 
-#ifndef EDITOR_MODEL
+#if 0
   GlobalClientTank.Unregister(CallBackPacketInterpretator,nsCallBackType::eRcvPacket);
   GlobalClientTank.Unregister(CallBackStreamInterpretator,nsCallBackType::eRcvStream);
 #endif

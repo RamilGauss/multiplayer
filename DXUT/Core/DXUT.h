@@ -1,40 +1,8 @@
-/*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
-Гудаков Рамиль Сергеевич 
-2011, 2012
-===========================================================================
-                        Common Information
-"Tanks" GPL Source Code
-
-This file is part of the "Tanks" GPL Source Code.
-
-"Tanks" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"Tanks" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "Tanks" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
-===========================================================================
-*/ 
-
-#include "DefineUnicode.h"
-
+//--------------------------------------------------------------------------------------
+// File: DXUT.h
+//
+// Copyright (c) Microsoft Corporation. All rights reserved.
+//--------------------------------------------------------------------------------------
 #pragma once
 #ifndef DXUT_H
 #define DXUT_H
@@ -271,7 +239,7 @@ HRESULT WINAPI DXUTInit( bool bParseCommandLine = true,
                         bool bThreadSafeDXUT = false );
 
 // Choose either DXUTCreateWindow or DXUTSetWindow.  If using DXUTSetWindow, consider using DXUTStaticWndProc
-HRESULT WINAPI DXUTCreateWindow( HWND* hWnd = NULL, const WCHAR* strWindowTitle = L"Direct3D Window", 
+HRESULT WINAPI DXUTCreateWindow( const WCHAR* strWindowTitle = L"Direct3D Window", 
                                 HINSTANCE hInstance = NULL, HICON hIcon = NULL, HMENU hMenu = NULL,
                                 int x = CW_USEDEFAULT, int y = CW_USEDEFAULT );
 HRESULT WINAPI DXUTSetWindow( HWND hWndFocus, HWND hWndDeviceFullScreen, HWND hWndDeviceWindowed, bool bHandleMessages = true );
@@ -284,8 +252,7 @@ HRESULT WINAPI DXUTSetD3D9Device( IDirect3DDevice9* pd3dDevice );
 HRESULT WINAPI DXUTSetD3D10Device( ID3D10Device* pd3dDevice, IDXGISwapChain* pSwapChain );
 
 // Choose either DXUTMainLoop or implement your own main loop 
-class TManagerDirectX;
-HRESULT WINAPI DXUTMainLoop( TManagerDirectX* pObjRefresh = NULL,HACCEL hAccel = NULL );
+HRESULT WINAPI DXUTMainLoop( HACCEL hAccel = NULL );
 
 // If not using DXUTMainLoop consider using DXUTRender3DEnvironment
 void WINAPI DXUTRender3DEnvironment(); 
@@ -353,7 +320,7 @@ RECT      WINAPI DXUTGetFullsceenClientRectAtModeChange(); // Useful for returni
 double    WINAPI DXUTGetTime();
 float     WINAPI DXUTGetElapsedTime();
 bool      WINAPI DXUTIsWindowed();
-bool	    WINAPI DXUTIsInGammaCorrectMode();
+bool	  WINAPI DXUTIsInGammaCorrectMode();
 float     WINAPI DXUTGetFPS();
 LPCWSTR   WINAPI DXUTGetWindowTitle();
 LPCWSTR   WINAPI DXUTGetFrameStats( bool bIncludeFPS = false );
@@ -371,7 +338,7 @@ bool      WINAPI DXUTWasKeyPressed( BYTE vKey );  // Like DXUTIsKeyDown() but re
 bool      WINAPI DXUTIsMouseButtonDown( BYTE vButton ); // Pass a virtual-key code: VK_LBUTTON, VK_RBUTTON, VK_MBUTTON, VK_XBUTTON1, VK_XBUTTON2
 HRESULT   WINAPI DXUTCreateState(); // Optional method to create DXUT's memory.  If its not called by the application it will be automatically called when needed
 void      WINAPI DXUTDestroyState(); // Optional method to destroy DXUT's memory.  If its not called by the application it will be automatically called after the application exits WinMain 
-void      WINAPI DXUTDestroy();
+
 //--------------------------------------------------------------------------------------
 // DXUT core layer includes
 //--------------------------------------------------------------------------------------

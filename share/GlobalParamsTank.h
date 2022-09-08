@@ -74,10 +74,9 @@ QMessageBox::warning( NULL, QObject::tr(NAME_TITTLE),sError );
 #define SERVER_NUMBER_OF_NETWORK 0 //  выбор подсети (в случае наличия нескольких сетевых адаптеров)
 
 
-#define QEVENT_DIRECTX_EXIT       (QEvent::Type)(QEvent::User+0)
-#define QEVENT_PACKET             (QEvent::Type)(QEvent::User+1)
-#define QEVENT_STREAM             (QEvent::Type)(QEvent::User+2)
-#define QEVENT_DISCONNECT         (QEvent::Type)(QEvent::User+3)
+#define QEVENT_PACKET             (QEvent::Type)(QEvent::User+0)
+#define QEVENT_STREAM             (QEvent::Type)(QEvent::User+1)
+#define QEVENT_DISCONNECT         (QEvent::Type)(QEvent::User+2)
 
 
 #define PATH_LIST_MODELS "..\\model\\listModel"

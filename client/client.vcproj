@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="client"
+	Name="Client"
 	ProjectGUID="{A4EE1FDE-FDDC-4CE4-AC31-71559907C174}"
 	RootNamespace="client"
 	Keyword="Qt4VSv1.0"
@@ -108,7 +108,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtOpenGL&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;.\;..\DXUT\Core;..\DXUT\Optional;..\DXUT;..\DirectX"
+				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtOpenGL&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;.\;..\DXUT\Core;..\DXUT\Optional;..\DXUT;..\DirectX;..\QBaseLib;..\Melissa;..\BigJack"
 				PreprocessorDefinitions="WIN32;QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;QT_SQL_LIB;QT_OPENGL_LIB;QT_NETWORK_LIB;_CRT_SECURE_NO_WARNINGS;DEBUG_CRT_DEBUG_CLIENT=0"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
@@ -164,35 +164,27 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ClientMain.cpp"
+				RelativePath=".\Source\ClientMain.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\GameForm.cpp"
+				RelativePath=".\Source\ClientTank.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\GameRoomPrepare.cpp"
+				RelativePath=".\Source\GameForm.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\KeyHandler.cpp"
+				RelativePath=".\Source\GameRoomPrepare.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\main.cpp"
+				RelativePath=".\Source\ManagerGUIClient.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ManagerGUI.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MouseHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\WaitForm.cpp"
+				RelativePath=".\Source\WaitForm.cpp"
 				>
 			</File>
 		</Filter>
@@ -202,100 +194,14 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\BaseGUI.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ClientMain.h"
+				RelativePath=".\Source\ClientMain.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_SQL_LIB -DUNICODE -DWIN32&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -D_CRT_SECURE_NO_WARNINGS -DDEBUG_CRT_DEBUG_CLIENT=0  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.&quot; &quot;-I.\..\DXUT\Core&quot; &quot;-I.\..\DXUT\Optional&quot; &quot;-I.\..\DXUT&quot; &quot;-I.\..\DirectX&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\GameForm.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_SQL_LIB -DUNICODE -DWIN32&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -D_CRT_SECURE_NO_WARNINGS -DDEBUG_CRT_DEBUG_CLIENT=0  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.&quot; &quot;-I.\..\DXUT\Core&quot; &quot;-I.\..\DXUT\Optional&quot; &quot;-I.\..\DXUT&quot; &quot;-I.\..\DirectX&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\GameRoomPrepare.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_SQL_LIB -DUNICODE -DWIN32&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -D_CRT_SECURE_NO_WARNINGS -DDEBUG_CRT_DEBUG_CLIENT=0  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.&quot; &quot;-I.\..\DXUT\Core&quot; &quot;-I.\..\DXUT\Optional&quot; &quot;-I.\..\DXUT&quot; &quot;-I.\..\DirectX&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
-						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\KeyHandler.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ManagerGUI.h"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing ManagerGUI.h..."
+						Description="Moc&apos;ing ClientMain.h..."
 						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
@@ -306,27 +212,27 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing ManagerGUI.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -D_CRT_SECURE_NO_WARNINGS -DDEBUG_CRT_DEBUG_CLIENT=0 &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.&quot; &quot;-I.\..\DXUT\Core&quot; &quot;-I.\..\DXUT\Optional&quot; &quot;-I.\..\DXUT&quot; &quot;-I.\..\DirectX&quot;&#x0D;&#x0A;"
+						Description="Moc&apos;ing ClientMain.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -D_CRT_SECURE_NO_WARNINGS -DDEBUG_CRT_DEBUG_CLIENT=0 &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.&quot; &quot;-I.\..\DXUT\Core&quot; &quot;-I.\..\DXUT\Optional&quot; &quot;-I.\..\DXUT&quot; &quot;-I.\..\DirectX&quot; &quot;-I.\..\QBaseLib&quot; &quot;-I.\..\Melissa&quot; &quot;-I.\..\BigJack&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\MouseHandler.h"
+				RelativePath=".\Source\ClientTank.h"
 				>
 			</File>
 			<File
-				RelativePath=".\WaitForm.h"
+				RelativePath=".\Source\GameForm.h"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I.&quot; &quot;-I.\GeneratedFiles&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_LARGEFILE_SUPPORT -DQT_NETWORK_LIB -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_SQL_LIB -DUNICODE -DWIN32&#x0D;&#x0A;"
+						Description="Moc&apos;ing GameForm.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -336,8 +242,86 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Moc&apos;ing $(InputFileName)..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -D_CRT_SECURE_NO_WARNINGS -DDEBUG_CRT_DEBUG_CLIENT=0  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.&quot; &quot;-I.\..\DXUT\Core&quot; &quot;-I.\..\DXUT\Optional&quot; &quot;-I.\..\DXUT&quot; &quot;-I.\..\DirectX&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						Description="Moc&apos;ing GameForm.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -D_CRT_SECURE_NO_WARNINGS -DDEBUG_CRT_DEBUG_CLIENT=0 &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.&quot; &quot;-I.\..\DXUT\Core&quot; &quot;-I.\..\DXUT\Optional&quot; &quot;-I.\..\DXUT&quot; &quot;-I.\..\DirectX&quot; &quot;-I.\..\QBaseLib&quot; &quot;-I.\..\Melissa&quot; &quot;-I.\..\BigJack&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Source\GameRoomPrepare.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing GameRoomPrepare.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing GameRoomPrepare.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -D_CRT_SECURE_NO_WARNINGS -DDEBUG_CRT_DEBUG_CLIENT=0 &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.&quot; &quot;-I.\..\DXUT\Core&quot; &quot;-I.\..\DXUT\Optional&quot; &quot;-I.\..\DXUT&quot; &quot;-I.\..\DirectX&quot; &quot;-I.\..\QBaseLib&quot; &quot;-I.\..\Melissa&quot; &quot;-I.\..\BigJack&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Source\ManagerGUIClient.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing ManagerGUIClient.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing ManagerGUIClient.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -D_CRT_SECURE_NO_WARNINGS -DDEBUG_CRT_DEBUG_CLIENT=0  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.&quot; &quot;-I.\..\DXUT\Core&quot; &quot;-I.\..\DXUT\Optional&quot; &quot;-I.\..\DXUT&quot; &quot;-I.\..\DirectX&quot; &quot;-I.\..\QBaseLib&quot; &quot;-I.\..\Melissa&quot; &quot;-I.\..\BigJack&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Source\WaitForm.h"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing WaitForm.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing WaitForm.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;  -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -D_CRT_SECURE_NO_WARNINGS -DDEBUG_CRT_DEBUG_CLIENT=0 &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.&quot; &quot;-I.\..\DXUT\Core&quot; &quot;-I.\..\DXUT\Optional&quot; &quot;-I.\..\DXUT&quot; &quot;-I.\..\DirectX&quot; &quot;-I.\..\QBaseLib&quot; &quot;-I.\..\Melissa&quot; &quot;-I.\..\BigJack&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -350,7 +334,7 @@
 			UniqueIdentifier="{99349809-55BA-4b9d-BF79-8FDBB0286EB3}"
 			>
 			<File
-				RelativePath=".\ClientMain.ui"
+				RelativePath=".\Source\ClientMain.ui"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -376,7 +360,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GameRoomPrepare.ui"
+				RelativePath=".\Source\GameRoomPrepare.ui"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -402,7 +386,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\WaitForm.ui"
+				RelativePath=".\Source\WaitForm.ui"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -541,7 +525,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\GeneratedFiles\Release\moc_ManagerGUI.cpp"
+					RelativePath=".\GeneratedFiles\Release\moc_ManagerGUIClient.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -607,7 +591,7 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\GeneratedFiles\Debug\moc_ManagerGUI.cpp"
+					RelativePath=".\GeneratedFiles\Debug\moc_ManagerGUIClient.cpp"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
@@ -632,766 +616,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<Filter
-			Name="Share"
-			>
-			<Filter
-				Name="Source Files"
-				>
-				<File
-					RelativePath="..\share\BoundingBox.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\Bufferizator2Thread.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\CallBackRegistrator.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\ClientTank.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\GlobalParamsTank.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\LoadFromHDD.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\memory_operation.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\NetSystem.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\ObjectPrediction.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\Prediction.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\SaveOnHDD.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\SelfTank.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\Testing.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\TransportProtocolTank.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\share\UdpDevice.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Header Files"
-				>
-				<File
-					RelativePath="..\share\AboutGrafikEngine_DirectX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\ApplicationProtocolDef.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\ApplicationProtocolMainPacket.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\ApplicationProtocolPacketAnswer.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\ApplicationProtocolPacketCmd.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\ApplicationProtocolPacketRequest.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\ApplicationProtocolPacketStream.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\BoundingBox.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\Bufferizator2Thread.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\CallBackRegistrator.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\classTools.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\ClientTank.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\common_defs.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\List.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\LoadFromHDD.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\memory_operation.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\MultiThreadQueue.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\NetSystem.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\ObjectPrediction.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\Prediction.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\SaveOnHDD.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\SelfTank.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\Struct3D.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\Testing.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\TransportProtocolPacket.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\TransportProtocolTank.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\UdpDevice.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="GBaseLib"
-			>
-			<Filter
-				Name="Header Files"
-				>
-				<File
-					RelativePath="..\GBaseLib\ArrUIDobject.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\AutoCreateVar.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_AppFile.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_ConfigFile.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_Conv.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_CycleBuffer.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_Debug.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_IOStream.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_IOStreamFile.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_IOStreamMem.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_Log.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_New.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_Thread.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_Time.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\ErrorReg.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\FileError.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\FileShare.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\GCS.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\GTime.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\hArray.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\HiTimer.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\IImageNotify.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\ILogConsole.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\ImageFile.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\List_DualLink.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\List_DualLink_p.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\List_SingleLink.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\List_SingleLink_p.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\ListMem_SingleLink.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\ListMem_SingleLink_p.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\LogFile.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\LogManager.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\LogStd.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\RWLock.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\TimerLog.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\TObject.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\ToStr.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\TypeDef.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\UIDobject.h"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\WatchValue.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Source Files"
-				>
-				<File
-					RelativePath="..\GBaseLib\ArrUIDobject.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_AppFile.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_ConfigFile.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_Conv.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_Debug.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_IOStream.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_IOStreamFile.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_IOStreamMem.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_Log.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_Thread.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\BL_Time.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\ErrNotify_File.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\ErrorDesc.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\ErrorReg.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\errSDK.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\errSTD.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\errStr.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\FileError.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\FileShare.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\GCS.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\hArray.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\HiTimer.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\ILogConsole.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\ImageFile.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\LogFile.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\LogManager.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\LogStd.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\TimerLog.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\ToStr.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\UIDobject.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\GBaseLib\WatchValue.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="DXUT"
-			>
-			<File
-				RelativePath="..\DXUT\DefineUnicode.h"
-				>
-			</File>
-			<Filter
-				Name="Core"
-				>
-				<Filter
-					Name="Source Files"
-					>
-					<File
-						RelativePath="..\DXUT\Core\DXUT.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Core\DXUTenum.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Core\DXUTmisc.cpp"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Header Files"
-					>
-					<File
-						RelativePath="..\DXUT\Core\DXUT.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Core\DXUTenum.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Core\DXUTmisc.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
-				Name="Optional"
-				>
-				<Filter
-					Name="Source Files"
-					>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTcamera.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTgui.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTguiIME.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTres.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTsettingsdlg.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTShapes.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\ImeUi.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\SDKmesh.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\SDKmisc.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\SDKsound.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\SDKwavefile.cpp"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="Header Files"
-					>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTcamera.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTgui.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTguiIME.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTLockFreePipe.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTres.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTsettingsdlg.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\DXUTShapes.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\ImeUi.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\SDKmesh.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\SDKmisc.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\SDKsound.h"
-						>
-					</File>
-					<File
-						RelativePath="..\DXUT\Optional\SDKwavefile.h"
-						>
-					</File>
-				</Filter>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="DirectX"
-			>
-			<Filter
-				Name="Source Files"
-				>
-				<File
-					RelativePath="..\DirectX\DX_main.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\EffectDX.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ILoaderModelDX.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\LoaderListModel.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\LoaderMap.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\LoaderModelDX.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\LoggerDX.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ManagerDirectX.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ManagerModel.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ManagerObjectDX.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ManagerShader.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\MeshLoader.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ModelDX.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ObjectDX.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\SoundDX.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Header Files"
-				>
-				<File
-					RelativePath="..\DirectX\DefineDX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\DX_main.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\EffectDX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ILoaderModelDX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\LoaderListModel.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\LoaderMap.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\LoaderModelDX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\LoggerDX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ManagerDirectX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ManagerModel.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ManagerObjectDX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ManagerShader.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\MeshLoader.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ModelDX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\ObjectDX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\SoundDX.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
 	</Files>
 	<Globals>
 		<Global
@@ -1408,7 +632,7 @@
 		/>
 		<Global
 			Name="QtVersion Win32"
-			Value="4.4.3.vc2008"
+			Value="4.5.0"
 		/>
 		<Global
 			Name="RccDir"
