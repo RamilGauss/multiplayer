@@ -97,24 +97,28 @@ void TRoom::Done()
     }
 
     pTank->pRoom = NULL;// отв€зать от комнаты
+    //--------------------------------------------------------------------
+    // отсылать только если есть св€зь с клиентом
+    if(pClient->flgDisconnect==false)
+    {
+      // отослать результаты бо€
+      TA_End_Fight A_End_Fight;
+      A_End_Fight.setCodeAction(TA_End_Fight::eNoOnes);// ### ничь€
 
-    // отослать результаты бо€
-    TA_End_Fight A_End_Fight;
-    A_End_Fight.setCodeAction(TA_End_Fight::eNoOnes);// ### ничь€
-    
-    // а вдруг клиент на другом танке в другом бою или в ожидании?
-    if((pClient->GetCurRoom()==pTank->pRoom||   // клиент находитс€ в бою в этой комнате
+      // а вдруг клиент на другом танке в другом бою или в ожидании?
+      if((pClient->GetCurRoom()==pTank->pRoom||   // клиент находитс€ в бою в этой комнате
         pClient->GetCurRoom()==NULL          )&&// клиент вышел из комнаты и ждет окончани€ бо€
         pClient->state!=TClient::eWait       )  // не в ожидании
-      A_End_Fight.setCodeExit(TA_End_Fight::eExitTrue);// ManagerGui закроет окно DX и откроет окно комнаты подготовке
-    else
-      A_End_Fight.setCodeExit(TA_End_Fight::eExitFalse);// идет бой на другом танке
+        A_End_Fight.setCodeExit(TA_End_Fight::eExitTrue);// ManagerGui закроет окно DX и откроет окно комнаты подготовке
+      else
+        A_End_Fight.setCodeExit(TA_End_Fight::eExitFalse);// идет бой на другом танке
 
-    char strMsg[100];
-    sprintf(strMsg, "ѕриветик. Ѕой то закончилс€. Ќичь€.¬рем€: %u сек.", (mNow_MS-mTimeAfterCountDown)/1000);
-    A_End_Fight.setMsg(strMsg);
+      char strMsg[100];
+      sprintf(strMsg, "ѕриветик. Ѕой то закончилс€. Ќичь€.¬рем€: %u сек.", (mNow_MS-mTimeAfterCountDown)/1000);
+      A_End_Fight.setMsg(strMsg);
 
-    WriteTransportAnswer(pClient,&A_End_Fight);
+      WriteTransportAnswer(pClient,&A_End_Fight);
+    }
   }
   mArrTank.Unlink();
 }

@@ -14,10 +14,10 @@ float3 g_vMaterialAmbient : Ambient = float3( 0.2f, 0.2f, 0.2f );   // Material'
 float3 g_vMaterialDiffuse : Diffuse = float3( 0.8f, 0.8f, 0.8f );   // Material's diffuse color
 float3 g_vMaterialSpecular : Specular = float3( 1.0f, 1.0f, 1.0f );  // Material's specular color
 float  g_fMaterialAlpha : Opacity = 1.0f;
-int    g_nMaterialShininess : SpecularPower = 32;
+int    g_nMaterialShininess : SpecularPower = 0;//32;
 
 float3 g_vLightColor : LightColor = float3( 1.0f, 1.0f, 1.0f );        // Light color
-float3 g_vLightPosition : LightPosition = float3( 50.0f, 10.0f, 0.0f );   // Light position
+float3 g_vLightPosition : LightPosition = float3( 0.0f, -40.0f, 0.0f );   // Light position
 float3 g_vCameraPosition : CameraPosition;
 
 texture  g_MeshTexture : Texture;   // Color texture for mesh
@@ -97,14 +97,12 @@ void Lighting( float2 vTexCoord: TEXCOORD0,
                out float4 vColorOut: COLOR0,
                uniform bool bTexture )
 {  
-    vColorOut = vColorIn;
-    
-    // Sample and modulate the texture
-    if( bTexture )
-        vColorOut.rgb *= tex2D( MeshTextureSampler, vTexCoord );
-        
-}
+	vColorOut = vColorIn;
 
+	// Sample and modulate the texture
+	if( bTexture )
+	  vColorOut.rgb *= tex2D( MeshTextureSampler, vTexCoord );  
+}
 
 //--------------------------------------------------------------------------------------
 // Techniques

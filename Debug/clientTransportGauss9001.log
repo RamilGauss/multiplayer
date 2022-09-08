@@ -3,8 +3,8 @@ TransportInfo:
 	 type=C,
 	 cn_in=0,
 	 cn_out=0,
-	 time=8:35:28.718,
-	 localTime=8:35:28.718,
+	 time=7:8:11.843,
+	 localTime=7:8:11.843,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9001
@@ -16,8 +16,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=0,
 	 cn_out=0,
-	 time=8:35:28.718,
-	 localTime=8:35:28.718,
+	 time=7:8:11.843,
+	 localTime=7:8:11.843,
 	 cntTry=0,
 	 DST=192.168.23.222:9001,
 	 SRC=192.168.23.222:4321
@@ -29,8 +29,8 @@ TransportInfo:
 	 type=P,
 	 cn_in=0,
 	 cn_out=1,
-	 time=8:35:28.828,
-	 localTime=8:35:28.828,
+	 time=7:8:11.953,
+	 localTime=7:8:11.953,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9001
@@ -42,8 +42,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=0,
 	 cn_out=1,
-	 time=8:35:28.828,
-	 localTime=8:35:28.828,
+	 time=7:8:11.953,
+	 localTime=7:8:11.953,
 	 cntTry=0,
 	 DST=192.168.23.222:9001,
 	 SRC=192.168.23.222:4321
@@ -55,8 +55,8 @@ TransportInfo:
 	 type=P,
 	 cn_in=1,
 	 cn_out=1,
-	 time=8:35:28.875,
-	 localTime=8:35:28.875,
+	 time=7:8:12.031,
+	 localTime=7:8:12.031,
 	 cntTry=0,
 	 DST=192.168.23.222:9001,
 	 SRC=192.168.23.222:4321
@@ -68,8 +68,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=1,
 	 cn_out=1,
-	 time=8:35:28.875,
-	 localTime=8:35:28.875,
+	 time=7:8:12.031,
+	 localTime=7:8:12.031,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9001
@@ -81,8 +81,8 @@ TransportInfo:
 	 type=P,
 	 cn_in=1,
 	 cn_out=2,
-	 time=8:35:28.875,
-	 localTime=8:35:28.875,
+	 time=7:8:12.046,
+	 localTime=7:8:12.046,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9001
@@ -94,8 +94,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=1,
 	 cn_out=2,
-	 time=8:35:28.875,
-	 localTime=8:35:28.875,
+	 time=7:8:12.046,
+	 localTime=7:8:12.046,
 	 cntTry=0,
 	 DST=192.168.23.222:9001,
 	 SRC=192.168.23.222:4321
@@ -107,8 +107,8 @@ TransportInfo:
 	 type=P,
 	 cn_in=2,
 	 cn_out=2,
-	 time=8:35:28.968,
-	 localTime=8:35:28.968,
+	 time=7:8:12.140,
+	 localTime=7:8:12.140,
 	 cntTry=0,
 	 DST=192.168.23.222:9001,
 	 SRC=192.168.23.222:4321
@@ -120,8 +120,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=2,
 	 cn_out=2,
-	 time=8:35:28.968,
-	 localTime=8:35:28.968,
+	 time=7:8:12.140,
+	 localTime=7:8:12.140,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9001
@@ -133,8 +133,8 @@ TransportInfo:
 	 type=P,
 	 cn_in=2,
 	 cn_out=3,
-	 time=8:35:33.328,
-	 localTime=8:35:33.328,
+	 time=7:8:16.468,
+	 localTime=7:8:16.468,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9001
@@ -146,8 +146,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=2,
 	 cn_out=3,
-	 time=8:35:33.328,
-	 localTime=8:35:33.328,
+	 time=7:8:16.468,
+	 localTime=7:8:16.468,
 	 cntTry=0,
 	 DST=192.168.23.222:9001,
 	 SRC=192.168.23.222:4321
@@ -159,8 +159,8 @@ TransportInfo:
 	 type=P,
 	 cn_in=3,
 	 cn_out=3,
-	 time=8:35:33.406,
-	 localTime=8:35:33.406,
+	 time=7:8:16.562,
+	 localTime=7:8:16.562,
 	 cntTry=0,
 	 DST=192.168.23.222:9001,
 	 SRC=192.168.23.222:4321
@@ -172,8 +172,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=3,
 	 cn_out=3,
-	 time=8:35:33.406,
-	 localTime=8:35:33.406,
+	 time=7:8:16.562,
+	 localTime=7:8:16.562,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9001
@@ -185,8 +185,8 @@ TransportInfo:
 	 type=P,
 	 cn_in=3,
 	 cn_out=4,
-	 time=8:35:34.000,
-	 localTime=8:35:34.000,
+	 time=7:8:17.562,
+	 localTime=7:8:17.562,
 	 cntTry=0,
 	 DST=192.168.23.222:9001,
 	 SRC=192.168.23.222:4321
@@ -198,8 +198,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=3,
 	 cn_out=4,
-	 time=8:35:34.000,
-	 localTime=8:35:34.000,
+	 time=7:8:17.562,
+	 localTime=7:8:17.562,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9001
@@ -211,8 +211,8 @@ TransportInfo:
 	 type=P,
 	 cn_in=4,
 	 cn_out=4,
-	 time=8:35:39.515,
-	 localTime=8:35:39.515,
+	 time=7:8:24.671,
+	 localTime=7:8:24.671,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9001
@@ -224,8 +224,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=4,
 	 cn_out=4,
-	 time=8:35:39.515,
-	 localTime=8:35:39.515,
+	 time=7:8:24.671,
+	 localTime=7:8:24.671,
 	 cntTry=0,
 	 DST=192.168.23.222:9001,
 	 SRC=192.168.23.222:4321
@@ -237,8 +237,8 @@ TransportInfo:
 	 type=P,
 	 cn_in=4,
 	 cn_out=5,
-	 time=8:35:39.546,
-	 localTime=8:35:39.546,
+	 time=7:8:24.734,
+	 localTime=7:8:24.734,
 	 cntTry=0,
 	 DST=192.168.23.222:9001,
 	 SRC=192.168.23.222:4321
@@ -250,8 +250,34 @@ TransportInfo:
 	 type=K,
 	 cn_in=4,
 	 cn_out=5,
-	 time=8:35:39.546,
-	 localTime=8:35:39.546,
+	 time=7:8:24.734,
+	 localTime=7:8:24.734,
+	 cntTry=0,
+	 DST=192.168.23.222:4321,
+	 SRC=192.168.23.222:9001
+Contain packet:
+
+
+Recive Packet from ip=192.168.23.222, port=4321
+TransportInfo: 
+	 type=P,
+	 cn_in=4,
+	 cn_out=6,
+	 time=7:9:12.109,
+	 localTime=7:9:12.109,
+	 cntTry=0,
+	 DST=192.168.23.222:9001,
+	 SRC=192.168.23.222:4321
+Contain packet:
+0xC9 0x0 
+
+Send Packet to ip=192.168.23.222, port=4321
+TransportInfo: 
+	 type=K,
+	 cn_in=4,
+	 cn_out=6,
+	 time=7:9:12.109,
+	 localTime=7:9:12.109,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9001
