@@ -8,13 +8,13 @@
 #include "ErrorReg.h"
 #include <glib/gthread.h>
 #include "ManagerGUI.h"
-
-
-#include "ApplicationProtocolPacketAnswer.h"//####
+#include "Testing.h"
 
 
 int main(int argc, char *argv[])
 {
+  //Testing();
+
   g_thread_init( NULL );
   err_Init();
   errSTR_Init();

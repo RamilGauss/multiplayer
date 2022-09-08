@@ -73,7 +73,7 @@ public:
   // характеристики
   
   // состояние
-  unsigned short mHitPoint;        // у.е.
+  unsigned short mHP;              // у.е.
   unsigned int maskDefectDevice;   // маска неисправности устройств,  0 - исправно, 1 - неисправно см. eMaskDefectDevice
   unsigned int maskDefectCrew;     // маска контузии экипажа,  0 - здоров, 1 - контужен см. eMaskDefectCrew
 
@@ -139,11 +139,13 @@ public:
   // параметры перемещения
   float mCoordX;//координата центра танка
   float mCoordY;
+  float mCoordZ;
 
   float mSpeed;
 
   float mCoordX_Vector;// вектор направления (ориентация)
   float mCoordY_Vector;
+  float mCoordZ_Vector;
 
   // маска нажатых клавиш
   unsigned int mMaskPushButton; // см. ePushButton

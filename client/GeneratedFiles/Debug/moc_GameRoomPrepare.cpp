@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'GameRoomPrepare.h'
 **
-** Created: Thu 3. May 16:00:27 2012
+** Created: Fri 4. May 15:09:32 2012
 **      by: The Qt Meta Object Compiler version 59 (Qt 4.4.3)
 **
 ** WARNING! All changes made in this file will be lost!

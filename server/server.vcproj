@@ -345,6 +345,10 @@
 				Name="Source Files"
 				>
 				<File
+					RelativePath="..\share\BoundingBox.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\share\CallBackRegistrator.cpp"
 					>
 				</File>
@@ -370,6 +374,10 @@
 				</File>
 				<File
 					RelativePath="..\share\NetSystem.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\share\ObjectPrediction.cpp"
 					>
 				</File>
 				<File
@@ -445,6 +453,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\share\BoundingBox.h"
+					>
+				</File>
+				<File
 					RelativePath="..\share\CallBackRegistrator.h"
 					>
 				</File>
@@ -482,6 +494,10 @@
 				</File>
 				<File
 					RelativePath="..\share\NetSystem.h"
+					>
+				</File>
+				<File
+					RelativePath="..\share\ObjectPrediction.h"
 					>
 				</File>
 				<File

@@ -623,6 +623,10 @@
 				Name="Source Files"
 				>
 				<File
+					RelativePath="..\share\BoundingBox.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\share\Bufferizator2Thread.cpp"
 					>
 				</File>
@@ -647,11 +651,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\share\ObjectPrediction.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\share\Prediction.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\share\SaveOnHDD.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\share\Testing.cpp"
 					>
 				</File>
 				<File
@@ -695,6 +707,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\share\BoundingBox.h"
+					>
+				</File>
+				<File
 					RelativePath="..\share\Bufferizator2Thread.h"
 					>
 				</File>
@@ -735,11 +751,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\share\ObjectPrediction.h"
+					>
+				</File>
+				<File
 					RelativePath="..\share\Prediction.h"
 					>
 				</File>
 				<File
 					RelativePath="..\share\SaveOnHDD.h"
+					>
+				</File>
+				<File
+					RelativePath="..\share\Testing.h"
 					>
 				</File>
 				<File
@@ -1324,18 +1348,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath=".\ClassDiagram1.cd"
-			>
-		</File>
-		<File
-			RelativePath=".\ClassDiagram2.cd"
-			>
-		</File>
-		<File
-			RelativePath=".\ClassDiagram3.cd"
-			>
-		</File>
 	</Files>
 	<Globals>
 		<Global

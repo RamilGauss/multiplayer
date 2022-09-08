@@ -406,16 +406,25 @@ public:
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //APPL_TYPE_A_CORRECT_PACKET_STATE_TANK
+// в начале перед боем на обратном отсчете показать координаты и ориентацию танков
 class TA_Correct_Packet_State_Tank : public TBasePacket
 {
   // ushort type
   // uchar cnt_tank
 
-  // uint HP
+  // uchar id - порядковый номер  танка
+  // float x - координаты
+  // float y
+  // float z
+  // float xv - ориентация
+  // float yv
+  // float zv
 
 public:
   enum{
-    eSizeDefTank = sizeof(unsigned int),
+    eSizeDefTank = sizeof(unsigned char)
+    +sizeof(float)+sizeof(float)+sizeof(float)
+    +sizeof(float)+sizeof(float)+sizeof(float),
   };
 
   TA_Correct_Packet_State_Tank()
@@ -438,10 +447,49 @@ public:
   unsigned char  getCountTank(){return *getPointerCountTank();}
   unsigned char* getPointerCountTank(){return (unsigned char*)(mData+sizeof(mType)+sizeof(unsigned char));}
   //----------------------------------------------------------------------
-  unsigned int* getPointerHP(int i)
-  {return (unsigned int*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefTank);}
-  unsigned int getHP(int i){return *getPointerHP(i);}
-  void setHP(int i,unsigned int val){*getPointerHP(i) = val;}
+  unsigned char* getPointerID(int i)
+  {return (unsigned char*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefTank);}
+  unsigned char getID(int i){return *getPointerID(i);}
+  void setID(int i,unsigned char val){*getPointerID(i) = val;}
+  //----------------------------------------------------------------------
+  float* getPointerX(int i)
+  {return (float*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefTank+sizeof(unsigned char));}
+  float getX(int i){return *getPointerX(i);}
+  void setX(int i,float val){*getPointerX(i) = val;}
+  //----------------------------------------------------------------------
+  float* getPointerY(int i)
+  {return (float*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefTank+sizeof(unsigned char)+
+                                       sizeof(float));}
+  float getY(int i){return *getPointerY(i);}
+  void setY(int i,float val){*getPointerY(i) = val;}
+  //----------------------------------------------------------------------
+  float* getPointerZ(int i)
+  {return (float*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefTank+sizeof(unsigned char)+
+                                       sizeof(float)+sizeof(float));}
+  float getZ(int i){return *getPointerZ(i);}
+  void setZ(int i,float val){*getPointerZ(i) = val;}
+  //----------------------------------------------------------------------
+  //----------------------------------------------------------------------
+  //----------------------------------------------------------------------
+  float* getPointerXV(int i)
+  {return (float*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefTank+sizeof(unsigned char)+
+                                       sizeof(float)+sizeof(float)+sizeof(float));}
+  float getXV(int i){return *getPointerXV(i);}
+  void setXV(int i,float val){*getPointerXV(i) = val;}
+  //----------------------------------------------------------------------
+  float* getPointerYV(int i)
+  {return (float*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefTank+sizeof(unsigned char)+
+                                       sizeof(float)+sizeof(float)+sizeof(float)+
+                                       sizeof(float));}
+  float getYV(int i){return *getPointerYV(i);}
+  void setYV(int i,float val){*getPointerYV(i) = val;}
+  //----------------------------------------------------------------------
+  float* getPointerZV(int i)
+  {return (float*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefTank+sizeof(unsigned char)+
+                                       sizeof(float)+sizeof(float)+sizeof(float)+
+                                       sizeof(float)+sizeof(float));}
+  float getZV(int i){return *getPointerZV(i);}
+  void setZV(int i,float val){*getPointerZV(i) = val;}
 };
 //-----------------------------------------------------------------------------
 //APPL_TYPE_A_SCORE

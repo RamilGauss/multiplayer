@@ -260,17 +260,19 @@ void TRoom::AnalizPacket()// здесь отослать корректирующий пакет (можно партиями
       {
         BL_ASSERT(mState!=eFight);
         // добавить в prediction
-        mPrediction.SetOrientAim(pClient);
+        mPrediction.SetOrientAim((*it)->pTank,(*it)->pDefPacket);
         break;
       }
       case APPL_TYPE_C_KEY_EVENT:
       {
         BL_ASSERT(mState!=eFight);
         // добавить в prediction
+        mPrediction.SetKeyEvent((*it)->pTank,(*it)->pDefPacket);
         break;
       }
       default:BL_FIX_BUG();
     }
+    delete *it;
     it++;
   }
   mListFreshAction.clear();
@@ -309,18 +311,28 @@ void TRoom::SetPacket(nsServerStruct::TPacketServer* pDefPacket,TTank* pTank)
   pAction->pTank   = pTank;
   pAction->pDefPacket = pDefPacket;
   mListFreshAction.push_back(pAction);  
-  //delete (*ppPacket);// пока эти данные не нужны
 }
 //----------------------------------------------------------------------------------
 void TRoom::SendInitCoordTank(TClient* pClient)
 {
+  TA_Correct_Packet_State_Tank packet;
   // расчет координат возможен до загрузки карты, все данные хранятся у предсказателя
-  mPrediction.mListTank.####
-  while(it!=eit)
+  int cnt = mArrTank.Count();
+  packet.setCountTank(cnt);
+  TS_Fight_Coord_Bullet::TLocalTank * pArrTank = new TS_Fight_Coord_Bullet::TLocalTank[cnt];
+  for(int i = 0 ; i < cnt ; i++)
   {
-
+    TTank* pTank = (TTank*)mArrTank.Get(i);
+    packet.setID(i,i);
+    packet.setX(i,pTank->mCoordX);
+    packet.setY(i,pTank->mCoordY);
+    packet.setZ(i,pTank->mCoordZ);
+    packet.setXV(i,pTank->mCoordX_Vector);
+    packet.setYV(i,pTank->mCoordY_Vector);
+    packet.setZV(i,pTank->mCoordZ_Vector);
+    //### ну и т.д.
   }
-  
+  delete[] pArrTank;
   WriteTransportAnswer(pClient,&packet);
 }
 //----------------------------------------------------------------------------------
@@ -329,17 +341,26 @@ void TRoom::SendScore(TClient* pClient)
   TA_Score A_Score;
   A_Score.setScore0(score0);
   A_Score.setScore1(score1);
-  A_Score.setTimeRest(DURATION_FIGHT_MS-mTimeAfterCountDown);
+  A_Score.setTimeRest(DURATION_FIGHT_MS - (mNow_MS - mTimeAfterCountDown));
   WriteTransportAnswer(pClient,&A_Score);
 }
 //----------------------------------------------------------------------------------
 void TRoom::SendStateObject(TClient* pClient)
 {
+  TA_Correct_Packet_State_Object packet;
   // все данные хранятся у предсказателя
-  mPrediction.mListDestroyObject.
+  std::list<TObjectPrediction*>::iterator it = mPrediction.mListDamageObject.begin();
+  std::list<TObjectPrediction*>::iterator eit = mPrediction.mListDamageObject.end();
+
+  int cnt = mPrediction.mListDamageObject.size();
+  packet.setCountObject(cnt);
+  int i = 0;
   while(it!=eit)
   {
-
+    packet.setID(i,(*it)->GetID());
+    packet.setMaskState(i,(*it)->GetMaskState());
+    it++;
+    i++;
   }
   // если объектов очень много, то разбить на группы
   WriteTransportAnswer(pClient,&packet);
