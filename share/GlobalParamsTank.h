@@ -3,8 +3,8 @@
 
 #define ServerLocalPort 4321
 
-#define VERSION_PROGRAMM ((unsigned short)28) // unsigned short
-#define VERSION_EDITOR   ((unsigned short)5)
+#define VERSION_PROGRAMM ((unsigned short)30) // unsigned short
+#define VERSION_EDITOR   ((unsigned short)7)
 //-------------------------------------------------------------------------------------------
 extern char strVersionClient[100];
 extern char strVersionServer[100];

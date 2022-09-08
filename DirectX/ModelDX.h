@@ -59,18 +59,12 @@ protected:
     TLOD(){mEffectDX_normal=NULL;mEffectDX_damage=NULL;}
     ~TLOD()
     {
-      if(mEffectDX_normal==mEffectDX_damage)
-      {
-        delete mEffectDX_normal;
-        mEffectDX_normal=NULL;mEffectDX_damage=NULL;
-      }
-      else
-      {
-        delete mEffectDX_normal;mEffectDX_normal=NULL;
-        delete mEffectDX_damage;mEffectDX_damage=NULL;
-      }
+      mEffectDX_normal = NULL;
+      mEffectDX_damage = NULL;
     }
   };
+
+  TEffectDX* pArrAllEffect;
 
   TLOD* mArrEffect0;// подробно
   TLOD* mArrEffect1;// грубо

@@ -87,7 +87,18 @@ void TManagerDirectX::Calc()
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::Optimize()
 {
+  while(mListReadyRender.size())
+  {mListReadyRender.pop_back();}
 
+  int cnt = GlobalManagerObjectDX.GetCnt();
+  for(int i = 0; i < cnt ; i++)
+  {
+    TObjectDX* pObjectDX = GlobalManagerObjectDX.Get(i);
+    if(pObjectDX)
+    {    
+      mListReadyRender.push_back(pObjectDX);
+    }
+  }
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::Render(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext)
@@ -130,7 +141,7 @@ void TManagerDirectX::ThreadLoadMap()
     ht_msleep(eWaitLoadModel);
   }
 
-  mLoaderMap.Load(mPacket.getCodeMap());
+  mLoaderMap.LoadMap(mPacket.getCodeMap());
   flgLoadingMap = false;
   flgNeedSendCorrectPacket = true;
 #ifdef LOG_DX
@@ -150,6 +161,7 @@ void TManagerDirectX::LoadMap(TA_In_Fight& packet)
   threadLoadMap = g_thread_create(::ThreadLoadMap, (gpointer)this, true, NULL);
 }
 //--------------------------------------------------------------------------------------------------------
+#ifndef EDITOR_MODEL
 void TManagerDirectX::KeyEvent(unsigned int nChar, bool bKeyDown, bool bAltDown, void* pUserContext)
 {
   if(mState==eLoadMap) return;
@@ -157,14 +169,39 @@ void TManagerDirectX::KeyEvent(unsigned int nChar, bool bKeyDown, bool bAltDown,
   switch(nChar)
   {
     case 0x1B://VK_ESCAPE:
-#ifndef EDITOR_MODEL
+
       GlobalClientTank.SendRequestExitFromFight();
-#endif
       GlobalLoggerDX.WriteF_time("Escape.\n");
       break;
     default:;
   }
+  GlobalLoggerDX.WriteF_time("Нажатие кнопки: %u.\n",nChar);
 }
+#else
+void TManagerDirectX::KeyEvent(unsigned int nChar, bool bKeyDown, bool bAltDown, void* pUserContext)
+{
+  switch(nChar)
+  {
+    case 0x1B://VK_ESCAPE:
+    {
+      TLoaderMap loaderMap(&GlobalManagerObjectDX,&GlobalManagerModel);
+      TLoaderMap::TDescObject oDesc;
+      oDesc.id = 1;// cube_pro
+      oDesc.state = 1;
+      oDesc.coord.x = 0;
+      oDesc.coord.y = 0;
+      oDesc.coord.z = 0;
+      oDesc.orient.vx = 0;
+      oDesc.orient.vy = 0;
+      oDesc.orient.vz = 0;
+      loaderMap.LoadObjectDX(&oDesc,true);
+      break;
+    }
+    default:;
+  }
+  GlobalLoggerDX.WriteF_time("Нажатие кнопки: %u.\n",nChar);
+}
+#endif
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::MouseEvent(double fTime, float fElapsedTime, void* pUserContext)
 {

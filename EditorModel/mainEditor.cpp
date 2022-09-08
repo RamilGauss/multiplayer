@@ -7,5 +7,8 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 
   TDX dx;
   dx.Work(NULL);
+
+  //dx.Work(NULL);
+
   return 0;
 }

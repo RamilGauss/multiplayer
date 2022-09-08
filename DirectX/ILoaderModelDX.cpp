@@ -31,19 +31,19 @@ char* ILoaderModelDX::GetStrPathShader(int iGroup)
 //-----------------------------------------------------------
 DWORD* ILoaderModelDX::GetPinterIndexes(int iGroup, int &size)
 {
-  size = mArrDefGroup[iGroup].sizeIndexes;
+  size = mArrDefGroup[iGroup].cntIndexes;
   return mArrDefGroup[iGroup].indexes;
 }
 //-----------------------------------------------------------
 TEffectDX::VERTEX* ILoaderModelDX::GetPinterVertex(int iGroup, int &size)
 {
-  size = mArrDefGroup[iGroup].sizeVertex;
+  size = mArrDefGroup[iGroup].cntVertex;
   return mArrDefGroup[iGroup].vertex;
 }
 //-----------------------------------------------------------
-char* ILoaderModelDX::GetTexture(int iGroup, int &cnt)
+WCHAR* ILoaderModelDX::GetTexture(int iGroup, int &cnt)
 {
-  return mArrDefGroup[iGroup].strPathShader;
+  return mArrDefGroup[iGroup].strTexture;
 }
 //-----------------------------------------------------------
 void ILoaderModelDX::Done()

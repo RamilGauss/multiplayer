@@ -815,7 +815,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\LoaderModelDXEditor.h"
+					RelativePath="..\DirectX\LoaderModelDXTest.h"
 					>
 				</File>
 				<File
@@ -883,7 +883,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\LoaderModelDXEditor.cpp"
+					RelativePath="..\DirectX\LoaderModelDXTest.cpp"
 					>
 				</File>
 				<File

@@ -8,7 +8,7 @@ class TManagerModel;
 
 class TLoaderMap
 {
-
+public:
   struct TDescObject
   {
     unsigned short       id;
@@ -16,7 +16,7 @@ class TLoaderMap
     nsStruct3D::TCoord3  coord;
     nsStruct3D::TOrient3 orient;
   };
-
+protected:
   std::list<TDescObject*> mListObject;
 
   TManagerObjectDX* mMO; 
@@ -31,7 +31,9 @@ public:
   };
 
   // читает карту: координаты, ориентацию и состояние объектов в менеджер объектов
-  int Load(unsigned int id_map, bool flgCleanObject = true);
+  int LoadMap(unsigned int id_map, bool flgCleanObject = true);
+
+  bool LoadObjectDX(TDescObject * pDescObjDX, bool clean_MO = false);
 
 protected:
   void LoadMapObject();

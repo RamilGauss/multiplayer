@@ -2,7 +2,7 @@
 #include "SDKmisc.h"
 #include "LoaderModelDX.h"
 #include "LoggerDX.h"
-#include "LoaderModelDXEditor.h"
+#include "LoaderModelDXTest.h"
 #include "BL_Debug.h"
 
 
@@ -28,16 +28,29 @@ TModelDX::TModelDX()
   mLOD             = 0;
   mArrEffect0       = NULL;
   mArrEffect1       = NULL;
+  pArrAllEffect = NULL;
 
   m_pd3dDevice = NULL;
 }
 //----------------------------------------------------------------------------------------------------
 TModelDX::~TModelDX()
 {
-  delete []mArrEffect0;
-  mArrEffect0       = NULL;
-  delete []mArrEffect1;
-  mArrEffect1       = NULL;
+  if(mArrEffect0!=mArrEffect1)
+  {
+    delete []mArrEffect0;
+    mArrEffect0       = NULL;
+    delete []mArrEffect1;
+    mArrEffect1       = NULL;
+  }
+  else
+  {
+    delete []mArrEffect0;
+    mArrEffect0       = NULL;
+    mArrEffect1       = NULL;
+  }
+  delete []pArrAllEffect;
+  pArrAllEffect = NULL;
+
   mCntEffectVisual = 0;
   mCntEffectInLOD  = 0;// как правило в 2 или 1 раз больше чем mCntEffectVisual
   mCntAllEffect    = 0;// как правило в 4 или 2 раза больше чем mCntEffectVisual
@@ -104,39 +117,64 @@ void TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strAbsPath/*путь к фай
   WCHAR str[MAX_PATH];
   DWORD dwShaderFlags = D3DXFX_NOT_CLONEABLE;
 
-  // прочитать эффект из файла
-  V( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, strFilenameShader ) );
-
   for(int i = 0 ; i < mCntEffectVisual ; i++)
   {
     ID3DXEffect* pEffect;
     // If this fails, there should be debug output as to 
     // they the .fx file failed to compile
-    V( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
-      NULL, &pEffect, NULL ) );
-    mArrEffect0[i].mEffectDX_normal->p = pEffect;
-    mArrEffect1[i].mEffectDX_normal->Init(i*4+0);
+    if(mArrEffect0[i].mEffectDX_normal->isN0() ||
+       mArrEffect0[i].mEffectDX_normal->p==NULL)
+    {
+      V( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, 
+         mArrEffect0[i].mEffectDX_normal->mMaterial.strShader) );
+
+      V( D3DXCreateEffectFromFile( pd3dDevice, str, 
+        NULL, NULL, dwShaderFlags, NULL, &pEffect, NULL ) );
+      mArrEffect0[i].mEffectDX_normal->p = pEffect;
+      mArrEffect0[i].mEffectDX_normal->Init(i*4+0);
+    }
     //-----------------------------------------------------------------------------
     // If this fails, there should be debug output as to 
     // they the .fx file failed to compile
-    V( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
-      NULL, &pEffect, NULL ) );
-    mArrEffect0[i].mEffectDX_damage->p = pEffect;
-    mArrEffect1[i].mEffectDX_damage->Init(i*4+1);
+    if(mArrEffect0[i].mEffectDX_damage->isD0() ||
+       mArrEffect0[i].mEffectDX_damage->p==NULL)
+    {
+      V( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, 
+        mArrEffect0[i].mEffectDX_damage->mMaterial.strShader) );
+
+      V( D3DXCreateEffectFromFile( pd3dDevice, str, 
+        NULL, NULL, dwShaderFlags, NULL, &pEffect, NULL ) );
+      mArrEffect0[i].mEffectDX_damage->p = pEffect;
+      mArrEffect0[i].mEffectDX_damage->Init(i*4+1);
+    }
     //-----------------------------------------------------------------------------
     // If this fails, there should be debug output as to 
     // they the .fx file failed to compile
-    V( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
-      NULL, &pEffect, NULL ) );
-    mArrEffect0[i].mEffectDX_damage->p = pEffect;
-    mArrEffect1[i].mEffectDX_damage->Init(i*4+2);
+    if(mArrEffect1[i].mEffectDX_normal->isN1() ||
+       mArrEffect1[i].mEffectDX_normal->p==NULL)
+    {
+      V( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, 
+        mArrEffect1[i].mEffectDX_normal->mMaterial.strShader) );
+
+      V( D3DXCreateEffectFromFile( pd3dDevice, str, 
+        NULL, NULL, dwShaderFlags, NULL, &pEffect, NULL ) );
+      mArrEffect1[i].mEffectDX_normal->p = pEffect;
+      mArrEffect1[i].mEffectDX_normal->Init(i*4+2);
+    }
     //-----------------------------------------------------------------------------
     // If this fails, there should be debug output as to 
     // they the .fx file failed to compile
-    V( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
-      NULL, &pEffect, NULL ) );
-    mArrEffect0[i].mEffectDX_damage->p = pEffect;
-    mArrEffect1[i].mEffectDX_damage->Init(i*4+3);
+    if(mArrEffect1[i].mEffectDX_damage->isD1() ||
+       mArrEffect1[i].mEffectDX_damage->p==NULL)
+    {
+      V( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, 
+        mArrEffect1[i].mEffectDX_damage->mMaterial.strShader) );
+
+      V( D3DXCreateEffectFromFile( pd3dDevice, str, 
+        NULL, NULL, dwShaderFlags, NULL, &pEffect, NULL ) );
+      mArrEffect1[i].mEffectDX_damage->p = pEffect;
+      mArrEffect1[i].mEffectDX_damage->Init(i*4+3);
+    }
   }
 }
 //----------------------------------------------------------------------------------------------------
@@ -154,10 +192,14 @@ void TModelDX::Destroy()
 {
   for(int i = 0 ; i < mCntEffectVisual ; i++)
   {
-    mArrEffect0[i].mEffectDX_normal->Destroy();
-    mArrEffect0[i].mEffectDX_damage->Destroy();
-    mArrEffect1[i].mEffectDX_normal->Destroy();
-    mArrEffect1[i].mEffectDX_damage->Destroy();
+    if(mArrEffect0[i].mEffectDX_normal->isN0())
+      mArrEffect0[i].mEffectDX_normal->Destroy();
+    if(mArrEffect0[i].mEffectDX_damage->isD0())
+      mArrEffect0[i].mEffectDX_damage->Destroy();
+    if(mArrEffect1[i].mEffectDX_normal->isN1())
+      mArrEffect1[i].mEffectDX_normal->Destroy();
+    if(mArrEffect1[i].mEffectDX_damage->isD0())
+      mArrEffect1[i].mEffectDX_damage->Destroy();
   }
 }
 //----------------------------------------------------------------------------------------------------
@@ -165,10 +207,14 @@ void TModelDX::LostDevice()
 {
   for(int i = 0 ; i < mCntEffectVisual ; i++)
   {
-    mArrEffect0[i].mEffectDX_normal->LostDevice();
-    mArrEffect0[i].mEffectDX_damage->LostDevice();
-    mArrEffect1[i].mEffectDX_normal->LostDevice();
-    mArrEffect1[i].mEffectDX_damage->LostDevice();
+    if(mArrEffect0[i].mEffectDX_normal->isN0())
+      mArrEffect0[i].mEffectDX_normal->LostDevice();
+    if(mArrEffect0[i].mEffectDX_damage->isD0())
+      mArrEffect0[i].mEffectDX_damage->LostDevice();
+    if(mArrEffect1[i].mEffectDX_normal->isN1())
+      mArrEffect1[i].mEffectDX_normal->LostDevice();
+    if(mArrEffect1[i].mEffectDX_damage->isD0())
+      mArrEffect1[i].mEffectDX_damage->LostDevice();
   }
 }
 //----------------------------------------------------------------------------------------------------
@@ -176,18 +222,22 @@ void TModelDX::ResetDevice()
 {
   for(int i = 0 ; i < mCntEffectVisual ; i++)
   {
-    mArrEffect0[i].mEffectDX_normal->ResetDevice();
-    mArrEffect0[i].mEffectDX_damage->ResetDevice();
-    mArrEffect1[i].mEffectDX_normal->ResetDevice();
-    mArrEffect1[i].mEffectDX_damage->ResetDevice();
+    if(mArrEffect0[i].mEffectDX_normal->isN0())
+      mArrEffect0[i].mEffectDX_normal->ResetDevice();
+    if(mArrEffect0[i].mEffectDX_damage->isD0())
+      mArrEffect0[i].mEffectDX_damage->ResetDevice();
+    if(mArrEffect1[i].mEffectDX_normal->isN1())
+      mArrEffect1[i].mEffectDX_normal->ResetDevice();
+    if(mArrEffect1[i].mEffectDX_damage->isD0())
+      mArrEffect1[i].mEffectDX_damage->ResetDevice();
   }
 }
 //----------------------------------------------------------------------------------------------------
 bool TModelDX::Load(LPCWSTR strFilenameData)
 {
   ILoaderModelDX* pLoadModel;
-#ifdef _EDITOR_MODEL // редактор моделей
-  pLoadModel = new TLoaderModelDXEditor;//в основном для экспериментов
+#if 0
+  pLoadModel = new TLoaderModelDXTest;//в основном для экспериментов
 #else
   pLoadModel = new TLoaderModelDX;
 #endif
@@ -205,12 +255,12 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
   mLOD = pLoadModel->GetLOD();
   mID  = pLoadModel->GetID_Unique();
   mCntAllEffect = pLoadModel->GetCountSubset();
-  TEffectDX* pArrEffect = new TEffectDX[mCntAllEffect];
+  pArrAllEffect = new TEffectDX[mCntAllEffect];
   for(int i = 0 ; i < mCntAllEffect ; i++)
   {
     ILoaderModelDX::TDefGroup *pDef = &(pLoadModel->GetArrDefGroup()[i]);
     // заполнение
-    SetupEffectDX(&pArrEffect[i],pDef);
+    SetupEffectDX(&pArrAllEffect[i],pDef);
   }
   // структурировать данные
   if(mCntAllEffect!=mCntEffectInLOD)
@@ -226,12 +276,12 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
   for(int i = 0 ; i < mCntAllEffect ; i++)
   {
     TLOD* pCurLOD = mArrEffect1;
-    if(pArrEffect[i].mTypeLOD==0)
+    if(pArrAllEffect[i].mTypeLOD==0)
       pCurLOD = mArrEffect0;
-    if(pArrEffect[i].mflgNormal)
-      pCurLOD[pArrEffect[i].mIndexVisual].mEffectDX_normal = &pArrEffect[i];
+    if(pArrAllEffect[i].mflgNormal)
+      pCurLOD[pArrAllEffect[i].mIndexVisual].mEffectDX_normal = &pArrAllEffect[i];
     else
-      pCurLOD[pArrEffect[i].mIndexVisual].mEffectDX_damage = &pArrEffect[i];
+      pCurLOD[pArrAllEffect[i].mIndexVisual].mEffectDX_damage = &pArrAllEffect[i];
   }
   for(int i = 0 ; i < mCntEffectVisual ; i++)
   {
@@ -249,7 +299,6 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
     BL_ASSERT(mArrEffect1[i].mEffectDX_normal!=NULL);
     BL_ASSERT(mArrEffect1[i].mEffectDX_damage!=NULL);
   }
-
   delete pLoadModel;
   return true;
 }
@@ -257,15 +306,19 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
 bool TModelDX::SetupEffectDX(TEffectDX *pEffect,ILoaderModelDX::TDefGroup * pDefGroup)
 {
   HRESULT hr;
-
+  
   pEffect->mIndexVisual = pDefGroup->mIndex;
   pEffect->mTypeLOD     = pDefGroup->mTypeLOD;
   pEffect->mflgNormal   = pDefGroup->mflgNormal;
+  
   // Load material textures
   TEffectDX::Material* pMaterial = &pEffect->mMaterial;
   // заполнить материал данными
-  wcscpy(pMaterial->strName,pDefGroup->strName);
+  strcpy(pMaterial->strTechnique,pDefGroup->strTechnique);
+  strcpy(pMaterial->strName,pDefGroup->strName);
   wcscpy(pMaterial->strTexture,pDefGroup->strTexture);
+  USES_CONVERSION;
+  wcscpy(pMaterial->strShader,A2W(pDefGroup->strPathShader));
 
   pMaterial->vAmbient   = pDefGroup->vAmbient;
   pMaterial->vDiffuse   = pDefGroup->vDiffuse;
@@ -276,24 +329,26 @@ bool TModelDX::SetupEffectDX(TEffectDX *pEffect,ILoaderModelDX::TDefGroup * pDef
 
   pMaterial->bSpecular  = pDefGroup->bSpecular;
 
+
   V( D3DXCreateTextureFromFile( m_pd3dDevice, pMaterial->strTexture,
     &( pMaterial->pTexture ) ) );
-
+  
   // Create the encapsulated mesh
-  V( D3DXCreateMesh( pDefGroup->sizeIndexes / 3, pDefGroup->sizeVertex,
+  V( D3DXCreateMesh( pDefGroup->cntIndexes / 3, pDefGroup->cntVertex,
     D3DXMESH_MANAGED | D3DXMESH_32BIT, VERTEX_MODELDX_DECL,
     m_pd3dDevice, &(pEffect->pMesh) ) );
+
 
   // Copy the vertex data
   TEffectDX::VERTEX* pVertex;
   V( pEffect->pMesh->LockVertexBuffer( 0, ( void** )&pVertex ) );
-  memcpy( pVertex, pDefGroup->vertex, pDefGroup->sizeVertex * sizeof( TEffectDX::VERTEX ) );
+  memcpy( pVertex, pDefGroup->vertex, pDefGroup->cntVertex * sizeof( TEffectDX::VERTEX ) );
   pEffect->pMesh->UnlockVertexBuffer();
 
   // Copy the index data
   DWORD* pIndex;
   V( pEffect->pMesh->LockIndexBuffer( 0, ( void** )&pIndex ) );
-  memcpy( pIndex, pDefGroup->indexes, pDefGroup->sizeIndexes * sizeof( DWORD ) );
+  memcpy( pIndex, pDefGroup->indexes, pDefGroup->cntIndexes * sizeof( DWORD ) );
   pEffect->pMesh->UnlockIndexBuffer();
 
   // оптимизация структуры данных
@@ -308,7 +363,6 @@ bool TModelDX::SetupEffectDX(TEffectDX *pEffect,ILoaderModelDX::TDefGroup * pDef
   V( pEffect->pMesh->OptimizeInplace( D3DXMESHOPT_ATTRSORT | D3DXMESHOPT_VERTEXCACHE, aAdjacency, NULL, NULL, NULL ) );
 
   SAFE_DELETE_ARRAY( aAdjacency );
-
   return true;
 }
 //----------------------------------------------------------------------------------------------------

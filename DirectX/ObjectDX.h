@@ -2,17 +2,18 @@
 #define ObjectDXH
 
 #include "ModelDX.h"
+#include "TObject.h"
 
 class TManagerObjectDX;
 
-class TObjectDX
+class TObjectDX : public TObject
 {
 
 public:
   TObjectDX();
   ~TObjectDX();
 
-  void SetModel(TModelDX* pModel){mModel=pModel;};
+  void SetModel(TModelDX* pModel);
 
   void Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj);
 
@@ -22,6 +23,9 @@ public:
 
 
 protected:
+  void Done();
+  void SetOneMatrix(D3DXMATRIXA16& matrix);
+
   friend class TManagerObjectDX;
 
   TModelDX* mModel; 

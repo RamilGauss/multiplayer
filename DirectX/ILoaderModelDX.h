@@ -15,12 +15,13 @@ public:
   {
     unsigned char      mIndex;
     char   strPathShader[MAX_PATH];// относительный путь
+    char   strTechnique[MAX_PATH];
     WCHAR  strTexture[MAX_PATH];
     char   strName[MAX_PATH];
     DWORD* indexes;
     TEffectDX::VERTEX* vertex;
-    DWORD  sizeIndexes;// расчет по файлу
-    DWORD  sizeVertex;// расчет по файлу
+    DWORD  cntIndexes;// расчет по файлу
+    DWORD  cntVertex;// расчет по файлу
 
     D3DXVECTOR3 vAmbient;
     D3DXVECTOR3 vDiffuse;
@@ -39,11 +40,12 @@ public:
       mIndex = 0;
       strTexture[0]    = '\0';
       strPathShader[0] = '\0';
+      strTechnique[0]  = '\0';
       strName[0]       = '\0';
       indexes = NULL;
       vertex = NULL;
-      sizeVertex = 0;
-      sizeIndexes = 0;
+      cntVertex = 0;
+      cntIndexes = 0;
 
       vAmbient  = D3DXVECTOR3(0,0,0);
       vDiffuse  = D3DXVECTOR3(0,0,0);
@@ -82,7 +84,7 @@ public:
   int GetCountSubset();
   DWORD* GetPinterIndexes(int iGroup, int &size);
   TEffectDX::VERTEX* GetPinterVertex(int iGroup, int &size);
-  char* GetTexture(int iGroup, int &size);
+  WCHAR* GetTexture(int iGroup, int &size);
   char* GetStrPathShader(int iGroup);
 
 public:

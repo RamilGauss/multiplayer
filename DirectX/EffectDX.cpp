@@ -4,6 +4,9 @@
 
 TEffectDX::TEffectDX()
 {
+  mIndexVisual = 0;
+
+  p = NULL;
   pMesh = NULL;
 
   hAmbient = NULL;
@@ -41,15 +44,12 @@ void TEffectDX::Init(int subset)
   hWorld = p->GetParameterBySemantic( 0, "World" );
   hWorldViewProjection = p->GetParameterBySemantic( 0, "WorldViewProjection" );
 
-  // Retrieve the ID3DXMesh pointer and current material from the MeshLoader helper
-  // Set the lighting variables and texture for the current material
   V( p->SetValue(     hAmbient,       mMaterial.vAmbient, sizeof( D3DXVECTOR3 ) ) );
   V( p->SetValue(     hDiffuse,       mMaterial.vDiffuse, sizeof( D3DXVECTOR3 ) ) );
   V( p->SetValue(     hSpecular,      mMaterial.vSpecular, sizeof( D3DXVECTOR3 ) ) );
   V( p->SetTexture(   hTexture,       mMaterial.pTexture ) );
   V( p->SetFloat(     hOpacity,       mMaterial.fAlpha ) );
   V( p->SetInt(       hSpecularPower, mMaterial.nShininess ) );
-  V( p->SetTechnique( mMaterial.hTechnique ) );
 
   mSubset = subset;
 }
@@ -106,6 +106,7 @@ void TEffectDX::Destroy()
 void TEffectDX::LostDevice()
 {
   HRESULT hr;
+  SAFE_RELEASE(mMaterial.pTexture);
   V(p->OnLostDevice());
 }
 //-----------------------------------------------------------
@@ -113,5 +114,33 @@ void TEffectDX::ResetDevice()
 {
   HRESULT hr;
   V(p->OnResetDevice());
+
+  // загрузка техники исполнения в шейдере
+  mMaterial.hTechnique = p->GetTechniqueByName( mMaterial.strTechnique );
+  V( p->SetTechnique( mMaterial.hTechnique ) );
+}
+//-----------------------------------------------------------
+bool TEffectDX::isN0()
+{
+  if(p==NULL) return false;
+  return ((mTypeLOD==0)&&(mflgNormal==1));
+}
+//-----------------------------------------------------------
+bool TEffectDX::isN1()
+{
+  if(p==NULL) return false;
+  return ((mTypeLOD==1)&&(mflgNormal==1));
+}
+//-----------------------------------------------------------
+bool TEffectDX::isD0()
+{
+  if(p==NULL) return false;
+  return ((mTypeLOD==0)&&(mflgNormal==0));
+}
+//-----------------------------------------------------------
+bool TEffectDX::isD1()
+{
+  if(p==NULL) return false;
+  return ((mTypeLOD==1)&&(mflgNormal==0));
 }
 //-----------------------------------------------------------

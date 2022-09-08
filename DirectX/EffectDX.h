@@ -30,7 +30,7 @@ public:
   // Material format 
   struct Material
   {
-    WCHAR   strName[MAX_PATH];
+    char   strName[MAX_PATH];
 
     D3DXVECTOR3 vAmbient;
     D3DXVECTOR3 vDiffuse;
@@ -40,6 +40,9 @@ public:
     float fAlpha;
 
     bool bSpecular;
+    
+    WCHAR   strShader[MAX_PATH];
+    char    strTechnique[MAX_PATH];
 
     WCHAR   strTexture[MAX_PATH];
     IDirect3DTexture9* pTexture;
@@ -54,7 +57,7 @@ public:
   };
 
   TEffectDX();
-  virtual ~TEffectDX();
+  ~TEffectDX();
 
   void Init(int subset);
   void Destroy();
@@ -76,6 +79,10 @@ public:
   int           mSubset;// номер в структуре TEffectDX
   unsigned char mIndexVisual;// индекс при отрисовке, для определения по состоянию
 
+  bool isN0();
+  bool isN1();
+  bool isD0();
+  bool isD1();
 };
 
 

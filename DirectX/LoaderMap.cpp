@@ -20,10 +20,10 @@ TLoaderMap::~TLoaderMap()
 }
 //----------------------------------------------------------------------------------
 // читает карту: координаты, ориентацию и состо€ние объектов в менеджер объектов
-int TLoaderMap::Load(unsigned int id_map, bool flgCleanObject)
+int TLoaderMap::LoadMap(unsigned int id_map, bool flgCleanObject)
 {
-  ht_msleep(5000);//### симул€ци€
-
+  mListObject.clear();
+                                            ht_msleep(5000);//### симул€ци€
   LoadMapObject();
 
   if(flgCleanObject)
@@ -31,8 +31,23 @@ int TLoaderMap::Load(unsigned int id_map, bool flgCleanObject)
 
   LoadObjectDX();
 
-  mListObject.clear();
   return eSuccess;
+}
+//----------------------------------------------------------------------------------
+bool TLoaderMap::LoadObjectDX(TDescObject * pDescObjDX, bool flgCleanObject)
+{
+  if(flgCleanObject)
+    mMO->Clean();
+  
+  mListObject.clear();
+
+  TDescObject* pDesc = new TDescObject();
+  *pDesc = *pDescObjDX;
+  mListObject.push_back(pDesc);
+
+  LoadObjectDX();
+
+  return true;
 }
 //----------------------------------------------------------------------------------
 void TLoaderMap::LoadObjectDX()
@@ -52,6 +67,7 @@ void TLoaderMap::LoadObjectDX()
       pObjectDX->SetCoord(pDesc->coord);
       pObjectDX->SetOrient(pDesc->orient);
       pObjectDX->SetState(pDesc->state);
+      mMO->Add(pObjectDX);
     }
     else
     {
@@ -64,6 +80,6 @@ void TLoaderMap::LoadObjectDX()
 //----------------------------------------------------------------------------------
 void TLoaderMap::LoadMapObject()//###
 {
-
+  
 }
 //----------------------------------------------------------------------------------
