@@ -6,7 +6,7 @@
 #include "HiTimer.h"
 #include "ApplicationProtocolPacketRequest.h"
 #include "ApplicationProtocolPacketCmd.h"
-#include "LogerDX.h"
+#include "LoggerDX.h"
 #include "ApplicationProtocolPacketStream.h"
 
 
@@ -103,7 +103,7 @@ bool ClientTank::Connect(unsigned int ip_dst, unsigned int port_src, char* sNick
   mTransport.InitLog(nameLogFile);
 
   //--------------------------------------------
-  InitLogerDX(sNick);
+  InitLoggerDX(sNick);
   //--------------------------------------------
 
   stop();

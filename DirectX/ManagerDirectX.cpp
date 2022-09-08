@@ -1,14 +1,15 @@
 #include "ManagerDirectX.h"
 #include "HiTimer.h"
-#include "Bufferizator2Thread.h"
-#include "ClientTank.h"
-#include "LogerDX.h"
-#include <d3d9.h>
+#include "LoggerDX.h"
 #include "ManagerObjectDX.h"
 #include "ManagerModel.h"
 #include "DXUT.h"
-#include "SDKmisc.h"
 #include "ObjectDX.h"
+
+#ifndef EDITOR_MODEL
+  #include "ClientTank.h"
+  #include "Bufferizator2Thread.h"
+#endif
 
 #define LOG_DX
 //#define LOG_DX_STREAM
@@ -38,6 +39,7 @@ void TManagerDirectX::VisualEvent(IDirect3DDevice9* pd3dDevice, double fTime, fl
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::Refresh()
 {
+#ifndef EDITOR_MODEL
   // только когда загрузится карта и перед тем как отошлется запрос на корректирующий пакет.
   if(flgNeedSendCorrectPacket)
   {
@@ -68,14 +70,19 @@ void TManagerDirectX::Refresh()
   else
     GlobalLoggerDX.WriteF_time("-----------------------------------------------\n");
 #endif
+#endif
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::Calc()
 {
+#ifndef EDITOR_MODEL
+  //------------------------------------------------------------------------
   // заполнить предсказатель данными
   mPrediction.SetState();
   // расчет
   mPrediction.Calc();
+  //------------------------------------------------------------------------
+#endif
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::Optimize()
@@ -150,7 +157,10 @@ void TManagerDirectX::KeyEvent(unsigned int nChar, bool bKeyDown, bool bAltDown,
   switch(nChar)
   {
     case 0x1B://VK_ESCAPE:
+#ifndef EDITOR_MODEL
       GlobalClientTank.SendRequestExitFromFight();
+#endif
+      GlobalLoggerDX.WriteF_time("Escape.\n");
       break;
     default:;
   }
@@ -158,6 +168,7 @@ void TManagerDirectX::KeyEvent(unsigned int nChar, bool bKeyDown, bool bAltDown,
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::MouseEvent(double fTime, float fElapsedTime, void* pUserContext)
 {
+#ifndef EDITOR_MODEL
   if(mState!=eFight) return;
   guint32 now_ms = ht_GetMSCount();
   if(now_ms>mLastTimeSendMouseStream+eIntervalMouseStream)
@@ -169,6 +180,7 @@ void TManagerDirectX::MouseEvent(double fTime, float fElapsedTime, void* pUserCo
     GlobalClientTank.SendOrientAim(0,0,1);//###
     mLastTimeSendMouseStream = now_ms;
   }
+#endif
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::SetStateByTypeStream()

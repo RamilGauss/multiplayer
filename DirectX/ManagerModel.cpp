@@ -3,10 +3,10 @@
 #include "ModelDX.h"
 #include "GlobalParamsTank.h"
 #include "LoadFromHDD.h"
-#include "LogerDX.h"
+#include "LoggerDX.h"
 #include "BL_Debug.h"
 #include "LoaderListModel.h"
-#include "WinChar.h"
+#include <atlconv.h>
 
 
 TManagerModel GlobalManagerModel;
@@ -35,9 +35,8 @@ void TManagerModel::Load(IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pB
   for(int i = 0 ; i < mCntPathModel ; i++)
   {
     TModelDX* pModel = new TModelDX();
-    WCHAR* p = A2W_(mArrPathModel[i]);
-    pModel->Init(pd3dDevice,p);
-    free(p);
+    USES_CONVERSION;
+    pModel->Init(pd3dDevice,A2W(mArrPathModel[i]));
     mArrModel.Add(pModel);
   }
 }

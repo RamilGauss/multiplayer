@@ -4,6 +4,8 @@
 
 TEffectDX::TEffectDX()
 {
+  pMesh = NULL;
+
   hAmbient = NULL;
   hDiffuse = NULL;
   hSpecular = NULL;
@@ -98,6 +100,7 @@ void TEffectDX::Destroy()
 {
   HRESULT hr;
   SAFE_RELEASE(p);
+  SAFE_RELEASE(pMesh);
 }
 //-----------------------------------------------------------
 void TEffectDX::LostDevice()

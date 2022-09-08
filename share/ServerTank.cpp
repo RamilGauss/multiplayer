@@ -11,8 +11,6 @@
 #include "Room.h"
 #include "Tank.h"
 #include "GlobalParamsTank.h"
-#include <QMessageBox>
-#include "qobject.h"
 #include "Win_Func.h"
 
 

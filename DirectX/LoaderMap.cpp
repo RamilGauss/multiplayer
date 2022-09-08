@@ -3,7 +3,7 @@
 #include "ManagerModel.h"
 #include "HiTimer.h"
 #include "ObjectDX.h"
-#include "LogerDX.h"
+#include "LoggerDX.h"
 #include "BL_Debug.h"
 
 using namespace nsStruct3D;

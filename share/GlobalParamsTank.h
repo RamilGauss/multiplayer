@@ -3,15 +3,18 @@
 
 #define ServerLocalPort 4321
 
-#define VERSION_PROGRAMM ((unsigned short)25) // unsigned short
-
+#define VERSION_PROGRAMM ((unsigned short)26) // unsigned short
+#define VERSION_EDITOR   ((unsigned short)3)
 //-------------------------------------------------------------------------------------------
 extern char strVersionClient[100];
 extern char strVersionServer[100];
+extern char strVersionEditor[100];
 //-------------------------------------------------------------------------------------------
 
 #define STR_VERSION_CLIENT strVersionClient
 #define STR_VERSION_SERVER strVersionServer
+#define STR_VERSION_EDITOR strVersionEditor
+
 
 #define DURATION_FIGHT_MINUTE 15 // длительность боя,минут
 #define DURATION_FIGHT_MS (DURATION_FIGHT_MINUTE*60*1000) // длительность боя, мс

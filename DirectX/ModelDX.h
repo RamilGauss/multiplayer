@@ -1,17 +1,21 @@
 #ifndef ModelDXH
 #define ModelDXH
 
+#include "DefineUnicode.h"
 #include "Struct3D.h"
 
 #include "DXUT.h"
 #include "EffectDX.h"
 #include "TObject.h"
 #include <d3dx9math.h>
+#include "ILoaderModelDX.h"
 
 class TManagerModel;
 
 class TModelDX : public TObject
 {
+  IDirect3DDevice9* m_pd3dDevice;    // Direct3D Device object associated with this mesh
+
   unsigned int mID; // уникальный для моделей
 
 public:
@@ -37,40 +41,32 @@ public:
 protected:
 
   //---------------------------------------------------------
-  void Draw(TEffectDX* pEffect);
+  bool SetupEffectDX(TEffectDX* pEffect,ILoaderModelDX::TDefGroup* pDefGroup);
   float GetDist(D3DXMATRIXA16* mWorld, D3DXMATRIXA16* mView);
-  bool Load(LPCWSTR strFilenameData);
+  void Draw(TEffectDX* pEffect);
+  virtual bool Load(LPCWSTR strFilenameData);
   //---------------------------------------------------------
   friend class TManagerModel;
   
   float mLOD;// 2 состояния по ЛОДу, расстояние от камеры до центра координат
 
-  ID3DXMesh* pArrMesh[2];// на два ЛОДа
-  ID3DXMesh* pCurMesh;
-
-
-  // 0 LOD
+  // если у объекта одно состояние, то mEffectDX_normal==mEffectDX_damage
   struct TLOD
   {
-    TEffectDX mArrEffectDX_normal;
-    TEffectDX mArrEffectDX_damage;
+    TEffectDX* mEffectDX_normal;
+    TEffectDX* mEffectDX_damage;
+    TLOD(){mEffectDX_normal=NULL;mEffectDX_damage=NULL;}
+    ~TLOD(){delete mEffectDX_normal;mEffectDX_normal=NULL;
+            delete mEffectDX_damage;mEffectDX_damage=NULL;}
   };
 
-  struct TDefEffect
-  {
-    // 0 LOD
-    TLOD lod0;
-    // 1 LOD
-    TLOD lod1;
-  };
-  TDefEffect* mArrEffect;
+  TLOD* mArrEffect0;// подробно
+  TLOD* mArrEffect1;// грубо
 
   int mCntEffectVisual;// кол-во эффектов равно кол-ву примитивов в Mesh
   int mCntEffectMesh;// как правило в 2 или 1 раз больше чем mCntEffectVisual
   int mCntAllEffect;// как правило в 4 или 2 раза больше чем mCntEffectVisual
  
-
-
   D3DXMATRIXA16 mWorldViewProjection;
 };
 //-----------------------------------------------------------------

@@ -9,7 +9,9 @@
 #include "Struct3D.h"
 #include "LoaderMap.h"
 #include "DXUTcamera.h"
-#include "Prediction.h"
+#ifndef EDITOR_MODEL
+  #include "Prediction.h"
+#endif
 
 class TDX;
 struct IDirect3DDevice9;
@@ -17,9 +19,9 @@ class TObjectDX;
 
 class TManagerDirectX
 {
-
+#ifndef EDITOR_MODEL
   TPrediction mPrediction;
-
+#endif
   enum{
       eSizeBufferStream = 4000,
       eSizeBufferPacket = 4000,

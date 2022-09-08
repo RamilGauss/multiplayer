@@ -678,10 +678,6 @@
 					RelativePath="..\share\UdpDevice.cpp"
 					>
 				</File>
-				<File
-					RelativePath="..\share\WinChar.cpp"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Header Files"
@@ -788,10 +784,6 @@
 				</File>
 				<File
 					RelativePath="..\share\UdpDevice.h"
-					>
-				</File>
-				<File
-					RelativePath="..\share\WinChar.h"
 					>
 				</File>
 			</Filter>
@@ -1255,6 +1247,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\DirectX\ILoaderModelDX.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\DirectX\LayerBetween_QT_DirectX.cpp"
 					>
 				</File>
@@ -1271,7 +1267,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\LogerDX.cpp"
+					RelativePath="..\DirectX\LoggerDX.cpp"
 					>
 				</File>
 				<File
@@ -1319,6 +1315,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\DirectX\ILoaderModelDX.h"
+					>
+				</File>
+				<File
 					RelativePath="..\DirectX\LayerBetween_QT_DirectX.h"
 					>
 				</File>
@@ -1335,7 +1335,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\LogerDX.h"
+					RelativePath="..\DirectX\LoggerDX.h"
 					>
 				</File>
 				<File

@@ -1,19 +1,21 @@
 #ifndef LoaderObjectDXH
 #define LoaderObjectDXH
 
-#include "Struct3D.h"
-#include <wtypes.h>
+#include "ILoaderModelDX.h"
 
-class TLoaderModelDX
+class TLoaderModelDX : public ILoaderModelDX
 {
 
 public:
   TLoaderModelDX();
-  ~TLoaderModelDX();
+  virtual ~TLoaderModelDX();
 
-  bool Load(LPCWSTR strFilenameData);
+  virtual bool Load(LPCWSTR strFilenameData);
+
 
 protected:
+
+  bool LoadMainFile();
 
 };
 

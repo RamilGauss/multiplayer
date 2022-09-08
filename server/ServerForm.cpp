@@ -152,7 +152,7 @@ void ServerForm::RefreshTableRoom()
     // имя 
     QTableWidgetItem* item = new QTableWidgetItem;
     char s_time_rest[100];
-    sprintf(s_time_rest,"%u:%u",pArrRoom[i].time_rest/60,pArrRoom[i].time_rest%60);
+    sprintf(s_time_rest,"%02u:%02u",pArrRoom[i].time_rest/60,pArrRoom[i].time_rest%60);
     item->setText(tr(s_time_rest));
     ui.tableRoom->setItem(i, 0, item);
     //-------------------------------------------------------

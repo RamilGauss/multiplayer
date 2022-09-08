@@ -2,6 +2,7 @@
 #define EffectDXH
 
 #include <d3dx9effect.h>
+#include <d3dx9mesh.h>
 
 class TEffectDX
 {
@@ -23,7 +24,10 @@ class TEffectDX
 
 public:
 
+  ID3DXMesh* pMesh;
+
   ID3DXEffect* p;
+  // Material format 
   struct Material
   {
     WCHAR   strName[MAX_PATH];
@@ -41,7 +45,13 @@ public:
     IDirect3DTexture9* pTexture;
     D3DXHANDLE hTechnique;
   };
-
+  // Vertex format
+  struct VERTEX
+  {
+    D3DXVECTOR3 position;
+    D3DXVECTOR3 normal;
+    D3DXVECTOR2 texcoord;
+  };
 
   TEffectDX();
   virtual ~TEffectDX();

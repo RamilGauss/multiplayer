@@ -4,8 +4,11 @@
 #include "GlobalParamsTank.h"
 
 #include "ManagerDirectX.h"
-#include "Bufferizator2Thread.h"
-#include "WinChar.h"
+#ifndef EDITOR_MODEL
+  #include "Bufferizator2Thread.h"
+#endif
+#include <atlconv.h>
+
 
 //--------------------------------------------------------------------------------------
 // UI control IDs
@@ -68,7 +71,9 @@ void TDX::Work(void* pFuncCallExit)
 //--------------------------------------------------------------------------------------
 int TDX::MainLoop()
 {
+#ifndef EDITOR_MODEL
   GlobalBufferizator2Thread.ClearWasRegisterCallback();
+#endif
   GlobalManagerDirectX.flgNeedSendCorrectPacket = false;//начало
   // DXUT will create and use the best device (either D3D9 or D3D10) 
   // that is available on the system depending on which D3D callbacks are set below
@@ -92,14 +97,18 @@ int TDX::MainLoop()
     InitApp();
     DXUTInit( true, true, NULL ); // Parse the command line, show msgboxes on error, no extra command line params
     DXUTSetCursorSettings( true, true );
-    WCHAR* p = A2W_(STR_VERSION_CLIENT);
-    DXUTCreateWindow( &hWnd, p );
-    free(p);
+    USES_CONVERSION;
+#ifndef EDITOR_MODEL    
+    DXUTCreateWindow( &hWnd, A2W(STR_VERSION_CLIENT) );
+#else
+    DXUTCreateWindow( &hWnd, A2W(STR_VERSION_EDITOR) );
+#endif
     DXUTCreateDevice( true, 640, 480 );
     DXUTMainLoop(); // Enter into the DXUT render loop
     DXUTDestroyState();// уничтожить DXUT
-    
+#ifndef EDITOR_MODEL    
     GlobalBufferizator2Thread.UnregisterFromClientTank();
+#endif
   }
   //--------------------------------------------------
   return 0;

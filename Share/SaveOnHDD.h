@@ -3,7 +3,10 @@
 
 
 #include <stdio.h>
-
+#include <string.h>
+#include <wchar.h>
+#include <malloc.h>
+#include <atlconv.h>
 
 class TSaveOnHDD
 {
