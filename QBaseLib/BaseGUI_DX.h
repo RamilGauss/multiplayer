@@ -49,7 +49,7 @@ public:
   TBaseGUI_DX( QWidget* pParent = NULL); 
 
   /** Destructor */ 
-  ~TBaseGUI_DX(); 
+  virtual ~TBaseGUI_DX(); 
 
   /** a hint to Qt to give the widget as much space as possible */ 
   QSizePolicy sizePolicy() const { return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ); } 

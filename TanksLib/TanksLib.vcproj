@@ -180,6 +180,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LoaderObjectCommon.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Tank.h"
 				>
 			</File>

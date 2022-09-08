@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef RoomH
 #define RoomH
 #include "ServerStruct.h"
-#include "TransportProtocolTank.h"
+#include "TransportProtocol.h"
 #include "ManagerMap.h"
 #include "Prediction.h"
 #include <list>
@@ -48,7 +48,7 @@ class TRoom
 
   TPrediction mPrediction;
 
-  TransportProtocolTank* mTransport;
+  TransportProtocol* mTransport;
 
   TArrayObject mArrTank;
 
@@ -98,7 +98,7 @@ public:
 
   void AddTank(TTank* pTank);
 
-	void SetTransport(TransportProtocolTank* pTransport);//старт боя, передача возможности вещать на клиента
+	void SetTransport(TransportProtocol* pTransport);//старт боя, передача возможности вещать на клиента
 
 	bool Work(); // рассчитать координаты и разослать стрим клиентам
 

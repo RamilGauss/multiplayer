@@ -43,6 +43,8 @@ class TManagerObjectDX;
 class TManagerModel;
 class TObjectDX;
 
+
+template < class TMakerBehavior >
 class TLoaderMap
 {
 public:

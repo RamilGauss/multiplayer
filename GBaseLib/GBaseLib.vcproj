@@ -230,10 +230,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GBaseLibWin.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\GCS.cpp"
 				>
 			</File>
