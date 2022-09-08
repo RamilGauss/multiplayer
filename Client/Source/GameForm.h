@@ -46,47 +46,17 @@ class TGameForm : public TBaseGUI_DX
 {
   Q_OBJECT
 
-  TA_In_Fight mPacketInFight;
-  TA_Correct_Packet_State_Tank   mPacketCorrectStateTank;
-  TA_Correct_Packet_State_Object mPacketCorrectStateObject;
-
 public:
   TGameForm(QWidget *parent = NULL);
   ~TGameForm();
 
   virtual void Translate(unsigned short type, char*pData, int size);
 
-  virtual void showGUI();
-  virtual void hideGUI();
-
 protected:
-  virtual void VisualEvent(QPaintEvent* pEvent);
-  virtual void SetupEvent();
-
   virtual void closeEvent(QCloseEvent* );
-  virtual void mouseMoveEvent( QMouseEvent * event );
-  virtual void keyPressEvent ( QKeyEvent * event );
-
  
 protected slots:
   void sl_Exit();
-
-protected:
-
-
-  friend void CallbackLoadMapEndEvent(void* pData, int size);
-
-  void PrepareTank(TTankTower* pTank, int i);
-  // отослать через какой-то транспорт запрос на получение корректирующего пакет
-  // отсылается после загрузки карты
-  void SendCorrectPacket(){};
-  void ApplPacketA_Correct_Packet_State_Tank();
-
-  void AddTankInCommonList();
-
-  void LoadMapEndEvent();
-
-  void ApplPacketA_In_Fight(char* pData, int size);
 
 };
 

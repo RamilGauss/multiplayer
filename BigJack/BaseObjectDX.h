@@ -56,7 +56,7 @@ public:
   void SetModel(TModelDX* pModel);
   TModelDX* GetModel();
 
-  void Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj);
+  void Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj,const D3DXVECTOR3* mCamera);
 
   void SetShow(bool show){flgShow=show;}
 

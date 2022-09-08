@@ -75,7 +75,7 @@ void TRoom::SetTransport(TTransportProtocol* pTransport)
   mTransport = pTransport;
 }
 //----------------------------------------------------------------
-bool TRoom::Work()
+bool TRoom::WorkAsRoom()
 {
   mNow_MS = ht_GetMSCount();
 
@@ -458,5 +458,11 @@ int TRoom::GetActiveClient()
       cntActive++;
   }
   return cntActive;
+}
+//----------------------------------------------------------------------------------
+TTank* TRoom::GetTank(int i)
+{
+  TTank* pTank = (TTank*)mArrTank.Get(i);
+  return pTank;
 }
 //----------------------------------------------------------------------------------

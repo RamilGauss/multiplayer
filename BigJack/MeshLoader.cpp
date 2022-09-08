@@ -86,7 +86,9 @@ HRESULT CMeshLoader::Create( IDirect3DDevice9* pd3dDevice, const WCHAR* strFilen
     // Load the vertex buffer, index buffer, and subset information from a file. In this case, 
     // an .obj file was chosen for simplicity, but it's meant to illustrate that ID3DXMesh objects
     // can be filled from any mesh file format once the necessary data is extracted from file.
-    V_RETURN( LoadGeometryFromOBJ( strFilename ) );
+    
+    //V_RETURN( LoadGeometryFromOBJ( strFilename ) );
+    V_RETURN( LoadGeometryFromOBJ_Fast( strFilename ) );
 
     // Set the current directory based on where the mesh was found
     WCHAR wstrOldDir[MAX_PATH] = {0};
@@ -147,12 +149,10 @@ HRESULT CMeshLoader::Create( IDirect3DDevice9* pd3dDevice, const WCHAR* strFilen
     m_Indices.RemoveAll();
 
     // Copy the attribute data
-#if 1
     DWORD* pSubset;
     V_RETURN( pMesh->LockAttributeBuffer( 0, &pSubset ) );
     memcpy( pSubset, m_Attributes.GetData(), m_Attributes.GetSize() * sizeof( DWORD ) );
     pMesh->UnlockAttributeBuffer();
-#endif
     m_Attributes.RemoveAll();
 
     // Reorder the vertices according to subset and optimize the mesh for this graphics 
@@ -577,3 +577,180 @@ void CMeshLoader::InitMaterial( Material* pMaterial )
     pMaterial->bSpecular = false;
     pMaterial->pTexture = NULL;
 }
+//--------------------------------------------------------------------------------------
+HRESULT CMeshLoader::LoadGeometryFromOBJ_Fast( const WCHAR* strFileName )
+{
+  WCHAR strMaterialFilename[MAX_PATH] = {0};
+  WCHAR wstr[MAX_PATH];
+  char str[MAX_PATH];
+  HRESULT hr;
+
+  // Find the file
+  V_RETURN( DXUTFindDXSDKMediaFileCch( wstr, MAX_PATH, strFileName ) );
+  WideCharToMultiByte( CP_ACP, 0, wstr, -1, str, MAX_PATH, NULL, NULL );
+
+  // Store the directory where the mesh was found
+  wcscpy_s( m_strMediaDir, MAX_PATH - 1, wstr );
+  WCHAR* pch = wcsrchr( m_strMediaDir, L'\\' );
+  if( pch )
+    *pch = NULL;
+
+  // Create temporary storage for the input data. Once the data has been loaded into
+  // a reasonable format we can create a D3DXMesh object and load it with the mesh data.
+  CGrowableArray <D3DXVECTOR3> Positions;
+  CGrowableArray <D3DXVECTOR2> TexCoords;
+  CGrowableArray <D3DXVECTOR3> Normals;
+
+  // The first subset uses the default material
+  Material* pMaterial = new Material();
+  if( pMaterial == NULL )
+    return E_OUTOFMEMORY;
+
+  InitMaterial( pMaterial );
+  wcscpy_s( pMaterial->strName, MAX_PATH - 1, L"default" );
+  m_Materials.Add( pMaterial );
+
+  DWORD dwCurSubset = 0;
+
+  // File input
+  WCHAR strCommand[256] = {0};
+  wifstream InFile( str );
+  if( !InFile )
+    return DXTRACE_ERR( L"wifstream::open", E_FAIL );
+
+  for(; ; )
+  {
+    InFile >> strCommand;
+    if( !InFile )
+      break;
+
+    if( 0 == wcscmp( strCommand, L"#" ) )
+    {
+      // Comment
+    }
+    else if( 0 == wcscmp( strCommand, L"v" ) )
+    {
+      // Vertex Position
+      float x, y, z;
+      InFile >> x >> y >> z;
+      Positions.Add( D3DXVECTOR3( x, y, z ) );
+    }
+    else if( 0 == wcscmp( strCommand, L"vt" ) )
+    {
+      // Vertex TexCoord
+      float u, v;
+      InFile >> u >> v;
+      TexCoords.Add( D3DXVECTOR2( u, v ) );
+    }
+    else if( 0 == wcscmp( strCommand, L"vn" ) )
+    {
+      // Vertex Normal
+      float x, y, z;
+      InFile >> x >> y >> z;
+      Normals.Add( D3DXVECTOR3( x, y, z ) );
+    }
+    else if( 0 == wcscmp( strCommand, L"f" ) )
+    {
+      // Face
+      UINT iPosition, iTexCoord, iNormal;
+      VERTEX vertex;
+
+      for( UINT iFace = 0; iFace < 3; iFace++ )
+      {
+        ZeroMemory( &vertex, sizeof( VERTEX ) );
+
+        // OBJ format uses 1-based arrays
+        InFile >> iPosition;
+        vertex.position = Positions[ iPosition - 1 ];
+
+        if( '/' == InFile.peek() )
+        {
+          InFile.ignore();
+
+          if( '/' != InFile.peek() )
+          {
+            // Optional texture coordinate
+            InFile >> iTexCoord;
+            vertex.texcoord = TexCoords[ iTexCoord - 1 ];
+          }
+
+          if( '/' == InFile.peek() )
+          {
+            InFile.ignore();
+
+            // Optional vertex normal
+            InFile >> iNormal;
+            vertex.normal = Normals[ iNormal - 1 ];
+          }
+        }
+
+        // If a duplicate vertex doesn't exist, add this vertex to the Vertices
+        // list. Store the index in the Indices array. The Vertices and Indices
+        // lists will eventually become the Vertex Buffer and Index Buffer for
+        // the mesh.
+        DWORD index = AddVertex( iPosition, &vertex );
+        if ( index == (DWORD)-1 )
+          return E_OUTOFMEMORY;
+
+        m_Indices.Add( index );
+      }
+      m_Attributes.Add( 0/*dwCurSubset*/ );
+    }
+    else if( 0 == wcscmp( strCommand, L"mtllib" ) )
+    {
+      // Material library
+      InFile >> strMaterialFilename;
+    }
+    else if( 0 == wcscmp( strCommand, L"usemtl" ) )
+    {
+      // Material
+      WCHAR strName[MAX_PATH] = {0};
+      InFile >> strName;
+
+      bool bFound = false;
+      for( int iMaterial = 0; iMaterial < m_Materials.GetSize(); iMaterial++ )
+      {
+        Material* pCurMaterial = m_Materials.GetAt( iMaterial );
+        if( 0 == wcscmp( pCurMaterial->strName, strName ) )
+        {
+          bFound = true;
+          dwCurSubset = iMaterial;
+          break;
+        }
+      }
+
+      if( !bFound )
+      {
+        pMaterial = new Material();
+        if( pMaterial == NULL )
+          return E_OUTOFMEMORY;
+
+        dwCurSubset = m_Materials.GetSize();
+
+        InitMaterial( pMaterial );
+        wcscpy_s( pMaterial->strName, MAX_PATH - 1, strName );
+
+        m_Materials.Add( pMaterial );
+      }
+    }
+    else
+    {
+      // Unimplemented or unrecognized command
+    }
+
+    InFile.ignore( 1000, '\n' );
+  }
+
+  // Cleanup
+  InFile.close();
+  DeleteCache();
+
+  // If an associated material file was found, read that in as well.
+  if( strMaterialFilename[0] )
+  {
+    V_RETURN( LoadMaterialsFromMTL( strMaterialFilename ) );
+  }
+
+  return S_OK;
+}
+//-----------------------------------------------------------------------------------------------------

@@ -244,6 +244,7 @@ HRESULT WINAPI DXUTCreateWindow( const WCHAR* strWindowTitle = L"Direct3D Window
                                 int x = CW_USEDEFAULT, int y = CW_USEDEFAULT );
 HRESULT WINAPI DXUTSetWindow( HWND hWndFocus, HWND hWndDeviceFullScreen, HWND hWndDeviceWindowed, bool bHandleMessages = true );
 LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 // Choose either DXUTCreateDevice or DXUTSetD3D*Device or DXUTCreateD3DDeviceFromSettings
 HRESULT WINAPI DXUTCreateDevice( bool bWindowed = true, int nSuggestedWidth = 0, int nSuggestedHeight = 0 );

@@ -96,15 +96,16 @@ int main(int argc, char *argv[])
 
   // что бы я не делал - линковщик не видит деструктор класса, определенного в исполняемом файле из под либины
   // убить всех: (блин почему это не C#? всех бы убил сборщик мусора)
-  delete pManagerGUI;
-  delete pClientTank;
-  delete pManagerObjectCommon;
-
   delete pGameRoomPrepare;
   delete pWaitForm;
   delete pClientMain;
 
   delete pGameForm;
+
+  delete pManagerGUI;
+  delete pClientTank;
+  delete pManagerObjectCommon;
+
 
 	return 0;
 }

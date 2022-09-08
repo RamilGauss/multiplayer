@@ -37,21 +37,31 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef ManagerDirectXH
 #define ManagerDirectXH
 
+
 #include "DXUT.h"
 #include "DXUTcamera.h"
+#include "DXUTsettingsdlg.h"
+#include "SDKmisc.h"
+#pragma warning(disable: 4995)
+#include "MeshLoader.h"
+#pragma warning(default: 4995)
 #include <list>
 #include "Struct3D.h"
 #include "ManagerModelDX.h"
+#include <set>
+#include "DXUT_Class.h"
 
 
 class TBaseObjectDX;
 
-struct IDirect3DDevice9;
+//struct IDirect3DDevice9;
 
 // BigJack - графический движок
 class TManagerDirectX
 {
 protected:
+
+  TDXUT mDXUT;
 
   TManagerModelDX mManagerModel;
 
@@ -66,17 +76,31 @@ protected:
   D3DXHANDLE         hmWorld;
   D3DXHANDLE         hfTime;
 
-  IDirect3DDevice9* mD3DDevice;
-  
 public:
   //----------------------------------------------------------------
   //                              INTERFACE
   //----------------------------------------------------------------
+  typedef void (*TCallBackMsg)( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+  typedef void (*TCallBackFrameMove)( double fTime, float fElapsedTime, void* pUserContext );
+
   TManagerDirectX();
   ~TManagerDirectX();
-  void CreateDeviceEvent(IDirect3DDevice9* pd3dDevice); 
-  void VisualEvent( guint32 iTime, float fElapsedTime);
 
+  enum{eTypeMsg     = 0,
+       eTypeFrameMove,
+  };
+
+  // на получение событий WinApi окна и DirectX
+  void Register(void*   pFunc, int type);
+  void Unregister(void* pFunc, int type);
+  // в частности события мыши и клавиатуры
+  void NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+  void NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext);
+  //------------------------------------------------------------------------
+  void Init(HWND hwnd = NULL);
+  void Work();
+  void Done();
+  //------------------------------------------------------------------------
   void AddObject(TBaseObjectDX* pObject);
   void Clear();
   // камера
@@ -91,6 +115,27 @@ public:
   //----------------------------------------------------------------
   //                             ~INTERFACE
   //----------------------------------------------------------------
+public:
+  //----------------------------------------------------------------
+  // Для внутренних событий движка.
+  //----------------------------------------------------------------
+
+  bool IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat, D3DFORMAT BackBufferFormat, bool bWindowed,void* pUserContext );
+  bool ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext );
+  HRESULT OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
+  HRESULT OnResetDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
+  void OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
+  void OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext );
+  LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,void* pUserContext );
+  void OnLostDevice( void* pUserContext );
+  void OnDestroyDevice( void* pUserContext );
+
+protected:
+  std::set<TCallBackMsg>       mSetCallbackMsg;
+  std::set<TCallBackFrameMove> mSetCallbackFrameMove;
+
+  void RegisterSet  (std::set<void*>* setCallback, void* pFunc);
+  void UnregisterSet(std::set<void*>* setCallback, void* pFunc);
 protected:
   D3DXHANDLE* getWorldViewProjection(){return &hmWorldViewProjection;}
   D3DXHANDLE* getWorld(){return &hmWorld;}
@@ -99,7 +144,8 @@ protected:
 protected:
 
   void Optimize();
-  void Render(guint32 fTime = 0, float fElapsedTime = 0);
+  void Render(IDirect3DDevice9* pd3dDevice);
+
 };
 
 #endif

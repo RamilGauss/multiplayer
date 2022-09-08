@@ -49,13 +49,18 @@ you may contact in writing [ramil2085@gmail.com].
 #include <d3dx9.h> 
 #include "ManagerObjectCommonEditorModel.h"
 #include "Logger.h"
-#include "..\GBaseLib\HiTimer.h"
+#include "HiTimer.h"
+#include "MakerBehavior.h"
+#include "namespace_ID_BEHAVIOR.h"
+#include "BaseObjectCommon.h"
+
+using namespace nsID_BEHAVIOR;
 
 
 TEditorModel::TEditorModel(QWidget *parent)
 : TBaseGUI_DX(parent)
 {
-  setMouseTracking(true);
+  setWindowTitle(tr(STR_VERSION_EDITOR));
 }
 //---------------------------------------------------------------------------------------------
 TEditorModel::~TEditorModel()
@@ -63,96 +68,59 @@ TEditorModel::~TEditorModel()
 
 }
 //---------------------------------------------------------------------------------------------
-void TEditorModel::SetupEvent()
-{
-  BL_ASSERT(pGame);
-  pGame->CreateDevice3DEvent(mDevice);
-}
-//---------------------------------------------------------------------------------------------
 void TEditorModel::Translate(unsigned short type, char*pData, int size)
 {
 }
 //---------------------------------------------------------------------------------------------
-void TEditorModel::VisualEvent(QPaintEvent* pEvent)
-{
-  guint32 iTime = ht_GetMSCount();
-  float fElapsedTime = 0;
-  pGame->VisualEvent(iTime, fElapsedTime);
-}
+//void TEditorModel::VisualEvent(QPaintEvent* pEvent)
+//{
+//  guint32 iTime = ht_GetMSCount();
+//  float fElapsedTime = 0;
+//  pGame->VisualEvent(iTime, fElapsedTime);
+//}
 //---------------------------------------------------------------------------------------------
-void TEditorModel::mousePressEvent ( QMouseEvent * event ) 
-{
-  mBeginPoint = event->pos();
-}
-//---------------------------------------------------------------------------------------------
-void TEditorModel::mouseMoveEvent ( QMouseEvent * event ) 
-{
-  // настроить ориентацию камеры 
-  
-  switch(event->button())
-  {
-    case Qt::LeftButton:
-    {
-      QPoint pointDelta =  event->pos() - mBeginPoint;
-      pGame->SetCameraDelta(pointDelta.x(),pointDelta.y());
-      break;
-    }
-    default:;
-  }
-}
+//void TEditorModel::mousePressEvent ( QMouseEvent * event ) 
+//{
+//  mBeginPoint = event->pos();
+//}
+////---------------------------------------------------------------------------------------------
+//void TEditorModel::keyPressEvent( QKeyEvent * event )
+//{
+//  switch(event->key())
+//  {
+//    case Qt::Key_O:
+//    {
+//      // открыть модель
+//      OpenModelPath();
+//      break;
+//    }
+//    case Qt::Key_W:
+//    {
+//      break;
+//    }
+//    case Qt::Key_S:
+//    {
+//      break;
+//    }
+//    case Qt::Key_A:
+//    {
+//      break;
+//    }
+//    case Qt::Key_D:
+//    {
+//      break;
+//    }
+//    default:;
+//  }
+//}
 //--------------------------------------------------------------------------------------------------------
-void TEditorModel::showGUI()
-{
-  TBaseGUI_DX::show();
-
-  // скрыть курсор
-  QBitmap bitmap;
-  QBitmap mask;
-  QCursor cursor(bitmap,mask);
-  cursor.setShape(Qt::BitmapCursor);
-  setCursor( cursor );
-}
-//--------------------------------------------------------------------------------------------------------
-void TEditorModel::hideGUI()
-{
-  TBaseGUI_DX::hideGUI();
-  unsetCursor();
-  pGame->StopLoadMap();// стоп поток! синхронно
-  pGame->Done();// очистить объекты ???
-}
-//--------------------------------------------------------------------------------------------------------
-void TEditorModel::keyPressEvent( QKeyEvent * event )
-{
-  switch(event->key())
-  {
-    case Qt::Key_O:
-    {
-      // открыть модель
-      OpenModelPath();
-      break;
-    }
-    case Qt::Key_W:
-    {
-      break;
-    }
-    case Qt::Key_S:
-    {
-      break;
-    }
-    case Qt::Key_A:
-    {
-      break;
-    }
-    case Qt::Key_D:
-    {
-      break;
-    }
-    default:;
-  }
-}
-//--------------------------------------------------------------------------------------------------------
-void TEditorModel::OpenModelPath()
-{
-  int a = 0;
-}
-//--------------------------------------------------------------------------------------------------------
+//void TEditorModel::OpenModelPath()
+//{
+//  //### пока так
+//  TMakerBehavior maker;
+//  TBaseObjectCommon* pObject = maker.New(ID_TANK_TOWER);
+//  pObject->SetID_Model(0);
+//  pGame->AddObject(pObject);
+//  //###
+//}
+////--------------------------------------------------------------------------------------------------------

@@ -56,7 +56,7 @@ TBaseObjectDX::~TBaseObjectDX()
   Done();
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj)
+void TBaseObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj,const D3DXVECTOR3* mCamera)
 {          
   if(flgShow==false) return;
 
@@ -67,7 +67,8 @@ void TBaseObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj)
                mArrMatrix,//кол-во совпадает с cSubset       (От ObjectDX)
                &mWorld,// где и как расположен объект        (От ObjectDX)
                mView, // расположение и ориентация камеры    (от ManagerDirectX)
-               mProj);
+               mProj,
+               mCamera);
 }
 //------------------------------------------------------------------------------------------------
 void TBaseObjectDX::SetModel(TModelDX* pModel)

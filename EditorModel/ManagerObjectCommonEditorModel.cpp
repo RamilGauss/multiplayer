@@ -34,13 +34,19 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 #include "ManagerObjectCommonEditorModel.h"
+#include "namespace_ID_BEHAVIOR.h"
+#include "BaseObjectCommon.h"
+#include "Logger.h"
+using namespace nsID_BEHAVIOR;
 
 
 //-------------------------------------------------------------------
 TManagerObjectCommonEditorModel::TManagerObjectCommonEditorModel()
 :TManagerObjectCommon()
 {
-  
+  flgNeedLoadModel = true;
+
+  InitLogger("Gauss");
 }
 //-------------------------------------------------------------------
 TManagerObjectCommonEditorModel::~TManagerObjectCommonEditorModel()
@@ -48,11 +54,31 @@ TManagerObjectCommonEditorModel::~TManagerObjectCommonEditorModel()
 
 }
 //-------------------------------------------------------------------
-void TManagerObjectCommonEditorModel::VisualEvent(guint32 iTime, float fElapsedTime)
+void TManagerObjectCommonEditorModel::Work()
 {
-  if(IsLoadMap())
-    mProgressBar.VisualEvent(mProcentLoadMap);
-  else
-    mMDX_Scene.VisualEvent(iTime, fElapsedTime);
+  mMDX_Scene.Work();
 }
 //--------------------------------------------------------------------
+void TManagerObjectCommonEditorModel::OnMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+{
+
+}
+//--------------------------------------------------------------------------------------------------------
+void TManagerObjectCommonEditorModel::OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
+{
+  LoadModel();
+}
+//--------------------------------------------------------------------------------------------------------
+void TManagerObjectCommonEditorModel::LoadModel()
+{
+  if(flgNeedLoadModel)
+    flgNeedLoadModel = false;
+  else
+    return;
+
+  TMakerBehavior maker;
+  TBaseObjectCommon* pObject = maker.New(ID_TANK_TOWER);
+  pObject->SetID_Model(0);
+  AddObject(pObject);
+}
+//--------------------------------------------------------------------------------------------------------

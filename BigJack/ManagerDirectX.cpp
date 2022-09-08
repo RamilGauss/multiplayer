@@ -33,32 +33,34 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
+#include "DXUT.h"
 #include "ManagerDirectX.h"
 #include "HiTimer.h"
 #include "Logger.h"
 #include "BaseObjectDX.h"
+#include "BL_Debug.h"
+#include "SDKmisc.h"
+
 
 
 #define LOG_DX
 //#define LOG_DX_STREAM
 
+using namespace std;
 using namespace nsStruct3D;
 
-TManagerDirectX::TManagerDirectX()
+#pragma warning(disable: 4355)
+
+TManagerDirectX::TManagerDirectX(): mDXUT(this)
 {
-  mD3DDevice = NULL;
+
 }
 //--------------------------------------------------------------------------------------------------------
 TManagerDirectX::~TManagerDirectX()
 {
-
-}
-//--------------------------------------------------------------------------------------------------------
-void TManagerDirectX::VisualEvent( guint32 iTime, float fElapsedTime )
-{
-  Optimize();
-  Render(iTime, fElapsedTime);
+  int size = mSetCallbackMsg.size();
+  BL_ASSERT(size==0);
+  mSetCallbackMsg.clear();
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::Optimize()
@@ -71,45 +73,30 @@ void TManagerDirectX::Optimize()
 
 }
 //--------------------------------------------------------------------------------------------------------
-void TManagerDirectX::Render( guint32 fTime, float fElapsedTime )
+void TManagerDirectX::Render(IDirect3DDevice9* pd3dDevice)
 {
   HRESULT hr;
   D3DXMATRIXA16 mView;
   D3DXMATRIXA16 mProj;
 
   // Clear the render target and the zbuffer 
-  V( mD3DDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB( 0, 45, 50, 170 ), 1.0f, 0 ) );
-
-  mProj = *mCamera.GetProjMatrix();
-  mView = *mCamera.GetViewMatrix();
+  V( pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB( 0, 141, 153, 191 ), 1.0f, 0 ) );
 
   // Render the scene
-  if( SUCCEEDED( mD3DDevice->BeginScene() ) )
+  if( SUCCEEDED( pd3dDevice->BeginScene() ) )
   {
+    mProj = *mCamera.GetProjMatrix();
+    mView = *mCamera.GetViewMatrix();
+
     std::list<TBaseObjectDX*>::iterator it = mListReadyRender.begin();
     std::list<TBaseObjectDX*>::iterator eit = mListReadyRender.end();
     while(it!=eit)
     {
-      (*it)->Draw(&mView,&mProj);
+      (*it)->Draw(&mView,&mProj,mCamera.GetEyePt());
       it++;
     }
-    V( mD3DDevice->EndScene() );
+    V( pd3dDevice->EndScene() );
   }
-}
-//--------------------------------------------------------------------------------------------------------
-void TManagerDirectX::CreateDeviceEvent(IDirect3DDevice9* pd3dDevice)
-{
-  mD3DDevice = pd3dDevice;
-  mManagerModel.Setup(mD3DDevice);
-
-  // Setup the camera's view parameters
-  D3DXVECTOR3 vecEye( 0.0f, 0.0f, -5.0f );
-  D3DXVECTOR3 vecAt ( 0.0f, 0.0f, -0.0f );
-
-  //D3DXVECTOR3 vecEye( 5.0f, 5.0f, 5.0f );
-  //D3DXVECTOR3 vecAt ( -10.0f, -10.0f, -10.0f );
-
-  mCamera.SetViewParams( &vecEye, &vecAt );
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::AddObject(TBaseObjectDX* pObject)
@@ -148,3 +135,205 @@ void TManagerDirectX::SetEffect(unsigned short id_effect/*уникальный эффект, см.
 
 }
 //--------------------------------------------------------------------------------------------------------
+void TManagerDirectX::NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext)
+{
+  set<TCallBackFrameMove>::iterator bit = mSetCallbackFrameMove.begin();
+  set<TCallBackFrameMove>::iterator eit = mSetCallbackFrameMove.end();
+  while(bit!=eit)
+  {
+    TCallBackFrameMove pFunc = (*bit);
+    pFunc(fTime, fElapsedTime, pUserContext);
+    bit++;
+  }
+}
+//--------------------------------------------------------------------------------------
+void TManagerDirectX::NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+  set<TCallBackMsg>::iterator bit = mSetCallbackMsg.begin();
+  set<TCallBackMsg>::iterator eit = mSetCallbackMsg.end();
+  while(bit!=eit)
+  {
+    TCallBackMsg pFunc = (*bit);
+    pFunc(hWnd, uMsg, wParam, lParam);
+    bit++;
+  }
+}
+//--------------------------------------------------------------------------------------
+bool TManagerDirectX::IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat,
+                               D3DFORMAT BackBufferFormat, bool bWindowed, void* pUserContext )
+{
+  // No fallback defined by this app, so reject any device that 
+  // doesn't support at least ps2.0
+  if( pCaps->PixelShaderVersion < D3DPS_VERSION( 2, 0 ) )
+    return false;
+
+  // Skip backbuffer formats that don't support alpha blending
+  IDirect3D9* pD3D = DXUTGetD3D9Object();
+  if( FAILED( pD3D->CheckDeviceFormat( pCaps->AdapterOrdinal, pCaps->DeviceType,
+    AdapterFormat, D3DUSAGE_QUERY_POSTPIXELSHADER_BLENDING,
+    D3DRTYPE_TEXTURE, BackBufferFormat ) ) )
+    return false;
+
+  return true;
+}
+//--------------------------------------------------------------------------------------
+bool TManagerDirectX::ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext )
+{
+  assert( DXUT_D3D9_DEVICE == pDeviceSettings->ver );
+
+  HRESULT hr;
+  IDirect3D9* pD3D = DXUTGetD3D9Object();
+  D3DCAPS9 caps;
+
+  V( pD3D->GetDeviceCaps( pDeviceSettings->d3d9.AdapterOrdinal,
+    pDeviceSettings->d3d9.DeviceType,
+    &caps ) );
+
+  // If device doesn't support HW T&L or doesn't support 1.1 vertex shaders in HW 
+  // then switch to SWVP.
+  if( ( caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT ) == 0 ||
+    caps.VertexShaderVersion < D3DVS_VERSION( 1, 1 ) )
+  {
+    pDeviceSettings->d3d9.BehaviorFlags = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+  }
+
+  // Enable anti-aliasing for HAL devices which support it
+  CD3D9Enumeration* pEnum = DXUTGetD3D9Enumeration();
+  CD3D9EnumDeviceSettingsCombo* pCombo = pEnum->GetDeviceSettingsCombo( &pDeviceSettings->d3d9 );
+
+  if( pDeviceSettings->d3d9.DeviceType == D3DDEVTYPE_HAL &&
+    pCombo->multiSampleTypeList.Contains( D3DMULTISAMPLE_4_SAMPLES ) )
+  {
+    pDeviceSettings->d3d9.pp.MultiSampleType = D3DMULTISAMPLE_4_SAMPLES;
+    pDeviceSettings->d3d9.pp.MultiSampleQuality = 0;
+  }
+  // For the first device created if its a REF device, optionally display a warning dialog box
+  static bool s_bFirstTime = true;
+  if( s_bFirstTime )
+  {
+    s_bFirstTime = false;
+    if( pDeviceSettings->d3d9.DeviceType == D3DDEVTYPE_REF )
+      DXUTDisplaySwitchingToREFWarning( pDeviceSettings->ver );
+  }
+  return true;
+}
+//--------------------------------------------------------------------------------------
+HRESULT TManagerDirectX::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
+                              void* pUserContext )
+{
+  mManagerModel.Setup(pd3dDevice);
+  // Setup the camera's view parameters
+  D3DXVECTOR3 vecEye( 0.0f, 0.0f, -5.0f );
+  D3DXVECTOR3 vecAt ( 0.0f, 0.0f, -0.0f );
+
+  mCamera.SetViewParams( &vecEye, &vecAt );
+  return S_OK;
+}
+//--------------------------------------------------------------------------------------
+HRESULT TManagerDirectX::OnResetDevice( IDirect3DDevice9* pd3dDevice,
+                             const D3DSURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
+{
+  mManagerModel.ResetDevice();
+  // Setup the camera's projection parameters
+  float fAspectRatio = pBackBufferSurfaceDesc->Width / ( FLOAT )pBackBufferSurfaceDesc->Height;
+  mCamera.SetProjParams( D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f );
+
+  mCamera.SetWindow( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
+  return S_OK;
+}
+//--------------------------------------------------------------------------------------
+void TManagerDirectX::OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
+{
+  // Update the camera's position based on user input 
+  mCamera.FrameMove( fElapsedTime );
+
+  NotifyFrameMove(fTime, fElapsedTime, pUserContext);
+}
+//--------------------------------------------------------------------------------------
+void TManagerDirectX::OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
+{
+  Optimize();
+  Render(pd3dDevice);
+}
+//--------------------------------------------------------------------------------------
+LRESULT TManagerDirectX::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,
+                       void* pUserContext )
+{
+  //g_Camera.HandleMessages( hWnd, uMsg, wParam, lParam );
+  mCamera.HandleMessages( hWnd, uMsg, wParam, lParam );
+
+  NotifyMsg(hWnd, uMsg, wParam, lParam);
+  return 0;
+}
+//--------------------------------------------------------------------------------------
+void TManagerDirectX::OnLostDevice( void* pUserContext )
+{
+  mManagerModel.LostDevice();
+}
+//--------------------------------------------------------------------------------------
+void TManagerDirectX::OnDestroyDevice( void* pUserContext )
+{
+  mManagerModel.DestroyModel();
+}
+//--------------------------------------------------------------------------------------
+void TManagerDirectX::Init(HWND hwnd )
+{
+  mDXUT.Init(hwnd);
+}
+//--------------------------------------------------------------------------------------
+void TManagerDirectX::Done()
+{
+  mDXUT.Done();
+  
+  mManagerModel.DestroyModel();
+}
+//--------------------------------------------------------------------------------------
+void TManagerDirectX::Work()
+{
+  mDXUT.Work();
+}
+//--------------------------------------------------------------------------------------
+// на получение событий WinApi окна и DirectX
+void TManagerDirectX::Register(void* pFunc, int type)
+{
+  switch(type)
+  {
+    case eTypeMsg:
+      RegisterSet((std::set<void*>*)&mSetCallbackMsg,(void*)pFunc);
+      break;
+    case eTypeFrameMove:
+      RegisterSet((std::set<void*>*)&mSetCallbackFrameMove,pFunc);
+      break;
+    default:;
+  }
+}
+//--------------------------------------------------------------------------------------
+void TManagerDirectX::Unregister(void* pFunc, int type)
+{
+  switch(type)
+  {
+    case eTypeMsg:
+      UnregisterSet((std::set<void*>*)&mSetCallbackMsg,pFunc);
+      break;
+    case eTypeFrameMove:
+      UnregisterSet((std::set<void*>*)&mSetCallbackFrameMove,pFunc);
+      break;
+    default:;
+  }
+}
+//--------------------------------------------------------------------------------------
+void TManagerDirectX::UnregisterSet(std::set<void*>* setCallback, void* pFunc)
+{
+  set<void*>::iterator fit = setCallback->find(pFunc);
+  set<void*>::iterator eit = setCallback->end();
+  if(fit!=eit)
+    setCallback->erase(fit);
+  else
+    BL_FIX_BUG();
+}
+//--------------------------------------------------------------------------------------
+void TManagerDirectX::RegisterSet(std::set<void*>* setCallback, void* pFunc)
+{
+  setCallback->insert(pFunc);
+}
+//--------------------------------------------------------------------------------------

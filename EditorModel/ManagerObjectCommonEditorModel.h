@@ -41,18 +41,22 @@ you may contact in writing [ramil2085@gmail.com].
 
 class TManagerObjectCommonEditorModel : public TManagerObjectCommon
 {
+  bool flgNeedLoadModel;
 
 public:
 
   TManagerObjectCommonEditorModel();
   virtual ~TManagerObjectCommonEditorModel();
 
-  void VisualEvent(guint32 iTime, float fElapsedTime);
+  virtual void Work();
 
 protected:
 
+  virtual void OnMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+  virtual void OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
 
 
+  void LoadModel();
 };
 
 #endif

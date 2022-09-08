@@ -39,9 +39,16 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "ClientTank.h"
 #include "ManagerObjectCommon.h"
+#include "ApplicationProtocolPacketAnswer.h"
+
+// сердце игры (клиента), тут все правила
 
 class TManagerObjectCommonClient : public TManagerObjectCommon
 {
+
+  TA_In_Fight mPacketInFight;
+  TA_Correct_Packet_State_Tank   mPacketCorrectStateTank;
+  TA_Correct_Packet_State_Object mPacketCorrectStateObject;
 
 public:
 
@@ -49,9 +56,22 @@ public:
   virtual ~TManagerObjectCommonClient();
 
   
-  virtual void VisualEvent(guint32 iTime, float fElapsedTime = 0);
+  virtual void Work();
+  virtual void Translate(unsigned short type, char*pData, int size);
 
 protected:
+  //void PrepareTank(TTankTower* pTank, int i);
+  //// отослать через какой-то транспорт запрос на получение корректирующего пакет
+  //// отсылается после загрузки карты
+  //void SendCorrectPacket(){};
+  //void ApplPacketA_Correct_Packet_State_Tank();
+
+  //void AddTankInCommonList();
+
+  //void LoadMapEndEvent();
+
+  //void ApplPacketA_In_Fight(char* pData, int size);
+
 };
 
 #endif

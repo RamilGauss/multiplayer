@@ -41,6 +41,22 @@ you may contact in writing [ramil2085@gmail.com].
 #include "HiTimer.h"
 #include "BaseObjectCommon.h"
 
+TManagerObjectCommon* pMOC = NULL;
+//-----------------------------------------------------------------------------
+void CallBackMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+{
+  if(pMOC==NULL) return;
+  
+  pMOC->OnMsg( hWnd, uMsg, wParam, lParam );
+}
+//-----------------------------------------------------------------------------
+void CallBackFrameMove( double fTime, float fElapsedTime, void* pUserContext )
+{
+  if(pMOC==NULL) return;
+  
+  pMOC->OnFrameMove( fTime, fElapsedTime, pUserContext );
+}
+//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 #define CHECK_END if(flgNeedStopThreadLoadMap==false) \
 { \
@@ -56,17 +72,18 @@ TManagerObjectCommon::TManagerObjectCommon()
   flgLoadMap               = false;
   flgActiveLoadThread      = false;
   mLastTimeFreshData       = 0;
+
+  pMOC = this;
+  mMDX_Scene.Register(CallBackMsg,TManagerDirectX::eTypeMsg);
+  mMDX_Scene.Register(CallBackFrameMove,TManagerDirectX::eTypeFrameMove);
 }
 //--------------------------------------------------------------------
 TManagerObjectCommon::~TManagerObjectCommon()
 {
+  pMOC = this;
+  mMDX_Scene.Unregister(CallBackMsg,TManagerDirectX::eTypeMsg);
+  mMDX_Scene.Unregister(CallBackFrameMove,TManagerDirectX::eTypeFrameMove);
   Done();
-}
-//--------------------------------------------------------------------
-void TManagerObjectCommon::CreateDevice3DEvent(IDirect3DDevice9* pDevice)
-{
-  mProgressBar.CreateDeviceEvent(pDevice);
-  mMDX_Scene.CreateDeviceEvent(pDevice);
 }
 //--------------------------------------------------------------------
 void* Thread(void* p)
@@ -160,6 +177,7 @@ void TManagerObjectCommon::AddFromLoaderObjectInPrediction()
 //--------------------------------------------------------------------
 void TManagerObjectCommon::Done()
 {
+  mMDX_Scene.Done();// отцепиться от WinApi и DirectX
   ClearSceneVectorObject();
   ClearProgressBarVectorObject();
 }
@@ -192,28 +210,6 @@ void TManagerObjectCommon::SetCameraDelta(int x, int y)
   //mMDX_Scene.SetViewParams();
 }
 //--------------------------------------------------------------------
-void TManagerObjectCommon::Register(TCallBackRegistrator::TCallBackFunc pFunc, int type)
-{
-  switch(type)
-  {
-    case eLoadMapEnd:
-      mCallbackLoadMapEndEvent.Register(pFunc);
-      break;
-    default:BL_FIX_BUG();
-  }
-}
-//--------------------------------------------------------------
-void TManagerObjectCommon::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type)
-{
-  switch(type)
-  {
-    case eLoadMapEnd:
-      mCallbackLoadMapEndEvent.Unregister(pFunc);
-      break;
-    default:BL_FIX_BUG();
-  }
-}
-//--------------------------------------------------------------
 TBaseObjectCommon* TManagerObjectCommon::Get(int index)
 {
   TBaseObjectCommon* pObject = mVectorObject.at(index);
@@ -245,4 +241,32 @@ void TManagerObjectCommon::StopLoadMap()// синхронно, придется подождать маленьк
   GlobalLoggerMOC.WriteF_time("Приказ остановить загрузку карты.\n");
   flgNeedStopThreadLoadMap = true;
 }
-//--------------------------------------------------------------
+//--------------------------------------------------------------  
+void TManagerObjectCommon::Init(HWND hwnd)
+{
+  mMDX_Scene.Init(hwnd);
+}
+//--------------------------------------------------------------  
+//void TGameForm::keyPressEvent( QKeyEvent * event )
+//{
+//  switch(event->key())
+//  {
+//    case Qt::Key_Escape:
+//    {
+//      pClient->SendRequestExitFromFight();
+//      break;
+//    }
+//    default:;
+//  }
+//}
+//--------------------------------------------------------------------------------------------------------
+void TManagerObjectCommon::OnMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+{
+
+}
+//--------------------------------------------------------------------------------------------------------
+void TManagerObjectCommon::OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
+{
+
+}
+//--------------------------------------------------------------------------------------------------------

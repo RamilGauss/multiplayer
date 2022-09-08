@@ -81,6 +81,8 @@ public:
     }
 
 private:
+    
+    HRESULT LoadGeometryFromOBJ_Fast( const WCHAR* strFileName );
 
     HRESULT LoadGeometryFromOBJ( const WCHAR* strFilename );
     HRESULT LoadMaterialsFromMTL( const WCHAR* strFileName );

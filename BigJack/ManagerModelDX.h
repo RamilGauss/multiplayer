@@ -61,6 +61,9 @@ public:
   TModelDX* Load(unsigned int id);
 
   void DestroyModel();
+  void LostDevice();
+  void ResetDevice();
+
 
 /*
 // при создании модели вызывать:

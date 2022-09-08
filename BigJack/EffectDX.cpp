@@ -105,6 +105,13 @@ HRESULT TEffectDX::SetMatrixWorldViewProjection(D3DXMATRIXA16* matrix)
   return S_OK;
 }
 //-----------------------------------------------------------
+HRESULT TEffectDX::SetCameraPosition(const D3DXVECTOR3* camera_pos)
+{
+  HRESULT hr;
+  V_RETURN(p->SetValue(hCameraPosition,camera_pos, sizeof( D3DXVECTOR3 )));
+  return S_OK;
+}
+//-----------------------------------------------------------
 HRESULT TEffectDX::Begin(UINT* cPasses , DWORD flag)
 {
   HRESULT hr;
@@ -135,6 +142,7 @@ HRESULT TEffectDX::End()
 //-----------------------------------------------------------
 void TEffectDX::Destroy()
 {
+  SAFE_RELEASE(mMaterial.pTexture);
   SAFE_RELEASE(p);
   SAFE_RELEASE(pMesh);
 }
@@ -142,7 +150,6 @@ void TEffectDX::Destroy()
 void TEffectDX::LostDevice()
 {
   HRESULT hr;
-  SAFE_RELEASE(mMaterial.pTexture);
   V(p->OnLostDevice());
 }
 //-----------------------------------------------------------

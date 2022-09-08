@@ -190,6 +190,7 @@ ServerTank::~ServerTank()
 {
   pServer = NULL;
   mTransport.Unregister(CallBackFuncServerRcvPacket, nsCallBackType::eRcvPacket);
+  mTransport.Unregister(CallBackFuncServerRcvStream, nsCallBackType::eRcvStream);
   mTransport.Unregister(CallBackFuncServerDisconnect,nsCallBackType::eDisconnect);
 
   mListRoom.Clear();
@@ -379,7 +380,7 @@ void ServerTank::WorkStream()
   {
     TRoom** ppNext = mListRoom.Next(ppRoom);
     TRoom * pRoom = *ppRoom;
-    if(pRoom->Work()==false)
+    if(pRoom->WorkAsRoom()==false)
     {
       for(int i = 0 ; i < COUNT_COMMAND_IN_FIGHT*2 ; i++)
       {
@@ -567,8 +568,6 @@ void ServerTank::WorkRequest()
     i++;
   }
   //---------------------------------------------------------	
-  //mCallBackRequestListClient.Notify(pArrClient,cntClient*sizeof(TDefClient));
-  
   pAnswerRequest->mArrClient = pArrClient;
   pAnswerRequest->cntClient  = cntClient;
 

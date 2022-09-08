@@ -159,6 +159,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DXUT_Class.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\EffectDX.cpp"
 				>
 			</File>
@@ -205,7 +209,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DXUT_Class.h"
+				>
+			</File>
+			<File
 				RelativePath=".\EffectDX.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IDirectX_Realize.h"
 				>
 			</File>
 			<File

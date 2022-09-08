@@ -81,6 +81,7 @@ ServerForm::ServerForm(QWidget *parent)
 //---------------------------------------------------------------------------------------------
 ServerForm::~ServerForm()
 {
+  mServer.unregisterRequest(CallBackEventServerForm);
   mServer.stop();
 	Done();
 }

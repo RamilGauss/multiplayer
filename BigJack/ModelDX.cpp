@@ -46,13 +46,13 @@ you may contact in writing [ramil2085@gmail.com].
 
 
 // Vertex declaration
-D3DVERTEXELEMENT9 VERTEX_MODELDX_DECL[] =
-{
-  { 0,  0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_POSITION, 0},
-  { 0, 12, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_NORMAL,   0},
-  { 0, 24, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD, 0},
-  D3DDECL_END()
-};
+//D3DVERTEXELEMENT9 VERTEX_MODELDX_DECL[] =
+//{
+//  { 0,  0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_POSITION, 0},
+//  { 0, 12, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_NORMAL,   0},
+//  { 0, 24, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD, 0},
+//  D3DDECL_END()
+//};
 
 
 using namespace nsStruct3D;
@@ -79,7 +79,8 @@ void TModelDX::Draw(std::vector<unsigned char>* state, // какое состояние нарисо
                     D3DXMATRIXA16* matrix,// ориентация составных частей внутри объекта, кол-во совпадает с cSubset (От ObjectDX)
                     D3DXMATRIXA16* mWorld,// где и как расположен объект         (От ObjectDX)
                     D3DXMATRIXA16* mView, // расположение и ориентация камеры    (от ManagerDirectX)
-                    D3DXMATRIXA16* mProj) // проецирование на плоскость экрана  (от ManagerDirectX)
+                    D3DXMATRIXA16* mProj,
+                    const D3DXVECTOR3* mCamera) // проецирование на плоскость экрана  (от ManagerDirectX)
 {
   D3DXMATRIXA16 mWorldViewProjection;
   mWorldViewProjection = (*mWorld) * (*mView) * (*mProj);
@@ -114,25 +115,28 @@ void TModelDX::Draw(std::vector<unsigned char>* state, // какое состояние нарисо
         else
           pEffect = pCurLOD->damage[i];
       }
-      pEffect->SetMatrixWorld(matrix+i);
-      Draw(pEffect,mWorldViewProjection);
+      //pEffect->SetMatrixWorld(matrix+i);
+      pEffect->SetMatrixWorld(mWorld);//###
+      Draw(pEffect,mWorldViewProjection,mCamera);
     }
   }
 }
 //---------------------------------------------------------------------------------------------------
-void TModelDX::Draw( TEffectDX* pEffect,D3DXMATRIXA16& mWorldViewProjection)
+void TModelDX::Draw( TEffectDX* pEffect,D3DXMATRIXA16& mWorldViewProjection,const  D3DXVECTOR3* mCamera)
 {
   ID3DXMesh* pCurMesh = pEffect->pMesh;
+
   HRESULT hr;
   UINT iPass, cPasses;
   pEffect->SetMatrixWorldViewProjection(&mWorldViewProjection);
+  pEffect->SetCameraPosition(mCamera);
 
   V( pEffect->Begin( &cPasses, 0 ) );
   for( iPass = 0; iPass < cPasses; iPass++ )
   {
     V( pEffect->BeginPass( iPass ) );
     // Render the mesh with the applied technique
-    V( pCurMesh->DrawSubset( 0/*pEffect->mSubset*/ ) );
+      V( pCurMesh->DrawSubset( 0 /*Subset*/ ) );
     V( pEffect->EndPass() );
   }
   V( pEffect->End() );
@@ -304,7 +308,7 @@ unsigned int TModelDX::GetIndexVisualGroupByName(char* sName, int num)
   return 0;
 }
 //----------------------------------------------------------------------------------------------------
-D3DXMATRIXA16* TModelDX::GetMatrixByName(char* sNameBlendBone/*к чем*/, int num, char* sNamePart/*что*/)
+D3DXMATRIXA16* TModelDX::GetMatrixByName(char* sNameBlendBone/*к чему*/, int num, char* sNamePart/*что*/)
 {
   unsigned int index = GetIndexVisualGroupByName(sNameBlendBone, num);
   TLOD* pLOD = &mVectorLOD[0];

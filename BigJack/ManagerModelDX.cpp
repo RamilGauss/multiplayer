@@ -60,6 +60,8 @@ TManagerModelDX::~TManagerModelDX()
 //--------------------------------------------------------------------------------------
 TModelDX* TManagerModelDX::Load(unsigned int id)
 {
+  GlobalLoggerDX.WriteF_time("Начало загрузки модели ID=%u\n",id);
+
   string sPath = mMapPathModel[id];
   TModelDX* pModel = NULL;
   if(sPath.length())
@@ -81,7 +83,8 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
     GlobalLoggerDX.WriteF_time("Не удалось найти модель sPath=%s, id=%u\n",sPath.data(),id);
     BL_FIX_BUG();
   }
-
+  
+  GlobalLoggerDX.WriteF_time("Конец загрузки модели ID=%u\n",id);
   return pModel;
 }
 //--------------------------------------------------------------------------------------
@@ -93,14 +96,37 @@ void TManagerModelDX::DestroyModel()
   {
     TModelDX* pModel = (*bit).second;
     if(pModel)
-    {
-      pModel->LostDevice();//### эксперимент
-      pModel->Destroy();//### эксперимент
-    }
+      pModel->Destroy();
     delete pModel;
     bit++;
   }
   mMapLoadedModel.clear();
+}
+//--------------------------------------------------------------------------------------
+void TManagerModelDX::LostDevice()
+{
+  std::map<unsigned int, TModelDX*>::iterator bit = mMapLoadedModel.begin();
+  std::map<unsigned int, TModelDX*>::iterator eit = mMapLoadedModel.end();
+  while(bit!=eit)
+  {
+    TModelDX* pModel = (*bit).second;
+    if(pModel)
+      pModel->LostDevice();
+    bit++;
+  }
+}
+//--------------------------------------------------------------------------------------
+void TManagerModelDX::ResetDevice()
+{
+  std::map<unsigned int, TModelDX*>::iterator bit = mMapLoadedModel.begin();
+  std::map<unsigned int, TModelDX*>::iterator eit = mMapLoadedModel.end();
+  while(bit!=eit)
+  {
+    TModelDX* pModel = (*bit).second;
+    if(pModel)
+      pModel->ResetDevice();
+    bit++;
+  }
 }
 //--------------------------------------------------------------------------------------
 //void TManagerModelDX::OnDestroyDevice()

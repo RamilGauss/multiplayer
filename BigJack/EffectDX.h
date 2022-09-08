@@ -89,6 +89,12 @@ public:
     std::wstring strTexture;
     IDirect3DTexture9* pTexture;
     D3DXHANDLE hTechnique;
+
+    Material()
+    {
+      pTexture = NULL;
+      hTechnique = NULL;
+    }
   };
   // Vertex format
 #pragma pack(push, 1)
@@ -111,6 +117,7 @@ public:
 
   HRESULT SetMatrixWorld(D3DXMATRIXA16* matrix);
   HRESULT SetMatrixWorldViewProjection(D3DXMATRIXA16* matrix);
+  HRESULT SetCameraPosition(const D3DXVECTOR3* camera_pos);
   HRESULT Begin(UINT* cPasses , DWORD flag);
   HRESULT BeginPass(UINT iPass);
   HRESULT EndPass();

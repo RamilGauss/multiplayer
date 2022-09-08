@@ -266,9 +266,11 @@ void WINAPI DXUTDisplaySwitchingToREFWarning( DXUTDeviceVersion ver );
 //--------------------------------------------------------------------------------------
 // Tries to finds a media file by searching in common locations
 //--------------------------------------------------------------------------------------
+
 HRESULT WINAPI DXUTFindDXSDKMediaFileCch( __out_ecount(cchDest) WCHAR* strDestPath,
                                           __in int cchDest, 
                                           __in LPCWSTR strFilename );
+
 HRESULT WINAPI DXUTSetMediaSearchPath( LPCWSTR strPath );
 LPCWSTR WINAPI DXUTGetMediaSearchPath();
 

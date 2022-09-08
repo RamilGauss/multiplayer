@@ -86,31 +86,14 @@ public:
   TManagerObjectCommon();
   virtual ~TManagerObjectCommon();
 
-  void CreateDevice3DEvent(IDirect3DDevice9* pDevice);
-  void AddObject(TBaseObjectCommon* pObject);
-  // прогресс загрузки карты
-  bool IsLoadMap(unsigned char* procent = NULL );// от 0 до 100 
+  void Init(HWND hwnd = NULL);
+  virtual void Work() = 0;
+  void Done();
 
-  void SetCameraDelta(int x, int y);
-
-  void Fresh();
-
-  void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type = eLoadMapEnd);
-  void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type = eLoadMapEnd);
-
-  void SetEffect(unsigned int id_effect, // номер эффекта
-    D3DVECTOR& coord,     // где
-    D3DVECTOR& orient,    // ориентация эффекта
-    float time_past = 0); // прошло времени, мс
-  TBaseObjectCommon* Get(int index);// отдать объект на изменение свойств объекта
-
-  void Done();// очистить массивы объектов сцены и прогресс бара
-  // загрузить карту
-  void LoadMap(unsigned int id_map);
-  void EndLoadMap();// очень криво и отвратительно, что есть такой метод! но пока только так.
-  void StopLoadMap();// синхронно, придется подождать маленько
-
-  virtual void VisualEvent(guint32 iTime, float fElapsedTime) = 0;
+  // какие-то данные
+  virtual void Translate(unsigned short type, char*pData, int size){};
+  // в наследуемом классе добавятся методы для управления - например через сеть или чтение реплея и воспроизведение боя
+  /*...*/
 
 protected:
 
@@ -126,6 +109,30 @@ protected:
   void ClearSceneVectorObject();
   void ClearProgressBarVectorObject();
 
+
+  // прогресс загрузки карты
+  bool IsLoadMap(unsigned char* procent = NULL );// от 0 до 100 
+  void SetCameraDelta(int x, int y);
+  // загрузить карту
+  void LoadMap(unsigned int id_map);
+  void EndLoadMap();// очень криво и отвратительно, что есть такой метод! но пока только так.
+  void StopLoadMap();// синхронно, придется подождать маленько
+
+  TBaseObjectCommon* Get(int index);// отдать объект на изменение свойств объекта
+  void AddObject(TBaseObjectCommon* pObject);
+  void Fresh();
+
+  void SetEffect(unsigned int id_effect, // номер эффекта
+    D3DVECTOR& coord,     // где
+    D3DVECTOR& orient,    // ориентация эффекта
+    float time_past = 0); // прошло времени, мс
+
+
+  friend void CallBackMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+  friend void CallBackFrameMove( double fTime, float fElapsedTime, void* pUserContext );
+
+  virtual void OnMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+  virtual void OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
 
 };
 

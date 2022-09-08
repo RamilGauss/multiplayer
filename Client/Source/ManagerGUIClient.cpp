@@ -82,7 +82,7 @@ void CallBackDisconnectManagerGUI(void* data, int size)// оставить
   QCoreApplication::postEvent( pManagerGUIClient, event );
 }
 //-------------------------------------------------------------------------------------------
-  //-----------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------
 TManagerGUIClient::TManagerGUIClient(QWidget* parent):TManagerGUI(parent)
 {
   pManagerGUIClient = this;

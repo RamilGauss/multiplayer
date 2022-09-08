@@ -38,6 +38,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "memory_operation.h"
 #include <string.h>
 #include "BL_Debug.h"
+#include <stdio.h>
+
 
 using namespace std;
 

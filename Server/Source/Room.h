@@ -100,12 +100,12 @@ public:
 
 	void SetTransport(TTransportProtocol* pTransport);//старт боя, передача возможности вещать на клиента
 
-	bool Work(); // рассчитать координаты и разослать стрим клиентам
+	bool WorkAsRoom(); // рассчитать координаты и разослать стрим клиентам
 
   void SetIDMap(unsigned short val);
   unsigned short GetIDMap(){return mID_map;};
 
-  TTank* GetTank(int i){return (TTank*)mArrTank.Get(i);};
+  TTank* GetTank(int i);
 
   void MakeGroup();
   void PreparePrediction();// настроить предсказатель для получения координат объектов, коллизий, событий
@@ -119,7 +119,7 @@ public:
   int GetTimeRest_sec();
   int GetActiveClient();
 
-  virtual void VisualEvent(guint32 iTime, float fElapsedTime){}
+  virtual void Work(){}
 
 protected:
 

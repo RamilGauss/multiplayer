@@ -33,27 +33,26 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "LoggerDX.h"
-#include "LoadFromHDD.h"
-#include "ManagerDirectX.h"
-#include "KeyHandlerEditorModel.h"
+#include "ManagerObjectCommonEditorModel.h"
 
-int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow )
+
+//-------------------------------------------------------------------
+TManagerObjectCommonEditorModel::TManagerObjectCommonEditorModel()
+:TManagerObjectCommon()
 {
-  InitLoggerDX("Editor");
-
-  TManagerDirectX mdx;
-  TKeyHandlerEditorModel mKeyHandler;
-  mdx.SetKeyHandler(&mKeyHandler);
-  mKeyHandler.SetManagerDirectX(&mdx);
-
-  mdx.Start(NULL);
-    mdx.Show();
-    ht_msleep(1000000);
-    mdx.Hide();
-  mdx.Stop();
-
-  return 0;
+  
 }
+//-------------------------------------------------------------------
+TManagerObjectCommonEditorModel::~TManagerObjectCommonEditorModel()
+{
 
-
+}
+//-------------------------------------------------------------------
+void TManagerObjectCommonEditorModel::VisualEvent(guint32 iTime, float fElapsedTime)
+{
+  if(IsLoadMap())
+    mProgressBar.VisualEvent(mProcentLoadMap);
+  else
+    mMDX_Scene.VisualEvent(iTime, fElapsedTime);
+}
+//--------------------------------------------------------------------

@@ -37,50 +37,32 @@ you may contact in writing [ramil2085@gmail.com].
 #define BaseGUI_DXH
 
 #include "BaseGUI.h"
+#include <QTimer>
 
-struct IDirect3D9; 
-struct IDirect3DDevice9; 
 
 class TBaseGUI_DX : public TBaseGUI
 { 
     Q_OBJECT
 
+  QTimer mTimer;
+
 public: 
-  /** Constructor */ 
   TBaseGUI_DX( QWidget* pParent = NULL); 
 
-  /** Destructor */ 
   virtual ~TBaseGUI_DX(); 
 
-  /** a hint to Qt to give the widget as much space as possible */ 
-  QSizePolicy sizePolicy() const { return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ); } 
-  /** a hint to Qt that we take care of the drawing for ourselves, thankyouverymuch */ 
-  QPaintEngine *paintEngine() const { return NULL; } 
-
-  virtual void hideGUI(){QWidget::hide();SetWaitFalse();};
+  virtual void showGUI();
+  virtual void hideGUI();
 
 
 protected: 
-  bool flgWaitCorrectPacketTank;
-  void SetWaitFalse(){flgWaitCorrectPacketTank=false;}
-  void SetWaitTrue(){flgWaitCorrectPacketTank=true;}
-  bool IsWaitCorrectPacketTank(){return flgWaitCorrectPacketTank;}
-  /** Initialized the D3D environment */ 
-  void Setup(); 
 
-  /** Destroys the D3D environment */ 
-  void Close(); 
+  virtual void SetupEvent();
 
-  /** paints the scene */ 
-  virtual void paintEvent( QPaintEvent* pEvent); 
 
-  virtual void VisualEvent(QPaintEvent* pEvent) = 0;
-  //mManagerDirectX->VisualEvent(mDevice);// пример использования
+protected slots:
+  void sl_Rendering();
 
-protected: 
-  /** D3D stuff */ 
-  IDirect3D9*       mD3D; 
-  IDirect3DDevice9* mDevice; 
 }; 
 
 

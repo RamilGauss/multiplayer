@@ -43,28 +43,14 @@ class TEditorModel : public TBaseGUI_DX
 {
   Q_OBJECT
 
-  QPoint mBeginPoint;
-
 public:
   TEditorModel(QWidget *parent = NULL);
   virtual ~TEditorModel();
 
   virtual void Translate(unsigned short type, char*pData, int size);
 
-  virtual void showGUI();
-  virtual void hideGUI();
-
 protected:
 
-  virtual void VisualEvent(QPaintEvent* pEvent);
-  virtual void SetupEvent();
-
-  virtual void mousePressEvent ( QMouseEvent * event );
-  virtual void mouseMoveEvent( QMouseEvent * event );
-  virtual void keyPressEvent ( QKeyEvent * event );
-
-
-  void OpenModelPath();
 };
 
 #endif // EDITORMODEL_H

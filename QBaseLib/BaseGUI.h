@@ -50,14 +50,12 @@ class TBaseGUI : public QWidget
 
 public:
   TBaseGUI(QWidget* parent=NULL): QWidget(parent){pClient=NULL;pGame=NULL;}
-  virtual ~TBaseGUI(){};
+  virtual ~TBaseGUI(){pClient=NULL;pGame=NULL;};
 
   virtual void Translate(unsigned short typePacket, char* pData, int size) = 0;
 
   virtual void showGUI(){QWidget::show();}
   virtual void hideGUI(){QWidget::hide();};
-
-  virtual void SetupEvent(){};
 
   void SetupMOC_Client(TClientTank  *_pClient,
                        TManagerObjectCommon* _pGame)
@@ -68,7 +66,10 @@ public:
   }
 
 protected:
-  
+
+  virtual void SetupEvent(){};
+
+protected:
   TClientTank  *pClient;
   TManagerObjectCommon* pGame;
   

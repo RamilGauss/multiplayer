@@ -63,19 +63,19 @@ int main(int argc, char *argv[])
   QApplication a(argc, argv);
   //---------------------------------------
   // менеджер двигателей
-  TManagerObjectCommon* pManagerObjectCommon = new TManagerObjectCommonEditorModel;
+  TManagerObjectCommon* pMOC = new TManagerObjectCommonEditorModel;
   
   TManagerGUIEditorModel* pManagerGUI = new TManagerGUIEditorModel;
-  pManagerGUI->startGUI(NULL,pManagerObjectCommon);
+  pManagerGUI->startGUI(NULL,pMOC);
 
   TEditorModel* pEditorModel = new TEditorModel;
   pManagerGUI->AddFormInList(pEditorModel, "editorModel");
 
   a.exec();
 
-  delete pManagerObjectCommon;
+  delete pEditorModel;// освободим ресурсы игры
+  delete pMOC;
   delete pManagerGUI;
-  delete pEditorModel;
 
 
   return 0;

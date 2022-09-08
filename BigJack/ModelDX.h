@@ -80,8 +80,8 @@ public:
                       D3DXMATRIXA16* matrix,//кол-во совпадает с cSubset (От ObjectDX)
                       D3DXMATRIXA16* mWorld,// где и как расположен объект         (От ObjectDX)
                       D3DXMATRIXA16* mView, // расположение и ориентация камеры    (от ManagerDirectX)
-                      D3DXMATRIXA16* mProj); // проецирование на плоскость экрана  (от ManagerDirectX)
-
+                      D3DXMATRIXA16* mProj, // проецирование на плоскость экрана  (от ManagerDirectX)
+                      const D3DXVECTOR3* mCamera);
   bool Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath);
   void Destroy();
   void LostDevice();
@@ -101,7 +101,7 @@ protected:
   void SetupVectorLOD();
   bool AddEffectDX(ILoaderModelDX::TDefGroup* pDefGroup);
   float GetDist(D3DXMATRIXA16* mWorld, D3DXMATRIXA16* mView);
-  void Draw(TEffectDX* pEffect,D3DXMATRIXA16& mWorldViewProjection);
+  void Draw(TEffectDX* pEffect,D3DXMATRIXA16& mWorldViewProjection,const D3DXVECTOR3* mCamera);
 
   virtual bool Load(LPCWSTR strFilenameData);
   //---------------------------------------------------------

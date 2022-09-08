@@ -48,8 +48,60 @@ TManagerObjectCommonClient::~TManagerObjectCommonClient()
 
 }
 //-------------------------------------------------------------------
-void TManagerObjectCommonClient::VisualEvent(guint32 iTime, float fElapsedTime)
+//void TGameForm::PrepareTank(TTankTower* pTank, int i)
+//{
+//  char* pData = (char*)mPacketInFight.getPointerTankProperty(i);
+//  int size = mPacketInFight.getSizeTankProperty(i);
+//  pTank->SetProperty(pData,size);
+//}
+////--------------------------------------------------------------------
+//void TGameForm::AddTankInCommonList()
+//{
+//  TMakerBehavior mMaker;
+//  int cntTank = mPacketInFight.getCountTank();
+//  for(int i = 0 ; i < cntTank ; i++ )
+//  {
+//    // 
+//    TBaseObjectCommon* pObject = mMaker.New(ID_TANK_TOWER);
+//    PrepareTank((TTankTower*)pObject,i);
+//
+//    pGame->AddObject(pObject);
+//  }
+//}
+////--------------------------------------------------------------------
+//void TGameForm::LoadMapEndEvent()
+//{
+//  AddTankInCommonList();
+//  SetWaitTrue();
+//  pClient->SendRequestCorrectPacket();// отсылка запроса
+//}
+////--------------------------------------------------------------------
+//void TGameForm::ApplPacketA_In_Fight(char* pData, int size)
+//{
+//  GlobalLoggerForm.WriteF_time("Получен пакет вход в бой.\n");
+//  // создать поток загрузки карты
+//  // когда загрузка закончится отослать запрос на корректирующий пакет
+//
+//  // к сожалению поток загрузки карты прервать нельзя,
+//  // ждите
+//  mPacketInFight.setData(pData,size);
+//  pGame->LoadMap(mPacketInFight.getCodeMap());
+//}
+////--------------------------------------------------------------------
+//void TGameForm::ApplPacketA_Correct_Packet_State_Tank()
+//{
+//  GlobalLoggerForm.WriteF_time("Получен корректирующий пакет, состояние танков.\n");
+//  if(IsWaitCorrectPacketTank()==false) return;
+//  // применить содержимое пакета
+//
+//  pGame->EndLoadMap();// окончание загрузки
+//
+//  SetWaitFalse();
+//}
+//--------------------------------------------------------------------
+void TManagerObjectCommonClient::Work()
 {
+  guint32 iTime = ht_GetMSCount();
   if(IsLoadMap())
   {
     mProgressBar.VisualEvent(mProcentLoadMap);
@@ -62,7 +114,39 @@ void TManagerObjectCommonClient::VisualEvent(guint32 iTime, float fElapsedTime)
       mLastTimeFreshData = ht_GetMSCount();
     }
 
-    mMDX_Scene.VisualEvent(iTime, fElapsedTime);
+    mMDX_Scene.Work();
   }
 }
 //--------------------------------------------------------------------
+void TManagerObjectCommonClient::Translate(unsigned short type, char*pData, int size)
+{
+  /*switch(type)
+  {
+    case APPL_TYPE_A_IN_FIGHT:
+    {
+      ApplPacketA_In_Fight(pData,size);
+      break;
+    }
+    case APPL_TYPE_G_A_CORRECT_PACKET_STATE_TANK:
+    {
+      ApplPacketA_Correct_Packet_State_Tank();
+      break;
+    }
+    case APPL_TYPE_G_S_LOAD_MAP:
+    {
+      break;
+    }
+    case APPL_TYPE_G_S_COUNT_DOWN:
+    {
+      // отображать отсчет на 
+      break;
+    }
+    case APPL_TYPE_G_S_FIGHT_COORD_BULLET:
+    {
+      //pGame->RefreshFromServer();
+      break;
+    }
+    default:;
+  }*/
+}
+//---------------------------------------------------------------------------------------------
