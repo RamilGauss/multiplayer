@@ -3,8 +3,8 @@
 
 #define ServerLocalPort 4321
 
-#define VERSION_PROGRAMM ((unsigned short)26) // unsigned short
-#define VERSION_EDITOR   ((unsigned short)3)
+#define VERSION_PROGRAMM ((unsigned short)27) // unsigned short
+#define VERSION_EDITOR   ((unsigned short)4)
 //-------------------------------------------------------------------------------------------
 extern char strVersionClient[100];
 extern char strVersionServer[100];
@@ -46,11 +46,9 @@ QMessageBox::warning( NULL, QObject::tr(NAME_TITTLE),sError );
 
 #define PATH_LIST_MODELS "..\\model\\listModel"
 // перечень файлов
-// 1 Файл описания: ID, комментарии, .\main.mod
-// 2 Файл шейдера                    .\shader.mod 
-// 3 Файл примитивов                 .\primitive.mod
-// 4 Файл текстур                    .\texture.mod
-// 5 Файл примитивов                 .\mod.dds  
+// 1 Файл описания: ID, комментарии, ..\Model\Name\main.ini
+// 2 Файл примитивов                 ..\Model\Name\primitive
+// Файлы текстур и шейдеров задаются для каждой группы отдельно
 
 
 #endif

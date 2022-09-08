@@ -5,6 +5,7 @@
 #include <glib.h>
 #include "BL_Debug.h"
 #include "BL_Conv.h"
+#include <stdlib.h>
 
 TAutoCreateVarT<TBL_ConfigFile> AppConfigFile;
 
@@ -290,8 +291,12 @@ double TBL_ConfigFile::GetDouble(const char *group_name, const char *key, double
   }
   else return res;
 #else
-	gdouble res;
+	//gdouble res;// #### sick!
+  gfloat res;
   gchar *resSt = g_key_file_get_value(m_keyfile, group_name, key, &m_gerror);
+
+  res = atof(resSt);
+
   if( !resSt || m_gerror || !sscanf( resSt, "%f", &res ) )
   {// параметра ранее не существовало, создадим его
     if ( autosave ) SetDouble(group_name, key, defaultValue );
@@ -299,7 +304,7 @@ double TBL_ConfigFile::GetDouble(const char *group_name, const char *key, double
   }
   if( resSt ) g_free( resSt );
   return res;
-  #endif
+#endif
 }
 
 /********************************************************************************************

@@ -4,6 +4,7 @@
 
 TLoaderListModel::TLoaderListModel()
 {
+  mCurDirectory[0] = '\0';
   mSize = 0;
   pData = NULL;
 }
@@ -15,6 +16,17 @@ TLoaderListModel::~TLoaderListModel()
 //--------------------------------------------------------------------------------------
 bool TLoaderListModel::Open(char* sPath)
 {
+  GetCurrentDirectoryA(sizeof(mCurDirectory),mCurDirectory);
+  int len = strlen(mCurDirectory);
+  for(int i = len-1 ; i >= 0 ; i--)
+  {
+    if(mCurDirectory[i]=='\\')
+    {
+      mCurDirectory[i]='\0';
+      break;
+    }
+  }
+
   bool res = lfHDD.ReOpen(sPath);
   if(!res) return false;
 
@@ -40,10 +52,13 @@ bool TLoaderListModel::Load(char*** pPointerArr,int& mCntPathModel)
   {
     if(size)
     {
-      pArr[i] = new char[size+1];
-      memcpy(pArr[i],p,size);
-      char* pCHAR = pArr[i];
-      pCHAR[size] = '\0';
+      int lenStr = size+strlen(mCurDirectory)+strlen("\\model\\");
+      pArr[i] = new char[lenStr+1];
+      memcpy(pArr[i],mCurDirectory,strlen(mCurDirectory));
+      memcpy(pArr[i]+strlen(mCurDirectory),"\\model\\",strlen("\\model\\"));
+      memcpy(pArr[i]+strlen(mCurDirectory)+strlen("\\model\\"),p,size);
+      char* str = pArr[i];
+      str[lenStr] = '\0';
       i++;
     }
     p = FindSeparator(p,size);

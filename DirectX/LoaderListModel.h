@@ -6,6 +6,7 @@
 
 class TLoaderListModel
 {
+  char mCurDirectory[MAX_PATH];
 
   TLoadFromHDD lfHDD;
   int mCntPath;

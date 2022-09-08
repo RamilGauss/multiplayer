@@ -68,10 +68,13 @@ public:
   HRESULT EndPass();
   HRESULT End();
 
+  Material      mMaterial;
 
-  Material mMaterial;
+  unsigned char mTypeLOD;
+  bool          mflgNormal;
 
-  int mSubset;
+  int           mSubset;// номер в структуре TEffectDX
+  unsigned char mIndexVisual;// индекс при отрисовке, для определения по состоянию
 
 };
 

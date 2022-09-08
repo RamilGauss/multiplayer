@@ -5,6 +5,10 @@
 
 ILoaderModelDX::ILoaderModelDX()
 {
+  pStrFilenameData[0] = '\0';
+  pStrPathPrimitive[0] = '\0';
+  pStrFilenameDataMainIni[0] = '\0';
+
   mID_unique   = eUndefID;
   mCntGroup    = 0;
   mArrDefGroup = NULL;

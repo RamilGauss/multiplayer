@@ -9,11 +9,14 @@
 #include "TObject.h"
 #include <d3dx9math.h>
 #include "ILoaderModelDX.h"
+#include <d3d9types.h>
 
 class TManagerModel;
 
 class TModelDX : public TObject
 {
+protected:
+
   IDirect3DDevice9* m_pd3dDevice;    // Direct3D Device object associated with this mesh
 
   unsigned int mID; // уникальный для моделей
@@ -48,26 +51,37 @@ protected:
   //---------------------------------------------------------
   friend class TManagerModel;
   
-  float mLOD;// 2 состояния по ЛОДу, расстояние от камеры до центра координат
-
   // если у объекта одно состояние, то mEffectDX_normal==mEffectDX_damage
   struct TLOD
   {
     TEffectDX* mEffectDX_normal;
     TEffectDX* mEffectDX_damage;
     TLOD(){mEffectDX_normal=NULL;mEffectDX_damage=NULL;}
-    ~TLOD(){delete mEffectDX_normal;mEffectDX_normal=NULL;
-            delete mEffectDX_damage;mEffectDX_damage=NULL;}
+    ~TLOD()
+    {
+      if(mEffectDX_normal==mEffectDX_damage)
+      {
+        delete mEffectDX_normal;
+        mEffectDX_normal=NULL;mEffectDX_damage=NULL;
+      }
+      else
+      {
+        delete mEffectDX_normal;mEffectDX_normal=NULL;
+        delete mEffectDX_damage;mEffectDX_damage=NULL;
+      }
+    }
   };
 
   TLOD* mArrEffect0;// подробно
   TLOD* mArrEffect1;// грубо
 
-  int mCntEffectVisual;// кол-во эффектов равно кол-ву примитивов в Mesh
-  int mCntEffectMesh;// как правило в 2 или 1 раз больше чем mCntEffectVisual
-  int mCntAllEffect;// как правило в 4 или 2 раза больше чем mCntEffectVisual
+  int mCntEffectVisual;// кол-во эффектов равно кол-ву отображаемых примитивов
+  int mCntEffectInLOD; // как правило в 2 или 1 раз больше чем mCntEffectVisual
+  int mCntAllEffect;   // как правило в 4 или 2 раза больше чем mCntEffectVisual
  
   D3DXMATRIXA16 mWorldViewProjection;
+
+  float mLOD;// 2 состояния по ЛОДу, расстояние от камеры до центра координат
 };
 //-----------------------------------------------------------------
 

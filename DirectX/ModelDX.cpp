@@ -3,11 +3,12 @@
 #include "LoaderModelDX.h"
 #include "LoggerDX.h"
 #include "LoaderModelDXEditor.h"
+#include "BL_Debug.h"
 
 
 
 // Vertex declaration
-D3DVERTEXELEMENT9 VERTEX_DECL[] =
+D3DVERTEXELEMENT9 VERTEX_MODELDX_DECL[] =
 {
   { 0,  0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_POSITION, 0},
   { 0, 12, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_NORMAL,   0},
@@ -22,7 +23,7 @@ TModelDX::TModelDX()
 {
   mID = -1;
   mCntEffectVisual = 0;
-  mCntEffectMesh   = 0;// как правило в 2 или 1 раз больше чем mCntEffectVisual
+  mCntEffectInLOD   = 0;// как правило в 2 или 1 раз больше чем mCntEffectVisual
   mCntAllEffect    = 0;// как правило в 4 или 2 раза больше чем mCntEffectVisual
   mLOD             = 0;
   mArrEffect0       = NULL;
@@ -38,7 +39,7 @@ TModelDX::~TModelDX()
   delete []mArrEffect1;
   mArrEffect1       = NULL;
   mCntEffectVisual = 0;
-  mCntEffectMesh   = 0;// как правило в 2 или 1 раз больше чем mCntEffectVisual
+  mCntEffectInLOD  = 0;// как правило в 2 или 1 раз больше чем mCntEffectVisual
   mCntAllEffect    = 0;// как правило в 4 или 2 раза больше чем mCntEffectVisual
 }
 //----------------------------------------------------------------------------------------------------
@@ -91,11 +92,11 @@ void TModelDX::Draw( TEffectDX* pEffect)
   V( pEffect->End() );
 }
 //----------------------------------------------------------------------------------------------------
-void TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath/*путь к файлам модели*/)
+void TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strAbsPath/*путь к файлам модели*/)
 {
   m_pd3dDevice = pd3dDevice;
   // загрузка данных примитивов, текстур и индексов.
-  if(Load(strPath)==false) 
+  if(Load(strAbsPath)==false) 
     return;
 
   LPCWSTR strFilenameShader = NULL;
@@ -198,6 +199,9 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
     return false;
   }
   //-------------------------------------------------------------------------------------------
+  mCntEffectVisual = pLoadModel->mCntEffectVisual;
+  mCntEffectInLOD  = pLoadModel->mCntEffectInLOD;
+  //------------------------------------------------
   mLOD = pLoadModel->GetLOD();
   mID  = pLoadModel->GetID_Unique();
   mCntAllEffect = pLoadModel->GetCountSubset();
@@ -208,16 +212,43 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
     // заполнение
     SetupEffectDX(&pArrEffect[i],pDef);
   }
-  // раскидать по группам:
-  // кому принадлежит
-  // normal состояние 0 ЛОДа
-  //if(pDef->)
-  // damage состояние 0 ЛОДа
-
-  // normal состояние 1 ЛОДа
-
-  // damage состояние 1 ЛОДа
-
+  // структурировать данные
+  if(mCntAllEffect!=mCntEffectInLOD)
+  {
+    mArrEffect0 = new TLOD[mCntEffectVisual];
+    mArrEffect1 = new TLOD[mCntEffectVisual];
+  }
+  else
+  {
+    mArrEffect0 = new TLOD[mCntEffectVisual];
+    mArrEffect1 = mArrEffect0;
+  }
+  for(int i = 0 ; i < mCntAllEffect ; i++)
+  {
+    TLOD* pCurLOD = mArrEffect1;
+    if(pArrEffect[i].mTypeLOD==0)
+      pCurLOD = mArrEffect0;
+    if(pArrEffect[i].mflgNormal)
+      pCurLOD[pArrEffect[i].mIndexVisual].mEffectDX_normal = &pArrEffect[i];
+    else
+      pCurLOD[pArrEffect[i].mIndexVisual].mEffectDX_damage = &pArrEffect[i];
+  }
+  for(int i = 0 ; i < mCntEffectVisual ; i++)
+  {
+    if(mArrEffect0[i].mEffectDX_damage == NULL)
+      mArrEffect0[i].mEffectDX_damage = mArrEffect0[i].mEffectDX_normal;
+    else
+      mArrEffect0[i].mEffectDX_normal = mArrEffect0[i].mEffectDX_damage;
+    BL_ASSERT(mArrEffect0[i].mEffectDX_normal!=NULL);
+    BL_ASSERT(mArrEffect0[i].mEffectDX_damage!=NULL);
+    //--------------------------------------------------------------------
+    if(mArrEffect1[i].mEffectDX_damage == NULL)
+      mArrEffect1[i].mEffectDX_damage = mArrEffect1[i].mEffectDX_normal;
+    else
+      mArrEffect1[i].mEffectDX_normal = mArrEffect1[i].mEffectDX_damage;
+    BL_ASSERT(mArrEffect1[i].mEffectDX_normal!=NULL);
+    BL_ASSERT(mArrEffect1[i].mEffectDX_damage!=NULL);
+  }
 
   delete pLoadModel;
   return true;
@@ -226,74 +257,55 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
 bool TModelDX::SetupEffectDX(TEffectDX *pEffect,ILoaderModelDX::TDefGroup * pDefGroup)
 {
   HRESULT hr;
-  ID3DXMesh* pMesh = pEffect->pMesh;
-  // Load material textures
- /* for( int iMaterial = 0; iMaterial < m_Materials.GetSize(); iMaterial++ )
-  {
-    TEffectDX::Material* pMaterial = m_Materials.GetAt( iMaterial );
-    if( pMaterial->strTexture[0] )
-    {
-      // Avoid loading the same texture twice
-      bool bFound = false;
-      for( int x = 0; x < iMaterial; x++ )
-      {
-        TEffectDX::Material* pCur = m_Materials.GetAt( x );
-        if( 0 == wcscmp( pCur->strTexture, pMaterial->strTexture ) )
-        {
-          bFound = true;
-          pMaterial->pTexture = pCur->pTexture;
-          break;
-        }
-      }
 
-      // Not found, load the texture
-      if( !bFound )
-      {
-        V_RETURN( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, pMaterial->strTexture ) );
-        V_RETURN( D3DXCreateTextureFromFile( pd3dDevice, pMaterial->strTexture,
-          &( pMaterial->pTexture ) ) );
-      }
-    }
-  }*/
+  pEffect->mIndexVisual = pDefGroup->mIndex;
+  pEffect->mTypeLOD     = pDefGroup->mTypeLOD;
+  pEffect->mflgNormal   = pDefGroup->mflgNormal;
+  // Load material textures
+  TEffectDX::Material* pMaterial = &pEffect->mMaterial;
+  // заполнить материал данными
+  wcscpy(pMaterial->strName,pDefGroup->strName);
+  wcscpy(pMaterial->strTexture,pDefGroup->strTexture);
+
+  pMaterial->vAmbient   = pDefGroup->vAmbient;
+  pMaterial->vDiffuse   = pDefGroup->vDiffuse;
+  pMaterial->vSpecular  = pDefGroup->vSpecular;
+
+  pMaterial->nShininess = pDefGroup->nShininess;
+  pMaterial->fAlpha     = pDefGroup->fAlpha;
+
+  pMaterial->bSpecular  = pDefGroup->bSpecular;
+
+  V( D3DXCreateTextureFromFile( m_pd3dDevice, pMaterial->strTexture,
+    &( pMaterial->pTexture ) ) );
+
   // Create the encapsulated mesh
-  pMesh = NULL;
   V( D3DXCreateMesh( pDefGroup->sizeIndexes / 3, pDefGroup->sizeVertex,
-    D3DXMESH_MANAGED | D3DXMESH_32BIT, VERTEX_DECL,
-    m_pd3dDevice, &pMesh ) );
+    D3DXMESH_MANAGED | D3DXMESH_32BIT, VERTEX_MODELDX_DECL,
+    m_pd3dDevice, &(pEffect->pMesh) ) );
 
   // Copy the vertex data
   TEffectDX::VERTEX* pVertex;
-  V( pMesh->LockVertexBuffer( 0, ( void** )&pVertex ) );
+  V( pEffect->pMesh->LockVertexBuffer( 0, ( void** )&pVertex ) );
   memcpy( pVertex, pDefGroup->vertex, pDefGroup->sizeVertex * sizeof( TEffectDX::VERTEX ) );
-  pMesh->UnlockVertexBuffer();
+  pEffect->pMesh->UnlockVertexBuffer();
 
   // Copy the index data
   DWORD* pIndex;
-  V( pMesh->LockIndexBuffer( 0, ( void** )&pIndex ) );
+  V( pEffect->pMesh->LockIndexBuffer( 0, ( void** )&pIndex ) );
   memcpy( pIndex, pDefGroup->indexes, pDefGroup->sizeIndexes * sizeof( DWORD ) );
-  pMesh->UnlockIndexBuffer();
+  pEffect->pMesh->UnlockIndexBuffer();
 
-  // Copy the attribute data
-/*  DWORD* pSubset;
-  V_RETURN( pMesh->LockAttributeBuffer( 0, &pSubset ) );
-  memcpy( pSubset, m_Attributes.GetData(), m_Attributes.GetSize() * sizeof( DWORD ) );
-  pMesh->UnlockAttributeBuffer();
-  m_Attributes.RemoveAll();
-
-  надо глянуть в MSDN что это за хрень
-*/
-  // Reorder the vertices according to subset and optimize the mesh for this graphics 
-  // card's vertex cache. When rendering the mesh's triangle list the vertices will 
-  // cache hit more often so it won't have to re-execute the vertex shader.
-  DWORD* aAdjacency = new DWORD[pMesh->GetNumFaces() * 3];
+  // оптимизация структуры данных
+  DWORD* aAdjacency = new DWORD[pEffect->pMesh->GetNumFaces() * 3];
   if( aAdjacency == NULL )
   {
     GlobalLoggerDX.WriteF_time("Нехватка памяти.SetupEffectDX().\n");
     return false;
   }
 
-  V( pMesh->GenerateAdjacency( 1e-6f, aAdjacency ) );
-  V( pMesh->OptimizeInplace( D3DXMESHOPT_ATTRSORT | D3DXMESHOPT_VERTEXCACHE, aAdjacency, NULL, NULL, NULL ) );
+  V( pEffect->pMesh->GenerateAdjacency( 1e-6f, aAdjacency ) );
+  V( pEffect->pMesh->OptimizeInplace( D3DXMESHOPT_ATTRSORT | D3DXMESHOPT_VERTEXCACHE, aAdjacency, NULL, NULL, NULL ) );
 
   SAFE_DELETE_ARRAY( aAdjacency );
 
