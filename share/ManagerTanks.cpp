@@ -17,8 +17,8 @@ void TManagerTanks::LoadPropertyFromIni(TTank* pTank)
   strcpy(path,"..\\tanks\\");
   switch(pTank->GetTypeTank())
   {
-    case eID_T_34:
-      strcpy(path,strTank_T_34_Ini);
+    case eID_Tiger:
+      strcpy(path,strTank_Tiger_Ini);
       break;
     case eID_IS:
       strcpy(path,strTank_IS_Ini);

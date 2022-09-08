@@ -49,13 +49,14 @@ public:
     D3DXHANDLE hTechnique;
   };
   // Vertex format
+#pragma pack(push, 1)
   struct VERTEX
   {
     D3DXVECTOR3 position;
     D3DXVECTOR3 normal;
     D3DXVECTOR2 texcoord;
   };
-
+#pragma pack(pop)
   TEffectDX();
   ~TEffectDX();
 

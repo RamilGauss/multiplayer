@@ -74,11 +74,11 @@ void GameRoomPrepare::ViewListTanks()
     unsigned short typeTank = mPacketListTank.getTypeTank(i);
     switch(typeTank)
     {
-      case nsTank_ID::eID_T_34:
+      case nsTank_ID::eID_Tiger:
 				if(mPacketListTank.getFlgBlockTank(i))
-          ui.cbTank->addItem(tr("Т-34 заблокирован"));
+          ui.cbTank->addItem(tr("Tiger заблокирован"));
 				else
-	        ui.cbTank->addItem(tr("Т-34"));
+	        ui.cbTank->addItem(tr("Tiger"));
         break;
       case nsTank_ID::eID_IS:
 				if(mPacketListTank.getFlgBlockTank(i))

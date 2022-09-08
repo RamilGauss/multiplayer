@@ -839,6 +839,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\DirectX\MeshLoader.h"
+					>
+				</File>
+				<File
 					RelativePath="..\DirectX\ModelDX.h"
 					>
 				</File>
@@ -904,6 +908,10 @@
 				</File>
 				<File
 					RelativePath="..\DirectX\ManagerShader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\DirectX\MeshLoader.cpp"
 					>
 				</File>
 				<File

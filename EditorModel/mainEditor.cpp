@@ -6,7 +6,7 @@ void Test();
 
 int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow )
 {
-  Test();
+  //Test();
 
   InitLoggerDX("Editor");
 

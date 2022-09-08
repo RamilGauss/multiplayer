@@ -1267,6 +1267,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\DirectX\LoaderModelDXTest.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\DirectX\LoggerDX.cpp"
 					>
 				</File>
@@ -1284,6 +1288,10 @@
 				</File>
 				<File
 					RelativePath="..\DirectX\ManagerShader.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\DirectX\MeshLoader.cpp"
 					>
 				</File>
 				<File
@@ -1335,6 +1343,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\DirectX\LoaderModelDXTest.h"
+					>
+				</File>
+				<File
 					RelativePath="..\DirectX\LoggerDX.h"
 					>
 				</File>
@@ -1352,6 +1364,10 @@
 				</File>
 				<File
 					RelativePath="..\DirectX\ManagerShader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\DirectX\MeshLoader.h"
 					>
 				</File>
 				<File

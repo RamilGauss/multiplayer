@@ -7,7 +7,7 @@ class TLoaderModelDX : public ILoaderModelDX
 {
 
 public:
-  TLoaderModelDX();
+  TLoaderModelDX(IDirect3DDevice9* _m_pd3dDevice);
   virtual ~TLoaderModelDX();
 
   virtual bool Load(LPCWSTR strFilenameData);

@@ -75,6 +75,7 @@ void TManagerDirectX::Refresh()
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::Calc()
 {
+  
 #ifndef EDITOR_MODEL
   //------------------------------------------------------------------------
   // заполнить предсказатель данными
@@ -82,6 +83,16 @@ void TManagerDirectX::Calc()
   // расчет
   mPrediction.Calc();
   //------------------------------------------------------------------------
+#else
+  TObjectDX* pObjectDX = GlobalManagerObjectDX.Get(0);
+  if(false)//pObjectDX)
+  {  
+    nsStruct3D::TCoord3 coord;
+    coord.y = 2*sin(float(ht_GetMSCount()/200.0f));
+    coord.x = 2*cos(float(ht_GetMSCount()/200.0f));
+    coord.z = 2*cos(float(ht_GetMSCount()/200.0f));
+    pObjectDX->SetCoord(coord);// пускай объекты летают
+  }
 #endif
 }
 //--------------------------------------------------------------------------------------------------------
@@ -95,7 +106,7 @@ void TManagerDirectX::Optimize()
   {
     TObjectDX* pObjectDX = GlobalManagerObjectDX.Get(i);
     if(pObjectDX)
-    {    
+    {  
       mListReadyRender.push_back(pObjectDX);
     }
   }
@@ -195,6 +206,15 @@ void TManagerDirectX::KeyEvent(unsigned int nChar, bool bKeyDown, bool bAltDown,
       oDesc.orient.vy = 0;
       oDesc.orient.vz = 0;
       loaderMap.LoadObjectDX(&oDesc,true);
+      oDesc.id = 1;// cube_pro
+      oDesc.state = 1;
+      oDesc.coord.x = 0;
+      oDesc.coord.y = 0;
+      oDesc.coord.z = 0;
+      oDesc.orient.vx = 0;
+      oDesc.orient.vy = 0;
+      oDesc.orient.vz = 0;
+      loaderMap.LoadObjectDX(&oDesc,false);
       break;
     }
     default:;

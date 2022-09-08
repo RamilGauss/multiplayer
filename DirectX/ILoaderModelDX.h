@@ -6,9 +6,12 @@
 #include "EffectDX.h"
 #include <d3dx9math.h>
 #include "BL_ConfigFile.h"
+#include <d3d9.h>
 
 class ILoaderModelDX
 {
+protected:
+  IDirect3DDevice9* m_pd3dDevice;
 public:
 
   struct TDefGroup
@@ -18,10 +21,12 @@ public:
     char   strTechnique[MAX_PATH];
     WCHAR  strTexture[MAX_PATH];
     char   strName[MAX_PATH];
-    DWORD* indexes;
-    TEffectDX::VERTEX* vertex;
-    DWORD  cntIndexes;// расчет по файлу
-    DWORD  cntVertex;// расчет по файлу
+
+    ID3DXMesh* pMesh;
+    //DWORD* indexes;
+    //TEffectDX::VERTEX* vertex;
+    //DWORD  cntIndexes;// расчет по файлу
+    //DWORD  cntVertex;// расчет по файлу
 
     D3DXVECTOR3 vAmbient;
     D3DXVECTOR3 vDiffuse;
@@ -42,10 +47,11 @@ public:
       strPathShader[0] = '\0';
       strTechnique[0]  = '\0';
       strName[0]       = '\0';
-      indexes = NULL;
-      vertex = NULL;
-      cntVertex = 0;
-      cntIndexes = 0;
+      pMesh            = NULL;
+      //indexes = NULL;
+      //vertex = NULL;
+      //cntVertex = 0;
+      //cntIndexes = 0;
 
       vAmbient  = D3DXVECTOR3(0,0,0);
       vDiffuse  = D3DXVECTOR3(0,0,0);
@@ -74,7 +80,7 @@ public:
     eUndefID = -1,
   };
 
-  ILoaderModelDX();
+  ILoaderModelDX( IDirect3DDevice9* m_pd3dDevice );
   virtual ~ILoaderModelDX();
 
   TDefGroup* GetArrDefGroup(){return mArrDefGroup;}
@@ -82,8 +88,8 @@ public:
   float GetLOD();
   unsigned short GetID_Unique();// уникальный для данного набора, фигурирует в файле карты
   int GetCountSubset();
-  DWORD* GetPinterIndexes(int iGroup, int &size);
-  TEffectDX::VERTEX* GetPinterVertex(int iGroup, int &size);
+  //DWORD* GetPinterIndexes(int iGroup, int &size);
+  //TEffectDX::VERTEX* GetPinterVertex(int iGroup, int &size);
   WCHAR* GetTexture(int iGroup, int &size);
   char* GetStrPathShader(int iGroup);
 

@@ -99,7 +99,7 @@ void TModelDX::Draw( TEffectDX* pEffect)
   {
     V( pEffect->BeginPass( iPass ) );
     // Render the mesh with the applied technique
-    V( pCurMesh->DrawSubset( pEffect->mSubset ) );
+    V( pCurMesh->DrawSubset( 0/*pEffect->mSubset*/ ) );
     V( pEffect->EndPass() );
   }
   V( pEffect->End() );
@@ -236,10 +236,10 @@ void TModelDX::ResetDevice()
 bool TModelDX::Load(LPCWSTR strFilenameData)
 {
   ILoaderModelDX* pLoadModel;
-#if 0
-  pLoadModel = new TLoaderModelDXTest;//в основном для экспериментов
+#if 1
+  pLoadModel = new TLoaderModelDXTest(m_pd3dDevice);//в основном для экспериментов
 #else
-  pLoadModel = new TLoaderModelDX;
+  pLoadModel = new TLoaderModelDX(m_pd3dDevice);
 #endif
   if(pLoadModel->Load(strFilenameData)==false)
   {
@@ -333,26 +333,10 @@ bool TModelDX::SetupEffectDX(TEffectDX *pEffect,ILoaderModelDX::TDefGroup * pDef
   V( D3DXCreateTextureFromFile( m_pd3dDevice, pMaterial->strTexture,
     &( pMaterial->pTexture ) ) );
   
-  // Create the encapsulated mesh
-  V( D3DXCreateMesh( pDefGroup->cntIndexes / 3, pDefGroup->cntVertex,
-    D3DXMESH_MANAGED | D3DXMESH_32BIT, VERTEX_MODELDX_DECL,
-    m_pd3dDevice, &(pEffect->pMesh) ) );
-
-
-  // Copy the vertex data
-  TEffectDX::VERTEX* pVertex;
-  V( pEffect->pMesh->LockVertexBuffer( 0, ( void** )&pVertex ) );
-  memcpy( pVertex, pDefGroup->vertex, pDefGroup->cntVertex * sizeof( TEffectDX::VERTEX ) );
-  pEffect->pMesh->UnlockVertexBuffer();
-
-  // Copy the index data
-  DWORD* pIndex;
-  V( pEffect->pMesh->LockIndexBuffer( 0, ( void** )&pIndex ) );
-  memcpy( pIndex, pDefGroup->indexes, pDefGroup->cntIndexes * sizeof( DWORD ) );
-  pEffect->pMesh->UnlockIndexBuffer();
-
+  pEffect->pMesh = pDefGroup->pMesh;
   // оптимизация структуры данных
-  DWORD* aAdjacency = new DWORD[pEffect->pMesh->GetNumFaces() * 3];
+  int cntAdjacency = pEffect->pMesh->GetNumFaces() * 3;
+  DWORD* aAdjacency = new DWORD[cntAdjacency];
   if( aAdjacency == NULL )
   {
     GlobalLoggerDX.WriteF_time("Нехватка памяти.SetupEffectDX().\n");

@@ -5,7 +5,8 @@
 
 using namespace nsStruct3D;
 
-TLoaderModelDX::TLoaderModelDX()
+TLoaderModelDX::TLoaderModelDX(IDirect3DDevice9* _m_pd3dDevice):
+ILoaderModelDX(_m_pd3dDevice)
 {
 
 }
@@ -143,15 +144,15 @@ bool TLoaderModelDX::LoadPart(int i)
   mArrDefGroup[i].mTypeLOD   = mFileIniRes.GetInteger(strNumPart,"mTypeLOD",0);
   mArrDefGroup[i].mflgNormal = mFileIniRes.GetInteger(strNumPart,"mflgNormal",1);
   //-----------------------------------------------------------------------
-  mArrDefGroup[i].cntIndexes = mFileIniRes.GetInteger(strNumPart,"cntIndexes",0);
-  mArrDefGroup[i].cntVertex  = mFileIniRes.GetInteger(strNumPart,"cntVertex",0);
-  if(mArrDefGroup[i].cntIndexes==0||mArrDefGroup[i].cntVertex==0) return false;
-  mArrDefGroup[i].indexes = new DWORD[mArrDefGroup[i].cntIndexes];
-  mArrDefGroup[i].vertex  = new TEffectDX::VERTEX[mArrDefGroup[i].cntVertex];
-  if(LoadVertex(strNumPart,mArrDefGroup[i].vertex,mArrDefGroup[i].cntVertex)==false)
-    return false;
-  if(LoadIndexes(strNumPart,mArrDefGroup[i].indexes,mArrDefGroup[i].cntIndexes)==false)
-    return false;
+  //mArrDefGroup[i].cntIndexes = mFileIniRes.GetInteger(strNumPart,"cntIndexes",0);
+  //mArrDefGroup[i].cntVertex  = mFileIniRes.GetInteger(strNumPart,"cntVertex",0);
+  //if(mArrDefGroup[i].cntIndexes==0||mArrDefGroup[i].cntVertex==0) return false;
+  //mArrDefGroup[i].indexes = new DWORD[mArrDefGroup[i].cntIndexes];
+  //mArrDefGroup[i].vertex  = new TEffectDX::VERTEX[mArrDefGroup[i].cntVertex];
+  //if(LoadVertex(strNumPart,mArrDefGroup[i].vertex,mArrDefGroup[i].cntVertex)==false)
+    //return false;
+  //if(LoadIndexes(strNumPart,mArrDefGroup[i].indexes,mArrDefGroup[i].cntIndexes)==false)
+    //return false;
   return true;
 }
 //--------------------------------------------------------------------------------

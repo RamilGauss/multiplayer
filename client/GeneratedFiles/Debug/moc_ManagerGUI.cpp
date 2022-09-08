@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'ManagerGUI.h'
 **
-** Created: Fri 18. May 21:18:26 2012
+** Created: Mon 21. May 16:49:30 2012
 **      by: The Qt Meta Object Compiler version 59 (Qt 4.4.3)
 **
 ** WARNING! All changes made in this file will be lost!
