@@ -21,7 +21,7 @@ TRoom::TRoom()
 //----------------------------------------------------------------
 TRoom::~TRoom()
 {
-  Done();
+  mArrTank.Unlink();
 }
 //----------------------------------------------------------------
 void TRoom::AddTank(TTank* pTank)
@@ -57,10 +57,7 @@ bool TRoom::Work()
   //-------------------------------------------------------------
   // проверить кончился ли бой
   if(CheckEndFight()) 
-  {
-    SendResultFight();
     return false;
-  }
   
   return true;
 }
@@ -87,14 +84,36 @@ void TRoom::WriteTransportAnswer(TClient* pClient,TBasePacket *packet)
 //----------------------------------------------------------------------------------
 void TRoom::Done()
 {
+  // разослать результаты боя
   for(int i = 0 ; i < mArrTank.Count() ; i++)
   {
     TTank* pTank = (TTank*)mArrTank.Get(i);
-    pTank->pRoom = NULL;// отвязать от комнаты
+
     TClient* pClient = pTank->GetMasterClient();
-    pClient->state = TClient::eGarage;
-    
+    if(pClient->GetCurRoom()==pTank->pRoom)// а вдруг клиент на другом танке в другом бою?
+    {
+      pClient->state = TClient::eGarage;
+      pClient->SetCurRoom(NULL);
+    }
+
+    pTank->pRoom = NULL;// отвязать от комнаты
+
+    // отослать результаты боя
     TA_End_Fight A_End_Fight;
+    A_End_Fight.setCodeAction(TA_End_Fight::eNoOnes);// ### ничья
+    
+    // а вдруг клиент на другом танке в другом бою или в ожидании?
+    if((pClient->GetCurRoom()==pTank->pRoom||   // клиент находится в бою в этой комнате
+        pClient->GetCurRoom()==NULL          )&&// клиент вышел из комнаты и ждет окончания боя
+        pClient->state!=TClient::eWait       )  // не в ожидании
+      A_End_Fight.setCodeExit(TA_End_Fight::eExitTrue);// ManagerGui закроет окно DX и откроет окно комнаты подготовке
+    else
+      A_End_Fight.setCodeExit(TA_End_Fight::eExitFalse);// идет бой на другом танке
+
+    char strMsg[100];
+    sprintf(strMsg, "Приветик. Бой то закончился. Ничья.Время: %u сек.", (mNow_MS-mTimeAfterCountDown)/1000);
+    A_End_Fight.setMsg(strMsg);
+
     WriteTransportAnswer(pClient,&A_End_Fight);
   }
   mArrTank.Unlink();
@@ -122,21 +141,7 @@ bool TRoom::CheckEndFight()
 {
   if(mState==eFight)
   if(mNow_MS>mTimeAfterCountDown+DURATION_FIGHT_MS)
-  {
-    // рассылка пакета об окончании времени боя
-    int cnt = mArrTank.Count();
-    for(int i = 0 ; i < cnt ; i++)
-    {
-      TTank* pTank = (TTank*)mArrTank.Get(i);
-      TClient* pClient = pTank->GetMasterClient();
-
-      TA_End_Fight A_End_Fight;
-      A_End_Fight.setCode(TA_End_Fight::eNoOnes); // ничья
-      WriteTransportAnswer(pClient,&A_End_Fight);
       return true;
-    }
-  }
-
   // вставить проверку флага окончания боя по причине захвата базы или уничтожения всех танков одной из команд
   // или же ничью
 
@@ -171,13 +176,29 @@ void TRoom::WorkFight()
 
   TS_Fight_Coord_Bullet s_coord;
   s_coord.setCntTank(cnt);
-  //s_coord.setArrBullet();// взять данные из предсказателя и раздать всем
-
   for(int i = 0 ; i < cnt ; i++)
   {
     TTank* pTank = (TTank*)mArrTank.Get(i);
     TClient* pClient = pTank->GetMasterClient();
-    WriteTransportStream(pClient,&s_coord);
+    if(pClient->GetCurRoom()==this)// уменьшить трафик
+      WriteTransportStream(pClient,&s_coord);
+  }
+  //------------------------------------------------------------------------------------
+  std::list<TPrediction::TEvent*>::iterator it = mPrediction.mListFreshEvent.begin();
+  std::list<TPrediction::TEvent*>::iterator eit = mPrediction.mListFreshEvent.end();
+  TA_Event_In_Fight event_packet;
+  while(it!=eit)// формирование пакета
+  {
+    // event_packet.setXXX(...);
+    it++;
+  }
+  //------------------------------------------------------------------------------------
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    TTank* pTank = (TTank*)mArrTank.Get(i);
+    TClient* pClient = pTank->GetMasterClient();
+    if(pClient->GetCurRoom()==this)// уменьшить трафик
+      WriteTransportAnswer(pClient,&event_packet);
   }
 }
 //----------------------------------------------------------------------------------
@@ -215,22 +236,6 @@ void TRoom::WorkLoadMap()
   {
     mState = eCountDown;
     mTimeBeginCountDown = mNow_MS;
-  }
-}
-//----------------------------------------------------------------------------------
-void TRoom::SendResultFight()
-{
-  int cnt = mArrTank.Count();
-  for(int i = 0 ; i < cnt ; i++)
-  {
-    TTank* pTank = (TTank*)mArrTank.Get(i);
-    TClient* pClient = pTank->GetMasterClient();
-
-    TA_End_Fight A_End_Fight;
-    // заполнить результатом
-    A_End_Fight.setCode(TA_End_Fight::eWin);// пока победа
-
-    WriteTransportAnswer(pClient,&A_End_Fight);
   }
 }
 //----------------------------------------------------------------------------------
@@ -301,6 +306,10 @@ void TRoom::ThreadLoadMap()
 //----------------------------------------------------------------------------------
 void TRoom::LoadMap()
 {
+  // при условии что список танков уже есть
+  BL_ASSERT(mArrTank.Count());
+  InitPositionTank();
+
   flgIsLoadingMap = true;
   threadLoadMap = g_thread_create(::ThreadLoadMap, (gpointer)this, true, NULL);
 }
@@ -310,7 +319,7 @@ void TRoom::SetPacket(nsServerStruct::TPacketServer* pDefPacket,TTank* pTank)
   TAction* pAction = new TAction;
   pAction->pTank   = pTank;
   pAction->pDefPacket = pDefPacket;
-  mListFreshAction.push_back(pAction);  
+  mListFreshAction.push_back(pAction);
 }
 //----------------------------------------------------------------------------------
 void TRoom::SendInitCoordTank(TClient* pClient)
@@ -319,20 +328,17 @@ void TRoom::SendInitCoordTank(TClient* pClient)
   // расчет координат возможен до загрузки карты, все данные хранятся у предсказателя
   int cnt = mArrTank.Count();
   packet.setCountTank(cnt);
-  TS_Fight_Coord_Bullet::TLocalTank * pArrTank = new TS_Fight_Coord_Bullet::TLocalTank[cnt];
   for(int i = 0 ; i < cnt ; i++)
   {
     TTank* pTank = (TTank*)mArrTank.Get(i);
     packet.setID(i,i);
     packet.setX(i,pTank->mCoordX);
-    packet.setY(i,pTank->mCoordY);
+    packet.setY(i,pTank->mCoordY);  
     packet.setZ(i,pTank->mCoordZ);
     packet.setXV(i,pTank->mCoordX_Vector);
     packet.setYV(i,pTank->mCoordY_Vector);
     packet.setZV(i,pTank->mCoordZ_Vector);
-    //### ну и т.д.
   }
-  delete[] pArrTank;
   WriteTransportAnswer(pClient,&packet);
 }
 //----------------------------------------------------------------------------------
@@ -349,10 +355,12 @@ void TRoom::SendStateObject(TClient* pClient)
 {
   TA_Correct_Packet_State_Object packet;
   // все данные хранятся у предсказателя
-  std::list<TObjectPrediction*>::iterator it = mPrediction.mListDamageObject.begin();
+  std::list<TObjectPrediction*>::iterator it  = mPrediction.mListDamageObject.begin();
   std::list<TObjectPrediction*>::iterator eit = mPrediction.mListDamageObject.end();
 
   int cnt = mPrediction.mListDamageObject.size();
+  if(cnt==0) return;//###
+  //---------------------------------------------------------
   packet.setCountObject(cnt);
   int i = 0;
   while(it!=eit)
@@ -364,5 +372,10 @@ void TRoom::SendStateObject(TClient* pClient)
   }
   // если объектов очень много, то разбить на группы
   WriteTransportAnswer(pClient,&packet);
+}
+//----------------------------------------------------------------------------------
+void TRoom::InitPositionTank()
+{
+  mID_map;
 }
 //----------------------------------------------------------------------------------

@@ -24,7 +24,7 @@ namespace nsServerStruct
     //TArrayObject mArrSomething;// снаряды на складе, и др.
 
     TGarage(TClient* pClient){pMasterClient=pClient;mCurTank=0;InitArrTank();};
-    ~TGarage(){};
+    ~TGarage(){}
 
     void InitArrTank();
     

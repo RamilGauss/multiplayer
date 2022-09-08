@@ -14,61 +14,6 @@
 #include "GameForm.h"
 
 
-
-//-------------------------------------------------------------------------------------------
-//void CallBackPacketGameRoomPrepare(void* data, int size)
-//{
-//	gcsGameRoomPrepare.lock();
-//	//--------------------------------------------------------
-//	if(pGameRoomPrepare==NULL) {BL_FIX_BUG();return;}
-//	unsigned short type = *((unsigned short*)((char*)data+sizeof(TIP_Port)));
-//	switch(type)
-//	{
-//		case APPL_TYPE_A_GET_LIST_TANK:
-//		{
-//			char* dataPacket = (char*)data + sizeof(TIP_Port);
-//			int sizePacket   = size - sizeof(TIP_Port);
-//			pGameRoomPrepare->AddListTank(dataPacket,sizePacket);
-//			QEvent * event = new QEvent(QEVENT_A_LIST_TANKS);
-//			QCoreApplication::postEvent( pGameRoomPrepare, event );
-//			break;
-//		}
-//    case APPL_TYPE_A_IN_FIGHT:
-//    {
-//      char* dataPacket = (char*)data + sizeof(TIP_Port);
-//      int sizePacket   = size - sizeof(TIP_Port);
-//      pGameRoomPrepare->SetCodeExit_A_In_Fight(dataPacket,sizePacket);
-//      QEvent * event = new QEvent(QEVENT_A_IN_FIGHT);
-//      QCoreApplication::postEvent( pGameRoomPrepare, event );
-//      break;
-//    }
-//		default:;
-//	}
-//	//--------------------------------------------------------
-//	gcsGameRoomPrepare.unlock();
-//}
-////-------------------------------------------------------------------------------------------
-//void CallBackStreamGameRoomPrepare(void* data, int size)
-//{
-//	gcsGameRoomPrepare.lock();
-//	//--------------------------------------------------------
-//	if(pGameRoomPrepare==NULL) {BL_FIX_BUG();return;}
-//	unsigned short type = *((unsigned short*)((char*)data+sizeof(TIP_Port)));
-//	switch(type)
-//	{
-//		case APPL_TYPE_S_GARAGE:
-//		{
-//			char* dataPacket = (char*)data + sizeof(TIP_Port);
-//			int sizePacket   = size - sizeof(TIP_Port);
-//			TS_Garage S_Garage;
-//			S_Garage.setData(dataPacket,sizePacket);
-//			pGameRoomPrepare->SetCntClient(S_Garage.getCommon(),S_Garage.getFight());
-//			break;
-//		}
-//		default:;
-//	}
-//	//--------------------------------------------------------
-//}
 //-------------------------------------------------------------------------------------------
 GameRoomPrepare::GameRoomPrepare(QWidget *parent)
 : TBaseGUI(parent)

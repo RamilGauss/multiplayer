@@ -262,7 +262,10 @@ public:
 //APPL_TYPE_A_GET_LIST_TANK
 class TA_Get_List_Tank : public TBasePacket
 {
-  // ushort type, uchar cnt, {{ushort ID, uchar flgBlock}... }
+  // ushort type, 
+  // uchar cnt, 
+  // {{ushort ID, 
+  //   uchar flgBlock}... }
 public:
   TA_Get_List_Tank(){mType=APPL_TYPE_A_GET_LIST_TANK;};
 
@@ -319,32 +322,6 @@ public:
 	//-----------------------------------------------------------------------------
 };
 //-----------------------------------------------------------------------------
-// APPL_TYPE_A_END_FIGHT
-class TA_End_Fight : public TBasePacket
-{
-  // ushort type, ХЗ пока неизвестно
-  // uchar code - окончание боя, 
-  // доп. инфо (пока неизвестно, reserved)
-
-public:
-  enum{eWin=0,
-       eLoss=1,
-       eNoOnes=2};
-
-  TA_End_Fight()
-  {
-    mType=APPL_TYPE_A_END_FIGHT;
-    mSize = sizeof(mType)+sizeof(unsigned char);
-    mData = (char*)malloc(mSize);
-    setType();
-  }
-
-  unsigned char getCode(){return *getPointerCode();};
-  unsigned char* getPointerCode(){return (unsigned char*)(mData+sizeof(mType));};
-  void setCode(unsigned char val){*getPointerCode()=val;};
-
-};
-//-----------------------------------------------------------------------------
 //APPL_TYPE_A_EXIT_WAIT
 class TA_Exit_Wait : public TBasePacket
 {
@@ -384,7 +361,7 @@ public:
   void setCountObject(unsigned char cnt)
   {
     int new_size = sizeof(mType)+sizeof(unsigned char)+cnt*eSizeDefObject;
-    mo_realloc(mData,mSize,new_size);
+    mData = (char*)mo_realloc(mData,mSize,new_size);
     mSize = new_size;
     
     unsigned char* pCnt = getPointerCountObject();
@@ -438,7 +415,7 @@ public:
   void setCountTank(unsigned char cnt)
   {
     int new_size = sizeof(mType)+sizeof(unsigned char)+cnt*eSizeDefTank;
-    mo_realloc(mData,mSize,new_size);
+    mData = (char*)mo_realloc(mData,mSize,new_size);
     mSize = new_size;
 
     unsigned char* pCnt = getPointerCountTank();
@@ -521,6 +498,100 @@ public:
   unsigned int  getTimeRest(){return *getPointerTimeRest();}
   unsigned int* getPointerTimeRest()
   {return (unsigned int*)(mData+sizeof(mType)+sizeof(unsigned char)+sizeof(unsigned char));}
+};
+//-----------------------------------------------------------------------------
+//APPL_TYPE_A_EVENT_IN_FIGHT
+class TA_Event_In_Fight : public TBasePacket
+{
+  // ushort type
+
+public:
+  TA_Event_In_Fight()
+  {
+    mType = APPL_TYPE_A_EVENT_IN_FIGHT;
+    mSize = sizeof(mType);
+    mData = (char*)malloc(mSize);
+    setType();
+  }
+  // .....###
+
+};
+//-----------------------------------------------------------------------------
+//APPL_TYPE_A_EXIT_FIGHT
+class TA_Exit_Fight : public TBasePacket
+{
+  // ushort type
+
+public:
+  TA_Exit_Fight()
+  {
+    mType = APPL_TYPE_A_EXIT_FIGHT;
+    mSize = sizeof(mType);
+    mData = (char*)malloc(mSize);
+    setType();
+  }
+};
+//-----------------------------------------------------------------------------
+//APPL_TYPE_A_END_FIGHT
+class TA_End_Fight : public TBasePacket
+{
+  // ushort type
+  // uchar  code_exit
+  // uchar  code_action выйти ли из боя ManagerGui
+  // ushort size_msg длина сообщения
+
+  // msg
+
+public:
+
+  enum{eWin=0,
+       eLoss=1,
+       eNoOnes=2};
+  
+  enum{eExitFalse=0,
+       eExitTrue=1,
+  };
+  TA_End_Fight()
+  {
+    mType = APPL_TYPE_A_END_FIGHT;
+    mSize = sizeof(mType)+sizeof(unsigned char)+sizeof(unsigned char)+sizeof(unsigned short);
+    mData = (char*)malloc(mSize);
+    setType();
+  }
+
+  void setCodeExit(unsigned char code){*getPointerCodeExit()=code;}
+  unsigned char getCodeExit(){return *getPointerCodeExit();}
+  unsigned char* getPointerCodeExit(){return (unsigned char*)(mData+sizeof(mType));}
+  //-------------------------------------------------------------------------------------
+  void setCodeAction(unsigned char code){*getPointerCodeAction()=code;}
+  unsigned char getCodeAction(){return *getPointerCodeAction();}
+  unsigned char* getPointerCodeAction(){return (unsigned char*)(mData+sizeof(mType)+sizeof(unsigned char));}
+  //-------------------------------------------------------------------------------------
+  unsigned short getSizeMsg(){return *getPointerSizeMsg();}
+protected:
+  void setSizeMsg(unsigned short size){*getPointerSizeMsg()=size;}
+  unsigned short* getPointerSizeMsg(){ return (unsigned short*)(mData+sizeof(mType)+sizeof(unsigned char)+sizeof(unsigned char));}
+
+  char* getPointerStrMsg(){return mData+sizeof(mType)+sizeof(unsigned char)+sizeof(unsigned char)+sizeof(unsigned short);}
+public:
+  //-------------------------------------------------------------------------------------
+  void setMsg(char* sMsg)
+  {
+    unsigned short sizeMsg = strlen(sMsg)+1;
+    int new_size = sizeof(mType)+sizeof(unsigned char)+sizeof(unsigned char)+sizeof(unsigned short)+sizeMsg;
+    mData = (char*)mo_realloc(mData,mSize,new_size);
+    mSize = new_size;
+    char* sPointerMsg = getPointerStrMsg();
+    strcpy(sPointerMsg,sMsg);
+
+    setSizeMsg(sizeMsg);
+  }
+  void getMsg(char* sMsg)
+  {
+    char* sPointerMsg = getPointerStrMsg();
+    strcpy(sMsg,sPointerMsg);
+  }
+  //-------------------------------------------------------------------------------------
 };
 //-----------------------------------------------------------------------------
 

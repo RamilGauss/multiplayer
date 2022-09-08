@@ -40,16 +40,17 @@
 #define APPL_TYPE_A_GET_LIST_TANK         (APPL_TYPE_BASE_ANSWER+4) // дать список танков
 
 #define APPL_TYPE_A_EXIT_WAIT             (APPL_TYPE_BASE_ANSWER+5) // ответ на желание выйти из очереди на ожидание
+#define APPL_TYPE_A_EXIT_FIGHT            (APPL_TYPE_BASE_ANSWER+6) // ответ на желание выйти из бо€
 
-#define APPL_TYPE_A_END_FIGHT             (APPL_TYPE_BASE_ANSWER+6) // конец битвы, пока не знаю что передавать (результат бо€,  Ёѕ)
+#define APPL_TYPE_A_END_FIGHT             (APPL_TYPE_BASE_ANSWER+7) // конец битвы, пока не знаю что передавать (результат бо€,  Ёѕ)
 
 // в общем виде событи€ бо€, может быть несколько событий в одном пакете:
-#define APPL_TYPE_A_CORRECT_PACKET_STATE_OBJECT  (APPL_TYPE_BASE_ANSWER+7)  // корректирующий пакет, не требует эффектов DX
-#define APPL_TYPE_A_CORRECT_PACKET_STATE_TANK    (APPL_TYPE_BASE_ANSWER+8)  // корректирующий пакет, не требует эффектов DX
+#define APPL_TYPE_A_CORRECT_PACKET_STATE_OBJECT  (APPL_TYPE_BASE_ANSWER+8)  // корректирующий пакет, не требует эффектов DX
+#define APPL_TYPE_A_CORRECT_PACKET_STATE_TANK    (APPL_TYPE_BASE_ANSWER+9)  // корректирующий пакет, не требует эффектов DX
 
-#define APPL_TYPE_A_SCORE                        (APPL_TYPE_BASE_ANSWER+9)  // и корректирующий пакет и просто пакет
+#define APPL_TYPE_A_SCORE                        (APPL_TYPE_BASE_ANSWER+10)  // и корректирующий пакет и просто пакет
 // как ответ на пустой вопрос - вопроса не было
-#define APPL_TYPE_A_EVENT_IN_FIGHT               (APPL_TYPE_BASE_ANSWER+10) // событие, показать на экране
+#define APPL_TYPE_A_EVENT_IN_FIGHT               (APPL_TYPE_BASE_ANSWER+11) // событие, показать на экране
 
 //-----------------------------------------------------------------------------
 // STREAM - S

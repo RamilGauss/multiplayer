@@ -77,12 +77,12 @@ public:
 
   void SetPacket(nsServerStruct::TPacketServer* pPacket,TTank* ptank);
 
+  void Done();
+
 protected:
 
   void WriteTransportStream(nsServerStruct::TClient* pClient,TBasePacket *packet);
   void WriteTransportAnswer(nsServerStruct::TClient* pClient,TBasePacket *packet);
-
-  void Done();
 
   void WorkByState();
   void WorkLoadMap();
@@ -94,8 +94,6 @@ protected:
   // проверка состояния потока загрузки карты
   bool CheckIsLoadComplete();
 
-  void SendResultFight();
-
   void AnalizPacket();// здесь отослать корректирующий пакет (можно партиями)
   void CalcPrediction();
 
@@ -105,6 +103,8 @@ protected:
   void SendInitCoordTank(nsServerStruct::TClient* pClient);
   void SendScore(nsServerStruct::TClient* pClient);
   void SendStateObject(nsServerStruct::TClient* pClient);
+
+  void InitPositionTank();
 
 };
 

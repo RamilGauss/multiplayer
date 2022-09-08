@@ -69,7 +69,7 @@ public:
   void ZeroPointerElement(TClass**d)
   {
     TElement* pEl = GetElement(d);
-    pEl = NULL;// отцепиться
+    pEl->mDefElement.data = NULL;// отцепиться
   }
   //---------------------------------------------
   int GetCnt(){return cnt;};

@@ -6,6 +6,7 @@
 #include "WaitForm.h"
 #include "ClientMain.h"
 #include <QObject>
+#include "SaveOnHDD.h"
 
 class TManagerGUIEvent;
 
@@ -41,6 +42,9 @@ protected:
 
   void AnswerFromServer_Enter(unsigned char mCodeAnswer);
   void AnalizCode_A_In_Fight(char* pData, int size);
+  void Analiz_End_Fight(char* pData, int size);
+  void ExitFromFight();
+  void ExitFromWait();
 
   void OpenWaitForm();
   void OpenGameForm();

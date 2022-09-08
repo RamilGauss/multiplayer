@@ -227,8 +227,9 @@ void ClientTank::SendRequestCorrectPacket()
   WriteTransport(&R_Correct_Packet);
 }
 //--------------------------------------------------------------
+void ClientTank::SendRequestExitFromFight()
+{
+  TR_Exit_Fight R_Exit_Fight;
+  WriteTransport(&R_Exit_Fight);
+}
 //--------------------------------------------------------------
-//void HandlePacket(void* data,int size)
-//{
-//
-//}

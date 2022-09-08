@@ -74,6 +74,7 @@ public:
   }
 };
 //-----------------------------------------------------------------------------
+//APPL_TYPE_R_CORRECT_PACKET
 class TR_Correct_Packet : public TBasePacket
 {
   // ushort type 
@@ -87,5 +88,20 @@ public:
   }
 };
 //-------------------------------------
+//APPL_TYPE_R_EXIT_FIGHT
+class TR_Exit_Fight : public TBasePacket
+{
+  // ushort type 
+public:
+  TR_Exit_Fight()
+  {
+    mType=APPL_TYPE_R_EXIT_FIGHT;
+    mSize=sizeof(mType);
+    mData=(char*)malloc(mSize);
+    setType();
+  }
+};
+//-------------------------------------
+
 #endif
 

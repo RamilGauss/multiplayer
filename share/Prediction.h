@@ -13,6 +13,7 @@ protected:
 
 
 public:
+
   TPrediction();
   ~TPrediction();
 
@@ -30,6 +31,11 @@ public:
   // список разрушенных или поврежденных объектов.
   std::list<TObjectPrediction*> mListDamageObject;
 
+  struct TEvent
+  {
+
+  };
+  std::list<TEvent*> mListFreshEvent;
 
 };
 

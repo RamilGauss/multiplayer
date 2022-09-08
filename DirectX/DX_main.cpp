@@ -473,7 +473,7 @@ void CALLBACK OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserC
 //--------------------------------------------------------------------------------------
 void TDX::OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
 {
-
+  GlobalManagerDirectX.mKey.Work(nChar, bKeyDown, bAltDown, pUserContext);
 }
 //--------------------------------------------------------------------------------------
 // Handles the GUI events

@@ -119,6 +119,13 @@ void CallBackFuncServerRcvPacket(void* data, int size)
       pServer->AddPacket(ip_port, packet);
       break;
     }
+    case APPL_TYPE_R_EXIT_FIGHT:
+    {
+      TR_Exit_Fight* packet = new TR_Exit_Fight;
+      packet->setData(pDataPacket,sizePacket);
+      pServer->AddPacket(ip_port, packet);
+      break;
+    }
     default:;
   }
 }
@@ -285,9 +292,9 @@ void ServerTank::WorkCmdRequest()
       case APPL_TYPE_R_EXIT_WAIT:
 				Appl_Type_R_Exit_Wait(ppPacket,pPacket);
         break;
-    //  case APPL_TYPE_C_READY_FOR_ROOM:
-				//Appl_Type_C_Ready_For_Room(ppPacket,pPacket);
-    //    break;
+      case APPL_TYPE_R_EXIT_FIGHT:
+				Appl_Type_R_Exit_Fight(ppPacket,pPacket);
+        break;
       case APPL_TYPE_S_ORIENT_AIM:
       case APPL_TYPE_C_KEY_EVENT:
       case APPL_TYPE_R_CORRECT_PACKET:
@@ -340,6 +347,19 @@ void ServerTank::WorkStream()
     TRoom * pRoom = *ppRoom;
     if(pRoom->Work()==false)
     {
+      for(int i = 0 ; i < COUNT_COMMAND_IN_FIGHT*2 ; i++)
+      {
+        // убрать клиента из списка участвующих в бою
+        TTank* pTank = pRoom->GetTank(i);// взять описание танка
+        TClient* pClient = pTank->GetMasterClient();
+        if(pClient->GetCurRoom()==pRoom)
+        {
+          int indexClientFound = mArrClientsFight.FastSearch(&pClient,NULL,SortFresh);
+          if(indexClientFound!=-1)
+            mArrClientsFight.Unlink(indexClientFound);
+        }
+      }
+      pRoom->Done();
       // комната перестала работать - бой закончился
       mListRoom.Remove(ppRoom);
     }
@@ -742,6 +762,27 @@ int ServerTank::Appl_Type_R_Exit_Wait(nsServerStruct::TPacketServer**ppPacket, T
 	return 0;
 }
 //----------------------------------------------------------------------------------
+int ServerTank::Appl_Type_R_Exit_Fight(nsServerStruct::TPacketServer**ppPacket, TBasePacket* pPacket)
+{
+  TClient oClient;
+  TClient* pClient = &oClient;
+  pClient->ip    = (*ppPacket)->ip;
+  pClient->port  = (*ppPacket)->port;
+  int indexClientFound = mArrClientsFight.FastSearch(&pClient,NULL,SortFresh);
+  pClient = (TClient*)mArrClientsFight.Get(indexClientFound);
+  if(pClient)
+  {
+    mArrClientsFight.Unlink(indexClientFound);
+    pClient->state = TClient::eGarage;
+    pClient->SetCurRoom(NULL);
+    TA_Exit_Fight answerExitFight;
+    WriteTransport(pClient,&answerExitFight);
+  } 
+
+  mListPacket.Remove(ppPacket);
+  return 0;
+}
+//----------------------------------------------------------------------------------
 void ServerTank::SendPacket_A_InFight(TClient* pClient)
 {
   TRoom* pRoom = pClient->GetCurRoom();
@@ -782,6 +823,7 @@ void ServerTank::MakeRoom()
     pClient->state = TClient::eFight;
     pClient->SetCurRoom(pRoom); // задать текущую комнату
     pRoom->AddTank(pClient->mGarage.GetPointerCurTank());
+    pClient->mGarage.GetPointerCurTank()->pRoom = pRoom;
 
     int indexInFight = mArrClientsFight.FastSearch(&pClient,NULL,SortFresh);
     if(indexInFight==-1)
@@ -791,7 +833,7 @@ void ServerTank::MakeRoom()
   // настроить комнату
   pRoom->MakeGroup();// создать противоборствующие команды и отсортировать список команд по типу mGroup
   pRoom->SetTransport(&mTransport);
-  pRoom->LoadMap();
+  pRoom->LoadMap(); // тут же задаются координаты танков (в файле карты есть зоны с ячейками возможных расположений танков)
   // разослать клиентам инфу по карте
   for(int i = 0 ; i < COUNT_COMMAND_IN_FIGHT*2 ; i++)
   {

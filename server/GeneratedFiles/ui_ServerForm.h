@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'ServerForm.ui'
 **
-** Created: Fri 4. May 15:10:32 2012
+** Created: Wed 9. May 14:30:27 2012
 **      by: Qt User Interface Compiler version 4.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!

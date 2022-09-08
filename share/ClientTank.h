@@ -43,6 +43,7 @@ public:
   bool Connect(unsigned int ip, unsigned int port, char* sNick);
   void SendRequestListTank();
   void SendRequestExitFromWait();
+  void SendRequestExitFromFight();
   void SendRequestInFight();
   // cmd
   //void SendClientReadyForRoom();

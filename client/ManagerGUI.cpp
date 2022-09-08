@@ -209,6 +209,21 @@ void TManagerGUI::WorkPacket(TManagerGUIEvent* event)
       AnalizCode_A_In_Fight(pData,size);
       break;
     }
+    case APPL_TYPE_A_END_FIGHT:
+    {
+      Analiz_End_Fight(pData,size);
+      break;
+    }
+    case APPL_TYPE_A_EXIT_WAIT:
+    {
+      ExitFromWait();
+      break;
+    }
+    case APPL_TYPE_A_EXIT_FIGHT:
+    {
+      ExitFromFight();
+      break;
+    }
     default:
     {  
       if(pCurrentForm)
@@ -299,10 +314,33 @@ void TManagerGUI::OpenRoomForm()
 //---------------------------------------------------------------------------------------------
 void TManagerGUI::OpenClientMainForm()
 {
+  // в главное окно
   pCurrentForm->hideGUI();
   pCurrentForm = &mClientMain;
   pCurrentForm->showGUI();
 }
 //---------------------------------------------------------------------------------------------
+void TManagerGUI::Analiz_End_Fight(char* pData, int size)
+{
+  TA_End_Fight A_End_Fight;
+  A_End_Fight.setData(pData,size);
+
+  if(A_End_Fight.getCodeExit()==TA_End_Fight::eExitTrue)
+  {
+    OpenRoomForm();
+    char str[400];
+    A_End_Fight.getMsg(str);
+    Q_MESSAGE(tr(str));
+  }
+}
 //---------------------------------------------------------------------------------------------
+void TManagerGUI::ExitFromFight()
+{
+  OpenRoomForm();
+}
+//---------------------------------------------------------------------------------------------
+void TManagerGUI::ExitFromWait()
+{
+  OpenRoomForm();
+}
 //---------------------------------------------------------------------------------------------

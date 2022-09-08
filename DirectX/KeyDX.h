@@ -8,7 +8,7 @@ public:
   TKeyDX();
   ~TKeyDX();
 
-  void Work();
+  void Work(unsigned int nChar, bool bKeyDown, bool bAltDown, void* pUserContext);
 };
 
 

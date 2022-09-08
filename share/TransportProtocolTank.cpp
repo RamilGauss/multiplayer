@@ -327,7 +327,7 @@ void TransportProtocolTank::Disconnect(TDefPacket* pDefPacket)
   TIP_Port dis;
   dis.ip   = ip;
   dis.port = port;
-  mCallBackDisconnect.Notify(&dis,sizeof(TIP_Port));
+  notifyDisconnect(&dis);
 }
 //----------------------------------------------------------------------------------
 void TransportProtocolTank::NotifyRcvPacket(int size)

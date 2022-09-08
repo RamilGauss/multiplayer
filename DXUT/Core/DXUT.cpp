@@ -1712,12 +1712,13 @@ LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         {
             switch( wParam )
             {
+                /*### Gauss 09.05.2012
                 case VK_ESCAPE:
                 {
                     if( GetDXUTState().GetHandleEscape() )
                         SendMessage( hWnd, WM_CLOSE, 0, 0 );
                     break;
-                }
+                }*/
 
                 case VK_PAUSE:
                 {

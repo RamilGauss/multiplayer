@@ -138,7 +138,7 @@ protected:
 	int Appl_Type_C_Choose_Tank(nsServerStruct::TPacketServer**ppPacket, TBasePacket* pPacket);
 	int Appl_Type_R_In_Fight(nsServerStruct::TPacketServer**ppPacket, TBasePacket* pPacket);
 	int Appl_Type_R_Exit_Wait(nsServerStruct::TPacketServer**ppPacket, TBasePacket* pPacket);
-	//int Appl_Type_C_Ready_For_Room(nsServerStruct::TPacketServer**ppPacket, TBasePacket* pPacket);
+	int Appl_Type_R_Exit_Fight(nsServerStruct::TPacketServer**ppPacket, TBasePacket* pPacket);
   int RoomHandler(nsServerStruct::TPacketServer**ppPacket, TBasePacket* pPacket);
 };
 
