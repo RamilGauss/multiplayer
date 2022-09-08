@@ -98,6 +98,7 @@ public:
 protected:
 
   //---------------------------------------------------------
+  void SetupVectorLOD();
   bool AddEffectDX(ILoaderModelDX::TDefGroup* pDefGroup);
   float GetDist(D3DXMATRIXA16* mWorld, D3DXMATRIXA16* mView);
   void Draw(TEffectDX* pEffect,D3DXMATRIXA16& mWorldViewProjection);
@@ -108,10 +109,10 @@ protected:
   struct TLOD
   {
     std::vector<TEffectDX*>* GetNonZeroVector(){if(normal.size()) return &normal;return &damage;}
-    // визульные индексы
+    // визуальные индексы
     std::vector<TEffectDX*> normal;
     std::vector<TEffectDX*> damage;
-    TLOD();
+    TLOD(){};
     ~TLOD()
     {
       normal.clear();

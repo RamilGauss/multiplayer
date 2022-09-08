@@ -570,11 +570,11 @@ TTransportProtocol::InfoConnect* TTransportProtocol::GetInfoConnect(unsigned int
 //----------------------------------------------------------------------------------
 bool TTransportProtocol::synchro(unsigned int ip, unsigned short port)
 {
-	//InfoConnect* pInfoConnect = GetInfoConnect(ip,port);
-	//pInfoConnect->cn_in_s = 0;
-	//pInfoConnect->cn_out_s = 0;
-	//pInfoConnect->cn_in_p = 0;
-	//pInfoConnect->cn_out_p = 0;
+	InfoConnect* pInfoConnect = GetInfoConnect(ip,port);
+	pInfoConnect->cn_in_s = 0;
+	pInfoConnect->cn_out_s = 0;
+	pInfoConnect->cn_in_p = 0;
+	pInfoConnect->cn_out_p = 0;
 
   if(!mUDP.isOpen()){BL_FIX_BUG();return false;}
   

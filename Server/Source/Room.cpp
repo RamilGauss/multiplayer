@@ -66,7 +66,7 @@ void TRoom::AddTank(TTank* pTank)
 {
   mArrTank.Add(pTank);
   // подготовка к бою
-  pTank->mSpeed = 0;
+  //pTank->mSpeed = 0;
   pTank->mMaskPushButton = 0;// ничего не нажато
 }
 //----------------------------------------------------------------

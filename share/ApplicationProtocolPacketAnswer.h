@@ -97,177 +97,46 @@ public:
 class TA_In_Fight : public TBasePacket
 {
 	// ushort type, 
-  // uchar code (см. enum{eFight..), 
+  // uchar  code (см. enum{eFight..), 
   // ushort codeMap - код карты только если code==eFight
-  // uchar - кол-во танков в команде
-  // массив длинной CountTankInCommand*sizeof(DefTank)
-
-  enum{
-    // длина ника равна нулю
-    eSizeDefTank = sizeof(unsigned char)/*lenNick*/+
-                   sizeof(unsigned char)/*Gun*/+
-                   sizeof(unsigned char)/*Tower*/+
-                   sizeof(unsigned short)/*setID_Tank*/,
-  };
+  // uchar - кол-во танков в бою
+  //--------------------------------------
+  // ushort - "длина" информации о танке после поля "длина" получен GetSizeProperty()
+  // массив инфы танка - получен GetProperty()
 public:
   enum{eFight=0,// в бой
        eWait,   // ждите
        eFailBlockTank, // танк нельзя использовать т.к. он еще находится в бою
        eFail,   // отказ выйти в бой, сбой в протоколе (отладка)
   };
+  enum{eLenHeader = sizeof(unsigned short)+
+                    sizeof(unsigned char)+
+                    sizeof(unsigned short)+
+                    sizeof(unsigned char),
+  };
   //-------------------------------------------------------------------------------------------
-  TA_In_Fight()
-  {
-    mType=APPL_TYPE_A_IN_FIGHT;
-    mSize = sizeof(mType)+sizeof(unsigned char)+sizeof(unsigned short)+sizeof(unsigned char);
-    mData = (char*)malloc(mSize);
-    setType();
-  }
+  TA_In_Fight();
+  virtual ~TA_In_Fight(){};
   //-------------------------------------------------------------------------------------------
-	unsigned char getCode(){return *getPointerCode();}; 
-  void setCode(unsigned char val){*getPointerCode() = val;}
-	unsigned char* getPointerCode(){return (unsigned char*)mData+sizeof(mType);}; 
+	unsigned char getCode();
+  void setCode(unsigned char val);
+	unsigned char* getPointerCode();
   //-------------------------------------------------------------------------------------------
-  unsigned short getCodeMap(){return *getPointerCodeMap();}
-  void setCodeMap(unsigned short val){*getPointerCodeMap()=val;}
-  unsigned short* getPointerCodeMap(){return (unsigned short*)(mData+sizeof(mType)+sizeof(unsigned char));}
+  unsigned short getCodeMap();
+  void setCodeMap(unsigned short val);
+  unsigned short* getPointerCodeMap();
   //-------------------------------------------------------------------------------------------
-  unsigned char getCountTank(){return *getPointerCountTank();}
-  unsigned char* getPointerCountTank(){return (unsigned char*)(mData+sizeof(mType)+sizeof(unsigned char)+sizeof(unsigned short));}
-  void setCountTank(unsigned char cnt)
-  {
-    *getPointerCountTank() = cnt;
+  unsigned char getCountTank();
+  //-------------------------------------------------------------------------------------------
+  unsigned char* getPointerTankProperty(int i);
+  unsigned short getSizeTankProperty(int i);
 
-    int newSize = sizeof(mType)+sizeof(unsigned char)+sizeof(unsigned short)+sizeof(unsigned char)+
-      cnt*eSizeDefTank;
-    mData = (char*)mo_realloc(mData,mSize,newSize);
-    mSize = newSize;
-  }
-  //-------------------------------------------------------------------------------------------
-  bool getPointerStrNick(int val, char* buffer, int &len)
-  {
-    int cnt = getCountTank();
-    char* pPointerFirstLenNick = getPointerBaseDefTank();
-    char* pStrLenNickVal = pPointerFirstLenNick;
-    for(int i = 0 ; i < cnt ; i++)
-    {
-      if(i==val)
-      {
-        len = *pStrLenNickVal;
-        strcpy(buffer,pStrLenNickVal+sizeof(unsigned char));
-        return true;
-      }
-      pStrLenNickVal += *pStrLenNickVal;// длина ника
-      pStrLenNickVal += eSizeDefTank;
-    }
-    return false;
-  }
-  //-------------------------------------------------------------------------------------------
-  void setPointerStrNick(int val, char* buffer )
-  {
-    int len = strlen(buffer)+1;
-    int cnt = getCountTank();
-    char* pPointerFirstLenNick = getPointerBaseDefTank();
-    char* pStrLenNickVal = pPointerFirstLenNick;
-    int size_bound = sizeof(mType)+sizeof(unsigned char)/*code*/+
-       sizeof(unsigned short)/*code_map*/+
-       sizeof(unsigned char)/*count*/+
-       sizeof(unsigned char)/*длина переменной lenNick*/;
-    for(int i = 0 ; i < cnt ; i++)
-    {
-      if(i==val)
-      {
-        goto l_mo_realloc;
-      }
-      size_bound += *pStrLenNickVal;
-      size_bound += eSizeDefTank;
-      pStrLenNickVal += *pStrLenNickVal;// длина ника
-      pStrLenNickVal += eSizeDefTank;
-    }   
-    return;
-l_mo_realloc:
-    mData = mo_realloc_bound(mData,mSize,size_bound,len);
-    mSize += len;
-
-    pStrLenNickVal = mData+size_bound;
-    *(pStrLenNickVal-sizeof(unsigned char)) = len;
-    strcpy(pStrLenNickVal,buffer);
-  }
-  //-------------------------------------------------------------------------------------------
-  unsigned char getGunType(int val){return *getPointerGunType(val);}
-  void setGunType(int val,unsigned char gun){*getPointerGunType(val) = gun;}
-  unsigned char* getPointerGunType(int val)
-  {
-    int cnt = getCountTank();
-    char* pBaseDefTank = getPointerBaseDefTank();
-    char* pDefTankVal = pBaseDefTank;
-    for(int i = 0 ; i < cnt ; i++)
-    {
-      if(i==val)
-      {
-        return (unsigned char*)pDefTankVal         +
-              sizeof(unsigned char)+// переменная "длина ника"
-              (*pDefTankVal);// буффер под ник
-      }
-      pDefTankVal += *pDefTankVal;// длина ника
-      pDefTankVal += eSizeDefTank;
-    }   
-    return NULL;// вместо BL_ASSERT
-  }
-  //-------------------------------------------------------------------------------------------
-  unsigned char getTowerType(int val){return *getPointerTowerType(val);}
-  void setTowerType(int val,unsigned char tower){*getPointerTowerType(val) = tower;}
-  unsigned char* getPointerTowerType(int val)
-  {
-    int cnt = getCountTank();
-    char* pBaseDefTank = getPointerBaseDefTank();
-    char* pDefTankVal = pBaseDefTank;
-    for(int i = 0 ; i < cnt ; i++)
-    {
-      if(i==val)
-      {
-        return (unsigned char*)pDefTankVal         +
-          sizeof(unsigned char)+// переменная "длина ника"
-          (*pDefTankVal)+// буффер под ник
-          sizeof(unsigned char);// переменная тип пушки gun
-      }
-      pDefTankVal += *pDefTankVal;// длина ника
-      pDefTankVal += eSizeDefTank;
-    }   
-    return NULL;// вместо BL_ASSERT
-  }
-  //-------------------------------------------------------------------------------------------
-  unsigned short getID_Tank(int val){return *getPointerID_Tank(val);}
-  void setID_Tank(int val,unsigned short id){*getPointerID_Tank(val) = id;}
-  unsigned short* getPointerID_Tank(int val)
-  {
-    int cnt = getCountTank();
-    char* pBaseDefTank = getPointerBaseDefTank();
-    char* pDefTankVal = pBaseDefTank;
-    for(int i = 0 ; i < cnt ; i++)
-    {
-      if(i==val)
-      {
-        unsigned short* pointer = (unsigned short*)((unsigned char*)pDefTankVal         +
-          sizeof(unsigned char)+// переменная "длина ника"
-          (*pDefTankVal)+// буффер под ник
-          sizeof(unsigned char)+// переменная тип пушки gun
-          sizeof(unsigned char));// переменная тип башни tower
-        return pointer;
-      }
-      pDefTankVal += *pDefTankVal;// длина ника
-      pDefTankVal += eSizeDefTank;
-    }   
-    return NULL;// вместо BL_ASSERT
-  }
-  //-------------------------------------------------------------------------------------------
+  void addTankProperty(unsigned char* pData, unsigned short size);
 protected:
-  char* getPointerBaseDefTank(void)
-  {
-    return mData+sizeof(mType)+sizeof(unsigned char)/*code*/+
-      sizeof(unsigned short)/*codeMap*/+sizeof(unsigned char)/*count*/;
-  }
-  //-------------------------------------------------------------------------------------------
+  unsigned char* FindTank(int i);
+
+  void setCountTank(unsigned char cnt);
+  unsigned char* getPointerCountTank();
 };
 //-----------------------------------------------------------------------------
 //APPL_TYPE_G_A_FIRE_RELOAD

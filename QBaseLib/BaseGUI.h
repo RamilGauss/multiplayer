@@ -45,8 +45,11 @@ class TManagerObjectCommon;
 
 class TBaseGUI : public QWidget
 {
+
+  Q_OBJECT
+
 public:
-  TBaseGUI(QWidget* parent=NULL): QWidget(parent){pClient=NULL;}
+  TBaseGUI(QWidget* parent=NULL): QWidget(parent){pClient=NULL;pGame=NULL;}
   virtual ~TBaseGUI(){};
 
   virtual void Translate(unsigned short typePacket, char* pData, int size) = 0;
@@ -56,8 +59,8 @@ public:
 
   virtual void SetupEvent(){};
 
-  void setup(TClientTank  *_pClient,
-             TManagerObjectCommon* _pGame)
+  void SetupMOC_Client(TClientTank  *_pClient,
+                       TManagerObjectCommon* _pGame)
   {
     pClient  = _pClient;
     pGame    = _pGame;

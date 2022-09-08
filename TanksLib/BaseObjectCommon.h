@@ -53,6 +53,12 @@ public:
   // настроиться объекту
   virtual void SetMirror(char* pData, int size) = 0;
 
+  // не забыть!!!!!!!
+  // delete []p;
+  virtual int GetSizeProperty(){return 0;};
+  virtual char* GetProperty(){return NULL;};
+  virtual void SetProperty(char* pData,int size){};
+
 };
 //-------------------------------------------------------------
 

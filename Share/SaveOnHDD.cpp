@@ -126,7 +126,11 @@ void TSaveOnHDD::WriteF(const char* format, ... )
 	int res = vsprintf(s,format,list); 
 	
   va_end(list);
-  if(res==-1) return;
+  if(res==-1)
+  {
+    BL_MessageBug("WriteF Error!",0);
+    return;
+  }
   // делаем то что хотели, будь то запись в файл или в консоль
   printf("%s",s);   
   Write(s,strlen(s));
@@ -145,7 +149,12 @@ void TSaveOnHDD::WriteF_time(const char* format, ... )
   int res = vsprintf(s,format,list); 
 
   va_end(list);
-  if(res==-1) return;
+  if(res==-1)  
+  {
+    BL_MessageBug("WriteF_time Error!",0);
+    return;
+  }
+
   // делаем то что хотели, будь то запись в файл или в консоль
   printf("%s",s);   
   Write(s,strlen(s));
@@ -174,16 +183,6 @@ void TSaveOnHDD::Write_Time()
 //---------------------------------------------------------------
 void TSaveOnHDD::FlushBuffer()
 {
-  //std::list<TBuffer*>::iterator bit = mListBuffer.begin();
-  //std::list<TBuffer*>::iterator eit = mListBuffer.end();
-  //while(bit!=eit)
-  //{
-  //  Write((*bit)->p,(*bit)->size);
-  //  delete (*bit);
-  //  bit++;
-  //}
-  //mListBuffer.clear();
-
   int cnt = mVectorBuffer.size();
   for(int i = 0 ; i < cnt ; i++)
   {
@@ -196,24 +195,11 @@ void TSaveOnHDD::FlushBuffer()
 //---------------------------------------------------------------
 void TSaveOnHDD::ClearBuffer()
 {
-  //std::list<TBuffer*>::iterator bit = mListBuffer.begin();
-  //std::list<TBuffer*>::iterator eit = mListBuffer.end();
-  //while(bit!=eit)
-  //{
-  //  delete (*bit);
-  //  bit++;
-  //}
-  //mListBuffer.clear();
   mVectorBuffer.clear();
 }
 //---------------------------------------------------------------
 void TSaveOnHDD::FlushInBuffer(char* buffer, int size)
 {
-  //TBuffer* pBuffer = new TBuffer;
-  //mListBuffer.push_back(pBuffer);
-  //pBuffer->p = new char[size];
-  //memcpy(pBuffer->p,buffer,size);
-  //pBuffer->size = size;
   std::vector<unsigned char> v;
   v.reserve(size);
   for(int i = 0; i < size ; i++)

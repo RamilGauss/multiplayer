@@ -43,6 +43,8 @@ struct IDirect3DDevice9;
 
 class TBaseGUI_DX : public TBaseGUI
 { 
+    Q_OBJECT
+
 public: 
   /** Constructor */ 
   TBaseGUI_DX( QWidget* pParent = NULL); 
@@ -55,7 +57,14 @@ public:
   /** a hint to Qt that we take care of the drawing for ourselves, thankyouverymuch */ 
   QPaintEngine *paintEngine() const { return NULL; } 
 
+  virtual void hideGUI(){QWidget::hide();SetWaitFalse();};
+
+
 protected: 
+  bool flgWaitCorrectPacketTank;
+  void SetWaitFalse(){flgWaitCorrectPacketTank=false;}
+  void SetWaitTrue(){flgWaitCorrectPacketTank=true;}
+  bool IsWaitCorrectPacketTank(){return flgWaitCorrectPacketTank;}
   /** Initialized the D3D environment */ 
   void Setup(); 
 

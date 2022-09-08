@@ -166,6 +166,9 @@ bool TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strAbsPath/*путь к фай
     pEffectDX->p = pEffect;
     pEffectDX->Init();
   }
+
+  SetupVectorLOD();
+
   return true;
 }
 //----------------------------------------------------------------------------------------------------
@@ -319,5 +322,35 @@ int TModelDX::GetCntEffect()
   TLOD* pLOD = &mVectorLOD[0];
   std::vector<TEffectDX*>*  v = pLOD->GetNonZeroVector();
   return v->size();
+}
+//----------------------------------------------------------------------------------------------------
+void TModelDX::SetupVectorLOD()
+{
+  mVectorLOD.clear();
+  TLOD lod;
+  mVectorLOD.push_back(lod);
+  bool TwoLOD = false;
+  int cnt = mVectorAllEffect.size();
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    if(mVectorAllEffect[i]->mTypeLOD==1)
+    {
+      TwoLOD = true;
+      break;
+    }
+  }
+  //----------------------------------------------------------------------------------------------------
+  if(TwoLOD)
+  mVectorLOD.push_back(lod);
+  //----------------------------------------------------------------------------------------------------
+  // структурировать данные
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    TEffectDX* pEffectDX = mVectorAllEffect[i];
+    if(pEffectDX->mflgNormal)
+      mVectorLOD[pEffectDX->mTypeLOD].normal.push_back(pEffectDX);
+    else
+      mVectorLOD[pEffectDX->mTypeLOD].damage.push_back(pEffectDX);
+  }
 }
 //----------------------------------------------------------------------------------------------------

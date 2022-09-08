@@ -100,6 +100,18 @@ void TManagerGUIClient::WorkPacket(TManagerGUIEvent* event)
   unsigned short type = event->GetType();
   switch(type)
   {
+    case APPL_TYPE_G_A_CORRECT_PACKET_STATE_OBJECT:
+    {
+      TA_Correct_Packet_State_Object packet;
+      packet.setData(pData,size);
+      break;
+    }
+    case APPL_TYPE_G_A_CORRECT_PACKET_STATE_TANK:
+    {
+      TA_Correct_Packet_State_Tank packet;
+      packet.setData(pData,size);
+      break;
+    }
     case APPL_TYPE_A_TRY_CONNECT_TO_SERVER:
     {
       TA_Try_Connect_To_Server packet;
@@ -133,7 +145,7 @@ void TManagerGUIClient::WorkPacket(TManagerGUIEvent* event)
         pCurrentForm->Translate(type,pData,size);
     };
   }
-  delete pData;
+  delete[] pData;
 }
 //---------------------------------------------------------------------------------------------
 void TManagerGUIClient::startEvent()

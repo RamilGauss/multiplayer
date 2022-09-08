@@ -106,6 +106,9 @@ void TManagerDirectX::CreateDeviceEvent(IDirect3DDevice9* pd3dDevice)
   D3DXVECTOR3 vecEye( 0.0f, 0.0f, -5.0f );
   D3DXVECTOR3 vecAt ( 0.0f, 0.0f, -0.0f );
 
+  //D3DXVECTOR3 vecEye( 5.0f, 5.0f, 5.0f );
+  //D3DXVECTOR3 vecAt ( -10.0f, -10.0f, -10.0f );
+
   mCamera.SetViewParams( &vecEye, &vecAt );
 }
 //--------------------------------------------------------------------------------------------------------
@@ -135,5 +138,13 @@ void TManagerDirectX::SetViewParams(D3DXVECTOR3* pvEyePt, D3DXVECTOR3* pvLookatP
 void TManagerDirectX::Clear()
 {
   mListAllObject.clear();
+}
+//--------------------------------------------------------------------------------------------------------
+void TManagerDirectX::SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
+               D3DVECTOR& coord,     // где
+               D3DVECTOR& orient,    // ориентация эффекта
+               float time_past/*// прошло времени, мс*/)
+{
+
 }
 //--------------------------------------------------------------------------------------------------------

@@ -37,29 +37,24 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef CallBackRegistratorH
 #define CallBackRegistratorH
 
+#include <set>
+
+
 class TCallBackRegistrator
 {
 
 public:
-	TCallBackRegistrator();
+	typedef void(*TCallBackFunc)(void* data, int size);
+  
+  TCallBackRegistrator();
 	~TCallBackRegistrator();
 
-	typedef void(*TCallBackFunc)(void* data, int size);
+  void Notify(void* data, int size);
+  void Register(TCallBackFunc pFunc);
+  void Unregister(TCallBackFunc pFunc);
 
 protected:
-	TCallBackFunc* mArrCallBack;
-	int mCntCallBack;
-public:
-
-	void Notify(void* data, int size);
-	void Register(TCallBackFunc pFunc);
-	void Unregister(TCallBackFunc pFunc);
-protected:
-	bool InArr(TCallBackFunc pFunc);
-	void AddElement(TCallBackFunc pFunc);
-	void RemoveInArr(int index);
-	//--------------------------------------------------------------------
-
+  std::set<TCallBackFunc> mSetCallback;
 };
 
 

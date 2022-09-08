@@ -327,8 +327,8 @@ double TBL_ConfigFile::GetDouble(const char *group_name, const char *key, double
   }
   else return res;
 #else
-	//gdouble res;// #### sick!
-  gfloat res;
+	gdouble res;// #### sick!
+  //gfloat res;
   gchar *resSt = g_key_file_get_value(m_keyfile, group_name, key, &m_gerror);
 
   res = atof(resSt);

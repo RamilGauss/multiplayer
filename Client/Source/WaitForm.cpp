@@ -49,70 +49,6 @@ you may contact in writing [ramil2085@gmail.com].
 
 
 //-------------------------------------------------------------------------------------------
-//void CallBackPacketWaitForm(void* data, int size)
-//{
-//	gcsWaitForm.lock();
-//		//------------------------------------------------
-//  if(pWaitForm==NULL) {BL_FIX_BUG();return;}
-//  unsigned short type = *((unsigned short*)((char*)data+sizeof(TIP_Port)));
-//  switch(type)
-//  {
-//    case APPL_TYPE_A_EXIT_WAIT:
-//    {
-//      if(pWaitForm==NULL) {BL_FIX_BUG();return;}
-//      QEvent * event = new QEvent(QEVENT_A_EXIT_WAIT);
-//      QCoreApplication::postEvent( pWaitForm, event );
-//      break;
-//    }
-//    case APPL_TYPE_A_IN_FIGHT:
-//    {
-//      char* dataPacket = (char*)data + sizeof(TIP_Port);
-//      int sizePacket   = size - sizeof(TIP_Port);
-//      pWaitForm->SetCodeExit_A_In_Fight(dataPacket,sizePacket);
-//      QEvent * event = new QEvent(QEVENT_A_IN_FIGHT);
-//      QCoreApplication::postEvent( pWaitForm, event );
-//      break;
-//    }
-//    default:;
-//  }
-//	//------------------------------------------------
-//	gcsWaitForm.unlock();
-//}
-////-------------------------------------------------------------------------------------------
-//void CallBackStreamWaitForm(void* data, int size)
-//{
-//	gcsWaitForm.lock();
-//  //-----------------------------------------------
-//	if(pWaitForm==NULL) {BL_FIX_BUG();return;}
-//  unsigned short type = *((unsigned short*)((char*)data+sizeof(TIP_Port)));
-//  switch(type)
-//  {
-//    case APPL_TYPE_S_WAIT:
-//    {
-//      char* dataPacket = (char*)data + sizeof(TIP_Port);
-//      int sizePacket   = size - sizeof(TIP_Port);
-//      TS_Wait S_Wait;
-//      S_Wait.setData(dataPacket,sizePacket);
-//      pWaitForm->SetCntClient(S_Wait.getWait(),S_Wait.getFight(),S_Wait.getCommon());
-//      break;
-//    }
-//	  default:;
-//  }
-//	//------------------------------------------------
-//	gcsWaitForm.unlock();
-//}
-////-------------------------------------------------------------------------------------------
-//void CallBackDisconnectWaitForm(void* data, int size)
-//{
-//	gcsWaitForm.lock();
-//	//------------------------------------------------
-//  if(pWaitForm==NULL) {BL_FIX_BUG();return;}
-//  QEvent * event = new QEvent(QEVENT_DISCONNECT);
-//  QCoreApplication::postEvent( pWaitForm, event );
-//	//------------------------------------------------
-//	gcsWaitForm.unlock();
-//}
-//-------------------------------------------------------------------------------------------
 TWaitForm::TWaitForm(QWidget *parent)
 : TBaseGUI(parent)
 {
@@ -205,12 +141,12 @@ void TWaitForm::showGUI()
 {
   mTimer->start(eTimeRefresh);
   mStartWait_ms = ht_GetMSCount();
-  QWidget::show();
+  TBaseGUI::showGUI();
 }
 //---------------------------------------------------------------------------------------------
 void TWaitForm::hideGUI()
 {
   mTimer->stop();
-  QWidget::hide();
+  TBaseGUI::hideGUI();
 }
 //---------------------------------------------------------------------------------------------

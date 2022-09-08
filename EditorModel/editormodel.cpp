@@ -34,15 +34,125 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#include "editormodel.h"
+#include "EditorModel.h"
 
-EditorModel::EditorModel(QWidget *parent, Qt::WFlags flags)
-    : QMainWindow(parent, flags)
+#include "GCS.h"
+#include "BL_Debug.h"
+#include "GlobalParamsTank.h"
+#include <QMessageBox>
+#include <QTimer>
+#include <QBitmap>
+#include <QMouseEvent>
+
+#define WIN32_LEAN_AND_MEAN 
+#include <d3d9.h> 
+#include <d3dx9.h> 
+#include "ManagerObjectCommonEditorModel.h"
+#include "Logger.h"
+#include "..\GBaseLib\HiTimer.h"
+
+
+TEditorModel::TEditorModel(QWidget *parent)
+: TBaseGUI_DX(parent)
 {
-  ui.setupUi(this);
+  setMouseTracking(true);
 }
-
-EditorModel::~EditorModel()
+//---------------------------------------------------------------------------------------------
+TEditorModel::~TEditorModel()
 {
 
 }
+//---------------------------------------------------------------------------------------------
+void TEditorModel::SetupEvent()
+{
+  BL_ASSERT(pGame);
+  pGame->CreateDevice3DEvent(mDevice);
+}
+//---------------------------------------------------------------------------------------------
+void TEditorModel::Translate(unsigned short type, char*pData, int size)
+{
+}
+//---------------------------------------------------------------------------------------------
+void TEditorModel::VisualEvent(QPaintEvent* pEvent)
+{
+  guint32 iTime = ht_GetMSCount();
+  float fElapsedTime = 0;
+  pGame->VisualEvent(iTime, fElapsedTime);
+}
+//---------------------------------------------------------------------------------------------
+void TEditorModel::mousePressEvent ( QMouseEvent * event ) 
+{
+  mBeginPoint = event->pos();
+}
+//---------------------------------------------------------------------------------------------
+void TEditorModel::mouseMoveEvent ( QMouseEvent * event ) 
+{
+  // настроить ориентацию камеры 
+  
+  switch(event->button())
+  {
+    case Qt::LeftButton:
+    {
+      QPoint pointDelta =  event->pos() - mBeginPoint;
+      pGame->SetCameraDelta(pointDelta.x(),pointDelta.y());
+      break;
+    }
+    default:;
+  }
+}
+//--------------------------------------------------------------------------------------------------------
+void TEditorModel::showGUI()
+{
+  TBaseGUI_DX::show();
+
+  // скрыть курсор
+  QBitmap bitmap;
+  QBitmap mask;
+  QCursor cursor(bitmap,mask);
+  cursor.setShape(Qt::BitmapCursor);
+  setCursor( cursor );
+}
+//--------------------------------------------------------------------------------------------------------
+void TEditorModel::hideGUI()
+{
+  TBaseGUI_DX::hideGUI();
+  unsetCursor();
+  pGame->StopLoadMap();// стоп поток! синхронно
+  pGame->Done();// очистить объекты ???
+}
+//--------------------------------------------------------------------------------------------------------
+void TEditorModel::keyPressEvent( QKeyEvent * event )
+{
+  switch(event->key())
+  {
+    case Qt::Key_O:
+    {
+      // открыть модель
+      OpenModelPath();
+      break;
+    }
+    case Qt::Key_W:
+    {
+      break;
+    }
+    case Qt::Key_S:
+    {
+      break;
+    }
+    case Qt::Key_A:
+    {
+      break;
+    }
+    case Qt::Key_D:
+    {
+      break;
+    }
+    default:;
+  }
+}
+//--------------------------------------------------------------------------------------------------------
+void TEditorModel::OpenModelPath()
+{
+  int a = 0;
+}
+//--------------------------------------------------------------------------------------------------------

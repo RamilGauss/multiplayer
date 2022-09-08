@@ -92,8 +92,8 @@ public:
   TManagerGUI(QWidget* parent=NULL);
   virtual ~TManagerGUI();
   
-  void start(TClientTank*_pClient,TManagerObjectCommon*_pGame);
-  void stop();
+  void startGUI(TClientTank*_pClient,TManagerObjectCommon*_pGame);
+  void stopGUI();
 
   void AddFormInList(TBaseGUI* pStrForm, char* name);
 
@@ -121,7 +121,7 @@ protected:
   virtual void OpenFirstForm() = 0;
 
   void OpenForm(char* pStrForm);
-public:
+
   TBaseGUI* FindForm(char* pStrForm)
   {
     std::map<std::string,void*>::iterator ifind = mMap.find(pStrForm);

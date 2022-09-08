@@ -62,13 +62,13 @@ TClientMain::~TClientMain()
 //---------------------------------------------------------------------------------------------
 void TClientMain::sl_Exit()
 {
-  _exit(0);
+  close();//_exit(0);
 }
 //---------------------------------------------------------------------------------------------
-void TClientMain::closeEvent(QCloseEvent* )
-{
-	sl_Exit();
-}
+//void TClientMain::closeEvent(QCloseEvent* )
+//{
+	//sl_Exit();
+//}
 //---------------------------------------------------------------------------------------------
 void TClientMain::sl_Enter()
 {

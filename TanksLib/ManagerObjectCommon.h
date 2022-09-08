@@ -36,7 +36,6 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef ManagerObjectCommonH
 #define ManagerObjectCommonH
 
-#include "BaseObjectCommon.h"
 #include "LoaderObjectCommon.h"
 #include "ManagerDirectX.h"
 #include "InterpretatorPredictionTank.h"
@@ -44,22 +43,30 @@ you may contact in writing [ramil2085@gmail.com].
 #include "glib/gthread.h"
 #include <vector>
 #include "ProgressBar.h"
+#include "CallBackRegistrator.h"
 
-class TTankTower;
+class TBaseObjectCommon;
 
 class TManagerObjectCommon
 {
 protected:
+  enum{eLoadMapEnd=0,
+  };
+  TCallBackRegistrator mCallbackLoadMapEndEvent;
+
+  unsigned int mID_map;
+
   GThread* thread;
 
-  TA_In_Fight mPacketInFight;
-
   volatile unsigned char mProcentLoadMap;
-
-  volatile bool flgActiveLoadThread;
+  
+  volatile bool flgActiveLoadThread;// активность потока
+  volatile bool flgLoadMap;         // процесс загрузки идет
+  volatile bool flgNeedStopThreadLoadMap;    // необходимо остановить загрузку
 
   guint32 mLastTimeFreshData;
-  enum{eTimeoutFreshData=10, // мс
+  enum{
+    eTimeoutFreshData=10, // мс
   };
 
 protected:
@@ -71,7 +78,7 @@ protected:
   TInterpretatorPredictionTank mPrediction;// физика
   TManagerDirectX mMDX_Scene; // отрисовка сцены
   
-  // прогресс загрузки карты
+  // прогресс загрузки карты/данных
   TProgressBar mProgressBar;
 
 public:
@@ -79,45 +86,47 @@ public:
   TManagerObjectCommon();
   virtual ~TManagerObjectCommon();
 
-  void Setup(IDirect3DDevice9* pDevice);
-
-  void VisualEvent(guint32 iTime, float fElapsedTime);
-
-  // в бою
-  void SetPacketA_In_Fight(char* pData, int size);
-
+  void CreateDevice3DEvent(IDirect3DDevice9* pDevice);
   void AddObject(TBaseObjectCommon* pObject);
   // прогресс загрузки карты
-  bool IsLoadMap(unsigned char& procent);// от 0 до 100 
+  bool IsLoadMap(unsigned char* procent = NULL );// от 0 до 100 
 
-  void RefreshFromServer();
+  void SetCameraDelta(int x, int y);
+
+  void Fresh();
+
+  void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type = eLoadMapEnd);
+  void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type = eLoadMapEnd);
+
+  void SetEffect(unsigned int id_effect, // номер эффекта
+    D3DVECTOR& coord,     // где
+    D3DVECTOR& orient,    // ориентация эффекта
+    float time_past = 0); // прошло времени, мс
+  TBaseObjectCommon* Get(int index);// отдать объект на изменение свойств объекта
+
+  void Done();// очистить массивы объектов сцены и прогресс бара
+  // загрузить карту
+  void LoadMap(unsigned int id_map);
+  void EndLoadMap();// очень криво и отвратительно, что есть такой метод! но пока только так.
+  void StopLoadMap();// синхронно, придется подождать маленько
+
+  virtual void VisualEvent(guint32 iTime, float fElapsedTime) = 0;
 
 protected:
-
-  void Done();
 
   friend void* Thread(void*p);
 
   void ThreadLoadMap();
-  // загрузить карту
-  void LoadMap(unsigned int id_map);
+  void NotifyLoadMapEndEvent();
 
   void AddFromLoaderObjectInCommonList();
   void AddFromLoaderObjectInMDX();
   void AddFromLoaderObjectInPrediction();
-  void AddTankInCommonList();
 
   void ClearSceneVectorObject();
   void ClearProgressBarVectorObject();
 
-  void PrepareTank(TTankTower* pTank, int i);
-
-  // отослать через какой-то транспорт запрос на получение корректирующего пакет
-  // отсылается после загрузки карты
-  virtual void SendCorrectPacket(){};
-
 
 };
-
 
 #endif

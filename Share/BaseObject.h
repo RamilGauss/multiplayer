@@ -67,6 +67,9 @@ public:
   virtual D3DXMATRIXA16 GetWorld(){return mWorld;}
 
 protected:
+  void SetOneMatrix(D3DXMATRIXA16& matrix);
+
+protected:
   unsigned int ID_map;// идентификатор на карте
   unsigned int ID_model;// идентификатор модели
 

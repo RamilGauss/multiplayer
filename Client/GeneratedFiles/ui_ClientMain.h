@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'ClientMain.ui'
 **
-** Created: Tue 14. Aug 16:17:43 2012
+** Created: Mon 20. Aug 14:41:13 2012
 **      by: Qt User Interface Compiler version 4.5.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!

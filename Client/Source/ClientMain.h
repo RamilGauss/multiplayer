@@ -63,7 +63,7 @@ protected:
 
 protected:
   virtual void Translate(unsigned short typePacket, char* pData, int size);
-	virtual void closeEvent(QCloseEvent* );
+	//virtual void closeEvent(QCloseEvent* );
 
 private:
   Ui::ClientMainClass ui;

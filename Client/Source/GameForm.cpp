@@ -52,18 +52,33 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ApplicationProtocolPacketAnswer.h"
 #include "ManagerObjectCommonClient.h"
 #include "Logger.h"
+#include "TankTower.h"
+#include "namespace_ID_BEHAVIOR.h"
 
+using namespace nsID_BEHAVIOR;
 
+TGameForm* pGameForm = NULL;
+
+void CallbackLoadMapEndEvent(void* /*pData*/, int /*size*/)
+{
+  BL_ASSERT(pGameForm);
+  pGameForm->LoadMapEndEvent();
+}
+//-------------------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------------------------
 TGameForm::TGameForm(QWidget *parent)
 : TBaseGUI_DX(parent)
 {
+  pGameForm = this;
+
   setMouseTracking(true);
 }
 //---------------------------------------------------------------------------------------------
 TGameForm::~TGameForm()
 {
+  pGame->Unregister(CallbackLoadMapEndEvent);
+  pGameForm = NULL;
 }
 //---------------------------------------------------------------------------------------------
 void TGameForm::closeEvent(QCloseEvent* )
@@ -79,8 +94,9 @@ void TGameForm::sl_Exit()
 void TGameForm::SetupEvent()
 {
   BL_ASSERT(pGame);
-  pGame->Setup(mDevice);
-  ((TManagerObjectCommonClient*)pGame)->SetTransport(pClient);
+  pGame->CreateDevice3DEvent(mDevice);
+  
+  pGame->Register(CallbackLoadMapEndEvent);
 }
 //---------------------------------------------------------------------------------------------
 void TGameForm::Translate(unsigned short type, char*pData, int size)
@@ -89,10 +105,12 @@ void TGameForm::Translate(unsigned short type, char*pData, int size)
   {
     case APPL_TYPE_A_IN_FIGHT:
     {
-      GlobalLoggerForm.WriteF_time("ѕолучен пакет вход в бой.\n");
-      // создать поток загрузки карты
-      // когда загрузка закончитс€ отослать запрос на корректирующий пакет
-      pGame->SetPacketA_In_Fight(pData,size);
+      ApplPacketA_In_Fight(pData,size);
+      break;
+    }
+    case APPL_TYPE_G_A_CORRECT_PACKET_STATE_TANK:
+    {
+      ApplPacketA_Correct_Packet_State_Tank();
       break;
     }
     case APPL_TYPE_G_S_LOAD_MAP:
@@ -106,7 +124,7 @@ void TGameForm::Translate(unsigned short type, char*pData, int size)
     }
     case APPL_TYPE_G_S_FIGHT_COORD_BULLET:
     {
-      pGame->RefreshFromServer();
+      //pGame->RefreshFromServer();
       break;
     }
     default:;
@@ -144,12 +162,14 @@ void TGameForm::mouseMoveEvent ( QMouseEvent * event )
   {
     point = mapToGlobal(point);
     QCursor::setPos(point);
+
+    pGame->SetCameraDelta(pointDelta.x(),pointDelta.y());
   }
 }
 //--------------------------------------------------------------------------------------------------------
 void TGameForm::showGUI()
 {
-  TBaseGUI_DX::show();
+  TBaseGUI_DX::showGUI();
 
   // скрыть курсор
   QBitmap bitmap;
@@ -161,8 +181,10 @@ void TGameForm::showGUI()
 //--------------------------------------------------------------------------------------------------------
 void TGameForm::hideGUI()
 {
-  TBaseGUI_DX::hide();
+  TBaseGUI_DX::hideGUI();
   unsetCursor();
+  pGame->StopLoadMap();// стоп поток! синхронно
+  pGame->Done();// очистить объекты ???
 }
 //--------------------------------------------------------------------------------------------------------
 void TGameForm::keyPressEvent( QKeyEvent * event )
@@ -178,3 +200,54 @@ void TGameForm::keyPressEvent( QKeyEvent * event )
   }
 }
 //--------------------------------------------------------------------------------------------------------
+void TGameForm::PrepareTank(TTankTower* pTank, int i)
+{
+  char* pData = (char*)mPacketInFight.getPointerTankProperty(i);
+  int size = mPacketInFight.getSizeTankProperty(i);
+  pTank->SetProperty(pData,size);
+}
+//--------------------------------------------------------------------
+void TGameForm::AddTankInCommonList()
+{
+  TMakerBehavior mMaker;
+  int cntTank = mPacketInFight.getCountTank();
+  for(int i = 0 ; i < cntTank ; i++ )
+  {
+    // 
+    TBaseObjectCommon* pObject = mMaker.New(ID_TANK_TOWER);
+    PrepareTank((TTankTower*)pObject,i);
+
+    pGame->AddObject(pObject);
+  }
+}
+//--------------------------------------------------------------------
+void TGameForm::LoadMapEndEvent()
+{
+  AddTankInCommonList();
+  SetWaitTrue();
+  pClient->SendRequestCorrectPacket();// отсылка запроса
+}
+//--------------------------------------------------------------------
+void TGameForm::ApplPacketA_In_Fight(char* pData, int size)
+{
+  GlobalLoggerForm.WriteF_time("ѕолучен пакет вход в бой.\n");
+  // создать поток загрузки карты
+  // когда загрузка закончитс€ отослать запрос на корректирующий пакет
+
+  // к сожалению поток загрузки карты прервать нельз€,
+  // ждите
+  mPacketInFight.setData(pData,size);
+  pGame->LoadMap(mPacketInFight.getCodeMap());
+}
+//--------------------------------------------------------------------
+void TGameForm::ApplPacketA_Correct_Packet_State_Tank()
+{
+  GlobalLoggerForm.WriteF_time("ѕолучен корректирующий пакет, состо€ние танков.\n");
+  if(IsWaitCorrectPacketTank()==false) return;
+  // применить содержимое пакета
+
+  pGame->EndLoadMap();// окончание загрузки
+
+  SetWaitFalse();
+}
+//--------------------------------------------------------------------

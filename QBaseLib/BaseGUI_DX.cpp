@@ -44,6 +44,7 @@ you may contact in writing [ramil2085@gmail.com].
 TBaseGUI_DX::TBaseGUI_DX( QWidget* pParent) 
 : TBaseGUI( pParent ) 
 { 
+  SetWaitFalse();
   mD3D = NULL; 
   mDevice = NULL; 
 

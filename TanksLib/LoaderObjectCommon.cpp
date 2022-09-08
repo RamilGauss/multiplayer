@@ -102,7 +102,7 @@ void TLoaderObjectCommon::PrepareMapPath()
   
   while(bit!=eit)
   {
-    bit->second += "\\main.ini";
+    bit->second += "main.ini";
     bit++;
   }
 }

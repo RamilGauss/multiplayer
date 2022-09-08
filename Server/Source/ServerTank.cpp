@@ -847,18 +847,20 @@ void ServerTank::SendPacket_A_InFight(TClient* pClient)
   TA_In_Fight answerFight;
   answerFight.setCode(TA_In_Fight::eFight);
   answerFight.setCodeMap(pRoom->GetIDMap());
-  answerFight.setCountTank(2*COUNT_COMMAND_IN_FIGHT,TTank::GetSizeProperty());
+  //answerFight.setCountTank(2*COUNT_COMMAND_IN_FIGHT,TTank::GetSizeProperty());
 
   // идут в порядке: 1 и 2 команда
   for(int i = 0 ; i < COUNT_COMMAND_IN_FIGHT*2 ; i++)
   {
     // танки отсортированы на уровне комнаты
     TTank* pTank = pRoom->GetTank(i);// взять описание танка
+    if(pTank->sClientName.length()==0)
+      pTank->sClientName = pTank->GetMasterClient()->sNick;
 
-    answerFight.setPointerStrNick(i,pTank->GetMasterClient()->sNick);
     char *pProperty = pTank->GetProperty();
-    answerFight.SetTankProperty(i,pProperty);
-    delete pProperty;
+    int size = pTank->GetSizeProperty();
+    answerFight.addTankProperty((unsigned char*)pProperty,size);
+    delete[] pProperty;
 
     //answerFight.setGunType(i,pTank->mGun);
     //answerFight.setTowerType(i,pTank->mTower);

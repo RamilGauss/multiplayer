@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 TManagerObjectCommonClient::TManagerObjectCommonClient()
 :TManagerObjectCommon()
 {
-  pClient = NULL;
+
 }
 //-------------------------------------------------------------------
 TManagerObjectCommonClient::~TManagerObjectCommonClient()
@@ -48,13 +48,21 @@ TManagerObjectCommonClient::~TManagerObjectCommonClient()
 
 }
 //-------------------------------------------------------------------
-void TManagerObjectCommonClient::SendCorrectPacket()
+void TManagerObjectCommonClient::VisualEvent(guint32 iTime, float fElapsedTime)
 {
-  pClient->SendRequestCorrectPacket();
+  if(IsLoadMap())
+  {
+    mProgressBar.VisualEvent(mProcentLoadMap);
+  }
+  else
+  {
+    if(iTime>mLastTimeFreshData+eTimeoutFreshData)
+    {
+      mPrediction.Calc();
+      mLastTimeFreshData = ht_GetMSCount();
+    }
+
+    mMDX_Scene.VisualEvent(iTime, fElapsedTime);
+  }
 }
-//-------------------------------------------------------------------
-void TManagerObjectCommonClient::SetTransport(TClientTank* _pClient)
-{
-  pClient = _pClient;
-}
-//-------------------------------------------------------------------
+//--------------------------------------------------------------------

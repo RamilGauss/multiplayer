@@ -43,6 +43,7 @@ TBaseObject::TBaseObject()
 {
   ID_model = 0;
   ID_map = 0;
+  SetOneMatrix(mWorld);
 }
 //------------------------------------------------------------------------------------------------
 TBaseObject::~TBaseObject()
@@ -65,5 +66,13 @@ void TBaseObject::SetOrient(TOrient3& orient)
 void TBaseObject::SetState(std::vector<unsigned char>* state)
 {
   mState = *state;
+}
+//------------------------------------------------------------------------------------------------
+void TBaseObject::SetOneMatrix(D3DXMATRIXA16& matrix)
+{
+  matrix._11 = 1;matrix._12 = 0;matrix._13 = 0;matrix._14 = 0;
+  matrix._21 = 0;matrix._22 = 1;matrix._23 = 0;matrix._24 = 0;
+  matrix._31 = 0;matrix._32 = 0;matrix._33 = 1;matrix._34 = 0;
+  matrix._41 = 0;matrix._42 = 0;matrix._43 = 0;matrix._44 = 1;
 }
 //------------------------------------------------------------------------------------------------

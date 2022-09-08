@@ -102,7 +102,7 @@ public:
     }
     ~TDefGroup()
     {
-      delete pArrJoint;
+      delete[] pArrJoint;
       pArrJoint = NULL;
     }
   };

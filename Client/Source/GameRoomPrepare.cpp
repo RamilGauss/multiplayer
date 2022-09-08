@@ -178,12 +178,12 @@ void TGameRoomPrepare::showGUI()
 
   SendRequestListTank();
 
-  QWidget::show();
+  TBaseGUI::showGUI();
 }
 //---------------------------------------------------------------------------------------------
 void TGameRoomPrepare::hideGUI()
 {
   mTimer->stop();
-  QWidget::hide();
+  TBaseGUI::hideGUI();
 }
 //---------------------------------------------------------------------------------------------

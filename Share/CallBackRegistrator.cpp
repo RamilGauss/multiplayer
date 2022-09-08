@@ -39,75 +39,43 @@ you may contact in writing [ramil2085@gmail.com].
 #include <string.h>
 #include "BL_Debug.h"
 
+using namespace std;
 
 TCallBackRegistrator::TCallBackRegistrator()
 {
-	mArrCallBack = NULL;
-	mCntCallBack = 0;
 }
 //--------------------------------------------------------------
 TCallBackRegistrator::~TCallBackRegistrator()
 {
-
+  int size = mSetCallback.size();
+  BL_ASSERT(size==0);
+  mSetCallback.clear();
 }
 //--------------------------------------------------------------
 void TCallBackRegistrator::Register(TCallBackFunc pFunc)
 {
-	if(!InArr(pFunc))
-		AddElement(pFunc);
-	else
-		BL_FIX_BUG();
+  mSetCallback.insert(pFunc);
 }
 //--------------------------------------------------------------
 void TCallBackRegistrator::Unregister(TCallBackFunc pFunc)
 {
-	for(int i = 0 ; i < mCntCallBack ; i++)
-	{
-		if(mArrCallBack[i]==pFunc)
-    {
-      RemoveInArr(i);
-      return;
-    }
-	}
-  BL_FIX_BUG();
-}
-//--------------------------------------------------------------
-bool TCallBackRegistrator::InArr(TCallBackFunc pFunc)
-{
-	for(int i = 0; i< mCntCallBack ; i++)
-	{
-		if(pFunc==mArrCallBack[i])
-			return true;
-	}
-	return false;
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::AddElement(TCallBackFunc pFunc)
-{
-	int size = mCntCallBack*sizeof(TCallBackFunc);
-
-	mArrCallBack = (TCallBackFunc(*))mo_realloc(mArrCallBack, size, size+sizeof(TCallBackFunc));
-
-	mArrCallBack[mCntCallBack] = pFunc;
-	mCntCallBack++;
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::RemoveInArr(int index)
-{
-	if(mCntCallBack==1){mCntCallBack=0;return;}
-
-	if(mCntCallBack-1==index) {mCntCallBack--;return;}
-
-	memmove(mArrCallBack+index,mArrCallBack+index+1,sizeof(TCallBackFunc)*(mCntCallBack-index-1));
-	mCntCallBack--;
+  set<TCallBackFunc>::iterator fit = mSetCallback.find(pFunc);
+  set<TCallBackFunc>::iterator eit = mSetCallback.end();
+  if(fit!=eit)
+    mSetCallback.erase(fit);
+  else
+    BL_FIX_BUG();
 }
 //--------------------------------------------------------------
 void TCallBackRegistrator::Notify(void* data, int size)
 {
-	for(int i = 0 ; i < mCntCallBack ; i++)
+  set<TCallBackFunc>::iterator bit = mSetCallback.begin();
+  set<TCallBackFunc>::iterator eit = mSetCallback.end();
+  while(bit!=eit)
 	{
-		TCallBackFunc pFunc = mArrCallBack[i];
+		TCallBackFunc pFunc = (*bit);
 		pFunc(data,size);
+    bit++;
 	}
 }
 //--------------------------------------------------------------

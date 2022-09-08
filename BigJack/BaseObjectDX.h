@@ -48,7 +48,6 @@ protected:
 
   bool flgShow;// показан ли объект на сцене
   
-  char* sName;//имя объекта
 
 public:
   TBaseObjectDX();
@@ -60,12 +59,10 @@ public:
   void Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj);
 
   void SetShow(bool show){flgShow=show;}
-  void SetName(const char* name);
 
 protected:
 
   void Done();
-  void SetOneMatrix(D3DXMATRIXA16& matrix);
 
   TModelDX* mModel;// внешний вид 
   
@@ -75,6 +72,8 @@ protected:
 
   // настроить матрицу расположения и ориентации локальных видимых частей
   virtual void SetupArrMatrix();
+  virtual void SetupState();
+  virtual void SetupMask();
 
   // маска отрисовки частей модели
   // например, нарисовать Пушку1, а не Пушку0 и т.д.

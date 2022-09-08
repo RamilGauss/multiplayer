@@ -38,6 +38,7 @@ you may contact in writing [ramil2085@gmail.com].
 #define TankH
 
 #include "BaseObjectCommon.h"
+#include <string>
 
 class TClient;
 class TRoom;
@@ -93,21 +94,22 @@ public:
 public:
   TTank();
   virtual ~TTank();
-
-
+//--------------------------------------------------------------------------------
+  // от TBaseObjectCommon
   virtual bool GetMirror(char** pData, int& size){return false;}
   virtual void SetMirror(char* pData, int size){}
 
   // реакция на человеческую реакцию
   virtual void SetHuman(char* pData, int size){};
 
+  virtual int GetSizeProperty();
+  virtual char* GetProperty();
+  virtual void SetProperty(char* pData,int size);
+//--------------------------------------------------------------------------------
+  // TTank интерфейс
   void SetTypeTank(unsigned int id_tank);
   unsigned int GetTypeTank();
-
-  static int GetSizeProperty();
-  char* GetProperty();
-  void SetProperty(char* pData);
-
+//--------------------------------------------------------------------------------
 public:
   // интерфейс для сервера
   TRoom* pRoom;
@@ -115,21 +117,25 @@ public:
   void SetMasterClient(TClient* _pClient);
   TClient* GetMasterClient();
 
-  // для Room
-  // в бою
+  // для Room, в бою
   unsigned char mGroup;// номер команды в комнате. или 0 или 1.
-
-  // характеристики
-
 
 protected:
   TClient* pMasterClient;
+//--------------------------------------------------------------------------------
+  // для Клиента
+public:
+  std::string sClientName;
+//--------------------------------------------------------------------------------
 
 public:
+
+  #pragma pack(push, 1)
   struct TProperty
   {
     unsigned int mID_tank;
   };
+  #pragma pack(pop)
 
   struct TDefShell
   {

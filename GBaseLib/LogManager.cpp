@@ -33,6 +33,11 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#ifdef _MSC_VER
+# pragma warning(push)
+# pragma warning( disable : 4996 )
+#endif
+
 
 #include "LogManager.h"
 #include "BL_AppFile.h"
@@ -311,3 +316,7 @@ void TLogManager::setGroupComment()
   }
 }
 //-----------------------------------------------------------------------------
+
+#ifdef _MSC_VER
+# pragma warning(pop)
+#endif

@@ -64,8 +64,9 @@ bool TLoaderModelDX::Load(LPCWSTR strFilenameData)
   strcat(pStrPathShader,"\\shader");
 
   strcpy(pStrFilenameData ,W2A(strFilenameData));
+  UpPath(&pStrFilenameData[0]);
   strcpy(pStrFilenameDataMainIni,pStrFilenameData);
-  //strcat(pStrFilenameDataMainIni,"\\main.ini");
+  strcat(pStrFilenameDataMainIni,"\\main.ini");
   if(LoadMainFile()==false) 
   {
     GlobalLoggerDX.WriteF_time("Ќе удалось загрузить ресурсы дл€ модели.\n");
@@ -88,7 +89,8 @@ bool TLoaderModelDX::LoadMainFile()
   for(int i = 0 ; i < cntGroup ; i++)
   {
     mVectorGroup.push_back(new TDefGroup);
-    if(LoadPart(&mFileIniMain,i)==false) return false;
+    if(LoadPart(&mFileIniMain,i)==false) 
+      return false;
   }
   mFileIniMain.Close();
   return true;
@@ -159,11 +161,14 @@ bool TLoaderModelDX::LoadPart(TBL_ConfigFile* fileIni, int i)
 
   // загрузить Joint
   mVectorGroup[i]->mCntJoint = fileIni->GetInteger(strNumPart,"cntJoint",0);
-  mVectorGroup[i]->pArrJoint = new TJointPart[mVectorGroup[i]->mCntJoint];
-  for(int i = 0 ; i < mVectorGroup[i]->mCntJoint ; i++)
+  if(mVectorGroup[i]->mCntJoint>0)
+    mVectorGroup[i]->pArrJoint = new TJointPart[mVectorGroup[i]->mCntJoint];
+  for(int j = 0 ; j < mVectorGroup[i]->mCntJoint ; j++)
   {
-    TJointPart* pJoint = mVectorGroup[i]->pArrJoint+i;
-    str = fileIni->GetValue(strNumPart,"strName");
+    char partJoint[30];
+    sprintf(partJoint,"nameJoint%d",j);
+    TJointPart* pJoint = &(mVectorGroup[i]->pArrJoint[j]);
+    str = fileIni->GetValue(strNumPart,partJoint);
     if(str)
     {
       pJoint->namePart = str;
@@ -172,15 +177,16 @@ bool TLoaderModelDX::LoadPart(TBL_ConfigFile* fileIni, int i)
     }
     else return false;
 
-    for(int j = 0 ; j < 4 ; j++)
+    for(int k = 0 ; k < 4 ; k++)
     {
       D3DXVECTOR4 vector4;
       char strNumJointPart[20];
-      sprintf(strNumJointPart,"matrix%d_%d",i,j);
+      sprintf(strNumJointPart,"matrix%d_%d",j,k);
 
       if(LoadVector4(fileIni,strNumPart,strNumJointPart,vector4)==false) 
         return false;
-      pJoint->matrix.m[j][0]=vector4[0];
+      for(int m = 0 ; m < 4 ; m++)
+        pJoint->matrix.m[k][m]=vector4[m];
     }
   }
   return true;

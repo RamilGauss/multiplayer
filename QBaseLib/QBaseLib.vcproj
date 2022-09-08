@@ -170,6 +170,28 @@
 			<File
 				RelativePath=".\BaseGUI.h"
 				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing BaseGUI.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -D -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQBASELIB_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;.\.&quot; &quot;.\BaseGUI.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_BaseGUI.cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\BaseGUI.h"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_BaseGUI.cpp&quot;"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Moc&apos;ing BaseGUI.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -D -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQBASELIB_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;.\.&quot; -I&quot;.\..\BigJack\.&quot; -I&quot;.\..\glib-2.0\.&quot; -I&quot;.\..\GBaseLib\.&quot; -I&quot;.\..\Share\.&quot; &quot;.\BaseGUI.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_BaseGUI.cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\BaseGUI.h"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_BaseGUI.cpp&quot;"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\BaseGUI_DX.h"
@@ -179,10 +201,10 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description=""
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
+						Description="Moc&apos;ing BaseGUI_DX.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -D -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQBASELIB_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;.\.&quot; &quot;.\BaseGUI_DX.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_BaseGUI_DX.cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\BaseGUI_DX.h"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_BaseGUI_DX.cpp&quot;"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -190,10 +212,10 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description=""
-						CommandLine=""
-						AdditionalDependencies=""
-						Outputs=""
+						Description="Moc&apos;ing BaseGUI_DX.h..."
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;  -D -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQBASELIB_LIB -I&quot;.\GeneratedFiles\.&quot; -I&quot;$(QTDIR)\include\.&quot; -I&quot;.\GeneratedFiles\$(ConfigurationName)\.&quot; -I&quot;$(QTDIR)\include\QtCore\.&quot; -I&quot;$(QTDIR)\include\QtGui\.&quot; -I&quot;.\.&quot; -I&quot;.\..\BigJack\.&quot; -I&quot;.\..\glib-2.0\.&quot; -I&quot;.\..\GBaseLib\.&quot; -I&quot;.\..\Share\.&quot; &quot;.\BaseGUI_DX.h&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_BaseGUI_DX.cpp&quot;&#x0D;&#x0A;"
+						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;.\BaseGUI_DX.h"
+						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_BaseGUI_DX.cpp&quot;"
 					/>
 				</FileConfiguration>
 			</File>
@@ -243,6 +265,82 @@
 			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}"
 			SourceControlFiles="false"
 			>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_BaseGUI.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Debug\moc_BaseGUI.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Debug\moc_BaseGUI_DX.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Release\moc_BaseGUI_DX.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
 			<Filter
 				Name="Release"
 				Filter="cpp;moc"

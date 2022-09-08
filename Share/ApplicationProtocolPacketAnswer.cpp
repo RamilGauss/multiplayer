@@ -32,3 +32,119 @@ If you have questions concerning this license or the applicable additional terms
 you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
+
+#include "ApplicationProtocolPacketAnswer.h"
+
+// ushort type, 
+// uchar code (см. enum{eFight..), 
+// ushort codeMap - код карты только если code==eFight
+// uchar - кол-во танков в команде
+// массив длинной CountTankInCommand*sizeof(DefTank)
+
+TA_In_Fight::TA_In_Fight(): TBasePacket()
+{
+  mType=APPL_TYPE_A_IN_FIGHT;
+  mSize = eLenHeader;
+  mData = (char*)malloc(mSize);
+  setType();
+
+  setCountTank(0);// иначе будет полный пиздец
+}
+//-------------------------------------------------------------------------------------------
+unsigned char TA_In_Fight::getCode()
+{
+  return *getPointerCode();
+} 
+//-------------------------------------------------------------------------------------------
+void TA_In_Fight::setCode(unsigned char val)
+{
+  *getPointerCode() = val;
+}
+//-------------------------------------------------------------------------------------------
+unsigned char* TA_In_Fight::getPointerCode()
+{
+  return (unsigned char*)mData+sizeof(mType);
+} 
+//-------------------------------------------------------------------------------------------
+unsigned short TA_In_Fight::getCodeMap()
+{
+  return *getPointerCodeMap();
+}
+//-------------------------------------------------------------------------------------------
+void TA_In_Fight::setCodeMap(unsigned short val)
+{
+  *getPointerCodeMap()=val;
+}
+//-------------------------------------------------------------------------------------------
+unsigned short* TA_In_Fight::getPointerCodeMap()
+{
+  return (unsigned short*)(mData+sizeof(mType)+sizeof(unsigned char));
+}
+//-------------------------------------------------------------------------------------------
+unsigned char TA_In_Fight::getCountTank()
+{
+  return *getPointerCountTank();
+}
+//-------------------------------------------------------------------------------------------
+unsigned char* TA_In_Fight::getPointerCountTank()
+{
+  return (unsigned char*)(mData+sizeof(mType)+sizeof(unsigned char)+sizeof(unsigned short));
+}
+//-------------------------------------------------------------------------------------------
+void TA_In_Fight::setCountTank(unsigned char cnt)
+{
+  *getPointerCountTank() = cnt;
+}
+//-------------------------------------------------------------------------------------------
+unsigned char* TA_In_Fight::getPointerTankProperty(int i)
+{
+  return FindTank(i)+sizeof(unsigned short)/*плюс размер "длина"*/;
+}
+//-----------------------------------------------------------------------------
+unsigned short TA_In_Fight::getSizeTankProperty(int i)
+{
+  unsigned int size = *((unsigned short*)FindTank(i));
+  return size;
+}
+//-----------------------------------------------------------------------------
+void TA_In_Fight::addTankProperty(unsigned char* pData, unsigned short size)
+{
+  // выделить память больше на размер свойств танка + размер поля "длина" 
+  mData = (char*)mo_realloc(mData,mSize,mSize+size+sizeof(unsigned short));
+  // новый размер
+  mSize+=size+sizeof(unsigned short);
+
+  unsigned char cnt = getCountTank();
+  unsigned char* pLastTank = FindTank(cnt);
+  //----------------------------------------
+  memcpy(pLastTank+sizeof(unsigned short),pData,size);
+  unsigned short* pSize = (unsigned short*)pLastTank;
+  *pSize = size;
+  //----------------------------------------
+  cnt++;
+  setCountTank(cnt);
+}
+//-----------------------------------------------------------------------------
+unsigned char* TA_In_Fight::FindTank(int i)
+{
+  int iFound = 0;
+
+  unsigned short* pSize;
+  unsigned short size;
+  unsigned char* p = (unsigned char*)mData+eLenHeader;
+
+  pSize = (unsigned short*)p;
+  size = *pSize;
+
+  while(iFound!=i)
+  {
+    p += sizeof(size)+size;  
+
+    pSize = (unsigned short*)p;
+    size = *pSize;
+    iFound++;
+  }
+
+  return p;
+}
+//-----------------------------------------------------------------------------

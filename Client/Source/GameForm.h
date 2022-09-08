@@ -38,10 +38,17 @@ you may contact in writing [ramil2085@gmail.com].
 #define GameFormH
 
 #include "ManagerGUIClient.h"
+#include "ApplicationProtocolPacketAnswer.h"
+
+class TTankTower;
 
 class TGameForm : public TBaseGUI_DX
 {
   Q_OBJECT
+
+  TA_In_Fight mPacketInFight;
+  TA_Correct_Packet_State_Tank   mPacketCorrectStateTank;
+  TA_Correct_Packet_State_Object mPacketCorrectStateObject;
 
 public:
   TGameForm(QWidget *parent = NULL);
@@ -53,9 +60,6 @@ public:
   virtual void hideGUI();
 
 protected:
-  friend void CallBackPacketGameForm(void* data, int size);
-  friend void CallBackDisconnectGameForm(void* data, int size);
-
   virtual void VisualEvent(QPaintEvent* pEvent);
   virtual void SetupEvent();
 
@@ -63,10 +67,26 @@ protected:
   virtual void mouseMoveEvent( QMouseEvent * event );
   virtual void keyPressEvent ( QKeyEvent * event );
 
-  void Disconnect();
-  
+ 
 protected slots:
   void sl_Exit();
+
+protected:
+
+
+  friend void CallbackLoadMapEndEvent(void* pData, int size);
+
+  void PrepareTank(TTankTower* pTank, int i);
+  // отослать через какой-то транспорт запрос на получение корректирующего пакет
+  // отсылается после загрузки карты
+  void SendCorrectPacket(){};
+  void ApplPacketA_Correct_Packet_State_Tank();
+
+  void AddTankInCommonList();
+
+  void LoadMapEndEvent();
+
+  void ApplPacketA_In_Fight(char* pData, int size);
 
 };
 

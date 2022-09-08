@@ -39,13 +39,23 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ApplicationProtocolPacketAnswer.h"
 #include "namespace_ID_BEHAVIOR.h"
 #include "HiTimer.h"
-#include "TankTower.h"
+#include "BaseObjectCommon.h"
 
+//-----------------------------------------------------------------------------
+#define CHECK_END if(flgNeedStopThreadLoadMap==false) \
+{ \
+  flgActiveLoadThread = false; \
+  EndLoadMap(); \
+  return; \
+}
+
+//-----------------------------------------------------------------------------
 TManagerObjectCommon::TManagerObjectCommon()
 {
-  thread = NULL;
-  flgActiveLoadThread = false;
-  mLastTimeFreshData  = 0;
+  thread                   = NULL;
+  flgLoadMap               = false;
+  flgActiveLoadThread      = false;
+  mLastTimeFreshData       = 0;
 }
 //--------------------------------------------------------------------
 TManagerObjectCommon::~TManagerObjectCommon()
@@ -53,28 +63,10 @@ TManagerObjectCommon::~TManagerObjectCommon()
   Done();
 }
 //--------------------------------------------------------------------
-void TManagerObjectCommon::Setup(IDirect3DDevice9* pDevice)
+void TManagerObjectCommon::CreateDevice3DEvent(IDirect3DDevice9* pDevice)
 {
   mProgressBar.CreateDeviceEvent(pDevice);
   mMDX_Scene.CreateDeviceEvent(pDevice);
-}
-//--------------------------------------------------------------------
-void TManagerObjectCommon::VisualEvent(guint32 iTime, float fElapsedTime)
-{
-  if(flgActiveLoadThread)
-  {
-    mProgressBar.VisualEvent(mProcentLoadMap);
-  }
-  else
-  {
-    if(iTime>mLastTimeFreshData+eTimeoutFreshData)
-    {
-      mPrediction.Calc();
-      mLastTimeFreshData = ht_GetMSCount();
-    }
-
-    mMDX_Scene.VisualEvent(iTime, fElapsedTime);
-  }
 }
 //--------------------------------------------------------------------
 void* Thread(void* p)
@@ -85,32 +77,47 @@ void* Thread(void* p)
 //--------------------------------------------------------------------
 void TManagerObjectCommon::ThreadLoadMap()
 {
+  GlobalLoggerMOC.WriteF_time("Началась загрузка карты.\n");
+  flgActiveLoadThread = true;
+
   mProcentLoadMap = 0;
-  LoadMap(mPacketInFight.getCodeMap());
-  mProcentLoadMap = 20;
+  CHECK_END
+  mLoaderObject.LoadMap(mID_map);
+  mProcentLoadMap = 15;
+  CHECK_END
   AddFromLoaderObjectInCommonList();
-  mProcentLoadMap = 50;
+  mProcentLoadMap = 55;
+  CHECK_END
   AddFromLoaderObjectInMDX();
   mProcentLoadMap = 70;
+  CHECK_END
   AddFromLoaderObjectInPrediction();
-  mProcentLoadMap = 90;
-  AddTankInCommonList();
-  mProcentLoadMap = 100;
+  mProcentLoadMap = 80;
+
+  CHECK_END
   //---------------------------------------
-  SendCorrectPacket();
+  NotifyLoadMapEndEvent();
+  //---------------------------------------
   flgActiveLoadThread = false;
+  
+  GlobalLoggerMOC.WriteF_time("Загрузка карты завершена (поток MOC).\n");
+  GlobalLoggerMOC.WriteF_time("Ожидание корректирующего пакета.\n");
 }
 //--------------------------------------------------------------------
 void TManagerObjectCommon::LoadMap(unsigned int id_map)
 {
-  mLoaderObject.LoadMap(id_map);
+  flgNeedStopThreadLoadMap = false;
+  flgLoadMap               = true;
+  mID_map = id_map;
+  thread = g_thread_create(Thread, this, true, NULL);
 }
 //--------------------------------------------------------------------
-bool TManagerObjectCommon::IsLoadMap(unsigned char& procent)
+bool TManagerObjectCommon::IsLoadMap(unsigned char* procent)
 {
-  if(flgActiveLoadThread)
+  if(flgLoadMap)
   {
-    procent = mProcentLoadMap;
+    if(procent)
+      *procent = mProcentLoadMap;
     return true;
   }
   return false;
@@ -121,15 +128,6 @@ void TManagerObjectCommon::AddObject(TBaseObjectCommon* pObject)
   mVectorObject.push_back(pObject);
   mMDX_Scene.AddObject(pObject);
   mPrediction.AddObject(pObject);
-}
-//--------------------------------------------------------------------
-void TManagerObjectCommon::SetPacketA_In_Fight(char* pData, int size)
-{
-  // к сожалению поток загрузки карты прервать нельзя,
-  // ждите
-  mPacketInFight.setData(pData,size);
-  flgActiveLoadThread = true;
-  thread = g_thread_create(Thread, this, true, NULL);
 }
 //--------------------------------------------------------------------
 void TManagerObjectCommon::AddFromLoaderObjectInCommonList()
@@ -160,26 +158,6 @@ void TManagerObjectCommon::AddFromLoaderObjectInPrediction()
   }
 }
 //--------------------------------------------------------------------
-void TManagerObjectCommon::AddTankInCommonList()
-{
-  TMakerBehavior mMaker;
-  int cntTank = mPacketInFight.getCountTank();
-  int cntObject = mVectorObject.size();
-  int cntAll = cntTank+cntObject;
-
-  mVectorObject.reserve(cntAll);
-  for(int i = cntObject ; i < cntAll ; i++ )
-  {
-    // 
-    TBaseObjectCommon* pObject = mMaker.New(nsID_BEHAVIOR::ID_TANK_TOWER);
-    PrepareTank((TTankTower*)pObject,i);
-
-    mVectorObject.push_back(pObject);
-    mMDX_Scene.AddObject(pObject);
-    mPrediction.AddObject(pObject);
-  }
-}
-//--------------------------------------------------------------------
 void TManagerObjectCommon::Done()
 {
   ClearSceneVectorObject();
@@ -203,15 +181,68 @@ void TManagerObjectCommon::ClearProgressBarVectorObject()
   mProgressBar.Clear();
 }
 //--------------------------------------------------------------------
-void TManagerObjectCommon::RefreshFromServer()
+void TManagerObjectCommon::Fresh()
 {
   mLastTimeFreshData = ht_GetMSCount();
 }
 //--------------------------------------------------------------------
-void TManagerObjectCommon::PrepareTank(TTankTower* pTank, int i)
+void TManagerObjectCommon::SetCameraDelta(int x, int y)
 {
-  pTank->SetTypeTank(mPacketInFight.getID_Tank(i));
-  pTank->mTower =  mPacketInFight.getTowerType(i);
-  pTank->mGun = mPacketInFight.getGunType(i);
+
+  //mMDX_Scene.SetViewParams();
 }
 //--------------------------------------------------------------------
+void TManagerObjectCommon::Register(TCallBackRegistrator::TCallBackFunc pFunc, int type)
+{
+  switch(type)
+  {
+    case eLoadMapEnd:
+      mCallbackLoadMapEndEvent.Register(pFunc);
+      break;
+    default:BL_FIX_BUG();
+  }
+}
+//--------------------------------------------------------------
+void TManagerObjectCommon::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type)
+{
+  switch(type)
+  {
+    case eLoadMapEnd:
+      mCallbackLoadMapEndEvent.Unregister(pFunc);
+      break;
+    default:BL_FIX_BUG();
+  }
+}
+//--------------------------------------------------------------
+TBaseObjectCommon* TManagerObjectCommon::Get(int index)
+{
+  TBaseObjectCommon* pObject = mVectorObject.at(index);
+  return pObject;
+}
+//--------------------------------------------------------------
+void TManagerObjectCommon::NotifyLoadMapEndEvent()
+{
+  mCallbackLoadMapEndEvent.Notify(NULL,0);
+}
+//--------------------------------------------------------------
+void TManagerObjectCommon::SetEffect(unsigned int id_effect, // номер эффекта
+               D3DVECTOR& coord,     // где
+               D3DVECTOR& orient,    // ориентация эффекта
+               float time_past ) // прошло времени, мс
+{
+  mMDX_Scene.SetEffect(id_effect,coord,orient,time_past);
+}
+//--------------------------------------------------------------
+void TManagerObjectCommon::EndLoadMap()
+{
+  GlobalLoggerMOC.WriteF_time("Загрузка карты завершена (поток Form).\n");
+  mProcentLoadMap          = 100;
+  flgLoadMap               = false;
+}
+//--------------------------------------------------------------
+void TManagerObjectCommon::StopLoadMap()// синхронно, придется подождать маленько
+{
+  GlobalLoggerMOC.WriteF_time("Приказ остановить загрузку карты.\n");
+  flgNeedStopThreadLoadMap = true;
+}
+//--------------------------------------------------------------

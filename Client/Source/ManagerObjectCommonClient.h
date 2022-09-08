@@ -48,13 +48,10 @@ public:
   TManagerObjectCommonClient();
   virtual ~TManagerObjectCommonClient();
 
-  void SetTransport(TClientTank* _pClient);
+  
+  virtual void VisualEvent(guint32 iTime, float fElapsedTime = 0);
 
 protected:
-  virtual void SendCorrectPacket();
-
-
-  TClientTank* pClient;
 };
 
 #endif

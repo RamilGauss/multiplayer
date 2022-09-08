@@ -60,7 +60,7 @@ protected:
 
   virtual void OpenFirstForm();
 
-  void WorkPacket(TManagerGUIEvent* event);
+  virtual void WorkPacket(TManagerGUIEvent* event);
 
   void AnswerFromServer_Enter(unsigned char mCodeAnswer);
   void AnalizCode_A_In_Fight(char* pData, int size);
@@ -74,8 +74,6 @@ protected:
   void OpenClientMainForm();
 
   void Done();
-
-  void LoadMap(TA_In_Fight& packet);
 };
 
 #endif

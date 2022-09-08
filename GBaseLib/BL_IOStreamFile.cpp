@@ -43,6 +43,13 @@ you may contact in writing [ramil2085@gmail.com].
 #include <sys/stat.h>
 #include <sys/types.h>
 
+
+#ifdef _MSC_VER
+# pragma warning(push)
+# pragma warning( disable : 4996 )
+#endif
+
+
 #if defined( __GNUC__ )
   #include <unistd.h>
   #define O_BINARY      0
@@ -317,3 +324,7 @@ bool TIOStreamFile::chsize( long size )
   return true;
 }
 //---------------------------------------------------------------
+
+#ifdef _MSC_VER
+# pragma warning(pop)
+#endif

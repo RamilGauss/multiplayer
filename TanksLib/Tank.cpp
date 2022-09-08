@@ -82,21 +82,24 @@ void TTank::SetMasterClient(TClient* _pClient)
 //------------------------------------------------------------------------
 int TTank::GetSizeProperty()
 {
-  int size = sizeof(TProperty);
+  int size = sizeof(TProperty)+sClientName.length();
   return size;
 }
 //------------------------------------------------------------------------
 char* TTank::GetProperty()
 {
-  TProperty* pProperty= new TProperty;
+  int size = GetSizeProperty();
+  char* pData = new char[size];
   // заполнить данными
-
-  return (char*)pProperty;
+  *((TProperty*)pData) = mProperty;
+  memcpy(pData+sizeof(TProperty),sClientName.data(),size-sizeof(TProperty));
+  return pData;
 }
 //------------------------------------------------------------------------
-void TTank::SetProperty(char* pData)
+void TTank::SetProperty(char* pData,int size)
 {
-  
+  mProperty = *((TProperty*)pData);
+  sClientName.insert(0,pData+sizeof(TProperty),size-sizeof(TProperty));
 }
 //------------------------------------------------------------------------
 

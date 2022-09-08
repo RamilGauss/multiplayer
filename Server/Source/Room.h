@@ -119,6 +119,8 @@ public:
   int GetTimeRest_sec();
   int GetActiveClient();
 
+  virtual void VisualEvent(guint32 iTime, float fElapsedTime){}
+
 protected:
 
   void WriteTransportStream(TClient* pClient,TBasePacket *packet);

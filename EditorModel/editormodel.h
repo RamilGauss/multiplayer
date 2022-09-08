@@ -37,19 +37,34 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef EDITORMODEL_H
 #define EDITORMODEL_H
 
-#include <QtGui/QMainWindow>
-#include "ui_editormodel.h"
+#include "ManagerGUIEditorModel.h"
 
-class EditorModel : public QMainWindow
+class TEditorModel : public TBaseGUI_DX
 {
-    Q_OBJECT
+  Q_OBJECT
+
+  QPoint mBeginPoint;
 
 public:
-    EditorModel(QWidget *parent = 0, Qt::WFlags flags = 0);
-    ~EditorModel();
+  TEditorModel(QWidget *parent = NULL);
+  virtual ~TEditorModel();
 
-private:
-    Ui::EditorModelClass ui;
+  virtual void Translate(unsigned short type, char*pData, int size);
+
+  virtual void showGUI();
+  virtual void hideGUI();
+
+protected:
+
+  virtual void VisualEvent(QPaintEvent* pEvent);
+  virtual void SetupEvent();
+
+  virtual void mousePressEvent ( QMouseEvent * event );
+  virtual void mouseMoveEvent( QMouseEvent * event );
+  virtual void keyPressEvent ( QKeyEvent * event );
+
+
+  void OpenModelPath();
 };
 
 #endif // EDITORMODEL_H

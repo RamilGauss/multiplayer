@@ -36,6 +36,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "ManagerGUI.h"
 #include <QMessageBox>
+#include <QApplication>
 #include "GlobalParamsTank.h"
 #include "BaseGUI.h"
 
@@ -52,8 +53,8 @@ TManagerGUI::~TManagerGUI()
   Done();
 }
 //-----------------------------------------------------------------------
-void TManagerGUI::start(TClientTank*                   _pClient,
-                        TManagerObjectCommon*          _pGame)
+void TManagerGUI::startGUI(TClientTank*          _pClient,
+                           TManagerObjectCommon* _pGame)
 {
   pClient  = _pClient; 
   pGame    = _pGame;
@@ -61,11 +62,11 @@ void TManagerGUI::start(TClientTank*                   _pClient,
   startEvent();
 }
 //-----------------------------------------------------------------------
-void TManagerGUI::stop()
+void TManagerGUI::stopGUI()
 {
   Done();
   stopEvent();
-  _exit(0);
+  QApplication::exit();///close();//_exit(0);
 }
 //-----------------------------------------------------------------------
 void TManagerGUI::customEvent( QEvent * e  )
@@ -102,7 +103,7 @@ void TManagerGUI::AddFormInList(TBaseGUI* pForm, char* name)
   if(pCurrentForm==NULL)
     pCurrentForm = pForm;
 
-  pForm->setup(pClient,pGame);
+  pForm->SetupMOC_Client(pClient,pGame);
   //-----------------------------------------------------------------------------
   mMap[name] = pForm;
 
@@ -112,17 +113,10 @@ void TManagerGUI::AddFormInList(TBaseGUI* pForm, char* name)
 //---------------------------------------------------------------------------------------------
 void TManagerGUI::Done()
 {
-  std::map<std::string,void*>::iterator bit = mMap.begin();
-  std::map<std::string,void*>::iterator eit = mMap.end();
-  while(bit!=eit)
-  {
-    delete bit->second;
-    bit++;
-  }
   mMap.clear();
 
-  delete pClient;pClient=NULL;
-  delete pGame;pGame = NULL;
+  pClient=NULL;
+  pGame = NULL;
 
   stopEvent();
 }

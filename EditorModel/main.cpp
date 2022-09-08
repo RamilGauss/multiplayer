@@ -33,28 +33,50 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "DXUT.h"
+#include <QtGui/QApplication>
 
-#include <QtGui/QWidget> 
-#include <QtGui/QApplication> 
-#include <QtGui/QHBoxLayout> 
-#include "Direct3DWidget.h" 
 #include <QtCore/QTextCodec>
 #include <QWindowsStyle>
+#include "HiTimer.h"
+#include "NetSystem.h"
+#include "ErrorReg.h"
+#include <glib/gthread.h>
+#include "ManagerGUIEditorModel.h"
+#include "EditorModel.h"
+#include "ManagerGUI.h"
+#include "ManagerObjectCommonEditorModel.h"
 
 
-int main(int argc, char *argv[]) 
-{ 
+int main(int argc, char *argv[])
+{
+  g_thread_init( NULL );
+  err_Init();
+  errSTR_Init();
+  errSTD_Init();
+  errSDK_Init();
+  ht_Init();
+  ns_Init();
+
   QTextCodec::setCodecForTr(QTextCodec::codecForName("CP1251"));
 
-  QApplication xApplication(argc, argv);
-  //--------------------------------Initialization complete 
-  QWidget xMainWindow; 
-  TBaseGUI_DX* xScene = new TBaseGUI_DX(&xMainWindow); 
-  QHBoxLayout* xMainLayout = new QHBoxLayout; 
-  xMainLayout->addWidget(xScene); 
-  xMainWindow.setLayout(xMainLayout); 
-  //It is important to initialize the Direct3d after the widget was embedded to the window 
-  xMainWindow.show(); 
+  QApplication a(argc, argv);
+  //---------------------------------------
+  // менеджер двигателей
+  TManagerObjectCommon* pManagerObjectCommon = new TManagerObjectCommonEditorModel;
+  
+  TManagerGUIEditorModel* pManagerGUI = new TManagerGUIEditorModel;
+  pManagerGUI->startGUI(NULL,pManagerObjectCommon);
 
-  return xApplication.exec(); 
-} 
+  TEditorModel* pEditorModel = new TEditorModel;
+  pManagerGUI->AddFormInList(pEditorModel, "editorModel");
+
+  a.exec();
+
+  delete pManagerObjectCommon;
+  delete pManagerGUI;
+  delete pEditorModel;
+
+
+  return 0;
+}
