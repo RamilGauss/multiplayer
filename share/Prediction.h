@@ -20,6 +20,7 @@ public:
   void SetListTank();
   void LoadMap(unsigned short id_map);
   void InitState();
+  void SetState();
 
   void Calc();
 

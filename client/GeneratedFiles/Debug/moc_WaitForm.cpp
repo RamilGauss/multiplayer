@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'WaitForm.h'
 **
-** Created: Thu 10. May 15:07:38 2012
+** Created: Fri 11. May 16:30:20 2012
 **      by: The Qt Meta Object Compiler version 59 (Qt 4.4.3)
 **
 ** WARNING! All changes made in this file will be lost!

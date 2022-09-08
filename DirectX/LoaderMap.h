@@ -11,13 +11,13 @@ class TLoaderMap
 
   struct TDescObject
   {
-    unsigned int id;
-    nsStructDirectX::TStateObjectDX state;
+    unsigned short           id;
+    unsigned int             state;
     nsStructDirectX::TCoord3 coord;
-    nsStructDirectX::TOrient3 Orient;
+    nsStructDirectX::TOrient3 orient;
   };
 
-  std::list<TDescObject> mListObject;
+  std::list<TDescObject*> mListObject;
 
   TManagerObjectDX* mMO; 
   TManagerModel* mMM;

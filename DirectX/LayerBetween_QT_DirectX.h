@@ -6,7 +6,8 @@
 class TLayerBetween_QT_DirectX
 {
 
-  GThread* thread;
+  //GThread* thread;
+  void* handle;
 
   enum{eTimeWaitStop=50,
   };

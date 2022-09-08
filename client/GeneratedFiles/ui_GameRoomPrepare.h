@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'GameRoomPrepare.ui'
 **
-** Created: Thu 10. May 15:07:36 2012
+** Created: Fri 11. May 16:30:21 2012
 **      by: Qt User Interface Compiler version 4.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!

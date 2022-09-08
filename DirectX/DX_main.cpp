@@ -240,6 +240,7 @@ HRESULT CALLBACK OnD3D9CreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURF
 HRESULT TDX::OnD3D9CreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
                                     void* pUserContext )
 {
+  HRESULT hr;
   V_RETURN( g_DialogResourceManager.OnD3D9CreateDevice( pd3dDevice ) );
   V_RETURN( g_SettingsDlg.OnD3D9CreateDevice( pd3dDevice ) );
 
@@ -247,7 +248,8 @@ HRESULT TDX::OnD3D9CreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_
     OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE,
     L"Arial", &g_pFont9 ) );
 
-  return GlobalManagerDirectX.CreateDeviceEvent(pd3dDevice, pBackBufferSurfaceDesc, pUserContext);
+  GlobalManagerDirectX.CreateDeviceEvent(pd3dDevice, pBackBufferSurfaceDesc, pUserContext);
+  return S_OK;
 }
 //--------------------------------------------------------------------------------------
 // Create any D3D9 resources that won't live through a device reset (D3DPOOL_DEFAULT) 
@@ -271,15 +273,11 @@ HRESULT TDX::OnD3D9ResetDevice( IDirect3DDevice9* pd3dDevice,
   V_RETURN( g_SettingsDlg.OnD3D9ResetDevice() );
 
   if( g_pFont9 ) V_RETURN( g_pFont9->OnResetDevice() );
-  if( g_pEffect9 ) V_RETURN( g_pEffect9->OnResetDevice() );
-
+  
   V_RETURN( D3DXCreateSprite( pd3dDevice, &g_pSprite9 ) );
   g_pTxtHelper = new CDXUTTextHelper( g_pFont9, g_pSprite9, NULL, NULL, 15 );
 
-  // Setup the camera's projection parameters
-  float fAspectRatio = pBackBufferSurfaceDesc->Width / ( FLOAT )pBackBufferSurfaceDesc->Height;
-  GlobalManagerDirectX.getCamera()->SetProjParams( D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f );
-  GlobalManagerDirectX.getCamera()->SetWindow( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
+  GlobalManagerDirectX.ResetDevice(pd3dDevice,pBackBufferSurfaceDesc, pUserContext);
 
   g_HUD.SetLocation( pBackBufferSurfaceDesc->Width - 170, 0 );
   g_HUD.SetSize( 170, 170 );
@@ -446,7 +444,9 @@ void TDX::OnD3D9LostDevice( void* pUserContext )
   g_DialogResourceManager.OnD3D9LostDevice();
   g_SettingsDlg.OnD3D9LostDevice();
   if( g_pFont9 ) g_pFont9->OnLostDevice();
-  if( g_pEffect9 ) g_pEffect9->OnLostDevice();
+  
+  GlobalManagerDirectX.OnLostDevice();
+
   SAFE_RELEASE( g_pSprite9 );
   SAFE_DELETE( g_pTxtHelper );
 }
@@ -463,7 +463,8 @@ void TDX::OnD3D9DestroyDevice( void* pUserContext )
 {
   g_DialogResourceManager.OnD3D9DestroyDevice();
   g_SettingsDlg.OnD3D9DestroyDevice();
-  SAFE_RELEASE( g_pEffect9 );
+
+  GlobalManagerDirectX.OnDestroyDevice();
   SAFE_RELEASE( g_pFont9 );
 }
 //--------------------------------------------------------------------------------------

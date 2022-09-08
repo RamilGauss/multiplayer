@@ -8,16 +8,18 @@
 #include "ManagerModel.h"
 #include "DXUT.h"
 #include "SDKmisc.h"
+#include "ObjectDX.h"
 
 #define LOG_DX
 //#define LOG_DX_STREAM
+
+using namespace nsStructDirectX;
 
 TManagerDirectX GlobalManagerDirectX;
 
 TManagerDirectX::TManagerDirectX():
 mLoaderMap(&GlobalManagerObjectDX,&GlobalManagerModel)
 {
-  mEffect                  = NULL;
   mLastTimeSendMouseStream = 0;
   flgNeedLoadModel         = true;
 }
@@ -57,6 +59,7 @@ void TManagerDirectX::Refresh()
   // изменить состояние в соответствии со стримом от сервера
   if(getStream)
     SetStateByTypeStream();
+
 #ifdef LOG_DX_STREAM
   if(getPacket)
     GlobalLoggerDX.WriteF_time("Получен пакет.\n");
@@ -69,7 +72,10 @@ void TManagerDirectX::Refresh()
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::Calc()
 {
-
+  // заполнить предсказатель данными
+  mPrediction.SetState();
+  // расчет
+  mPrediction.Calc();
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::Optimize()
@@ -79,37 +85,26 @@ void TManagerDirectX::Optimize()
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::Render(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext)
 {
-
   HRESULT hr;
-  D3DXMATRIXA16 mWorld;
   D3DXMATRIXA16 mView;
   D3DXMATRIXA16 mProj;
-  D3DXMATRIXA16 mWorldViewProjection;
 
   // Clear the render target and the zbuffer 
   V( pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB( 0, 45, 50, 170 ), 1.0f, 0 ) );
 
+  mProj = *mCamera.GetProjMatrix();
+  mView = *mCamera.GetViewMatrix();
+
   // Render the scene
   if( SUCCEEDED( pd3dDevice->BeginScene() ) )
   {
-    // Get the projection & view matrix from the camera class
-    mWorld = *mCamera.GetWorldMatrix();
-    mProj = *mCamera.GetProjMatrix();
-    mView = *mCamera.GetViewMatrix();
-
-    mWorldViewProjection = mWorld * mView * mProj;
-    // Update the effect's variables.  Instead of using strings, it would 
-    // be more efficient to cache a handle to the parameter by calling 
-    // ID3DXEffect::GetParameterByName
-    V( mEffect->SetMatrix( hmWorldViewProjection, &mWorldViewProjection ) );
-    V( mEffect->SetMatrix( hmWorld, &mWorld ) );
-    V( mEffect->SetFloat( hfTime, ( float )fTime ) );
-#if 0
-    DXUT_BeginPerfEvent( DXUT_PERFEVENTCOLOR, L"HUD / Stats" ); // These events are to help PIX identify what the code is doing
-    V( g_HUD.OnRender( fElapsedTime ) );
-    V( g_SampleUI.OnRender( fElapsedTime ) );
-    DXUT_EndPerfEvent();
-#endif
+    std::list<TObjectDX*>::iterator it = mListReadyRender.begin();
+    std::list<TObjectDX*>::iterator eit = mListReadyRender.end();
+    while(it!=eit)
+    {
+      (*it)->Draw(&mView,&mProj);
+      it++;
+    }
     V( pd3dDevice->EndScene() );
   }
 }
@@ -122,7 +117,7 @@ void* ThreadLoadMap(void* p)
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::ThreadLoadMap()
 {
-  // ождаться загрузки моделей
+  // дождаться загрузки моделей
   while(flgNeedLoadModel)
   {
     ht_msleep(eWaitLoadModel);
@@ -171,7 +166,7 @@ void TManagerDirectX::MouseEvent(double fTime, float fElapsedTime, void* pUserCo
     D3DXVECTOR3 view = *mCamera.GetLookAtPt();
     //view.y
 
-    GlobalClientTank.SendOrientAim(0,0,1);
+    GlobalClientTank.SendOrientAim(0,0,1);//###
     mLastTimeSendMouseStream = now_ms;
   }
 }
@@ -207,7 +202,7 @@ void TManagerDirectX::SetStateByTypeStream()
     }
 }
 //--------------------------------------------------------------------------------------------------------
-HRESULT TManagerDirectX::CreateDeviceEvent(IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
+void TManagerDirectX::CreateDeviceEvent(IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
                                            void* pUserContext )
 {
   HRESULT hr;
@@ -231,7 +226,7 @@ HRESULT TManagerDirectX::CreateDeviceEvent(IDirect3DDevice9* pd3dDevice, const D
 #endif
 
   // загрузка меша, текстур и шейдеров
-  V_RETURN(GlobalManagerModel.Load(pd3dDevice,pBackBufferSurfaceDesc,pUserContext));
+  GlobalManagerModel.Load(pd3dDevice,pBackBufferSurfaceDesc,pUserContext);
   flgNeedLoadModel = false;
 
 #ifdef LOG_DX
@@ -243,6 +238,27 @@ HRESULT TManagerDirectX::CreateDeviceEvent(IDirect3DDevice9* pd3dDevice, const D
   D3DXVECTOR3 vecAt ( 0.0f, 0.0f, -0.0f );
 
   GlobalManagerDirectX.getCamera()->SetViewParams( &vecEye, &vecAt );
-  return S_OK;
+}
+//--------------------------------------------------------------------------------------------------------
+void TManagerDirectX::ResetDevice(IDirect3DDevice9* pd3dDevice,
+                                     const D3DSURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
+{
+  HRESULT hr;
+  GlobalManagerModel.ResetDevice();
+  
+  // Setup the camera's projection parameters
+  float fAspectRatio = pBackBufferSurfaceDesc->Width / ( FLOAT )pBackBufferSurfaceDesc->Height;
+  getCamera()->SetProjParams( D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f );
+  getCamera()->SetWindow( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
+}
+//--------------------------------------------------------------------------------------------------------
+void TManagerDirectX::OnLostDevice()
+{
+  GlobalManagerModel.OnLostDevice();
+}
+//--------------------------------------------------------------------------------------------------------
+void TManagerDirectX::OnDestroyDevice()
+{
+  GlobalManagerModel.OnDestroyDevice();
 }
 //--------------------------------------------------------------------------------------------------------

@@ -1235,6 +1235,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\DirectX\EffectDX.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\DirectX\LayerBetween_QT_DirectX.cpp"
 					>
 				</File>
@@ -1243,7 +1247,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\LoaderObjectDX.cpp"
+					RelativePath="..\DirectX\LoaderModelDX.cpp"
 					>
 				</File>
 				<File
@@ -1267,6 +1271,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\DirectX\ModelDX.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\DirectX\ObjectDX.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\DirectX\SoundDX.cpp"
 					>
 				</File>
@@ -1283,6 +1295,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\DirectX\EffectDX.h"
+					>
+				</File>
+				<File
 					RelativePath="..\DirectX\LayerBetween_QT_DirectX.h"
 					>
 				</File>
@@ -1291,7 +1307,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\DirectX\LoaderObjectDX.h"
+					RelativePath="..\DirectX\LoaderModelDX.h"
 					>
 				</File>
 				<File
@@ -1312,6 +1328,14 @@
 				</File>
 				<File
 					RelativePath="..\DirectX\ManagerShader.h"
+					>
+				</File>
+				<File
+					RelativePath="..\DirectX\ModelDX.h"
+					>
+				</File>
+				<File
+					RelativePath="..\DirectX\ObjectDX.h"
 					>
 				</File>
 				<File

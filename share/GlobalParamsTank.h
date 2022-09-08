@@ -35,4 +35,14 @@ QMessageBox::warning( NULL, QObject::tr(NAME_TITTLE),sError );
 #define QEVENT_STREAM             (QEvent::Type)(QEvent::User+2)
 #define QEVENT_DISCONNECT         (QEvent::Type)(QEvent::User+3)
 
+
+#define PATH_LIST_MODELS "..\\model\\listModel.xml"
+// перечень файлов
+// 1 Файл описания: ID, комментарии, .\main.mod
+// 2 Файл шейдера                    .\shader.mod 
+// 3 Файл примитивов                 .\primitive.mod
+// 4 Файл текстур                    .\texture.mod
+// 5 Файл примитивов                 .\mod.dds  
+
+
 #endif

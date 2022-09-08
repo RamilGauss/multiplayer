@@ -9,12 +9,16 @@
 #include "StructDirectX.h"
 #include "LoaderMap.h"
 #include "DXUTcamera.h"
+#include "Prediction.h"
 
 class TDX;
 struct IDirect3DDevice9;
+class TObjectDX;
 
 class TManagerDirectX
 {
+
+  TPrediction mPrediction;
 
   enum{
       eSizeBufferStream = 4000,
@@ -44,7 +48,7 @@ class TManagerDirectX
   volatile bool flgNeedSendCorrectPacket;
 
   // список на отрисовку
-  std::list<nsStructDirectX::TObjectDX*> mListReadyRender;
+  std::list<TObjectDX*> mListReadyRender;
 
   enum{
     eLoadMap   = 0,// или клиентской или серверной
@@ -60,7 +64,6 @@ class TManagerDirectX
 
   TLoaderMap         mLoaderMap;
   CModelViewerCamera mCamera;                // A model viewing camera
-  ID3DXEffect*       mEffect;
 
   D3DXHANDLE         hmWorldViewProjection;
   D3DXHANDLE         hmWorld;
@@ -72,7 +75,6 @@ public:
   ~TManagerDirectX();
 
   CModelViewerCamera* getCamera(){return &mCamera;}
-  ID3DXEffect*        getEffect(){return mEffect;}
 
   D3DXHANDLE* getWorldViewProjection(){return &hmWorldViewProjection;}
   D3DXHANDLE* getWorld(){return &hmWorld;}
@@ -87,9 +89,12 @@ public:
   // вызывается из DXUT либо на отрисовку либо для очистки буфера
   void Refresh();
 
-  HRESULT CreateDeviceEvent(IDirect3DDevice9* pd3dDevice, 
+  void CreateDeviceEvent(IDirect3DDevice9* pd3dDevice, 
     const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
-
+  void ResetDevice(IDirect3DDevice9* pd3dDevice,
+    const D3DSURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext );
+  void OnLostDevice();
+  void OnDestroyDevice();
 
 protected:
 

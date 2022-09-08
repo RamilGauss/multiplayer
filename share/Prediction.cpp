@@ -35,3 +35,8 @@ void TPrediction::SetKeyEvent(TTank*pTank, TPacketServer* pDefPacket)
   pTank->mTimeRefreshPushButton = pDefPacket->ms_time;
 }
 //--------------------------------------------------------------------
+void TPrediction::SetState()
+{
+
+}
+//--------------------------------------------------------------------
