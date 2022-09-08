@@ -184,23 +184,26 @@ void TRoom::WorkFight()
       WriteTransportStream(pClient,&s_coord);
   }
   //------------------------------------------------------------------------------------
-  std::list<TPrediction::TEvent*>::iterator it = mPrediction.mListFreshEvent.begin();
-  std::list<TPrediction::TEvent*>::iterator eit = mPrediction.mListFreshEvent.end();
-  TA_Event_In_Fight event_packet;
-  event_packet.setCnt(mPrediction.mListFreshEvent.size());
-  while(it!=eit)// формирование пакета
+  if(mPrediction.mListFreshEvent.size())
   {
-    //event_packet.setID((*it)->id);
-    //event_packet.setID((*it)->state);
-    it++;
-  }
-  //------------------------------------------------------------------------------------
-  for(int i = 0 ; i < cnt ; i++)
-  {
-    TTank* pTank = (TTank*)mArrTank.Get(i);
-    TClient* pClient = pTank->GetMasterClient();
-    if(pClient->GetCurRoom()==this)// уменьшить трафик
-      WriteTransportAnswer(pClient,&event_packet);
+    std::list<TPrediction::TEvent*>::iterator it = mPrediction.mListFreshEvent.begin();
+    std::list<TPrediction::TEvent*>::iterator eit = mPrediction.mListFreshEvent.end();
+    TA_Event_In_Fight event_packet;
+    event_packet.setCnt(mPrediction.mListFreshEvent.size());
+    while(it!=eit)// формирование пакета
+    {
+      //event_packet.setID((*it)->id);
+      //event_packet.setID((*it)->state);
+      it++;
+    }
+    //------------------------------------------------------------------------------------
+    for(int i = 0 ; i < cnt ; i++)
+    {
+      TTank* pTank = (TTank*)mArrTank.Get(i);
+      TClient* pClient = pTank->GetMasterClient();
+      if(pClient->GetCurRoom()==this)// уменьшить трафик
+        WriteTransportAnswer(pClient,&event_packet);
+    }
   }
 }
 //----------------------------------------------------------------------------------
@@ -334,12 +337,12 @@ void TRoom::SendInitCoordTank(TClient* pClient)
   {
     TTank* pTank = (TTank*)mArrTank.Get(i);
     packet.setID(i,i);
-    packet.setX(i,pTank->mCoordX);
-    packet.setY(i,pTank->mCoordY);  
-    packet.setZ(i,pTank->mCoordZ);
-    packet.setXV(i,pTank->mCoordX_Vector);
-    packet.setYV(i,pTank->mCoordY_Vector);
-    packet.setZV(i,pTank->mCoordZ_Vector);
+    packet.setX(i,pTank->mCoord.x);
+    packet.setY(i,pTank->mCoord.y);  
+    packet.setZ(i,pTank->mCoord.z);
+    packet.setXV(i,pTank->mOrient.vx);
+    packet.setYV(i,pTank->mOrient.vy);
+    packet.setZV(i,pTank->mOrient.vz);
   }
   WriteTransportAnswer(pClient,&packet);
 }
@@ -379,5 +382,27 @@ void TRoom::SendStateObject(TClient* pClient)
 void TRoom::InitPositionTank()
 {
   mID_map;
+}
+//----------------------------------------------------------------------------------
+// отладка
+int TRoom::GetTimeRest_sec()
+{
+  if(mState==eFight)
+    return DURATION_FIGHT_MS/1000 - (mNow_MS-mTimeAfterCountDown)/1000;
+  return 0;
+}
+//----------------------------------------------------------------------------------
+int TRoom::GetActiveClient()
+{
+  int cntActive = 0;
+  int cnt = mArrTank.Count();
+  for(int i = 0 ; i < cnt ; i++ )
+  {
+    TTank* pTank = (TTank*)mArrTank.Get(i);
+    if(pTank)
+    if(pTank->GetMasterClient()->GetCurRoom()==this)
+      cntActive++;
+  }
+  return cntActive;
 }
 //----------------------------------------------------------------------------------

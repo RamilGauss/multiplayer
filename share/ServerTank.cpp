@@ -505,20 +505,44 @@ void ServerTank::WorkRequest()
 {
 	if(flgNeedRequest==false) return;
 
-	int cnt = mArrClients.Count();
+  TAnswerRequest* pAnswerRequest = new TAnswerRequest;
 
-	TDefClient* pArr = new TDefClient[cnt];
-  for(int i = 0 ; i < cnt ; i++ )
+	int cntClient = mArrClients.Count();
+	TDefClient* pArrClient = new TDefClient[cntClient];
+  for(int i = 0 ; i < cntClient ; i++ )
   {
     TClient* pClient = (TClient*)mArrClients.Get(i);
-    strcpy(pArr[i].name,pClient->sNick);
-    pArr[i].ip            = pClient->ip;
-    pArr[i].port          = pClient->port;
-    pArr[i].state         = pClient->state;
-    pArr[i].flgDisconnect = pClient->flgDisconnect;
+    strcpy(pArrClient[i].name,pClient->sNick);
+    pArrClient[i].ip            = pClient->ip;
+    pArrClient[i].port          = pClient->port;
+    pArrClient[i].state         = pClient->state;
+    pArrClient[i].flgDisconnect = pClient->flgDisconnect;
   }
-	
-  mCallBackRequestListClient.Notify(pArr,cnt*sizeof(TDefClient));
+  //---------------------------------------------------------	
+  int cntRoom = mListRoom.GetCnt();
+  TDefRoom* pArrRoom = new TDefRoom[cntRoom];
+  TRoom** ppRoom = mListRoom.GetFirst();
+  int i = 0;
+  while(ppRoom)
+  {
+    TRoom** ppNext = mListRoom.Next(ppRoom);
+    TRoom * pRoom = *ppRoom;
+    pArrRoom[i].time_rest       = pRoom->GetTimeRest_sec();
+    pArrRoom[i].cntActiveClient = pRoom->GetActiveClient();
+    ppRoom = ppNext;
+    i++;
+  }
+  //---------------------------------------------------------	
+  //mCallBackRequestListClient.Notify(pArrClient,cntClient*sizeof(TDefClient));
+  
+  pAnswerRequest->mArrClient = pArrClient;
+  pAnswerRequest->cntClient  = cntClient;
+
+  pAnswerRequest->mArrRoom = pArrRoom;
+  pAnswerRequest->cntRoom  = cntRoom;
+
+  mCallBackRequestListClient.Notify(pAnswerRequest,sizeof(TAnswerRequest));
+
   flgNeedRequest = false;
 }
 //----------------------------------------------------------------------------------
@@ -552,7 +576,7 @@ bool ServerTank::SetListTank(TA_Get_List_Tank *answerListTank, unsigned int ip, 
   for(int i = 0 ; i < cnt ; i++)
   {
     TTank* pTank = (TTank*)pClient->mGarage.mArrTanks.Get(i);
-    int typeTank = pTank->GetID();
+    int typeTank = pTank->GetTypeTank();
     answerListTank->setTypeTank(i,typeTank);
 		answerListTank->setFlgBlockTank(i,pTank->pRoom?1:0);
   }
@@ -799,7 +823,7 @@ void ServerTank::SendPacket_A_InFight(TClient* pClient)
     answerFight.setPointerStrNick(i,pTank->GetMasterClient()->sNick);
     answerFight.setGunType(i,pTank->mGun);
     answerFight.setTowerType(i,pTank->mTower);
-    answerFight.setID_Tank(i,pTank->GetID());
+    answerFight.setID_Tank(i,pTank->GetTypeTank());
   }
   //--------------------------------------
   WriteTransport(pClient,&answerFight);

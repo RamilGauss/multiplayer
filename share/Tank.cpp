@@ -3,20 +3,26 @@
 
 using namespace nsServerStruct;
 
-TTank::TTank(TClient* pClient)
+TTank::TTank(TClient* pClient):
+TObjectPrediction(eTank)
 {
   pMasterClient = pClient;
   pRoom = NULL;
 }
 //------------------------------------------------------------------------
-void TTank::SetID(int mid)
+TTank::~TTank()
 {
-  mID=mid;
+
 }
 //------------------------------------------------------------------------
-int TTank::GetID()
+void TTank::SetTypeTank(unsigned short typeTank)
 {
-  return mID;
+  mTypeTank = typeTank;
+}
+//------------------------------------------------------------------------
+unsigned short TTank::GetTypeTank()
+{
+  return mTypeTank;
 }
 //------------------------------------------------------------------------
 TClient* TTank::GetMasterClient()

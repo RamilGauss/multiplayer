@@ -3,7 +3,7 @@
 #include "LoaderModelDX.h"
 #include "LogerDX.h"
 
-using namespace nsStructDirectX;
+using namespace nsStruct3D;
 
 TModelDX::TModelDX()
 {
@@ -83,9 +83,13 @@ void TModelDX::Draw( TEffectDX* pEffect)
   V( pEffect->End() );
 }
 //----------------------------------------------------------------------------------------------------
-HRESULT TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath/*путь к файлам модели*/)
+void TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath/*путь к файлам модели*/)
 {
-  Load(strPath);// загрузка данных примитивов, текстур и индексов.
+  if(Load(strPath)==false) 
+  {
+    GlobalLoggerDX.WriteF_time("Ќе удалось проинициализировать модель: %s.\n",strPath);
+    return;// загрузка данных примитивов, текстур и индексов.
+  }
 
   LPCWSTR strFilenameShader = NULL;
   HRESULT hr;
@@ -93,40 +97,39 @@ HRESULT TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath/*путь к фай
   DWORD dwShaderFlags = D3DXFX_NOT_CLONEABLE;
 
   // прочитать эффект из файла
-  V_RETURN( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, strFilenameShader ) );
+  V( DXUTFindDXSDKMediaFileCch( str, MAX_PATH, strFilenameShader ) );
 
   for(int i = 0 ; i < mCntEffectVisual ; i++)
   {
     ID3DXEffect* pEffect;
     // If this fails, there should be debug output as to 
     // they the .fx file failed to compile
-    V_RETURN( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
+    V( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
       NULL, &pEffect, NULL ) );
     mArrEffect[i].lod0.mArrEffectDX_normal.p = pEffect;
     mArrEffect[i].lod0.mArrEffectDX_normal.Init(i*4+0);
     //-----------------------------------------------------------------------------
     // If this fails, there should be debug output as to 
     // they the .fx file failed to compile
-    V_RETURN( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
+    V( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
       NULL, &pEffect, NULL ) );
     mArrEffect[i].lod0.mArrEffectDX_damage.p = pEffect;
     mArrEffect[i].lod0.mArrEffectDX_damage.Init(i*4+1);
     //-----------------------------------------------------------------------------
     // If this fails, there should be debug output as to 
     // they the .fx file failed to compile
-    V_RETURN( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
+    V( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
       NULL, &pEffect, NULL ) );
     mArrEffect[i].lod1.mArrEffectDX_normal.p = pEffect;
     mArrEffect[i].lod1.mArrEffectDX_normal.Init(i*4+2);
     //-----------------------------------------------------------------------------
     // If this fails, there should be debug output as to 
     // they the .fx file failed to compile
-    V_RETURN( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
+    V( D3DXCreateEffectFromFile( pd3dDevice, str, NULL, NULL, dwShaderFlags,
       NULL, &pEffect, NULL ) );
     mArrEffect[i].lod1.mArrEffectDX_damage.p = pEffect;
     mArrEffect[i].lod1.mArrEffectDX_damage.Init(i*4+3);
   }
-  return S_OK;
 }
 //----------------------------------------------------------------------------------------------------
 float TModelDX::GetDist(D3DXMATRIXA16* mWorld, D3DXMATRIXA16* mView)
@@ -175,7 +178,7 @@ void TModelDX::ResetDevice()
 bool TModelDX::Load(LPCWSTR strFilenameData)
 {
   TLoaderModelDX loadObj;
-  if(loadObj.Load(strFilenameData))
+  if(loadObj.Load(strFilenameData)==false)
   {
     GlobalLoggerDX.WriteF_time("Ќе удалось загрузить модель %s.\n",strFilenameData);
     return false;

@@ -16,8 +16,8 @@ public:
 
   void Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj);
 
-  void SetCoord(nsStructDirectX::TCoord3 coord);
-  void SetOrient(nsStructDirectX::TOrient3 orient);
+  void SetCoord(nsStruct3D::TCoord3 coord);
+  void SetOrient(nsStruct3D::TOrient3 orient);
   void SetState(unsigned int state);
 
 

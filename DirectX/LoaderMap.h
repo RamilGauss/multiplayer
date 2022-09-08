@@ -1,7 +1,7 @@
 #ifndef LoaderMapH
 #define LoaderMapH
 
-#include "StructDirectX.h"
+#include "Struct3D.h"
 #include <list>
 class TManagerObjectDX;
 class TManagerModel;
@@ -11,10 +11,10 @@ class TLoaderMap
 
   struct TDescObject
   {
-    unsigned short           id;
-    unsigned int             state;
-    nsStructDirectX::TCoord3 coord;
-    nsStructDirectX::TOrient3 orient;
+    unsigned short       id;
+    unsigned int         state;
+    nsStruct3D::TCoord3  coord;
+    nsStruct3D::TOrient3 orient;
   };
 
   std::list<TDescObject*> mListObject;

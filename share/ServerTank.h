@@ -57,6 +57,7 @@ class ServerTank
 
 public:
 
+  // клиенты
 	struct TDefClient
 	{
 		char name[nsServerStruct::TClient::eMaxLenNick];
@@ -65,6 +66,36 @@ public:
 		int state;
     bool flgDisconnect;
 	};
+  // комнаты
+  struct TDefRoom
+  {
+    guint32 time_rest;
+    int cntActiveClient;
+  };
+
+  struct TAnswerRequest
+  {
+    int cntClient;
+    TDefClient* mArrClient;
+    int cntRoom;
+    TDefRoom*   mArrRoom;
+    TAnswerRequest()
+    {
+      cntClient = 0;
+      mArrClient = NULL;
+      cntRoom = 0;
+      mArrRoom = NULL;
+    }
+    ~TAnswerRequest()
+    {
+      cntClient = 0;
+      delete mArrClient;
+      mArrClient = NULL;
+      cntRoom = 0;
+      delete mArrRoom;
+      mArrRoom = NULL;
+    }
+  };
 
 	ServerTank(int numNetWork = 0);
 	~ServerTank();

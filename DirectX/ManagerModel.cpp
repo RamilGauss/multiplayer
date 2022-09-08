@@ -5,6 +5,9 @@
 #include "LoadFromHDD.h"
 #include "LogerDX.h"
 #include "BL_Debug.h"
+#include "LoaderListModel.h"
+#include "WinChar.h"
+
 
 TManagerModel GlobalManagerModel;
 
@@ -22,7 +25,7 @@ TManagerModel::~TManagerModel()
 void TManagerModel::Load(IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
              void* pUserContext )
 {
-  if(LoadListPath())
+  if(LoadListPath()==false)
   {
     GlobalLoggerDX.WriteF_time("Ќе удалось загрузить список моделей.\n");
     BL_FIX_BUG();
@@ -32,7 +35,9 @@ void TManagerModel::Load(IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pB
   for(int i = 0 ; i < mCntPathModel ; i++)
   {
     TModelDX* pModel = new TModelDX();
-    pModel->Init(pd3dDevice,mArrPathModel[i]);
+    WCHAR* p = A2W_(mArrPathModel[i]);
+    pModel->Init(pd3dDevice,p);
+    free(p);
     mArrModel.Add(pModel);
   }
 }
@@ -70,13 +75,15 @@ void TManagerModel::OnDestroyDevice()
   }
 }
 //--------------------------------------------------------------------------------------
-bool TManagerModel::LoadListPath()//###
+bool TManagerModel::LoadListPath()
 {
-  TLoadFromHDD lfHDD;
-  if(lfHDD.ReOpen(PATH_LIST_MODELS)==false)
+  TLoaderListModel loader;
+  if(loader.Open(PATH_LIST_MODELS)==false)
     return false;
-  
-  //lfHDD.Read()
+
+  if(loader.Load( &mArrPathModel, mCntPathModel)==false)
+    return false;
+
   return true;
 }
 //--------------------------------------------------------------------------------------

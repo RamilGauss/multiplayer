@@ -20,8 +20,7 @@ ServerForm::ServerForm(QWidget *parent)
 {
 	mServer.registerRequest(CallBackEventServerForm);
 
-	mCntClient = 0;
-	pArrClient = NULL;
+	pArr = NULL;
 
 	pServerForm = this;
 
@@ -33,9 +32,13 @@ ServerForm::ServerForm(QWidget *parent)
   QTimer * timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(sl_RequestArrClient()));
 	timer->start(eTime);
-  ui.table->clear();
-  ui.table->setRowCount(0);
-  
+  ui.tableClient->clear();
+  ui.tableClient->setRowCount(0);
+
+  ui.tableRoom->clear();
+  ui.tableRoom->setRowCount(0);
+
+
   mServer.start();
 	RefreshTable();
 }
@@ -58,12 +61,48 @@ void ServerForm::customEvent( QEvent * event  )
 //---------------------------------------------------------------------------------------------
 void ServerForm::RefreshTable()
 {
-	ui.table->setRowCount(mCntClient);
+  if(pArr)
+  {
+    ui.tableClient->setRowCount(pArr->cntClient);
+    ui.tableRoom->setRowCount(pArr->cntRoom);
+  }
+  else
+  {
+    ui.tableClient->setRowCount(0);
+    ui.tableRoom->setRowCount(0);
+  }
 
-	if(pArrClient==NULL) return;
-	
-	for(int i = 0 ; i < mCntClient ; i++)
-	{
+	if(pArr==NULL) return;
+  
+  RefreshTableClient();
+  RefreshTableRoom();
+}
+//---------------------------------------------------------------------------------------------
+void ServerForm::setArrClient(void* data,int size)
+{
+	Done();
+	if(data)
+		pArr = (ServerTank::TAnswerRequest*)data;
+}
+//---------------------------------------------------------------------------------------------
+void ServerForm::Done()
+{
+	delete pArr;
+	pArr = NULL;
+}
+//---------------------------------------------------------------------------------------------
+void ServerForm::sl_RequestArrClient()
+{
+	mServer.requestListClient();
+}
+//---------------------------------------------------------------------------------------------
+void ServerForm::RefreshTableClient()
+{
+  ServerTank::TDefClient * pArrClient = pArr->mArrClient;
+  int cntClient                       = pArr->cntClient;
+
+  for(int i = 0 ; i < cntClient ; i++)
+  {
     // имя 
     QTableWidgetItem* item = new QTableWidgetItem;
     item->setText(tr(pArrClient[i].name));
@@ -72,56 +111,57 @@ void ServerForm::RefreshTable()
     else
       item->setForeground(QBrush(QColor(0,0xff,0)));
 
-    ui.table->setItem(i, 0, item);
+    ui.tableClient->setItem(i, 0, item);
 
     // состояние
     QString sState;
     switch(pArrClient[i].state)
     {
-      case nsServerStruct::TClient::eGarage:
-        sState = tr("Гараж");
-        break;
-      case nsServerStruct::TClient::eWait:
-        sState = tr("Ждет");
-        break;
-      case nsServerStruct::TClient::eFight:
-        sState = tr("Бой");
-        break;
-      default:BL_FIX_BUG();;
+    case nsServerStruct::TClient::eGarage:
+      sState = tr("Гараж");
+      break;
+    case nsServerStruct::TClient::eWait:
+      sState = tr("Ждет");
+      break;
+    case nsServerStruct::TClient::eFight:
+      sState = tr("Бой");
+      break;
+    default:BL_FIX_BUG();;
     }
     item = new QTableWidgetItem();
-		item->setText(sState); 
-    ui.table->setItem(i, 1, item);
+    item->setText(sState); 
+    ui.tableClient->setItem(i, 1, item);
     // ip:port
     char sIP_Port[100];
     sprintf(sIP_Port,"%s:%u",ns_str_addr(pArrClient[i].ip),pArrClient[i].port);
     QString strIP_Port = tr(sIP_Port);
     item = new QTableWidgetItem();
     item->setText(strIP_Port); 
-    ui.table->setItem(i, 2, item);
-	}
-	ui.table->resizeColumnsToContents();
+    ui.tableClient->setItem(i, 2, item);
+  }
+  ui.tableClient->resizeColumnsToContents();
 }
-//---------------------------------------------------------------------------------------------
-void ServerForm::setArrClient(void* data,int size)
+//-------------------------------------------------------------------------------------------
+void ServerForm::RefreshTableRoom()
 {
-	Done();
-	if(data)
-	{
-		pArrClient = (ServerTank::TDefClient*)data;
-		mCntClient = size/sizeof(ServerTank::TDefClient);
-	}
+  ServerTank::TDefRoom * pArrRoom = pArr->mArrRoom;
+  int cntRoom                     = pArr->cntRoom;
+
+  for(int i = 0 ; i < cntRoom ; i++)
+  {
+    // имя 
+    QTableWidgetItem* item = new QTableWidgetItem;
+    char s_time_rest[100];
+    sprintf(s_time_rest,"%u:%u",pArrRoom[i].time_rest/60,pArrRoom[i].time_rest%60);
+    item->setText(tr(s_time_rest));
+    ui.tableRoom->setItem(i, 0, item);
+    //-------------------------------------------------------
+    item = new QTableWidgetItem();
+    char s_active[100];
+    sprintf(s_active,"%d",pArrRoom[i].cntActiveClient);
+    item->setText(tr(s_active)); 
+    ui.tableRoom->setItem(i, 1, item);
+  }
+  ui.tableRoom->resizeColumnsToContents();
 }
-//---------------------------------------------------------------------------------------------
-void ServerForm::Done()
-{
-	delete pArrClient;
-	pArrClient = NULL;
-	mCntClient = 0;
-}
-//---------------------------------------------------------------------------------------------
-void ServerForm::sl_RequestArrClient()
-{
-	mServer.requestListClient();
-}
-//---------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------

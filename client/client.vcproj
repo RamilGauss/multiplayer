@@ -639,6 +639,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\share\GlobalParamsTank.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\share\LoadFromHDD.cpp"
 					>
 				</File>
@@ -672,6 +676,10 @@
 				</File>
 				<File
 					RelativePath="..\share\UdpDevice.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\share\WinChar.cpp"
 					>
 				</File>
 			</Filter>
@@ -763,6 +771,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\share\Struct3D.h"
+					>
+				</File>
+				<File
 					RelativePath="..\share\Testing.h"
 					>
 				</File>
@@ -776,6 +788,10 @@
 				</File>
 				<File
 					RelativePath="..\share\UdpDevice.h"
+					>
+				</File>
+				<File
+					RelativePath="..\share\WinChar.h"
 					>
 				</File>
 			</Filter>
@@ -1243,6 +1259,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\DirectX\LoaderListModel.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\DirectX\LoaderMap.cpp"
 					>
 				</File>
@@ -1303,6 +1323,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\DirectX\LoaderListModel.h"
+					>
+				</File>
+				<File
 					RelativePath="..\DirectX\LoaderMap.h"
 					>
 				</File>
@@ -1340,10 +1364,6 @@
 				</File>
 				<File
 					RelativePath="..\DirectX\SoundDX.h"
-					>
-				</File>
-				<File
-					RelativePath="..\DirectX\StructDirectX.h"
 					>
 				</File>
 			</Filter>

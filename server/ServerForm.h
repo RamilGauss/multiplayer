@@ -12,8 +12,7 @@ class ServerForm : public QWidget
 
 		enum{eTime=5000};
 
-	int                     mCntClient;
-	ServerTank::TDefClient* pArrClient;
+	ServerTank::TAnswerRequest* pArr;
 
 protected:
 	ServerTank mServer;
@@ -33,6 +32,9 @@ protected:
 	void setArrClient(void* data,int size);
 	void Done();
 	void RefreshTable();	
+
+  void RefreshTableClient();
+  void RefreshTableRoom();
 
 private:
   Ui::ServerFormClass ui;

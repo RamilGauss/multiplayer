@@ -3,11 +3,14 @@
 
 #include "ServerStruct.h"
 #include "TObject.h"
+#include "ObjectPrediction.h"
 
-class TTank : public TObject
+//------------------------------------------------------------------------------
+class TTank : public TObject/*для хранения в массиве*/,
+              public TObjectPrediction
 {
 
-  unsigned short mID;
+  unsigned short mTypeTank;
   nsServerStruct::TClient* pMasterClient;
 
 public:
@@ -58,10 +61,12 @@ public:
   TRoom* pRoom;
   
   TTank(nsServerStruct::TClient* pClient);
+  virtual ~TTank();
+
   void LoadPropertyFromIni();
 
-  void SetID(int type);
-  int GetID();
+  void SetTypeTank(unsigned short type);
+  unsigned short GetTypeTank();
 
   nsServerStruct::TClient* GetMasterClient();
 
@@ -140,15 +145,15 @@ public:
   guint32 mTimeRefreshOrientAim;
 
   // параметры перемещения
-  float mCoordX;//координата центра танка
-  float mCoordY;
-  float mCoordZ;
+  //float mCoordX;//координата центра танка
+  //float mCoordY;
+  //float mCoordZ;
 
   float mSpeed;
 
-  float mCoordX_Vector;// вектор направления (ориентация)
-  float mCoordY_Vector;
-  float mCoordZ_Vector;
+  //float mCoordX_Vector;// вектор направления (ориентация)
+  //float mCoordY_Vector;
+  //float mCoordZ_Vector;
 
   // маска нажатых клавиш
   guint32 mTimeRefreshPushButton;// когда последний раз менялась маска

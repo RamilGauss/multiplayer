@@ -250,8 +250,8 @@ void TManagerGUI::AnswerFromServer_Enter(unsigned char mCodeAnswer)
       //OpenGameForm();
       break;
  	  case TA_Try_Connect_To_Server::eOldVersion:
-  		 sError = tr("Обновите клиент.Старая версия.");
-  		 break;
+  		sError = tr("Обновите клиент.Старая версия.");
+  		break;
   	case TA_Try_Connect_To_Server::eWasConnect:
   		sError = tr("Повторная попытка соединения.");
   		break;
@@ -260,6 +260,7 @@ void TManagerGUI::AnswerFromServer_Enter(unsigned char mCodeAnswer)
   		break;
     case TA_Try_Connect_To_Server::eOverloadServer:
       sError = tr("Сервер перегружен. Попытайтесь зайти попозже.");
+      break;
   	default:BL_FIX_BUG();
   }
   if(sError.length())

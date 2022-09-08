@@ -6,7 +6,7 @@
 
 #include "SoundDX.h"
 #include <list>
-#include "StructDirectX.h"
+#include "Struct3D.h"
 #include "LoaderMap.h"
 #include "DXUTcamera.h"
 #include "Prediction.h"

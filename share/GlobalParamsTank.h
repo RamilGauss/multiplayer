@@ -3,12 +3,17 @@
 
 #define ServerLocalPort 4321
 
-#define VERSION_PROGRAMM ((unsigned short)24) // unsigned short
+#define VERSION_PROGRAMM ((unsigned short)25) // unsigned short
 
-#define STR_VERSION_CLIENT "Клиент \"Tanks\" v0.024 NET DX9"
-#define STR_VERSION_SERVER "Сервер \"Tanks\" v0.024 NET DX9"
+//-------------------------------------------------------------------------------------------
+extern char strVersionClient[100];
+extern char strVersionServer[100];
+//-------------------------------------------------------------------------------------------
 
-#define DURATION_FIGHT_MINUTE 5//### 15 // длительность боя,минут
+#define STR_VERSION_CLIENT strVersionClient
+#define STR_VERSION_SERVER strVersionServer
+
+#define DURATION_FIGHT_MINUTE 15 // длительность боя,минут
 #define DURATION_FIGHT_MS (DURATION_FIGHT_MINUTE*60*1000) // длительность боя, мс
 #define COUNT_COMMAND_IN_FIGHT 1// размер одной из команды в бою
 
@@ -36,7 +41,7 @@ QMessageBox::warning( NULL, QObject::tr(NAME_TITTLE),sError );
 #define QEVENT_DISCONNECT         (QEvent::Type)(QEvent::User+3)
 
 
-#define PATH_LIST_MODELS "..\\model\\listModel.xml"
+#define PATH_LIST_MODELS "..\\model\\listModel"
 // перечень файлов
 // 1 Файл описания: ID, комментарии, .\main.mod
 // 2 Файл шейдера                    .\shader.mod 

@@ -14,11 +14,11 @@ void TGarage::InitArrTank()
   mCurTank = 0; // первый в массиве
 
   TTank* pTank = new TTank(pMasterClient);
-  pTank->SetID(nsTank_ID::eID_T_34);
+  pTank->SetTypeTank(nsTank_ID::eID_T_34);
   mArrTanks.Add(pTank);
 
   pTank = new TTank(pMasterClient);
-  pTank->SetID(nsTank_ID::eID_IS);
+  pTank->SetTypeTank(nsTank_ID::eID_IS);
   mArrTanks.Add(pTank);
 
 }

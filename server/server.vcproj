@@ -353,6 +353,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\share\GlobalParamsTank.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\share\LiveWall.cpp"
 					>
 				</File>
@@ -522,6 +526,10 @@
 				</File>
 				<File
 					RelativePath="..\share\StatisticValue.h"
+					>
+				</File>
+				<File
+					RelativePath="..\share\Struct3D.h"
 					>
 				</File>
 				<File

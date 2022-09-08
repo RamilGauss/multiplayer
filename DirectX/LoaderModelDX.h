@@ -1,7 +1,7 @@
 #ifndef LoaderObjectDXH
 #define LoaderObjectDXH
 
-#include "StructDirectX.h"
+#include "Struct3D.h"
 #include <wtypes.h>
 
 class TLoaderModelDX

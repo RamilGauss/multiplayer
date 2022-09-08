@@ -28,7 +28,7 @@ public:
 protected:
   bool LoadListPath();
 
-  WCHAR** mArrPathModel;
+  char** mArrPathModel;
   int   mCntPathModel;
 
   void Done();

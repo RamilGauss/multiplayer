@@ -3,14 +3,9 @@
 #include "DefineDX.h"
 #include "GlobalParamsTank.h"
 
-#include <atlconv.h>
 #include "ManagerDirectX.h"
 #include "Bufferizator2Thread.h"
-
-int _convert = 0; //(_convert); 
-UINT _acp = ATL::_AtlGetConversionACP() /*CP_THREAD_ACP*/; //(_acp); 
-LPCWSTR _lpw = NULL; //(_lpw); 
-LPCSTR _lpa = NULL; //(_lpa);
+#include "WinChar.h"
 
 //--------------------------------------------------------------------------------------
 // UI control IDs
@@ -97,7 +92,9 @@ int TDX::MainLoop()
     InitApp();
     DXUTInit( true, true, NULL ); // Parse the command line, show msgboxes on error, no extra command line params
     DXUTSetCursorSettings( true, true );
-    DXUTCreateWindow( &hWnd, A2W(STR_VERSION_CLIENT) );
+    WCHAR* p = A2W_(STR_VERSION_CLIENT);
+    DXUTCreateWindow( &hWnd, p );
+    free(p);
     DXUTCreateDevice( true, 640, 480 );
     DXUTMainLoop(); // Enter into the DXUT render loop
     DXUTDestroyState();// уничтожить DXUT

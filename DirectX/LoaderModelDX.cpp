@@ -1,6 +1,6 @@
 #include "LoaderModelDX.h"
 
-using namespace nsStructDirectX;
+using namespace nsStruct3D;
 
 TLoaderModelDX::TLoaderModelDX()
 {

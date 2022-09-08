@@ -6,7 +6,7 @@
 #include "LogerDX.h"
 #include "BL_Debug.h"
 
-using namespace nsStructDirectX;
+using namespace nsStruct3D;
 
 TLoaderMap::TLoaderMap(TManagerObjectDX* pMO, TManagerModel* pMM)
 {

@@ -13,7 +13,7 @@
 #define LOG_DX
 //#define LOG_DX_STREAM
 
-using namespace nsStructDirectX;
+using namespace nsStruct3D;
 
 TManagerDirectX GlobalManagerDirectX;
 

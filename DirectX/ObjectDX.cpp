@@ -1,7 +1,7 @@
 #include "ObjectDX.h"
 #include <d3d9.h>
 
-using namespace nsStructDirectX;
+using namespace nsStruct3D;
 
 TObjectDX::TObjectDX()
 {

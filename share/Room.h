@@ -79,6 +79,10 @@ public:
 
   void Done();
 
+  // отладка
+  int GetTimeRest_sec();
+  int GetActiveClient();
+
 protected:
 
   void WriteTransportStream(nsServerStruct::TClient* pClient,TBasePacket *packet);

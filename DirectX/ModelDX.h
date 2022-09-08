@@ -1,7 +1,7 @@
 #ifndef ModelDXH
 #define ModelDXH
 
-#include "StructDirectX.h"
+#include "Struct3D.h"
 
 #include "DXUT.h"
 #include "EffectDX.h"
@@ -27,7 +27,7 @@ public:
     D3DXMATRIXA16* mView, // расположение и ориентация камеры    (от ManagerDirectX)
     D3DXMATRIXA16* mProj); // проектирование на плоскость экрана  (от ManagerDirectX)
 
-  HRESULT Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath);
+  void Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath);
   void Destroy();
   void LostDevice();
   void ResetDevice();

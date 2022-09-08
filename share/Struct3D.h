@@ -1,9 +1,9 @@
-#ifndef StructDirectXH
-#define StructDirectXH
+#ifndef Struct3DXH
+#define Struct3DXH
 
 #include "TypeDef.h"
 
-namespace nsStructDirectX
+namespace nsStruct3D
 {
 
 #if defined( TD_WINDOWS )
