@@ -40,10 +40,10 @@ you may contact in writing [ramil2085@gmail.com].
 #include <QWidget>
 #include "ui_ClientMain.h"
 #include "ApplicationProtocolPacket.h"
-#include "BaseGUI.h"
+#include "ManagerGUIClient.h"
 
 
-class ClientMain : public TBaseGUI
+class ClientMain : public TManagerGUI::TBaseGUI_G
 {
   Q_OBJECT
 

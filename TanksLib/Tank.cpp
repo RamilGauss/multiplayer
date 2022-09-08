@@ -33,16 +33,17 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef ObjectPredictionTankH
-#define ObjectPredictionTankH
+
+#include "Tank.h"
 
 
-class TObjectPredictionTank
+TTank::TTank()
 {
 
-public:
-  TObjectPredictionTank();
+}
+//------------------------------------------------------------------------
+TTank::~TTank()
+{
 
-};
-
-#endif
+}
+//------------------------------------------------------------------------

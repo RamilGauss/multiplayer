@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\client.vcproj", "{A4EE1FDE-FDDC-4CE4-AC31-71559907C174}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
 	ProjectSection(ProjectDependencies) = postProject
 		{CD7A413A-B10E-4B83-AD7E-55C96422E915} = {CD7A413A-B10E-4B83-AD7E-55C96422E915}
 		{15D68F42-EE7B-4CC9-A54D-5A37B96DEF2C} = {15D68F42-EE7B-4CC9-A54D-5A37B96DEF2C}
@@ -11,6 +14,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\client.vcp
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server\server.vcproj", "{4D2DD4B8-016F-44E8-85A2-C0F40A53251B}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
 	ProjectSection(ProjectDependencies) = postProject
 		{15D68F42-EE7B-4CC9-A54D-5A37B96DEF2C} = {15D68F42-EE7B-4CC9-A54D-5A37B96DEF2C}
 		{DF0D719A-E5DE-4F17-9741-FCBDD15B3FE0} = {DF0D719A-E5DE-4F17-9741-FCBDD15B3FE0}
@@ -37,14 +43,22 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BigJack", "BigJack\BigJack.vcproj", "{600BBB4D-1A07-4D9E-8C52-6FDE93C3902A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QBaseLib", "QBaseLib\QBaseLib.vcproj", "{CD7A413A-B10E-4B83-AD7E-55C96422E915}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EditorModel", "EditorModel\EditorModel.vcproj", "{DA5DE3BC-5DC6-4233-93E8-7F40A836F05C}"
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TanksLib", "TanksLib\TanksLib.vcproj", "{187CFE85-D0F7-4E23-9216-24CFDB66EB60}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXUT", "DXUT\Core\DXUT_2008.vcproj", "{E0CF097B-F22D-465B-A884-D89E55BD7ECD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXUTOpt", "DXUT\Optional\DXUTOpt_2008.vcproj", "{9F64786D-4F8F-43BF-ADA0-133ABAE1E52D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProject", "TestProject\TestProject.vcproj", "{DF4005CE-5AC6-4B13-BB09-779850A9DEEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,20 +139,14 @@ Global
 		{9F64786D-4F8F-43BF-ADA0-133ABAE1E52D}.Profile|Win32.Build.0 = Profile|Win32
 		{9F64786D-4F8F-43BF-ADA0-133ABAE1E52D}.Release|Win32.ActiveCfg = Release|Win32
 		{9F64786D-4F8F-43BF-ADA0-133ABAE1E52D}.Release|Win32.Build.0 = Release|Win32
+		{DF4005CE-5AC6-4B13-BB09-779850A9DEEC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DF4005CE-5AC6-4B13-BB09-779850A9DEEC}.Debug|Win32.Build.0 = Debug|Win32
+		{DF4005CE-5AC6-4B13-BB09-779850A9DEEC}.Profile|Win32.ActiveCfg = Release|Win32
+		{DF4005CE-5AC6-4B13-BB09-779850A9DEEC}.Profile|Win32.Build.0 = Release|Win32
+		{DF4005CE-5AC6-4B13-BB09-779850A9DEEC}.Release|Win32.ActiveCfg = Release|Win32
+		{DF4005CE-5AC6-4B13-BB09-779850A9DEEC}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
-	GlobalSection(Qt) = preSolution
-		Integration = True
 	EndGlobalSection
 EndGlobal

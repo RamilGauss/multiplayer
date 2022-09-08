@@ -34,20 +34,15 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#ifndef __TankH
-#define __TankH
+#ifndef TankH
+#define TankH
 
-#include "ServerStruct.h"
-#include "TObject.h"
-#include "ObjectPrediction.h"
+#include "BaseObjectCommon.h"
+#include "BaseObjectGravityPrediction.h"
 
 //------------------------------------------------------------------------------
-class TTank : public TObject/*для хранения в массиве*/,
-              public TObjectPrediction
+class TTank : public TBaseObjectCommon<TBaseObjectGravityPrediction>
 {
-
-  unsigned short mTypeTank;
-  nsServerStruct::TClient* pMasterClient;
 
 public:
   typedef enum{
@@ -94,25 +89,18 @@ public:
     eForward,
   }ePushButton;
 
-  TRoom* pRoom;
-  
-  TTank(nsServerStruct::TClient* pClient);
+  TTank();
   virtual ~TTank();
 
-  void LoadPropertyFromIni();
-
-  void SetTypeTank(unsigned short type);
-  unsigned short GetTypeTank();
-
-  nsServerStruct::TClient* GetMasterClient();
-
-  // для Room
-  // в бою
-  unsigned char mGroup;// номер команды в комнате. или 0 или 1.
+  // реакция на человеческую реакцию
+  virtual void SetHuman(char* pData, int size){};
 
 
   // характеристики
   
+  // состояние
+  unsigned short mHP;              // у.е.
+
   // состояние
   unsigned short mHP;              // у.е.
   unsigned int maskDefectDevice;   // маска неисправности устройств,  0 - исправно, 1 - неисправно см. eMaskDefectDevice

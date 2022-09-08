@@ -33,47 +33,40 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#ifndef BaseObjectH
+#define BaseObjectH
 
-#include "Prediction.h"
-#include "ApplicationProtocolPacketCmd.h"
-//#include "..\Server\Source\ServerStruct.h"
 
-//using namespace nsServerStruct;
+#include "TObject.h"
+#include "Struct3D.h"
+#include <windows.h>
+#include <d3d9types.h>
+#include <d3dx10math.h>
 
-TPrediction::TPrediction()
+
+class TBaseObject : public TObject
 {
+  // свойства, характерные для физики и графики
+  // ориентация, координаты, состояние
 
-}
-//--------------------------------------------------------------------
-TPrediction::~TPrediction()
-{
+public:
+  TBaseObject();
+  virtual ~TBaseObject();
 
-}
-//--------------------------------------------------------------------
-void TPrediction::InitState()
-{
+  virtual void SetCoord(nsStruct3D::TCoord3& coord);
+  virtual void SetOrient(nsStruct3D::TOrient3& orient);
+  virtual void SetState(unsigned int state);
 
-}
-//--------------------------------------------------------------------
-void TPrediction::Calc()
-{
+protected:
+  unsigned int ID_map;// идентификатор на карте
+  unsigned int ID_model;// идентификатор модели
 
-}
-//--------------------------------------------------------------------
-//void TPrediction::SetOrientAim(unsigned int id_Tank /*TTank* pTank*/, TPacketServer* pDefPacket)
-//{
-//  
-//}
-////--------------------------------------------------------------------
-//void TPrediction::SetKeyEvent(unsigned int id_Tank  /*TTank*pTank*/, TPacketServer* pDefPacket)
-//{
-//  TC_Key_Event* packet = (TC_Key_Event*)pDefPacket->packet;
-//  pTank->mMaskPushButton &= packet->getKeyEvent();
-//  pTank->mTimeRefreshPushButton = pDefPacket->ms_time;
-//}
-//--------------------------------------------------------------------
-void TPrediction::SetState()
-{
+  unsigned int mState;
 
-}
-//--------------------------------------------------------------------
+  D3DXMATRIXA16 mWorld; // здесь вся инфа по ориентации и координатам объекта
+
+};
+
+
+#endif
+

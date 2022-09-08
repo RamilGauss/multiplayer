@@ -34,63 +34,64 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#include "ObjectPrediction.h"
+#include "BaseObjectPrediction.h"
 #include <memory.h>
+#include <stddef.h>
 
-TObjectPrediction::TObjectPrediction(unsigned char type)
+TBaseObjectPrediction::TBaseObjectPrediction()
 {
-  mType = type;
-  pUserData = NULL;
-  mUserDataSize = 0;
-  mArrDef = NULL;
-  mCntDef = 0;
+  //mType = type;
+  //pUserData = NULL;
+  //mUserDataSize = 0;
+  //mArrDef = NULL;
+  //mCntDef = 0;
 }
 //--------------------------------------------------------------------------
-TObjectPrediction::~TObjectPrediction()
+TBaseObjectPrediction::~TBaseObjectPrediction()
 {
-  CleanUserData();
-  CleanArrDef();
+  //CleanUserData();
+  //CleanArrDef();
 }
+////--------------------------------------------------------------------------
+//unsigned short TBaseObjectPrediction::GetID()
+//{
+//  return mID;
+//}
+////--------------------------------------------------------------------------
+//void TBaseObjectPrediction::SetID(unsigned short id)
+//{
+//  mID = id;
+//}
 //--------------------------------------------------------------------------
-unsigned short TObjectPrediction::GetID()
-{
-  return mID;
-}
-//--------------------------------------------------------------------------
-void TObjectPrediction::SetID(unsigned short id)
-{
-  mID = id;
-}
-//--------------------------------------------------------------------------
-unsigned int TObjectPrediction::GetMaskState()
-{
-  return mMaskState;
-}
-//--------------------------------------------------------------------------
-void TObjectPrediction::SetUserData(char* pData, int size)
-{
-  CleanUserData();
-  mUserDataSize = size;
-  pUserData = new char[size];
-  memcpy(pUserData,pData,mUserDataSize);
-}
-//--------------------------------------------------------------------------
-void TObjectPrediction::GetUserData(char* pData, int& size)
-{
-  memcpy(pData,pUserData,mUserDataSize);
-}
-//--------------------------------------------------------------------------
-void TObjectPrediction::CleanUserData()
-{
-  delete[] pUserData;
-  pUserData = NULL;
-  mUserDataSize = 0;
-}
-//--------------------------------------------------------------------------
-void TObjectPrediction::CleanArrDef()
-{
-  delete []mArrDef;
-  mArrDef = NULL;
-  mCntDef = 0;
-}
-//--------------------------------------------------------------------------
+//unsigned int TBaseObjectPrediction::GetMaskState()
+//{
+//  return mMaskState;
+//}
+////--------------------------------------------------------------------------
+//void TBaseObjectPrediction::SetUserData(char* pData, int size)
+//{
+//  CleanUserData();
+//  mUserDataSize = size;
+//  pUserData = new char[size];
+//  memcpy(pUserData,pData,mUserDataSize);
+//}
+////--------------------------------------------------------------------------
+//void TBaseObjectPrediction::GetUserData(char* pData, int& size)
+//{
+//  memcpy(pData,pUserData,mUserDataSize);
+//}
+////--------------------------------------------------------------------------
+//void TBaseObjectPrediction::CleanUserData()
+//{
+//  delete[] pUserData;
+//  pUserData = NULL;
+//  mUserDataSize = 0;
+//}
+////--------------------------------------------------------------------------
+//void TBaseObjectPrediction::CleanArrDef()
+//{
+//  delete []mArrDef;
+//  mArrDef = NULL;
+//  mCntDef = 0;
+//}
+////--------------------------------------------------------------------------

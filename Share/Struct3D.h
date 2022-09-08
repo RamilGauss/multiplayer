@@ -32,3 +32,34 @@ If you have questions concerning this license or the applicable additional terms
 you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
+
+
+#ifndef Struct3DXH
+#define Struct3DXH
+
+
+namespace nsStruct3D
+{
+
+#pragma pack(push, 1)
+
+struct TCoord3
+{
+  float x;
+  float y;
+  float z;
+};
+//-----------------------------------------------------------------
+struct TOrient3
+{
+  float vx;
+  float vy;
+  float vz;
+};
+//-----------------------------------------------------------------
+
+#pragma pack(pop)
+
+}
+
+#endif

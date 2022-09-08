@@ -34,46 +34,26 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#include "Prediction.h"
-#include "ApplicationProtocolPacketCmd.h"
-//#include "..\Server\Source\ServerStruct.h"
+#include "TankServer.h"
+#include "ManagerTanks.h"
 
-//using namespace nsServerStruct;
+using namespace nsServerStruct;
 
-TPrediction::TPrediction()
+TTankServer::TTankServer(TClient* pClient):
+TTank()
+{
+  pMasterClient = pClient;
+  pRoom = NULL;
+}
+//------------------------------------------------------------------------
+TTankServer::~TTankServer()
 {
 
 }
-//--------------------------------------------------------------------
-TPrediction::~TPrediction()
+//------------------------------------------------------------------------
+TClient* TTankServer::GetMasterClient()
 {
-
+  return pMasterClient;
 }
-//--------------------------------------------------------------------
-void TPrediction::InitState()
-{
+//------------------------------------------------------------------------
 
-}
-//--------------------------------------------------------------------
-void TPrediction::Calc()
-{
-
-}
-//--------------------------------------------------------------------
-//void TPrediction::SetOrientAim(unsigned int id_Tank /*TTank* pTank*/, TPacketServer* pDefPacket)
-//{
-//  
-//}
-////--------------------------------------------------------------------
-//void TPrediction::SetKeyEvent(unsigned int id_Tank  /*TTank*pTank*/, TPacketServer* pDefPacket)
-//{
-//  TC_Key_Event* packet = (TC_Key_Event*)pDefPacket->packet;
-//  pTank->mMaskPushButton &= packet->getKeyEvent();
-//  pTank->mTimeRefreshPushButton = pDefPacket->ms_time;
-//}
-//--------------------------------------------------------------------
-void TPrediction::SetState()
-{
-
-}
-//--------------------------------------------------------------------

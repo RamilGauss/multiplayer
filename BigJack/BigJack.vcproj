@@ -150,6 +150,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\BaseObjectDX.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DefineDX.h"
 				>
 			</File>
@@ -167,10 +171,6 @@
 			</File>
 			<File
 				RelativePath=".\LoaderListModel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\LoaderMap.cpp"
 				>
 			</File>
 			<File
@@ -206,10 +206,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ObjectDX.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\SoundDX.cpp"
 				>
 			</File>
@@ -219,6 +215,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\BaseObjectDX.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Define_DX.h"
 				>
@@ -237,10 +237,6 @@
 			</File>
 			<File
 				RelativePath=".\LoaderListModel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LoaderMap.h"
 				>
 			</File>
 			<File
@@ -276,15 +272,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ObjectDX.h"
-				>
-			</File>
-			<File
 				RelativePath=".\SoundDX.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Struct3D.h"
 				>
 			</File>
 		</Filter>

@@ -152,6 +152,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\BaseObject.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\BoundingBox.cpp"
 				>
 			</File>
@@ -242,6 +246,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BaseObject.h"
+				>
+			</File>
+			<File
 				RelativePath=".\BoundingBox.h"
 				>
 			</File>
@@ -299,6 +307,10 @@
 			</File>
 			<File
 				RelativePath=".\StatisticValue.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Struct3D.h"
 				>
 			</File>
 			<File

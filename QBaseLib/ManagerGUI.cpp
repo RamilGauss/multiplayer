@@ -110,10 +110,7 @@ void TManagerGUI<Robert, Client, BigJack >::AddForm(TBaseGUI_G* pForm, char* nam
 
   pForm->setup(pRobert,pBigJack,pClient);
   //-----------------------------------------------------------------------------
-  TDescForm desc;
-  desc.pForm = pForm;
-  desc.SetName(name);
-  list.push_back(desc);
+  mMap[name] = pForm;
 }
 //---------------------------------------------------------------------------------------------
 template <class Robert, class Client, class BigJack >

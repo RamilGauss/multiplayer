@@ -34,46 +34,45 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#include "Prediction.h"
-#include "ApplicationProtocolPacketCmd.h"
-//#include "..\Server\Source\ServerStruct.h"
+#ifndef BaseObjectDXH
+#define BaseObjectDXH
 
-//using namespace nsServerStruct;
+#include "ModelDX.h"
+#include "BaseObject.h"
 
-TPrediction::TPrediction()
+class TManagerObjectDX;
+
+class TBaseObjectDX : virtual public TBaseObject
 {
+protected:
 
-}
-//--------------------------------------------------------------------
-TPrediction::~TPrediction()
-{
+  bool flgShow;// показан ли объект на сцене
+  
+  char* sName;//имя объекта
 
-}
-//--------------------------------------------------------------------
-void TPrediction::InitState()
-{
+public:
+  TBaseObjectDX();
+  ~TBaseObjectDX();
 
-}
-//--------------------------------------------------------------------
-void TPrediction::Calc()
-{
+  void SetModel(TModelDX* pModel);
 
-}
-//--------------------------------------------------------------------
-//void TPrediction::SetOrientAim(unsigned int id_Tank /*TTank* pTank*/, TPacketServer* pDefPacket)
-//{
-//  
-//}
-////--------------------------------------------------------------------
-//void TPrediction::SetKeyEvent(unsigned int id_Tank  /*TTank*pTank*/, TPacketServer* pDefPacket)
-//{
-//  TC_Key_Event* packet = (TC_Key_Event*)pDefPacket->packet;
-//  pTank->mMaskPushButton &= packet->getKeyEvent();
-//  pTank->mTimeRefreshPushButton = pDefPacket->ms_time;
-//}
-//--------------------------------------------------------------------
-void TPrediction::SetState()
-{
+  void Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj);
 
-}
-//--------------------------------------------------------------------
+  void SetShow(bool show){flgShow=show;}
+  void SetName(const char* name);
+
+protected:
+  void Done();
+  void SetOneMatrix(D3DXMATRIXA16& matrix);
+
+  friend class TManagerObjectDX;
+
+  TModelDX* mModel;// внешний вид 
+  D3DXMATRIXA16* mArrMatrixSubset;// кол-во см. в mModel
+
+};
+//-----------------------------------------------------------------
+
+
+
+#endif

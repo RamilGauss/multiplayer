@@ -34,41 +34,36 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
+#ifndef TankServerH
+#define TankServerH
+
+#include "ServerStruct.h"
 #include "Tank.h"
-#include "ManagerTanks.h"
 
-using namespace nsServerStruct;
-
-TTank::TTank(TClient* pClient):
-TObjectPrediction(eTank)
-{
-  pMasterClient = pClient;
-  pRoom = NULL;
-}
-//------------------------------------------------------------------------
-TTank::~TTank()
+//------------------------------------------------------------------------------
+class TTankServer : public TTank
 {
 
-}
-//------------------------------------------------------------------------
-void TTank::SetTypeTank(unsigned short typeTank)
-{
-  mTypeTank = typeTank;
-}
-//------------------------------------------------------------------------
-unsigned short TTank::GetTypeTank()
-{
-  return mTypeTank;
-}
-//------------------------------------------------------------------------
-TClient* TTank::GetMasterClient()
-{
-  return pMasterClient;
-}
-//------------------------------------------------------------------------
-void TTank::LoadPropertyFromIni()
-{
-  GlobalManagerTanks.LoadPropertyFromIni(this);
-}
-//------------------------------------------------------------------------
+  unsigned short mTypeTank;
+  nsServerStruct::TClient* pMasterClient;
+
+public:
+  TRoom* pRoom;
+  
+  TTank(nsServerStruct::TClient* pClient);
+  virtual ~TTank();
+
+  nsServerStruct::TClient* GetMasterClient();
+
+  // для Room
+  // в бою
+  unsigned char mGroup;// номер команды в комнате. или 0 или 1.
+
+  // характеристики
+  
+};
+//-----------------------------------------------------------------------------
+
+
+#endif
 

@@ -33,16 +33,19 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
 #ifndef ManagerGUIH
 #define ManagerGUIH
+
+#include <iostream>
+#include <string>
+#include <map>
 
 #include <QObject>
 #include <QEvent>
 
 #include "BL_Debug.h"
 #include "BaseGUI_DX.h"
-#include <map>
+
 
 //-------------------------------------------------------------------------------------------
 class TManagerGUIEvent: public QEvent
@@ -108,6 +111,8 @@ protected:
 
   TBaseGUI_G* pCurrentForm;
 
+  std::map<std::string,void*> mMap;
+
 protected:
 
   virtual void customEvent( QEvent * e  );
@@ -120,49 +125,12 @@ protected:
   void OpenForm(char* pStrForm);
   TBaseGUI_G* FindForm(char* pStrForm)
   {
-    std::list<TDescForm>::iterator bit = list.begin();
-    std::list<TDescForm>::iterator eit = list.end();
-    while(bit!=eit)
-    {
-      TBaseGUI* pForm = (*bit).pForm;
-      char* name = (*bit).Name();
-      if(strcmp(pStrForm,name)==0)
-        return pForm;
-      bit++;
-    }
-
-    BL_FIX_BUG();
-    return NULL;
+    std::map<std::string,void*>::iterator ifind = mMap.find(pStrForm);
+    BL_ASSERT(ifind->second);
+    return ifind->second;
   }
   //---------------------------------------------------------------------------------------------
   void Done();
-
-protected:
-  struct TDescForm
-  {
-    TBaseGUI_G* pForm;
-    TDescForm()
-    {
-      name = NULL;
-    }
-    ~TDescForm()
-    {
-      delete[] name;
-    }
-  protected:
-    char* name;
-  public:
-    char* Name(){return name;}
-    void SetName(char* str)
-    {
-      int len = strlen(str);
-      delete[] name;
-      name = new char[len+1];
-      strcpy(name,str);
-    }
-  };
-
-  std::list<TDescForm> list;
 };
 
 #endif

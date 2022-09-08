@@ -34,12 +34,12 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#include "ObjectDX.h"
+#include "BaseObjectDX.h"
 #include <d3d9.h>
 
 using namespace nsStruct3D;
 
-TObjectDX::TObjectDX()
+TBaseObjectDX::TBaseObjectDX()
 {
   SetOneMatrix(mWorld);
   
@@ -50,12 +50,12 @@ TObjectDX::TObjectDX()
   sName = NULL;//имя объекта
 }
 //------------------------------------------------------------------------------------------------
-TObjectDX::~TObjectDX()
+TBaseObjectDX::~TBaseObjectDX()
 {
   Done();
 }
 //------------------------------------------------------------------------------------------------
-void TObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj)
+void TBaseObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj)
 {          
   if(flgShow==false) return;
   mModel->Draw(mState,             //                           (От ObjectDX)
@@ -65,24 +65,7 @@ void TObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj)
                mProj);
 }
 //------------------------------------------------------------------------------------------------
-void TObjectDX::SetCoord(TCoord3 coord)
-{
-  mWorld._41 = coord.x;
-  mWorld._42 = coord.y;
-  mWorld._43 = coord.z;
-}
-//------------------------------------------------------------------------------------------------
-void TObjectDX::SetOrient(TOrient3 orient)
-{
-  //mWorld. ; // здесь вся инфа по ориентации и координатам объекта
-}
-//------------------------------------------------------------------------------------------------
-void TObjectDX::SetState(unsigned int state)
-{
-  mState = state;
-}
-//------------------------------------------------------------------------------------------------
-void TObjectDX::SetModel(TModelDX* pModel)
+void TBaseObjectDX::SetModel(TModelDX* pModel)
 {
   mModel = pModel;
   int cnt = mModel->GetCntEffect();
@@ -91,7 +74,7 @@ void TObjectDX::SetModel(TModelDX* pModel)
     SetOneMatrix(mArrMatrixSubset[i]);
 }
 //------------------------------------------------------------------------------------------------
-void TObjectDX::Done()
+void TBaseObjectDX::Done()
 {
   delete[] mArrMatrixSubset;
   mArrMatrixSubset = NULL;
@@ -99,7 +82,7 @@ void TObjectDX::Done()
   sName = NULL;
 }
 //------------------------------------------------------------------------------------------------
-void TObjectDX::SetOneMatrix(D3DXMATRIXA16& matrix)
+void TBaseObjectDX::SetOneMatrix(D3DXMATRIXA16& matrix)
 {
   matrix._11 = 1;matrix._12 = 0;matrix._13 = 0;matrix._14 = 0;
   matrix._21 = 0;matrix._22 = 1;matrix._23 = 0;matrix._24 = 0;
@@ -107,7 +90,7 @@ void TObjectDX::SetOneMatrix(D3DXMATRIXA16& matrix)
   matrix._41 = 0;matrix._42 = 0;matrix._43 = 0;matrix._44 = 1;
 }
 //------------------------------------------------------------------------------------------------
-void TObjectDX::SetName(const char* name)
+void TBaseObjectDX::SetName(const char* name)
 {
   int len = strlen(name)+1;
   delete sName;

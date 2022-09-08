@@ -33,55 +33,27 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#ifndef BaseObjectCommonH
+#define BaseObjectCommonH
 
-#ifndef ObjectDXH
-#define ObjectDXH
+#include "BaseObjectDX.h"
 
-#include "ModelDX.h"
-#include "TObject.h"
 
-class TManagerObjectDX;
-
-class TObjectDX : public TObject
+template <class ObjectPrediction >
+class TBaseObjectCommon : public TBaseObjectDX , public ObjectPrediction
 {
-protected:
-
-  bool flgShow;// показан ли объект на сцене
-  
-  char* sName;//имя объекта
 
 public:
-  TObjectDX();
-  ~TObjectDX();
+  TBaseObjectCommon();
+  virtual ~TBaseObjectCommon();
 
-  void SetModel(TModelDX* pModel);
 
-  void Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj);
-
-  void SetCoord(nsStruct3D::TCoord3 coord);
-  void SetOrient(nsStruct3D::TOrient3 orient);
-  void SetState(unsigned int state);
-
-  void SetShow(bool show){flgShow=show;}
-  void SetName(const char* name);
-
-protected:
-  void Done();
-  void SetOneMatrix(D3DXMATRIXA16& matrix);
-
-  friend class TManagerObjectDX;
-
-  TModelDX* mModel;// внешний вид 
-  unsigned int ID_map;// идентификатор на карте
-
-  unsigned int mState;
-
-  D3DXMATRIXA16 mWorld; // здесь вся инфа по ориентации и координатам объекта
-  D3DXMATRIXA16* mArrMatrixSubset;// кол-во см. в mModel
+  // зеркальное отражение такого же объекта на "той стороне"
+  // отдать свое сообщение
+  virtual bool GetMirror(char** pData, int& size) = 0;
+  // настроиться объекту
+  virtual void SetMirror(char* pData, int size) = 0;
 
 };
-//-----------------------------------------------------------------
-
-
 
 #endif

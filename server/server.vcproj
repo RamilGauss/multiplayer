@@ -109,7 +109,7 @@
 				Name="VCCLCompilerTool"
 				UseUnicodeResponseFiles="false"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtOpenGL&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;.\Source"
+				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtOpenGL&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;.\Source;..\TanksLib"
 				PreprocessorDefinitions="WIN32;QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;QT_SQL_LIB;QT_OPENGL_LIB;QT_NETWORK_LIB"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
@@ -190,7 +190,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Source\Tank.cpp"
+				RelativePath=".\Source\TankServer.cpp"
 				>
 			</File>
 		</Filter>
@@ -227,7 +227,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing ServerForm.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.\Source&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.\Source&quot; &quot;-I.\..\TanksLib&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -242,7 +242,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Source\Tank.h"
+				RelativePath=".\Source\TankServer.h"
 				>
 			</File>
 		</Filter>

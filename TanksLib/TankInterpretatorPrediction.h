@@ -40,10 +40,11 @@ you may contact in writing [ramil2085@gmail.com].
 //#include "Tank.h"
 //#include "ObjectPrediction.h"
 #include <list>
+#include "Prediction.h"
 
 // предсказатель
 // Robert - физический движок
-class TTankInterpretatorPrediction
+class TTankInterpretatorPrediction : public TPrediction
 {
 
 protected:

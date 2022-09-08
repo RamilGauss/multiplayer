@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef PredictionH
 #define PredictionH
 
-#include "ObjectPrediction.h"
+#include "BaseObjectPrediction.h"
 #include <list>
 
 // предсказатель
@@ -60,13 +60,13 @@ public:
 
   void Calc();
 
-  void SetOrientAim(unsigned int id_Tank /*TTank*pTank*/, nsServerStruct::TPacketServer* pDefPacket);
-  void SetKeyEvent(unsigned int id_Tank /*TTank*pTank*/, nsServerStruct::TPacketServer* pDefPacket);
+  //void SetOrientAim(unsigned int id_Tank /*TTank*pTank*/, nsServerStruct::TPacketServer* pDefPacket);
+  //void SetKeyEvent(unsigned int id_Tank /*TTank*pTank*/, nsServerStruct::TPacketServer* pDefPacket);
 
 
 public:
   // список разрушенных или поврежденных объектов.
-  std::list<TObjectPrediction*> mListDamageObject;
+  std::list<TBaseObjectPrediction*> mListDamageObject;
 
   struct TEvent
   {

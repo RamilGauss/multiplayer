@@ -34,18 +34,19 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#ifndef ObjectPredictionH
-#define ObjectPredictionH
+#ifndef BaseObjectPredictionH
+#define BaseObjectPredictionH
 
 #include "BoundingBox.h"
-#include "Struct3D.h"
+//#include "Struct3D.h"
+#include "BaseObject.h"
 
-class TObjectPrediction
+class TBaseObjectPrediction : virtual public TBaseObject
 {
 public:
   // тип объекта, важно для Prediction
   // 
-  typedef 
+ /* typedef 
     enum{
        eTank    = 0,
        eBullet  = 1,
@@ -53,22 +54,22 @@ public:
        eTree    = 3,
        eTerrain = 4,
        eBush    = 5,
-  } eTypeObject;
+  } eTypeObject;*/
 protected:
 
-  char* pUserData;    // в клиенте хранит TObjectDX*, в сервере хранит id
-  int   mUserDataSize;
+  //char* pUserData;    // в клиенте хранит TObjectDX*, в сервере хранит id
+  //int   mUserDataSize;
 
-  unsigned short mID;// тип
-  unsigned char mType;// см. eTypeObject
+  //unsigned short mID;// тип
+  //unsigned char mType;// см. eTypeObject
 
 public:
   //=====================================
-  unsigned int mMaskState;// конечная цель существования объекта - определить состояние этой переменной mMaskState
+  //unsigned int mMaskState;// конечная цель существования объекта - определить состояние этой переменной mMaskState
   // 1 - нормальное, 0 - разрушенное
   
-  nsStruct3D::TCoord3  mCoord; // конечная цель существования объекта
-  nsStruct3D::TOrient3 mOrient;// 
+  //nsStruct3D::TCoord3  mCoord; // конечная цель существования объекта
+  //nsStruct3D::TOrient3 mOrient;// 
   //=====================================
 
   TBoundingBox mBBCommon;// определить коллизии, грубая оценка
@@ -86,21 +87,21 @@ public:
 
 public:
   
-  TObjectPrediction(unsigned char type);
-  ~TObjectPrediction();
+  TBaseObjectPrediction();
+  virtual ~TBaseObjectPrediction();
 
-  unsigned short GetID();
-  void SetID(unsigned short id);
-  unsigned char GetType(){return mType;}
+  //unsigned short GetID();
+  //void SetID(unsigned short id);
+  //unsigned char GetType(){return mType;}
 
-  unsigned int GetMaskState();
+  //unsigned int GetMaskState();
 
-  void SetUserData(char* pData, int size);
-  void GetUserData(char* pData, int& size);
+  //void SetUserData(char* pData, int size);
+  //void GetUserData(char* pData, int& size);
 
 protected:
-  void CleanUserData();
-  void CleanArrDef();
+  //void CleanUserData();
+  //void CleanArrDef();
 
 };
 #endif
