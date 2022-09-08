@@ -42,7 +42,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "HiTimer.h"
 #include "ApplicationProtocolPacketRequest.h"
 #include "ApplicationProtocolPacketCmd.h"
-#include "LoggerDX.h"
+#include "Logger.h"
 #include "ApplicationProtocolPacketStream.h"
 
 
@@ -66,6 +66,7 @@ void ClientCallBackRcvDisconnect(void* data, int size)
 
 TClientTank::TClientTank()
 {
+  flgActive = false;
   pClient = this;
   mLastTimeRcv = 0;
 	thread = NULL;
@@ -96,7 +97,7 @@ void TClientTank::ThreadDefDisconnect()
 	{
 		ht_msleep(eWaitCheck);
 		now_time = ht_GetMSCount();
-		if(now_time>mLastTimeRcv+eWaitCheck)
+		if(now_time>GetLastTime()+eWaitCheck)
 		{
 			flgActive = false;// чтобы не ждать свой собственный поток
 			Disconnect(NULL,0);
@@ -141,7 +142,7 @@ bool TClientTank::Connect(unsigned int ip_dst, unsigned int port_src, char* sNic
   mTransport.InitLog(nameLogFile);
 
   //--------------------------------------------
-  InitLoggerDX(sNick);
+  InitLogger(sNick);
   //--------------------------------------------
 
   stop();

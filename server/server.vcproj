@@ -167,10 +167,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Source\Antitank_Server.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Source\Client.cpp"
 				>
 			</File>
@@ -180,10 +176,6 @@
 			</File>
 			<File
 				RelativePath=".\Source\main.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\MakerBehaviorServer.cpp"
 				>
 			</File>
 			<File
@@ -202,14 +194,6 @@
 				RelativePath=".\Source\ServerTank.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\Source\TankServer.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\TankTower_Server.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -217,19 +201,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Source\Antitank_Server.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Source\Client.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Source\Garage.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\MakerBehaviorServer.h"
 				>
 			</File>
 			<File
@@ -272,14 +248,6 @@
 			</File>
 			<File
 				RelativePath=".\Source\ServerTank.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\TankServer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\TankTower_Server.h"
 				>
 			</File>
 		</Filter>

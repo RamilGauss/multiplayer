@@ -43,26 +43,31 @@ you may contact in writing [ramil2085@gmail.com].
 #include <d3dx9math.h>
 #include "BL_ConfigFile.h"
 #include <d3d9.h>
+#include <vector>
 
 class ILoaderModelDX
 {
 protected:
   IDirect3DDevice9* m_pd3dDevice;
 public:
+  struct TJointPart
+  {
+    std::string namePart;
+    D3DXMATRIXA16 matrix;
+  };
 
   struct TDefGroup
   {
-    unsigned char      mIndex;
-    char   strPathShader[MAX_PATH];// относительный путь
-    char   strTechnique[MAX_PATH];
-    WCHAR  strTexture[MAX_PATH];
-    char   strName[MAX_PATH];
+    TJointPart* pArrJoint;
+    int mCntJoint;
+    //--------------------------
+
+    std::string  strPathShader;// относительный путь
+    std::string  strTechnique;
+    std::wstring strTexture;
+    std::string  strName;
 
     ID3DXMesh* pMesh;
-    //DWORD* indexes;
-    //TEffectDX::VERTEX* vertex;
-    //DWORD  cntIndexes;// расчет по файлу
-    //DWORD  cntVertex;// расчет по файлу
 
     D3DXVECTOR3 vAmbient;
     D3DXVECTOR3 vDiffuse;
@@ -78,16 +83,10 @@ public:
 
     TDefGroup()
     {
-      mIndex = 0;
-      strTexture[0]    = '\0';
-      strPathShader[0] = '\0';
-      strTechnique[0]  = '\0';
-      strName[0]       = '\0';
+      pArrJoint = NULL;
+      mCntJoint = 0;
+
       pMesh            = NULL;
-      //indexes = NULL;
-      //vertex = NULL;
-      //cntVertex = 0;
-      //cntIndexes = 0;
 
       vAmbient  = D3DXVECTOR3(0,0,0);
       vDiffuse  = D3DXVECTOR3(0,0,0);
@@ -101,15 +100,17 @@ public:
       mTypeLOD   = 0;
       mflgNormal = true;
     }
+    ~TDefGroup()
+    {
+      delete pArrJoint;
+      pArrJoint = NULL;
+    }
   };
-public:
-  int mCntEffectVisual;// расчет после загрузки
-  int mCntEffectInLOD;
+
 protected:
   float mLOD;
-  unsigned short mID_unique;
-  int mCntGroup;
-  TDefGroup* mArrDefGroup;
+  
+  std::vector<TDefGroup*> mVectorGroup;
 
 public:
   enum{
@@ -119,15 +120,10 @@ public:
   ILoaderModelDX( IDirect3DDevice9* m_pd3dDevice );
   virtual ~ILoaderModelDX();
 
-  TDefGroup* GetArrDefGroup(){return mArrDefGroup;}
+  TDefGroup* GetGroup(int i){return mVectorGroup[i];}
   // после загрузки становятся доступными
   float GetLOD();
-  unsigned short GetID_Unique();// уникальный для данного набора, фигурирует в файле карты
-  int GetCountSubset();
-  //DWORD* GetPinterIndexes(int iGroup, int &size);
-  //TEffectDX::VERTEX* GetPinterVertex(int iGroup, int &size);
-  WCHAR* GetTexture(int iGroup, int &size);
-  char* GetStrPathShader(int iGroup);
+  int GetCountGroup();
 
 public:
   // virtual
@@ -142,7 +138,6 @@ protected:
 protected:
 
   TBL_ConfigFile mFileIniMain;
-  TBL_ConfigFile mFileIniRes;
 
   char pStrPathShader[MAX_PATH];
 

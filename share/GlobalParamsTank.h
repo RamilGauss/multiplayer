@@ -39,7 +39,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 #define ServerLocalPort 4321
 
-#define VERSION_PROGRAMM ((unsigned short)40) // unsigned short
+#define VERSION_PROGRAMM ((unsigned short)43) // unsigned short
 #define VERSION_EDITOR   ((unsigned short)7)
 //-------------------------------------------------------------------------------------------
 extern char strVersionClient[100];
@@ -79,10 +79,109 @@ QMessageBox::warning( NULL, QObject::tr(NAME_TITTLE),sError );
 #define QEVENT_DISCONNECT         (QEvent::Type)(QEvent::User+2)
 
 
-#define PATH_LIST_MODELS "..\\model\\listModel"
-// перечень файлов
-// 1 Файл описания: ID, комментарии, ..\Model\Name\main.ini
-// 2 Файл примитивов                 ..\Model\Name\primitive
+
+#define PATH_LIST_MODELS "..\\model\\listModel.ini"
+#define PATH_LIST_MAP "..\\map\\listMap.ini"
+
+
+/* описание структуры хранения моделей и карт
+//----------------------------------------------------
+//    Список карт и моделей
+//----------------------------------------------------
+ формат один:
+ ---------
+ [MAIN]
+    cnt=N
+ [PART0]
+    id=ID
+    path=PATH
+    ...
+ [PART(N-1)]
+    ...
+ ---------
+ path - название папки, которая находится в той же папке, что и файл списка
+
+ //----------------------------------------------------
+ //    Файл карты
+ //----------------------------------------------------
+ ---------
+ [MAIN]
+    cnt=N
+    common property - будет уточняться
+ [PART0]
+    id_model=
+    id_behavior=
+    coord=;;;
+    orient=;;;
+    state=
+    ...
+ [PART(N-1)]
+    ...
+ ---------
+ индекс - он же ID на карте
+ //----------------------------------------------------
+ //    Файл модели DX
+ //----------------------------------------------------
+ ---------
+ [MAIN]
+    LOD= - дистанция от камеры до объекта
+    CntGroup=4 - кол-во частей
+ [PART0]
+    strPathShader=shader.fx - название шейдера
+    strTechnique=TexturedSpecular - функция внутри шейдера
+    strTexture=PzVl_Tiger_I.dds - название файла текстуры
+    strName=Hull - имя (для отладки)
+    vAmbient=0.4;0.4;0.4; - 
+    vDiffuse=0.4;0.4;0.4;
+    vSpecular=1;1;1;
+    nShininess=1
+    fAlpha=1.0
+    bSpecular=0
+    mTypeLOD=0   - детализация
+    mflgNormal=1 - разрушен ли
+    primitives=Hull.obj - набор вершин, индексов, нормалей
+
+    cntJoint=N
+    nameJoint0=Turret
+    matrix0_0=;;;;
+    matrix0_1=;;;;
+    matrix0_2=;;;;   
+    matrix0_3=;;;;
+    nameJoint1=TrackL
+    matrix1_0=;;;;
+    matrix1_1=;;;;
+    matrix1_2=;;;;   
+    matrix1_3=;;;;
+    nameJoint2=TrackR
+    matrix2_0=;;;;
+    matrix2_1=;;;;
+    matrix2_2=;;;;   
+    matrix2_3=;;;;
+    nameJoint1=ChassisL
+    matrix1_0=;;;;
+    matrix1_1=;;;;
+    matrix1_2=;;;;   
+    matrix1_3=;;;;
+    nameJoint2=ChassisR
+    matrix2_0=;;;;
+    matrix2_1=;;;;
+    matrix2_2=;;;;   
+    matrix2_3=;;;;
+
+ [PART(N-1)]
+ ...
+ ---------
+
+ 
+    Состав частей для танка: 
+  Пушка Gun
+  Башня Turret
+  Корпус Hull
+  Траки TrackR и TrackL
+  Шасси ChassisR и ChassisL
+
+ */
+
 // Файлы текстур и шейдеров задаются для каждой группы отдельно
 
 

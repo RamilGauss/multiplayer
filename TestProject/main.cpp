@@ -1,3 +1,4 @@
+#include <vector>
 /*
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
@@ -33,28 +34,39 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include <QtGui/QApplication>
 
-#include <QtCore/QTextCodec>
-#include <QWindowsStyle>
-#include "BaseGUI_DX.h"
-  //#include "ManagerDirectX.h"
+//#include "ManagerObjectCommon.h"
+//#include "BaseGUI_DX.h"
+//#include "BaseObjectDX.h"
+//#include "LoaderModelDX.h"
+//#include "ModelDX.h"
 
-class TA :  public TBaseGUI_DX</*TManagerDirectX*/int,int,int>
-{
-public:
-  TA(){};
-  virtual void VisualEvent(QPaintEvent* pEvent){};
-  virtual void Translate(unsigned short typePacket, char* pData, int size){};
-};
 
 int main(int argc, char *argv[])
 {
-  QTextCodec::setCodecForTr(QTextCodec::codecForName("CP1251"));
+  
 
-  QApplication a(argc, argv);
-  TA asd;
-  asd.showGUI();
-	a.exec();
-	return 0;
+  //TModelDX model;
+  //TLoaderModelDX loader;
+  //TBaseObjectDX object;
+
+  //TBaseGUI_DX pForm;
+
+  //TManagerObjectCommon MOC;
+  //TManagerDirectX MDX;
+
+  //pForm.setup(NULL,&MDX,NULL,&MOC);
+  std::vector<int> v;
+  v.reserve(100);
+  int r = v.capacity();
+  int cnt = v.size();
+  for(int i = 0 ; i < 100 ; i++)
+  {
+    v.push_back(i);
+  }
+  r = v.capacity();
+  v.reserve(200);
+  r = v.capacity();
+
+  return 0;
 }

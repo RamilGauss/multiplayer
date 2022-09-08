@@ -45,8 +45,9 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ErrorReg.h"
 #include "HiTimer.h"
 #include "NetSystem.h"
+#include "TankTower.h"
+#include "ModelDX.h"
 
-#include "TankTower_Server.h"
 
 int main(int argc, char *argv[])
 {
@@ -57,19 +58,6 @@ int main(int argc, char *argv[])
   errSDK_Init();
   ht_Init();
   ns_Init();
-
-
-  TTankTower_Server* pTank = new TTankTower_Server(NULL);
-  pTank->SetTypeTank(123);
-
-  unsigned int type = pTank->GetTypeTank();
-  TArrayObject array;
-  array.Add(pTank);
-  type = pTank->GetTypeTank();
-
-  TTankServer* pTankServer = (TTankServer*)array.Get(i);
-  int typeTank = ((TTank*)pTankServer)->GetTypeTank();
-
 
 	QTextCodec::setCodecForTr(QTextCodec::codecForName("CP1251"));
 

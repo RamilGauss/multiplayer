@@ -153,6 +153,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\ApplicationProtocolPacketAnswer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\BaseObject.cpp"
 				>
 			</File>
@@ -169,6 +173,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\file_operation.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\GlobalParamsTank.cpp"
 				>
 			</File>
@@ -177,7 +185,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LoaderListPathID.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\LoadFromHDD.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Logger.cpp"
 				>
 			</File>
 			<File
@@ -275,6 +291,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\file_operation.h"
+				>
+			</File>
+			<File
 				RelativePath=".\GlobalParamsTank.h"
 				>
 			</File>
@@ -287,7 +307,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LoaderListPathID.h"
+				>
+			</File>
+			<File
 				RelativePath=".\LoadFromHDD.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Logger.h"
 				>
 			</File>
 			<File

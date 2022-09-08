@@ -145,6 +145,19 @@ public:
   float* getPointerZ(){return (float*)(mData+sizeof(mType)+sizeof(float)+sizeof(float));}
 };
 //-----------------------------------------------------------------------------
+// APPL_TYPE_G_S_LOAD_MAP
+class TS_Load_Map : public TBasePacket
+{
+  // ushort type,
+
+public:
+  TS_Load_Map(){mType=APPL_TYPE_G_S_LOAD_MAP;
+  mSize = sizeof(mType);
+  mData = (char*)malloc(mSize);
+  setType();
+  }
+};
+//-----------------------------------------------------------------------------
 
 
 #endif

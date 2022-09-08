@@ -37,6 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <stddef.h>
 
 #include "namespace_ID_BEHAVIOR.h"
+#include "TankTower.h"
 
 using namespace nsID_BEHAVIOR;
 
@@ -56,6 +57,8 @@ TBaseObjectCommon* TMakerBehavior::New(unsigned int id_behavior)
   {
     case ID_NULL:
       break;
+    case ID_TANK_TOWER:
+      return new TTankTower();
     default:;
   }
   return NULL;

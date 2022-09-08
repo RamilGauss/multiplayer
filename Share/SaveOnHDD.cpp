@@ -57,11 +57,13 @@ TSaveOnHDD::TSaveOnHDD(char* path)
   
   flgPrintf = false;
   flgDebug  = true;
+  flgBuffer = true;
 }
 //---------------------------------------------------------------
 TSaveOnHDD::~TSaveOnHDD()
 {
 	Close();
+  ClearBuffer();
 }
 //---------------------------------------------------------------
 bool TSaveOnHDD::ReOpen(char* path)
@@ -74,7 +76,11 @@ bool TSaveOnHDD::ReOpen(char* path)
 	if(sPath[0] == '\0') return false;
 
 	pFile = fopen(sPath,"wb");
-	if(pFile!=NULL) return true;
+	if(pFile!=NULL) 
+  {
+    FlushBuffer();
+    return true;
+  }
 
 	char sErr[1000];
 	sprintf(sErr,"fopen Error: %s path=\"%s\"",strerror(errno),path);
@@ -90,8 +96,16 @@ bool TSaveOnHDD::IsOpen()
 //---------------------------------------------------------------
 void TSaveOnHDD::Write(void* buffer, int size)
 {
-	fwrite(buffer, size,1,pFile);
-	fflush(pFile);
+	if(pFile)
+  {
+    fwrite(buffer, size,1,pFile);
+    fflush(pFile);
+  }
+  else
+  {
+    if(flgBuffer)
+      FlushInBuffer((char*)buffer,size);
+  }
 }
 //---------------------------------------------------------------
 void TSaveOnHDD::Close()
@@ -156,5 +170,55 @@ void TSaveOnHDD::Write_Time()
     my_time->tm_hour,my_time->tm_min,my_time->tm_sec,millitm1);
 
   Write(str_time,strlen(str_time));
+}
+//---------------------------------------------------------------
+void TSaveOnHDD::FlushBuffer()
+{
+  //std::list<TBuffer*>::iterator bit = mListBuffer.begin();
+  //std::list<TBuffer*>::iterator eit = mListBuffer.end();
+  //while(bit!=eit)
+  //{
+  //  Write((*bit)->p,(*bit)->size);
+  //  delete (*bit);
+  //  bit++;
+  //}
+  //mListBuffer.clear();
+
+  int cnt = mVectorBuffer.size();
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    std::vector<unsigned char> v = mVectorBuffer.at(i);
+    Write(&v.at(0),v.size());
+    v.clear();
+  }
+  mVectorBuffer.clear();
+}
+//---------------------------------------------------------------
+void TSaveOnHDD::ClearBuffer()
+{
+  //std::list<TBuffer*>::iterator bit = mListBuffer.begin();
+  //std::list<TBuffer*>::iterator eit = mListBuffer.end();
+  //while(bit!=eit)
+  //{
+  //  delete (*bit);
+  //  bit++;
+  //}
+  //mListBuffer.clear();
+  mVectorBuffer.clear();
+}
+//---------------------------------------------------------------
+void TSaveOnHDD::FlushInBuffer(char* buffer, int size)
+{
+  //TBuffer* pBuffer = new TBuffer;
+  //mListBuffer.push_back(pBuffer);
+  //pBuffer->p = new char[size];
+  //memcpy(pBuffer->p,buffer,size);
+  //pBuffer->size = size;
+  std::vector<unsigned char> v;
+  v.reserve(size);
+  for(int i = 0; i < size ; i++)
+    v.push_back((unsigned char)buffer[i]);
+
+  mVectorBuffer.push_back(v);
 }
 //---------------------------------------------------------------

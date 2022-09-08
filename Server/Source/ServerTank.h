@@ -126,10 +126,10 @@ public:
     ~TAnswerRequest()
     {
       cntClient = 0;
-      delete mArrClient;
+      delete[] mArrClient;
       mArrClient = NULL;
       cntRoom = 0;
-      delete mArrRoom;
+      delete[] mArrRoom;
       mArrRoom = NULL;
     }
   };

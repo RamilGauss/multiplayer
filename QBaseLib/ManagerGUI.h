@@ -42,6 +42,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include <QObject>
 #include <QEvent>
+#include <QMap>
 
 #include "BL_Debug.h"
 #include "BaseGUI_DX.h"
@@ -91,18 +92,17 @@ public:
   TManagerGUI(QWidget* parent=NULL);
   virtual ~TManagerGUI();
   
-  void start(TInterpretatorPredictionTank* _pRobert,
-             TManagerDirectX*              _pBigJack, 
-             TClientTank*                  _pClient);
+  void start(TClientTank*_pClient,TManagerObjectCommon*_pGame);
   void stop();
 
   void AddFormInList(TBaseGUI* pStrForm, char* name);
 
 protected:
-  
-  TInterpretatorPredictionTank* pRobert;
-  TManagerDirectX*              pBigJack;  
+
+  // транспорт
   TClientTank*                  pClient;
+  // управляющий двигателями
+  TManagerObjectCommon*         pGame;
 
   TBaseGUI* pCurrentForm;
 

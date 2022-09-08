@@ -191,18 +191,18 @@ void TManagerGUIClient::AnalizCode_A_In_Fight(char* pData, int size)
 
   switch(packet.getCode())
   {
-  case TA_In_Fight::eFight:
-    OpenGameForm();
-    // загрузка карты по коду
-    pCurrentForm->Translate(packet.getCode(),pData, size);
-    break;
-  case TA_In_Fight::eWait:
-    OpenWaitForm();
-    break;
-  case TA_In_Fight::eFailBlockTank:
-    Q_MESSAGE(tr("Танк заблокирован. Выберете другой."))
+    case TA_In_Fight::eFight:
+      OpenGameForm();
+      // загрузка карты по коду
+      pCurrentForm->Translate(APPL_TYPE_A_IN_FIGHT,pData, size);
       break;
-  default:BL_FIX_BUG();
+    case TA_In_Fight::eWait:
+      OpenWaitForm();
+      break;
+    case TA_In_Fight::eFailBlockTank:
+      Q_MESSAGE(tr("Танк заблокирован. Выберете другой."))
+        break;
+    default:BL_FIX_BUG();
   }
 }
 //---------------------------------------------------------------------------------------------

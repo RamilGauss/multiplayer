@@ -3,8 +3,8 @@ TransportInfo:
 	 type=C,
 	 cn_in=0,
 	 cn_out=0,
-	 time=8:40:12.375,
-	 localTime=8:40:12.375,
+	 time=8:6:17.125,
+	 localTime=8:6:17.125,
 	 cntTry=0,
 	 DST=192.168.23.226:4321,
 	 SRC=192.168.23.226:9002
@@ -16,8 +16,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=0,
 	 cn_out=0,
-	 time=8:40:12.375,
-	 localTime=8:40:12.375,
+	 time=8:6:17.125,
+	 localTime=8:6:17.125,
 	 cntTry=0,
 	 DST=192.168.23.226:9002,
 	 SRC=192.168.23.226:4321
@@ -29,21 +29,21 @@ TransportInfo:
 	 type=P,
 	 cn_in=0,
 	 cn_out=1,
-	 time=8:40:12.468,
-	 localTime=8:40:12.468,
+	 time=8:6:17.218,
+	 localTime=8:6:17.218,
 	 cntTry=0,
 	 DST=192.168.23.226:4321,
 	 SRC=192.168.23.226:9002
 Contain packet:
-0x0 0x0 0x28 0x0 0x47 0x61 0x75 0x73 0x73 0x39 0x30 0x30 0x32 0x0 
+0x0 0x0 0x2B 0x0 0x47 0x61 0x75 0x73 0x73 0x39 0x30 0x30 0x32 0x0 
 
 Recive Packet from ip=192.168.23.226, port=4321
 TransportInfo: 
 	 type=K,
 	 cn_in=0,
 	 cn_out=1,
-	 time=8:40:12.468,
-	 localTime=8:40:12.468,
+	 time=8:6:17.218,
+	 localTime=8:6:17.218,
 	 cntTry=0,
 	 DST=192.168.23.226:9002,
 	 SRC=192.168.23.226:4321
@@ -55,8 +55,8 @@ TransportInfo:
 	 type=P,
 	 cn_in=1,
 	 cn_out=1,
-	 time=8:40:12.515,
-	 localTime=8:40:12.515,
+	 time=8:6:17.250,
+	 localTime=8:6:17.250,
 	 cntTry=0,
 	 DST=192.168.23.226:9002,
 	 SRC=192.168.23.226:4321
@@ -68,8 +68,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=1,
 	 cn_out=1,
-	 time=8:40:12.515,
-	 localTime=8:40:12.515,
+	 time=8:6:17.250,
+	 localTime=8:6:17.250,
 	 cntTry=0,
 	 DST=192.168.23.226:4321,
 	 SRC=192.168.23.226:9002
@@ -81,8 +81,8 @@ TransportInfo:
 	 type=P,
 	 cn_in=1,
 	 cn_out=2,
-	 time=8:40:12.515,
-	 localTime=8:40:12.515,
+	 time=8:6:17.250,
+	 localTime=8:6:17.250,
 	 cntTry=0,
 	 DST=192.168.23.226:4321,
 	 SRC=192.168.23.226:9002
@@ -94,8 +94,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=1,
 	 cn_out=2,
-	 time=8:40:12.515,
-	 localTime=8:40:12.515,
+	 time=8:6:17.250,
+	 localTime=8:6:17.250,
 	 cntTry=0,
 	 DST=192.168.23.226:9002,
 	 SRC=192.168.23.226:4321
@@ -107,21 +107,73 @@ TransportInfo:
 	 type=P,
 	 cn_in=2,
 	 cn_out=2,
-	 time=8:40:12.625,
-	 localTime=8:40:12.625,
+	 time=8:6:17.343,
+	 localTime=8:6:17.343,
 	 cntTry=0,
 	 DST=192.168.23.226:9002,
 	 SRC=192.168.23.226:4321
 Contain packet:
-0xCB 0x0 0x1 0x0 0x0 0x1 
+0xCB 0x0 0x1 0x66 0x66 0x0 
 
 Send Packet to ip=192.168.23.226, port=4321
 TransportInfo: 
 	 type=K,
 	 cn_in=2,
 	 cn_out=2,
-	 time=8:40:12.625,
-	 localTime=8:40:12.625,
+	 time=8:6:17.343,
+	 localTime=8:6:17.343,
+	 cntTry=0,
+	 DST=192.168.23.226:4321,
+	 SRC=192.168.23.226:9002
+Contain packet:
+
+
+Send Packet to ip=192.168.23.226, port=4321
+TransportInfo: 
+	 type=P,
+	 cn_in=2,
+	 cn_out=3,
+	 time=8:6:19.140,
+	 localTime=8:6:19.140,
+	 cntTry=0,
+	 DST=192.168.23.226:4321,
+	 SRC=192.168.23.226:9002
+Contain packet:
+0x2 0x0 
+
+Recive Packet from ip=192.168.23.226, port=4321
+TransportInfo: 
+	 type=K,
+	 cn_in=2,
+	 cn_out=3,
+	 time=8:6:19.140,
+	 localTime=8:6:19.140,
+	 cntTry=0,
+	 DST=192.168.23.226:9002,
+	 SRC=192.168.23.226:4321
+Contain packet:
+
+
+Recive Packet from ip=192.168.23.226, port=4321
+TransportInfo: 
+	 type=P,
+	 cn_in=3,
+	 cn_out=3,
+	 time=8:6:19.203,
+	 localTime=8:6:19.203,
+	 cntTry=0,
+	 DST=192.168.23.226:9002,
+	 SRC=192.168.23.226:4321
+Contain packet:
+0xCA 0x0 0x0 0x0 0x0 0x2 0xA 0x47 0x61 0x75 0x73 0x73 0x39 0x30 0x30 0x32 0x0 0x0 0x0 0x66 0x66 0xA 0x47 0x61 0x75 0x73 0x73 0x39 0x30 0x30 0x31 0x0 0x0 0x0 0x66 0x66 
+
+Send Packet to ip=192.168.23.226, port=4321
+TransportInfo: 
+	 type=K,
+	 cn_in=3,
+	 cn_out=3,
+	 time=8:6:19.203,
+	 localTime=8:6:19.203,
 	 cntTry=0,
 	 DST=192.168.23.226:4321,
 	 SRC=192.168.23.226:9002

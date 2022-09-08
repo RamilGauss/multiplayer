@@ -38,11 +38,11 @@ you may contact in writing [ramil2085@gmail.com].
 #define BaseObjectDXH
 
 #include "ModelDX.h"
-#include "BaseObject.h"
+#include "BaseObjectPrediction.h"
 
 class TManagerObjectDX;
 
-class TBaseObjectDX : virtual public TBaseObject
+class TBaseObjectDX : public TBaseObjectPrediction
 {
 protected:
 
@@ -52,9 +52,10 @@ protected:
 
 public:
   TBaseObjectDX();
-  ~TBaseObjectDX();
+  virtual ~TBaseObjectDX();
 
   void SetModel(TModelDX* pModel);
+  TModelDX* GetModel();
 
   void Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj);
 
@@ -62,14 +63,22 @@ public:
   void SetName(const char* name);
 
 protected:
+
   void Done();
   void SetOneMatrix(D3DXMATRIXA16& matrix);
 
-  friend class TManagerObjectDX;
-
   TModelDX* mModel;// внешний вид 
-  D3DXMATRIXA16* mArrMatrixSubset;// кол-во см. в mModel
+  
+  D3DXMATRIXA16* mArrMatrix;// кол-во см. в mModel
+  int mCntMatrix;
+  std::vector<unsigned char> mMask;
 
+  // настроить матрицу расположения и ориентации локальных видимых частей
+  virtual void SetupArrMatrix();
+
+  // маска отрисовки частей модели
+  // например, нарисовать Пушку1, а не Пушку0 и т.д.
+  // 1 0 0 1 1 1 1
 };
 //-----------------------------------------------------------------
 

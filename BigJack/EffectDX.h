@@ -37,13 +37,16 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef EffectDXH
 #define EffectDXH
 
+#include <string>
 #include <d3dx9effect.h>
 #include <d3dx9mesh.h>
+#include <vector>
 
 class TEffectDX
 {
   //--------------------------------------------------------------------------------------
   // Effect parameter handles
+  // Шейдер
   //--------------------------------------------------------------------------------------
   D3DXHANDLE  hAmbient;
   D3DXHANDLE  hDiffuse;
@@ -57,16 +60,19 @@ class TEffectDX
   D3DXHANDLE  hTime;
   D3DXHANDLE  hWorld;
   D3DXHANDLE  hWorldViewProjection;
+  //----------------------------------------------------------------------------------------
+  struct TJointPart
+  {
+    std::string namePart;
+    D3DXMATRIXA16 matrix;
+  };
 
 public:
 
-  ID3DXMesh* pMesh;
-
-  ID3DXEffect* p;
   // Material format 
   struct Material
   {
-    char   strName[MAX_PATH];
+    std::string strName;
 
     D3DXVECTOR3 vAmbient;
     D3DXVECTOR3 vDiffuse;
@@ -77,10 +83,10 @@ public:
 
     bool bSpecular;
     
-    WCHAR   strShader[MAX_PATH];
-    char    strTechnique[MAX_PATH];
+    std::wstring strShader;
+    std::string  strTechnique;
 
-    WCHAR   strTexture[MAX_PATH];
+    std::wstring strTexture;
     IDirect3DTexture9* pTexture;
     D3DXHANDLE hTechnique;
   };
@@ -96,7 +102,9 @@ public:
   TEffectDX();
   ~TEffectDX();
 
-  void Init(int subset);
+  D3DXMATRIXA16* GetBlendMatrixByName(char* sNamePart);
+
+  void Init();
   void Destroy();
   void LostDevice();
   void ResetDevice();
@@ -107,19 +115,24 @@ public:
   HRESULT BeginPass(UINT iPass);
   HRESULT EndPass();
   HRESULT End();
+//----------------------------------------------------------
+  ID3DXMesh*    pMesh;
+  ID3DXEffect*  p;// функция шейдера
 
   Material      mMaterial;
 
   unsigned char mTypeLOD;
   bool          mflgNormal;
 
-  int           mSubset;// номер в структуре TEffectDX
-  unsigned char mIndexVisual;// индекс при отрисовке, для определения по состоянию
+  std::string   sName;
 
-  bool isN0();
-  bool isN1();
-  bool isD0();
-  bool isD1();
+
+  void CreateJoint(int cnt);
+  void AddJoint(int i, std::string s, D3DXMATRIXA16& matrix);
+protected:
+  TJointPart* mArrJoint;
+  int         mCntJoint;
+
 };
 
 

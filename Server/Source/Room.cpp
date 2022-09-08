@@ -62,12 +62,12 @@ TRoom::~TRoom()
   mArrTank.Unlink();
 }
 //----------------------------------------------------------------
-void TRoom::AddTank(TTankServer* pTank)
+void TRoom::AddTank(TTank* pTank)
 {
-  mArrTank.Add((TTank*)pTank);
+  mArrTank.Add(pTank);
   // подготовка к бою
-  //pTank->mSpeed = 0;
-  //pTank->mMaskPushButton = 0;// ничего не нажато
+  pTank->mSpeed = 0;
+  pTank->mMaskPushButton = 0;// ничего не нажато
 }
 //----------------------------------------------------------------
 void TRoom::SetTransport(TTransportProtocol* pTransport)
@@ -125,7 +125,7 @@ void TRoom::Done()
   // разослать результаты боя
   for(int i = 0 ; i < mArrTank.Count() ; i++)
   {
-    TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
+    TTank* pTank = (TTank*)(mArrTank.Get(i));
 
     TClient* pClient = pTank->GetMasterClient();
     if(pClient->GetCurRoom()==pTank->pRoom)// а вдруг клиент на другом танке в другом бою?
@@ -200,7 +200,7 @@ void TRoom::WorkCountDown()
     int cnt = mArrTank.Count();
     for(int i = 0 ; i < cnt ; i++)
     {
-      TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
+      TTank* pTank = (TTank*)mArrTank.Get(i);
       TClient* pClient = pTank->GetMasterClient();
       WriteTransportStream(pClient,&S_Count_Down);
     }
@@ -220,7 +220,7 @@ void TRoom::WorkFight()
   s_coord.setCntTank(cnt);
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
+    TTank* pTank = (TTank*)mArrTank.Get(i);
     TClient* pClient = pTank->GetMasterClient();
     if(pClient->GetCurRoom()==this)// уменьшить трафик
       WriteTransportStream(pClient,&s_coord);
@@ -241,7 +241,7 @@ void TRoom::WorkFight()
     //------------------------------------------------------------------------------------
     for(int i = 0 ; i < cnt ; i++)
     {
-      TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
+      TTank* pTank = (TTank*)mArrTank.Get(i);
       TClient* pClient = pTank->GetMasterClient();
       if(pClient->GetCurRoom()==this)// уменьшить трафик
         WriteTransportAnswer(pClient,&event_packet);
@@ -264,7 +264,7 @@ void TRoom::MakeGroup()
   int cnt = mArrTank.Count();
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
+    TTank* pTank = (TTank*)mArrTank.Get(i);
     if(i>cnt/2)
       pTank->mGroup = 1;
     else
@@ -283,6 +283,15 @@ void TRoom::WorkLoadMap()
   {
     mState = eCountDown;
     mTimeBeginCountDown = mNow_MS;
+    return;
+  }
+  TS_Load_Map S_Load_Map;
+  int cnt = mArrTank.Count();
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    TTank* pTank = (TTank*)mArrTank.Get(i);
+    TClient* pClient = pTank->GetMasterClient();
+    WriteTransportStream(pClient,&S_Load_Map);
   }
 }
 //----------------------------------------------------------------------------------
@@ -361,7 +370,7 @@ void TRoom::LoadMap()
   threadLoadMap = g_thread_create(::ThreadLoadMap, (gpointer)this, true, NULL);
 }
 //----------------------------------------------------------------------------------
-void TRoom::SetPacket(nsServerStruct::TPacketServer* pDefPacket,TTankServer* pTank)
+void TRoom::SetPacket(nsServerStruct::TPacketServer* pDefPacket,TTank* pTank)
 {
   TAction* pAction = new TAction;
   pAction->pTank   = pTank;
@@ -377,7 +386,7 @@ void TRoom::SendInitCoordTank(TClient* pClient)
   packet.setCountTank(cnt);
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
+    TTank* pTank = (TTank*)mArrTank.Get(i);
     // ### заменить на GetMirror()
     //packet.setID(i,i);
     //packet.setX(i,pTank->mCoord.x);
@@ -443,7 +452,7 @@ int TRoom::GetActiveClient()
   int cnt = mArrTank.Count();
   for(int i = 0 ; i < cnt ; i++ )
   {
-    TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
+    TTank* pTank = (TTank*)mArrTank.Get(i);
     if(pTank)
     if(pTank->GetMasterClient()->GetCurRoom()==this)
       cntActive++;

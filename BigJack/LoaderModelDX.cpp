@@ -35,7 +35,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 
 #include "LoaderModelDX.h"
-#include "LoggerDX.h"
+#include "Logger.h"
 #include "BL_Debug.h"
 #include "glib/gmem.h"
 
@@ -58,17 +58,15 @@ bool TLoaderModelDX::Load(LPCWSTR strFilenameData)
 
   strcpy(pStrPathShader,W2A(strFilenameData));
   UpPath(&pStrPathShader[0]);
+  UpPath(&pStrPathShader[0]);
+  UpPath(&pStrPathShader[0]);
+  UpPath(&pStrPathShader[0]);
   strcat(pStrPathShader,"\\shader");
 
   strcpy(pStrFilenameData ,W2A(strFilenameData));
   strcpy(pStrFilenameDataMainIni,pStrFilenameData);
-  strcat(pStrFilenameDataMainIni,"\\main.ini");
+  //strcat(pStrFilenameDataMainIni,"\\main.ini");
   if(LoadMainFile()==false) 
-  {
-    GlobalLoggerDX.WriteF_time("Не удалось загрузить MainFile для модели.\n");
-    return false;
-  }
-  if(LoadFileResource()==false)
   {
     GlobalLoggerDX.WriteF_time("Не удалось загрузить ресурсы для модели.\n");
     return false;
@@ -84,110 +82,134 @@ bool TLoaderModelDX::LoadMainFile()
     return false;
 
   // считать данные:
-  mCntEffectVisual = mFileIniMain.GetInteger("MAIN","CntEffectVisual",0);
-  mCntEffectInLOD  = mFileIniMain.GetInteger("MAIN","CntEffectInLOD",0);
-  mLOD             = (float)mFileIniMain.GetDouble("MAIN","LOD",1);
-  mID_unique       = mFileIniMain.GetInteger("MAIN","ID_unique",eUndefID);
-  mCntGroup        = mFileIniMain.GetInteger("MAIN","CntGroup",0);
-  mArrDefGroup     = new TDefGroup[mCntGroup];
-  //----------------------------------------------------------------------------  
-  // примитивы
-  char* strFileNamePrimitive = mFileIniMain.GetValue("MAIN","StrPathFilePrimitive");
-  if(strFileNamePrimitive)
+  mLOD         = (float)mFileIniMain.GetDouble("MAIN","LOD",1);
+  int cntGroup = mFileIniMain.GetInteger("MAIN","CntGroup",0);
+  Done();
+  for(int i = 0 ; i < cntGroup ; i++)
   {
-    strcpy(pStrPathPrimitive,pStrFilenameData);
-    strcat(pStrPathPrimitive,"\\");
-    strcat(pStrPathPrimitive,strFileNamePrimitive);
-    g_free(strFileNamePrimitive);
+    mVectorGroup.push_back(new TDefGroup);
+    if(LoadPart(&mFileIniMain,i)==false) return false;
   }
-  //----------------------------------------------------------------------------  
   mFileIniMain.Close();
   return true;
 }
 //--------------------------------------------------------------------------------
-bool TLoaderModelDX::LoadFileResource()
-{
-  mFileIniRes.Close();
-  mFileIniRes.Open(pStrPathPrimitive);
-  if(mFileIniRes.IsOpen()==false)
-    return false;
-
-  for(int i = 0 ; i < mCntGroup ; i++)
-    if(LoadPart(i)==false) return false;
-
-  mFileIniRes.Close();
-  return true;
-}
-//--------------------------------------------------------------------------------
-bool TLoaderModelDX::LoadPart(int i)
+bool TLoaderModelDX::LoadPart(TBL_ConfigFile* fileIni, int i)
 {
   char strNumPart[20];
   sprintf(strNumPart,"PART%d",i);
 
-  mArrDefGroup[i].mIndex = mFileIniRes.GetInteger(strNumPart,"Index",0);
   //------------------------------------------------------------
-  char * str = mFileIniRes.GetValue(strNumPart,"strPathShader");
+  char * str = fileIni->GetValue(strNumPart,"strPathShader");
   if(str)
   {
-    strcpy(mArrDefGroup[i].strPathShader,pStrPathShader);
-    strcat(mArrDefGroup[i].strPathShader,"\\");
-    strcat(mArrDefGroup[i].strPathShader,str);
+    mVectorGroup[i]->strPathShader = pStrPathShader;
+    mVectorGroup[i]->strPathShader += "\\";
+    mVectorGroup[i]->strPathShader += str;
     g_free(str);
     str = NULL;
   }
   else return false;
   //------------------------------------------------------------
-  str = mFileIniRes.GetValue(strNumPart,"strTechnique");
+  str = fileIni->GetValue(strNumPart,"strTechnique");
   if(str)
   {
-    strcpy(mArrDefGroup[i].strTechnique,str);
+    mVectorGroup[i]->strTechnique = str;
     g_free(str);
     str = NULL;
   }
   else return false;
   //------------------------------------------------------------
-  str = mFileIniRes.GetValue(strNumPart,"strTexture");
+  str = fileIni->GetValue(strNumPart,"strTexture");
   if(str)
   {
     USES_CONVERSION;
-    wcscpy(mArrDefGroup[i].strTexture,A2W(pStrFilenameData));
-    wcscat(mArrDefGroup[i].strTexture,L"\\");
-    wcscat(mArrDefGroup[i].strTexture,A2W(str));
+    mVectorGroup[i]->strTexture = A2W(pStrFilenameData);
+    mVectorGroup[i]->strTexture += L"\\";
+    mVectorGroup[i]->strTexture += A2W(str);
     g_free(str);
     str = NULL;
   }
   else return false;
   //------------------------------------------------------------
-  str = mFileIniRes.GetValue(strNumPart,"strName");
+  str = fileIni->GetValue(strNumPart,"strName");
   if(str)
   {
-    strcpy(mArrDefGroup[i].strName,str);
+    mVectorGroup[i]->strName = str;
     g_free(str);
     str = NULL;
   }
   else return false;
   //------------------------------------------------------------
-  if(LoadVector(strNumPart,"vAmbient",mArrDefGroup[i].vAmbient)==false) 
+  if(LoadVector(fileIni,strNumPart,"vAmbient",mVectorGroup[i]->vAmbient)==false) 
     return false;
-  if(LoadVector(strNumPart,"vDiffuse",mArrDefGroup[i].vDiffuse)==false) 
+  if(LoadVector(fileIni,strNumPart,"vDiffuse",mVectorGroup[i]->vDiffuse)==false) 
     return false;
-  if(LoadVector(strNumPart,"vSpecular",mArrDefGroup[i].vSpecular)==false) 
+  if(LoadVector(fileIni,strNumPart,"vSpecular",mVectorGroup[i]->vSpecular)==false) 
     return false;
 
-  mArrDefGroup[i].nShininess = mFileIniRes.GetInteger(strNumPart,"nShininess",0);
-  mArrDefGroup[i].fAlpha     = (float)mFileIniRes.GetDouble(strNumPart,"fAlpha");
-  mArrDefGroup[i].bSpecular  = mFileIniRes.GetBool(strNumPart,"bSpecular",false);
-  mArrDefGroup[i].mTypeLOD   = mFileIniRes.GetBool(strNumPart,"mTypeLOD",false);
-  mArrDefGroup[i].mflgNormal = mFileIniRes.GetBool(strNumPart,"mflgNormal",true);
+  mVectorGroup[i]->nShininess = fileIni->GetInteger(strNumPart,"nShininess",0);
+  mVectorGroup[i]->fAlpha     = (float)fileIni->GetDouble(strNumPart,"fAlpha");
+  mVectorGroup[i]->bSpecular  = fileIni->GetBool(strNumPart,"bSpecular",false);
+  mVectorGroup[i]->mTypeLOD   = fileIni->GetBool(strNumPart,"mTypeLOD",false);
+  mVectorGroup[i]->mflgNormal = fileIni->GetBool(strNumPart,"mflgNormal",true);
   //-----------------------------------------------------------------------
-  if(LoadMesh(strNumPart,&mArrDefGroup[i])==false)
+  if(LoadMesh(fileIni,strNumPart,mVectorGroup[i])==false)
     return false;
+
+  // загрузить Joint
+  mVectorGroup[i]->mCntJoint = fileIni->GetInteger(strNumPart,"cntJoint",0);
+  mVectorGroup[i]->pArrJoint = new TJointPart[mVectorGroup[i]->mCntJoint];
+  for(int i = 0 ; i < mVectorGroup[i]->mCntJoint ; i++)
+  {
+    TJointPart* pJoint = mVectorGroup[i]->pArrJoint+i;
+    str = fileIni->GetValue(strNumPart,"strName");
+    if(str)
+    {
+      pJoint->namePart = str;
+      g_free(str);
+      str = NULL;
+    }
+    else return false;
+
+    for(int j = 0 ; j < 4 ; j++)
+    {
+      D3DXVECTOR4 vector4;
+      char strNumJointPart[20];
+      sprintf(strNumJointPart,"matrix%d_%d",i,j);
+
+      if(LoadVector4(fileIni,strNumPart,strNumJointPart,vector4)==false) 
+        return false;
+      pJoint->matrix.m[j][0]=vector4[0];
+    }
+  }
   return true;
 }
 //--------------------------------------------------------------------------------
-bool TLoaderModelDX::LoadVector(char* strNumPart,char* key,D3DXVECTOR3& vector)
+bool TLoaderModelDX::LoadVector4(TBL_ConfigFile* fileIni,char* strNumPart,char* key,D3DXVECTOR4& vector4)
 {
-  char* str = mFileIniRes.GetValue(strNumPart,key);
+  char* str = fileIni->GetValue(strNumPart,key);
+  if(str)
+  {
+    char* buffer = str;
+    bool ok;
+    vector4.x = FindFloat_Semicolon(&buffer,&ok);
+    if(ok==false) {g_free(str);return false;}
+    vector4.y = FindFloat_Semicolon(&buffer,&ok);
+    if(ok==false) {g_free(str);return false;}
+    vector4.z = FindFloat_Semicolon(&buffer,&ok);
+    if(ok==false) {g_free(str);return false;}
+    vector4.w = FindFloat_Semicolon(&buffer,&ok);
+    if(ok==false) {g_free(str);return false;}
+    g_free(str);
+    return true;
+  }
+  return false;
+}
+//--------------------------------------------------------------------------------
+bool TLoaderModelDX::LoadVector(TBL_ConfigFile* fileIni,char* strNumPart,char* key,D3DXVECTOR3& vector)
+{
+  char* str = fileIni->GetValue(strNumPart,key);
   if(str)
   {
     char* buffer = str;
@@ -237,11 +259,11 @@ float TLoaderModelDX::FindFloat_Semicolon(char** buffer,bool* ok)
   return res; 
 }
 //--------------------------------------------------------------------------------
-bool TLoaderModelDX::LoadMesh(char* strNumPart,TDefGroup *mArrDefGroup)
+bool TLoaderModelDX::LoadMesh(TBL_ConfigFile* fileIni,char* strNumPart,TDefGroup *mArrDefGroup)
 {
   HRESULT hr;
   char strPathPrimitives[MAX_PATH];
-  char* str = mFileIniRes.GetValue(strNumPart,"primitives");
+  char* str = fileIni->GetValue(strNumPart,"primitives");
   if(str)
   {
     strcpy(strPathPrimitives,pStrFilenameData);
@@ -256,63 +278,6 @@ bool TLoaderModelDX::LoadMesh(char* strNumPart,TDefGroup *mArrDefGroup)
   mArrDefGroup->pMesh = mMeshLoader.GetMesh();
   mMeshLoader.ZeroMesh();// отвязаться
 
-  return true;
-//  HRESULT hr;
-//  LPD3DXMESH pMesh = NULL;
-//  LPD3DXBUFFER bufEffectInstances = NULL;
-//  LPD3DXBUFFER bufAdjacency = NULL;
-//  DWORD dwMaterials = 0;
-//
-//  V( D3DXLoadMeshFromX( strPathPrimitives,
-//                        D3DXMESH_SYSTEMMEM,
-//                        m_pd3dDevice,
-//                        NULL,//&bufAdjacency,
-//                        NULL,
-//                        NULL,//&bufEffectInstances,
-//                        NULL,//&dwMaterials,
-//                        &pMesh
-//                        ) );
-//  mArrDefGroup->cntVertex  = 3;//###pMesh->GetNumVertices();
-//  mArrDefGroup->vertex  = new TEffectDX::VERTEX[mArrDefGroup->cntVertex];
-//  mArrDefGroup->cntIndexes = 3;//###3*pMesh->GetNumFaces();
-//  mArrDefGroup->indexes = new DWORD[mArrDefGroup->cntIndexes];
-//#if 0
-//  //###
-//  mArrDefGroup->indexes[0]=0;
-//  mArrDefGroup->indexes[1]=1;
-//  mArrDefGroup->indexes[2]=2;
-//  //###
-//#endif
-//#if 1
-//  DWORD size = pMesh->GetNumBytesPerVertex();
-//  // копировать из меша
-//#pragma pack(push, 1)
-//  struct TPosText
-//  {
-//    D3DXVECTOR3 position;
-//    D3DXVECTOR2 texcoord;
-//  };
-//#pragma pack(pop)
-//  TPosText* pVertex;
-//  V( pMesh->LockVertexBuffer( 0 , ( void** )&pVertex ) );
-//  for(int i = 0 ; i < mArrDefGroup->cntVertex ; i++ )
-//  {
-//    mArrDefGroup->vertex[i].position = pVertex[i].position;
-//    mArrDefGroup->vertex[i].normal   = D3DXVECTOR3(0,0,1);
-//    mArrDefGroup->vertex[i].texcoord = pVertex[i].texcoord;
-//  }
-//  //memcpy( mArrDefGroup->vertex, pVertex, /*mArrDefGroup->cntVertex **/ sizeof( TEffectDX::VERTEX ) );
-//  pMesh->UnlockVertexBuffer();
-//
-//  // Copy the index data
-//  DWORD* pIndex;
-//  V( pMesh->LockIndexBuffer( 0 , ( void** )&pIndex ) );
-//  memcpy( mArrDefGroup->indexes, pIndex, mArrDefGroup->cntIndexes * sizeof( DWORD ) );
-//  pMesh->UnlockIndexBuffer();
-//
-//#endif
-//  // уничтожить меш и другие ресурсы
-//  SAFE_RELEASE(pMesh);
   return true;
 }
 //--------------------------------------------------------------------------------

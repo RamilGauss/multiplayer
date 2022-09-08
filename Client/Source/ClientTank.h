@@ -107,6 +107,7 @@ protected:
 	void Disconnect(void* data, int size);	
 
 	void SetLastTime(){mLastTimeRcv=ht_GetMSCount();};
+	guint32 GetLastTime(){return mLastTimeRcv;};
 
 
   void WriteTransport(TBasePacket* packet);

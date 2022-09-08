@@ -53,18 +53,17 @@ public:
   TPrediction();
   ~TPrediction();
 
-  void SetListTank();
-  void LoadMap(unsigned short id_map);
+  void AddObject(TBaseObjectPrediction* pObject);
+  void Clear();
+
+
   void InitState();
-  void SetState();
 
   void Calc();
 
-  //void SetOrientAim(unsigned int id_Tank /*TTank*pTank*/, nsServerStruct::TPacketServer* pDefPacket);
-  //void SetKeyEvent(unsigned int id_Tank /*TTank*pTank*/, nsServerStruct::TPacketServer* pDefPacket);
-
 
 public:
+  std::list<TBaseObjectPrediction*> mListObject;
   // список разрушенных или поврежденных объектов.
   std::list<TBaseObjectPrediction*> mListDamageObject;
 

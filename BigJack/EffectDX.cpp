@@ -40,7 +40,8 @@ you may contact in writing [ramil2085@gmail.com].
 
 TEffectDX::TEffectDX()
 {
-  mIndexVisual = 0;
+  mArrJoint = NULL;
+  mCntJoint = 0;
 
   p = NULL;
   pMesh = NULL;
@@ -61,9 +62,11 @@ TEffectDX::TEffectDX()
 //-----------------------------------------------------------
 TEffectDX::~TEffectDX()
 {
+  delete[] mArrJoint;
+  mCntJoint = 0;
 }
 //-----------------------------------------------------------
-void TEffectDX::Init(int subset)
+void TEffectDX::Init()
 {
   HRESULT hr;
   // Cache the effect handles
@@ -86,8 +89,6 @@ void TEffectDX::Init(int subset)
   V( p->SetTexture(   hTexture,       mMaterial.pTexture ) );
   V( p->SetFloat(     hOpacity,       mMaterial.fAlpha ) );
   V( p->SetInt(       hSpecularPower, mMaterial.nShininess ) );
-
-  mSubset = subset;
 }
 //-----------------------------------------------------------
 HRESULT TEffectDX::SetMatrixWorld(D3DXMATRIXA16* matrix)
@@ -151,31 +152,27 @@ void TEffectDX::ResetDevice()
   V(p->OnResetDevice());
 
   // загрузка техники исполнения в шейдере
-  mMaterial.hTechnique = p->GetTechniqueByName( mMaterial.strTechnique );
+  mMaterial.hTechnique = p->GetTechniqueByName( mMaterial.strTechnique.data() );
   V( p->SetTechnique( mMaterial.hTechnique ) );
 }
 //-----------------------------------------------------------
-bool TEffectDX::isN0()
+D3DXMATRIXA16* TEffectDX::GetBlendMatrixByName(char* sNamePart)
 {
-  if(p==NULL) return false;
-  return ((mTypeLOD==0)&&(mflgNormal==1));
+
+  return NULL;
 }
 //-----------------------------------------------------------
-bool TEffectDX::isN1()
+void TEffectDX::CreateJoint(int cnt)
 {
-  if(p==NULL) return false;
-  return ((mTypeLOD==1)&&(mflgNormal==1));
+  delete []mArrJoint;
+  mArrJoint = new TJointPart[cnt];
+  mCntJoint = cnt;
 }
 //-----------------------------------------------------------
-bool TEffectDX::isD0()
+void TEffectDX::AddJoint(int i, std::string s, D3DXMATRIXA16& matrix)
 {
-  if(p==NULL) return false;
-  return ((mTypeLOD==0)&&(mflgNormal==0));
-}
-//-----------------------------------------------------------
-bool TEffectDX::isD1()
-{
-  if(p==NULL) return false;
-  return ((mTypeLOD==1)&&(mflgNormal==0));
+  BL_ASSERT(i<mCntJoint);
+  mArrJoint[i].namePart = s;
+  mArrJoint[i].matrix   = matrix;
 }
 //-----------------------------------------------------------

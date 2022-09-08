@@ -39,15 +39,14 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include <QWidget>
 
-class TInterpretatorPredictionTank;
-class TManagerDirectX;
 class TClientTank;
+class TManagerObjectCommon;
 
 
 class TBaseGUI : public QWidget
 {
 public:
-  TBaseGUI(QWidget* parent=NULL): QWidget(parent){pRobert=NULL;pBigJack = NULL;pClient=NULL;}
+  TBaseGUI(QWidget* parent=NULL): QWidget(parent){pClient=NULL;}
   virtual ~TBaseGUI(){};
 
   virtual void Translate(unsigned short typePacket, char* pData, int size) = 0;
@@ -55,20 +54,20 @@ public:
   virtual void showGUI(){QWidget::show();}
   virtual void hideGUI(){QWidget::hide();};
 
-  void setup(TInterpretatorPredictionTank  *_pRobert,
-             TManagerDirectX *_pBigJack,
-             TClientTank  *_pClient )
+  virtual void SetupEvent(){};
+
+  void setup(TClientTank  *_pClient,
+             TManagerObjectCommon* _pGame)
   {
-    pRobert  = _pRobert;
-    pBigJack = _pBigJack;
     pClient  = _pClient;
+    pGame    = _pGame;
+    SetupEvent();
   }
 
 protected:
   
-  TInterpretatorPredictionTank  *pRobert;
-  TManagerDirectX *pBigJack;  
   TClientTank  *pClient;
+  TManagerObjectCommon* pGame;
   
 };
 

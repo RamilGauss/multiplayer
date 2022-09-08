@@ -384,7 +384,7 @@ void ServerTank::WorkStream()
       for(int i = 0 ; i < COUNT_COMMAND_IN_FIGHT*2 ; i++)
       {
         // убрать клиента из списка участвующих в бою
-        TTankServer* pTank = pRoom->GetTank(i);// взять описание танка
+        TTank* pTank = pRoom->GetTank(i);// взять описание танка
         TClient* pClient = pTank->GetMasterClient();
         if(pClient->GetCurRoom()==pRoom)
         {
@@ -609,8 +609,8 @@ bool ServerTank::SetListTank(TA_Get_List_Tank *answerListTank, unsigned int ip, 
   answerListTank->setCnt(cnt);
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTankServer* pTank = (TTankServer*)pClient->mGarage.mArrTanks.Get(i);
-    int typeTank = ((TTank*)pTank)->GetTypeTank();
+    TTank* pTank = (TTank*)pClient->mGarage.mArrTanks.Get(i);
+    int typeTank = pTank->GetTypeTank();
     answerListTank->setTypeTank(i,typeTank);
 		answerListTank->setFlgBlockTank(i,pTank->pRoom?1:0);
   }
@@ -847,17 +847,22 @@ void ServerTank::SendPacket_A_InFight(TClient* pClient)
   TA_In_Fight answerFight;
   answerFight.setCode(TA_In_Fight::eFight);
   answerFight.setCodeMap(pRoom->GetIDMap());
-  answerFight.setCountTank(2*COUNT_COMMAND_IN_FIGHT);
+  answerFight.setCountTank(2*COUNT_COMMAND_IN_FIGHT,TTank::GetSizeProperty());
 
   // идут в порядке: 1 и 2 команда
   for(int i = 0 ; i < COUNT_COMMAND_IN_FIGHT*2 ; i++)
   {
     // танки отсортированы на уровне комнаты
-    TTankServer* pTank = pRoom->GetTank(i);// взять описание танка
-    //### answerFight.setPointerStrNick(i,pTank->GetMasterClient()->sNick);
+    TTank* pTank = pRoom->GetTank(i);// взять описание танка
+
+    answerFight.setPointerStrNick(i,pTank->GetMasterClient()->sNick);
+    char *pProperty = pTank->GetProperty();
+    answerFight.SetTankProperty(i,pProperty);
+    delete pProperty;
+
     //answerFight.setGunType(i,pTank->mGun);
     //answerFight.setTowerType(i,pTank->mTower);
-    answerFight.setID_Tank(i,((TTank*)pTank)->GetTypeTank());
+    //answerFight.setID_Tank(i,pTank->GetTypeTank());
   }
   //--------------------------------------
   WriteTransport(pClient,&answerFight);
@@ -895,7 +900,7 @@ void ServerTank::MakeRoom()
   // разослать клиентам инфу по карте
   for(int i = 0 ; i < COUNT_COMMAND_IN_FIGHT*2 ; i++)
   {
-    TTankServer* pTank = pRoom->GetTank(i);
+    TTank* pTank = pRoom->GetTank(i);
     if(pTank==NULL){BL_FIX_BUG();return;}
     TClient* pClient = pTank->GetMasterClient();
     SendPacket_A_InFight(pClient);

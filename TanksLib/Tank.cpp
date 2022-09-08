@@ -35,11 +35,17 @@ you may contact in writing [ramil2085@gmail.com].
 
 
 #include "Tank.h"
+#include "TypeTank.h"
 
 
 TTank::TTank()
 {
-  mID_tank = 0;
+  mProperty.mID_tank = 0;
+  pRoom = NULL;
+
+  mTower = 0; // номер, 0 - базовая (сток)
+  mGun = 0;
+
 }
 //------------------------------------------------------------------------
 TTank::~TTank()
@@ -49,11 +55,48 @@ TTank::~TTank()
 //------------------------------------------------------------------------
 void TTank::SetTypeTank(unsigned int id_tank)
 {
-  mID_tank = id_tank;
+  mProperty.mID_tank = id_tank;
+
+  switch(mProperty.mID_tank)
+  {
+    case nsTank_ID::eID_KingTiger:
+      ID_model = 0;
+      break;
+  }
 }
 //------------------------------------------------------------------------
 unsigned int TTank::GetTypeTank()
 {
-  return mID_tank;
+  return mProperty.mID_tank;
 }
 //------------------------------------------------------------------------
+TClient* TTank::GetMasterClient()
+{
+  return pMasterClient;
+}
+//------------------------------------------------------------------------
+void TTank::SetMasterClient(TClient* _pClient)
+{
+  pMasterClient = _pClient;
+}
+//------------------------------------------------------------------------
+int TTank::GetSizeProperty()
+{
+  int size = sizeof(TProperty);
+  return size;
+}
+//------------------------------------------------------------------------
+char* TTank::GetProperty()
+{
+  TProperty* pProperty= new TProperty;
+  // заполнить данными
+
+  return (char*)pProperty;
+}
+//------------------------------------------------------------------------
+void TTank::SetProperty(char* pData)
+{
+  
+}
+//------------------------------------------------------------------------
+

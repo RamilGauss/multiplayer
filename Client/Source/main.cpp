@@ -48,12 +48,18 @@ you may contact in writing [ramil2085@gmail.com].
 #include "WaitForm.h"
 #include "GameForm.h"
 #include "ClientTank.h"
-#include "InterpretatorPredictionTank.h"
-#include "ManagerDirectX.h"
 #include "ManagerGUI.h"
+#include "ManagerObjectCommonClient.h"
+
 
 int main(int argc, char *argv[])
 {
+  char ss[100];
+  strcpy(ss,"Hello");
+  std::string s = ss;
+  s += " asd";
+
+
   g_thread_init( NULL );
   err_Init();
   errSTR_Init();
@@ -67,30 +73,29 @@ int main(int argc, char *argv[])
   QApplication a(argc, argv);
   //---------------------------------------
   TManagerGUIClient managerGUI;
-  // двигатели
-  TClientTank clientTank;// транспорт
-  TInterpretatorPredictionTank interpretatorPredictionTank;// физика
-  TManagerDirectX managerDirectX;// графика
+  TClientTank* clientTank = new TClientTank;// транспорт
+  // менеджер двигателей
+  TManagerObjectCommon* pManagerObjectCommon = new TManagerObjectCommonClient;
 
-  managerGUI.start(&interpretatorPredictionTank,&managerDirectX,&clientTank);
+  managerGUI.start(clientTank,pManagerObjectCommon);
   // формы:
   // обычные 
-  TGameRoomPrepare gameRoomPrepare;
-  TWaitForm        waitForm;
-  TClientMain      clientMain;
+  TGameRoomPrepare *gameRoomPrepare = new TGameRoomPrepare;
+  TWaitForm        *waitForm = new TWaitForm;
+  TClientMain      *clientMain = new TClientMain;
   // DirectX формы
-  TGameForm       gameForm;
-  managerGUI.AddFormInList(&clientMain,     "clientMain");// первая форма
-  managerGUI.AddFormInList(&waitForm,       "waitForm");
-  managerGUI.AddFormInList(&gameRoomPrepare,"gameRoomPrepare");
-  managerGUI.AddFormInList(&gameForm,       "gameForm");
+  TGameForm*       gameForm = new TGameForm;
+  managerGUI.AddFormInList(clientMain,     "clientMain");// первая форма
+  managerGUI.AddFormInList(waitForm,       "waitForm");
+  managerGUI.AddFormInList(gameRoomPrepare,"gameRoomPrepare");
+  managerGUI.AddFormInList(gameForm,       "gameForm");
 
   if(argc==4)
   {
     char* sNick = argv[1];
     char*   sIP = argv[2]; 
     char*  port = argv[3]; 
-    clientMain.Connect(sNick,sIP,port);
+    clientMain->Connect(sNick,sIP,port);
   }
 	a.exec();
 	return 0;

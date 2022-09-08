@@ -39,6 +39,9 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "BaseObjectCommon.h"
 
+class TClient;
+class TRoom;
+
 //------------------------------------------------------------------------------
 class TTank : public TBaseObjectCommon
 {
@@ -87,9 +90,13 @@ public:
     eBack,
     eForward,
   }ePushButton;
-
+public:
   TTank();
   virtual ~TTank();
+
+
+  virtual bool GetMirror(char** pData, int& size){return false;}
+  virtual void SetMirror(char* pData, int size){}
 
   // реакция на человеческую реакцию
   virtual void SetHuman(char* pData, int size){};
@@ -97,34 +104,80 @@ public:
   void SetTypeTank(unsigned int id_tank);
   unsigned int GetTypeTank();
 
-protected:
-  unsigned int mID_tank;
+  static int GetSizeProperty();
+  char* GetProperty();
+  void SetProperty(char* pData);
+
 public:
+  // интерфейс для сервера
+  TRoom* pRoom;
+
+  void SetMasterClient(TClient* _pClient);
+  TClient* GetMasterClient();
+
+  // для Room
+  // в бою
+  unsigned char mGroup;// номер команды в комнате. или 0 или 1.
 
   // характеристики
-  
-  // состояние
-  unsigned short mHP;              // у.е.
+
+
+protected:
+  TClient* pMasterClient;
+
+public:
+  struct TProperty
+  {
+    unsigned int mID_tank;
+  };
+
+  struct TDefShell
+  {
+    float damage;              // урон, хп
+    float depthShoot;          // пробиваемость, мм
+    float mSpeedShell;               // скорость снаряда
+  };
+
+  // характеристики
+  // свойства в бою
 
   unsigned int maskDefectDevice;   // маска неисправности устройств,  0 - исправно, 1 - неисправно см. eMaskDefectDevice
   unsigned int maskDefectCrew;     // маска контузии экипажа,  0 - здоров, 1 - контужен см. eMaskDefectCrew
 
+
+  // состояние
+
+  // Property, которые не меняются
+  float mMaxSpeed;                 //максимальная скорость, км/ч
+  float mRadiusRadio;              // радиус действия радио, м - зависит от рации и радиста
+  // ББ
+  TDefShell mShellBron; // зависит от пушки
+  // ОФ
+  TDefShell mShellExplosive; // зависит от пушки
+  // КС
+  TDefShell mShellCumul; // зависит от пушки
+
+  float mProbablyFireEngine;       // вероятность загорания танка, зависит от двигателя
+  unsigned short mFireDamage; 
+  float mProbablyExplosiveStackShell; // вероятность взрыва БК
+  unsigned short mExplosiveStackShellDamage; 
+
+  unsigned short mHP;              // у.е. зависит от типа танка и типа башни
+
+  float mCentrRotate;              //центр поворота, смещение относительно центра танка, м  от типа танка и типа шасси
+
+  // Property, которые меняются
+  TProperty mProperty;
+
   // базовые
   float mMassa;                    //масса, кг
-  float mGeometry[3];              //геометрия, параллелепипед ДхШхВ, м
   float mPower;                    //мощность двигателя, Вт
   float mSpeedRotate;              //мощность поворота, град/сек
-  float mCentrRotate;              //центр поворота, смещение относительно центра танка, м 
-  float mMaxSpeed;                 //максимальная скорость, км/ч
   float mDistView;                 //дальность обзора, м
   float mVisibilityStatic;         //видимость неподвижный
   float mVisibilityDinamic;        //          подвижный, коэф
   float mSpeedRotateTower;         // скорость вращения башни, град/сек
-  float mSpeedReductionGun;
-  float mRadiusRadio;              // радиус действия радио, м
-
-  // описание поверхности: углы (град), толщина (мм)
-  // ....
+  float mSpeedReductionGun;        // скорость движения пушки, град/с
 
   // характеристики орудия
   unsigned short mCntCommonShell;   // общее кол-во снарядов
@@ -139,24 +192,6 @@ public:
   float mTimeReload;               // время перезарядки, сек
   float mSpeedReductionAim;        // скорость наведения
 
-  struct TDefShell
-  {
-    float damage;              // урон, хп
-    float depthShoot;          // пробиваемость, мм
-    float mSpeedShell;               // скорость снаряда
-  };
-
-  // ББ
-  TDefShell mShellBron;
-  // ОФ
-  TDefShell mShellExplosive;
-  // КС
-  TDefShell mShellCumul;
-
-  float mProbablyFireEngine;       // вероятность загорания танка
-  unsigned short mFireDamage; 
-  float mProbablyExplosiveStackShell; // вероятность взрыва БК
-  unsigned short mExplosiveStackShellDamage; 
 
   // есть два фактора: экипаж и комплектация танка
   // комплектация
@@ -170,17 +205,6 @@ public:
   unsigned int maskModule;
 
   guint32 mTimeRefreshOrientAim;
-
-  // параметры перемещения
-  //float mCoordX;//координата центра танка
-  //float mCoordY;
-  //float mCoordZ;
-
-  float mSpeed;
-
-  //float mCoordX_Vector;// вектор направления (ориентация)
-  //float mCoordY_Vector;
-  //float mCoordZ_Vector;
 
   // маска нажатых клавиш
   guint32 mTimeRefreshPushButton;// когда последний раз менялась маска

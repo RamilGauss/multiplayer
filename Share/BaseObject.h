@@ -42,9 +42,10 @@ you may contact in writing [ramil2085@gmail.com].
 #include <windows.h>
 #include <d3d9types.h>
 #include <d3dx10math.h>
+#include <vector>
 
 
-class TBaseObject : virtual public TObject
+class TBaseObject : public TObject
 {
   // свойства, характерные для физики и графики
   // ориентация, координаты, состояние
@@ -55,13 +56,21 @@ public:
 
   virtual void SetCoord(nsStruct3D::TCoord3& coord);
   virtual void SetOrient(nsStruct3D::TOrient3& orient);
-  virtual void SetState(unsigned int state);
+  virtual void SetWorld(D3DXMATRIXA16& world){mWorld=world;}
+  virtual void SetState(std::vector<unsigned char>* state);
+  virtual void SetID_Model(unsigned int id){ID_model=id;}
+  virtual void SetID_Map(unsigned int id){ID_map = id;}
+
+  virtual unsigned int GetID_Model(){return ID_model;}
+  virtual unsigned int GetID_Map(){return ID_map;}
+  virtual std::vector<unsigned char>* GetState(){return &mState;}
+  virtual D3DXMATRIXA16 GetWorld(){return mWorld;}
 
 protected:
   unsigned int ID_map;// идентификатор на карте
   unsigned int ID_model;// идентификатор модели
 
-  unsigned int mState;
+  std::vector<unsigned char> mState;
 
   D3DXMATRIXA16 mWorld; // здесь вся инфа по ориентации и координатам объекта
 

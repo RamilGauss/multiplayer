@@ -45,6 +45,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <d3dx9math.h>
 #include "ILoaderModelDX.h"
 #include <d3d9types.h>
+#include <vector>
 
 class TManagerModelDX;
 
@@ -54,7 +55,11 @@ protected:
 
   IDirect3DDevice9* m_pd3dDevice;    // Direct3D Device object associated with this mesh
 
+  // задаст ManagerModelDX
   unsigned int mID; // уникальный для моделей
+
+
+  // должно храниться в модели
 
 public:
   
@@ -63,53 +68,62 @@ public:
   unsigned int GetID(){return mID;}
   void SetID(unsigned int id){mID=id;}
 
-  void TModelDX::Draw(unsigned int state,             //                           (От ObjectDX)
-    D3DXMATRIXA16* mArrMatrixSubset,//кол-во совпадает с cSubset (От ObjectDX)
-    D3DXMATRIXA16* mWorld,// где и как расположен объект         (От ObjectDX)
-    D3DXMATRIXA16* mView, // расположение и ориентация камеры    (от ManagerDirectX)
-    D3DXMATRIXA16* mProj); // проектирование на плоскость экрана  (от ManagerDirectX)
+  int GetCntEffect();
 
-  void Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath);
+  /*
+    Рендер маски частей
+    с ориентацией и положением частей
+    в мировых координатах
+  */
+  void TModelDX::Draw(std::vector<unsigned char>* state, //                           (От ObjectDX)
+                      std::vector<unsigned char>* mask,  //                           (От ObjectDX)
+                      D3DXMATRIXA16* matrix,//кол-во совпадает с cSubset (От ObjectDX)
+                      D3DXMATRIXA16* mWorld,// где и как расположен объект         (От ObjectDX)
+                      D3DXMATRIXA16* mView, // расположение и ориентация камеры    (от ManagerDirectX)
+                      D3DXMATRIXA16* mProj); // проецирование на плоскость экрана  (от ManagerDirectX)
+
+  bool Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath);
   void Destroy();
   void LostDevice();
   void ResetDevice();
 
-  int GetCntEffect(){return mCntEffectVisual;}// снаружи знают только о видимых
+  // выдать номер визуальной части
+  // для которой совпадает имя num-ный раз
+  // если не будет найдено вернет 0 и генерирует BL_FIX_BUG()
+  unsigned int GetIndexVisualGroupByName(char* sName, int num/*например,10 с таким же именем*/);
+
+  // как присоединить к blendBone part
+  D3DXMATRIXA16* GetMatrixByName(char* sNameBlendBone/*к чем*/, int num, char* sNamePart/*что*/);
 
 protected:
 
   //---------------------------------------------------------
-  bool SetupEffectDX(TEffectDX* pEffect,ILoaderModelDX::TDefGroup* pDefGroup);
+  bool AddEffectDX(ILoaderModelDX::TDefGroup* pDefGroup);
   float GetDist(D3DXMATRIXA16* mWorld, D3DXMATRIXA16* mView);
-  void Draw(TEffectDX* pEffect);
+  void Draw(TEffectDX* pEffect,D3DXMATRIXA16& mWorldViewProjection);
+
   virtual bool Load(LPCWSTR strFilenameData);
   //---------------------------------------------------------
-  friend class TManagerModelDX;
   
-  // если у объекта одно состояние, то mEffectDX_normal==mEffectDX_damage
   struct TLOD
   {
-    TEffectDX* mEffectDX_normal;
-    TEffectDX* mEffectDX_damage;
-    TLOD(){mEffectDX_normal=NULL;mEffectDX_damage=NULL;}
+    std::vector<TEffectDX*>* GetNonZeroVector(){if(normal.size()) return &normal;return &damage;}
+    // визульные индексы
+    std::vector<TEffectDX*> normal;
+    std::vector<TEffectDX*> damage;
+    TLOD();
     ~TLOD()
     {
-      mEffectDX_normal = NULL;
-      mEffectDX_damage = NULL;
+      normal.clear();
+      damage.clear();
     }
   };
 
-  TEffectDX* pArrAllEffect;
+  // структурировать после загрузки
+  std::vector<TLOD> mVectorLOD;
 
-  TLOD* mArrEffect0;// подробно
-  TLOD* mArrEffect1;// грубо
-
-  int mCntEffectVisual;// кол-во эффектов равно кол-ву отображаемых примитивов
-  int mCntEffectInLOD; // как правило в 2 или 1 раз больше чем mCntEffectVisual
-  int mCntAllEffect;   // как правило в 4 или 2 раза больше чем mCntEffectVisual
- 
-  D3DXMATRIXA16 mWorldViewProjection;
-
+  // заполнить от загрузчика
+  std::vector<TEffectDX*> mVectorAllEffect;// все состояния, ЛОДы, типы пушек, башен и т.д.
   float mLOD;// 2 состояния по ЛОДу, расстояние от камеры до центра координат
 };
 //-----------------------------------------------------------------

@@ -39,35 +39,48 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "hArray.h"
 #include "Define_DX.h"
+#include <map>
 class TModelDX;
 
 class TManagerModelDX
 {
 
+protected:
+  IDirect3DDevice9* mD3dDevice;
+
 public:
   TManagerModelDX();
   ~TManagerModelDX();
-  
-  TModelDX* Find(unsigned int id);
-  // список примитивов (оригиналы, которые используются в ObjectDX)
 
-  void Load(IDirect3DDevice9* pd3dDevice, 
-    const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
-    void* pUserContext );
-
-  void ResetDevice();
-  void OnLostDevice();
-  void OnDestroyDevice();
-
-  TArrayObject mArrModel;
-
-protected:
   bool LoadListPath();
 
-  char** mArrPathModel;
-  int   mCntPathModel;
+  void Setup(IDirect3DDevice9* pd3dDevice){mD3dDevice = pd3dDevice;};
+
+  TModelDX* Find(unsigned int id);
+  // список примитивов (оригиналы, которые используются в ObjectDX)
+  TModelDX* Load(unsigned int id);
+
+  void DestroyModel();
+
+/*
+// при создании модели вызывать:
+void ResetDevice();
+
+
+порядок вызова при окончании использования
+void OnLostDevice();
+void OnDestroyDevice();
+
+*/
+
+protected:
+
+  std::map<unsigned int, std::string> mMapPathModel;
+  std::map<unsigned int, TModelDX*>   mMapLoadedModel;
 
   void Done();
+
+  void PrepareForDX();
 
 };
 

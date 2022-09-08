@@ -33,34 +33,50 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
+#include "DXUT.h"
 #include <QtGui/QApplication>
 
 #include <QtCore/QTextCodec>
 #include <QWindowsStyle>
+#include "HiTimer.h"
+#include "NetSystem.h"
+#include "ErrorReg.h"
+#include <glib/gthread.h>
 
+#include "ManagerObjectCommon.h"
 #include "BaseGUI_DX.h"
-#include "../QBaseLib/BaseGUI.h"
-//#include "ManagerDirectX.h"
+#include "BaseObjectDX.h"
+#include "LoaderModelDX.h"
+#include "ModelDX.h"
 
-class TA :  public TBaseGUI_DX
-{
-public:
-  TA()
-  {
-
-  }
-  virtual void VisualEvent(QPaintEvent* pEvent){};
-  virtual void Translate(unsigned short typePacket, char* pData, int size){};
-};
 
 int main(int argc, char *argv[])
 {
+  g_thread_init( NULL );
+  err_Init();
+  errSTR_Init();
+  errSTD_Init();
+  errSDK_Init();
+  ht_Init();
+  ns_Init();
+
   QTextCodec::setCodecForTr(QTextCodec::codecForName("CP1251"));
 
   QApplication a(argc, argv);
-  TA asd;
-  asd.showGUI();
-	a.exec();
-	return 0;
+  
+
+  TModelDX model;
+  TTankTower object;
+
+  TBaseGUI_DX pForm;
+
+  TManagerObjectCommon MOC;
+  TManagerDirectX MDX;
+  MOC.AddObject();
+
+  pForm.setup(NULL,&MDX,NULL,&MOC);
+
+
+  a.exec();
+  return 0;
 }

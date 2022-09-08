@@ -56,7 +56,7 @@ ServerForm::ServerForm(QWidget *parent)
 {
 	mServer.registerRequest(CallBackEventServerForm);
 
-	pArr = NULL;
+	pAnswerRequest = NULL;
 
 	pServerForm = this;
 
@@ -97,10 +97,10 @@ void ServerForm::customEvent( QEvent * event  )
 //---------------------------------------------------------------------------------------------
 void ServerForm::RefreshTable()
 {
-  if(pArr)
+  if(pAnswerRequest)
   {
-    ui.tableClient->setRowCount(pArr->cntClient);
-    ui.tableRoom->setRowCount(pArr->cntRoom);
+    ui.tableClient->setRowCount(pAnswerRequest->cntClient);
+    ui.tableRoom->setRowCount(pAnswerRequest->cntRoom);
   }
   else
   {
@@ -108,7 +108,7 @@ void ServerForm::RefreshTable()
     ui.tableRoom->setRowCount(0);
   }
 
-	if(pArr==NULL) return;
+	if(pAnswerRequest==NULL) return;
   
   RefreshTableClient();
   RefreshTableRoom();
@@ -118,13 +118,13 @@ void ServerForm::setArrClient(void* data,int size)
 {
 	Done();
 	if(data)
-		pArr = (ServerTank::TAnswerRequest*)data;
+		pAnswerRequest = (ServerTank::TAnswerRequest*)data;
 }
 //---------------------------------------------------------------------------------------------
 void ServerForm::Done()
 {
-	delete pArr;
-	pArr = NULL;
+	delete pAnswerRequest;
+	pAnswerRequest = NULL;
 }
 //---------------------------------------------------------------------------------------------
 void ServerForm::sl_RequestArrClient()
@@ -134,8 +134,8 @@ void ServerForm::sl_RequestArrClient()
 //---------------------------------------------------------------------------------------------
 void ServerForm::RefreshTableClient()
 {
-  ServerTank::TDefClient * pArrClient = pArr->mArrClient;
-  int cntClient                       = pArr->cntClient;
+  ServerTank::TDefClient * pArrClient = pAnswerRequest->mArrClient;
+  int cntClient                       = pAnswerRequest->cntClient;
 
   for(int i = 0 ; i < cntClient ; i++)
   {
@@ -180,8 +180,8 @@ void ServerForm::RefreshTableClient()
 //-------------------------------------------------------------------------------------------
 void ServerForm::RefreshTableRoom()
 {
-  ServerTank::TDefRoom * pArrRoom = pArr->mArrRoom;
-  int cntRoom                     = pArr->cntRoom;
+  ServerTank::TDefRoom * pArrRoom = pAnswerRequest->mArrRoom;
+  int cntRoom                     = pAnswerRequest->cntRoom;
 
   for(int i = 0 ; i < cntRoom ; i++)
   {

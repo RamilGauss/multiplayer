@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\GBaseLib;&quot;..\glib-2.0&quot;;..\Share;..\DXUT\Core;..\DXUT\Optional"
+				AdditionalIncludeDirectories=".\;..\GBaseLib;&quot;..\glib-2.0&quot;;..\Share;..\DXUT\Core;..\DXUT\Optional;..\Robert"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;PROFILE;_WINDOWS;D3DXFX_LARGEADDRESS_HANDLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -167,15 +167,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LoaderListModel.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\LoaderModelDX.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\LoggerDX.cpp"
 				>
 			</File>
 			<File
@@ -198,6 +190,10 @@
 				RelativePath=".\ModelDX.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\ProgressBar.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -209,10 +205,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Define_DX.h"
-				>
-			</File>
-			<File
 				RelativePath=".\EffectDX.h"
 				>
 			</File>
@@ -221,15 +213,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LoaderListModel.h"
-				>
-			</File>
-			<File
 				RelativePath=".\LoaderModelDX.h"
 				>
 			</File>
 			<File
-				RelativePath=".\LoggerDX.h"
+				RelativePath=".\MakerLoaderModelDX.h"
 				>
 			</File>
 			<File
@@ -250,6 +238,10 @@
 			</File>
 			<File
 				RelativePath=".\ModelDX.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ProgressBar.h"
 				>
 			</File>
 			<File

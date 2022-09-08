@@ -48,7 +48,7 @@ class ServerForm : public QWidget
 
 		enum{eTime=5000};
 
-	ServerTank::TAnswerRequest* pArr;
+	ServerTank::TAnswerRequest* pAnswerRequest;
 
 protected:
 	ServerTank mServer;

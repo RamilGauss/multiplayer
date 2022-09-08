@@ -41,9 +41,8 @@ you may contact in writing [ramil2085@gmail.com].
 
 TManagerGUI::TManagerGUI(QWidget* parent):QObject(parent)
 {
-  pRobert  = NULL;
-  pBigJack = NULL;
   pClient  = NULL;
+  pGame    = NULL;
 
   pCurrentForm = NULL;
 }
@@ -53,19 +52,18 @@ TManagerGUI::~TManagerGUI()
   Done();
 }
 //-----------------------------------------------------------------------
-void TManagerGUI::start(TInterpretatorPredictionTank  *_pRobert,
-                        TManagerDirectX* _pBigJack,
-                        TClientTank  *_pClient)
+void TManagerGUI::start(TClientTank*                   _pClient,
+                        TManagerObjectCommon*          _pGame)
 {
-  pRobert  = _pRobert;
-  pBigJack = _pBigJack;
   pClient  = _pClient; 
+  pGame    = _pGame;
 
   startEvent();
 }
 //-----------------------------------------------------------------------
 void TManagerGUI::stop()
 {
+  Done();
   stopEvent();
   _exit(0);
 }
@@ -86,7 +84,7 @@ void TManagerGUI::customEvent( QEvent * e  )
     case QEVENT_STREAM:
       WorkStream(event);
       break;
-    default:;
+    default:BL_FIX_BUG();;
   }
 }
 //---------------------------------------------------------------------------------------------
@@ -104,7 +102,7 @@ void TManagerGUI::AddFormInList(TBaseGUI* pForm, char* name)
   if(pCurrentForm==NULL)
     pCurrentForm = pForm;
 
-  pForm->setup(pRobert,pBigJack,pClient);
+  pForm->setup(pClient,pGame);
   //-----------------------------------------------------------------------------
   mMap[name] = pForm;
 
@@ -114,7 +112,18 @@ void TManagerGUI::AddFormInList(TBaseGUI* pForm, char* name)
 //---------------------------------------------------------------------------------------------
 void TManagerGUI::Done()
 {
+  std::map<std::string,void*>::iterator bit = mMap.begin();
+  std::map<std::string,void*>::iterator eit = mMap.end();
+  while(bit!=eit)
+  {
+    delete bit->second;
+    bit++;
+  }
   mMap.clear();
+
+  delete pClient;pClient=NULL;
+  delete pGame;pGame = NULL;
+
   stopEvent();
 }
 //---------------------------------------------------------------------------------------------

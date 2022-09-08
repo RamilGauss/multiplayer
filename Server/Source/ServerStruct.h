@@ -37,7 +37,6 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef ServerStructH
 #define ServerStructH
 #include "ApplicationProtocolPacket.h"
-#include "TankServer.h"
 #include "glibconfig.h"
 
 

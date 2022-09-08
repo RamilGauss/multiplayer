@@ -43,11 +43,14 @@ TBaseObjectDX::TBaseObjectDX()
 {
   SetOneMatrix(mWorld);
   
-  mArrMatrixSubset = NULL;
+  mArrMatrix = NULL;
+  mCntMatrix = 0;
 
   flgShow = true;// показан ли объект на сцене
 
   sName = NULL;//имя объекта
+
+  mModel = NULL;
 }
 //------------------------------------------------------------------------------------------------
 TBaseObjectDX::~TBaseObjectDX()
@@ -58,8 +61,12 @@ TBaseObjectDX::~TBaseObjectDX()
 void TBaseObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj)
 {          
   if(flgShow==false) return;
-  mModel->Draw(mState,             //                           (От ObjectDX)
-               mArrMatrixSubset,//кол-во совпадает с cSubset (От ObjectDX)
+
+  SetupArrMatrix();
+
+  mModel->Draw(&mState,             //                           (От ObjectDX)
+               &mMask,
+               mArrMatrix,//кол-во совпадает с cSubset (От ObjectDX)
                &mWorld,// где и как расположен объект         (От ObjectDX)
                mView, // расположение и ориентация камеры    (от ManagerDirectX)
                mProj);
@@ -68,16 +75,21 @@ void TBaseObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj)
 void TBaseObjectDX::SetModel(TModelDX* pModel)
 {
   mModel = pModel;
-  int cnt = mModel->GetCntEffect();
-  mArrMatrixSubset = new D3DXMATRIXA16[cnt];
-  for(int i = 0 ; i < cnt ; i++ )
-    SetOneMatrix(mArrMatrixSubset[i]);
+  mCntMatrix = mModel->GetCntEffect();
+  mArrMatrix = new D3DXMATRIXA16[mCntMatrix];
+  SetupArrMatrix();
+}
+//------------------------------------------------------------------------------------------------
+TModelDX* TBaseObjectDX::GetModel()
+{
+  return mModel;
 }
 //------------------------------------------------------------------------------------------------
 void TBaseObjectDX::Done()
 {
-  delete[] mArrMatrixSubset;
-  mArrMatrixSubset = NULL;
+  delete[] mArrMatrix;
+  mArrMatrix = NULL;
+  mCntMatrix = 0;
   delete sName;
   sName = NULL;
 }
@@ -93,8 +105,14 @@ void TBaseObjectDX::SetOneMatrix(D3DXMATRIXA16& matrix)
 void TBaseObjectDX::SetName(const char* name)
 {
   int len = strlen(name)+1;
-  delete sName;
+  delete[] sName;
   sName = new char[len];
   strcpy(sName,name);
+}
+//------------------------------------------------------------------------------------------------
+void TBaseObjectDX::SetupArrMatrix()
+{
+  for(int i = 0 ; i < mCntMatrix ; i++ )
+    SetOneMatrix(mArrMatrix[i]);// по-умолчанию
 }
 //------------------------------------------------------------------------------------------------

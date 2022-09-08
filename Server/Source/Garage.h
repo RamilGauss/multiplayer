@@ -36,19 +36,19 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef GarageH
 #define GarageH
 
-#include "MakerBehaviorServer.h"
 #include "hArray.h"
+#include "MakerBehavior.h"
 
 
 class TClient;
-class TTankServer;
+class TTank;
 
 class TGarage
 {
   int mCurTank;// текущий танк, NULL - если нет танков
   TClient* pMasterClient;
 
-  TMakerBehaviorServer mMakerBehaviorServer;
+  TMakerBehavior mMakerBehaviorServer;
 
 public:
   TArrayObject mArrTanks; // пока без БД тут будут всего два танка СТ и ТТ
@@ -64,7 +64,7 @@ public:
 
   bool SetCurTank(int i);
   int  GetCurTank();
-  TTankServer* GetPointerCurTank();
+  TTank* GetPointerCurTank();
 
   TClient* GetMasterClient(){return pMasterClient;};
 };

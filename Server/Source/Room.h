@@ -41,12 +41,12 @@ you may contact in writing [ramil2085@gmail.com].
 #include <list>
 #include "glib/gthread.h"
 #include "ManagerObjectCommon.h"
-#include "TankServer.h"
+#include "Tank.h"
 
 class TRoom : public TManagerObjectCommon
 {
 
-  TPrediction mPrediction;
+  //TPrediction mPrediction; - отсюда получит - TManagerObjectCommon
 
   TTransportProtocol* mTransport;
 
@@ -83,7 +83,7 @@ class TRoom : public TManagerObjectCommon
   //---------------------------------------------------
   struct TAction
   {
-    TTankServer* pTank;
+    TTank* pTank;
     nsServerStruct::TPacketServer* pDefPacket;
   };
   //---------------------------------------------------
@@ -96,7 +96,7 @@ public:
   TRoom();
   ~TRoom();
 
-  void AddTank(TTankServer* pTank);
+  void AddTank(TTank* pTank);
 
 	void SetTransport(TTransportProtocol* pTransport);//старт боя, передача возможности вещать на клиента
 
@@ -105,13 +105,13 @@ public:
   void SetIDMap(unsigned short val);
   unsigned short GetIDMap(){return mID_map;};
 
-  TTankServer* GetTank(int i){return (TTankServer*)mArrTank.Get(i);};
+  TTank* GetTank(int i){return (TTank*)mArrTank.Get(i);};
 
   void MakeGroup();
   void PreparePrediction();// настроить предсказатель для получения координат объектов, коллизий, событий
   void LoadMap();
 
-  void SetPacket(nsServerStruct::TPacketServer* pPacket,TTankServer* ptank);
+  void SetPacket(nsServerStruct::TPacketServer* pPacket,TTank* ptank);
 
   void Done();
 

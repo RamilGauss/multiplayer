@@ -51,48 +51,14 @@ struct IDirect3DDevice9;
 // BigJack - графический движок
 class TManagerDirectX
 {
+protected:
 
-  enum{
-      eSizeBufferStream = 4000,
-      eSizeBufferPacket = 4000,
-  };
+  TManagerModelDX mManagerModel;
 
-  char mBufferStream[eSizeBufferStream];
-  char mBufferPacket[eSizeBufferPacket];
-
-  int mSizeStream;
-  int mSizePacket;
-  guint32 mTimePacket_ms;
-  guint32 mTimeStream_ms;
-
-  //TA_In_Fight mPacket;
-  // владеет потоком загрузки карты
-  //GThread* threadLoadMap;
-  //bool flgNeedLoadMap;
-  //bool flgLoadingMap;
-  enum{
-    eWaitLoadModel=100
-  };
-  //unsigned int 
-
-  volatile bool flgNeedLoadObjectDX;
-  volatile bool flgNeedSendCorrectPacket;
-
+  // все объекты
   std::list<TBaseObjectDX*> mListAllObject;
   // список на отрисовку
   std::list<TBaseObjectDX*> mListReadyRender;
-
-  enum{
-    eLoadMap   = 0,// или клиентской или серверной
-    eCountDown = 1,
-    eFight     = 2,
-  };
-  int mState;
-  // время последнего отсылки мышиной ориентации
-  guint32 mLastTimeSendMouseStream;
-  enum{
-    eIntervalMouseStream = 100,// мс
-  };
 
   CModelViewerCamera mCamera;                // A model viewing camera
 
@@ -102,82 +68,37 @@ class TManagerDirectX
 
   IDirect3DDevice9* mD3DDevice;
   
-  //TDX* pDX;// поставщик событий Windows, 
-  // !!! НЕ править на объект, т.к. нельзя включать в этот файл #include "DX_main.h"
-  //TBufferizator2Thread mBufferizator2Thread;// буфер, отсюда берем задания для движка
-  TManagerModelDX        mManagerModel;
-
 public:
   //----------------------------------------------------------------
   //                              INTERFACE
   //----------------------------------------------------------------
   TManagerDirectX();
   ~TManagerDirectX();
+  void CreateDeviceEvent(IDirect3DDevice9* pd3dDevice); 
+  void VisualEvent( guint32 iTime, float fElapsedTime);
 
-  //----------------------------------------------------------------
-  //                             INTERFACE
-  //----------------------------------------------------------------
-  // управление группой объектов (картой) сцены
-  //void UnloadAll();
-  //void LoadMap(unsigned short id_map);// асинхронная загрузка карты
-  // нельзя: 1. загружать одновременно карту и объект,
-  //         2. загрузить объект, а потом карту (объект удалят со сцены, потеря объекта)
-  //bool SaveCurrentMap();// сохранит текущее состояние объектов на карте (кроме танков, тип MobileDamageObject ### - как-то так)
-  // управление объектами сцены
-  //TObjectDX* LoadObjectDX(unsigned int id_model/*уникальный идентификатор модели*/,
-                          //unsigned int id_object/*уникальный идентификатор объекта на карте*/,
-                          //unsigned short type_object,/*тип объекта*/
-                          //bool flgNeedClear = false);// потом как правило идет настройка объекта
-  //TObjectDX* GetObject(unsigned int id_object);// для настройки
-  //unsigned int GetCountObject();// кол-во объектов на карте
+  void AddObject(TBaseObjectDX* pObject);
+  void Clear();
+  // камера
+  void SetViewParams(D3DXVECTOR3* pvEyePt, D3DXVECTOR3* pvLookatPt);// расположение камеры
+  
+  // 21 декабря 2012 года реализую:
   // клиентские эффекты движка, не влияют на физические параметры объектов
   //void SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
   //               D3DXMATRIXA16* loc/*местоположение*/,
   //               double time_rest/*прошедшее время*/ = 0);
-  // камера
-  //void SetCameraView(D3DXMATRIXA16* mView);// расположение камеры
   //----------------------------------------------------------------
   //                             ~INTERFACE
   //----------------------------------------------------------------
 protected:
-  // вызывается из DXUT либо на отрисовку либо для очистки буфера
-  void Refresh();
-
-protected:
-  //friend class TDX;
-  //friend void* ThreadLoadMap(void* p);
-  //friend HRESULT WINAPI DXUTMainLoop( TManagerDirectX* pObjRefresh, HACCEL hAccel);
-
-  //CModelViewerCamera* getCamera(){return &mCamera;}
-
   D3DXHANDLE* getWorldViewProjection(){return &hmWorldViewProjection;}
   D3DXHANDLE* getWorld(){return &hmWorld;}
   D3DXHANDLE* getTime(){return &hfTime;}
 
-  void VisualEvent(IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext);
-  //void KeyEvent(unsigned int nChar, bool bKeyDown, bool bAltDown, void* pUserContext);
-  //void MouseEvent(double fTime, float fElapsedTime, void* pUserContext);
-
-  void CreateDeviceEvent(IDirect3DDevice9* pd3dDevice); 
-    //const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
-  //void ResetDevice(IDirect3DDevice9* pd3dDevice,
-    //const D3DSURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext );
-  //void OnLostDevice();
-  //void OnDestroyDevice();
-
 protected:
 
-  void Calc();
   void Optimize();
-  void Render(IDirect3DDevice9* pd3dDevice, double fTime = 0, float fElapsedTime = 0, void* pUserContext = NULL);
-  //void SetStateByTypeStream();
-
-  //void ThreadLoadMap();
-
-  //void ParserPacket();// обработка пакета
-
-protected:
-  //TSoundDX  mSound;
+  void Render(guint32 fTime = 0, float fElapsedTime = 0);
 };
 
 #endif

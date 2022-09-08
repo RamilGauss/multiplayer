@@ -36,31 +36,74 @@ you may contact in writing [ramil2085@gmail.com].
 #include "LoaderObjectCommon.h"
 #include <stddef.h>
 #include "MakerBehavior.h"
+#include "LoaderListPathID.h"
+#include "file_operation.h"
+#include "GlobalParamsTank.h"
+#include "Logger.h"
+#include "BL_Debug.h"
+
+using namespace std;
 
 TLoaderObjectCommon::TLoaderObjectCommon()
 {
-  pMakerObject = NULL;
+  LoadListMap();
 }
 //-------------------------------------------------------------
 TLoaderObjectCommon::~TLoaderObjectCommon()
 {
-
-}
-//-------------------------------------------------------------
-void TLoaderObjectCommon::Setup(TMakerBehavior* _pMakerObject)
-{
-  pMakerObject = _pMakerObject;
+  Done();
 }
 //-------------------------------------------------------------
 TBaseObjectCommon* TLoaderObjectCommon::LoadObject(unsigned int id_behavior)
 {
-  if(pMakerObject)
-    return pMakerObject->New(id_behavior);
-  return NULL;
+  return mMakerObject.New(id_behavior);
 }
 //-------------------------------------------------------------
-bool TLoaderObjectCommon::LoadMap(unsigned int id_map)
+void TLoaderObjectCommon::LoadMap(unsigned int id_map)
 {
-  return false;
+  string sPath = mMapID[id_map];
+  if(sPath.length()==0) return;
+
+  Done();
+  // собственно загрузка
+}
+//-------------------------------------------------------------
+void TLoaderObjectCommon::LoadListMap()
+{
+  // открыть файл, содержащий список путей к картам и запомнить в ассоциативный список
+  TLoaderListPathID loader;
+  char sAbsPath[300];
+  FindAbsPath(PATH_LIST_MAP,sAbsPath,sizeof(sAbsPath));
+  if(loader.Load(sAbsPath,&mMapID)==false)
+    BL_FIX_BUG();
+
+  PrepareMapPath();
+}
+//-------------------------------------------------------------
+int TLoaderObjectCommon::GetCountObject()
+{
+  return mVectorObject.size();
+}
+//-------------------------------------------------------------
+TBaseObjectCommon* TLoaderObjectCommon::Get(int i)
+{
+  return mVectorObject[i];
+}
+//-------------------------------------------------------------
+void TLoaderObjectCommon::Done()
+{
+  mVectorObject.clear();
+}
+//-------------------------------------------------------------
+void TLoaderObjectCommon::PrepareMapPath()
+{
+  std::map<unsigned int,std::string>::iterator bit = mMapID.begin();
+  std::map<unsigned int,std::string>::iterator eit = mMapID.end();
+  
+  while(bit!=eit)
+  {
+    bit->second += "\\main.ini";
+    bit++;
+  }
 }
 //-------------------------------------------------------------

@@ -43,6 +43,9 @@ you may contact in writing [ramil2085@gmail.com].
 #include <wchar.h>
 #include <malloc.h>
 #include <atlconv.h>
+#include <list>
+#include <vector>
+#include <deque>
 
 class TSaveOnHDD
 {
@@ -53,20 +56,40 @@ class TSaveOnHDD
 
   bool flgPrintf;
   bool flgDebug;
+  bool flgBuffer;
+
+  struct TBuffer
+  {
+    char* p;
+    int size;
+    TBuffer()
+    {
+      p = NULL;
+      size = 0;
+    }
+    ~TBuffer()
+    {
+      delete[]p;p = NULL;
+      size = 0;
+    }
+  };
+  //std::list<TBuffer*> mListBuffer;
+  std::vector< std::vector< unsigned char > > mVectorBuffer;
+
 public:
 
 	TSaveOnHDD(char* path = NULL);
-	~TSaveOnHDD();
+	virtual ~TSaveOnHDD();
 
-	bool ReOpen(char* path);
+	virtual bool ReOpen(char* path);
 
-	bool IsOpen();
+	virtual bool IsOpen();
 
-	void Write(void* buffer, int size);
-  void WriteF(const char* format, ... );
-  void WriteF_time(const char* format, ... );
+	virtual void Write(void* buffer, int size);
+  virtual void WriteF(const char* format, ... );
+  virtual void WriteF_time(const char* format, ... );
 
-	void Close();
+	virtual void Close();
 
   void SetPrintf(bool val){flgPrintf=val;};
   bool GetPrintf(){return flgPrintf;};
@@ -74,9 +97,15 @@ public:
   void SetDebug(bool val){flgDebug=val;};
   bool GetDebug(){return flgDebug;};
 
+  void SetBufferization(bool val){flgBuffer=val;};
+  bool GetBufferization(){return flgBuffer;};
+
 protected:
   void Write_Time();
 
+  void ClearBuffer();
+  void FlushBuffer();
+  void FlushInBuffer(char* buffer, int size);
 };
 
 

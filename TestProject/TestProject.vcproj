@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;.\;..\DXUT\Core;..\DXUT\Optional;..\DXUT;..\DirectX;..\QBaseLib;..\Melissa;..\BigJack;..\Robert;..\TanksLib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -60,7 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib d3dx10d.lib d3dx9d.lib d3d9.lib dxerr.lib dxguid.lib winmm.lib comctl32.lib Imm32.lib Version.lib Dsound.lib QBaseLib.lib BigJack.lib TanksLib.lib DXUT.lib DXUTOpt.lib Share.lib GBaseLib.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\Lib;..\Debug"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"

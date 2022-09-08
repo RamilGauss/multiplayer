@@ -49,13 +49,19 @@ public:
 
   virtual void Translate(unsigned short type, char*pData, int size);
 
+  virtual void showGUI();
+  virtual void hideGUI();
+
 protected:
   friend void CallBackPacketGameForm(void* data, int size);
   friend void CallBackDisconnectGameForm(void* data, int size);
 
   virtual void VisualEvent(QPaintEvent* pEvent);
+  virtual void SetupEvent();
 
   virtual void closeEvent(QCloseEvent* );
+  virtual void mouseMoveEvent( QMouseEvent * event );
+  virtual void keyPressEvent ( QKeyEvent * event );
 
   void Disconnect();
   

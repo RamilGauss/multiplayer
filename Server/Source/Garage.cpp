@@ -35,7 +35,6 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "Garage.h"
 #include "namespace_ID_BEHAVIOR.h"
-#include "TankServer.h"
 #include "Tank.h"
 #include "TypeTank.h"
 
@@ -49,10 +48,9 @@ void TGarage::InitArrTank()
   int cnt = 1;// ReadFromBD(...);
   mCurTank = 0; // первый в массиве
 
-  mMakerBehaviorServer.SetPtrClient(pMasterClient);
-
   TTank* pTank = (TTank*)mMakerBehaviorServer.New(ID_TANK_TOWER);
   pTank->SetTypeTank(nsTank_ID::eID_KingTiger);
+  pTank->SetMasterClient(pMasterClient);
   mArrTanks.Add(pTank);
     
   //TTankServer* pTank = new TTank(pMasterClient);
@@ -78,8 +76,8 @@ int TGarage::GetCurTank()
   return mCurTank;
 }
 //------------------------------------------------------------------------------
-TTankServer* TGarage::GetPointerCurTank()
+TTank* TGarage::GetPointerCurTank()
 {
-  return (TTankServer*)mArrTanks.Get(mCurTank);
+  return (TTank*)mArrTanks.Get(mCurTank);
 }
 //------------------------------------------------------------------------------

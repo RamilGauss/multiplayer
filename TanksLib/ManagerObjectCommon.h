@@ -40,26 +40,81 @@ you may contact in writing [ramil2085@gmail.com].
 #include "LoaderObjectCommon.h"
 #include "ManagerDirectX.h"
 #include "InterpretatorPredictionTank.h"
+#include "ApplicationProtocolPacketAnswer.h"
+#include "glib/gthread.h"
+#include <vector>
+#include "ProgressBar.h"
+
+class TTankTower;
 
 class TManagerObjectCommon
 {
 protected:
+  GThread* thread;
+
+  TA_In_Fight mPacketInFight;
+
+  volatile unsigned char mProcentLoadMap;
+
+  volatile bool flgActiveLoadThread;
+
+  guint32 mLastTimeFreshData;
+  enum{eTimeoutFreshData=10, // мс
+  };
+
+protected:
   
-  std::list< TBaseObjectCommon* > mListObject;
+  std::vector< TBaseObjectCommon* > mVectorObject;
   
   TLoaderObjectCommon mLoaderObject;
 
-  TManagerDirectX* pManagerDirectX;
-  TInterpretatorPredictionTank* pPrediction;
-
+  TInterpretatorPredictionTank mPrediction;// физика
+  TManagerDirectX mMDX_Scene; // отрисовка сцены
+  
+  // прогресс загрузки карты
+  TProgressBar mProgressBar;
 
 public:
 
   TManagerObjectCommon();
-  ~TManagerObjectCommon();
+  virtual ~TManagerObjectCommon();
 
-  void Setup(TManagerDirectX* _pManagerDirectX,
-             TInterpretatorPredictionTank* _pPrediction);
+  void Setup(IDirect3DDevice9* pDevice);
+
+  void VisualEvent(guint32 iTime, float fElapsedTime);
+
+  // в бою
+  void SetPacketA_In_Fight(char* pData, int size);
+
+  void AddObject(TBaseObjectCommon* pObject);
+  // прогресс загрузки карты
+  bool IsLoadMap(unsigned char& procent);// от 0 до 100 
+
+  void RefreshFromServer();
+
+protected:
+
+  void Done();
+
+  friend void* Thread(void*p);
+
+  void ThreadLoadMap();
+  // загрузить карту
+  void LoadMap(unsigned int id_map);
+
+  void AddFromLoaderObjectInCommonList();
+  void AddFromLoaderObjectInMDX();
+  void AddFromLoaderObjectInPrediction();
+  void AddTankInCommonList();
+
+  void ClearSceneVectorObject();
+  void ClearProgressBarVectorObject();
+
+  void PrepareTank(TTankTower* pTank, int i);
+
+  // отослать через какой-то транспорт запрос на получение корректирующего пакет
+  // отсылается после загрузки карты
+  virtual void SendCorrectPacket(){};
 
 
 };

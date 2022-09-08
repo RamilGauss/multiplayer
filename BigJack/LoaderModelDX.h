@@ -59,10 +59,11 @@ protected:
 
   bool LoadMainFile();
   bool LoadFileResource();
-  bool LoadPart(int i);
-  bool LoadVector(char* strNumPart,char* key,D3DXVECTOR3& vector);
+  bool LoadPart(TBL_ConfigFile* fileIni,int i);
+  bool LoadVector(TBL_ConfigFile* fileIni,char* strNumPart,char* key,D3DXVECTOR3& vector);
+  bool LoadVector4(TBL_ConfigFile* fileIni,char* strNumPart,char* key,D3DXVECTOR4& vector4);
 
-  bool LoadMesh(char* strNumPart, TDefGroup *mArrDefGroup);
+  bool LoadMesh(TBL_ConfigFile* fileIni,char* strNumPart, TDefGroup *mArrDefGroup);
 
 
 protected:

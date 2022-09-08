@@ -35,25 +35,43 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef LoaderObjectCommonH
 #define LoaderObjectCommonH
 
-class TMakerBehavior;
+
+#include "MakerBehavior.h"
+#include <map>
+#include <vector>
+
 class TBaseObjectCommon;
 
 class TLoaderObjectCommon
 {
 protected:
 
-  TMakerBehavior* pMakerObject;// создает объект заданного типа (следующий уровень)
+  TMakerBehavior mMakerObject;// создает объект заданного типа
+
+  std::map<unsigned int,std::string> mMapID;
+
+  std::vector<TBaseObjectCommon*> mVectorObject;
+
 
 public:
 
   TLoaderObjectCommon();
   virtual ~TLoaderObjectCommon();
   
-  void Setup(TMakerBehavior* _pMakerObject);
+  int GetCountObject();
+  TBaseObjectCommon* Get(int i);
 
 
   TBaseObjectCommon* LoadObject(unsigned int id_behavior);
-  bool LoadMap(unsigned int id_behavior);
+  void LoadMap(unsigned int id_map);
+
+
+  void LoadListMap();
+
+protected:
+  void Done();
+  
+  void PrepareMapPath();
 
 };
 

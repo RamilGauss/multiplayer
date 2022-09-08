@@ -47,7 +47,6 @@ namespace nsID_BEHAVIOR
     ID_BULLET_EXPLOSION,
     ID_BULLET_UNEXPLOSION,
     // tank
-    ID_ANTITANK,
     ID_TANK_TOWER,
     
     // visible
