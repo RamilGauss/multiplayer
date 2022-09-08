@@ -35,20 +35,25 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef LoaderObjectCommonH
 #define LoaderObjectCommonH
 
-template < class TNewObject >
+class TMakerBehavior;
+class TBaseObjectCommon;
+
 class TLoaderObjectCommon
 {
 protected:
 
-  TNewObject mNewObject;// создает объект заданного типа (следующий уровень)
+  TMakerBehavior* pMakerObject;// создает объект заданного типа (следующий уровень)
 
 public:
 
-  TLoaderObjectCommon(){};
-  virtual ~TLoaderObjectCommon(){};
+  TLoaderObjectCommon();
+  virtual ~TLoaderObjectCommon();
+  
+  void Setup(TMakerBehavior* _pMakerObject);
 
-  TBaseObjectCommon* LoadObject(unsigned int id_new);
-  bool LoadMap(unsigned int id_map);
+
+  TBaseObjectCommon* LoadObject(unsigned int id_behavior);
+  bool LoadMap(unsigned int id_behavior);
 
 };
 

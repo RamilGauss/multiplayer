@@ -38,20 +38,16 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ApplicationProtocolDef.h"
 #include "GlobalParamsTank.h"
 #include "BL_Debug.h"
-#include "TransportProtocolPacket.h"
 #include "ApplicationProtocolPacketStream.h"
-#include "ClientTank.h"
 #include <QMessageBox>
 #include <QTimer>
-#include "ClientMain.h"
 #include "ApplicationProtocolPacketAnswer.h"
 #include "TypeTank.h"
-#include "WaitForm.h"
-#include "GameForm.h"
+#include "ClientTank.h"
 
 
 //-------------------------------------------------------------------------------------------
-GameRoomPrepare::GameRoomPrepare(QWidget *parent)
+TGameRoomPrepare::TGameRoomPrepare(QWidget *parent)
 : TBaseGUI(parent)
 {
   mTimer = new QTimer(this);
@@ -68,17 +64,17 @@ GameRoomPrepare::GameRoomPrepare(QWidget *parent)
 	connect(ui.bExit,  SIGNAL(clicked()), this, SLOT(sl_Exit()));
 }
 //---------------------------------------------------------------------------------------------
-GameRoomPrepare::~GameRoomPrepare()
+TGameRoomPrepare::~TGameRoomPrepare()
 {
 }
 //---------------------------------------------------------------------------------------------
-void GameRoomPrepare::SetCntClient(unsigned int common,unsigned int fight)
+void TGameRoomPrepare::SetCntClient(unsigned int common,unsigned int fight)
 {
 	mCntCommon = common;
 	mCntInFight = fight;
 }
 //---------------------------------------------------------------------------------------------
-void GameRoomPrepare::sl_RefreshCntClient()
+void TGameRoomPrepare::sl_RefreshCntClient()
 {
 	QString str;
 	str = QString(tr("В бою: %1")).arg(mCntInFight);
@@ -88,63 +84,70 @@ void GameRoomPrepare::sl_RefreshCntClient()
 	ui.lAll->setText(str);
 }
 //---------------------------------------------------------------------------------------------
-void GameRoomPrepare::closeEvent(QCloseEvent* )
+void TGameRoomPrepare::closeEvent(QCloseEvent* )
 {
 	sl_Exit();
 }
 //---------------------------------------------------------------------------------------------
-void GameRoomPrepare::sl_Exit()
+void TGameRoomPrepare::sl_Exit()
 {
 	_exit(0);
 }
 //---------------------------------------------------------------------------------------------
-void GameRoomPrepare::SendRequestListTank()
+void TGameRoomPrepare::SendRequestListTank()
 {
-  mClient->SendRequestListTank();
+  pClient->SendRequestListTank();
 }
 //---------------------------------------------------------------------------------------------
-void GameRoomPrepare::ViewListTanks()
+void TGameRoomPrepare::ViewListTanks()
 {
   for(int i = 0 ; i < mPacketListTank.getCnt() ; i++)
   {
     unsigned short typeTank = mPacketListTank.getTypeTank(i);
     switch(typeTank)
     {
-      case nsTank_ID::eID_Tiger:
-				if(mPacketListTank.getFlgBlockTank(i))
-          ui.cbTank->addItem(tr("Tiger заблокирован"));
-				else
-	        ui.cbTank->addItem(tr("Tiger"));
-        break;
-      case nsTank_ID::eID_IS:
-				if(mPacketListTank.getFlgBlockTank(i))
-					ui.cbTank->addItem(tr("ИС заблокирован"));
-				else
-					ui.cbTank->addItem(tr("ИС"));
-        break;
+      case nsTank_ID::eID_KingTiger:
+        if(mPacketListTank.getFlgBlockTank(i))
+          ui.cbTank->addItem(tr("KingTiger заблокирован"));
+        else
+           ui.cbTank->addItem(tr("KingTiger"));
+          break;
+
+      //  case nsTank_ID::eID_Tiger:
+				//if(mPacketListTank.getFlgBlockTank(i))
+    //      ui.cbTank->addItem(tr("Tiger заблокирован"));
+				//else
+	   //     ui.cbTank->addItem(tr("Tiger"));
+    //    break;
+    //  case nsTank_ID::eID_IS:
+				//if(mPacketListTank.getFlgBlockTank(i))
+				//	ui.cbTank->addItem(tr("ИС заблокирован"));
+				//else
+				//	ui.cbTank->addItem(tr("ИС"));
+    //    break;
       default:BL_FIX_BUG();
     }
   }
 }
 //---------------------------------------------------------------------------------------------
-void GameRoomPrepare::AddListTank(char* data, int size)
+void TGameRoomPrepare::AddListTank(char* data, int size)
 {
   mPacketListTank.setData(data,size);
 }
 //---------------------------------------------------------------------------------------------
-void GameRoomPrepare::sl_ChangeCurTank()
+void TGameRoomPrepare::sl_ChangeCurTank()
 {
   int i = ui.cbTank->currentIndex();
   if(i==-1) return;
-  mClient->SetCurrentTank(i);
+  pClient->SetCurrentTank(i);
 }
 //---------------------------------------------------------------------------------------------
-void GameRoomPrepare::sl_InFight()
+void TGameRoomPrepare::sl_InFight()
 {
-  mClient->SendRequestInFight();
+  pClient->SendRequestInFight();
 }
 //---------------------------------------------------------------------------------------------
-void GameRoomPrepare::Translate(unsigned short type, char*pData, int size)
+void TGameRoomPrepare::Translate(unsigned short type, char*pData, int size)
 {
   switch(type)
   {
@@ -165,7 +168,7 @@ void GameRoomPrepare::Translate(unsigned short type, char*pData, int size)
   }
 }
 //---------------------------------------------------------------------------------------------
-void GameRoomPrepare::showGUI()
+void TGameRoomPrepare::showGUI()
 {
   ui.cbTank->clear();
   sl_RefreshCntClient();
@@ -178,7 +181,7 @@ void GameRoomPrepare::showGUI()
   QWidget::show();
 }
 //---------------------------------------------------------------------------------------------
-void GameRoomPrepare::hideGUI()
+void TGameRoomPrepare::hideGUI()
 {
   mTimer->stop();
   QWidget::hide();

@@ -36,9 +36,10 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "ManagerGUI.h"
 #include <QMessageBox>
+#include "GlobalParamsTank.h"
+#include "BaseGUI.h"
 
-template <class Robert, class Client, class BigJack >
-TManagerGUI<Robert, Client, BigJack >::TManagerGUI(QWidget* parent):QObject(parent)
+TManagerGUI::TManagerGUI(QWidget* parent):QObject(parent)
 {
   pRobert  = NULL;
   pBigJack = NULL;
@@ -47,33 +48,29 @@ TManagerGUI<Robert, Client, BigJack >::TManagerGUI(QWidget* parent):QObject(pare
   pCurrentForm = NULL;
 }
 //-----------------------------------------------------------------------
-template <class Robert, class Client, class BigJack >
-TManagerGUI<Robert, Client, BigJack >::~TManagerGUI()
+TManagerGUI::~TManagerGUI()
 {
   Done();
 }
 //-----------------------------------------------------------------------
-template <class Robert, class Client, class BigJack >
-void TManagerGUI<Robert, Client, BigJack >::start(Robert  *_pRobert,
-                                                  BigJack *_pBigJack,
-                                                  Client  *_pClient )
+void TManagerGUI::start(TInterpretatorPredictionTank  *_pRobert,
+                        TManagerDirectX* _pBigJack,
+                        TClientTank  *_pClient)
 {
   pRobert  = _pRobert;
   pBigJack = _pBigJack;
   pClient  = _pClient; 
 
-  if(pCurrentForm)
-    pCurrentForm->showGUI();
+  startEvent();
 }
 //-----------------------------------------------------------------------
-template <class Robert, class Client, class BigJack >
-void TManagerGUI<Robert, Client, BigJack >::stop()
+void TManagerGUI::stop()
 {
+  stopEvent();
   _exit(0);
 }
 //-----------------------------------------------------------------------
-template <class Robert, class Client, class BigJack >
-void TManagerGUI<Robert, Client, BigJack >::customEvent( QEvent * e  )
+void TManagerGUI::customEvent( QEvent * e  )
 {
   TManagerGUIEvent* event = (TManagerGUIEvent*)e;
   switch(event->type())
@@ -93,17 +90,16 @@ void TManagerGUI<Robert, Client, BigJack >::customEvent( QEvent * e  )
   }
 }
 //---------------------------------------------------------------------------------------------
-template <class Robert, class Client, class BigJack >
-void TManagerGUI<Robert, Client, BigJack >::OpenForm(char* pStrForm)
+void TManagerGUI::OpenForm(char* pStrForm)
 {
   // создать форму ожидания
   pCurrentForm->hideGUI();
   pCurrentForm = FindForm(pStrForm);
+  BL_ASSERT(pCurrentForm);
   pCurrentForm->showGUI();
 }
 //---------------------------------------------------------------------------------------------
-template <class Robert, class Client, class BigJack >
-void TManagerGUI<Robert, Client, BigJack >::AddForm(TBaseGUI_G* pForm, char* name)
+void TManagerGUI::AddFormInList(TBaseGUI* pForm, char* name)
 {
   if(pCurrentForm==NULL)
     pCurrentForm = pForm;
@@ -111,16 +107,18 @@ void TManagerGUI<Robert, Client, BigJack >::AddForm(TBaseGUI_G* pForm, char* nam
   pForm->setup(pRobert,pBigJack,pClient);
   //-----------------------------------------------------------------------------
   mMap[name] = pForm;
+
+  if(pCurrentForm)
+    pCurrentForm->showGUI();
 }
 //---------------------------------------------------------------------------------------------
-template <class Robert, class Client, class BigJack >
-void TManagerGUI<Robert, Client, BigJack >::Done()
+void TManagerGUI::Done()
 {
-  list.clear();
+  mMap.clear();
+  stopEvent();
 }
 //---------------------------------------------------------------------------------------------
-template <class Robert, class Client, class BigJack >
-void TManagerGUI<Robert, Client, BigJack >::WorkStream(TManagerGUIEvent* event)
+void TManagerGUI::WorkStream(TManagerGUIEvent* event)
 {
   int size;
   char* pData = event->GetData(size);

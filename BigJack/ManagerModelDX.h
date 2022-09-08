@@ -33,13 +33,42 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "BaseObjectGravityPrediction.h"
 
-TBaseObjectGravityPrediction::TBaseObjectGravityPrediction()
+#ifndef ManagerModelH
+#define ManagerModelH
+
+#include "hArray.h"
+#include "Define_DX.h"
+class TModelDX;
+
+class TManagerModelDX
 {
-}
-//--------------------------------------------------------------------------
-TBaseObjectGravityPrediction::~TBaseObjectGravityPrediction()
-{
-}
-//--------------------------------------------------------------------------
+
+public:
+  TManagerModelDX();
+  ~TManagerModelDX();
+  
+  TModelDX* Find(unsigned int id);
+  // список примитивов (оригиналы, которые используются в ObjectDX)
+
+  void Load(IDirect3DDevice9* pd3dDevice, 
+    const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
+    void* pUserContext );
+
+  void ResetDevice();
+  void OnLostDevice();
+  void OnDestroyDevice();
+
+  TArrayObject mArrModel;
+
+protected:
+  bool LoadListPath();
+
+  char** mArrPathModel;
+  int   mCntPathModel;
+
+  void Done();
+
+};
+
+#endif

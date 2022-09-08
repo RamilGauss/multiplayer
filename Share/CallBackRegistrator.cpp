@@ -40,18 +40,18 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BL_Debug.h"
 
 
-CallBackRegistrator::CallBackRegistrator()
+TCallBackRegistrator::TCallBackRegistrator()
 {
 	mArrCallBack = NULL;
 	mCntCallBack = 0;
 }
 //--------------------------------------------------------------
-CallBackRegistrator::~CallBackRegistrator()
+TCallBackRegistrator::~TCallBackRegistrator()
 {
 
 }
 //--------------------------------------------------------------
-void CallBackRegistrator::Register(TCallBackFunc pFunc)
+void TCallBackRegistrator::Register(TCallBackFunc pFunc)
 {
 	if(!InArr(pFunc))
 		AddElement(pFunc);
@@ -59,7 +59,7 @@ void CallBackRegistrator::Register(TCallBackFunc pFunc)
 		BL_FIX_BUG();
 }
 //--------------------------------------------------------------
-void CallBackRegistrator::Unregister(TCallBackFunc pFunc)
+void TCallBackRegistrator::Unregister(TCallBackFunc pFunc)
 {
 	for(int i = 0 ; i < mCntCallBack ; i++)
 	{
@@ -72,7 +72,7 @@ void CallBackRegistrator::Unregister(TCallBackFunc pFunc)
   BL_FIX_BUG();
 }
 //--------------------------------------------------------------
-bool CallBackRegistrator::InArr(TCallBackFunc pFunc)
+bool TCallBackRegistrator::InArr(TCallBackFunc pFunc)
 {
 	for(int i = 0; i< mCntCallBack ; i++)
 	{
@@ -82,7 +82,7 @@ bool CallBackRegistrator::InArr(TCallBackFunc pFunc)
 	return false;
 }
 //--------------------------------------------------------------
-void CallBackRegistrator::AddElement(TCallBackFunc pFunc)
+void TCallBackRegistrator::AddElement(TCallBackFunc pFunc)
 {
 	int size = mCntCallBack*sizeof(TCallBackFunc);
 
@@ -92,7 +92,7 @@ void CallBackRegistrator::AddElement(TCallBackFunc pFunc)
 	mCntCallBack++;
 }
 //--------------------------------------------------------------
-void CallBackRegistrator::RemoveInArr(int index)
+void TCallBackRegistrator::RemoveInArr(int index)
 {
 	if(mCntCallBack==1){mCntCallBack=0;return;}
 
@@ -102,7 +102,7 @@ void CallBackRegistrator::RemoveInArr(int index)
 	mCntCallBack--;
 }
 //--------------------------------------------------------------
-void CallBackRegistrator::Notify(void* data, int size)
+void TCallBackRegistrator::Notify(void* data, int size)
 {
 	for(int i = 0 ; i < mCntCallBack ; i++)
 	{

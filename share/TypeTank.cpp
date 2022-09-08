@@ -39,11 +39,11 @@ you may contact in writing [ramil2085@gmail.com].
 
 namespace nsStrTank
 {
-
-const char* strTank_T_34      = "Т-34";
-const char* strTank_T_34_Ini  = "T_34.ini";
-const char* strTank_IS        = "ИС";
-const char* strTank_IS_Ini    = "IS.ini";
-const char* strTank_Tiger     = "Тигр";
-const char* strTank_Tiger_Ini = "Tiger.ini";
+  const char* strTank_KingTiger = "Королевский Тигр";
+//const char* strTank_T_34      = "Т-34";
+//const char* strTank_T_34_Ini  = "T_34.ini";
+//const char* strTank_IS        = "ИС";
+//const char* strTank_IS_Ini    = "IS.ini";
+//const char* strTank_Tiger     = "Тигр";
+//const char* strTank_Tiger_Ini = "Tiger.ini";
 }

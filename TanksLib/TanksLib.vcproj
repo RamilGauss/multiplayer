@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\BigJack;..\Robert;.\;..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;"
+				AdditionalIncludeDirectories="..\BigJack;..\Robert;.\;..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;..\DXUT\Optional;..\DXUT\Core"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,6 +61,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="..\Lib\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -150,11 +151,27 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\Antitank.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\BaseObjectCommon.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\LoaderMap.cpp"
+				RelativePath=".\InterpretatorPredictionTank.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LoaderObjectCommon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerBehavior.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerObjectCommon.cpp"
 				>
 			</File>
 			<File
@@ -162,7 +179,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TankInterpretatorPrediction.cpp"
+				RelativePath=".\TankTower.cpp"
 				>
 			</File>
 		</Filter>
@@ -172,11 +189,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\Antitank.h"
+				>
+			</File>
+			<File
 				RelativePath=".\BaseObjectCommon.h"
 				>
 			</File>
 			<File
-				RelativePath=".\LoaderMap.h"
+				RelativePath=".\InterpretatorPredictionTank.h"
 				>
 			</File>
 			<File
@@ -184,11 +205,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MakerBehavior.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerObjectCommon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\namespace_ID_BEHAVIOR.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Tank.h"
 				>
 			</File>
 			<File
-				RelativePath=".\TankInterpretatorPrediction.h"
+				RelativePath=".\TankTower.h"
 				>
 			</File>
 		</Filter>

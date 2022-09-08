@@ -75,6 +75,10 @@ public:
     {
         return m_strMediaDir;
     }
+    void ZeroMesh()
+    {
+      m_pMesh = NULL;
+    }
 
 private:
 

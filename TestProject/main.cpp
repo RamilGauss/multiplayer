@@ -1,50 +1,60 @@
-#include <iostream>
-#include <string>
-#include <map>
+/*
+===========================================================================
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Гудаков Рамиль Сергеевич 
+2011, 2012
+===========================================================================
+                        Common Information
+"Tanks" GPL Source Code
 
-using namespace std;
+This file is part of the "Tanks" GPL Source Code.
 
-int main()
+"Tanks" Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+"Tanks" Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the "Tanks" Source Code is also subject to certain additional terms. 
+You should have received a copy of these additional terms immediately following 
+the terms and conditions of the GNU General Public License which accompanied
+the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+===========================================================================
+                                  Contacts
+If you have questions concerning this license or the applicable additional terms,
+you may contact in writing [ramil2085@gmail.com].
+===========================================================================
+*/ 
+
+#include <QtGui/QApplication>
+
+#include <QtCore/QTextCodec>
+#include <QWindowsStyle>
+#include "BaseGUI_DX.h"
+  //#include "ManagerDirectX.h"
+
+class TA :  public TBaseGUI_DX</*TManagerDirectX*/int,int,int>
 {
-  string cmd, name, phone;
-  map< string, string > book;
+public:
+  TA(){};
+  virtual void VisualEvent(QPaintEvent* pEvent){};
+  virtual void Translate(unsigned short typePacket, char* pData, int size){};
+};
 
-  while( cin >> cmd )
-  {
-    if ( cmd == "add" )
-    {
-      cin >> name >> phone;
-      book[ name ] = phone;
-      cout << "Added" << endl;
-    }
-    else if ( cmd == "find" )
-    {
-      cin >> name;
-      map< string, string >::const_iterator ifind = book.find( name );
+int main(int argc, char *argv[])
+{
+  QTextCodec::setCodecForTr(QTextCodec::codecForName("CP1251"));
 
-      if ( ifind != book.end() )
-        cout << ifind->first << "'s phone is " << ifind->second << endl;
-      else
-        cout << name << " not found" << endl;
-    }
-    else if ( cmd == "del" )
-    {
-      cin >> name;
-      book.erase( name );
-      cout << "Deleted" << endl;
-    }
-    else if ( cmd == "view" )
-    {
-      map< string, string >::const_iterator i;
-
-      for( i = book.begin(); i != book.end() ; ++i )
-        cout << i->first << "\t " << i->second << endl;
-    }
-    else if ( cmd == "quit" )
-      return 0;
-    else
-      cerr << "Bad command '" << cmd << "'" << endl;
-  } // while( cin >> cmd )
-
-  return 0;
-} // int main()
+  QApplication a(argc, argv);
+  TA asd;
+  asd.showGUI();
+	a.exec();
+	return 0;
+}

@@ -39,27 +39,36 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include <QWidget>
 
-template <class Robert, class Client, class BigJack >
+class TInterpretatorPredictionTank;
+class TManagerDirectX;
+class TClientTank;
+
+
 class TBaseGUI : public QWidget
 {
 public:
-  TBaseGUI(QWidget* parent):QWidget(parent){pRobert=NULL;pBigJack = NULL;pClient=NULL;}
+  TBaseGUI(QWidget* parent=NULL): QWidget(parent){pRobert=NULL;pBigJack = NULL;pClient=NULL;}
   virtual ~TBaseGUI(){};
 
   virtual void Translate(unsigned short typePacket, char* pData, int size) = 0;
 
-  virtual void showGUI() = 0;
-  virtual void hideGUI() = 0;
+  virtual void showGUI(){QWidget::show();}
+  virtual void hideGUI(){QWidget::hide();};
 
-  void setup(Robert  *_pRobert,
-             BigJack *_pBigJack,
-             Client  *_pClient );
+  void setup(TInterpretatorPredictionTank  *_pRobert,
+             TManagerDirectX *_pBigJack,
+             TClientTank  *_pClient )
+  {
+    pRobert  = _pRobert;
+    pBigJack = _pBigJack;
+    pClient  = _pClient;
+  }
 
 protected:
   
-  Robert  *pRobert;
-  BigJack *pBigJack;  
-  Client  *pClient;
+  TInterpretatorPredictionTank  *pRobert;
+  TManagerDirectX *pBigJack;  
+  TClientTank  *pClient;
   
 };
 

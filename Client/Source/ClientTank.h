@@ -39,8 +39,10 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "CallBackRegistrator.h"
 #include "TransportProtocol.h"
+#include "HiTimer.h"
+#include "ApplicationProtocolPacket.h"
 
-class ClientTank
+class TClientTank
 {
 	bool flgNeedStop;
 	bool flgActive;
@@ -50,23 +52,23 @@ class ClientTank
 
 	volatile guint32 mLastTimeRcv;// время последнего получения пакета от сервера (стрим или обычный пакет)
 
-	TransportProtocol mTransport;
+	TTransportProtocol mTransport;
 
-	CallBackRegistrator mCallBackDisconnect;
-	CallBackRegistrator mCallBackStream;
-	CallBackRegistrator mCallBackPacket;
+	TCallBackRegistrator mCallBackDisconnect;
+	TCallBackRegistrator mCallBackStream;
+	TCallBackRegistrator mCallBackPacket;
 
 	GThread* thread;// поток определения дисконнекта от сервера
 
   unsigned int mIP_server;
 public:
   
-  ClientTank();
-  ~ClientTank();
+  TClientTank();
+  ~TClientTank();
   void start();
   void stop();
-  void Register(CallBackRegistrator::TCallBackFunc pFunc, int type);
-  void Unregister(CallBackRegistrator::TCallBackFunc pFunc, int type);
+  void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type);
+  void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type);
 
 //--------------------------------------------------------------------
 public:

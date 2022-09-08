@@ -37,6 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef ModelDXH
 #define ModelDXH
 
+#include "DXUT.h"
 #include "Struct3D.h"
 
 #include "EffectDX.h"
@@ -45,7 +46,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ILoaderModelDX.h"
 #include <d3d9types.h>
 
-class TManagerModel;
+class TManagerModelDX;
 
 class TModelDX : public TObject
 {
@@ -83,7 +84,7 @@ protected:
   void Draw(TEffectDX* pEffect);
   virtual bool Load(LPCWSTR strFilenameData);
   //---------------------------------------------------------
-  friend class TManagerModel;
+  friend class TManagerModelDX;
   
   // если у объекта одно состояние, то mEffectDX_normal==mEffectDX_damage
   struct TLOD

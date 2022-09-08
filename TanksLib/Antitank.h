@@ -33,58 +33,23 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#ifndef AntitankH
+#define AntitankH
 
-#include "ServerStruct.h"
-#include "TypeTank.h"
 #include "Tank.h"
 
-using namespace nsServerStruct;
+
+class TAntitank : public TTank
+{
+public:
+  TAntitank();
+  virtual ~TAntitank();
+
+  bool GetMirror(char ** pData,int &size);
+  void SetMirror(char *pData,int size);
 
 
-void TGarage::InitArrTank()
-{
-  // читаем из БД
-  mArrTanks.Clear();
-  
-  int cnt = 2;// ReadFromBD(...);
-  mCurTank = 0; // первый в массиве
+};
 
-  TTank* pTank = new TTank(pMasterClient);
-  pTank->SetTypeTank(nsTank_ID::eID_Tiger);
-  mArrTanks.Add(pTank);
 
-  pTank = new TTank(pMasterClient);
-  pTank->SetTypeTank(nsTank_ID::eID_IS);
-  mArrTanks.Add(pTank);
-
-}
-//------------------------------------------------------------------------------
-bool TGarage::SetCurTank(int i)
-{
-  if(i>=mArrTanks.Count())
-    return false;
-  mCurTank = i;
-  return true;
-}
-//------------------------------------------------------------------------------
-int TGarage::GetCurTank()
-{
-  return mCurTank;
-}
-//------------------------------------------------------------------------------
-TTank* TGarage::GetPointerCurTank()
-{
-  return (TTank*)mArrTanks.Get(mCurTank);
-}
-//------------------------------------------------------------------------------
-TClient::TClient():mGarage(this)
-{
-  sNick=NULL;
-  time=ht_GetMSCount();
-}
-//------------------------------------------------------------------------------
-TClient::~TClient()
-{
-  free(sNick);
-}
-//------------------------------------------------------------------------------
+#endif

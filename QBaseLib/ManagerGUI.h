@@ -84,51 +84,51 @@ public:
   }
 };
 //-------------------------------------------------------------------------------------------
-template <class Robert, class Client, class BigJack > // какие-то данные, 
-//было классно если бы можно было: template <class T0, ... >
 class TManagerGUI : public QObject
 {
 public:
   
-  typedef TBaseGUI   < Robert, Client, BigJack> TBaseGUI_G;// игровые формы
-  typedef TBaseGUI_DX< Robert, Client, BigJack> TBaseGUI_DX_G;
-
   TManagerGUI(QWidget* parent=NULL);
   virtual ~TManagerGUI();
   
-  void start(Robert  *_pRobert,
-             BigJack *_pBigJack,
-             Client  *_pClient );
+  void start(TInterpretatorPredictionTank* _pRobert,
+             TManagerDirectX*              _pBigJack, 
+             TClientTank*                  _pClient);
   void stop();
 
-  void AddForm(TBaseGUI_G* pStrForm, char* name);
+  void AddFormInList(TBaseGUI* pStrForm, char* name);
 
 protected:
   
-  Robert  *pRobert;
-  BigJack *pBigJack;  
-  Client  *pClient;
+  TInterpretatorPredictionTank* pRobert;
+  TManagerDirectX*              pBigJack;  
+  TClientTank*                  pClient;
 
-  TBaseGUI_G* pCurrentForm;
+  TBaseGUI* pCurrentForm;
 
   std::map<std::string,void*> mMap;
 
 protected:
 
-  virtual void customEvent( QEvent * e  );
+  virtual void startEvent(){};
+  virtual void stopEvent(){};
+
+  virtual void customEvent( QEvent * e );
 
   virtual void WorkStream(TManagerGUIEvent* event);// чистая трансляция данных
   virtual void WorkPacket(TManagerGUIEvent* event) = 0;// принятие решения об открытии формы
   
-  virtual void OpenFirstForm();
+  virtual void OpenFirstForm() = 0;
 
   void OpenForm(char* pStrForm);
-  TBaseGUI_G* FindForm(char* pStrForm)
+public:
+  TBaseGUI* FindForm(char* pStrForm)
   {
     std::map<std::string,void*>::iterator ifind = mMap.find(pStrForm);
     BL_ASSERT(ifind->second);
-    return ifind->second;
+    return (TBaseGUI*)ifind->second;
   }
+protected:
   //---------------------------------------------------------------------------------------------
   void Done();
 };

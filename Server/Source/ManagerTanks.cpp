@@ -49,20 +49,20 @@ TManagerTanks::TManagerTanks()
 //--------------------------------------------------------
 void TManagerTanks::LoadPropertyFromIni(TTank* pTank)
 {
-  char path[400];
-  strcpy(path,"..\\tanks\\");
-  switch(pTank->GetTypeTank())
-  {
-    case eID_Tiger:
-      strcpy(path,strTank_Tiger_Ini);
-      break;
-    case eID_IS:
-      strcpy(path,strTank_IS_Ini);
-      break;
-    default:return;
-  }
+  //char path[400];
+  //strcpy(path,"..\\tanks\\");
+  //switch(pTank->GetTypeTank())
+  //{
+  //  case eID_Tiger:
+  //    strcpy(path,strTank_Tiger_Ini);
+  //    break;
+  //  case eID_IS:
+  //    strcpy(path,strTank_IS_Ini);
+  //    break;
+  //  default:return;
+  //}
 
-  Load(path,pTank);
+  //Load(path,pTank);
 }
 //--------------------------------------------------------
 void TManagerTanks::Load(char* path,TTank* pTank)

@@ -41,9 +41,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include <d3dx9.h> 
 
 // Constructor 
-template <class Robert, class Client, class BigJack>
-TBaseGUI_DX<Robert, Client, BigJack>::TBaseGUI_DX( QWidget* pParent) 
-: TBaseGUI<Robert, Client, BigJack>( pParent ) 
+TBaseGUI_DX::TBaseGUI_DX( QWidget* pParent) 
+: TBaseGUI( pParent ) 
 { 
   mD3D = NULL; 
   mDevice = NULL; 
@@ -56,15 +55,13 @@ TBaseGUI_DX<Robert, Client, BigJack>::TBaseGUI_DX( QWidget* pParent)
 } 
 //-------------------------------------------------------------------------
 // Destructor 
-template <class Robert, class Client, class BigJack>
-TBaseGUI_DX<Robert, Client, BigJack>::~TBaseGUI_DX() 
+TBaseGUI_DX::~TBaseGUI_DX() 
 { 
   Close(); 
 } 
 //-------------------------------------------------------------------------
 // Initialized the D3D environment 
-template <class Robert, class Client, class BigJack>
-void TBaseGUI_DX<Robert, Client, BigJack>::Setup() 
+void TBaseGUI_DX::Setup() 
 { 
   HWND windowHandle = winId(); 
 
@@ -104,8 +101,7 @@ void TBaseGUI_DX<Robert, Client, BigJack>::Setup()
 } 
 //-------------------------------------------------------------------------
 // Destroys the D3D environment 
-template <class Robert, class Client, class BigJack>
-void TBaseGUI_DX<Robert, Client, BigJack>::Close() 
+void TBaseGUI_DX::Close() 
 { 
   if( mDevice ) 
     mDevice->Release(); 
@@ -114,15 +110,16 @@ void TBaseGUI_DX<Robert, Client, BigJack>::Close()
 } 
 //-------------------------------------------------------------------------
 // paints the scene 
-template <class Robert, class Client, class BigJack>
-void TBaseGUI_DX<Robert, Client, BigJack>::paintEvent( QPaintEvent* pEvent ) 
+void TBaseGUI_DX::paintEvent( QPaintEvent* pEvent ) 
 { 
+  HRESULT hr;
+#if 1
   VisualEvent(pEvent);
-#if 0
+#else
   // clear render buffer 
-  HRESULT hr = mDevice->Clear(0, NULL, 
-                              D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 
-                              D3DCOLOR_XRGB(250, 40, 40), 1.0f, 0);
+  hr = mDevice->Clear(0, NULL, 
+                      D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 
+                      D3DCOLOR_XRGB(250, 40, 40), 1.0f, 0);
   if( FAILED( hr)) 
     QMessageBox::critical(this,
     "ERROR",
@@ -136,7 +133,7 @@ void TBaseGUI_DX<Robert, Client, BigJack>::paintEvent( QPaintEvent* pEvent )
   mDevice->EndScene();    // ends the 3D scene
 #endif
   // and show the result 
-  HRESULT hr = mDevice->Present(NULL, NULL, NULL, NULL);   // displays the created frame on the screen
+  hr = mDevice->Present(NULL, NULL, NULL, NULL);   // displays the created frame on the screen
   if( FAILED( hr)) 
     QMessageBox::critical(this,
     "ERROR",

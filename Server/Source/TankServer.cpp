@@ -37,10 +37,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "TankServer.h"
 #include "ManagerTanks.h"
 
-using namespace nsServerStruct;
 
-TTankServer::TTankServer(TClient* pClient):
-TTank()
+TTankServer::TTankServer(TClient* pClient)
 {
   pMasterClient = pClient;
   pRoom = NULL;

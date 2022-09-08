@@ -37,10 +37,10 @@ you may contact in writing [ramil2085@gmail.com].
 #define BaseObjectCommonH
 
 #include "BaseObjectDX.h"
+#include "BaseObjectPrediction.h"
 
 
-template <class ObjectPrediction >
-class TBaseObjectCommon : public TBaseObjectDX , public ObjectPrediction
+class TBaseObjectCommon : public TBaseObjectDX , public TBaseObjectPrediction
 {
 
 public:
@@ -55,5 +55,6 @@ public:
   virtual void SetMirror(char* pData, int size) = 0;
 
 };
+//-------------------------------------------------------------
 
 #endif

@@ -46,7 +46,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "GCS.h"
 
 // Melissa - транспорт
-class TransportProtocol
+class TTransportProtocol
 {
   // для сервера, в клиенте такая ситуация маловероятна
   // при отправке известному клиенту
@@ -60,9 +60,9 @@ class TransportProtocol
 	void unlockSendRcv(){gcsSendRcv.unlock();};
 
 
-  CallBackRegistrator mCallBackRecvPacket;// указатель на ip, port, пакет и размер данных по указателю, данные - {4б|2б|sizeб-6б}
-  CallBackRegistrator mCallBackRecvStream;// указатель на ip, port, пакет и размер данных по указателю, данные - {4б|2б|sizeб-6б}
-  CallBackRegistrator mCallBackDisconnect;// указатель на ip, port с кем произошел разрыв связи
+  TCallBackRegistrator mCallBackRecvPacket;// указатель на ip, port, пакет и размер данных по указателю, данные - {4б|2б|sizeб-6б}
+  TCallBackRegistrator mCallBackRecvStream;// указатель на ip, port, пакет и размер данных по указателю, данные - {4б|2б|sizeб-6б}
+  TCallBackRegistrator mCallBackDisconnect;// указатель на ip, port с кем произошел разрыв связи
 
 	UdpDevice mUDP;	
 
@@ -95,8 +95,8 @@ public:
 
 	enum{ePacket=0,eStream=1,};
 
-	TransportProtocol(char* pPathLog=NULL);
-	~TransportProtocol();
+	TTransportProtocol(char* pPathLog=NULL);
+	~TTransportProtocol();
 	void InitLog(char* pPathLog);
 
   bool Open(unsigned short port,int numNetWork=0);
@@ -116,8 +116,8 @@ protected:
   bool SendSynchro(unsigned int ip, unsigned short port, int cntTry);
 
 public:
-  void Register(CallBackRegistrator::TCallBackFunc pFunc, int type);
-  void Unregister(CallBackRegistrator::TCallBackFunc pFunc, int type);
+  void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type);
+  void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type);
 
 protected:
   void notifyRcvPacket(void * data,int size){mCallBackRecvPacket.Notify(data,size);};

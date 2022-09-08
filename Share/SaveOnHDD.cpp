@@ -34,10 +34,6 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#ifndef _CRT_SECURE_NO_WARNINGS
-#define _CRT_SECURE_NO_WARNINGS
-#endif
-
 #include "SaveOnHDD.h"
 
 #include <stdio.h>

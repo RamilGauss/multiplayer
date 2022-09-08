@@ -34,7 +34,7 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#include "ManagerModel.h"
+#include "ManagerModelDX.h"
 #include <d3d9.h>
 #include "ModelDX.h"
 #include "GlobalParamsTank.h"
@@ -45,18 +45,18 @@ you may contact in writing [ramil2085@gmail.com].
 #include <atlconv.h>
 
 
-TManagerModel::TManagerModel()
+TManagerModelDX::TManagerModelDX()
 {
   mArrPathModel = NULL;
   mCntPathModel = 0;
 }
 //--------------------------------------------------------------------------------------
-TManagerModel::~TManagerModel()
+TManagerModelDX::~TManagerModelDX()
 {
   Done();
 }
 //--------------------------------------------------------------------------------------
-void TManagerModel::Load(IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
+void TManagerModelDX::Load(IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
              void* pUserContext )
 {
   if(LoadListPath()==false)
@@ -75,7 +75,7 @@ void TManagerModel::Load(IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pB
   }
 }
 //--------------------------------------------------------------------------------------
-void TManagerModel::ResetDevice()
+void TManagerModelDX::ResetDevice()
 {
   int cnt = mArrModel.Count();
   for(int i = 0 ; i < cnt ; i++)
@@ -86,7 +86,7 @@ void TManagerModel::ResetDevice()
   }
 }
 //--------------------------------------------------------------------------------------
-void TManagerModel::OnLostDevice()
+void TManagerModelDX::OnLostDevice()
 {
   int cnt = mArrModel.Count();
   for(int i = 0 ; i < cnt ; i++)
@@ -97,7 +97,7 @@ void TManagerModel::OnLostDevice()
   }
 }
 //--------------------------------------------------------------------------------------
-void TManagerModel::OnDestroyDevice()
+void TManagerModelDX::OnDestroyDevice()
 {
   int cnt = mArrModel.Count();
   for(int i = 0 ; i < cnt ; i++)
@@ -109,7 +109,7 @@ void TManagerModel::OnDestroyDevice()
   mArrModel.Clear();
 }
 //--------------------------------------------------------------------------------------
-bool TManagerModel::LoadListPath()
+bool TManagerModelDX::LoadListPath()
 {
   TLoaderListModel loader;
   if(loader.Open(PATH_LIST_MODELS)==false)
@@ -121,7 +121,7 @@ bool TManagerModel::LoadListPath()
   return true;
 }
 //--------------------------------------------------------------------------------------
-void TManagerModel::Done()
+void TManagerModelDX::Done()
 {
   for(int i = 0 ; i < mCntPathModel ; i++)
   {
@@ -136,7 +136,7 @@ void TManagerModel::Done()
   mArrModel.Clear();
 }
 //--------------------------------------------------------------------------------------
-TModelDX* TManagerModel::Find(unsigned int id)
+TModelDX* TManagerModelDX::Find(unsigned int id)
 {
   int cnt = mArrModel.Count();
   // скорость не имеет значения

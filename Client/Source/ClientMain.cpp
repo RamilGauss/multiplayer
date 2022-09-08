@@ -36,18 +36,14 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "ClientMain.h"
 #include "NetSystem.h"
-#include "ClientTank.h"
 #include "ApplicationProtocolDef.h"
-#include "GameRoomPrepare.h"
-#include "TransportProtocolTank.h"
 #include <QMessageBox>
 #include <QSettings>
 #include "ApplicationProtocolPacketAnswer.h"
-#include "WaitForm.h"
-#include "GameForm.h"
+#include "ClientTank.h"
 
 //-------------------------------------------------------------------------------------------
-ClientMain::ClientMain(QWidget *parent)
+TClientMain::TClientMain(QWidget *parent)
 : TBaseGUI(parent)
 {
   ui.setupUi(this);
@@ -60,21 +56,21 @@ ClientMain::ClientMain(QWidget *parent)
   LoadFromReestr();
 }
 //---------------------------------------------------------------------------------------------
-ClientMain::~ClientMain()
+TClientMain::~TClientMain()
 {
 }
 //---------------------------------------------------------------------------------------------
-void ClientMain::sl_Exit()
+void TClientMain::sl_Exit()
 {
   _exit(0);
 }
 //---------------------------------------------------------------------------------------------
-void ClientMain::closeEvent(QCloseEvent* )
+void TClientMain::closeEvent(QCloseEvent* )
 {
 	sl_Exit();
 }
 //---------------------------------------------------------------------------------------------
-void ClientMain::sl_Enter()
+void TClientMain::sl_Enter()
 {
   bool ok;
   
@@ -95,11 +91,11 @@ void ClientMain::sl_Enter()
   // осуществить вход
   QByteArray baNick = nick.toLocal8Bit();
   char* sNick = baNick.data();
-  if(!mClient->Connect(ip,port,sNick))
+  if(!pClient->Connect(ip,port,sNick))
 		Q_MESSAGE(tr("Нет связи с сервером."));
 }
 //---------------------------------------------------------------------------------------------
-void ClientMain::SaveInReestr(unsigned int ip, unsigned int port,QString& nick)
+void TClientMain::SaveInReestr(unsigned int ip, unsigned int port,QString& nick)
 {
 	QSettings settings("RUSSIA","ClientMain");
 	settings.setValue("ip", ip);
@@ -107,7 +103,7 @@ void ClientMain::SaveInReestr(unsigned int ip, unsigned int port,QString& nick)
 	settings.setValue("nick", nick);
 }
 //---------------------------------------------------------------------------------------------
-void ClientMain::LoadFromReestr()
+void TClientMain::LoadFromReestr()
 {
 	QSettings settings("RUSSIA","ClientMain");
 	bool ok = false;
@@ -126,12 +122,12 @@ void ClientMain::LoadFromReestr()
 	ui.leNik->setText(nick);
 }
 //---------------------------------------------------------------------------------------------
-void ClientMain::Translate( unsigned short type,char *pData, int size )
+void TClientMain::Translate( unsigned short type,char *pData, int size )
 {
   // пустышка
 }
 //---------------------------------------------------------------------------------------------
-void ClientMain::Connect(char* sNick, char* ip,char* port)// поддержка скрипт-управления
+void TClientMain::Connect(char* sNick, char* ip,char* port)// поддержка скрипт-управления
 {
   ui.leNik->setText(tr(sNick));
   ui.leLocalPort->setText(tr(port));

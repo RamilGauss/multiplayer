@@ -38,17 +38,17 @@ you may contact in writing [ramil2085@gmail.com].
 #define RoomH
 #include "ServerStruct.h"
 #include "TransportProtocol.h"
-#include "ManagerMap.h"
-#include "Prediction.h"
 #include <list>
 #include "glib/gthread.h"
+#include "ManagerObjectCommon.h"
+#include "TankServer.h"
 
-class TRoom
+class TRoom : public TManagerObjectCommon
 {
 
   TPrediction mPrediction;
 
-  TransportProtocol* mTransport;
+  TTransportProtocol* mTransport;
 
   TArrayObject mArrTank;
 
@@ -83,7 +83,7 @@ class TRoom
   //---------------------------------------------------
   struct TAction
   {
-    TTank* pTank;
+    TTankServer* pTank;
     nsServerStruct::TPacketServer* pDefPacket;
   };
   //---------------------------------------------------
@@ -96,22 +96,22 @@ public:
   TRoom();
   ~TRoom();
 
-  void AddTank(TTank* pTank);
+  void AddTank(TTankServer* pTank);
 
-	void SetTransport(TransportProtocol* pTransport);//старт боя, передача возможности вещать на клиента
+	void SetTransport(TTransportProtocol* pTransport);//старт боя, передача возможности вещать на клиента
 
 	bool Work(); // рассчитать координаты и разослать стрим клиентам
 
   void SetIDMap(unsigned short val);
   unsigned short GetIDMap(){return mID_map;};
 
-  TTank* GetTank(int i){return (TTank*)mArrTank.Get(i);};
+  TTankServer* GetTank(int i){return (TTankServer*)mArrTank.Get(i);};
 
   void MakeGroup();
   void PreparePrediction();// настроить предсказатель для получения координат объектов, коллизий, событий
   void LoadMap();
 
-  void SetPacket(nsServerStruct::TPacketServer* pPacket,TTank* ptank);
+  void SetPacket(nsServerStruct::TPacketServer* pPacket,TTankServer* ptank);
 
   void Done();
 
@@ -121,8 +121,8 @@ public:
 
 protected:
 
-  void WriteTransportStream(nsServerStruct::TClient* pClient,TBasePacket *packet);
-  void WriteTransportAnswer(nsServerStruct::TClient* pClient,TBasePacket *packet);
+  void WriteTransportStream(TClient* pClient,TBasePacket *packet);
+  void WriteTransportAnswer(TClient* pClient,TBasePacket *packet);
 
   void WorkByState();
   void WorkLoadMap();
@@ -140,9 +140,9 @@ protected:
   friend void* ThreadLoadMap(void* p);
   void ThreadLoadMap();
 
-  void SendInitCoordTank(nsServerStruct::TClient* pClient);
-  void SendScore(nsServerStruct::TClient* pClient);
-  void SendStateObject(nsServerStruct::TClient* pClient);
+  void SendInitCoordTank(TClient* pClient);
+  void SendScore(TClient* pClient);
+  void SendStateObject(TClient* pClient);
 
   void InitPositionTank();
 

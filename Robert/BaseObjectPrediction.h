@@ -38,7 +38,6 @@ you may contact in writing [ramil2085@gmail.com].
 #define BaseObjectPredictionH
 
 #include "BoundingBox.h"
-//#include "Struct3D.h"
 #include "BaseObject.h"
 
 class TBaseObjectPrediction : virtual public TBaseObject

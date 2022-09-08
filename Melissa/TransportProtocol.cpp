@@ -66,8 +66,9 @@ you may contact in writing [ramil2085@gmail.com].
 #endif
 
 //----------------------------------------------------------------------------
-TransportProtocol::TransportProtocol(char* pPathLog)
+TTransportProtocol::TTransportProtocol(char* pPathLog)
 {
+  flgActive = false;
   mArrFresh.Sort(SortFreshInfoConnect);
 	mArrWaitCheck.Sort(SortFreshDefPacket);
 	mArrWaitSend.Sort(SortFreshDefPacket);
@@ -77,12 +78,12 @@ TransportProtocol::TransportProtocol(char* pPathLog)
   mLogEvent.SetPrintf(false);
 }
 //----------------------------------------------------------------------------------
-TransportProtocol::~TransportProtocol()
+TTransportProtocol::~TTransportProtocol()
 {
 
 }
 //----------------------------------------------------------------------------------
-bool TransportProtocol::Open(unsigned short port, int numNetWork)
+bool TTransportProtocol::Open(unsigned short port, int numNetWork)
 {
   UdpDevice::TParams params;
 #ifdef WIN32
@@ -102,7 +103,7 @@ bool TransportProtocol::Open(unsigned short port, int numNetWork)
   return true;
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::write(InfoData* data, bool check)
+void TTransportProtocol::write(InfoData* data, bool check)
 {
 	InfoConnect* pFound = GetInfoConnect(data->ip_dst,data->port_dst);
 	data->ip_src   = mUDP.portSetting().m_LocalHost;
@@ -146,11 +147,11 @@ void TransportProtocol::write(InfoData* data, bool check)
 //----------------------------------------------------------------------------------
 void* ThreadTransport(void*p)
 {
-	((TransportProtocol*)p)->Engine();
+	((TTransportProtocol*)p)->Engine();
 	return NULL;
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::Engine()
+void TTransportProtocol::Engine()
 {
 	flgNeedStop = false;
 	flgActive = true;
@@ -179,7 +180,7 @@ void TransportProtocol::Engine()
 	flgActive = false;
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::start()
+void TTransportProtocol::start()
 {
   thread = g_thread_create(ThreadTransport,
     (gpointer)this,
@@ -187,7 +188,7 @@ void TransportProtocol::start()
     NULL);
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::stop()
+void TTransportProtocol::stop()
 {
 	flgNeedStop = true;
 	while(flgActive)
@@ -197,7 +198,7 @@ void TransportProtocol::stop()
 	mUDP.close();
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::AnalizPacket(unsigned int ip,unsigned short port,int size)
+void TTransportProtocol::AnalizPacket(unsigned int ip,unsigned short port,int size)
 {
   TPrefixTransport* prefix = (TPrefixTransport*)mBuffer;
   switch(prefix->type)
@@ -232,7 +233,7 @@ void TransportProtocol::AnalizPacket(unsigned int ip,unsigned short port,int siz
   }
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::FindAndCheck(TPrefixTransport* prefix,unsigned int ip,unsigned short port)
+void TTransportProtocol::FindAndCheck(TPrefixTransport* prefix,unsigned int ip,unsigned short port)
 {
 	TDefPacket oForSearchDefPacket;
 	TDefPacket *pForSearchDefPacket = &oForSearchDefPacket;
@@ -276,13 +277,13 @@ void TransportProtocol::FindAndCheck(TPrefixTransport* prefix,unsigned int ip,un
 	BL_FIX_BUG();
 }
 //----------------------------------------------------------------------------------
-int TransportProtocol::GetTimeout()
+int TTransportProtocol::GetTimeout()
 {
 	int to = eTimeout;//###
 	return to;
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::SendUnchecked()
+void TTransportProtocol::SendUnchecked()
 {
 	lockSendRcv();
   guint32 now_ms = ht_GetMSCount();
@@ -304,7 +305,7 @@ void TransportProtocol::SendUnchecked()
 	unlockSendRcv();
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::Register(CallBackRegistrator::TCallBackFunc pFunc, int type)
+void TTransportProtocol::Register(TCallBackRegistrator::TCallBackFunc pFunc, int type)
 {
   switch(type)
   {
@@ -321,7 +322,7 @@ void TransportProtocol::Register(CallBackRegistrator::TCallBackFunc pFunc, int t
   }
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::Unregister(CallBackRegistrator::TCallBackFunc pFunc, int type)
+void TTransportProtocol::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type)
 {
   switch(type)
   {
@@ -338,7 +339,7 @@ void TransportProtocol::Unregister(CallBackRegistrator::TCallBackFunc pFunc, int
   }
 }
 //----------------------------------------------------------------------------------
-bool TransportProtocol::Send(TDefPacket* pDefPacket)
+bool TTransportProtocol::Send(TDefPacket* pDefPacket)
 {
   unsigned char cntTry = pDefPacket->GetCntTry();
   if((unsigned char)(cntTry+1)>eCntTry)
@@ -354,7 +355,7 @@ bool TransportProtocol::Send(TDefPacket* pDefPacket)
   return Write(pData,size,ip, port);
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::Disconnect(TDefPacket* pDefPacket)
+void TTransportProtocol::Disconnect(TDefPacket* pDefPacket)
 {
   int size;
   unsigned int ip;
@@ -366,7 +367,7 @@ void TransportProtocol::Disconnect(TDefPacket* pDefPacket)
   notifyDisconnect(&dis);
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::NotifyRcvPacket(int size)
+void TTransportProtocol::NotifyRcvPacket(int size)
 {
 	// смещение по пакету до места ip и port
   int shift = sizeof(TPrefixTransport)-sizeof(TIP_Port);
@@ -374,7 +375,7 @@ void TransportProtocol::NotifyRcvPacket(int size)
   notifyRcvPacket(mBuffer+shift,size);
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::NotifyRcvStream(int size)
+void TTransportProtocol::NotifyRcvStream(int size)
 {
 	// смещение по пакету до места ip и port
 	int shift = sizeof(TPrefixTransport)-sizeof(TIP_Port);
@@ -382,7 +383,7 @@ void TransportProtocol::NotifyRcvStream(int size)
 	notifyRcvStream(mBuffer+shift,size);
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::SendCheck(TPrefixTransport* prefix,unsigned int ip,unsigned short port)
+void TTransportProtocol::SendCheck(TPrefixTransport* prefix,unsigned int ip,unsigned short port)
 {
   TPrefixTransport check;
   check.cn_in  = prefix->cn_in;
@@ -398,13 +399,13 @@ void TransportProtocol::SendCheck(TPrefixTransport* prefix,unsigned int ip,unsig
   Write(&check,sizeof(TPrefixTransport),ip, port);
 }
 //----------------------------------------------------------------------------------
-bool TransportProtocol::Write(void *p, int size, unsigned int ip, unsigned short port)
+bool TTransportProtocol::Write(void *p, int size, unsigned int ip, unsigned short port)
 {
 	WriteLog(p, size, ip, port);
 	return mUDP.write(p, size, ip, port);
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::WriteLog(void *p, int size, unsigned int ip, unsigned short port)
+void TTransportProtocol::WriteLog(void *p, int size, unsigned int ip, unsigned short port)
 {
   DEBUG_PACKET_ONLY_WRITE
 
@@ -416,7 +417,7 @@ void TransportProtocol::WriteLog(void *p, int size, unsigned int ip, unsigned sh
 	mLogRcvSend.WriteF("\n");
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::ReadLog(int size, unsigned int ip, unsigned short port)
+void TTransportProtocol::ReadLog(int size, unsigned int ip, unsigned short port)
 {
   DEBUG_PACKET_ONLY_READ
 
@@ -428,7 +429,7 @@ void TransportProtocol::ReadLog(int size, unsigned int ip, unsigned short port)
 	mLogRcvSend.WriteF("\n");
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::LogTransportInfo(TPrefixTransport* p,int size)
+void TTransportProtocol::LogTransportInfo(TPrefixTransport* p,int size)
 {
 	unsigned int hour   = p->time_ms/(1000*3600);
 	unsigned int minute = p->time_ms/(1000*60)-hour*60;
@@ -467,7 +468,7 @@ void TransportProtocol::LogTransportInfo(TPrefixTransport* p,int size)
 	mLogRcvSend.WriteF("\n");
 }
 //----------------------------------------------------------------------------------
-bool TransportProtocol::IsPacketFresh()
+bool TTransportProtocol::IsPacketFresh()
 {
 	TPrefixTransport* p = (TPrefixTransport*)mBuffer;
 	InfoConnect* pFoundFresh = GetInfoConnect(p->ip_port_src.ip,p->ip_port_src.port);
@@ -482,7 +483,7 @@ bool TransportProtocol::IsPacketFresh()
   return false;
 }
 //----------------------------------------------------------------------------------
-bool TransportProtocol::IsStreamFresh()
+bool TTransportProtocol::IsStreamFresh()
 {
 	TPrefixTransport* p = (TPrefixTransport*)mBuffer;
 	InfoConnect* pFoundFresh = GetInfoConnect(p->ip_port_src.ip,p->ip_port_src.port);
@@ -495,7 +496,7 @@ bool TransportProtocol::IsStreamFresh()
 	return false;
 }
 //----------------------------------------------------------------------------------
-bool TransportProtocol::A_more_B(unsigned short A, unsigned short B)
+bool TTransportProtocol::A_more_B(unsigned short A, unsigned short B)
 {
   if(A>B)
   {
@@ -508,7 +509,7 @@ bool TransportProtocol::A_more_B(unsigned short A, unsigned short B)
   return false;
 }
 //----------------------------------------------------------------------------------
-int TransportProtocol::SortFreshInfoConnect(const void* p1, const void* p2)
+int TTransportProtocol::SortFreshInfoConnect(const void* p1, const void* p2)
 {
   const InfoConnect *s1 = *( const InfoConnect **)p1;
   const InfoConnect *s2 = *( const InfoConnect **)p2;
@@ -527,7 +528,7 @@ int TransportProtocol::SortFreshInfoConnect(const void* p1, const void* p2)
   return 1;
 }
 //----------------------------------------------------------------------------------
-int TransportProtocol::SortFreshDefPacket(const void* p1, const void* p2)
+int TTransportProtocol::SortFreshDefPacket(const void* p1, const void* p2)
 {
   const TDefPacket *s1 = *( const TDefPacket **)p1;
   const TDefPacket *s2 = *( const TDefPacket **)p2;
@@ -546,7 +547,7 @@ int TransportProtocol::SortFreshDefPacket(const void* p1, const void* p2)
     return 1;
 }
 //----------------------------------------------------------------------------------
-TransportProtocol::InfoConnect* TransportProtocol::GetInfoConnect(unsigned int ip,unsigned short port)
+TTransportProtocol::InfoConnect* TTransportProtocol::GetInfoConnect(unsigned int ip,unsigned short port)
 {
   InfoConnect* pFresh = new InfoConnect;
   pFresh->ip    = ip;
@@ -567,13 +568,13 @@ TransportProtocol::InfoConnect* TransportProtocol::GetInfoConnect(unsigned int i
 	return pFoundFresh;
 }
 //----------------------------------------------------------------------------------
-bool TransportProtocol::synchro(unsigned int ip, unsigned short port)
+bool TTransportProtocol::synchro(unsigned int ip, unsigned short port)
 {
-	InfoConnect* pInfoConnect = GetInfoConnect(ip,port);
-	pInfoConnect->cn_in_s = 0;
-	pInfoConnect->cn_out_s = 0;
-	pInfoConnect->cn_in_p = 0;
-	pInfoConnect->cn_out_p = 0;
+	//InfoConnect* pInfoConnect = GetInfoConnect(ip,port);
+	//pInfoConnect->cn_in_s = 0;
+	//pInfoConnect->cn_out_s = 0;
+	//pInfoConnect->cn_in_p = 0;
+	//pInfoConnect->cn_out_p = 0;
 
   if(!mUDP.isOpen()){BL_FIX_BUG();return false;}
   
@@ -587,7 +588,9 @@ bool TransportProtocol::synchro(unsigned int ip, unsigned short port)
 		{
 			time_send	= ht_GetMSCount();
 			if(!SendSynchro(ip,port,cntTry)) {mUDP.close();return false;}
-		  cntTry++;
+		  if(cntTry>eCntTry) 
+        return false;
+      cntTry++;
 		}
     
     int res = mUDP.read(mBuffer,eSizeBuffer,(eWaitSynchro*1000)/eCntTry, ip, port);
@@ -595,26 +598,30 @@ bool TransportProtocol::synchro(unsigned int ip, unsigned short port)
     {
       case RR_ERROR:
       case RR_BREAK:
-      case RR_TIMEOUT:
 			{
 				mUDP.close();
 				return false;
 			}
-      default:;
+      case RR_TIMEOUT:
+        break;
+      default:
+      {
+        ReadLog(res,ip,port);
+        TPrefixTransport* prefix = (TPrefixTransport*)mBuffer;
+        if(prefix->type  =='K')
+          if(prefix->cn_in ==0)
+            if(prefix->cn_out==0)
+              return true;
+          break;       
+      };
     }
 
-    ReadLog(res,ip,port);
-    TPrefixTransport* prefix = (TPrefixTransport*)mBuffer;
-    if(prefix->type  =='K')
-		if(prefix->cn_in ==0)
-		if(prefix->cn_out==0)
-      return true;
     now_ms = ht_GetMSCount();
   }
-  return true;
+  return false;
 }
 //----------------------------------------------------------------------------------
-bool TransportProtocol::SendSynchro(unsigned int ip, unsigned short port, int cntTry)
+bool TTransportProtocol::SendSynchro(unsigned int ip, unsigned short port, int cntTry)
 {
   // начало сеанса, обнулить счетчик на той стороне
   TPrefixTransport synchro;
@@ -631,7 +638,7 @@ bool TransportProtocol::SendSynchro(unsigned int ip, unsigned short port, int cn
   return Write(&synchro,sizeof(TPrefixTransport),ip, port);
 }
 //----------------------------------------------------------------------------------
-void TransportProtocol::InitLog(char* pPathLog)
+void TTransportProtocol::InitLog(char* pPathLog)
 {  
 	if(pPathLog)
 	{		
@@ -643,7 +650,7 @@ void TransportProtocol::InitLog(char* pPathLog)
 	}
 }
 //----------------------------------------------------------------------------------
-bool TransportProtocol::FindInArrWaitCheck(TDefPacket* pDefPacket)
+bool TTransportProtocol::FindInArrWaitCheck(TDefPacket* pDefPacket)
 {
 	if(mArrWaitCheck.FastSearch(&pDefPacket,NULL,SortFreshDefPacket)!=-1)
 		return true;

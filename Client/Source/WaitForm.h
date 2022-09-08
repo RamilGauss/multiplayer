@@ -40,11 +40,11 @@ you may contact in writing [ramil2085@gmail.com].
 #include <QWidget>
 #include "ui_WaitForm.h"
 #include "glibconfig.h"
-#include "ManagerGUI.h"
+#include "ManagerGUIClient.h"
 
 class QTimer;
 
-class WaitForm : public TBaseGUI_G
+class TWaitForm : public TBaseGUI
 {
   Q_OBJECT
 
@@ -58,8 +58,8 @@ class WaitForm : public TBaseGUI_G
   unsigned int mCommon;
 
 public:
-  WaitForm(QWidget *parent = NULL);
-  ~WaitForm();
+  TWaitForm(QWidget *parent = NULL);
+  ~TWaitForm();
 
   virtual void Translate(unsigned short typePacket, char* pData, int size);
 

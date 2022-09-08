@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "LoaderModelDX.h"
 #include "LoggerDX.h"
 #include "BL_Debug.h"
-#include "glib\gmem.h"
+#include "glib/gmem.h"
 
 using namespace nsStruct3D;
 
@@ -86,7 +86,7 @@ bool TLoaderModelDX::LoadMainFile()
   // считать данные:
   mCntEffectVisual = mFileIniMain.GetInteger("MAIN","CntEffectVisual",0);
   mCntEffectInLOD  = mFileIniMain.GetInteger("MAIN","CntEffectInLOD",0);
-  mLOD             = mFileIniMain.GetDouble("MAIN","LOD",1);
+  mLOD             = (float)mFileIniMain.GetDouble("MAIN","LOD",1);
   mID_unique       = mFileIniMain.GetInteger("MAIN","ID_unique",eUndefID);
   mCntGroup        = mFileIniMain.GetInteger("MAIN","CntGroup",0);
   mArrDefGroup     = new TDefGroup[mCntGroup];
@@ -175,10 +175,10 @@ bool TLoaderModelDX::LoadPart(int i)
     return false;
 
   mArrDefGroup[i].nShininess = mFileIniRes.GetInteger(strNumPart,"nShininess",0);
-  mArrDefGroup[i].fAlpha     = mFileIniRes.GetDouble(strNumPart,"fAlpha");
-  mArrDefGroup[i].bSpecular  = mFileIniRes.GetInteger(strNumPart,"bSpecular",0);
-  mArrDefGroup[i].mTypeLOD   = mFileIniRes.GetInteger(strNumPart,"mTypeLOD",0);
-  mArrDefGroup[i].mflgNormal = mFileIniRes.GetInteger(strNumPart,"mflgNormal",1);
+  mArrDefGroup[i].fAlpha     = (float)mFileIniRes.GetDouble(strNumPart,"fAlpha");
+  mArrDefGroup[i].bSpecular  = mFileIniRes.GetBool(strNumPart,"bSpecular",false);
+  mArrDefGroup[i].mTypeLOD   = mFileIniRes.GetBool(strNumPart,"mTypeLOD",false);
+  mArrDefGroup[i].mflgNormal = mFileIniRes.GetBool(strNumPart,"mflgNormal",true);
   //-----------------------------------------------------------------------
   if(LoadMesh(strNumPart,&mArrDefGroup[i])==false)
     return false;
@@ -231,7 +231,7 @@ float TLoaderModelDX::FindFloat_Semicolon(char** buffer,bool* ok)
   size = buffer1-buffer0;
   memcpy(cpyBuffer,buffer0,size);
   cpyBuffer[size] = '\0';
-  float res = atof(cpyBuffer);
+  float res = (float)atof(cpyBuffer);
   *buffer = buffer1+1;
   *ok = true;
   return res; 

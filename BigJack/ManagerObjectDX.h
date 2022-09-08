@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef ManagerObjectDXH
 #define ManagerObjectDXH
 
-#include "ObjectDX.h"
+#include "BaseObjectDX.h"
 #include "hArray.h"
 
 class TManagerObjectDX

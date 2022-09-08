@@ -33,51 +33,34 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "LoaderObjectCommon.h"
+#include <stddef.h>
+#include "MakerBehavior.h"
 
-#ifndef PredictionH
-#define PredictionH
-
-//#include "Tank.h"
-//#include "ObjectPrediction.h"
-#include <list>
-#include "Prediction.h"
-
-// предсказатель
-// Robert - физический движок
-class TTankInterpretatorPrediction : public TPrediction
+TLoaderObjectCommon::TLoaderObjectCommon()
+{
+  pMakerObject = NULL;
+}
+//-------------------------------------------------------------
+TLoaderObjectCommon::~TLoaderObjectCommon()
 {
 
-protected:
-
-
-public:
-
-  TTankInterpretatorPrediction();
-  ~TTankInterpretatorPrediction();
-
-//  void SetListTank();
-//  void LoadMap(unsigned short id_map);
-//  void InitState();
-//  void SetState();
-//
-//  void Calc();
-//
-//  void SetOrientAim(unsigned int id_Tank /*TTank*pTank*/, nsServerStruct::TPacketServer* pDefPacket);
-//  void SetKeyEvent(unsigned int id_Tank /*TTank*pTank*/, nsServerStruct::TPacketServer* pDefPacket);
-//
-//
-//public:
-//  // список разрушенных или поврежденных объектов.
-//  std::list<TObjectPrediction*> mListDamageObject;
-//
-//  struct TEvent
-//  {
-//
-//  };
-//  std::list<TEvent*> mListFreshEvent;
-
-};
-
-
-#endif
-
+}
+//-------------------------------------------------------------
+void TLoaderObjectCommon::Setup(TMakerBehavior* _pMakerObject)
+{
+  pMakerObject = _pMakerObject;
+}
+//-------------------------------------------------------------
+TBaseObjectCommon* TLoaderObjectCommon::LoadObject(unsigned int id_behavior)
+{
+  if(pMakerObject)
+    return pMakerObject->New(id_behavior);
+  return NULL;
+}
+//-------------------------------------------------------------
+bool TLoaderObjectCommon::LoadMap(unsigned int id_map)
+{
+  return false;
+}
+//-------------------------------------------------------------

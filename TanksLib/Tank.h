@@ -38,10 +38,9 @@ you may contact in writing [ramil2085@gmail.com].
 #define TankH
 
 #include "BaseObjectCommon.h"
-#include "BaseObjectGravityPrediction.h"
 
 //------------------------------------------------------------------------------
-class TTank : public TBaseObjectCommon<TBaseObjectGravityPrediction>
+class TTank : public TBaseObjectCommon
 {
 
 public:
@@ -95,14 +94,18 @@ public:
   // реакция на человеческую реакцию
   virtual void SetHuman(char* pData, int size){};
 
+  void SetTypeTank(unsigned int id_tank);
+  unsigned int GetTypeTank();
+
+protected:
+  unsigned int mID_tank;
+public:
 
   // характеристики
   
   // состояние
   unsigned short mHP;              // у.е.
 
-  // состояние
-  unsigned short mHP;              // у.е.
   unsigned int maskDefectDevice;   // маска неисправности устройств,  0 - исправно, 1 - неисправно см. eMaskDefectDevice
   unsigned int maskDefectCrew;     // маска контузии экипажа,  0 - здоров, 1 - контужен см. eMaskDefectCrew
 

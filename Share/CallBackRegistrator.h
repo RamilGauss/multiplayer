@@ -37,12 +37,12 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef CallBackRegistratorH
 #define CallBackRegistratorH
 
-class CallBackRegistrator
+class TCallBackRegistrator
 {
 
 public:
-	CallBackRegistrator();
-	~CallBackRegistrator();
+	TCallBackRegistrator();
+	~TCallBackRegistrator();
 
 	typedef void(*TCallBackFunc)(void* data, int size);
 

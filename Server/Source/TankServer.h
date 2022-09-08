@@ -38,22 +38,24 @@ you may contact in writing [ramil2085@gmail.com].
 #define TankServerH
 
 #include "ServerStruct.h"
-#include "Tank.h"
+#include "TObject.h"
+class TClient;
+class TRoom;
 
 //------------------------------------------------------------------------------
-class TTankServer : public TTank
+class TTankServer/* : public TObject*/
 {
 
   unsigned short mTypeTank;
-  nsServerStruct::TClient* pMasterClient;
+  TClient* pMasterClient;
 
 public:
   TRoom* pRoom;
   
-  TTank(nsServerStruct::TClient* pClient);
-  virtual ~TTank();
+  TTankServer(TClient* pClient);
+  virtual ~TTankServer();
 
-  nsServerStruct::TClient* GetMasterClient();
+  TClient* GetMasterClient();
 
   // для Room
   // в бою

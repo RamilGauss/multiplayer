@@ -39,7 +39,6 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ClientTank.h"
 #include "ApplicationProtocolDef.h"
 #include "WaitForm.h"
-#include "TransportProtocolTank.h"
 #include <QMessageBox>
 #include <QSettings>
 #include <QTimer>
@@ -114,7 +113,7 @@ you may contact in writing [ramil2085@gmail.com].
 //	gcsWaitForm.unlock();
 //}
 //-------------------------------------------------------------------------------------------
-WaitForm::WaitForm(QWidget *parent)
+TWaitForm::TWaitForm(QWidget *parent)
 : TBaseGUI(parent)
 {
   mWait   = 0;
@@ -132,22 +131,22 @@ WaitForm::WaitForm(QWidget *parent)
   connect(mTimer, SIGNAL(timeout()), this, SLOT(sl_Timer()));
 }
 //---------------------------------------------------------------------------------------------
-WaitForm::~WaitForm()
+TWaitForm::~TWaitForm()
 {
 }
 //---------------------------------------------------------------------------------------------
-void WaitForm::sl_ExitQueue()
+void TWaitForm::sl_ExitQueue()
 {
   // отправить запрос на выход из ожидания
-  mClient->SendRequestExitFromWait();
+  pClient->SendRequestExitFromWait();
 }
 //---------------------------------------------------------------------------------------------
-void WaitForm::closeEvent(QCloseEvent* )
+void TWaitForm::closeEvent(QCloseEvent* )
 {
   _exit(0);
 }
 //---------------------------------------------------------------------------------------------
-void WaitForm::Translate(unsigned short typePacket, char* pData, int size)
+void TWaitForm::Translate(unsigned short typePacket, char* pData, int size)
 {
   switch(typePacket)
   {
@@ -168,7 +167,7 @@ void WaitForm::Translate(unsigned short typePacket, char* pData, int size)
   }
 }
 //---------------------------------------------------------------------------------------------
-void WaitForm::sl_Timer()
+void TWaitForm::sl_Timer()
 {
   RefreshInfoStream();
 
@@ -184,14 +183,14 @@ void WaitForm::sl_Timer()
   ui.lTimeWait->setText(str_time);
 }
 //---------------------------------------------------------------------------------------------
-void WaitForm::SetCntClient(unsigned int wait,unsigned int fight,unsigned int common)
+void TWaitForm::SetCntClient(unsigned int wait,unsigned int fight,unsigned int common)
 {
   mWait   = wait;
   mFight  = fight;
   mCommon = common;
 }
 //---------------------------------------------------------------------------------------------
-void WaitForm::RefreshInfoStream()
+void TWaitForm::RefreshInfoStream()
 {
   QString str;
   str = QString(tr("Кол-во ожидающих: %1")).arg(mWait);
@@ -202,14 +201,14 @@ void WaitForm::RefreshInfoStream()
   ui.lFight->setText(str);
 }
 //---------------------------------------------------------------------------------------------
-void WaitForm::showGUI()
+void TWaitForm::showGUI()
 {
   mTimer->start(eTimeRefresh);
   mStartWait_ms = ht_GetMSCount();
   QWidget::show();
 }
 //---------------------------------------------------------------------------------------------
-void WaitForm::hideGUI()
+void TWaitForm::hideGUI()
 {
   mTimer->stop();
   QWidget::hide();

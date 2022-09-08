@@ -4,6 +4,7 @@
 	Version="9,00"
 	Name="QBaseLib"
 	ProjectGUID="{CD7A413A-B10E-4B83-AD7E-55C96422E915}"
+	RootNamespace="QBaseLib"
 	Keyword="Qt4VSv1.0"
 	TargetFrameworkVersion="0"
 	>
@@ -88,6 +89,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -124,6 +126,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="..\Lib\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"

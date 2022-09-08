@@ -37,15 +37,15 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef GameFormH
 #define GameFormH
 
-#include "BaseGUI_DX.h"
+#include "ManagerGUIClient.h"
 
-class GameForm : public TBaseGUI_DX
+class TGameForm : public TBaseGUI_DX
 {
   Q_OBJECT
 
 public:
-  GameForm(QWidget *parent = NULL);
-  ~GameForm();
+  TGameForm(QWidget *parent = NULL);
+  ~TGameForm();
 
   virtual void Translate(unsigned short type, char*pData, int size);
 
@@ -53,18 +53,15 @@ protected:
   friend void CallBackPacketGameForm(void* data, int size);
   friend void CallBackDisconnectGameForm(void* data, int size);
 
-  void Disconnect();
+  virtual void VisualEvent(QPaintEvent* pEvent);
 
   virtual void closeEvent(QCloseEvent* );
-  
-  void startDX();// убрать в show и hide
-  void stopDX();
 
+  void Disconnect();
+  
 protected slots:
   void sl_Exit();
 
-  virtual void showGUI();
-  virtual void hideGUI();
 };
 
 #endif

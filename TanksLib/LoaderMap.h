@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Struct3D.h"
 #include <list>
 class TManagerObjectDX;
-class TManagerModel;
+class TManagerModelDX;
 class TObjectDX;
 
 
@@ -59,10 +59,10 @@ protected:
   std::list<TDescObject*> mListObject;
 
   TManagerObjectDX* mMO; 
-  TManagerModel* mMM;
+  TManagerModelDX* mMM;
 
 public:
-  TLoaderMap(TManagerObjectDX* pMO, TManagerModel* pMM);
+  TLoaderMap(TManagerObjectDX* pMO, TManagerModelDX* pMM);
   ~TLoaderMap();
 
   enum{

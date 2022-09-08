@@ -61,6 +61,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				OutputFile="..\Lib\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -158,10 +159,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\DX_main.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\EffectDX.cpp"
 				>
 			</File>
@@ -186,11 +183,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ManagerModel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ManagerObjectDX.cpp"
+				RelativePath=".\ManagerModelDX.cpp"
 				>
 			</File>
 			<File
@@ -205,10 +198,6 @@
 				RelativePath=".\ModelDX.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\SoundDX.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -221,10 +210,6 @@
 			</File>
 			<File
 				RelativePath=".\Define_DX.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DX_main.h"
 				>
 			</File>
 			<File
@@ -252,11 +237,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ManagerModel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ManagerObjectDX.h"
+				RelativePath=".\ManagerModelDX.h"
 				>
 			</File>
 			<File

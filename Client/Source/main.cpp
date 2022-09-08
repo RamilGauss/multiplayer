@@ -33,8 +33,7 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
-#include "ClientMain.h"
+#include "DXUT.h"
 #include <QtGui/QApplication>
 
 #include <QtCore/QTextCodec>
@@ -43,9 +42,15 @@ you may contact in writing [ramil2085@gmail.com].
 #include "NetSystem.h"
 #include "ErrorReg.h"
 #include <glib/gthread.h>
+#include "ManagerGUIClient.h"
+#include "GameRoomPrepare.h"
+#include "ClientMain.h"
+#include "WaitForm.h"
+#include "GameForm.h"
+#include "ClientTank.h"
+#include "InterpretatorPredictionTank.h"
+#include "ManagerDirectX.h"
 #include "ManagerGUI.h"
-#include "Testing.h"
-
 
 int main(int argc, char *argv[])
 {
@@ -60,18 +65,33 @@ int main(int argc, char *argv[])
   QTextCodec::setCodecForTr(QTextCodec::codecForName("CP1251"));
 
   QApplication a(argc, argv);
-  TManagerGUI managerGUI;
-  managerGUI.start();
+  //---------------------------------------
+  TManagerGUIClient managerGUI;
+  // двигатели
+  TClientTank clientTank;// транспорт
+  TInterpretatorPredictionTank interpretatorPredictionTank;// физика
+  TManagerDirectX managerDirectX;// графика
+
+  managerGUI.start(&interpretatorPredictionTank,&managerDirectX,&clientTank);
+  // формы:
+  // обычные 
+  TGameRoomPrepare gameRoomPrepare;
+  TWaitForm        waitForm;
+  TClientMain      clientMain;
+  // DirectX формы
+  TGameForm       gameForm;
+  managerGUI.AddFormInList(&clientMain,     "clientMain");// первая форма
+  managerGUI.AddFormInList(&waitForm,       "waitForm");
+  managerGUI.AddFormInList(&gameRoomPrepare,"gameRoomPrepare");
+  managerGUI.AddFormInList(&gameForm,       "gameForm");
 
   if(argc==4)
   {
     char* sNick = argv[1];
     char*   sIP = argv[2]; 
     char*  port = argv[3]; 
-    managerGUI.Connect(sNick,sIP,port);
+    clientMain.Connect(sNick,sIP,port);
   }
-
 	a.exec();
-
 	return 0;
 }

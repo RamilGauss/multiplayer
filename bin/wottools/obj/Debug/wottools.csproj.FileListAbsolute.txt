@@ -9,3 +9,10 @@ D:\MyProjects\multiPlayer\bin\wottools\obj\Debug\wottools.exe
 D:\MyProjects\multiPlayer\bin\wottools\obj\Debug\wottools.pdb
 D:\Temp\multiPlayer\bin\wottools\obj\Debug\wottools.exe
 D:\Temp\multiPlayer\bin\wottools\obj\Debug\wottools.pdb
+D:\Temp\multiPlayer\bin\wottools\bin\Debug\wottools.exe
+D:\Temp\multiPlayer\bin\wottools\bin\Debug\wottools.pdb
+D:\Temp\multiPlayer\bin\wottools\obj\Debug\ResolveAssemblyReference.cache
+D:\Temp\multiPlayer\bin\wottools\obj\Debug\wottools.AboutBox.resources
+D:\Temp\multiPlayer\bin\wottools\obj\Debug\wottools.MainForm.resources
+D:\Temp\multiPlayer\bin\wottools\obj\Debug\wottools.Properties.Resources.resources
+D:\Temp\multiPlayer\bin\wottools\obj\Debug\wottools.csproj.GenerateResource.Cache

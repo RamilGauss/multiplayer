@@ -44,7 +44,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <d3dx10math.h>
 
 
-class TBaseObject : public TObject
+class TBaseObject : virtual public TObject
 {
   // свойства, характерные для физики и графики
   // ориентация, координаты, состояние

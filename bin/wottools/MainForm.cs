@@ -102,7 +102,7 @@ namespace wottools
             FileStream F = new FileStream(file, FileMode.Open, FileAccess.Read);
             BinaryReader reader = new BinaryReader(F);
 
-            XmlComment ptiComment = xDoc.CreateComment("DO NOT SAVE THIS FILE! THIS CODE IS JUST FOR INFORMATION PUPORSES!");
+            XmlComment ptiComment = xDoc.CreateComment("DO NOT SAVE THIS FILE! THIS CODE IS JUST FOR INFORMATION PURPOSES!");
 
             XmlNode xmlprimitives = xDoc.CreateNode(XmlNodeType.Element, "primitives", "");
 

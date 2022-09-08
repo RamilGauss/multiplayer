@@ -153,16 +153,16 @@ void ServerForm::RefreshTableClient()
     QString sState;
     switch(pArrClient[i].state)
     {
-    case nsServerStruct::TClient::eGarage:
-      sState = tr("Гараж");
-      break;
-    case nsServerStruct::TClient::eWait:
-      sState = tr("Ждет");
-      break;
-    case nsServerStruct::TClient::eFight:
-      sState = tr("Бой");
-      break;
-    default:BL_FIX_BUG();;
+      case TClient::eGarage:
+        sState = tr("Гараж");
+        break;
+      case TClient::eWait:
+        sState = tr("Ждет");
+        break;
+      case TClient::eFight:
+        sState = tr("Бой");
+        break;
+      default:BL_FIX_BUG();;
     }
     item = new QTableWidgetItem();
     item->setText(sState); 

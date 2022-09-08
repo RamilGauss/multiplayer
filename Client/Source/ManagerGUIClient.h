@@ -39,52 +39,28 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include <QObject>
 #include "SaveOnHDD.h"
-
-#include "GameForm.h"
-#include "GameRoomPrepare.h"
-#include "WaitForm.h"
-#include "ClientMain.h"
-#include "ClientTank.h"
 #include "ManagerGUI.h"
+#include "ApplicationProtocolPacketAnswer.h"
 
-typedef TManagerGUI<TTankInterpretatorPrediction,ClientTank,TManagerDirectX> TManagerGUITanks;
-
-class TManagerGUIClient : public TManagerGUITanks
+class TManagerGUIClient : public TManagerGUI
 {
 
   Q_OBJECT
 
 public:
+
   TManagerGUIClient(QWidget* parent=NULL);
   ~TManagerGUIClient();
   
-  void start();
-  void stop();
-
-  void Connect(char* sNick, char* ip,char* port);// поддержка скрипт-управления
 
 protected:
-  
-  TPrediction    * pPrediction;
-  TManagerDirectX* pManagerDirectX;
-  
-  ClientTank mClientTank;
 
-  TBaseGUI* pCurrentForm;
+  virtual void startEvent();
+  virtual void stopEvent();
 
+  virtual void OpenFirstForm();
 
-// формы
-  // обычные 
-  GameRoomPrepare mGameRoomPrepare;
-  WaitForm        mWaitForm;
-  ClientMain      mClientMain;
-  // DirectX формы
-  GameForm       mGameForm;
-
-  void WorkStream(TManagerGUIEvent* event);
   void WorkPacket(TManagerGUIEvent* event);
-
-  virtual void customEvent( QEvent * e  );
 
   void AnswerFromServer_Enter(unsigned char mCodeAnswer);
   void AnalizCode_A_In_Fight(char* pData, int size);

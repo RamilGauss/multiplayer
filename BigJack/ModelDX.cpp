@@ -33,7 +33,6 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
 #include "ModelDX.h"
 #include "SDKmisc.h"
 #include "LoaderModelDX.h"

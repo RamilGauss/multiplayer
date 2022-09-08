@@ -33,20 +33,31 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "MakerBehavior.h"
+#include <stddef.h>
 
-#ifndef BaseObjectGravityPredictionH
-#define BaseObjectGravityPredictionH
+#include "namespace_ID_BEHAVIOR.h"
 
-//#include "BoundingBox.h"
-//#include "Struct3D.h"
-#include "BaseObjectPrediction.h"
+using namespace nsID_BEHAVIOR;
 
-class TBaseObjectGravityPrediction : public TBaseObjectPrediction
+TMakerBehavior::TMakerBehavior()
 {
-public:
- 
-  TBaseObjectGravityPrediction();
-  virtual ~TBaseObjectGravityPrediction();
-};
 
-#endif
+}
+//------------------------------------------------------------------------
+TMakerBehavior::~TMakerBehavior()
+{
+
+}
+//------------------------------------------------------------------------
+TBaseObjectCommon* TMakerBehavior::New(unsigned int id_behavior)
+{
+  switch(id_behavior)
+  {
+    case ID_NULL:
+      break;
+    default:;
+  }
+  return NULL;
+}
+//------------------------------------------------------------------------

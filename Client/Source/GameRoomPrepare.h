@@ -40,11 +40,11 @@ you may contact in writing [ramil2085@gmail.com].
 #include <QWidget>
 #include "ui_GameRoomPrepare.h"
 #include "ApplicationProtocolPacketAnswer.h"
-#include "BaseGUI.h"
+#include "ManagerGUIClient.h"
 
 class QTimer;
 
-class GameRoomPrepare : public TBaseGUI
+class TGameRoomPrepare : public TBaseGUI
 {
   Q_OBJECT
 
@@ -60,8 +60,8 @@ class GameRoomPrepare : public TBaseGUI
   QTimer* mTimer;
   
 public:
-  GameRoomPrepare(QWidget *parent = NULL);
-  ~GameRoomPrepare();
+  TGameRoomPrepare(QWidget *parent = NULL);
+  ~TGameRoomPrepare();
 
   virtual void Translate(unsigned short type, char*pData, int size);
   virtual void showGUI();

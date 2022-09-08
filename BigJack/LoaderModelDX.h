@@ -38,6 +38,7 @@ you may contact in writing [ramil2085@gmail.com].
 #define LoaderModelDXTestH
 #pragma once
 
+#include "DXUT.h"
 #include "ILoaderModelDX.h"
 #include "MeshLoader.h"
 

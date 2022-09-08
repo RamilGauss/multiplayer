@@ -46,7 +46,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ApplicationProtocolPacketStream.h"
 
 
-ClientTank *pClient = NULL;
+TClientTank *pClient = NULL;
 
 void ClientCallBackRcvPacket(void* data, int size)
 {
@@ -64,7 +64,7 @@ void ClientCallBackRcvDisconnect(void* data, int size)
 }
 //--------------------------------------------------------------
 
-ClientTank::ClientTank()
+TClientTank::TClientTank()
 {
   pClient = this;
   mLastTimeRcv = 0;
@@ -74,7 +74,7 @@ ClientTank::ClientTank()
 	mTransport.Register(ClientCallBackRcvDisconnect,nsCallBackType::eDisconnect);
 }
 //--------------------------------------------------------------
-ClientTank::~ClientTank()
+TClientTank::~TClientTank()
 {
   stop();
   pClient = NULL;
@@ -82,11 +82,11 @@ ClientTank::~ClientTank()
 //--------------------------------------------------------------
 void* ClientThreadDefDisconnect(void*p)
 {
-	((ClientTank*)p)->ThreadDefDisconnect();
+	((TClientTank*)p)->ThreadDefDisconnect();
 	return NULL;
 }
 //--------------------------------------------------------------
-void ClientTank::ThreadDefDisconnect()
+void TClientTank::ThreadDefDisconnect()
 {
 	guint32 now_time;
 	SetLastTime();
@@ -106,18 +106,18 @@ void ClientTank::ThreadDefDisconnect()
 	flgActive = false;
 }
 //--------------------------------------------------------------
-void ClientTank::startThreadDefDisconnect()
+void TClientTank::startThreadDefDisconnect()
 {
 	thread = g_thread_create(ClientThreadDefDisconnect,(gpointer)this,true,NULL);
 }
 //--------------------------------------------------------------
-void ClientTank::start()
+void TClientTank::start()
 {
   mTransport.start();
 	startThreadDefDisconnect();
 }
 //--------------------------------------------------------------
-void ClientTank::stop()
+void TClientTank::stop()
 {
 	flgNeedStop = true;
 	while(flgActive)
@@ -128,12 +128,12 @@ void ClientTank::stop()
   mTransport.stop();
 }
 //--------------------------------------------------------------
-bool ClientTank::IsConnect()
+bool TClientTank::IsConnect()
 {
   return false;
 }
 //--------------------------------------------------------------
-bool ClientTank::Connect(unsigned int ip_dst, unsigned int port_src, char* sNick)
+bool TClientTank::Connect(unsigned int ip_dst, unsigned int port_src, char* sNick)
 {
   mIP_server = ip_dst;
   char nameLogFile[260];
@@ -161,12 +161,12 @@ bool ClientTank::Connect(unsigned int ip_dst, unsigned int port_src, char* sNick
 	return true;
 }
 //--------------------------------------------------------------
-void ClientTank::PushButton(int button)
+void TClientTank::PushButton(int button)
 {
 
 }
 //--------------------------------------------------------------
-void ClientTank::Register(CallBackRegistrator::TCallBackFunc pFunc, int type)
+void TClientTank::Register(TCallBackRegistrator::TCallBackFunc pFunc, int type)
 {
 	switch(type)
 	{
@@ -183,7 +183,7 @@ void ClientTank::Register(CallBackRegistrator::TCallBackFunc pFunc, int type)
 	}
 }
 //--------------------------------------------------------------
-void ClientTank::Unregister(CallBackRegistrator::TCallBackFunc pFunc, int type)
+void TClientTank::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type)
 {
 	switch(type)
 	{
@@ -200,13 +200,13 @@ void ClientTank::Unregister(CallBackRegistrator::TCallBackFunc pFunc, int type)
 	}
 }
 //--------------------------------------------------------------
-void ClientTank::RcvStream(void* data, int size)
+void TClientTank::RcvStream(void* data, int size)
 {
 	SetLastTime();
 	mCallBackStream.Notify(data,size);
 }
 //--------------------------------------------------------------
-void ClientTank::RcvPacket(void* data, int size)
+void TClientTank::RcvPacket(void* data, int size)
 {
 	SetLastTime();
 
@@ -216,20 +216,20 @@ void ClientTank::RcvPacket(void* data, int size)
 	mCallBackPacket.Notify(data,size);
 }
 //--------------------------------------------------------------
-void ClientTank::Disconnect(void* data, int size)
+void TClientTank::Disconnect(void* data, int size)
 {
 	stop();
 	mCallBackDisconnect.Notify(data,size);
 }
 //--------------------------------------------------------------
-void ClientTank::SendRequestListTank()
+void TClientTank::SendRequestListTank()
 {
   TR_Get_List_Tank packet;
 
   WriteTransport(&packet);
 }
 //--------------------------------------------------------------
-void ClientTank::SetCurrentTank(int i)
+void TClientTank::SetCurrentTank(int i)
 {
   TÑ_Choose_Tank packet;
   packet.setCurrentTank(i);
@@ -237,21 +237,21 @@ void ClientTank::SetCurrentTank(int i)
   WriteTransport(&packet);
 }
 //--------------------------------------------------------------
-void ClientTank::SendRequestExitFromWait()
+void TClientTank::SendRequestExitFromWait()
 {
   TR_Exit_Wait packet;
   WriteTransport(&packet);
 }
 //--------------------------------------------------------------
-void ClientTank::SendRequestInFight()
+void TClientTank::SendRequestInFight()
 {
   TR_In_Fight packet;
   WriteTransport(&packet);
 }
 //--------------------------------------------------------------
-void ClientTank::WriteTransport(TBasePacket* packet)
+void TClientTank::WriteTransport(TBasePacket* packet)
 {
-  TransportProtocolTank::InfoData* infoData = new TransportProtocolTank::InfoData;
+  TTransportProtocol::InfoData* infoData = new TTransportProtocol::InfoData;
   infoData->ip_dst   = mIP_server;
   infoData->port_dst = ServerLocalPort;
   infoData->packet   = packet->getData();
@@ -260,9 +260,9 @@ void ClientTank::WriteTransport(TBasePacket* packet)
   mTransport.write(infoData);
 }
 //--------------------------------------------------------------
-void ClientTank::WriteStream(TBasePacket* packet)
+void TClientTank::WriteStream(TBasePacket* packet)
 {
-  TransportProtocolTank::InfoData* infoData = new TransportProtocolTank::InfoData;
+  TTransportProtocol::InfoData* infoData = new TTransportProtocol::InfoData;
   infoData->ip_dst   = mIP_server;
   infoData->port_dst = ServerLocalPort;
   infoData->packet   = packet->getData();
@@ -271,19 +271,19 @@ void ClientTank::WriteStream(TBasePacket* packet)
   mTransport.write(infoData,false);
 }
 //--------------------------------------------------------------
-void ClientTank::SendRequestCorrectPacket()
+void TClientTank::SendRequestCorrectPacket()
 {
   TR_Correct_Packet R_Correct_Packet;
   WriteTransport(&R_Correct_Packet);
 }
 //--------------------------------------------------------------
-void ClientTank::SendRequestExitFromFight()
+void TClientTank::SendRequestExitFromFight()
 {
   TR_Exit_Fight R_Exit_Fight;
   WriteTransport(&R_Exit_Fight);
 }
 //--------------------------------------------------------------
-void ClientTank::SendOrientAim(float x,float y,float z)
+void TClientTank::SendOrientAim(float x,float y,float z)
 {
   TS_Orient_Aim packet;
   packet.setXYZ(0,0,1);

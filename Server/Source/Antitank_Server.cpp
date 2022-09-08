@@ -33,46 +33,17 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "Antitank_Server.h"
 
-#include "TankInterpretatorPrediction.h"
-//#include "ApplicationProtocolPacketCmd.h"
 
-//using namespace nsServerStruct;
-
-TTankInterpretatorPrediction::TTankInterpretatorPrediction()
+TAntitank_Server::TAntitank_Server(TClient* pClient)
+:TTankServer(pClient)
 {
 
 }
-//--------------------------------------------------------------------
-TTankInterpretatorPrediction::~TTankInterpretatorPrediction()
+//-----------------------------------------------------
+TAntitank_Server::~TAntitank_Server()
 {
 
 }
-//--------------------------------------------------------------------
-//void TPrediction::InitState()
-//{
-//
-//}
-////--------------------------------------------------------------------
-//void TPrediction::Calc()
-//{
-//
-//}
-////--------------------------------------------------------------------
-//void TPrediction::SetOrientAim(unsigned int id_Tank /*TTank* pTank*/, TPacketServer* pDefPacket)
-//{
-//  
-//}
-////--------------------------------------------------------------------
-//void TPrediction::SetKeyEvent(unsigned int id_Tank  /*TTank*pTank*/, TPacketServer* pDefPacket)
-//{
-//  TC_Key_Event* packet = (TC_Key_Event*)pDefPacket->packet;
-//  pTank->mMaskPushButton &= packet->getKeyEvent();
-//  pTank->mTimeRefreshPushButton = pDefPacket->ms_time;
-//}
-////--------------------------------------------------------------------
-//void TPrediction::SetState()
-//{
-//
-//}
-////--------------------------------------------------------------------
+//-----------------------------------------------------

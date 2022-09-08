@@ -44,7 +44,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 using namespace nsStruct3D;
 
-TLoaderMap::TLoaderMap(TManagerObjectDX* pMO, TManagerModel* pMM)
+TLoaderMap::TLoaderMap(TManagerObjectDX* pMO, TManagerModelDX* pMM)
 {
   mMO = pMO;
   mMM = pMM;

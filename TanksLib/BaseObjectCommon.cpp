@@ -35,16 +35,17 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "BaseObjectCommon.h"
 
-
-template <class ObjectPrediction >
-TBaseObjectCommon<ObjectPrediction>::TBaseObjectCommon()
+TBaseObjectCommon::TBaseObjectCommon()
 {
 
 }
 //-------------------------------------------------------------
-template <class ObjectPrediction >
-TBaseObjectCommon<ObjectPrediction>::~TBaseObjectCommon()
+TBaseObjectCommon::~TBaseObjectCommon()
 {
 
 }
 //-------------------------------------------------------------
+//-------------------------------------------------------------
+
+
+

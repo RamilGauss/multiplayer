@@ -40,6 +40,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ApplicationProtocolPacketAnswer.h"
 #include "ApplicationProtocolMainPacket.h"
 #include "BL_Debug.h"
+#include "HiTimer.h"
+#include "Client.h"
 
 using namespace nsServerStruct;
 
@@ -60,15 +62,15 @@ TRoom::~TRoom()
   mArrTank.Unlink();
 }
 //----------------------------------------------------------------
-void TRoom::AddTank(TTank* pTank)
+void TRoom::AddTank(TTankServer* pTank)
 {
-  mArrTank.Add(pTank);
+  mArrTank.Add((TTank*)pTank);
   // подготовка к бою
-  pTank->mSpeed = 0;
-  pTank->mMaskPushButton = 0;// ничего не нажато
+  //pTank->mSpeed = 0;
+  //pTank->mMaskPushButton = 0;// ничего не нажато
 }
 //----------------------------------------------------------------
-void TRoom::SetTransport(TransportProtocolTank* pTransport)
+void TRoom::SetTransport(TTransportProtocol* pTransport)
 {
   mTransport = pTransport;
 }
@@ -100,7 +102,7 @@ bool TRoom::Work()
 //----------------------------------------------------------------
 void TRoom::WriteTransportStream(TClient* pClient,TBasePacket *packet)
 {
-  TransportProtocolTank::InfoData* infoData = new TransportProtocolTank::InfoData;
+  TTransportProtocol::InfoData* infoData = new TTransportProtocol::InfoData;
   infoData->ip_dst   = pClient->ip;
   infoData->port_dst = pClient->port;
   infoData->packet   = packet->getData();
@@ -110,7 +112,7 @@ void TRoom::WriteTransportStream(TClient* pClient,TBasePacket *packet)
 //----------------------------------------------------------------------------------
 void TRoom::WriteTransportAnswer(TClient* pClient,TBasePacket *packet)
 {
-  TransportProtocolTank::InfoData* infoData = new TransportProtocolTank::InfoData;
+  TTransportProtocol::InfoData* infoData = new TTransportProtocol::InfoData;
   infoData->ip_dst   = pClient->ip;
   infoData->port_dst = pClient->port;
   infoData->packet   = packet->getData();
@@ -123,7 +125,7 @@ void TRoom::Done()
   // разослать результаты боя
   for(int i = 0 ; i < mArrTank.Count() ; i++)
   {
-    TTank* pTank = (TTank*)mArrTank.Get(i);
+    TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
 
     TClient* pClient = pTank->GetMasterClient();
     if(pClient->GetCurRoom()==pTank->pRoom)// а вдруг клиент на другом танке в другом бою?
@@ -198,7 +200,7 @@ void TRoom::WorkCountDown()
     int cnt = mArrTank.Count();
     for(int i = 0 ; i < cnt ; i++)
     {
-      TTank* pTank = (TTank*)mArrTank.Get(i);
+      TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
       TClient* pClient = pTank->GetMasterClient();
       WriteTransportStream(pClient,&S_Count_Down);
     }
@@ -218,7 +220,7 @@ void TRoom::WorkFight()
   s_coord.setCntTank(cnt);
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = (TTank*)mArrTank.Get(i);
+    TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
     TClient* pClient = pTank->GetMasterClient();
     if(pClient->GetCurRoom()==this)// уменьшить трафик
       WriteTransportStream(pClient,&s_coord);
@@ -239,7 +241,7 @@ void TRoom::WorkFight()
     //------------------------------------------------------------------------------------
     for(int i = 0 ; i < cnt ; i++)
     {
-      TTank* pTank = (TTank*)mArrTank.Get(i);
+      TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
       TClient* pClient = pTank->GetMasterClient();
       if(pClient->GetCurRoom()==this)// уменьшить трафик
         WriteTransportAnswer(pClient,&event_packet);
@@ -262,7 +264,7 @@ void TRoom::MakeGroup()
   int cnt = mArrTank.Count();
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = (TTank*)mArrTank.Get(i);
+    TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
     if(i>cnt/2)
       pTank->mGroup = 1;
     else
@@ -310,14 +312,14 @@ void TRoom::AnalizPacket()// здесь отослать корректирующий пакет (можно партиями
       {
         BL_ASSERT(mState!=eFight);
         // добавить в prediction
-        mPrediction.SetOrientAim((*it)->pTank,(*it)->pDefPacket);
+        //mPrediction.SetOrientAim((*it)->pTank,(*it)->pDefPacket);
         break;
       }
       case APPL_TYPE_C_KEY_EVENT:
       {
         BL_ASSERT(mState!=eFight);
         // добавить в prediction
-        mPrediction.SetKeyEvent((*it)->pTank,(*it)->pDefPacket);
+        //mPrediction.SetKeyEvent((*it)->pTank,(*it)->pDefPacket);
         break;
       }
       default:BL_FIX_BUG();
@@ -359,7 +361,7 @@ void TRoom::LoadMap()
   threadLoadMap = g_thread_create(::ThreadLoadMap, (gpointer)this, true, NULL);
 }
 //----------------------------------------------------------------------------------
-void TRoom::SetPacket(nsServerStruct::TPacketServer* pDefPacket,TTank* pTank)
+void TRoom::SetPacket(nsServerStruct::TPacketServer* pDefPacket,TTankServer* pTank)
 {
   TAction* pAction = new TAction;
   pAction->pTank   = pTank;
@@ -375,14 +377,15 @@ void TRoom::SendInitCoordTank(TClient* pClient)
   packet.setCountTank(cnt);
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = (TTank*)mArrTank.Get(i);
-    packet.setID(i,i);
-    packet.setX(i,pTank->mCoord.x);
-    packet.setY(i,pTank->mCoord.y);  
-    packet.setZ(i,pTank->mCoord.z);
-    packet.setXV(i,pTank->mOrient.vx);
-    packet.setYV(i,pTank->mOrient.vy);
-    packet.setZV(i,pTank->mOrient.vz);
+    TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
+    // ### заменить на GetMirror()
+    //packet.setID(i,i);
+    //packet.setX(i,pTank->mCoord.x);
+    //packet.setY(i,pTank->mCoord.y);  
+    //packet.setZ(i,pTank->mCoord.z);
+    //packet.setXV(i,pTank->mOrient.vx);
+    //packet.setYV(i,pTank->mOrient.vy);
+    //packet.setZV(i,pTank->mOrient.vz);
   }
   WriteTransportAnswer(pClient,&packet);
 }
@@ -398,10 +401,11 @@ void TRoom::SendScore(TClient* pClient)
 //----------------------------------------------------------------------------------
 void TRoom::SendStateObject(TClient* pClient)
 {
+#if 0
   TA_Correct_Packet_State_Object packet;
-  // все данные хранятся у предсказателя
-  std::list<TObjectPrediction*>::iterator it  = mPrediction.mListDamageObject.begin();
-  std::list<TObjectPrediction*>::iterator eit = mPrediction.mListDamageObject.end();
+  // все данные хранятся в списке объектов
+  std::list<TBaseObjectPrediction*>::iterator it  = mPrediction.mListDamageObject.begin();
+  std::list<TBaseObjectPrediction*>::iterator eit = mPrediction.mListDamageObject.end();
 
   int cnt = mPrediction.mListDamageObject.size();
   if(cnt==0) return;//###
@@ -417,6 +421,7 @@ void TRoom::SendStateObject(TClient* pClient)
   }
   // если объектов очень много, то разбить на группы
   WriteTransportAnswer(pClient,&packet);
+#endif
 }
 //----------------------------------------------------------------------------------
 void TRoom::InitPositionTank()
@@ -438,7 +443,7 @@ int TRoom::GetActiveClient()
   int cnt = mArrTank.Count();
   for(int i = 0 ; i < cnt ; i++ )
   {
-    TTank* pTank = (TTank*)mArrTank.Get(i);
+    TTankServer* pTank = (TTankServer*)mArrTank.Get(i);
     if(pTank)
     if(pTank->GetMasterClient()->GetCurRoom()==this)
       cntActive++;

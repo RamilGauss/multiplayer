@@ -33,41 +33,46 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#ifndef ClientH
+#define ClientH
 
-#ifndef ManagerModelH
-#define ManagerModelH
+#include "TObject.h"
+#include "GlobalParamsTank.h"
+#include "Garage.h"
+class TRoom;
 
-#include "hArray.h"
-#include "Define_DX.h"
-class TModelDX;
-
-class TManagerModel
+class TClient : public TObject
 {
-
+  TRoom*  			 pCurRoom; // либо что-то либо NULL
 public:
-  TManagerModel();
-  ~TManagerModel();
-  
-  TModelDX* Find(unsigned int id);
-  // список примитивов (оригиналы, которые используются в ObjectDX)
+  enum{eMaxLenNick=250,};
 
-  void Load(IDirect3DDevice9* pd3dDevice, 
-    const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
-    void* pUserContext );
+  enum{eGarage=0,eWait=1,eFight=2};
+  enum{eRemoveInterval=60*DURATION_FIGHT_MINUTE, // сек
+    eTimeRefresh = 60, // сек
+  };
+  // инфо для сервера
+  unsigned int   ip;
+  unsigned short port;
+  char*          sNick;
+  bool           flgDisconnect;
+  unsigned int   time; // либо момент времени когда был последний раз посылка Эха
+  // либо момент времени потери связи
 
-  void ResetDevice();
-  void OnLostDevice();
-  void OnDestroyDevice();
+  // специально для игровой комнаты
+  //bool flgReadyForRoom;// готовность клиента к приему данных от комнаты
 
-  TArrayObject mArrModel;
+  TClient();
+  ~TClient();
 
-protected:
-  bool LoadListPath();
+  // инфо для клиента
+  int            state;// garage, wait, fight
+  TGarage 			 mGarage;
 
-  char** mArrPathModel;
-  int   mCntPathModel;
+  void SetCurRoom(TRoom* room){pCurRoom=room;}
+  TRoom* GetCurRoom(){return pCurRoom;}
 
-  void Done();
+  //TTreeTanks mTreeTanks;// читать из БД ветку исследований - пока нету
 
 };
 

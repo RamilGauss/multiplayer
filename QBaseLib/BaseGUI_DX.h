@@ -41,8 +41,7 @@ you may contact in writing [ramil2085@gmail.com].
 struct IDirect3D9; 
 struct IDirect3DDevice9; 
 
-template <class Robert, class Client, class BigJack>
-class TBaseGUI_DX : public TBaseGUI<Robert, Client, BigJack>
+class TBaseGUI_DX : public TBaseGUI
 { 
 public: 
   /** Constructor */ 
@@ -75,4 +74,6 @@ protected:
   IDirect3DDevice9* mDevice; 
 }; 
 
+
 #endif // _QD3DWIDGET_H_ 
+

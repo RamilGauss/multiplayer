@@ -43,18 +43,15 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ManagerGUIClient.h"
 
 
-class ClientMain : public TManagerGUI::TBaseGUI_G
+class TClientMain : public TBaseGUI
 {
   Q_OBJECT
 
 public:
-  ClientMain(QWidget *parent = NULL);
-  ~ClientMain();
+  TClientMain(QWidget *parent = NULL);
+  ~TClientMain();
 
   void Connect(char* sNick, char* ip,char* port);// поддержка скрипт-управления
-
-  virtual void showGUI(){QWidget::show();};
-  virtual void hideGUI(){QWidget::hide();};
 
 protected slots:
   void sl_Exit();

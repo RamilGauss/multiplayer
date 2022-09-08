@@ -35,9 +35,10 @@ you may contact in writing [ramil2085@gmail.com].
 
 
 #include "ManagerGUIClient.h"
+#include <QCoreApplication.h>
 #include <QMessageBox>
-#include "ManagerDirectX.h"
-#include "Prediction.h"
+#include "TransportProtocolPacket.h"
+#include "ClientTank.h"
 
 
 TManagerGUIClient* pManagerGUIClient = NULL;
@@ -85,28 +86,14 @@ void CallBackDisconnectManagerGUI(void* data, int size)// оставить
 TManagerGUIClient::TManagerGUIClient(QWidget* parent):TManagerGUI(parent)
 {
   pManagerGUIClient = this;
-
-  pClientTank->Register(CallBackPacketManagerGUI,nsCallBackType::eRcvPacket);
-  pClientTank->Register(CallBackStreamManagerGUI,nsCallBackType::eRcvStream);
-  pClientTank->Register(CallBackDisconnectManagerGUI,nsCallBackType::eDisconnect);
 }
 //-----------------------------------------------------------------------
 TManagerGUIClient::~TManagerGUIClient()
 {
-  pClientTank->Unregister(CallBackPacketManagerGUI,nsCallBackType::eRcvPacket);
-  pClientTank->Unregister(CallBackStreamManagerGUI,nsCallBackType::eRcvStream);
-  pClientTank->Unregister(CallBackDisconnectManagerGUI,nsCallBackType::eDisconnect);
-  
   pManagerGUIClient = NULL;
 }
 //-----------------------------------------------------------------------
-void TManagerGUIClient::Connect(char* sNick, char* ip,char* port)// поддержка скрипт-управления
-{
-  // кривая реализация, потом исправлю
-  mClientMain.Connect( sNick, ip, port);
-}
-//-----------------------------------------------------------------------
-void TManagerGUI::WorkPacket(TManagerGUIEvent* event)
+void TManagerGUIClient::WorkPacket(TManagerGUIEvent* event)
 {
   int size;
   char* pData = event->GetData(size);
@@ -149,15 +136,29 @@ void TManagerGUI::WorkPacket(TManagerGUIEvent* event)
   delete pData;
 }
 //---------------------------------------------------------------------------------------------
-void TManagerGUI::AnswerFromServer_Enter(unsigned char mCodeAnswer)
+void TManagerGUIClient::startEvent()
+{
+  pClient->Register(CallBackPacketManagerGUI,nsCallBackType::eRcvPacket);
+  pClient->Register(CallBackStreamManagerGUI,nsCallBackType::eRcvStream);
+  pClient->Register(CallBackDisconnectManagerGUI,nsCallBackType::eDisconnect);
+}
+//---------------------------------------------------------------------------------------------
+void TManagerGUIClient::stopEvent()
+{
+  pClient->Unregister(CallBackPacketManagerGUI,nsCallBackType::eRcvPacket);
+  pClient->Unregister(CallBackStreamManagerGUI,nsCallBackType::eRcvStream);
+  pClient->Unregister(CallBackDisconnectManagerGUI,nsCallBackType::eDisconnect);
+}
+//---------------------------------------------------------------------------------------------
+void TManagerGUIClient::AnswerFromServer_Enter(unsigned char mCodeAnswer)
 {
   QString sError;
-   // удачно
+  // удачно
   switch(mCodeAnswer)
   {
-  	case TA_Try_Connect_To_Server::eConnectGarage:
+    case TA_Try_Connect_To_Server::eConnectGarage:
       OpenRoomForm();
-  		break;
+      break;
     case TA_Try_Connect_To_Server::eConnectWait:
       OpenWaitForm();       
       break;
@@ -165,22 +166,22 @@ void TManagerGUI::AnswerFromServer_Enter(unsigned char mCodeAnswer)
       BL_FIX_BUG();
       //OpenGameForm();
       break;
- 	  case TA_Try_Connect_To_Server::eOldVersion:
-  		sError = tr("Обновите клиент.Старая версия.");
-  		break;
-  	case TA_Try_Connect_To_Server::eWasConnect:
-  		sError = tr("Повторная попытка соединения.");
-  		break;
-  	case TA_Try_Connect_To_Server::eBlackList:
-  		sError = tr("Клиент в черном списке.");
-  		break;
+    case TA_Try_Connect_To_Server::eOldVersion:
+      sError = tr("Обновите клиент.Старая версия.");
+      break;
+    case TA_Try_Connect_To_Server::eWasConnect:
+      sError = tr("Повторная попытка соединения.");
+      break;
+    case TA_Try_Connect_To_Server::eBlackList:
+      sError = tr("Клиент в черном списке.");
+      break;
     case TA_Try_Connect_To_Server::eOverloadServer:
       sError = tr("Сервер перегружен. Попытайтесь зайти попозже.");
       break;
-  	default:BL_FIX_BUG();
+    default:BL_FIX_BUG();
   }
   if(sError.length())
-  	Q_MESSAGE(sError);
+    Q_MESSAGE(sError);
 }
 //---------------------------------------------------------------------------------------------
 void TManagerGUIClient::AnalizCode_A_In_Fight(char* pData, int size)
@@ -190,51 +191,43 @@ void TManagerGUIClient::AnalizCode_A_In_Fight(char* pData, int size)
 
   switch(packet.getCode())
   {
-    case TA_In_Fight::eFight:
-      OpenGameForm();
-      // загрузка карты по коду
-      pManagerDirectX->LoadMap(packet);
+  case TA_In_Fight::eFight:
+    OpenGameForm();
+    // загрузка карты по коду
+    pCurrentForm->Translate(packet.getCode(),pData, size);
+    break;
+  case TA_In_Fight::eWait:
+    OpenWaitForm();
+    break;
+  case TA_In_Fight::eFailBlockTank:
+    Q_MESSAGE(tr("Танк заблокирован. Выберете другой."))
       break;
-    case TA_In_Fight::eWait:
-      OpenWaitForm();
-      break;
-    case TA_In_Fight::eFailBlockTank:
-      Q_MESSAGE(tr("Танк заблокирован. Выберете другой."))
-      break;
-    default:BL_FIX_BUG();
+  default:BL_FIX_BUG();
   }
 }
 //---------------------------------------------------------------------------------------------
 void TManagerGUIClient::OpenWaitForm()
 {
   // создать форму ожидания
-  pCurrentForm->hideGUI();
-  pCurrentForm = &mWaitForm;
-  pCurrentForm->showGUI();
+  OpenForm("waitForm");
 }
 //---------------------------------------------------------------------------------------------
 void TManagerGUIClient::OpenGameForm()
 {
   // создать форму боя
-  pCurrentForm->hideGUI();
-  pCurrentForm = &mGameForm;
-  pCurrentForm->showGUI();
+  OpenForm("gameForm");
 }
 //---------------------------------------------------------------------------------------------
 void TManagerGUIClient::OpenRoomForm()
 {
   // создать форму гаража
-  pCurrentForm->hideGUI();
-  pCurrentForm = &mGameRoomPrepare;
-  pCurrentForm->showGUI();
+  OpenForm("gameRoomPrepare");
 }
 //---------------------------------------------------------------------------------------------
 void TManagerGUIClient::OpenClientMainForm()
 {
   // в главное окно
-  pCurrentForm->hideGUI();
-  pCurrentForm = &mClientMain;
-  pCurrentForm->showGUI();
+  OpenForm("clientMain");
 }
 //---------------------------------------------------------------------------------------------
 void TManagerGUIClient::Analiz_End_Fight(char* pData, int size)
@@ -259,5 +252,10 @@ void TManagerGUIClient::ExitFromFight()
 void TManagerGUIClient::ExitFromWait()
 {
   OpenRoomForm();
+}
+//---------------------------------------------------------------------------------------------
+void TManagerGUIClient::OpenFirstForm()
+{
+  OpenClientMainForm();
 }
 //---------------------------------------------------------------------------------------------

@@ -43,29 +43,29 @@ you may contact in writing [ramil2085@gmail.com].
 #include <QTimer>
 #include "ApplicationProtocolMainPacket.h"
 #include "ApplicationProtocolPacketStream.h"
-#include "ManagerDirectX.h"
 
 //-------------------------------------------------------------------------------------------
-GameForm::GameForm(QWidget *parent)
+TGameForm::TGameForm(QWidget *parent)
 : TBaseGUI_DX(parent)
 {
+
 }
 //---------------------------------------------------------------------------------------------
-GameForm::~GameForm()
+TGameForm::~TGameForm()
 {
 }
 //---------------------------------------------------------------------------------------------
-void GameForm::closeEvent(QCloseEvent* )
+void TGameForm::closeEvent(QCloseEvent* )
 {
   sl_Exit();
 }
 //---------------------------------------------------------------------------------------------
-void GameForm::sl_Exit()
+void TGameForm::sl_Exit()
 {
   _exit(0);
 }
 //---------------------------------------------------------------------------------------------
-void GameForm::Translate(unsigned short type, char*pData, int size)
+void TGameForm::Translate(unsigned short type, char*pData, int size)
 {
   switch(type)
   {
@@ -86,13 +86,8 @@ void GameForm::Translate(unsigned short type, char*pData, int size)
   }
 }
 //---------------------------------------------------------------------------------------------
-void GameForm::showGUI()
+void TGameForm::VisualEvent(QPaintEvent* pEvent)
 {
-  mManagerDirectX->Show();
-}
-//---------------------------------------------------------------------------------------------
-void GameForm::hideGUI()
-{
-  mManagerDirectX->Hide();
+
 }
 //---------------------------------------------------------------------------------------------

@@ -89,6 +89,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -109,7 +110,7 @@
 				Name="VCCLCompilerTool"
 				UseUnicodeResponseFiles="false"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtOpenGL&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;.\Source;..\TanksLib"
+				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;$(QTDIR)\include&quot;;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;&quot;$(QTDIR)\include\qtmain&quot;;&quot;$(QTDIR)\include\QtCore&quot;;&quot;$(QTDIR)\include\QtGui&quot;;&quot;$(QTDIR)\include\QtSql&quot;;&quot;$(QTDIR)\include\QtOpenGL&quot;;&quot;$(QTDIR)\include\QtNetwork&quot;;..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;.\Source;..\TanksLib;..\Melissa;..\BigJack;..\DXUT\Optional;..\DXUT\Core;..\Robert"
 				PreprocessorDefinitions="WIN32;QT_LARGEFILE_SUPPORT;QT_CORE_LIB;QT_GUI_LIB;QT_SQL_LIB;QT_OPENGL_LIB;QT_NETWORK_LIB"
 				RuntimeLibrary="3"
 				TreatWChar_tAsBuiltInType="false"
@@ -128,9 +129,9 @@
 			<Tool
 				Name="VCLinkerTool"
 				UseUnicodeResponseFiles="false"
-				AdditionalDependencies="shlwapi.lib qtmaind.lib QtCored4.lib QtGuid4.lib QtSqld4.lib QtOpenGLd4.lib opengl32.lib glu32.lib QtNetworkd4.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib"
+				AdditionalDependencies="shlwapi.lib qtmaind.lib QtCored4.lib QtGuid4.lib QtSqld4.lib QtOpenGLd4.lib opengl32.lib glu32.lib QtNetworkd4.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib d3dx10d.lib d3dx9d.lib d3d9.lib dxerr.lib dxguid.lib winmm.lib comctl32.lib Imm32.lib Version.lib Dsound.lib QBaseLib.lib BigJack.lib TanksLib.lib DXUT.lib DXUTOpt.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
-				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;..\Lib"
+				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;..\Lib;..\Debug"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 			/>
@@ -166,7 +167,23 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\Source\Antitank_Server.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Client.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Garage.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Source\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\MakerBehaviorServer.cpp"
 				>
 			</File>
 			<File
@@ -182,15 +199,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Source\ServerStruct.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Source\ServerTank.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Source\TankServer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\TankTower_Server.cpp"
 				>
 			</File>
 		</Filter>
@@ -199,6 +216,22 @@
 			Filter="h"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\Source\Antitank_Server.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Client.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\Garage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\MakerBehaviorServer.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Source\ManagerTanks.h"
 				>
@@ -227,7 +260,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Moc&apos;ing ServerForm.h..."
-						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.\Source&quot; &quot;-I.\..\TanksLib&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
+						CommandLine="&quot;$(QTDIR)\bin\moc.exe&quot;   -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_OPENGL_LIB -DQT_NETWORK_LIB -D_UNICODE -DUNICODE  &quot;-I.\GeneratedFiles&quot; &quot;-I$(QTDIR)\include&quot; &quot;-I.\GeneratedFiles\$(ConfigurationName)\.&quot; &quot;-I$(QTDIR)\include\qtmain&quot; &quot;-I$(QTDIR)\include\QtCore&quot; &quot;-I$(QTDIR)\include\QtGui&quot; &quot;-I$(QTDIR)\include\QtSql&quot; &quot;-I$(QTDIR)\include\QtOpenGL&quot; &quot;-I$(QTDIR)\include\QtNetwork&quot; &quot;-I.\..\Share&quot; &quot;-I.\..\GBaseLib&quot; &quot;-I.\..\glib-2.0&quot; &quot;-I.\Source&quot; &quot;-I.\..\TanksLib&quot; &quot;-I.\..\Melissa&quot; &quot;-I.\..\BigJack&quot; &quot;-I.\..\DXUT\Optional&quot; &quot;-I.\..\DXUT\Core&quot; &quot;-I.\..\Robert&quot; &quot;$(InputPath)&quot; -o &quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="&quot;$(QTDIR)\bin\moc.exe&quot;;$(InputPath)"
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
@@ -243,6 +276,10 @@
 			</File>
 			<File
 				RelativePath=".\Source\TankServer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\TankTower_Server.h"
 				>
 			</File>
 		</Filter>

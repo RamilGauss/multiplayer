@@ -54,11 +54,13 @@ namespace nsTank_Type
 namespace nsTank_ID
 {
   enum{
-    eID_T_34    = nsTank_Type::eTypeTankMedium,
-    eID_Pz_34   = nsTank_Type::eTypeTankMedium+1,
+    eID_KingTiger = nsTank_Type::eTypeTankHeavy,
 
-    eID_IS      = nsTank_Type::eTypeTankHeavy,
-    eID_Tiger   = nsTank_Type::eTypeTankHeavy+1,
+    //eID_T_34    = nsTank_Type::eTypeTankMedium,
+    //eID_Pz_34   = nsTank_Type::eTypeTankMedium+1,
+
+    //eID_IS      = nsTank_Type::eTypeTankHeavy,
+    //eID_Tiger   = nsTank_Type::eTypeTankHeavy+1,
   };
   
 };
@@ -66,12 +68,13 @@ namespace nsTank_ID
 
 namespace nsStrTank
 {
-  extern const char* strTank_T_34;
-  extern const char* strTank_T_34_Ini;
-  extern const char* strTank_IS;
-  extern const char* strTank_IS_Ini;
-  extern const char* strTank_Tiger;
-  extern const char* strTank_Tiger_Ini;
+  extern const char* strTank_KingTiger;
+  //extern const char* strTank_T_34;
+  //extern const char* strTank_T_34_Ini;
+  //extern const char* strTank_IS;
+  //extern const char* strTank_IS_Ini;
+  //extern const char* strTank_Tiger;
+  //extern const char* strTank_Tiger_Ini;
 }
 
 

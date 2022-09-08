@@ -46,6 +46,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ApplicationProtocolPacketRequest.h"
 #include "StatisticValue.h"
 #include "ApplicationProtocolPacketAnswer.h"
+#include "Client.h"
 
 class ServerTank
 {
@@ -56,9 +57,9 @@ class ServerTank
 
 	TSaveOnHDD mLogLoad;
 	
-	CallBackRegistrator mCallBackRequestListClient; // 
+	TCallBackRegistrator mCallBackRequestListClient; // 
 
-	TransportProtocol mTransport;
+	TTransportProtocol mTransport;
 
 	GThread* threadStreamAnswerCommand;
 
@@ -96,7 +97,7 @@ public:
   // клиенты
 	struct TDefClient
 	{
-		char name[nsServerStruct::TClient::eMaxLenNick];
+		char name[TClient::eMaxLenNick];
 		unsigned int ip;
 		unsigned int port;
 		int state;
@@ -141,12 +142,12 @@ public:
 
   void requestListClient();
 
-  void registerRequest(CallBackRegistrator::TCallBackFunc func){mCallBackRequestListClient.Register(func);};
-  void unregisterRequest(CallBackRegistrator::TCallBackFunc func){mCallBackRequestListClient.Unregister(func);};
+  void registerRequest(TCallBackRegistrator::TCallBackFunc func){mCallBackRequestListClient.Register(func);};
+  void unregisterRequest(TCallBackRegistrator::TCallBackFunc func){mCallBackRequestListClient.Unregister(func);};
   
 protected:
 
-  void SendPacket_A_InFight(nsServerStruct::TClient* pClient);
+  void SendPacket_A_InFight(TClient* pClient);
 
   void Notify(void* data,unsigned int size){mCallBackRequestListClient.Notify(data,size);};
 
@@ -190,11 +191,11 @@ protected:
   bool SetListTank(TA_Get_List_Tank *answerListTank, unsigned int ip, unsigned short port);
 
 
-  void WriteTransport(nsServerStruct::TClient* pClient,TBasePacket *packet);
+  void WriteTransport(TClient* pClient,TBasePacket *packet);
   void WriteTransport(nsServerStruct::TPacketServer* pServerPacket,TBasePacket *packet);
   void WriteTransport(unsigned int ip, unsigned short port,TBasePacket *packet);
 
-  void WriteTransportS(nsServerStruct::TClient* pClient,TBasePacket *packet);
+  void WriteTransportS(TClient* pClient,TBasePacket *packet);
   void WriteTransportS(nsServerStruct::TPacketServer* pServerPacket,TBasePacket *packet);
   void WriteTransportS(unsigned int ip, unsigned short port,TBasePacket *packet);
 

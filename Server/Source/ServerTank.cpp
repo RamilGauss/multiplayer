@@ -384,7 +384,7 @@ void ServerTank::WorkStream()
       for(int i = 0 ; i < COUNT_COMMAND_IN_FIGHT*2 ; i++)
       {
         // убрать клиента из списка участвующих в бою
-        TTank* pTank = pRoom->GetTank(i);// взять описание танка
+        TTankServer* pTank = pRoom->GetTank(i);// взять описание танка
         TClient* pClient = pTank->GetMasterClient();
         if(pClient->GetCurRoom()==pRoom)
         {
@@ -413,14 +413,14 @@ unsigned char ServerTank::RegisterClient(TR_Try_Connect_To_Server* tryConnect, u
 
   char* sNick = tryConnect->getNick();
 
-  nsServerStruct::TClient* pClient = new nsServerStruct::TClient;
+  TClient* pClient = new TClient;
   pClient->ip    = ip;
   pClient->port  = port;
   int index = mArrClients.FastSearch(&pClient,NULL,SortFresh);
   if(index!=-1)
   {
     delete pClient;
-    pClient = (nsServerStruct::TClient*)mArrClients.Get(index);
+    pClient = (TClient*)mArrClients.Get(index);
     if((strcmp(pClient->sNick,sNick)==0)&&
        (pClient->ip==ip&&pClient->port==port))
     {
@@ -444,7 +444,7 @@ unsigned char ServerTank::RegisterClient(TR_Try_Connect_To_Server* tryConnect, u
 	strcpy(pClient->sNick,sNick);
 	pClient->ip   = ip;
 	pClient->port = port;
-	pClient->state = nsServerStruct::TClient::eGarage;
+	pClient->state = TClient::eGarage;
 	pClient->flgDisconnect = false;
 
 	mArrClients.Add(pClient);
@@ -460,14 +460,14 @@ void ServerTank::WorkListDisconnect()
 	{
 		TIP_Port** ppNext = mListDisconnectClient.Next(ppIP_Port);
 		TIP_Port* pIP_Port = *ppIP_Port;
-    nsServerStruct::TClient dClient;
-    nsServerStruct::TClient* pdClient = &dClient;
+    TClient dClient;
+    TClient* pdClient = &dClient;
     dClient.ip    = pIP_Port->ip;
     dClient.port  = pIP_Port->port;
     int index = mArrClients.FastSearch(&pdClient,NULL,SortFresh);
     if(index!=-1)
     {
-      nsServerStruct::TClient* pClient = (nsServerStruct::TClient*)mArrClients.Get(index);
+      TClient* pClient = (TClient*)mArrClients.Get(index);
 			pClient->flgDisconnect = true;
 			pClient->time = ht_GetMSCount();
 		}
@@ -484,7 +484,7 @@ void ServerTank::WorkRefreshListClient()
 		TClient* pClient = (TClient*)mArrClients.Get(i);
 		if(pClient->flgDisconnect)
 		{
-			if(now_ms>(pClient->time+nsServerStruct::TClient::eRemoveInterval*1000))
+			if(now_ms>(pClient->time+TClient::eRemoveInterval*1000))
 			{
 				switch(pClient->state)
 				{
@@ -501,7 +501,7 @@ void ServerTank::WorkRefreshListClient()
 		}
 		else
 		{
-			if(now_ms>(pClient->time+nsServerStruct::TClient::eTimeRefresh*1000))
+			if(now_ms>(pClient->time+TClient::eTimeRefresh*1000))
 			{
 				pClient->time = now_ms;
 				SendEcho(pClient->ip,pClient->port);
@@ -609,8 +609,8 @@ bool ServerTank::SetListTank(TA_Get_List_Tank *answerListTank, unsigned int ip, 
   answerListTank->setCnt(cnt);
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = (TTank*)pClient->mGarage.mArrTanks.Get(i);
-    int typeTank = pTank->GetTypeTank();
+    TTankServer* pTank = (TTankServer*)pClient->mGarage.mArrTanks.Get(i);
+    int typeTank = ((TTank*)pTank)->GetTypeTank();
     answerListTank->setTypeTank(i,typeTank);
 		answerListTank->setFlgBlockTank(i,pTank->pRoom?1:0);
   }
@@ -643,7 +643,7 @@ void ServerTank::WorkBalanser()
 //----------------------------------------------------------------------------------
 void ServerTank::WriteTransport(TClient* pClient,TBasePacket *packet)
 {
-  TransportProtocolTank::InfoData* infoData = new TransportProtocolTank::InfoData;
+  TTransportProtocol::InfoData* infoData = new TTransportProtocol::InfoData;
   infoData->ip_dst   = pClient->ip;
   infoData->port_dst = pClient->port;
   infoData->packet   = packet->getData();
@@ -653,7 +653,7 @@ void ServerTank::WriteTransport(TClient* pClient,TBasePacket *packet)
 //----------------------------------------------------------------------------------
 void ServerTank::WriteTransport(nsServerStruct::TPacketServer* pServerPacket,TBasePacket *packet)
 {
-  TransportProtocolTank::InfoData* infoData = new TransportProtocolTank::InfoData;
+  TTransportProtocol::InfoData* infoData = new TTransportProtocol::InfoData;
   infoData->ip_dst   = pServerPacket->ip;
   infoData->port_dst = pServerPacket->port;
   infoData->packet   = packet->getData();
@@ -663,7 +663,7 @@ void ServerTank::WriteTransport(nsServerStruct::TPacketServer* pServerPacket,TBa
 //----------------------------------------------------------------------------------
 void ServerTank::WriteTransport(unsigned int ip, unsigned short port,TBasePacket *packet)
 {
-  TransportProtocolTank::InfoData* infoData = new TransportProtocolTank::InfoData;
+  TTransportProtocol::InfoData* infoData = new TTransportProtocol::InfoData;
   infoData->ip_dst   = ip;
   infoData->port_dst = port;
   infoData->packet   = packet->getData();
@@ -673,7 +673,7 @@ void ServerTank::WriteTransport(unsigned int ip, unsigned short port,TBasePacket
 //----------------------------------------------------------------------------------
 void ServerTank::WriteTransportS(TClient* pClient,TBasePacket *packet)
 {
-  TransportProtocolTank::InfoData* infoData = new TransportProtocolTank::InfoData;
+  TTransportProtocol::InfoData* infoData = new TTransportProtocol::InfoData;
   infoData->ip_dst   = pClient->ip;
   infoData->port_dst = pClient->port;
   infoData->packet   = packet->getData();
@@ -683,7 +683,7 @@ void ServerTank::WriteTransportS(TClient* pClient,TBasePacket *packet)
 //----------------------------------------------------------------------------------
 void ServerTank::WriteTransportS(nsServerStruct::TPacketServer* pServerPacket,TBasePacket *packet)
 {
-  TransportProtocolTank::InfoData* infoData = new TransportProtocolTank::InfoData;
+  TTransportProtocol::InfoData* infoData = new TTransportProtocol::InfoData;
   infoData->ip_dst   = pServerPacket->ip;
   infoData->port_dst = pServerPacket->port;
   infoData->packet   = packet->getData();
@@ -693,7 +693,7 @@ void ServerTank::WriteTransportS(nsServerStruct::TPacketServer* pServerPacket,TB
 //----------------------------------------------------------------------------------
 void ServerTank::WriteTransportS(unsigned int ip, unsigned short port,TBasePacket *packet)
 {
-  TransportProtocolTank::InfoData* infoData = new TransportProtocolTank::InfoData;
+  TTransportProtocol::InfoData* infoData = new TTransportProtocol::InfoData;
   infoData->ip_dst   = ip;
   infoData->port_dst = port;
   infoData->packet   = packet->getData();
@@ -710,14 +710,14 @@ int ServerTank::Appl_Type_R_Try_Connect_To_Server(nsServerStruct::TPacketServer*
 	// отправить ответ о регистрации
   if(resRegister==TClient::eFight)
   {
-    nsServerStruct::TClient oClient;
+    TClient oClient;
     TClient* pClient = &oClient;
     pClient->ip    = (*ppPacket)->ip;
     pClient->port  = (*ppPacket)->port;
     int index = mArrClients.FastSearch(&pClient,NULL,SortFresh);
     if(index!=-1)
     {
-      pClient = (nsServerStruct::TClient*)mArrClients.Get(index);
+      pClient = (TClient*)mArrClients.Get(index);
       SendPacket_A_InFight(pClient);
     }
     else BL_FIX_BUG();
@@ -853,11 +853,11 @@ void ServerTank::SendPacket_A_InFight(TClient* pClient)
   for(int i = 0 ; i < COUNT_COMMAND_IN_FIGHT*2 ; i++)
   {
     // танки отсортированы на уровне комнаты
-    TTank* pTank = pRoom->GetTank(i);// взять описание танка
-    answerFight.setPointerStrNick(i,pTank->GetMasterClient()->sNick);
-    answerFight.setGunType(i,pTank->mGun);
-    answerFight.setTowerType(i,pTank->mTower);
-    answerFight.setID_Tank(i,pTank->GetTypeTank());
+    TTankServer* pTank = pRoom->GetTank(i);// взять описание танка
+    //### answerFight.setPointerStrNick(i,pTank->GetMasterClient()->sNick);
+    //answerFight.setGunType(i,pTank->mGun);
+    //answerFight.setTowerType(i,pTank->mTower);
+    answerFight.setID_Tank(i,((TTank*)pTank)->GetTypeTank());
   }
   //--------------------------------------
   WriteTransport(pClient,&answerFight);
@@ -895,7 +895,7 @@ void ServerTank::MakeRoom()
   // разослать клиентам инфу по карте
   for(int i = 0 ; i < COUNT_COMMAND_IN_FIGHT*2 ; i++)
   {
-    TTank* pTank = pRoom->GetTank(i);
+    TTankServer* pTank = pRoom->GetTank(i);
     if(pTank==NULL){BL_FIX_BUG();return;}
     TClient* pClient = pTank->GetMasterClient();
     SendPacket_A_InFight(pClient);
