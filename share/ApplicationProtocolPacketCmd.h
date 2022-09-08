@@ -13,17 +13,26 @@
 // APPL_TYPE_C_RELEASE_RIGHT  
 // APPL_TYPE_C_PRESS_UP       
 // APPL_TYPE_C_RELEASE_UP     
-class TEvent_Packet : public TBasePacket
+class TC_Key_Event : public TBasePacket
 {
 	// ushort type
+  // uint event
+
 public:
-	TEvent_Packet(unsigned short type)
+	TC_Key_Event()
 	{
-		mType=type;
+		mType=APPL_TYPE_C_KEY_EVENT;
 		mSize=sizeof(mType);
 		mData=(char*)malloc(mSize);
 		setType();
-	};
+	}
+
+  void getKeyEvent(unsigned int val){ *(getPointerKeyEvent())= val;}
+  unsigned int getKeyEvent(){return *(getPointerKeyEvent());}
+  unsigned int* getPointerKeyEvent()
+  {
+    return (unsigned int*)(mData+sizeof(mType));
+  }
 };
 //-----------------------------------------------------------------------------
 //APPL_TYPE_Ñ_CHOOSE_TANK
@@ -55,20 +64,6 @@ public:
   }
 
 };
-//-----------------------------------------------------------------------------
-////APPL_TYPE_C_READY_FOR_ROOM
-//class TC_Ready_For_Room : public TBasePacket
-//{
-//  // ushort type
-//public:
-//  TC_Ready_For_Room()
-//  {
-//    mType=APPL_TYPE_C_READY_FOR_ROOM;
-//    mSize=sizeof(mType);
-//    mData=(char*)malloc(mSize);
-//    setType();
-//  };
-//};
 //-----------------------------------------------------------------------------
 
 #endif

@@ -3,6 +3,7 @@
 #include "Tank.h"
 #include "ApplicationProtocolPacketAnswer.h"
 #include "ApplicationProtocolMainPacket.h"
+#include "BL_Debug.h"
 
 using namespace nsServerStruct;
 
@@ -36,11 +37,6 @@ void TRoom::SetTransport(TransportProtocolTank* pTransport)
   mTransport = pTransport;
 }
 //----------------------------------------------------------------
-void TRoom::SetPacket(TTank* pTank, TBasePacket* packet)
-{
-
-}
-//----------------------------------------------------------------
 bool TRoom::Work()
 {
   mNow_MS = ht_GetMSCount();
@@ -48,11 +44,12 @@ bool TRoom::Work()
   // что прислали клиенты, раскидать по спискам
   AnalizPacket();// здесь отослать корректирующий пакет (можно парти€ми)
   //-------------------------------------------------------------
-  // поместить в ѕредсказатель инфо и событи€ из списка событий по объектам
-  SetDataInPrediction();
-  //-------------------------------------------------------------
-  // расчет данных
-  CalcPrediction();
+  // поместить в ѕредсказатель инфо и событи€х из списка событий по объектам
+  if(mState==eFight)
+  {
+    // расчет данных
+    CalcPrediction();
+  }
   //-------------------------------------------------------------
   // –ассылка Stream - обратный отсчет, координаты и событи€х бо€ (как результат ѕредсказател€)
   // если только началс€ - загрузить карту
@@ -223,29 +220,66 @@ void TRoom::WorkLoadMap()
 //----------------------------------------------------------------------------------
 void TRoom::SendResultFight()
 {
+  int cnt = mArrTank.Count();
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    TTank* pTank = (TTank*)mArrTank.Get(i);
+    TClient* pClient = pTank->GetMasterClient();
 
+    TA_End_Fight A_End_Fight;
+    // заполнить результатом
+    A_End_Fight.setCode(TA_End_Fight::eWin);// пока победа
+
+    WriteTransportAnswer(pClient,&A_End_Fight);
+  }
 }
 //----------------------------------------------------------------------------------
 void TRoom::AnalizPacket()// здесь отослать корректирующий пакет (можно парти€ми)
 {
-  
-
-  //switch()
+  std::list<TAction*>::iterator it  = mListFreshAction.begin();
+  std::list<TAction*>::iterator eit = mListFreshAction.end();
+  while(it!=eit)
   {
-
+    unsigned short type = (*it)->pDefPacket->packet->getType();
+    TClient* pClient = (*it)->pTank->GetMasterClient();
+    switch(type)
+    {
+      case APPL_TYPE_R_CORRECT_PACKET:
+      {
+        // если не бой, то отослать координаты расставленных танков
+        if(mState!=eFight)
+          SendInitCoordTank(pClient);
+        // танк в бою, надо дать инфу по счету и времени
+        if(mState==eFight)
+          SendScore(pClient);
+        
+        SendStateObject(pClient);
+        break;
+      }
+      case APPL_TYPE_S_ORIENT_AIM:
+      {
+        BL_ASSERT(mState!=eFight);
+        // добавить в prediction
+        mPrediction.SetOrientAim(pClient);
+        break;
+      }
+      case APPL_TYPE_C_KEY_EVENT:
+      {
+        BL_ASSERT(mState!=eFight);
+        // добавить в prediction
+        break;
+      }
+      default:BL_FIX_BUG();
+    }
+    it++;
   }
-}
-//----------------------------------------------------------------------------------
-// поместить в ѕредсказатель инфо и событи€ из списка событий по объектам
-void TRoom::SetDataInPrediction()
-{
-
+  mListFreshAction.clear();
 }
 //----------------------------------------------------------------------------------
 // расчет данных
 void TRoom::CalcPrediction()
 {
-
+  mPrediction.Calc();
 }
 //----------------------------------------------------------------------------------
 void* ThreadLoadMap(void* p)
@@ -257,13 +291,57 @@ void* ThreadLoadMap(void* p)
 void TRoom::ThreadLoadMap()
 {
   // загрузка
+  //mID_map
   ht_msleep(5000);// симул€ци€
   flgIsLoadingMap = false;
+  PreparePrediction();
 }
 //----------------------------------------------------------------------------------
 void TRoom::LoadMap()
 {
   flgIsLoadingMap = true;
   threadLoadMap = g_thread_create(::ThreadLoadMap, (gpointer)this, true, NULL);
+}
+//----------------------------------------------------------------------------------
+void TRoom::SetPacket(nsServerStruct::TPacketServer* pDefPacket,TTank* pTank)
+{
+  TAction* pAction = new TAction;
+  pAction->pTank   = pTank;
+  pAction->pDefPacket = pDefPacket;
+  mListFreshAction.push_back(pAction);  
+  //delete (*ppPacket);// пока эти данные не нужны
+}
+//----------------------------------------------------------------------------------
+void TRoom::SendInitCoordTank(TClient* pClient)
+{
+  // расчет координат возможен до загрузки карты, все данные хран€тс€ у предсказател€
+  mPrediction.mListTank.####
+  while(it!=eit)
+  {
+
+  }
+  
+  WriteTransportAnswer(pClient,&packet);
+}
+//----------------------------------------------------------------------------------
+void TRoom::SendScore(TClient* pClient)
+{
+  TA_Score A_Score;
+  A_Score.setScore0(score0);
+  A_Score.setScore1(score1);
+  A_Score.setTimeRest(DURATION_FIGHT_MS-mTimeAfterCountDown);
+  WriteTransportAnswer(pClient,&A_Score);
+}
+//----------------------------------------------------------------------------------
+void TRoom::SendStateObject(TClient* pClient)
+{
+  // все данные хран€тс€ у предсказател€
+  mPrediction.mListDestroyObject.
+  while(it!=eit)
+  {
+
+  }
+  // если объектов очень много, то разбить на группы
+  WriteTransportAnswer(pClient,&packet);
 }
 //----------------------------------------------------------------------------------

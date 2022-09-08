@@ -74,7 +74,18 @@ public:
   }
 };
 //-----------------------------------------------------------------------------
-
-
+class TR_Correct_Packet : public TBasePacket
+{
+  // ushort type 
+public:
+  TR_Correct_Packet()
+  {
+    mType=APPL_TYPE_R_CORRECT_PACKET;
+    mSize=sizeof(mType);
+    mData=(char*)malloc(mSize);
+    setType();
+  }
+};
+//-------------------------------------
 #endif
 

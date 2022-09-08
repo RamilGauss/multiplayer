@@ -3,10 +3,10 @@
 
 #define ServerLocalPort 4321
 
-#define VERSION_PROGRAMM ((unsigned short)21) // unsigned short
+#define VERSION_PROGRAMM ((unsigned short)23) // unsigned short
 
-#define STR_VERSION_CLIENT "Клиент \"WarTanks\" v0.021 NET DX9"
-#define STR_VERSION_SERVER "Сервер \"WarTanks\" v0.021 NET DX9"
+#define STR_VERSION_CLIENT "Клиент \"WarTanks\" v0.023 NET DX9"
+#define STR_VERSION_SERVER "Сервер \"WarTanks\" v0.023 NET DX9"
 
 #define DURATION_FIGHT_MINUTE 15 // длительность боя,минут
 #define DURATION_FIGHT_MS (DURATION_FIGHT_MINUTE*60*1000) // длительность боя, мс

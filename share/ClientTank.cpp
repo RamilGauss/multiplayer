@@ -6,6 +6,7 @@
 #include "HiTimer.h"
 #include "ApplicationProtocolPacketRequest.h"
 #include "ApplicationProtocolPacketCmd.h"
+#include "LogerDX.h"
 
 
 ClientTank GlobalClientTank;
@@ -99,6 +100,10 @@ bool ClientTank::Connect(unsigned int ip_dst, unsigned int port_src, char* sNick
   char nameLogFile[260];
   sprintf(nameLogFile,".\\clientTransport%s.log",sNick);
   mTransport.InitLog(nameLogFile);
+
+  //--------------------------------------------
+  InitLogerDX(sNick);
+  //--------------------------------------------
 
   stop();
 	mTransport.Open(port_src);
@@ -216,12 +221,13 @@ void ClientTank::WriteTransport(TBasePacket* packet)
   mTransport.write(infoData);
 }
 //--------------------------------------------------------------
-//void ClientTank::SendClientReadyForRoom()
-//{
-//  TC_Ready_For_Room C_Ready_For_Room;
-//  WriteTransport(&C_Ready_For_Room);
-//}
-////--------------------------------------------------------------
+void ClientTank::SendRequestCorrectPacket()
+{
+  TR_Correct_Packet R_Correct_Packet;
+  WriteTransport(&R_Correct_Packet);
+}
+//--------------------------------------------------------------
+//--------------------------------------------------------------
 //void HandlePacket(void* data,int size)
 //{
 //

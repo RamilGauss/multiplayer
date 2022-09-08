@@ -359,6 +359,121 @@ public:
   }
 };
 //-----------------------------------------------------------------------------
+//APPL_TYPE_A_CORRECT_PACKET_STATE_OBJECT
+class TA_Correct_Packet_State_Object : public TBasePacket
+{
+  // ushort type
+  // uchar cnt_object не более eMaxCountObject
+  
+  // ushort ID
+  // uint maskState
+
+public:
+  enum{eMaxCountObject=100,
+       eSizeDefObject = sizeof(unsigned short)+sizeof(unsigned int),
+  };
+
+  TA_Correct_Packet_State_Object()
+  {
+    mType = APPL_TYPE_A_CORRECT_PACKET_STATE_OBJECT;
+    mSize = sizeof(mType);
+    mData = (char*)malloc(mSize);
+    setType();
+  }
+  //----------------------------------------------------------------------
+  void setCountObject(unsigned char cnt)
+  {
+    int new_size = sizeof(mType)+sizeof(unsigned char)+cnt*eSizeDefObject;
+    mo_realloc(mData,mSize,new_size);
+    mSize = new_size;
+    
+    unsigned char* pCnt = getPointerCountObject();
+    *pCnt = cnt;
+  }
+  unsigned char  getCountObject(){return *getPointerCountObject();}
+  unsigned char* getPointerCountObject(){return (unsigned char*)(mData+sizeof(mType)+sizeof(unsigned char));}
+  //----------------------------------------------------------------------
+  unsigned short* getPointerID(int i)
+  {return (unsigned short*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefObject);}
+  unsigned short getID(int i){return *getPointerID(i);}
+  void setID(int i,unsigned short val){*getPointerID(i) = val;}
+  //----------------------------------------------------------------------
+  unsigned int* getPointerMaskState(int i)
+  {return (unsigned int*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefObject+sizeof(unsigned short));}
+  unsigned int getMaskState(int i){return *getPointerMaskState(i);}
+  void setMaskState(int i,unsigned int val){*getPointerMaskState(i) = val;}
+};
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//APPL_TYPE_A_CORRECT_PACKET_STATE_TANK
+class TA_Correct_Packet_State_Tank : public TBasePacket
+{
+  // ushort type
+  // uchar cnt_tank
+
+  // uint HP
+
+public:
+  enum{
+    eSizeDefTank = sizeof(unsigned int),
+  };
+
+  TA_Correct_Packet_State_Tank()
+  {
+    mType = APPL_TYPE_A_CORRECT_PACKET_STATE_TANK;
+    mSize = sizeof(mType);
+    mData = (char*)malloc(mSize);
+    setType();
+  }
+  //----------------------------------------------------------------------
+  void setCountTank(unsigned char cnt)
+  {
+    int new_size = sizeof(mType)+sizeof(unsigned char)+cnt*eSizeDefTank;
+    mo_realloc(mData,mSize,new_size);
+    mSize = new_size;
+
+    unsigned char* pCnt = getPointerCountTank();
+    *pCnt = cnt;
+  }
+  unsigned char  getCountTank(){return *getPointerCountTank();}
+  unsigned char* getPointerCountTank(){return (unsigned char*)(mData+sizeof(mType)+sizeof(unsigned char));}
+  //----------------------------------------------------------------------
+  unsigned int* getPointerHP(int i)
+  {return (unsigned int*)(mData+sizeof(mType)+sizeof(unsigned char)+i*eSizeDefTank);}
+  unsigned int getHP(int i){return *getPointerHP(i);}
+  void setHP(int i,unsigned int val){*getPointerHP(i) = val;}
+};
+//-----------------------------------------------------------------------------
+//APPL_TYPE_A_SCORE
+class TA_Score : public TBasePacket
+{
+  // ushort type
+  // uchar score0 
+  // uchar score1
+  // uint time_rest мс
+
+public:
+  TA_Score()
+  {
+    mType = APPL_TYPE_A_SCORE;
+    mSize = sizeof(mType)+sizeof(unsigned char)+sizeof(unsigned char)+sizeof(unsigned int);
+    mData = (char*)malloc(mSize);
+    setType();
+  }
+  //----------------------------------------------------------------------
+  void setScore0(unsigned char val){*getPointerScore0()=val;}
+  unsigned char  getScore0(){return *getPointerScore0();}
+  unsigned char* getPointerScore0(){return (unsigned char*)(mData+sizeof(mType));}
+  //----------------------------------------------------------------------
+  void setScore1(unsigned char val){*getPointerScore1()=val;}
+  unsigned char  getScore1(){return *getPointerScore1();}
+  unsigned char* getPointerScore1(){return (unsigned char*)(mData+sizeof(mType)+sizeof(unsigned char));}
+  //----------------------------------------------------------------------
+  void setTimeRest(unsigned int val){*getPointerTimeRest()=val;}
+  unsigned int  getTimeRest(){return *getPointerTimeRest();}
+  unsigned int* getPointerTimeRest()
+  {return (unsigned int*)(mData+sizeof(mType)+sizeof(unsigned char)+sizeof(unsigned char));}
+};
 //-----------------------------------------------------------------------------
 
 #endif

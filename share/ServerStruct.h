@@ -37,7 +37,6 @@ namespace nsServerStruct
   //---------------------------------------------------------------
   class TClient : public TObject
   {
-    bool flgNeedCorrectState;
 		TRoom*  			 pCurRoom; // либо что-то либо NULL
   public:
     enum{eMaxLenNick=250,};
@@ -64,14 +63,11 @@ namespace nsServerStruct
 		int            state;// garage, wait, fight
 		TGarage 			 mGarage;
     
-    void SetCurRoom(TRoom* room){pCurRoom=room;ClearNeedCorrectState();}
+    void SetCurRoom(TRoom* room){pCurRoom=room;}
     TRoom* GetCurRoom(){return pCurRoom;}
 
 		//TTreeTanks mTreeTanks;// читать из БД ветку исследований - пока нету
 
-    void ClearNeedCorrectState(){flgNeedCorrectState=false;}
-    void SetNeedCorrectState(){flgNeedCorrectState=true;}
-    bool GetNeedCorrectState(){return flgNeedCorrectState;}
   };
   //---------------------------------------------------------------
   struct TPacketServer

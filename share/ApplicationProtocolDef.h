@@ -43,11 +43,13 @@
 
 #define APPL_TYPE_A_END_FIGHT             (APPL_TYPE_BASE_ANSWER+6) // конец битвы, пока не знаю что передавать (результат бо€,  Ёѕ)
 
-// как ответ на пустой вопрос - вопроса не было
-
 // в общем виде событи€ бо€, может быть несколько событий в одном пакете:
-#define APPL_TYPE_A_CORRECT_PACKET        (APPL_TYPE_BASE_ANSWER+7) // корректирующий пакет, не требует эффектов DX
-#define APPL_TYPE_A_EVENT_IN_FIGHT        (APPL_TYPE_BASE_ANSWER+8) // событие, показать на экране
+#define APPL_TYPE_A_CORRECT_PACKET_STATE_OBJECT  (APPL_TYPE_BASE_ANSWER+7)  // корректирующий пакет, не требует эффектов DX
+#define APPL_TYPE_A_CORRECT_PACKET_STATE_TANK    (APPL_TYPE_BASE_ANSWER+8)  // корректирующий пакет, не требует эффектов DX
+
+#define APPL_TYPE_A_SCORE                        (APPL_TYPE_BASE_ANSWER+9)  // и корректирующий пакет и просто пакет
+// как ответ на пустой вопрос - вопроса не было
+#define APPL_TYPE_A_EVENT_IN_FIGHT               (APPL_TYPE_BASE_ANSWER+10) // событие, показать на экране
 
 //-----------------------------------------------------------------------------
 // STREAM - S
@@ -57,7 +59,7 @@
 #define APPL_TYPE_S_GARAGE              (APPL_TYPE_BASE_STREAM+0) // статистика: клиентов в бою и общее кол-во
 #define APPL_TYPE_S_WAIT                (APPL_TYPE_BASE_STREAM+1) // статистика: кол-во ожидающих в очереди, в бою и общее кол-во
 // размер пакета будет уточн€тс€
-#define APPL_TYPE_S_LOAD_MAP            (APPL_TYPE_BASE_STREAM+2)// во врем€ завгрузки карты на сервере
+#define APPL_TYPE_S_LOAD_MAP            (APPL_TYPE_BASE_STREAM+2)// во врем€ загрузки карты на сервере
 #define APPL_TYPE_S_COUNT_DOWN          (APPL_TYPE_BASE_STREAM+3) // статистика обратного отсчета в начале бо€
 #define APPL_TYPE_S_FIGHT_COORD_BULLET  (APPL_TYPE_BASE_STREAM+4) // ориентаци€ и скорости танков, снар€дов
 

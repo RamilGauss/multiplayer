@@ -3,8 +3,8 @@ TransportInfo:
 	 type=C,
 	 cn_in=0,
 	 cn_out=0,
-	 time=5:43:52.515,
-	 localTime=5:43:52.515,
+	 time=5:11:9.812,
+	 localTime=5:11:9.812,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9002
@@ -16,8 +16,8 @@ TransportInfo:
 	 type=K,
 	 cn_in=0,
 	 cn_out=0,
-	 time=5:43:52.515,
-	 localTime=5:43:52.515,
+	 time=5:11:9.812,
+	 localTime=5:11:9.812,
 	 cntTry=0,
 	 DST=192.168.23.222:9002,
 	 SRC=192.168.23.222:4321
@@ -29,21 +29,21 @@ TransportInfo:
 	 type=P,
 	 cn_in=0,
 	 cn_out=1,
-	 time=5:43:52.625,
-	 localTime=5:43:52.625,
+	 time=5:11:9.906,
+	 localTime=5:11:9.906,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9002
 Contain packet:
-0x0 0x0 0x14 0x0 0x47 0x61 0x75 0x73 0x73 0x39 0x30 0x30 0x32 0x0 
+0x0 0x0 0x16 0x0 0x47 0x61 0x75 0x73 0x73 0x39 0x30 0x30 0x32 0x0 
 
 Recive Packet from ip=192.168.23.222, port=4321
 TransportInfo: 
 	 type=K,
 	 cn_in=0,
 	 cn_out=1,
-	 time=5:43:52.625,
-	 localTime=5:43:52.625,
+	 time=5:11:9.906,
+	 localTime=5:11:9.906,
 	 cntTry=0,
 	 DST=192.168.23.222:9002,
 	 SRC=192.168.23.222:4321
@@ -55,112 +55,8 @@ TransportInfo:
 	 type=P,
 	 cn_in=1,
 	 cn_out=1,
-	 time=5:43:52.640,
-	 localTime=5:43:52.640,
-	 cntTry=0,
-	 DST=192.168.23.222:9002,
-	 SRC=192.168.23.222:4321
-Contain packet:
-0xC8 0x0 0x0 
-
-Send Packet to ip=192.168.23.222, port=4321
-TransportInfo: 
-	 type=K,
-	 cn_in=1,
-	 cn_out=1,
-	 time=5:43:52.640,
-	 localTime=5:43:52.640,
-	 cntTry=0,
-	 DST=192.168.23.222:4321,
-	 SRC=192.168.23.222:9002
-Contain packet:
-
-
-Send Packet to ip=192.168.23.222, port=4321
-TransportInfo: 
-	 type=P,
-	 cn_in=1,
-	 cn_out=2,
-	 time=5:43:52.640,
-	 localTime=5:43:52.640,
-	 cntTry=0,
-	 DST=192.168.23.222:4321,
-	 SRC=192.168.23.222:9002
-Contain packet:
-0x3 0x0 
-
-Recive Packet from ip=192.168.23.222, port=4321
-TransportInfo: 
-	 type=K,
-	 cn_in=1,
-	 cn_out=2,
-	 time=5:43:52.640,
-	 localTime=5:43:52.640,
-	 cntTry=0,
-	 DST=192.168.23.222:9002,
-	 SRC=192.168.23.222:4321
-Contain packet:
-
-
-Recive Packet from ip=192.168.23.222, port=4321
-TransportInfo: 
-	 type=P,
-	 cn_in=2,
-	 cn_out=2,
-	 time=5:43:52.687,
-	 localTime=5:43:52.687,
-	 cntTry=0,
-	 DST=192.168.23.222:9002,
-	 SRC=192.168.23.222:4321
-Contain packet:
-0xCC 0x0 0x2 0x33 0x33 0x0 0x66 0x66 0x0 
-
-Send Packet to ip=192.168.23.222, port=4321
-TransportInfo: 
-	 type=K,
-	 cn_in=2,
-	 cn_out=2,
-	 time=5:43:52.687,
-	 localTime=5:43:52.687,
-	 cntTry=0,
-	 DST=192.168.23.222:4321,
-	 SRC=192.168.23.222:9002
-Contain packet:
-
-
-Send Packet to ip=192.168.23.222, port=4321
-TransportInfo: 
-	 type=P,
-	 cn_in=2,
-	 cn_out=3,
-	 time=5:43:55.203,
-	 localTime=5:43:55.203,
-	 cntTry=0,
-	 DST=192.168.23.222:4321,
-	 SRC=192.168.23.222:9002
-Contain packet:
-0x2 0x0 
-
-Recive Packet from ip=192.168.23.222, port=4321
-TransportInfo: 
-	 type=K,
-	 cn_in=2,
-	 cn_out=3,
-	 time=5:43:55.203,
-	 localTime=5:43:55.203,
-	 cntTry=0,
-	 DST=192.168.23.222:9002,
-	 SRC=192.168.23.222:4321
-Contain packet:
-
-
-Recive Packet from ip=192.168.23.222, port=4321
-TransportInfo: 
-	 type=P,
-	 cn_in=3,
-	 cn_out=3,
-	 time=5:43:55.203,
-	 localTime=5:43:55.203,
+	 time=5:11:9.906,
+	 localTime=5:11:9.906,
 	 cntTry=0,
 	 DST=192.168.23.222:9002,
 	 SRC=192.168.23.222:4321
@@ -170,10 +66,114 @@ Contain packet:
 Send Packet to ip=192.168.23.222, port=4321
 TransportInfo: 
 	 type=K,
-	 cn_in=3,
+	 cn_in=1,
+	 cn_out=1,
+	 time=5:11:9.906,
+	 localTime=5:11:9.906,
+	 cntTry=0,
+	 DST=192.168.23.222:4321,
+	 SRC=192.168.23.222:9002
+Contain packet:
+
+
+Recive Packet from ip=192.168.23.222, port=4321
+TransportInfo: 
+	 type=P,
+	 cn_in=1,
+	 cn_out=2,
+	 time=5:11:9.906,
+	 localTime=5:11:9.906,
+	 cntTry=0,
+	 DST=192.168.23.222:9002,
+	 SRC=192.168.23.222:4321
+Contain packet:
+0xC9 0x0 
+
+Send Packet to ip=192.168.23.222, port=4321
+TransportInfo: 
+	 type=K,
+	 cn_in=1,
+	 cn_out=2,
+	 time=5:11:9.906,
+	 localTime=5:11:9.906,
+	 cntTry=0,
+	 DST=192.168.23.222:4321,
+	 SRC=192.168.23.222:9002
+Contain packet:
+
+
+Send Packet to ip=192.168.23.222, port=4321
+TransportInfo: 
+	 type=P,
+	 cn_in=2,
+	 cn_out=2,
+	 time=5:11:14.921,
+	 localTime=5:11:14.921,
+	 cntTry=0,
+	 DST=192.168.23.222:4321,
+	 SRC=192.168.23.222:9002
+Contain packet:
+0x5 0x0 
+
+Recive Packet from ip=192.168.23.222, port=4321
+TransportInfo: 
+	 type=K,
+	 cn_in=2,
+	 cn_out=2,
+	 time=5:11:14.921,
+	 localTime=5:11:14.921,
+	 cntTry=0,
+	 DST=192.168.23.222:9002,
+	 SRC=192.168.23.222:4321
+Contain packet:
+
+
+Recive Packet from ip=192.168.23.222, port=4321
+TransportInfo: 
+	 type=P,
+	 cn_in=2,
 	 cn_out=3,
-	 time=5:43:55.203,
-	 localTime=5:43:55.203,
+	 time=5:12:9.968,
+	 localTime=5:12:9.968,
+	 cntTry=0,
+	 DST=192.168.23.222:9002,
+	 SRC=192.168.23.222:4321
+Contain packet:
+0xC9 0x0 
+
+Send Packet to ip=192.168.23.222, port=4321
+TransportInfo: 
+	 type=K,
+	 cn_in=2,
+	 cn_out=3,
+	 time=5:12:9.968,
+	 localTime=5:12:9.968,
+	 cntTry=0,
+	 DST=192.168.23.222:4321,
+	 SRC=192.168.23.222:9002
+Contain packet:
+
+
+Recive Packet from ip=192.168.23.222, port=4321
+TransportInfo: 
+	 type=P,
+	 cn_in=2,
+	 cn_out=4,
+	 time=5:13:10.031,
+	 localTime=5:13:10.031,
+	 cntTry=0,
+	 DST=192.168.23.222:9002,
+	 SRC=192.168.23.222:4321
+Contain packet:
+0xC9 0x0 
+
+Send Packet to ip=192.168.23.222, port=4321
+TransportInfo: 
+	 type=K,
+	 cn_in=2,
+	 cn_out=4,
+	 time=5:13:10.031,
+	 localTime=5:13:10.031,
 	 cntTry=0,
 	 DST=192.168.23.222:4321,
 	 SRC=192.168.23.222:9002

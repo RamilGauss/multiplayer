@@ -31,9 +31,9 @@ class ServerTank
   bool flgActive;
   bool flgNeedStop;
 
-  enum{eWaitThread    = 100,
-       eTimeSleep     = 40,
-       eMaxLoadServer = 75,
+  enum{eWaitThread    = 100, // мс
+       eTimeSleep     = 100, // мс
+       eMaxLoadServer = 75,  // проценты
   };
 
 
@@ -42,7 +42,6 @@ class ServerTank
 	// список комнат
 	TList<TRoom>  mListRoom;
 	// список клиентов
-	unsigned int mCntInFight;
   TArrayObject mArrClients;
 
   // вместо Delete использовать Unlink!
@@ -51,6 +50,8 @@ class ServerTank
 
   // запросы и команды на изменение параметров
   TList<nsServerStruct::TPacketServer> mListPacket;
+  // стрим от клиента (ориентация прицела)
+  TList<nsServerStruct::TPacketServer> mListStream;
 	// подготовленный транспортом список на дисконнект, асинхронное разъединение
 	TList<TIP_Port> mListDisconnectClient;
 
@@ -90,7 +91,9 @@ protected:
   void WaitRestTime();
 
 	friend void CallBackFuncServerRcvPacket(void* data, int size);
-	void AddPacket(TIP_Port* ip_port, TBasePacket* packet);
+  friend void CallBackFuncServerRcvStream(void* data, int size);
+  void AddPacket(TIP_Port* ip_port, TBasePacket* packet);
+  void AddStream(TIP_Port* ip_port, TBasePacket* packet);
 
 	friend void CallBackFuncServerDisconnect(void* data, int size);
 	void DisconnectClient(TIP_Port* ip_port);

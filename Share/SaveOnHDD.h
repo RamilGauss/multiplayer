@@ -25,6 +25,7 @@ public:
 
 	void Write(void* buffer, int size);
   void WriteF(const char* format, ... );
+  void WriteF_time(const char* format, ... );
 
 	void Close();
 
@@ -33,6 +34,9 @@ public:
 
   void SetDebug(bool val){flgDebug=val;};
   bool GetDebug(){return flgDebug;};
+
+protected:
+  void Write_Time();
 
 };
 

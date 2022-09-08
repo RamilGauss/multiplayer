@@ -1,6 +1,7 @@
 #include "ManagerGUI.h"
 #include "ClientTank.h"
 #include <QMessageBox>
+#include "ManagerDirectX.h"
 
 
 class TManagerGUIEvent: public QEvent
@@ -52,6 +53,18 @@ void CallBackPacketManagerGUI(void* data, int size)
 {
   if(pManagerGUI==NULL) {BL_FIX_BUG();return;}
   unsigned short type = *((unsigned short*)((char*)data+sizeof(TIP_Port)));
+
+  //---------------------------------------------------------------
+  // фильтр
+  switch(type)
+  {
+    case APPL_TYPE_A_CORRECT_PACKET_STATE_OBJECT:
+    case APPL_TYPE_A_CORRECT_PACKET_STATE_TANK:
+    case APPL_TYPE_A_SCORE:
+    case APPL_TYPE_A_EVENT_IN_FIGHT:
+      return;
+  }
+  //---------------------------------------------------------------
   char* dataPacket = (char*)data + sizeof(TIP_Port);
   int sizePacket   = size - sizeof(TIP_Port);
 
@@ -67,6 +80,19 @@ void CallBackStreamManagerGUI(void* data, int size)
 {
   if(pManagerGUI==NULL) {BL_FIX_BUG();return;}
   unsigned short type = *((unsigned short*)((char*)data+sizeof(TIP_Port)));
+
+  //---------------------------------------------------------------
+  // фильтр
+  switch(type)
+  {
+    case APPL_TYPE_S_LOAD_MAP:
+    case APPL_TYPE_S_COUNT_DOWN:
+    case APPL_TYPE_S_FIGHT_COORD_BULLET:
+      // обработка возложена на буфферизатор
+      return;
+  }
+  //---------------------------------------------------------------
+
   char* dataPacket = (char*)data + sizeof(TIP_Port);
   int sizePacket   = size - sizeof(TIP_Port);
 
@@ -155,11 +181,6 @@ void TManagerGUI::WorkStream(TManagerGUIEvent* event)
   unsigned short type = event->GetType();
   switch(type)
   {
-    case APPL_TYPE_S_LOAD_MAP:
-    case APPL_TYPE_S_COUNT_DOWN:
-    case APPL_TYPE_S_FIGHT_COORD_BULLET:
-      // обработка возложена на буфферизатор
-      break;
     default:
     {  
       if(pCurrentForm)
@@ -188,9 +209,6 @@ void TManagerGUI::WorkPacket(TManagerGUIEvent* event)
       AnalizCode_A_In_Fight(pData,size);
       break;
     }
-    case APPL_TYPE_A_CORRECT_PACKET:
-    case APPL_TYPE_A_EVENT_IN_FIGHT:
-      break;
     default:
     {  
       if(pCurrentForm)
@@ -243,7 +261,7 @@ void TManagerGUI::AnalizCode_A_In_Fight(char* pData, int size)
     case TA_In_Fight::eFight:
       OpenGameForm();
       // загрузка карты по коду
-      LoadMap(packet);
+      GlobalManagerDirectX.LoadMap(packet);
       break;
     case TA_In_Fight::eWait:
       OpenWaitForm();
@@ -286,10 +304,5 @@ void TManagerGUI::OpenClientMainForm()
   pCurrentForm->showGUI();
 }
 //---------------------------------------------------------------------------------------------
-void TManagerGUI::LoadMap(TA_In_Fight& packet)
-{
-  unsigned short id_map = packet.getCodeMap();
-  GlobalManagerDirectX
-}
 //---------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------

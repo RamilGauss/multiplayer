@@ -10,12 +10,15 @@
 #include <sys/stat.h>
 #include <stdarg.h>
 #include <errno.h>
+#include <time.h>
+#include <sys/timeb.h>
 #include "BL_Debug.h"
+#include "HiTimer.h"
 
 
 TSaveOnHDD::TSaveOnHDD(char* path)
 {
-	pFile = NULL;
+  pFile = NULL;
 	sPath[0] = '\0';
 
 	ReOpen(path);
@@ -81,5 +84,45 @@ void TSaveOnHDD::WriteF(const char* format, ... )
   // делаем то что хотели, будь то запись в файл или в консоль
   printf("%s",s);   
   Write(s,strlen(s));
+}
+//---------------------------------------------------------------
+void TSaveOnHDD::WriteF_time(const char* format, ... )
+{
+  if(flgDebug==false) return;
+
+  Write_Time();
+
+  va_list list;
+  va_start(list,format);
+
+  char s[10000]; 
+  int res = vsprintf(s,format,list); 
+
+  va_end(list);
+  if(res==-1) return;
+  // делаем то что хотели, будь то запись в файл или в консоль
+  printf("%s",s);   
+  Write(s,strlen(s));
+}
+//---------------------------------------------------------------
+void TSaveOnHDD::Write_Time()
+{
+  struct _timeb timebuffer;
+  time_t time1;
+  unsigned short millitm1;
+
+  _ftime( &timebuffer );
+  time1 = timebuffer.time;
+  millitm1 = timebuffer.millitm;
+
+  char str_time[1000];
+  // формируем время в строку
+  struct tm * my_time = localtime(&time1);
+
+  sprintf(str_time,"%04d_%02d_%02d %02d:%02d:%02d.%03d\n\t",
+    my_time->tm_year+1900,my_time->tm_mon+1,my_time->tm_mday,
+    my_time->tm_hour,my_time->tm_min,my_time->tm_sec,millitm1);
+
+  Write(str_time,strlen(str_time));
 }
 //---------------------------------------------------------------

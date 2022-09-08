@@ -53,6 +53,7 @@ public:
     if(cnt!=0) BL_FIX_BUG();
     end();
   }
+
 protected:
   //----------------------------------------------
   TElement* GetElement(TClass**d)
@@ -64,6 +65,13 @@ protected:
 	}
 
 public:
+
+  void ZeroPointerElement(TClass**d)
+  {
+    TElement* pEl = GetElement(d);
+    pEl = NULL;// отцепиться
+  }
+  //---------------------------------------------
   int GetCnt(){return cnt;};
   TList()
 	{
@@ -79,6 +87,15 @@ public:
 	//----------------------------------------------
 	// чтение/запись
   // функции Remove, Add, GetFirst, GetLast, Next и Below обрамлять Begin()/End()
+  //++++++++++++++++++++++++++++++++++++++++++++
+  // если в одном потоке используется Add
+  // то во втором можно спокойной использовать Remove, GetFirst,Below, Next и GetLast.
+  //++++++++++++++++++++++++++++++++++++++++++++
+  // список запретных комбинаций (используй мьютекс для избежания коллизий)
+  // Add    - Add
+  // Remove - Remove
+  // Remove - ( GetFirst,Below, Next и GetLast ) (операции чтения/запись R/W)
+  // ( GetFirst,Below, Next и GetLast ) - ( GetFirst,Below, Next и GetLast )
   TClass** GetFirst()
   {
     if(pFirst==NULL)

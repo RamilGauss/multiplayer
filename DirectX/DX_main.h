@@ -8,10 +8,6 @@
 #include "DXUTSettingsDlg.h"
 #include "SDKmisc.h"
 #include "SDKmesh.h"
-#include "VisualDX.h"
-#include "SoundDX.h"
-#include "MouseDX.h"
-#include "KeyDX.h"
 
 
 class TDX
@@ -37,11 +33,6 @@ protected:
   D3DXHANDLE                  g_hfTime;
   
   HWND hWnd;// хэндл окна
-
-  TVisualDX mVisual;
-  TSoundDX  mSound;
-  TMouseDX  mMouse;
-  TKeyDX    mKey;
 
   bool flgWasStop;
 public:

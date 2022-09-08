@@ -48,6 +48,8 @@ public:
   //void SendClientReadyForRoom();
   void SetCurrentTank(int i);
   void PushButton(int button);
+
+  void SendRequestCorrectPacket();
 //--------------------------------------------------------------------
 protected:
 	friend void* ClientThreadDefDisconnect(void*p);

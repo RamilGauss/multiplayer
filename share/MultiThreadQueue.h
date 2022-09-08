@@ -94,7 +94,7 @@ public:
       return true;
     }
     //Извлечь самый последний элемент из очереди
-    bool PopFresh(void* buffer,int &size, int &time_ms)
+    bool PopFresh(void* buffer,int &size, guint32 &time_ms)
     {
       if(CurrentQueueSize == 0) 
         return false;
@@ -108,7 +108,7 @@ public:
       Queue[BeginPos].size = 0;
       if(++BeginPos == QueueSize) BeginPos = 0;
       
-      CurrentQueueSize -= shift;
+      CurrentQueueSize -= shift+1;
 
       return true;
     }

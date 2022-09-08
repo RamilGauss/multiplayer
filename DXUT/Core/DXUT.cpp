@@ -4,6 +4,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //--------------------------------------------------------------------------------------
 #include "DXUT.h"
+#include "ManagerDirectX.h"
 #define DXUT_MIN_WINDOW_SIZE_X 200
 #define DXUT_MIN_WINDOW_SIZE_Y 200
 #define DXUT_COUNTER_STAT_LENGTH 2048
@@ -3112,6 +3113,8 @@ void DXUTRender3DEnvironment9()
 {
     HRESULT hr;
 
+    GlobalManagerDirectX.Refresh();
+
     if( GetDXUTState().GetDeviceLost() || DXUTIsRenderingPaused() || !DXUTIsActive() )
     {
         // Window is minimized or paused so yield CPU time to other processes
@@ -6184,7 +6187,8 @@ void DXUTUpdateFrameStats()
 LPCWSTR WINAPI DXUTGetFrameStats( bool bShowFPS )
 {
     WCHAR* pstrFrameStats = GetDXUTState().GetFrameStats();
-    WCHAR* pstrFPS = ( bShowFPS ) ? GetDXUTState().GetFPSStats() : L"";
+    //WCHAR* pstrFPS = ( bShowFPS ) ? GetDXUTState().GetFPSStats() : L"";
+    WCHAR* pstrFPS = GetDXUTState().GetFPSStats();
     swprintf_s( pstrFrameStats, 256, GetDXUTState().GetStaticFrameStats(), pstrFPS );
     return pstrFrameStats;
 }

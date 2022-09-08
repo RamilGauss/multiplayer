@@ -12,6 +12,8 @@ public:
 
   void InitState();
 
+  void Calc();
+
 };
 
 

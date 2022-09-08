@@ -55,13 +55,11 @@ void GameForm::Translate(unsigned short type, char*pData, int size)
 void GameForm::showGUI()
 {
   startDX();
-  //GlobalBufferizator2Thread.RegisterToClientTank();//### только когда загрузится карта и перед тем как отошлется запрос на корректирующий пакет.
 }
 //---------------------------------------------------------------------------------------------
 void GameForm::hideGUI()
 {
   stopDX();
-  //GlobalBufferizator2Thread.UnregisterFromClientTank();
 }
 //---------------------------------------------------------------------------------------------
 void GameForm::startDX()

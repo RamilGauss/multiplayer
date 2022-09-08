@@ -41,6 +41,26 @@ ServerTank* pServer = NULL;
 
 using namespace nsServerStruct;
 
+void CallBackFuncServerRcvStream(void* data, int size)
+{
+  if(pServer==NULL) BL_FIX_BUG();
+  char* pDataPacket = (char*)data+sizeof(TIP_Port);
+  int sizePacket = size - sizeof(TIP_Port);
+  TIP_Port* ip_port= (TIP_Port*)data;
+  unsigned short type = *((unsigned short*)pDataPacket);
+  switch(type)
+  {
+    case APPL_TYPE_S_ORIENT_AIM:
+    {
+      TS_Orient_Aim* packet = new TS_Orient_Aim;
+      packet->setData(pDataPacket,sizePacket);
+      pServer->AddStream(ip_port, packet);
+      break;
+    }
+    default:;
+  }
+}
+//----------------------------------------------------------------------------
 void CallBackFuncServerRcvPacket(void* data, int size)
 {
   if(pServer==NULL) BL_FIX_BUG();
@@ -85,13 +105,20 @@ void CallBackFuncServerRcvPacket(void* data, int size)
       pServer->AddPacket(ip_port, packet);
       break;
     }
-    //case APPL_TYPE_C_READY_FOR_ROOM:
-    //{
-    //  TC_Ready_For_Room* packet = new TC_Ready_For_Room;
-    //  packet->setData(pDataPacket,sizePacket);
-    //  pServer->AddPacket(ip_port, packet);
-    //  break;
-    //}
+    case APPL_TYPE_R_CORRECT_PACKET:
+    {
+      TR_Correct_Packet* packet = new TR_Correct_Packet;
+      packet->setData(pDataPacket,sizePacket);
+      pServer->AddPacket(ip_port, packet);
+      break;
+    }
+    case APPL_TYPE_C_KEY_EVENT:
+    {
+      TC_Key_Event* packet = new TC_Key_Event;
+      packet->setData(pDataPacket,sizePacket);
+      pServer->AddPacket(ip_port, packet);
+      break;
+    }
     default:;
   }
 }
@@ -114,6 +141,7 @@ ServerTank::ServerTank(int numNetWork):mTransport(".\\serverTransport.log"),stat
   mTransport.Open(ServerLocalPort,numNetWork);
   pServer = this;
   mTransport.Register(CallBackFuncServerRcvPacket, nsCallBackType::eRcvPacket);
+  mTransport.Register(CallBackFuncServerRcvStream, nsCallBackType::eRcvStream);
   mTransport.Register(CallBackFuncServerDisconnect,nsCallBackType::eDisconnect);
 }
 //----------------------------------------------------------------------------
@@ -211,6 +239,17 @@ void ServerTank::AddPacket(TIP_Port* ip_port, TBasePacket* packet)
   servPacket->ms_time = ht_GetMSCount();
 
 	mListPacket.Add(servPacket);
+}
+//---------------------------------------------------------------------------
+void ServerTank::AddStream(TIP_Port* ip_port, TBasePacket* packet)
+{
+  nsServerStruct::TPacketServer* servPacket = new nsServerStruct::TPacketServer;
+  servPacket->ip      = ip_port->ip;
+  servPacket->port    = ip_port->port;
+  servPacket->packet  = packet;
+  servPacket->ms_time = ht_GetMSCount();
+
+  mListStream.Add(servPacket);
 }
 //---------------------------------------------------------------------------
 void ServerTank::DisconnectClient(TIP_Port* ip_port)
@@ -333,12 +372,6 @@ unsigned char ServerTank::RegisterClient(TR_Try_Connect_To_Server* tryConnect, u
     {
       // клиент уже есть в массиве клиентов
 			pClient->flgDisconnect = false;
-
-      //if(pClient->state==TClient::eFight)
-      //{
-      //  if(pClient->GetCurRoom()==NULL) BL_FIX_BUG();
-      //  pClient->GetCurRoom()->Reconnect();
-      //}
       return pClient->state;
     }
     else
@@ -755,8 +788,8 @@ void ServerTank::MakeRoom()
       mArrClientsFight.Add(pClient);
   }
 
+  // настроить комнату
   pRoom->MakeGroup();// создать противоборствующие команды и отсортировать список команд по типу mGroup
-  pRoom->PreparePrediction();
   pRoom->SetTransport(&mTransport);
   pRoom->LoadMap();
   // разослать клиентам инфу по карте
@@ -782,19 +815,19 @@ int ServerTank::RoomHandler(nsServerStruct::TPacketServer**ppPacket, TBasePacket
   pClient->ip    = (*ppPacket)->ip;
   pClient->port  = (*ppPacket)->port;
   int indexClientFound = mArrClientsFight.FastSearch(&pClient,NULL,SortFresh);
-  pClient = (TClient*)mArrClientsWait.Get(indexClientFound);
+  pClient = (TClient*)mArrClientsFight.Get(indexClientFound);
   if(pClient)
   {
-    if(pClient->GetCurRoom())
+    TRoom* pRoom = pClient->GetCurRoom();
+    if(pRoom)
     {
       switch(pPacket->getType())
       {
         case APPL_TYPE_S_ORIENT_AIM:
-          break;
         case APPL_TYPE_C_KEY_EVENT:
-          break;
         case APPL_TYPE_R_CORRECT_PACKET:
-          pClient->SetNeedCorrectState();
+          pRoom->SetPacket(*ppPacket,pClient->mGarage.GetPointerCurTank());// полностью отдать пакет на попечение комнаты
+          mListPacket.ZeroPointerElement(ppPacket);// обнулить указатель, память не очистится
           break;
         default:;
       }

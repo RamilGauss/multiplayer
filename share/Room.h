@@ -37,22 +37,24 @@ class TRoom
 
   unsigned short mID_map;
 
+  //struct TStateObject
+  //{
+  //  unsigned short id;
+  //  unsigned int maskState;
+  //};
+  unsigned char score0;
+  unsigned char score1;
   //---------------------------------------------------
   struct TAction
   {
-
-  };
-  //---------------------------------------------------
-  struct TCorrectPacket
-  {
-
+    TTank* pTank;
+    nsServerStruct::TPacketServer* pDefPacket;
   };
   //---------------------------------------------------
   // список событий:
   // работаем в одном потоке
-  std::list<TAction> mListHistoryAction;// на отправку только присоединившимся клиентам в качестве корректирующего пакета
-  std::list<TAction> mListFreshAction;  // свежие события от клиентов, требуют обработки
-  std::list<TCorrectPacket> mListRequestSendCorrectPacket; // то что не успели отправить
+  //std::list<TStateObject> mListHistoryAction;// на отправку только присоединившимся клиентам в качестве корректирующего пакета
+  std::list<TAction*> mListFreshAction;  // свежие события от клиентов, требуют обработки
 
 public:
   TRoom();
@@ -61,8 +63,6 @@ public:
   void AddTank(TTank* pTank);
 
 	void SetTransport(TransportProtocolTank* pTransport);//старт боя, передача возможности вещать на клиента
-
-	void SetPacket(TTank* pTank, TBasePacket* packet);
 
 	bool Work(); // рассчитать координаты и разослать стрим клиентам
 
@@ -74,6 +74,9 @@ public:
   void MakeGroup();
   void PreparePrediction();// настроить предсказатель для получения координат объектов, коллизий, событий
   void LoadMap();
+
+  void SetPacket(nsServerStruct::TPacketServer* pPacket,TTank* ptank);
+
 protected:
 
   void WriteTransportStream(nsServerStruct::TClient* pClient,TBasePacket *packet);
@@ -94,11 +97,14 @@ protected:
   void SendResultFight();
 
   void AnalizPacket();// здесь отослать корректирующий пакет (можно партиями)
-  void SetDataInPrediction();
   void CalcPrediction();
 
   friend void* ThreadLoadMap(void* p);
   void ThreadLoadMap();
+
+  void SendInitCoordTank(nsServerStruct::TClient* pClient);
+  void SendScore(nsServerStruct::TClient* pClient);
+  void SendStateObject(nsServerStruct::TClient* pClient);
 
 };
 

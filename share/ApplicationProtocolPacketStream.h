@@ -72,7 +72,43 @@ public:
 	void setWait(float val){*getPointerRest() = val;};
 };
 //-----------------------------------------------------------------------------
+class TS_Orient_Aim : public TBasePacket
+{
+  // ushort type, 
+  // вектор относительно башни указателя мыши
+  // float x
+  // float y
+  // float z
 
+public:
+  TS_Orient_Aim()
+  {
+    mType=APPL_TYPE_S_ORIENT_AIM;
+    mSize = sizeof(mType)+sizeof(float)+sizeof(float)+sizeof(float);
+    mData = (char*)malloc(mSize);
+    setType();
+  }
+
+  void setXYZ(float x, float y, float z)
+  {
+    setX(x);
+    setY(y);
+    setZ(z);
+  };
+
+  void setX(float val){*getPointerX()=val;}
+  float getX(){return *getPointerX();}
+  float* getPointerX(){return (float*)(mData+sizeof(mType));}
+  //---------------------------------------------------------
+  void setY(float val){*getPointerY()=val;}
+  float getY(){return *getPointerY();}
+  float* getPointerY(){return (float*)(mData+sizeof(mType)+sizeof(float));}
+  //---------------------------------------------------------
+  void setZ(float val){*getPointerZ()=val;}
+  float getZ(){return *getPointerZ();}
+  float* getPointerZ(){return (float*)(mData+sizeof(mType)+sizeof(float)+sizeof(float));}
+};
+//-----------------------------------------------------------------------------
 
 
 #endif

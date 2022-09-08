@@ -12,7 +12,9 @@ void CallBackPacketInterpretator(void* data, int size)
   switch(type)
   {
     // фильтр пакетов
-    case APPL_TYPE_A_CORRECT_PACKET:
+    case APPL_TYPE_A_CORRECT_PACKET_STATE_OBJECT:
+    case APPL_TYPE_A_CORRECT_PACKET_STATE_TANK:
+    case APPL_TYPE_A_SCORE:
     case APPL_TYPE_A_EVENT_IN_FIGHT:
     {
       char* dataPacket = (char*)data + sizeof(TIP_Port);
@@ -71,14 +73,14 @@ void TBufferizator2Thread::RcvStream(void* dataPacket, int sizePacket)
   mQueueStream.Push(dataPacket,sizePacket);
 }
 //------------------------------------------------------------------------
-void TBufferizator2Thread::GetPacket(void* dataPacket, int& sizePacket,guint32 &time_ms)
+bool TBufferizator2Thread::GetPacket(void* dataPacket, int& sizePacket,guint32 &time_ms)
 {
-  mQueuePacket.Pop(dataPacket,sizePacket,time_ms);
+  return mQueuePacket.Pop(dataPacket,sizePacket,time_ms);
 }
 //------------------------------------------------------------------------
-void TBufferizator2Thread::GetStream(void* dataPacket, int& sizePacket,guint32 &time_ms)
+bool TBufferizator2Thread::GetStream(void* dataPacket, int& sizePacket,guint32 &time_ms)
 {
-  mQueueStream.Pop(dataPacket,sizePacket,time_ms);
+  return mQueueStream.PopFresh(dataPacket,sizePacket,time_ms);
 }
 //------------------------------------------------------------------------
 void TBufferizator2Thread::RegisterToClientTank()

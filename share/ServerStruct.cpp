@@ -45,7 +45,6 @@ TClient::TClient():mGarage(this)
 {
   sNick=NULL;
   time=ht_GetMSCount();
-  ClearNeedCorrectState();
 }
 //------------------------------------------------------------------------------
 TClient::~TClient()

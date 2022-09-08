@@ -4,6 +4,8 @@
 #include "GlobalParamsTank.h"
 
 #include <atlconv.h>
+#include "ManagerDirectX.h"
+#include "Bufferizator2Thread.h"
 
 int _convert = 0; //(_convert); 
 UINT _acp = ATL::_AtlGetConversionACP() /*CP_THREAD_ACP*/; //(_acp); 
@@ -73,6 +75,7 @@ void TDX::Work(void* pFuncCallExit)
 //--------------------------------------------------------------------------------------
 int TDX::MainLoop()
 {
+  GlobalManagerDirectX.flgNeedSendCorrectPacket = false;//начало
   // DXUT will create and use the best device (either D3D9 or D3D10) 
   // that is available on the system depending on which D3D callbacks are set below
 
@@ -99,6 +102,8 @@ int TDX::MainLoop()
     DXUTCreateDevice( true, 640, 480 );
     DXUTMainLoop(); // Enter into the DXUT render loop
     DXUTDestroyState();// уничтожить DXUT
+    
+    GlobalBufferizator2Thread.UnregisterFromClientTank();
   }
   //--------------------------------------------------
   return 0;
@@ -338,7 +343,7 @@ void CALLBACK OnD3D9FrameRender( IDirect3DDevice9* pd3dDevice, double fTime, flo
 //--------------------------------------------------------------------------------------
 void TDX::OnD3D9FrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
 {
-#ifndef VISUAL_HANDLER
+#ifdef VISUAL_HANDLER
   HRESULT hr;
   D3DXMATRIXA16 mWorld;
   D3DXMATRIXA16 mView;
@@ -416,6 +421,7 @@ void TDX::OnD3D9FrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float f
     V( pd3dDevice->EndScene() );
   }
 #endif
+  GlobalManagerDirectX.Work();
 }
 //--------------------------------------------------------------------------------------
 // Handle messages to the application
