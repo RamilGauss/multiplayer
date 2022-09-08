@@ -1,0 +1,1629 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>N-ary Trees</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-data-types.html" title="GLib Data Types">
+<link rel="prev" href="glib-Balanced-Binary-Trees.html" title="Balanced Binary Trees">
+<link rel="next" href="glib-Quarks.html" title="Quarks">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Balanced-Binary-Trees.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-data-types.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Quarks.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2966009" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2967050" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-N-ary-Trees"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2966009"></a><span class="refentrytitle">N-ary Trees</span>
+</h2>
+<p>N-ary Trees &#8212; Деревья данных с любым количеством ответвлений.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-N-ary-Trees.html#GNode">GNode</a>;
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-new">g_node_new</a>                      (<a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-copy">g_node_copy</a>                     (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    (<a href="glib-N-ary-Trees.html#GCopyFunc">*GCopyFunc</a>)                    (<a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> src,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-copy-deep">g_node_copy_deep</a>                (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-N-ary-Trees.html#GCopyFunc">GCopyFunc</a> copy_func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-insert">g_node_insert</a>                   (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *parent,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> position,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-insert-before">g_node_insert_before</a>            (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *parent,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *sibling,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-insert-after">g_node_insert_after</a>             (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *parent,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *sibling,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+#define     <a href="glib-N-ary-Trees.html#g-node-append">g_node_append</a>                   (parent, node)
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-prepend">g_node_prepend</a>                  (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *parent,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+
+#define     <a href="glib-N-ary-Trees.html#g-node-insert-data">g_node_insert_data</a>              (parent, position, data)
+#define     <a href="glib-N-ary-Trees.html#g-node-insert-data-before">g_node_insert_data_before</a>       (parent, sibling, data)
+#define     <a href="glib-N-ary-Trees.html#g-node-append-data">g_node_append_data</a>              (parent, data)
+#define     <a href="glib-N-ary-Trees.html#g-node-prepend-data">g_node_prepend_data</a>             (parent, data)
+
+void        <a href="glib-N-ary-Trees.html#g-node-reverse-children">g_node_reverse_children</a>         (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+void        <a href="glib-N-ary-Trees.html#g-node-traverse">g_node_traverse</a>                 (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *root,
+                                             <a href="glib-Balanced-Binary-Trees.html#GTraverseType">GTraverseType</a> order,
+                                             <a href="glib-N-ary-Trees.html#GTraverseFlags">GTraverseFlags</a> flags,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> max_depth,
+                                             <a href="glib-N-ary-Trees.html#GNodeTraverseFunc">GNodeTraverseFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+enum        <a href="glib-N-ary-Trees.html#GTraverseFlags">GTraverseFlags</a>;
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    (<a href="glib-N-ary-Trees.html#GNodeTraverseFunc">*GNodeTraverseFunc</a>)            (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+void        <a href="glib-N-ary-Trees.html#g-node-children-foreach">g_node_children_foreach</a>         (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-N-ary-Trees.html#GTraverseFlags">GTraverseFlags</a> flags,
+                                             <a href="glib-N-ary-Trees.html#GNodeForeachFunc">GNodeForeachFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+void        (<a href="glib-N-ary-Trees.html#GNodeForeachFunc">*GNodeForeachFunc</a>)             (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-get-root">g_node_get_root</a>                 (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-find">g_node_find</a>                     (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *root,
+                                             <a href="glib-Balanced-Binary-Trees.html#GTraverseType">GTraverseType</a> order,
+                                             <a href="glib-N-ary-Trees.html#GTraverseFlags">GTraverseFlags</a> flags,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-find-child">g_node_find_child</a>               (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-N-ary-Trees.html#GTraverseFlags">GTraverseFlags</a> flags,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-N-ary-Trees.html#g-node-child-index">g_node_child_index</a>              (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-N-ary-Trees.html#g-node-child-position">g_node_child_position</a>           (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *child);
+#define     <a href="glib-N-ary-Trees.html#g-node-first-child">g_node_first_child</a>              (node)
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-last-child">g_node_last_child</a>               (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-nth-child">g_node_nth_child</a>                (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-first-sibling">g_node_first_sibling</a>            (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+#define     <a href="glib-N-ary-Trees.html#g-node-next-sibling">g_node_next_sibling</a>             (node)
+#define     <a href="glib-N-ary-Trees.html#g-node-prev-sibling">g_node_prev_sibling</a>             (node)
+<a href="glib-N-ary-Trees.html#GNode">GNode</a>*      <a href="glib-N-ary-Trees.html#g-node-last-sibling">g_node_last_sibling</a>             (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+
+#define     <a href="glib-N-ary-Trees.html#G-NODE-IS-LEAF:CAPS">G_NODE_IS_LEAF</a>                  (node)
+#define     <a href="glib-N-ary-Trees.html#G-NODE-IS-ROOT:CAPS">G_NODE_IS_ROOT</a>                  (node)
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-N-ary-Trees.html#g-node-depth">g_node_depth</a>                    (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-N-ary-Trees.html#g-node-n-nodes">g_node_n_nodes</a>                  (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *root,
+                                             <a href="glib-N-ary-Trees.html#GTraverseFlags">GTraverseFlags</a> flags);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-N-ary-Trees.html#g-node-n-children">g_node_n_children</a>               (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-N-ary-Trees.html#g-node-is-ancestor">g_node_is_ancestor</a>              (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *descendant);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-N-ary-Trees.html#g-node-max-height">g_node_max_height</a>               (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *root);
+
+void        <a href="glib-N-ary-Trees.html#g-node-unlink">g_node_unlink</a>                   (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);
+void        <a href="glib-N-ary-Trees.html#g-node-destroy">g_node_destroy</a>                  (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *root);
+
+void        <a href="glib-N-ary-Trees.html#g-node-push-allocator">g_node_push_allocator</a>           (<a href="glib-Basic-Types.html#gpointer">gpointer</a> dummy);
+void        <a href="glib-N-ary-Trees.html#g-node-pop-allocator">g_node_pop_allocator</a>            (void);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2967050"></a><h2>Описание</h2>
+<p>
+Структура <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> и связанные с ней функции обеспечивают 
+N-ary дерево структур данных, где узлы в дереве могут содержать произвольные данные.
+</p>
+<p>
+Для создания нового дерева используйте <a href="glib-N-ary-Trees.html#g-node-new"><code class="function">g_node_new()</code></a>.
+</p>
+<p>
+Для вставки узлов в дерево используйте <a href="glib-N-ary-Trees.html#g-node-insert"><code class="function">g_node_insert()</code></a>, 
+<a href="glib-N-ary-Trees.html#g-node-insert-before"><code class="function">g_node_insert_before()</code></a>,
+<a href="glib-N-ary-Trees.html#g-node-append"><code class="function">g_node_append()</code></a> и 
+<a href="glib-N-ary-Trees.html#g-node-prepend"><code class="function">g_node_prepend()</code></a>.
+</p>
+<p>
+Для создания нового узла и вставки его в дерево используйте 
+<a href="glib-N-ary-Trees.html#g-node-insert-data"><code class="function">g_node_insert_data()</code></a>, 
+<a href="glib-N-ary-Trees.html#g-node-insert-data-before"><code class="function">g_node_insert_data_before()</code></a>, 
+<a href="glib-N-ary-Trees.html#g-node-append-data"><code class="function">g_node_append_data()</code></a> и 
+<a href="glib-N-ary-Trees.html#g-node-prepend-data"><code class="function">g_node_prepend_data()</code></a>.
+</p>
+<p>
+Для реверса дочерних элементов узла используйте 
+<a href="glib-N-ary-Trees.html#g-node-reverse-children"><code class="function">g_node_reverse_children()</code></a>.
+</p>
+<p>
+Для поиска узла используйте <a href="glib-N-ary-Trees.html#g-node-get-root"><code class="function">g_node_get_root()</code></a>, <a href="glib-N-ary-Trees.html#g-node-find"><code class="function">g_node_find()</code></a>, <a href="glib-N-ary-Trees.html#g-node-find-child"><code class="function">g_node_find_child()</code></a>,
+<a href="glib-N-ary-Trees.html#g-node-child-index"><code class="function">g_node_child_index()</code></a>, <a href="glib-N-ary-Trees.html#g-node-child-position"><code class="function">g_node_child_position()</code></a>, 
+<a href="glib-N-ary-Trees.html#g-node-first-child"><code class="function">g_node_first_child()</code></a>, <a href="glib-N-ary-Trees.html#g-node-last-child"><code class="function">g_node_last_child()</code></a>,
+<a href="glib-N-ary-Trees.html#g-node-nth-child"><code class="function">g_node_nth_child()</code></a>, <a href="glib-N-ary-Trees.html#g-node-first-sibling"><code class="function">g_node_first_sibling()</code></a>, <a href="glib-N-ary-Trees.html#g-node-prev-sibling"><code class="function">g_node_prev_sibling()</code></a>,
+<a href="glib-N-ary-Trees.html#g-node-next-sibling"><code class="function">g_node_next_sibling()</code></a> или <a href="glib-N-ary-Trees.html#g-node-last-sibling"><code class="function">g_node_last_sibling()</code></a>.
+</p>
+<p>
+Для получения информации об узле или дереве используйте <a href="glib-N-ary-Trees.html#G-NODE-IS-LEAF:CAPS"><code class="function">G_NODE_IS_LEAF()</code></a>,
+<a href="glib-N-ary-Trees.html#G-NODE-IS-ROOT:CAPS"><code class="function">G_NODE_IS_ROOT()</code></a>, <a href="glib-N-ary-Trees.html#g-node-depth"><code class="function">g_node_depth()</code></a>, <a href="glib-N-ary-Trees.html#g-node-n-nodes"><code class="function">g_node_n_nodes()</code></a>, <a href="glib-N-ary-Trees.html#g-node-n-children"><code class="function">g_node_n_children()</code></a>,
+<a href="glib-N-ary-Trees.html#g-node-is-ancestor"><code class="function">g_node_is_ancestor()</code></a> or <a href="glib-N-ary-Trees.html#g-node-max-height"><code class="function">g_node_max_height()</code></a>.
+</p>
+<p>
+Для обхода дерева, вызывая функцию для каждого посещяемого узла при обходе, используйте 
+<a href="glib-N-ary-Trees.html#g-node-traverse"><code class="function">g_node_traverse()</code></a> или 
+<a href="glib-N-ary-Trees.html#g-node-children-foreach"><code class="function">g_node_children_foreach()</code></a>.
+</p>
+<p>
+Для удаления узла или дочернего дерева из дерева используйте 
+<a href="glib-N-ary-Trees.html#g-node-unlink"><code class="function">g_node_unlink()</code></a> или
+<a href="glib-N-ary-Trees.html#g-node-destroy"><code class="function">g_node_destroy()</code></a>.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2967456"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2967466"></a><h3>
+<a name="GNode"></a>GNode</h3>
+<a class="indexterm" name="id2967478"></a><pre class="programlisting">typedef struct {
+  gpointer data;
+  GNode	  *next;
+  GNode	  *prev;
+  GNode	  *parent;
+  GNode	  *children;
+} GNode;
+</pre>
+<p>
+Структура <span class="structname">GNode</span> представляет один узел в
+<a href="glib-N-ary-Trees.html" title="N-ary Trees">N-ary Tree</a>.
+Поле <em class="structfield"><code>data</code></em> содержит фактические данные в узле.
+Поля <em class="structfield"><code>next</code></em> и <em class="structfield"><code>prev</code></em>
+указывают на дочерние узлы (дочерние - это другие <span class="structname">GNode</span> с тем же родителем).
+Поле <em class="structfield"><code>parent</code></em> указывает на родителя <span class="structname">GNode</span>,
+или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если 
+<span class="structname">GNode</span> является корнем дерева.
+Поле <em class="structfield"><code>children</code></em> указывает на первую дочернюю <span class="structname">GNode</span>. 
+Другие дочерние узлы связываются используя указатель <em class="structfield"><code>next</code></em> каждого дочернего узла.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2967558"></a><h3>
+<a name="g-node-new"></a>g_node_new ()</h3>
+<a class="indexterm" name="id2967570"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_new                      (<a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Создаёт новую <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> содержащую полученные данные.
+Используется для создания первого узла в дереве.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные нового узла.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2967645"></a><h3>
+<a name="g-node-copy"></a>g_node_copy ()</h3>
+<a class="indexterm" name="id2967657"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_copy                     (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Рекурсивно копирует <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> 
+(но не делает глубоких копий данных в узлах,
+смотрите <a href="glib-N-ary-Trees.html#g-node-copy-deep"><code class="function">g_node_copy_deep()</code></a> если вам это нужно).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> содержащий те же указатели данных.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2967749"></a><h3>
+<a name="GCopyFunc"></a>GCopyFunc ()</h3>
+<a class="indexterm" name="id2967764"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    (*GCopyFunc)                    (<a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> src,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Функция этой сигнатуры используется для копирования узла данных выполняя глубокую копию дерева. 
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>src</code></em>&#160;:</span></td>
+<td>указатель на данные которые должны быть скопированны.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>дополнительные данные.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель на копию.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2967850"></a><h3>
+<a name="g-node-copy-deep"></a>g_node_copy_deep ()</h3>
+<a class="indexterm" name="id2967864"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_copy_deep                (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-N-ary-Trees.html#GCopyFunc">GCopyFunc</a> copy_func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Рекурсивно копирует <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> и его данные.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>copy_func</code></em>&#160;:</span></td>
+<td> функция вызываемая для копирования данных внутри каждого узла,
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     для использования оригинальных данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> данные помещаемые в <em class="parameter"><code>copy_func</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> новый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> содержащий копии данных в 
+     <em class="parameter"><code>node</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2968019"></a><h3>
+<a name="g-node-insert"></a>g_node_insert ()</h3>
+<a class="indexterm" name="id2968032"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_insert                   (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *parent,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> position,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Вставляет <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> ниже родителя в указанную позицию.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> под которым размещается 
+    <em class="parameter"><code>node</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>position</code></em>&#160;:</span></td>
+<td>позиция для размещения <em class="parameter"><code>node</code></em>, относительно родственных элементов.
+    Если позиция -1, <em class="parameter"><code>node</code></em> вставляется как последний дочерний элемент 
+    <em class="parameter"><code>parent</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> для вставки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>вставляемый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2968190"></a><h3>
+<a name="g-node-insert-before"></a>g_node_insert_before ()</h3>
+<a class="indexterm" name="id2968203"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_insert_before            (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *parent,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *sibling,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Вставляет <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> ниже родителя перед указанным соседом.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> под которым располагается 
+    <em class="parameter"><code>node</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>sibling</code></em>&#160;:</span></td>
+<td>соседний <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> для размещения 
+    <em class="parameter"><code>node</code></em> перед ним. Если соседний это 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>,
+    узел вставляется как последний дочерний <em class="parameter"><code>parent</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td>вставляемый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>вставленный <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2968373"></a><h3>
+<a name="g-node-insert-after"></a>g_node_insert_after ()</h3>
+<a class="indexterm" name="id2968386"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_insert_after             (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *parent,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *sibling,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Вставляет <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> ниже родителя после указанного соседа.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> под которым размещается 
+    <em class="parameter"><code>node</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>sibling</code></em>&#160;:</span></td>
+<td>соседний <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> после которого размещается 
+    <em class="parameter"><code>node</code></em>. Если сосед это 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>,
+    узел вставляется как первый дочерний <em class="parameter"><code>parent</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td>вставляемый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>вставленный <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2968556"></a><h3>
+<a name="g-node-append"></a>g_node_append()</h3>
+<a class="indexterm" name="id2968569"></a><pre class="programlisting">#define     g_node_append(parent, node)</pre>
+<p>
+Вставляет <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> как последний дочерний указанного родителя.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> под которым размещается новый 
+    <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td>вставляемый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>вставляемый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2968668"></a><h3>
+<a name="g-node-prepend"></a>g_node_prepend ()</h3>
+<a class="indexterm" name="id2968680"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_prepend                  (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *parent,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Вставляет <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> как первый дочерний указанного родителя.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> под которым размещается новый 
+    <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> under.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td>вставляемый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>вставленный <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2968800"></a><h3>
+<a name="g-node-insert-data"></a>g_node_insert_data()</h3>
+<a class="indexterm" name="id2968813"></a><pre class="programlisting">#define     g_node_insert_data(parent, position, data)</pre>
+<p>
+Вставляет новый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> в указанную позицию.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> под которым размещается новый 
+    <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>position</code></em>&#160;:</span></td>
+<td>позиция для размещения нового <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+    Если позиция равна -1, новый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> 
+    вставляется как последний дочерний <em class="parameter"><code>parent</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для нового <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2968948"></a><h3>
+<a name="g-node-insert-data-before"></a>g_node_insert_data_before()</h3>
+<a class="indexterm" name="id2968961"></a><pre class="programlisting">#define     g_node_insert_data_before(parent, sibling, data)</pre>
+<p>
+Вставляет новый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> перед указанным соседом.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> под которым размещается новый 
+    <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>sibling</code></em>&#160;:</span></td>
+<td>соседний <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> перед которым размещается новый 
+    <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для нового <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2969090"></a><h3>
+<a name="g-node-append-data"></a>g_node_append_data()</h3>
+<a class="indexterm" name="id2969103"></a><pre class="programlisting">#define     g_node_append_data(parent, data)</pre>
+<p>
+Вставляет новый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> как последний дочерний указанного родителя.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> под которым размещается новый 
+    <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для нового <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2969202"></a><h3>
+<a name="g-node-prepend-data"></a>g_node_prepend_data()</h3>
+<a class="indexterm" name="id2969215"></a><pre class="programlisting">#define     g_node_prepend_data(parent, data)</pre>
+<p>
+Вставляет новый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> как первый дочерний указанного родителя.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>parent</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> под которым размещается новый 
+    <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для нового <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новый <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2969314"></a><h3>
+<a name="g-node-reverse-children"></a>g_node_reverse_children ()</h3>
+<a class="indexterm" name="id2969327"></a><pre class="programlisting">void        g_node_reverse_children         (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Переворачивает порядок дочерних <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+(Она не меняет порядок внуков.)
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2969390"></a><h3>
+<a name="g-node-traverse"></a>g_node_traverse ()</h3>
+<a class="indexterm" name="id2969403"></a><pre class="programlisting">void        g_node_traverse                 (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *root,
+                                             <a href="glib-Balanced-Binary-Trees.html#GTraverseType">GTraverseType</a> order,
+                                             <a href="glib-N-ary-Trees.html#GTraverseFlags">GTraverseFlags</a> flags,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> max_depth,
+                                             <a href="glib-N-ary-Trees.html#GNodeTraverseFunc">GNodeTraverseFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Обходит дерево начиная с указанного корня <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+Она вызывает указанную функцию для каждого посещяемого узла.
+Обход может быть прекращён в любой точке когда <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> 
+вернётся из <em class="parameter"><code>func</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>root</code></em>&#160;:</span></td>
+<td>корень <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> дерева для обхода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>order</code></em>&#160;:</span></td>
+<td>порядок в котором посещаются узлы - <a href="glib-Balanced-Binary-Trees.html#G-IN-ORDER:CAPS"><code class="literal">G_IN_ORDER</code></a>,
+    <a href="glib-Balanced-Binary-Trees.html#G-PRE-ORDER:CAPS"><code class="literal">G_PRE_ORDER</code></a>,
+    <a href="glib-Balanced-Binary-Trees.html#G-POST-ORDER:CAPS"><code class="literal">G_POST_ORDER</code></a>, или 
+    <a href="glib-Balanced-Binary-Trees.html#G-LEVEL-ORDER:CAPS"><code class="literal">G_LEVEL_ORDER</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>flags</code></em>&#160;:</span></td>
+<td>какие типы дочерних узлов будут посещены, 
+    один из вариантов - <a href="glib-N-ary-Trees.html#G-TRAVERSE-ALL:CAPS"><code class="literal">G_TRAVERSE_ALL</code></a>,
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-LEAVES:CAPS"><code class="literal">G_TRAVERSE_LEAVES</code></a> и 
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-NON-LEAVES:CAPS"><code class="literal">G_TRAVERSE_NON_LEAVES</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>max_depth</code></em>&#160;:</span></td>
+<td>максимальная глубина обхода. Узлы на этой глубине не будут посещаться. 
+    Если max_depth равна -1 посещаются все узлы в дереве. Если глубина 1, посещается
+    только корень. Если глубина 2, посещаются корень и его дочерние узлы. И так далее.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td>функция вызываемая для каждого посещённого элемента <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>пользовательские данные помещаемые в функцию.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2969684"></a><h3>
+<a name="GTraverseFlags"></a>enum GTraverseFlags</h3>
+<a class="indexterm" name="id2969697"></a><pre class="programlisting">typedef enum
+{
+  G_TRAVERSE_LEAVES     = 1 &lt;&lt; 0,
+  G_TRAVERSE_NON_LEAVES = 1 &lt;&lt; 1,
+  G_TRAVERSE_ALL        = G_TRAVERSE_LEAVES | G_TRAVERSE_NON_LEAVES,
+  G_TRAVERSE_MASK       = 0x03,
+  G_TRAVERSE_LEAFS      = G_TRAVERSE_LEAVES,
+  G_TRAVERSE_NON_LEAFS  = G_TRAVERSE_NON_LEAVES
+} GTraverseFlags;
+</pre>
+<p>
+Определяет какие узлы посещаются при выполнении некоторых функций дерева,
+включая <a href="glib-N-ary-Trees.html#g-node-traverse"><code class="function">g_node_traverse()</code></a> и
+<a href="glib-N-ary-Trees.html#g-node-find"><code class="function">g_node_find()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-TRAVERSE-LEAVES:CAPS"></a><code class="literal">G_TRAVERSE_LEAVES</code></span></td>
+<td>только вершины узлов должны посещаться. Это название было введено в версии 2.6, 
+    ранние версии использовали <a href="glib-N-ary-Trees.html#G-TRAVERSE-LEAFS:CAPS"><code class="literal">G_TRAVERSE_LEAFS</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-TRAVERSE-NON-LEAVES:CAPS"></a><code class="literal">G_TRAVERSE_NON_LEAVES</code></span></td>
+<td>только не вершины должны посещаться. Это имя введено в версии 2.6, 
+    в ранних версиях использовалось <a href="glib-N-ary-Trees.html#G-TRAVERSE-NON-LEAFS:CAPS"><code class="literal">G_TRAVERSE_NON_LEAFS</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-TRAVERSE-ALL:CAPS"></a><code class="literal">G_TRAVERSE_ALL</code></span></td>
+<td>все узлы должны посещаться.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-TRAVERSE-MASK:CAPS"></a><code class="literal">G_TRAVERSE_MASK</code></span></td>
+<td>
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-TRAVERSE-LEAFS:CAPS"></a><code class="literal">G_TRAVERSE_LEAFS</code></span></td>
+<td>идентично <a href="glib-N-ary-Trees.html#G-TRAVERSE-LEAVES:CAPS"><code class="literal">G_TRAVERSE_LEAVES</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-TRAVERSE-NON-LEAFS:CAPS"></a><code class="literal">G_TRAVERSE_NON_LEAFS</code></span></td>
+<td>идентично <a href="glib-N-ary-Trees.html#G-TRAVERSE-NON-LEAVES:CAPS"><code class="literal">G_TRAVERSE_NON_LEAVES</code></a>
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2969927"></a><h3>
+<a name="GNodeTraverseFunc"></a>GNodeTraverseFunc ()</h3>
+<a class="indexterm" name="id2969940"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    (*GNodeTraverseFunc)            (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Определяет тип функции помещаемой в <a href="glib-N-ary-Trees.html#g-node-traverse"><code class="function">g_node_traverse()</code></a>.
+Функция вызывается с каждым посещённым узлом, который передают вместе с пользовательскими данными в 
+<a href="glib-N-ary-Trees.html#g-node-traverse"><code class="function">g_node_traverse()</code></a>.
+Если функция возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>, то обход прекращается.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>пользовательские данные помещаемые в <a href="glib-N-ary-Trees.html#g-node-traverse"><code class="function">g_node_traverse()</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> для остановки обхода.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2970080"></a><h3>
+<a name="g-node-children-foreach"></a>g_node_children_foreach ()</h3>
+<a class="indexterm" name="id2970093"></a><pre class="programlisting">void        g_node_children_foreach         (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-N-ary-Trees.html#GTraverseFlags">GTraverseFlags</a> flags,
+                                             <a href="glib-N-ary-Trees.html#GNodeForeachFunc">GNodeForeachFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Вызывает функцию для каждого дочернего <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+Помните что она не опускается ниже дочерних узлов.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>flags</code></em>&#160;:</span></td>
+<td>какие типы дочерних элементов посещаются, один из 
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-ALL:CAPS"><code class="literal">G_TRAVERSE_ALL</code></a>,
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-LEAVES:CAPS"><code class="literal">G_TRAVERSE_LEAVES</code></a> и 
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-NON-LEAVES:CAPS"><code class="literal">G_TRAVERSE_NON_LEAVES</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td>функция вызываемая для каждого посещённого узла.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>пользовательские данные помещаемые в функцию.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2970256"></a><h3>
+<a name="GNodeForeachFunc"></a>GNodeForeachFunc ()</h3>
+<a class="indexterm" name="id2970268"></a><pre class="programlisting">void        (*GNodeForeachFunc)             (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Определяет тип функции помещаемой в <a href="glib-N-ary-Trees.html#g-node-children-foreach"><code class="function">g_node_children_foreach()</code></a>.
+Функция вызываемая для каждого дочернего узла, вместе с пользовательскими данными которые помещаются в 
+<a href="glib-N-ary-Trees.html#g-node-children-foreach"><code class="function">g_node_children_foreach()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>пользовательские данные помещаемые в <a href="glib-N-ary-Trees.html#g-node-children-foreach"><code class="function">g_node_children_foreach()</code></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2970379"></a><h3>
+<a name="g-node-get-root"></a>g_node_get_root ()</h3>
+<a class="indexterm" name="id2970391"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_get_root                 (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Определяет корень дерева.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>корень дерева.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2970456"></a><h3>
+<a name="g-node-find"></a>g_node_find ()</h3>
+<a class="indexterm" name="id2970468"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_find                     (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *root,
+                                             <a href="glib-Balanced-Binary-Trees.html#GTraverseType">GTraverseType</a> order,
+                                             <a href="glib-N-ary-Trees.html#GTraverseFlags">GTraverseFlags</a> flags,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Находит <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> в дереве.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>root</code></em>&#160;:</span></td>
+<td>корневой <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> дерева для поиска.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>order</code></em>&#160;:</span></td>
+<td>порядок в котором посещаются узлы - <a href="glib-Balanced-Binary-Trees.html#G-IN-ORDER:CAPS"><code class="literal">G_IN_ORDER</code></a>,
+    <a href="glib-Balanced-Binary-Trees.html#G-PRE-ORDER:CAPS"><code class="literal">G_PRE_ORDER</code></a>,
+    <a href="glib-Balanced-Binary-Trees.html#G-POST-ORDER:CAPS"><code class="literal">G_POST_ORDER</code></a>, или 
+    <a href="glib-Balanced-Binary-Trees.html#G-LEVEL-ORDER:CAPS"><code class="literal">G_LEVEL_ORDER</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>flags</code></em>&#160;:</span></td>
+<td>какой тип дочернего элемента должен быть найден, один из 
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-ALL:CAPS"><code class="literal">G_TRAVERSE_ALL</code></a>,
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-LEAVES:CAPS"><code class="literal">G_TRAVERSE_LEAVES</code></a> и 
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-NON-LEAVES:CAPS"><code class="literal">G_TRAVERSE_NON_LEAVES</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для поиска.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>найденный <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>, или 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если данные не найдены.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2970700"></a><h3>
+<a name="g-node-find-child"></a>g_node_find_child ()</h3>
+<a class="indexterm" name="id2970714"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_find_child               (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-N-ary-Trees.html#GTraverseFlags">GTraverseFlags</a> flags,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Находит первый дочерний <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> с указанными данными.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>flags</code></em>&#160;:</span></td>
+<td>какой тип дочерних узлов разыскивается, один из 
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-ALL:CAPS"><code class="literal">G_TRAVERSE_ALL</code></a>,
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-LEAVES:CAPS"><code class="literal">G_TRAVERSE_LEAVES</code></a> и 
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-NON-LEAVES:CAPS"><code class="literal">G_TRAVERSE_NON_LEAVES</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для поиска.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>найденный дочерний <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>, или 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если данные не найдены.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2970881"></a><h3>
+<a name="g-node-child-index"></a>g_node_child_index ()</h3>
+<a class="indexterm" name="id2970895"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_node_child_index              (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Определяет позицию первого дочернего <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> 
+который содержит указанные данные.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для поиска.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>номер дочернего <em class="parameter"><code>node</code></em> который содержит <em class="parameter"><code>data</code></em>, 
+    или -1 если данные не найдены.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2971002"></a><h3>
+<a name="g-node-child-position"></a>g_node_child_position ()</h3>
+<a class="indexterm" name="id2971015"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_node_child_position           (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *child);</pre>
+<p>
+Определяет позицию <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> относительно его соседей.
+<em class="parameter"><code>child</code></em> должен быть дочерним по отношению к <em class="parameter"><code>node</code></em>.
+Первый дочерний нумеруется 0, второй 1, и так далее.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>child</code></em>&#160;:</span></td>
+<td>дочерний по отношению к <em class="parameter"><code>node</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>позиция <em class="parameter"><code>child</code></em> относительно его соседей.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2971135"></a><h3>
+<a name="g-node-first-child"></a>g_node_first_child()</h3>
+<a class="indexterm" name="id2971149"></a><pre class="programlisting">#define     g_node_first_child(node)</pre>
+<p>
+Определяет первый дочерний <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>первый дочерний <em class="parameter"><code>node</code></em>, или 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если 
+    <em class="parameter"><code>node</code></em> это <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+    или нет дочерних элементов.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2971241"></a><h3>
+<a name="g-node-last-child"></a>g_node_last_child ()</h3>
+<a class="indexterm" name="id2971254"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_last_child               (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Определяет последний дочерний <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> 
+    (не должен быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>).
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>последний дочерний <em class="parameter"><code>node</code></em>, или 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+    если <em class="parameter"><code>node</code></em> не имеет дочерних элементов.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2971359"></a><h3>
+<a name="g-node-nth-child"></a>g_node_nth_child ()</h3>
+<a class="indexterm" name="id2971372"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_nth_child                (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);</pre>
+<p>
+Определяет дочерний <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>, используя указанный номер.
+Первый это номер 0. Если номер слишком большой, возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n</code></em>&#160;:</span></td>
+<td>номер желаемого дочернего элемента.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>дочерний <em class="parameter"><code>node</code></em> с номером <em class="parameter"><code>n</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2971489"></a><h3>
+<a name="g-node-first-sibling"></a>g_node_first_sibling ()</h3>
+<a class="indexterm" name="id2971503"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_first_sibling            (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Определяет первый соседний <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+Это может быть сам узел.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>первый соседний <em class="parameter"><code>node</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2971582"></a><h3>
+<a name="g-node-next-sibling"></a>g_node_next_sibling()</h3>
+<a class="indexterm" name="id2971596"></a><pre class="programlisting">#define     g_node_next_sibling(node)</pre>
+<p>
+Определяет следующего соседа <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>следующий сосед <em class="parameter"><code>node</code></em>, или 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если 
+    <em class="parameter"><code>node</code></em> это <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2971688"></a><h3>
+<a name="g-node-prev-sibling"></a>g_node_prev_sibling()</h3>
+<a class="indexterm" name="id2971701"></a><pre class="programlisting">#define     g_node_prev_sibling(node)</pre>
+<p>
+Определяет предыдущего соседа <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>предыдущий сосед <em class="parameter"><code>node</code></em>, или 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если 
+    <em class="parameter"><code>node</code></em> это <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2971794"></a><h3>
+<a name="g-node-last-sibling"></a>g_node_last_sibling ()</h3>
+<a class="indexterm" name="id2971807"></a><pre class="programlisting"><a href="glib-N-ary-Trees.html#GNode">GNode</a>*      g_node_last_sibling             (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Определяет последнего соседа <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+Это может быть сам узел.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>последний соседний <em class="parameter"><code>node</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2971886"></a><h3>
+<a name="G-NODE-IS-LEAF:CAPS"></a>G_NODE_IS_LEAF()</h3>
+<a class="indexterm" name="id2971898"></a><pre class="programlisting">#define	 G_NODE_IS_LEAF(node)	(((GNode*) (node))-&gt;children == NULL)
+</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если 
+<a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> это вершина узла.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если 
+<a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> вершина узла (то есть он не имеет дочерних элементов).
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2971987"></a><h3>
+<a name="G-NODE-IS-ROOT:CAPS"></a>G_NODE_IS_ROOT()</h3>
+<a class="indexterm" name="id2971999"></a><pre class="programlisting">#define     G_NODE_IS_ROOT(node)</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если 
+<a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> это корень дерева.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если 
+<a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> является корнем дерева 
+(то есть он не имеет родительского соседа).
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2972087"></a><h3>
+<a name="g-node-depth"></a>g_node_depth ()</h3>
+<a class="indexterm" name="id2972100"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_node_depth                    (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Определяет глубину <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</p>
+<p>
+Если <em class="parameter"><code>node</code></em> это <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+глубина равна 0.
+Корневой узел имеет глубину равную 1.
+Для дочерних элементов корневого узла глубина равна 2. И так далее.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>глубина <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2972202"></a><h3>
+<a name="g-node-n-nodes"></a>g_node_n_nodes ()</h3>
+<a class="indexterm" name="id2972214"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_node_n_nodes                  (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *root,
+                                             <a href="glib-N-ary-Trees.html#GTraverseFlags">GTraverseFlags</a> flags);</pre>
+<p>
+Определяет количество узлов в дереве.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>root</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>flags</code></em>&#160;:</span></td>
+<td>какие типы дочерних элементов подсчитываются, один из вариантов 
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-ALL:CAPS"><code class="literal">G_TRAVERSE_ALL</code></a>,
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-LEAVES:CAPS"><code class="literal">G_TRAVERSE_LEAVES</code></a> и 
+    <a href="glib-N-ary-Trees.html#G-TRAVERSE-NON-LEAVES:CAPS"><code class="literal">G_TRAVERSE_NON_LEAVES</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>количество узлов в дереве.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2972334"></a><h3>
+<a name="g-node-n-children"></a>g_node_n_children ()</h3>
+<a class="indexterm" name="id2972347"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_node_n_children               (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Определяет количество дочерних <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>количество дочерних <em class="parameter"><code>node</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2972425"></a><h3>
+<a name="g-node-is-ancestor"></a>g_node_is_ancestor ()</h3>
+<a class="indexterm" name="id2972438"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_node_is_ancestor              (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node,
+                                             <a href="glib-N-ary-Trees.html#GNode">GNode</a> *descendant);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если 
+<em class="parameter"><code>node</code></em> предок <em class="parameter"><code>descendant</code></em>.
+Это правильно если узел является родителем <em class="parameter"><code>descendant</code></em>, или если узел является родителем родителя 
+<em class="parameter"><code>descendant</code></em> и так далее.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>descendant</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>node</code></em> 
+является родителем <em class="parameter"><code>descendant</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2972588"></a><h3>
+<a name="g-node-max-height"></a>g_node_max_height ()</h3>
+<a class="indexterm" name="id2972601"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_node_max_height               (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *root);</pre>
+<p>
+Определяет максимальную высоту всех переходов от <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+Это максимальное расстояние от <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> до всех вершин.
+</p>
+<p>
+Если <em class="parameter"><code>root</code></em> это <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, 
+возвращается 0. Если <em class="parameter"><code>root</code></em> не имеет дочерних элементов, возвращается 1.
+Если <em class="parameter"><code>root</code></em> имеет дочерние элементы, возвращается 2. И так далее.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>root</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>максимальная высота дерева от <em class="parameter"><code>root</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2972722"></a><h3>
+<a name="g-node-unlink"></a>g_node_unlink ()</h3>
+<a class="indexterm" name="id2972735"></a><pre class="programlisting">void        g_node_unlink                   (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *node);</pre>
+<p>
+Сбрасывает ссылки <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> из дерева, 
+получая в качестве результата два разделённых дерева.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>node</code></em>&#160;:</span></td>
+<td><a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> для разлинковки, который становится корнем нового дерева.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2972798"></a><h3>
+<a name="g-node-destroy"></a>g_node_destroy ()</h3>
+<a class="indexterm" name="id2972811"></a><pre class="programlisting">void        g_node_destroy                  (<a href="glib-N-ary-Trees.html#GNode">GNode</a> *root);</pre>
+<p>
+Удаляет <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> и дочерние элементы из дерева, 
+освобождает любую распределённую память.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>root</code></em>&#160;:</span></td>
+<td>корень дерева/поддерева для уничтожения.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2972867"></a><h3>
+<a name="g-node-push-allocator"></a>g_node_push_allocator ()</h3>
+<a class="indexterm" name="id2972882"></a><pre class="programlisting">void        g_node_push_allocator           (<a href="glib-Basic-Types.html#gpointer">gpointer</a> dummy);</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_node_push_allocator</code> устарела начиная с версии 2.10 и не должна использоваться во вновь создаваемом коде. 
+Она ничего не делает, так как <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> конвертируется в 
+<a href="glib-Memory-Slices.html" title="Memory Slices">slice allocator</a></p>
+</div>
+<p>
+Устанавливает распределитель для распределения элементов <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+Использует <a href="glib-N-ary-Trees.html#g-node-pop-allocator"><code class="function">g_node_pop_allocator()</code></a> 
+для восстановления предыдущего распределителя.
+</p>
+<p>
+Помните что эта функция не доступна если GLib была скомпилирована с опцией <code class="option">--disable-mem-pools</code>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>dummy</code></em>&#160;:</span></td>
+<td><a href="glib-Memory-Allocators.html#GAllocator"><span class="type">GAllocator</span></a> для распределения элементов
+    <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2973002"></a><h3>
+<a name="g-node-pop-allocator"></a>g_node_pop_allocator ()</h3>
+<a class="indexterm" name="id2973017"></a><pre class="programlisting">void        g_node_pop_allocator            (void);</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_node_pop_allocator</code> устарела начиная с версии 2.10 и не должна использоваться во вновь создаваемом коде. 
+Она ничего не делает, так как <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a> конвертируется в 
+<a href="glib-Memory-Slices.html" title="Memory Slices">slice allocator</a></p>
+</div>
+<p>
+Восстанавливает предыдущий <a href="glib-Memory-Allocators.html#GAllocator"><span class="type">GAllocator</span></a>, 
+используется при распределении элементов <a href="glib-N-ary-Trees.html#GNode"><span class="type">GNode</span></a>.
+</p>
+<p>
+Помните что эта функция не доступна если GLib скомпилирована с опцией <code class="option">--disable-mem-pools</code>
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

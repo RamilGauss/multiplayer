@@ -1,0 +1,660 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Keyed Data Lists</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-data-types.html" title="GLib Data Types">
+<link rel="prev" href="glib-Quarks.html" title="Quarks">
+<link rel="next" href="glib-Datasets.html" title="Datasets">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Quarks.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-data-types.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Datasets.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2981968" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2982342" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Keyed-Data-Lists"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2981968"></a><span class="refentrytitle">Keyed Data Lists</span>
+</h2>
+<p>Keyed Data Lists &#8212; Списки элементов данных которые являются доступными при помощи строки или <a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> идентификатора.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-Keyed-Data-Lists.html#GData">GData</a>;
+void        <a href="glib-Keyed-Data-Lists.html#g-datalist-init">g_datalist_init</a>                 (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist);
+
+#define     <a href="glib-Keyed-Data-Lists.html#g-datalist-id-set-data">g_datalist_id_set_data</a>          (dl, q, d)
+void        <a href="glib-Keyed-Data-Lists.html#g-datalist-id-set-data-full">g_datalist_id_set_data_full</a>     (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist,
+                                             <a href="glib-Quarks.html#GQuark">GQuark</a> key_id,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Datasets.html#GDestroyNotify">GDestroyNotify</a> destroy_func);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Keyed-Data-Lists.html#g-datalist-id-get-data">g_datalist_id_get_data</a>          (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist,
+                                             <a href="glib-Quarks.html#GQuark">GQuark</a> key_id);
+#define     <a href="glib-Keyed-Data-Lists.html#g-datalist-id-remove-data">g_datalist_id_remove_data</a>       (dl, q)
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Keyed-Data-Lists.html#g-datalist-id-remove-no-notify">g_datalist_id_remove_no_notify</a>  (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist,
+                                             <a href="glib-Quarks.html#GQuark">GQuark</a> key_id);
+
+#define     <a href="glib-Keyed-Data-Lists.html#g-datalist-set-data">g_datalist_set_data</a>             (dl, k, d)
+#define     <a href="glib-Keyed-Data-Lists.html#g-datalist-set-data-full">g_datalist_set_data_full</a>        (dl, k, d, f)
+#define     <a href="glib-Keyed-Data-Lists.html#g-datalist-get-data">g_datalist_get_data</a>             (dl, k)
+#define     <a href="glib-Keyed-Data-Lists.html#g-datalist-remove-data">g_datalist_remove_data</a>          (dl, k)
+#define     <a href="glib-Keyed-Data-Lists.html#g-datalist-remove-no-notify">g_datalist_remove_no_notify</a>     (dl, k)
+
+void        <a href="glib-Keyed-Data-Lists.html#g-datalist-foreach">g_datalist_foreach</a>              (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist,
+                                             <a href="glib-Datasets.html#GDataForeachFunc">GDataForeachFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+void        <a href="glib-Keyed-Data-Lists.html#g-datalist-clear">g_datalist_clear</a>                (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist);
+void        <a href="glib-Keyed-Data-Lists.html#g-datalist-set-flags">g_datalist_set_flags</a>            (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> flags);
+void        <a href="glib-Keyed-Data-Lists.html#g-datalist-unset-flags">g_datalist_unset_flags</a>          (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> flags);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Keyed-Data-Lists.html#g-datalist-get-flags">g_datalist_get_flags</a>            (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist);
+#define     <a href="glib-Keyed-Data-Lists.html#G-DATALIST-FLAGS-MASK:CAPS">G_DATALIST_FLAGS_MASK</a>
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2982342"></a><h2>Описание</h2>
+<p>
+Списки ключевых данных обеспечивают списки произвольных элементов данных к которым можно обратиться либо с помощью строки, либо с помощью
+<a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> соответствующим строке.
+</p>
+<p>
+<a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> метод быстрее, так как строки всё равно конвертируются в 
+<span class="type">GQuarks</span>.
+</p>
+<p>
+Списки данных используются для связи произвольных данных с <span class="type">GObjects</span>, 
+используя <code class="function">g_object_set_data()</code> и родственные функции.
+</p>
+<p>
+Для создания списка данных, используйте <a href="glib-Keyed-Data-Lists.html#g-datalist-init"><code class="function">g_datalist_init()</code></a>.
+</p>
+<p>
+Для добавления элементов данных в список данных используйте <a href="glib-Keyed-Data-Lists.html#g-datalist-id-set-data"><code class="function">g_datalist_id_set_data()</code></a>,
+<a href="glib-Keyed-Data-Lists.html#g-datalist-id-set-data-full"><code class="function">g_datalist_id_set_data_full()</code></a>, <a href="glib-Keyed-Data-Lists.html#g-datalist-set-data"><code class="function">g_datalist_set_data()</code></a>
+и <a href="glib-Keyed-Data-Lists.html#g-datalist-set-data-full"><code class="function">g_datalist_set_data_full()</code></a>.
+</p>
+<p>
+Для получения элементов данных из списка данных используйте <a href="glib-Keyed-Data-Lists.html#g-datalist-id-get-data"><code class="function">g_datalist_id_get_data()</code></a> и
+<a href="glib-Keyed-Data-Lists.html#g-datalist-get-data"><code class="function">g_datalist_get_data()</code></a>.
+</p>
+<p>
+Для итерации через все элементы в списке данных используйте <a href="glib-Keyed-Data-Lists.html#g-datalist-foreach"><code class="function">g_datalist_foreach()</code></a> (not thread-safe).
+</p>
+<p>
+Для удаления элементов данных из списка данных используйте <a href="glib-Keyed-Data-Lists.html#g-datalist-id-remove-data"><code class="function">g_datalist_id_remove_data()</code></a> и
+<a href="glib-Keyed-Data-Lists.html#g-datalist-remove-data"><code class="function">g_datalist_remove_data()</code></a>.
+</p>
+<p>
+Для удаления всех элементов из списка данных, используйте <a href="glib-Keyed-Data-Lists.html#g-datalist-clear"><code class="function">g_datalist_clear()</code></a>.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2982558"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2982568"></a><h3>
+<a name="GData"></a>GData</h3>
+<a class="indexterm" name="id2982580"></a><pre class="programlisting">typedef struct _GData GData;</pre>
+<p>
+Структура <a href="glib-Keyed-Data-Lists.html#GData"><span class="type">GData</span></a> - это непрозрачная структура данных представляющая 
+<a href="glib-Keyed-Data-Lists.html" title="Keyed Data Lists">Keyed Data List</a>.
+доступ к ней должен осуществляться только с помощью следующих функций.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2982614"></a><h3>
+<a name="g-datalist-init"></a>g_datalist_init ()</h3>
+<a class="indexterm" name="id2982626"></a><pre class="programlisting">void        g_datalist_init                 (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist);</pre>
+<p>
+Сбрасывает список данных в <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+Она не освобождает память и не вызывает функции уничтожения.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>datalist</code></em>&#160;:</span></td>
+<td>указатель на указатель в списке данных.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2982684"></a><h3>
+<a name="g-datalist-id-set-data"></a>g_datalist_id_set_data()</h3>
+<a class="indexterm" name="id2982697"></a><pre class="programlisting">#define     g_datalist_id_set_data(dl, q, d)</pre>
+<p>
+Устанавливает данные соответствующие указанному <a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> идентификатору.
+Любые предыдущие данные с тем же ключом - удаляются, и это вызывает функцию уничтожения.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>dl</code></em>&#160;:</span></td>
+<td>список данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>q</code></em>&#160;:</span></td>
+<td><a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> для идентификации элемента данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>d</code></em>&#160;:</span></td>
+<td>элемент данных, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+    для удаления любых предыдущих элементов соответствующих <em class="parameter"><code>q</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2982793"></a><h3>
+<a name="g-datalist-id-set-data-full"></a>g_datalist_id_set_data_full ()</h3>
+<a class="indexterm" name="id2982807"></a><pre class="programlisting">void        g_datalist_id_set_data_full     (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist,
+                                             <a href="glib-Quarks.html#GQuark">GQuark</a> key_id,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Datasets.html#GDestroyNotify">GDestroyNotify</a> destroy_func);</pre>
+<p>
+Устанавливает данные соответствующие указанному <a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> идентификатору, 
+и вызывает функцию когда элемент удаляется из списка данных. Любые предыдущие данные с тем же ключом удаляются 
+и вызывается функция уничтожения.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>datalist</code></em>&#160;:</span></td>
+<td>список данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>key_id</code></em>&#160;:</span></td>
+<td><a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> для идентификации элемента данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>элемент данных или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+    для удаления любых предыдущих элементов соответствующих <em class="parameter"><code>key_id</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>destroy_func</code></em>&#160;:</span></td>
+<td>функция вызываемая когда удаляется элемент данных. Эта функция вызывается с элементом данных и может использоваться для освобождения 
+    любой распределённой памяти для него. Если <em class="parameter"><code>data</code></em> это 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, то 
+    <em class="parameter"><code>destroy_func</code></em> должен также быть 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2982990"></a><h3>
+<a name="g-datalist-id-get-data"></a>g_datalist_id_get_data ()</h3>
+<a class="indexterm" name="id2983003"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_datalist_id_get_data          (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist,
+                                             <a href="glib-Quarks.html#GQuark">GQuark</a> key_id);</pre>
+<p>
+Находит элемент данных соответствующий <em class="parameter"><code>key_id</code></em>. 
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>datalist</code></em>&#160;:</span></td>
+<td>список данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>key_id</code></em>&#160;:</span></td>
+<td><a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> идентификатор элемента данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>элемент данных, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если он не найден.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2983107"></a><h3>
+<a name="g-datalist-id-remove-data"></a>g_datalist_id_remove_data()</h3>
+<a class="indexterm" name="id2983120"></a><pre class="programlisting">#define     g_datalist_id_remove_data(dl, q)</pre>
+<p>
+Удаляет элемент, используя его <a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> идентификатор.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>dl</code></em>&#160;:</span></td>
+<td>список данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>q</code></em>&#160;:</span></td>
+<td><a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> идентификатор элемента данных.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2983184"></a><h3>
+<a name="g-datalist-id-remove-no-notify"></a>g_datalist_id_remove_no_notify ()</h3>
+<a class="indexterm" name="id2983198"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_datalist_id_remove_no_notify  (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist,
+                                             <a href="glib-Quarks.html#GQuark">GQuark</a> key_id);</pre>
+<p>
+Удаляет элемент, без вызова функции уничтожения.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>datalist</code></em>&#160;:</span></td>
+<td>список данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>key_id</code></em>&#160;:</span></td>
+<td><a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> идентификатор элемента данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>предыдущие данные <em class="parameter"><code>key_id</code></em>, или 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> ели нет.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2983303"></a><h3>
+<a name="g-datalist-set-data"></a>g_datalist_set_data()</h3>
+<a class="indexterm" name="id2983316"></a><pre class="programlisting">#define     g_datalist_set_data(dl, k, d)</pre>
+<p>
+Устанавливает элемент данных соответствующий указанному строковому идентификатору.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>dl</code></em>&#160;:</span></td>
+<td>список данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>k</code></em>&#160;:</span></td>
+<td>строка для идентификации элемента данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>d</code></em>&#160;:</span></td>
+<td>элемент данных, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+    для удаления любых предыдущих элементов соответствующих <em class="parameter"><code>k</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2983395"></a><h3>
+<a name="g-datalist-set-data-full"></a>g_datalist_set_data_full()</h3>
+<a class="indexterm" name="id2983408"></a><pre class="programlisting">#define     g_datalist_set_data_full(dl, k, d, f)</pre>
+<p>
+Устанавливает элемент данных соответствующий указанной строке идентификатору, и функцию вызываемую при удалении элемента данных.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>dl</code></em>&#160;:</span></td>
+<td>список данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>k</code></em>&#160;:</span></td>
+<td>строка для идентификации элемента данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>d</code></em>&#160;:</span></td>
+<td>элемент данных, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+    для удаления любых предыдущих элементов соответствующих <em class="parameter"><code>k</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>f</code></em>&#160;:</span></td>
+<td>Функция вызываемая при удалении элемента данных. Эта функция вызывается с элементом данных и может использоваться для освобождения 
+    любой распределённой для него памяти. Если <em class="parameter"><code>d</code></em> это 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, то 
+    <em class="parameter"><code>f</code></em> должен также быть 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2983537"></a><h3>
+<a name="g-datalist-get-data"></a>g_datalist_get_data()</h3>
+<a class="indexterm" name="id2983550"></a><pre class="programlisting">#define     g_datalist_get_data(dl, k)</pre>
+<p>
+Выдаёт элемент данных, используя его строку идентификатор.
+Это медленнее чем <a href="glib-Keyed-Data-Lists.html#g-datalist-id-get-data"><code class="function">g_datalist_id_get_data()</code></a> 
+потомучто строка сначала конвертируется в <a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>dl</code></em>&#160;:</span></td>
+<td>список данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>k</code></em>&#160;:</span></td>
+<td>строка идентификатор элемента данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>элемент данных, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если он не найден.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2983639"></a><h3>
+<a name="g-datalist-remove-data"></a>g_datalist_remove_data()</h3>
+<a class="indexterm" name="id2983652"></a><pre class="programlisting">#define     g_datalist_remove_data(dl, k)</pre>
+<p>
+Удаляет элемент используя его строковый идентификатор.
+Элемент данных уничтожается функцией если она была установлена.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>dl</code></em>&#160;:</span></td>
+<td>список данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>k</code></em>&#160;:</span></td>
+<td>строка идентификатор элемента данных.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2983702"></a><h3>
+<a name="g-datalist-remove-no-notify"></a>g_datalist_remove_no_notify()</h3>
+<a class="indexterm" name="id2983716"></a><pre class="programlisting">#define     g_datalist_remove_no_notify(dl, k)</pre>
+<p>
+Удаляет элемент, без вызова уничтожающей функции.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>dl</code></em>&#160;:</span></td>
+<td>список данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>k</code></em>&#160;:</span></td>
+<td>строка идентификатор элемента данных.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2983764"></a><h3>
+<a name="g-datalist-foreach"></a>g_datalist_foreach ()</h3>
+<a class="indexterm" name="id2983777"></a><pre class="programlisting">void        g_datalist_foreach              (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist,
+                                             <a href="glib-Datasets.html#GDataForeachFunc">GDataForeachFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Вызывает указанную функцию для каждого элемента данных в списке данных.
+Функция вызывается на каждым элементом данных с <a href="glib-Quarks.html#GQuark"><span class="type">GQuark</span></a> 
+идентификатором и данными, вместе с параметром <em class="parameter"><code>user_data</code></em>.
+Помните что эта функция потоко-небезопасна. Поэтому если <em class="parameter"><code>datalist</code></em> не может быть 
+защищён от любых изменений в течении выполнения этой функции, она не должна вызываться.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>datalist</code></em>&#160;:</span></td>
+<td>список данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td>функция вызываемая для каждого элемента данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>пользовательские данные помещаемые в функцию.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2983893"></a><h3>
+<a name="g-datalist-clear"></a>g_datalist_clear ()</h3>
+<a class="indexterm" name="id2983906"></a><pre class="programlisting">void        g_datalist_clear                (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist);</pre>
+<p>
+Освобождает все элементы данных в списке данных.
+Элементы данных уничтожаются функциями вызываемыми если она была установлена.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>datalist</code></em>&#160;:</span></td>
+<td>список данных.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2983954"></a><h3>
+<a name="g-datalist-set-flags"></a>g_datalist_set_flags ()</h3>
+<a class="indexterm" name="id2983970"></a><pre class="programlisting">void        g_datalist_set_flags            (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> flags);</pre>
+<p>
+Включает значение флажка для списка данных. Эта функция используется для хранения небольшого числа логических флажков в объекте 
+со списком данных без использования любого дополнительного пространства. Она в основном бесполезна, кроме ситуаций когда пространство сильно
+уплотнено. (Она в основном типе <span class="type">GObject</span>, например.)</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>datalist</code></em>&#160;:</span></td>
+<td> указатель на расположение которое содержит список
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>flags</code></em>&#160;:</span></td>
+<td> флажки для включения. Значения флажков ограничены 
+     <a href="glib-Keyed-Data-Lists.html#G-DATALIST-FLAGS-MASK:CAPS"><code class="literal">G_DATALIST_FLAGS_MASK</code></a> 
+     (в настоящее время 3; представляя два возможных логических флажка).
+      Значение для <em class="parameter"><code>flags</code></em> которое не соответствует маске - ошибика.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.8
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2984080"></a><h3>
+<a name="g-datalist-unset-flags"></a>g_datalist_unset_flags ()</h3>
+<a class="indexterm" name="id2984095"></a><pre class="programlisting">void        g_datalist_unset_flags          (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> flags);</pre>
+<p>
+Выключает значения флажка для списка данных. 
+Смотрите <a href="glib-Keyed-Data-Lists.html#g-datalist-unset-flags"><code class="function">g_datalist_unset_flags()</code></a></p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>datalist</code></em>&#160;:</span></td>
+<td> указатель на расположение которое содержит список
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>flags</code></em>&#160;:</span></td>
+<td> флажки для выключения. Значения флажков ограничены 
+     <a href="glib-Keyed-Data-Lists.html#G-DATALIST-FLAGS-MASK:CAPS"><code class="literal">G_DATALIST_FLAGS_MASK</code></a> 
+     (в настоящее время 3: представляя два возможных логических флажка).
+     Значение для <em class="parameter"><code>flags</code></em> которое не соответствует маске - ошибка.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.8
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2984201"></a><h3>
+<a name="g-datalist-get-flags"></a>g_datalist_get_flags ()</h3>
+<a class="indexterm" name="id2984216"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_datalist_get_flags            (<a href="glib-Keyed-Data-Lists.html#GData">GData</a> **datalist);</pre>
+<p>
+Определяет значения флажков упакованных вместе со списком данных.
+Смотрите <a href="glib-Keyed-Data-Lists.html#g-datalist-set-flags"><code class="function">g_datalist_set_flags()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>datalist</code></em>&#160;:</span></td>
+<td> указатель на расположение которое содержит список
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> флажки списка данных
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.8
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2984294"></a><h3>
+<a name="G-DATALIST-FLAGS-MASK:CAPS"></a>G_DATALIST_FLAGS_MASK</h3>
+<a class="indexterm" name="id2984306"></a><pre class="programlisting">#define G_DATALIST_FLAGS_MASK 0x3
+</pre>
+<p>
+Битовая маска которая ограничивает возможные флажки помещаемые в 
+<a href="glib-Keyed-Data-Lists.html#g-datalist-set-flags"><code class="function">g_datalist_set_flags()</code></a>. 
+Помещаемые значения флажков где флажки &amp; ~G_DATALIST_FLAGS_MASK != 0 - это ошибка.</p>
+<p>
+
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

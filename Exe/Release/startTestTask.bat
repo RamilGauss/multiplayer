@@ -1,0 +1,1 @@
+start Tornado.exe -con ..\..\DeveloperToolDLL\TestTask.dll

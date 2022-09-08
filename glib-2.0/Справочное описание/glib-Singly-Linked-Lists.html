@@ -1,0 +1,1201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Singly-Linked Lists</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-data-types.html" title="GLib Data Types">
+<link rel="prev" href="glib-Doubly-Linked-Lists.html" title="Doubly-Linked Lists">
+<link rel="next" href="glib-Double-ended-Queues.html" title="Double-ended Queues">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Doubly-Linked-Lists.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-data-types.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Double-ended-Queues.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2899936" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2900835" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Singly-Linked-Lists"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2899936"></a><span class="refentrytitle">Singly-Linked Lists</span>
+</h2>
+<p>Singly-Linked Lists &#8212; Связанные списки содержащие целочисленные значения или указатели на данные, 
+с ограничением итерации только в одном направлении.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>;
+
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-alloc">g_slist_alloc</a>                   (void);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-append">g_slist_append</a>                  (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-prepend">g_slist_prepend</a>                 (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-insert">g_slist_insert</a>                  (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> position);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-insert-before">g_slist_insert_before</a>           (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *slist,
+                                             <a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *sibling,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-insert-sorted">g_slist_insert_sorted</a>           (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareFunc">GCompareFunc</a> func);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-remove">g_slist_remove</a>                  (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-remove-link">g_slist_remove_link</a>             (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *link_);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-delete-link">g_slist_delete_link</a>             (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *link_);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-remove-all">g_slist_remove_all</a>              (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);
+void        <a href="glib-Singly-Linked-Lists.html#g-slist-free">g_slist_free</a>                    (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list);
+void        <a href="glib-Singly-Linked-Lists.html#g-slist-free-1">g_slist_free_1</a>                  (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list);
+#define     <a href="glib-Singly-Linked-Lists.html#g-slist-free1">g_slist_free1</a>
+
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Singly-Linked-Lists.html#g-slist-length">g_slist_length</a>                  (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-copy">g_slist_copy</a>                    (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-reverse">g_slist_reverse</a>                 (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-insert-sorted-with-data">g_slist_insert_sorted_with_data</a> (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc">GCompareDataFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-sort">g_slist_sort</a>                    (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareFunc">GCompareFunc</a> compare_func);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-sort-with-data">g_slist_sort_with_data</a>          (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc">GCompareDataFunc</a> compare_func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-concat">g_slist_concat</a>                  (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list1,
+                                             <a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list2);
+void        <a href="glib-Singly-Linked-Lists.html#g-slist-foreach">g_slist_foreach</a>                 (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Doubly-Linked-Lists.html#GFunc">GFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-last">g_slist_last</a>                    (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list);
+#define     <a href="glib-Singly-Linked-Lists.html#g-slist-next">g_slist_next</a>                    (slist)
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-nth">g_slist_nth</a>                     (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Singly-Linked-Lists.html#g-slist-nth-data">g_slist_nth_data</a>                (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);
+
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-find">g_slist_find</a>                    (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);
+<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     <a href="glib-Singly-Linked-Lists.html#g-slist-find-custom">g_slist_find_custom</a>             (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareFunc">GCompareFunc</a> func);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Singly-Linked-Lists.html#g-slist-position">g_slist_position</a>                (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *llink);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Singly-Linked-Lists.html#g-slist-index">g_slist_index</a>                   (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);
+
+void        <a href="glib-Singly-Linked-Lists.html#g-slist-push-allocator">g_slist_push_allocator</a>          (<a href="glib-Basic-Types.html#gpointer">gpointer</a> dummy);
+void        <a href="glib-Singly-Linked-Lists.html#g-slist-pop-allocator">g_slist_pop_allocator</a>           (void);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2900835"></a><h2>Описание</h2>
+<p>
+Структура <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> и связанные с ней функции обеспечивают
+стандартный односвязный список структур данных.
+</p>
+<p>
+Каждый элемент в списке содержит часть данных, вместе с указателем который привязывает следующий элемент в списке.
+Используя этот указатель можно перемещаться по списку только в одном направлении 
+(в отличие от двусвязных списков которые позволяют перемещение в двух направлениях).
+</p>
+<p>
+Данные содержащиеся в каждом элементе могут быть либо целочисленными значениями, используя один из
+<a href="glib-Type-Conversion-Macros.html" title="Type Conversion Macros">Type Conversion Macros</a>,
+либо просто указателями на любой тип данных.
+</p>
+<p>
+Список элементов распределяется <a href="glib-Memory-Slices.html" title="Memory Slices">slice allocator</a>, 
+что более эффективно чем индивидуальное распределение элементов.
+</p>
+<p>
+Помните что функции <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> предполагают помещение указателя
+на первый элемент в списке. Функции которые вставляют элементы, возвращают новое начало списка, которое может иметь изменения.
+</p>
+<p>
+Нет функции для создания <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>. 
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> рассматривается как пустой список,
+поэтому вы можете установить <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>* в 
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<p>
+Для добавления элементов, используйте <a href="glib-Singly-Linked-Lists.html#g-slist-append"><code class="function">g_slist_append()</code></a>, <a href="glib-Singly-Linked-Lists.html#g-slist-prepend"><code class="function">g_slist_prepend()</code></a>, <a href="glib-Singly-Linked-Lists.html#g-slist-insert"><code class="function">g_slist_insert()</code></a>
+и <a href="glib-Singly-Linked-Lists.html#g-slist-insert-sorted"><code class="function">g_slist_insert_sorted()</code></a>.
+</p>
+<p>
+Для удаления элементов, используйте <a href="glib-Singly-Linked-Lists.html#g-slist-remove"><code class="function">g_slist_remove()</code></a>.
+</p>
+<p>
+Для поиска элементов в списке используйте <a href="glib-Singly-Linked-Lists.html#g-slist-last"><code class="function">g_slist_last()</code></a>, <a href="glib-Singly-Linked-Lists.html#g-slist-next"><code class="function">g_slist_next()</code></a>,
+<a href="glib-Singly-Linked-Lists.html#g-slist-nth"><code class="function">g_slist_nth()</code></a>, <a href="glib-Singly-Linked-Lists.html#g-slist-nth-data"><code class="function">g_slist_nth_data()</code></a>, <a href="glib-Singly-Linked-Lists.html#g-slist-find"><code class="function">g_slist_find()</code></a> и
+<a href="glib-Singly-Linked-Lists.html#g-slist-find-custom"><code class="function">g_slist_find_custom()</code></a>.
+</p>
+<p>
+Для поиска номера элемента используйте <a href="glib-Singly-Linked-Lists.html#g-slist-position"><code class="function">g_slist_position()</code></a> и <a href="glib-Singly-Linked-Lists.html#g-slist-index"><code class="function">g_slist_index()</code></a>.
+</p>
+<p>
+Для вызова функции для каждого элемента в списке используйте <a href="glib-Singly-Linked-Lists.html#g-slist-foreach"><code class="function">g_slist_foreach()</code></a>.
+</p>
+<p>
+Для освобождения элементов списка, используйте <a href="glib-Singly-Linked-Lists.html#g-slist-free"><code class="function">g_slist_free()</code></a>.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2901136"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2901146"></a><h3>
+<a name="GSList"></a>GSList</h3>
+<a class="indexterm" name="id2901159"></a><pre class="programlisting">typedef struct {
+  gpointer data;
+  GSList *next;
+} GSList;
+</pre>
+<p>
+Структура <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> 
+используется для каждого элемента в односвязном списке.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#gpointer">gpointer</a>&#160;<em class="structfield"><code>data</code></em>;</span></td>
+<td>содержит элементы данных, которые могут указывать на любой тип данных, 
+    или любое целочисленное значение используя 
+    <a href="glib-Type-Conversion-Macros.html" title="Type Conversion Macros">Type Conversion Macros</a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>&#160;*<em class="structfield"><code>next</code></em>;</span></td>
+<td>содержит ссылку на следующий элемент в списке.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2901239"></a><h3>
+<a name="g-slist-alloc"></a>g_slist_alloc ()</h3>
+<a class="indexterm" name="id2901251"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_alloc                   (void);</pre>
+<p>
+Распределяет свободное пространство для одного элемента <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+Она вызывается с помощью <a href="glib-Singly-Linked-Lists.html#g-slist-append"><code class="function">g_slist_append()</code></a>, <a href="glib-Singly-Linked-Lists.html#g-slist-prepend"><code class="function">g_slist_prepend()</code></a>, <a href="glib-Singly-Linked-Lists.html#g-slist-insert"><code class="function">g_slist_insert()</code></a> и
+<a href="glib-Singly-Linked-Lists.html#g-slist-insert-sorted"><code class="function">g_slist_insert_sorted()</code></a> функций 
+и очень редко используется самостоятельно.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель на вновь распределённый элемент <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2901348"></a><h3>
+<a name="g-slist-append"></a>g_slist_append ()</h3>
+<a class="indexterm" name="id2901361"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_append                  (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Добавляет новый элемент в конец списка.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Примечание</h3>
+<p>
+Возвращает значение начала списка, которое может измениться, 
+поэтому убедитесь что вы сохранили новое значение.
+</p>
+</div>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Примечание</h3>
+<p>
+Помните что <a href="glib-Singly-Linked-Lists.html#g-slist-append"><code class="function">g_slist_append()</code></a> 
+перебирает все элементы в списке для поиска конца, это не эффективно когда добавляется много элементов. 
+Основная идиома избежать неэффективности в прикреплении элементов сначала перевернутого списка и последующее 
+переворачивание обратно когда все элементы добавлены. 
+</p>
+</div>
+<div class="informalexample"><pre class="programlisting">
+  /* Помните что это инициализирует пустой список. */
+  GSList *list = NULL, *number_list = NULL;
+
+  /* Это список строк. */
+  list = g_slist_append (list, "first");
+  list = g_slist_append (list, "second");
+
+  /* Это список целочисленных. */
+  number_list = g_slist_append (number_list, GINT_TO_POINTER (27));
+  number_list = g_slist_append (number_list, GINT_TO_POINTER (14));
+</pre></div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для нового элемента.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новое начало <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2901499"></a><h3>
+<a name="g-slist-prepend"></a>g_slist_prepend ()</h3>
+<a class="indexterm" name="id2901512"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_prepend                 (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Добавляет новый элемент в начало списка.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Примечание</h3>
+<p>
+Возвращает значение нового начала списка, которое может меняться, 
+поэтому убедитесь что вы сохранили новое значение.
+</p>
+</div>
+<div class="informalexample"><pre class="programlisting">
+  /* Помните что это инициализирует пустой список. */
+  GSList *list = NULL;
+  list = g_slist_prepend (list, "last");
+  list = g_slist_prepend (list, "first");
+</pre></div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для нового элемента
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новое начало <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2901625"></a><h3>
+<a name="g-slist-insert"></a>g_slist_insert ()</h3>
+<a class="indexterm" name="id2901637"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_insert                  (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> position);</pre>
+<p>
+Вставляет новый элемент в данную позицию списка.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для нового элемента.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>position</code></em>&#160;:</span></td>
+<td>позиция для вставляемого элемента. Если отрицательное, или больше чем число элементов в списке, 
+    новый элемент добавляется в конец списка.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новое начало <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2901756"></a><h3>
+<a name="g-slist-insert-before"></a>g_slist_insert_before ()</h3>
+<a class="indexterm" name="id2901769"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_insert_before           (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *slist,
+                                             <a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *sibling,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Вставляет узел перед <em class="parameter"><code>sibling</code></em> содержащим <em class="parameter"><code>data</code></em>. 
+Возвращает новый первый элемент списка.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>slist</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>sibling</code></em>&#160;:</span></td>
+<td> узел для вставки перед <em class="parameter"><code>data</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> данные помещаемые во вновь вставленный узел.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> новый первый элемент списка.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2901896"></a><h3>
+<a name="g-slist-insert-sorted"></a>g_slist_insert_sorted ()</h3>
+<a class="indexterm" name="id2901910"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_insert_sorted           (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareFunc">GCompareFunc</a> func);</pre>
+<p>
+Вставляет новый элемент в список, используя полученную функцию сравнения для определения его позиции.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для нового элемента.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td>функция для сравнения элементов всписке. Она должна возвращать число &gt; 0 
+    если первый параметр располагается после второго параметра при сортировке.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> новое начало <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2902030"></a><h3>
+<a name="g-slist-remove"></a>g_slist_remove ()</h3>
+<a class="indexterm" name="id2902042"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_remove                  (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);</pre>
+<p>
+Удаляет элемент из <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+Если два элемента содержат одинаковые данные, удаляет только первый.
+Если нет элементов содержащих данные, <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> не изменяется.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> данные удаляемого элемента.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> новое начало <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2902155"></a><h3>
+<a name="g-slist-remove-link"></a>g_slist_remove_link ()</h3>
+<a class="indexterm" name="id2902169"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_remove_link             (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *link_);</pre>
+<p>
+Удаляет элемент из <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>, не освобождая элемент.
+Ссылка на следующий элемент у удаляемого устанавливается в 
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, 
+так как он сам становится списком с единственным элементом.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>link_</code></em>&#160;:</span></td>
+<td> элемент в <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> новое начало <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>, без элемента.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2902291"></a><h3>
+<a name="g-slist-delete-link"></a>g_slist_delete_link ()</h3>
+<a class="indexterm" name="id2902305"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_delete_link             (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *link_);</pre>
+<p>
+Удаляет узел <em class="parameter"><code>list</code></em>. Возвращает новый первый элемент списка.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>link_</code></em>&#160;:</span></td>
+<td> узел для удаления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> новый первый элемент <em class="parameter"><code>list</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2902403"></a><h3>
+<a name="g-slist-remove-all"></a>g_slist_remove_all ()</h3>
+<a class="indexterm" name="id2902416"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_remove_all              (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);</pre>
+<p>
+Удаляет все узлы списка с данными <em class="parameter"><code>data</code></em>. Возвращает новый первый элемент списка. 
+В отличие от <a href="glib-Singly-Linked-Lists.html#g-slist-remove"><code class="function">g_slist_remove()</code></a> 
+которая удаляет только первый узел соответствующий полученным данным.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> данные для удаления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> новый первый элемент <em class="parameter"><code>list</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2902526"></a><h3>
+<a name="g-slist-free"></a>g_slist_free ()</h3>
+<a class="indexterm" name="id2902539"></a><pre class="programlisting">void        g_slist_free                    (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list);</pre>
+<p>
+Освобождает всю память используемую <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+Освобождает элементы возвращаемые распределителем слайсов.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2902603"></a><h3>
+<a name="g-slist-free-1"></a>g_slist_free_1 ()</h3>
+<a class="indexterm" name="id2902615"></a><pre class="programlisting">void        g_slist_free_1                  (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list);</pre>
+<p>
+Освобождает один элемент <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+Её полезно использовать после <a href="glib-Singly-Linked-Lists.html#g-slist-remove-link"><code class="function">g_slist_remove_link()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td> элемент <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2902688"></a><h3>
+<a name="g-slist-free1"></a>g_slist_free1</h3>
+<a class="indexterm" name="id2902704"></a><pre class="programlisting">#define     g_slist_free1</pre>
+<p>
+Макрос который делает тоже самое что и <a href="glib-Singly-Linked-Lists.html#g-slist-free-1"><code class="function">g_slist_free_1()</code></a>.
+</p>
+<p>Начиная с версии 2.10
+
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2902735"></a><h3>
+<a name="g-slist-length"></a>g_slist_length ()</h3>
+<a class="indexterm" name="id2902748"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_slist_length                  (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list);</pre>
+<p>
+Определяет количество элементов в <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> количество элементов в <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2902828"></a><h3>
+<a name="g-slist-copy"></a>g_slist_copy ()</h3>
+<a class="indexterm" name="id2902841"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_copy                    (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list);</pre>
+<p>
+Копирует <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</p>
+<p>
+Помните что это "пустая" копия. Если список элементов содержит указатели на данные, 
+то указатели копируются, а фактические данные нет.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> копия <em class="parameter"><code>list</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2902924"></a><h3>
+<a name="g-slist-reverse"></a>g_slist_reverse ()</h3>
+<a class="indexterm" name="id2902937"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_reverse                 (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list);</pre>
+<p>
+Переворачивает <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>начало перевернутой <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2903018"></a><h3>
+<a name="g-slist-insert-sorted-with-data"></a>g_slist_insert_sorted_with_data ()</h3>
+<a class="indexterm" name="id2903031"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_insert_sorted_with_data (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc">GCompareDataFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Вставляет новый элемент в список, использует полученную функцию сравнения для определения позиции.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для нового элемента.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td>функция сравнивающая элементы в списке. Она должна возвращать число &gt; 0 
+    если первый параметр располагается после второго параметра при сортировке.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td> данные помещаемые в функцию сравнения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новое начало <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+<em class="parameter"><code>Начиная с версии</code></em> 2.10
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2903179"></a><h3>
+<a name="g-slist-sort"></a>g_slist_sort ()</h3>
+<a class="indexterm" name="id2903192"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_sort                    (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareFunc">GCompareFunc</a> compare_func);</pre>
+<p>
+Сортирует <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> используя полученную функцию сравнения.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>compare_func</code></em>&#160;:</span></td>
+<td>функция сравнения используемая для сортировки <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>. 
+    Эта функция принимает данные из 2 элементов <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> 
+    и должна вернуть 0 если они равны, отрицательное значение если первый элемент располагается перед вторым, 
+    или положительное значение если первый элемент располагается после второго.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>начало отсортированной <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2903315"></a><h3>
+<a name="g-slist-sort-with-data"></a>g_slist_sort_with_data ()</h3>
+<a class="indexterm" name="id2903329"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_sort_with_data          (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc">GCompareDataFunc</a> compare_func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Подобна <a href="glib-Singly-Linked-Lists.html#g-slist-sort"><code class="function">g_slist_sort()</code></a>, 
+но сравнивающая функция принимает аргумент пользовательских данных.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>compare_func</code></em>&#160;:</span></td>
+<td>сравнивающая функция.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>данные помещаемые в функцию сравнения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новый первый элемент списка.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2903449"></a><h3>
+<a name="g-slist-concat"></a>g_slist_concat ()</h3>
+<a class="indexterm" name="id2903462"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_concat                  (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list1,
+                                             <a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list2);</pre>
+<p>
+Добавляет второй <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> в конец первого 
+<a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+Помните что элементы второго <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> не копируются.
+Они используются непосредственно.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list1</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>list2</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> для добавления в конец первого 
+    <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>начало нового <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2903597"></a><h3>
+<a name="g-slist-foreach"></a>g_slist_foreach ()</h3>
+<a class="indexterm" name="id2903610"></a><pre class="programlisting">void        g_slist_foreach                 (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Doubly-Linked-Lists.html#GFunc">GFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Вызывает функцию для каждого элемента <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td>функция вызываемая для каждого элемента данных.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>пользовательские данные для помещения в функцию.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2903716"></a><h3>
+<a name="g-slist-last"></a>g_slist_last ()</h3>
+<a class="indexterm" name="id2903729"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_last                    (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list);</pre>
+<p>
+Получает последний элемент в <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>последний элемент в <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>, 
+    или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если 
+    <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> не имеет элементов.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2903828"></a><h3>
+<a name="g-slist-next"></a>g_slist_next()</h3>
+<a class="indexterm" name="id2903840"></a><pre class="programlisting">#define     g_slist_next(slist)</pre>
+<p>
+Удобный макрос для получения следующего элемента в <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>slist</code></em>&#160;:</span></td>
+<td>элемент в <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>следующий элемент, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если нет больше элементов.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2903912"></a><h3>
+<a name="g-slist-nth"></a>g_slist_nth ()</h3>
+<a class="indexterm" name="id2903924"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_nth                     (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);</pre>
+<p>
+Определяет элемент в указанной позиции <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n</code></em>&#160;:</span></td>
+<td>позиция элемента, подсчёт с 0.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>элемент, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+    если позиция выходит за пределы <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2904037"></a><h3>
+<a name="g-slist-nth-data"></a>g_slist_nth_data ()</h3>
+<a class="indexterm" name="id2904050"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_slist_nth_data                (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);</pre>
+<p>
+Определяет данные элемента в указанной позиции.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n</code></em>&#160;:</span></td>
+<td>позиция элемента.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>данные элемента, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+    если выходит за пределы <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2904156"></a><h3>
+<a name="g-slist-find"></a>g_slist_find ()</h3>
+<a class="indexterm" name="id2904169"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_find                    (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);</pre>
+<p>
+Находит элемент в <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> который содержит указанные данные.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные элемента для поиска.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>найденный элемент <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>, 
+    или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если он не найден.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2904282"></a><h3>
+<a name="g-slist-find-custom"></a>g_slist_find_custom ()</h3>
+<a class="indexterm" name="id2904296"></a><pre class="programlisting"><a href="glib-Singly-Linked-Lists.html#GSList">GSList</a>*     g_slist_find_custom             (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareFunc">GCompareFunc</a> func);</pre>
+<p>
+Ищет элемент в <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>, 
+используя полученную функцию для поиска желаемого элемента.
+Она перемещается по списку, вызов полученной функции должен вернуть 0
+когда желаемый элемент найден.
+Функция принимает два <a href="glib-Basic-Types.html#gconstpointer"><span class="type">gconstpointer</span></a> аргумента, 
+данные элемента <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> как первый аргумент и
+полученные пользовательские данные.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>пользовательские данные помещаемые в функцию.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td>функция вызываемая для каждого элемента. Она должна возвращать 0 когда желаемый элемент найден.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>найденный элемент <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>, 
+    или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если он не найден.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2904453"></a><h3>
+<a name="g-slist-position"></a>g_slist_position ()</h3>
+<a class="indexterm" name="id2904466"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_slist_position                (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *llink);</pre>
+<p>
+Определяет позицию полученного элемента в <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> (начиная с 0).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>llink</code></em>&#160;:</span></td>
+<td>элемент в <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>позиция элемента в <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>, 
+    или -1 если элемент не найден.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2904577"></a><h3>
+<a name="g-slist-index"></a>g_slist_index ()</h3>
+<a class="indexterm" name="id2904590"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_slist_index                   (<a href="glib-Singly-Linked-Lists.html#GSList">GSList</a> *list,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);</pre>
+<p>
+Получает позицию элемента содержащего полученные данные (начиная с 0).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>list</code></em>&#160;:</span></td>
+<td><a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные для поиска.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>номер элемента содержащего данные, или -1 если данные не найдены.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2904679"></a><h3>
+<a name="g-slist-push-allocator"></a>g_slist_push_allocator ()</h3>
+<a class="indexterm" name="id2904694"></a><pre class="programlisting">void        g_slist_push_allocator          (<a href="glib-Basic-Types.html#gpointer">gpointer</a> dummy);</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_slist_push_allocator</code> устарела начиная с версии 2.10 и не должна использоваться во вновь создаваемом коде. 
+Она ничего не делает, так как <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> конвертирован в 
+<a href="glib-Memory-Slices.html" title="Memory Slices">slice allocator</a></p>
+</div>
+<p>
+Устанавливает распределитель используемый для распределения элементов <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+Использует <a href="glib-Singly-Linked-Lists.html#g-slist-pop-allocator"><code class="function">g_slist_pop_allocator()</code></a>
+для восстановления предыдущих распределений.
+</p>
+<p>
+Помните что эта функция не доступна если GLib скомпилирована с опцией <code class="option">--disable-mem-pools</code>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>dummy</code></em>&#160;:</span></td>
+<td><a href="glib-Memory-Allocators.html#GAllocator"><span class="type">GAllocator</span></a> используемый для распределения элементов
+    <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2904813"></a><h3>
+<a name="g-slist-pop-allocator"></a>g_slist_pop_allocator ()</h3>
+<a class="indexterm" name="id2904828"></a><pre class="programlisting">void        g_slist_pop_allocator           (void);</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_slist_pop_allocator</code> устарела начиная с версии 2.10 и не должна использоваться во вновь создаваемом коде. 
+Она ничего не делает, так как <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a> конвертирован в 
+<a href="glib-Memory-Slices.html" title="Memory Slices">slice allocator</a></p>
+</div>
+<p>
+Восстанавливает предыдущий <a href="glib-Memory-Allocators.html#GAllocator"><span class="type">GAllocator</span></a>, 
+используемый для распределения элементов <a href="glib-Singly-Linked-Lists.html#GSList"><span class="type">GSList</span></a>.
+</p>
+<p>
+Помните что эта функция не доступна если GLib скомпилирована с опцией <code class="option">--disable-mem-pools</code>
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

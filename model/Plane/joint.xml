@@ -1,0 +1,14 @@
+<root>
+	<name>plane</name>
+	<numUse>0</numUse>
+	<matrix>
+		<row>0.2;0;0;0</row>
+		<row>0;0.2;0;0</row>
+		<row>0;0;0.2;0</row>
+		<row>0;0;0;1</row>
+	</matrix>
+	<joint>
+		<name>plane</name>
+		<numUse>0</numUse>
+	</joint> 
+</root>

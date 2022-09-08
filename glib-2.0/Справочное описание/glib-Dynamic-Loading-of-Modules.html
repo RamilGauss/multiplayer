@@ -1,0 +1,521 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Dynamic Loading of Modules</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-core.html" title="GLib Core Application Support">
+<link rel="prev" href="glib-Asynchronous-Queues.html" title="Asynchronous Queues">
+<link rel="next" href="glib-Memory-Allocation.html" title="Memory Allocation">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Asynchronous-Queues.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-core.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Memory-Allocation.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2619443" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2619743" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Dynamic-Loading-of-Modules"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2619443"></a><span class="refentrytitle">Dynamic Loading of Modules</span>
+</h2>
+<p>Dynamic Loading of Modules &#8212; Переносимый способ для динамической загрузки 'plug-ins'.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;gmodule.h&gt;
+
+
+            <a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a>;
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Dynamic-Loading-of-Modules.html#g-module-supported">g_module_supported</a>              (void);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Dynamic-Loading-of-Modules.html#g-module-build-path">g_module_build_path</a>             (const <a href="glib-Basic-Types.html#gchar">gchar</a> *directory,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *module_name);
+<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a>*    <a href="glib-Dynamic-Loading-of-Modules.html#g-module-open">g_module_open</a>                   (const <a href="glib-Basic-Types.html#gchar">gchar</a> *file_name,
+                                             <a href="glib-Dynamic-Loading-of-Modules.html#GModuleFlags">GModuleFlags</a> flags);
+enum        <a href="glib-Dynamic-Loading-of-Modules.html#GModuleFlags">GModuleFlags</a>;
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Dynamic-Loading-of-Modules.html#g-module-symbol">g_module_symbol</a>                 (<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a> *module,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol_name,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> *symbol);
+const <a href="glib-Basic-Types.html#gchar">gchar</a>* <a href="glib-Dynamic-Loading-of-Modules.html#g-module-name">g_module_name</a>                  (<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a> *module);
+void        <a href="glib-Dynamic-Loading-of-Modules.html#g-module-make-resident">g_module_make_resident</a>          (<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a> *module);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Dynamic-Loading-of-Modules.html#g-module-close">g_module_close</a>                  (<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a> *module);
+const <a href="glib-Basic-Types.html#gchar">gchar</a>* <a href="glib-Dynamic-Loading-of-Modules.html#g-module-error">g_module_error</a>                 (void);
+
+const <a href="glib-Basic-Types.html#gchar">gchar</a>* (<a href="glib-Dynamic-Loading-of-Modules.html#GModuleCheckInit">*GModuleCheckInit</a>)            (<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a> *module);
+void        (<a href="glib-Dynamic-Loading-of-Modules.html#GModuleUnload">*GModuleUnload</a>)                (<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a> *module);
+#define     <a href="glib-Dynamic-Loading-of-Modules.html#G-MODULE-SUFFIX:CAPS">G_MODULE_SUFFIX</a>
+#define     <a href="glib-Dynamic-Loading-of-Modules.html#G-MODULE-EXPORT:CAPS">G_MODULE_EXPORT</a>
+#define     <a href="glib-Dynamic-Loading-of-Modules.html#G-MODULE-IMPORT:CAPS">G_MODULE_IMPORT</a>
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2619743"></a><h2>Описание</h2>
+<p>
+Эти функции обеспечивают переносимый способ динамической загрузки объектных файлов
+(известны как 'plug-ins').
+Текущая реализация поддерживает все системы которые обеспечивают выполнение
+<code class="function"><code class="function">dlopen()</code></code> (например Linux/Sun), а также 
+HP-UX через механизм <code class="function"><code class="function">shl_load()</code></code> и 
+Windows через DLLs.
+</p>
+<p>
+Программы которые предполагается использовать с этими функциями должны быть слинкованы с 
+библиотеками вывода (output) с помощью команды <span><strong class="command">pkg-config --libs gmodule-2.0</strong></span>.
+</p>
+<p>
+Для их использования вы сначала должны определить поддерживается ли динамическая загрузка на 
+используемой платформе с помощью вызова <a href="glib-Dynamic-Loading-of-Modules.html#g-module-supported"><code class="function">g_module_supported()</code></a>.
+Если поддерживается, то вы можете открывать модули с помощью <a href="glib-Dynamic-Loading-of-Modules.html#g-module-open"><code class="function">g_module_open()</code></a>,
+искать модульные идентификаторы (например имена функций) с помощью <a href="glib-Dynamic-Loading-of-Modules.html#g-module-symbol"><code class="function">g_module_symbol()</code></a>,
+а затем закрывать модули с помощью <a href="glib-Dynamic-Loading-of-Modules.html#g-module-close"><code class="function">g_module_close()</code></a>.
+<a href="glib-Dynamic-Loading-of-Modules.html#g-module-name"><code class="function">g_module_name()</code></a> возвращает имя файла текущего открытого модуля.
+</p>
+<p>
+Если любая из описанных выше функций завершается неудачей, описание ошибки можно найти с помощью 
+<a href="glib-Dynamic-Loading-of-Modules.html#g-module-error"><code class="function">g_module_error()</code></a>.
+</p>
+<p>
+ <a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a> реализует особенность подсчета ссылок для открытых модулей
+и поддержку функций обработки прерываний в модуле, которая вызывается когда 
+модуль загружается и выгружается (смотрите <a href="glib-Dynamic-Loading-of-Modules.html#GModuleCheckInit"><span class="type">GModuleCheckInit</span></a> и <a href="glib-Dynamic-Loading-of-Modules.html#GModuleUnload"><span class="type">GModuleUnload</span></a>).
+</p>
+<p>
+Если ваш модуль вводит статические данные для общих подсистем в выполняемой программе, 
+например через вызов <code class="literal">g_quark_from_static_string ("my-module-stuff")</code>,
+он должен быть уверен что никогда не выгрузится с помощью вызова <a href="glib-Dynamic-Loading-of-Modules.html#g-module-make-resident"><code class="function">g_module_make_resident()</code></a>.
+</p>
+<p>
+</p>
+<div class="example">
+<a name="id2619934"></a><p class="title"><b>Пример&#160;12.&#160;Calling a function defined in a <span class="structname">GModule</span></b></p>
+<pre class="programlisting">
+/* Подпись функции для 'say_hello' */
+typedef void (* SayHelloFunc) (const char *message);
+
+gboolean
+just_say_hello (const char *filename, GError **error)
+{
+  SayHelloFunc  say_hello;
+  GModule      *module;
+
+  module = g_module_open (filename, G_MODULE_BIND_LAZY);
+  if (!module)
+    {
+      g_set_error (error, FOO_ERROR, FOO_ERROR_BLAH,
+		   "%s", g_module_error ());
+      return FALSE;
+    }
+
+  if (!g_module_symbol (module, "say_hello", (gpointer *)&amp;say_hello))
+    {
+      g_set_error (error, SAY_ERROR, SAY_ERROR_OPEN,
+		   "%s: %s", filename, g_module_error ());
+      if (!g_module_close (module))
+	g_warning ("%s: %s", filename, g_module_error ());
+      return FALSE;
+    }
+
+  /* вызываем нашу функцию в модуле */
+  say_hello ("Hello world!");
+
+  if (!g_module_close (module))
+    g_warning ("%s: %s", filename, g_module_error ());
+
+  return TRUE;
+}
+</pre>
+</div>
+<p>
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2619978"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2619987"></a><h3>
+<a name="GModule"></a>GModule</h3>
+<a class="indexterm" name="id2620002"></a><pre class="programlisting">typedef struct _GModule GModule;</pre>
+<p>
+Непрозрачная структура данных <a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a> представляет <a href="glib-Dynamic-Loading-of-Modules.html" title="Dynamic Loading of Modules">Dynamically-Loaded Module</a>.
+Доступ к ней должен осуществляться только с помощью функций описанных ниже.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2620035"></a><h3>
+<a name="g-module-supported"></a>g_module_supported ()</h3>
+<a class="indexterm" name="id2620049"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_module_supported              (void);</pre>
+<p>
+Проверяет поддерживается ли модуль текущей платформой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если модуль поддерживается.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2620093"></a><h3>
+<a name="g-module-build-path"></a>g_module_build_path ()</h3>
+<a class="indexterm" name="id2620106"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_module_build_path             (const <a href="glib-Basic-Types.html#gchar">gchar</a> *directory,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *module_name);</pre>
+<p>
+Переносимый способ создания имени файла модуля. Платформо-специфичные
+префикс и суффикс добавляются для имени файла, если необходимо и результат добавляется в каталог, 
+используя правильный символьный разделитель.
+</p>
+<p>
+Параметр directory должен определять каталог где где может быть найден модуль.
+Он может быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> или пустой строкой указывая что модуль находится в стандартном платформо-зависимом каталоге, хотя это не рекомендуется, так как может быть найден неправильный модуль.
+</p>
+<p>
+Например, вызов <a href="glib-Dynamic-Loading-of-Modules.html#g-module-build-path"><code class="function">g_module_build_path()</code></a> в системе Linux с параметром <em class="parameter"><code>directory</code></em>
+равным значению <code class="filename">/lib</code> и параметром <em class="parameter"><code>module_name</code></em> равным значению "mylibrary" вернёт 
+<code class="filename">/lib/libmylibrary.so</code>. В системе Windows, использование <code class="filename">\Windows</code> как значение параметра directory 
+вернёт <code class="filename">\Windows\mylibrary.dll</code>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>directory</code></em>&#160;:</span></td>
+<td>
+каталог где находится модуль. Может быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> или пустой строкой указывая что 
+используется стандартный платформо-зависимый каталог, хотя это не рекомендуется.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>module_name</code></em>&#160;:</span></td>
+<td>
+имя модуля.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+абсолютный путь модуля, включая стандартный библиотечный префикс и суффикс. 
+Должен освобождаться когда больше не нужен.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2620274"></a><h3>
+<a name="g-module-open"></a>g_module_open ()</h3>
+<a class="indexterm" name="id2620287"></a><pre class="programlisting"><a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a>*    g_module_open                   (const <a href="glib-Basic-Types.html#gchar">gchar</a> *file_name,
+                                             <a href="glib-Dynamic-Loading-of-Modules.html#GModuleFlags">GModuleFlags</a> flags);</pre>
+<p>
+Открывает модуль. Если модуль уже открыт, то увеличивает количество ссылок. 
+</p>
+<p>
+Прежде всего <a href="glib-Dynamic-Loading-of-Modules.html#g-module-open"><code class="function">g_module_open()</code></a> пытается открыть <em class="parameter"><code>file_name</code></em> 
+как модуль. Если это не удаётся и <em class="parameter"><code>file_name</code></em> 
+имеет суффикс ".la" (и есть архив libtool), она пробует открыть соответствующий модуль. 
+Если терпит неудачу и он не имеет надлежащего суффикса модуля для платформы 
+(<a href="glib-Dynamic-Loading-of-Modules.html#G-MODULE-SUFFIX:CAPS"><span class="type">G_MODULE_SUFFIX</span></a>), этот суффикс будет приставлен и соответствующий модуль будет открыт. 
+Если это не удаётся и <em class="parameter"><code>file_name</code></em> не имеет суффикса ".la", 
+этот суффикс подставляется и <a href="glib-Dynamic-Loading-of-Modules.html#g-module-open"><code class="function">g_module_open()</code></a> пытается открыть соответствующий модуль. 
+Если и это не удаётся, то возвращается <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>file_name</code></em>&#160;:</span></td>
+<td>имя файла содержащего модуль, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+для получения <a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a> представляющую непосредственно основную программу.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>flags</code></em>&#160;:</span></td>
+<td>флаги используемые для открытия модуля. Это может быть логическое ИЛИ 
+любого из <a href="glib-Dynamic-Loading-of-Modules.html#GModuleFlags"><span class="type">GModuleFlags</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a> если выполнено удачно, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если неудачно.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2620483"></a><h3>
+<a name="GModuleFlags"></a>enum GModuleFlags</h3>
+<a class="indexterm" name="id2620496"></a><pre class="programlisting">typedef enum
+{
+  G_MODULE_BIND_LAZY	= 1 &lt;&lt; 0,
+  G_MODULE_BIND_LOCAL	= 1 &lt;&lt; 1,
+  G_MODULE_BIND_MASK	= 0x03
+} GModuleFlags;
+</pre>
+<p>
+Флаги помещаемые в <a href="glib-Dynamic-Loading-of-Modules.html#g-module-open"><code class="function">g_module_open()</code></a>. Помните что эти флаги поддерживаются на всех платформах.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-MODULE-BIND-LAZY:CAPS"></a><code class="literal">G_MODULE_BIND_LAZY</code></span></td>
+<td>определяет что обозначения разрешены только при необходимости.
+  Действие по умолчанию связывает все символы при загрузке модуля.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-MODULE-BIND-LOCAL:CAPS"></a><code class="literal">G_MODULE_BIND_LOCAL</code></span></td>
+<td>определяет что обозначения модуля не должны добавляться к глобальному пространству имён.  
+  Действие по умолчанию на большинстве платформ помещает обозначения в модуле в глобальное 
+  пространство имён, что может вызвать конфликт с существующими обозначениями.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-MODULE-BIND-MASK:CAPS"></a><code class="literal">G_MODULE_BIND_MASK</code></span></td>
+<td>маска для всех флагов.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2620605"></a><h3>
+<a name="g-module-symbol"></a>g_module_symbol ()</h3>
+<a class="indexterm" name="id2620618"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_module_symbol                 (<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a> *module,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol_name,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> *symbol);</pre>
+<p>
+Получает указатель символа из модуля.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>module</code></em>&#160;:</span></td>
+<td><a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>symbol_name</code></em>&#160;:</span></td>
+<td>символьное имя для поиска.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>symbol</code></em>&#160;:</span></td>
+<td>возвращает указатель для символьного значения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если выполнено.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2620735"></a><h3>
+<a name="g-module-name"></a>g_module_name ()</h3>
+<a class="indexterm" name="id2620748"></a><pre class="programlisting">const <a href="glib-Basic-Types.html#gchar">gchar</a>* g_module_name                  (<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a> *module);</pre>
+<p>
+Получает имя файла из <a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>module</code></em>&#160;:</span></td>
+<td><a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>имя файла модуля, или "main" если модуль непосредственно основная программа.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2620823"></a><h3>
+<a name="g-module-make-resident"></a>g_module_make_resident ()</h3>
+<a class="indexterm" name="id2620835"></a><pre class="programlisting">void        g_module_make_resident          (<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a> *module);</pre>
+<p>
+Гарантирует что модуль не будет выгружен.
+Любые вызовы <a href="glib-Dynamic-Loading-of-Modules.html#g-module-close"><code class="function">g_module_close()</code></a> для модуля будут игнорироваться в последствии.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>module</code></em>&#160;:</span></td>
+<td><a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a> для постоянного нахождения в памяти.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2620902"></a><h3>
+<a name="g-module-close"></a>g_module_close ()</h3>
+<a class="indexterm" name="id2620915"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_module_close                  (<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a> *module);</pre>
+<p>
+Закрывает модуль.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>module</code></em>&#160;:</span></td>
+<td><a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a> для закрытия.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> при удачном выполнении.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2620989"></a><h3>
+<a name="g-module-error"></a>g_module_error ()</h3>
+<a class="indexterm" name="id2621002"></a><pre class="programlisting">const <a href="glib-Basic-Types.html#gchar">gchar</a>* g_module_error                 (void);</pre>
+<p>
+Получает строку описывающую последнюю ошибку модуля.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>строка описывающая последнюю ошибку модуля.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2621040"></a><h3>
+<a name="GModuleCheckInit"></a>GModuleCheckInit ()</h3>
+<a class="indexterm" name="id2621053"></a><pre class="programlisting">const <a href="glib-Basic-Types.html#gchar">gchar</a>* (*GModuleCheckInit)            (<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a> *module);</pre>
+<p>
+Определяет тип функции инициализации модуля.
+Если модуль содержит функцию с именем <code class="function">g_module_check_init()</code> 
+она вызывается автоматически при загрузке модуля. 
+В неё помещается структура <a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a> и она должна вернуть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при успешном выполнении инициализации, или строку описывающую ошибку.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>module</code></em>&#160;:</span></td>
+<td><a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a> соответствующая только что загруженному модулю.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при успешном выполнении, или строку описывающую ошибку инициализации.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2621164"></a><h3>
+<a name="GModuleUnload"></a>GModuleUnload ()</h3>
+<a class="indexterm" name="id2621177"></a><pre class="programlisting">void        (*GModuleUnload)                (<a href="glib-Dynamic-Loading-of-Modules.html#GModule">GModule</a> *module);</pre>
+<p>
+Определяет тип модульной функции вызываемой при выгрузке.
+Если модуль содержит функцию с именем <code class="function">g_module_unload()</code> она вызывается автоматически при выгрузке модуля.
+В неё помещается структура <a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>module</code></em>&#160;:</span></td>
+<td><a href="glib-Dynamic-Loading-of-Modules.html#GModule"><span class="type">GModule</span></a> который выгружается.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2621255"></a><h3>
+<a name="G-MODULE-SUFFIX:CAPS"></a>G_MODULE_SUFFIX</h3>
+<a class="indexterm" name="id2621268"></a><pre class="programlisting">#define G_MODULE_SUFFIX "so"
+</pre>
+<p>
+Расширение для надлежащего обще-библиотечного суффикса текущей платформы, без точки. 
+Для большинства версий Uniх и Linux это "so",
+для некоторых версий HP-UX это "sl", а для Windows это "dll".
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2621287"></a><h3>
+<a name="G-MODULE-EXPORT:CAPS"></a>G_MODULE_EXPORT</h3>
+<a class="indexterm" name="id2621300"></a><pre class="programlisting">#define     G_MODULE_EXPORT</pre>
+<p>
+Используется для декларации функций экспортируемых модулями.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2621316"></a><h3>
+<a name="G-MODULE-IMPORT:CAPS"></a>G_MODULE_IMPORT</h3>
+<a class="indexterm" name="id2621330"></a><pre class="programlisting">#define	G_MODULE_IMPORT		extern
+</pre>
+<p>
+Используется для декларации функций импортируемых из модулей.
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

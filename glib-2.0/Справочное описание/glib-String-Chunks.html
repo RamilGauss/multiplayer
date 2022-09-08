@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>String Chunks</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-data-types.html" title="GLib Data Types">
+<link rel="prev" href="glib-Strings.html" title="Strings">
+<link rel="next" href="glib-Arrays.html" title="Arrays">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Strings.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-data-types.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Arrays.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2942280" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2942447" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-String-Chunks"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2942280"></a><span class="refentrytitle">String Chunks</span>
+</h2>
+<p>String Chunks &#8212; Эффективное хранение групп строк.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-String-Chunks.html#GStringChunk">GStringChunk</a>;
+<a href="glib-String-Chunks.html#GStringChunk">GStringChunk</a>* <a href="glib-String-Chunks.html#g-string-chunk-new">g_string_chunk_new</a>            (<a href="glib-Basic-Types.html#gsize">gsize</a> size);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-String-Chunks.html#g-string-chunk-insert">g_string_chunk_insert</a>           (<a href="glib-String-Chunks.html#GStringChunk">GStringChunk</a> *chunk,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-String-Chunks.html#g-string-chunk-insert-const">g_string_chunk_insert_const</a>     (<a href="glib-String-Chunks.html#GStringChunk">GStringChunk</a> *chunk,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-String-Chunks.html#g-string-chunk-insert-len">g_string_chunk_insert_len</a>       (<a href="glib-String-Chunks.html#GStringChunk">GStringChunk</a> *chunk,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);
+void        <a href="glib-String-Chunks.html#g-string-chunk-free">g_string_chunk_free</a>             (<a href="glib-String-Chunks.html#GStringChunk">GStringChunk</a> *chunk);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2942447"></a><h2>Описание</h2>
+<p>
+Строковый блок используется для хранения групп строк.
+Память распределяется блоками и когда строки добавляются в <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>
+они копируются в следующую свободную позицию в блоке. Когда блок заполняется распределяется следующий блок.
+</p>
+<p>
+Когда сохраняется большое количество строк, строковые блоки более эффективны чем использование 
+<a href="glib-String-Utility-Functions.html#g-strdup"><code class="function">g_strdup()</code></a>, 
+так как необходимо меньше вызовов <code class="function"><code class="function">malloc()</code></code>, 
+и при распределении тратится меньше памяти на накладные расходы.
+</p>
+<p>
+Добавление строк с помощью <a href="glib-String-Chunks.html#g-string-chunk-insert-const"><code class="function">g_string_chunk_insert_const()</code></a>, также позволяет удалять дубликаты.
+</p>
+<p>
+Для создания новой <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a> 
+используется <a href="glib-String-Chunks.html#g-string-chunk-new"><code class="function">g_string_chunk_new()</code></a>.
+</p>
+<p>
+Для добавления строк в <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a> 
+используется <a href="glib-String-Chunks.html#g-string-chunk-insert"><code class="function">g_string_chunk_insert()</code></a>.
+</p>
+<p>
+Для добавления строк в <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>, 
+но без дубликатов уже существующих строк в <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>, 
+используется <a href="glib-String-Chunks.html#g-string-chunk-insert-const"><code class="function">g_string_chunk_insert_const()</code></a>.
+</p>
+<p>
+Для освобождения элементов <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a> 
+используется <a href="glib-String-Chunks.html#g-string-chunk-free"><code class="function">g_string_chunk_free()</code></a>.
+Она не позволяет освобождать отдельные строки.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2942620"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2942630"></a><h3>
+<a name="GStringChunk"></a>GStringChunk</h3>
+<a class="indexterm" name="id2942643"></a><pre class="programlisting">typedef struct _GStringChunk GStringChunk;</pre>
+<p>
+Непрозрачная структура данных представляющая строковый блок (String Chunks).
+Она должна использоваться только при помощи следующих функций.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2942660"></a><h3>
+<a name="g-string-chunk-new"></a>g_string_chunk_new ()</h3>
+<a class="indexterm" name="id2942674"></a><pre class="programlisting"><a href="glib-String-Chunks.html#GStringChunk">GStringChunk</a>* g_string_chunk_new            (<a href="glib-Basic-Types.html#gsize">gsize</a> size);</pre>
+<p>
+Создаёт новый <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>size</code></em>&#160;:</span></td>
+<td>размер по умолчанию блока памяти который распределён для хранения строк. 
+    Если определённая строка больше чем этот размер по умолчанию, то для неё
+    будет распределён блок большего размера.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новый <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2942750"></a><h3>
+<a name="g-string-chunk-insert"></a>g_string_chunk_insert ()</h3>
+<a class="indexterm" name="id2942763"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_string_chunk_insert           (<a href="glib-String-Chunks.html#GStringChunk">GStringChunk</a> *chunk,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string);</pre>
+<p>
+Добавляет копию <em class="parameter"><code>string</code></em> в <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>.
+Возвращает указатель на новую копию строки в <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>.
+Символы в строке могут быть изменены, если необходимо, однако вы не должны изменять ничего после завершения строки.
+</p>
+<p>
+В отличие <a href="glib-String-Chunks.html#g-string-chunk-insert-const"><code class="function">g_string_chunk_insert_const()</code></a>, 
+эта функция не контролирует дубликаты. 
+А также строки добавленные с помощью <a href="glib-String-Chunks.html#g-string-chunk-insert"><code class="function">g_string_chunk_insert()</code></a> не будут найдены с помощью <a href="glib-String-Chunks.html#g-string-chunk-insert-const"><code class="function">g_string_chunk_insert_const()</code></a> при поиске дубликатов.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>chunk</code></em>&#160;:</span></td>
+<td><a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td>строка для добавления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель на копию <em class="parameter"><code>string</code></em> внутри 
+    <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2942930"></a><h3>
+<a name="g-string-chunk-insert-const"></a>g_string_chunk_insert_const ()</h3>
+<a class="indexterm" name="id2942944"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_string_chunk_insert_const     (<a href="glib-String-Chunks.html#GStringChunk">GStringChunk</a> *chunk,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string);</pre>
+<p>
+Добавляет копию <em class="parameter"><code>string</code></em> в <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>, если такая же строка уже не добавлена в <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a> с помощью <a href="glib-String-Chunks.html#g-string-chunk-insert-const"><code class="function">g_string_chunk_insert_const()</code></a>.
+</p>
+<p>
+Эта функция полезна если вам нужно копировать большое количество строк 
+но не нужно тратить пространство хранилища под дубликаты. Но вы должны помнить
+что здесь могут быть указатели на туже строку и поэтому любые изменения
+в строках должны выполняться очень осторожно.
+</p>
+<p>
+Помните что <a href="glib-String-Chunks.html#g-string-chunk-insert-const"><code class="function">g_string_chunk_insert_const()</code></a> 
+не будет возвращать указатель на строку добавленную с помощью 
+<a href="glib-String-Chunks.html#g-string-chunk-insert"><code class="function">g_string_chunk_insert()</code></a>, 
+даже если они соответствуют.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>chunk</code></em>&#160;:</span></td>
+<td><a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td>строка для добавления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель на новую или существующую копию <em class="parameter"><code>string</code></em> внутри
+    <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2943114"></a><h3>
+<a name="g-string-chunk-insert-len"></a>g_string_chunk_insert_len ()</h3>
+<a class="indexterm" name="id2943130"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_string_chunk_insert_len       (<a href="glib-String-Chunks.html#GStringChunk">GStringChunk</a> *chunk,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);</pre>
+<p>
+Добавляет копию первых <em class="parameter"><code>len</code></em> байт <em class="parameter"><code>string</code></em> 
+в <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>. 
+Копия nul-завершённая.
+</p>
+<p>
+Символы в строке могут изменяться, если необходимо, однако вы не должны делать никаких изменений после завершения строки.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>chunk</code></em>&#160;:</span></td>
+<td><a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td> байты для вставки
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> количество байт <em class="parameter"><code>string</code></em> для вставки, 
+     или -1 для вставки nul-завершённой строки. 
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> указатель на копию <em class="parameter"><code>string</code></em> внутри 
+    <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2943293"></a><h3>
+<a name="g-string-chunk-free"></a>g_string_chunk_free ()</h3>
+<a class="indexterm" name="id2943306"></a><pre class="programlisting">void        g_string_chunk_free             (<a href="glib-String-Chunks.html#GStringChunk">GStringChunk</a> *chunk);</pre>
+<p>
+Освобождает всю память распределённую <a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>.
+После вызова <a href="glib-String-Chunks.html#g-string-chunk-free"><code class="function">g_string_chunk_free()</code></a> запрещается
+доступ к любым строкам которые содержались внутри.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>chunk</code></em>&#160;:</span></td>
+<td><a href="glib-String-Chunks.html#GStringChunk"><span class="type">GStringChunk</span></a>.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+</div>
+</body>
+</html>

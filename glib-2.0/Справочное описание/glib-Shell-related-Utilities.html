@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Shell-related Utilities</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-utilities.html" title="GLib Utilities">
+<link rel="prev" href="glib-File-Utilities.html" title="File Utilities">
+<link rel="next" href="glib-Commandline-option-parser.html" title="Commandline option parser">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-File-Utilities.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-utilities.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Commandline-option-parser.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2813971" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2814097" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Shell-related-Utilities"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2813971"></a><span class="refentrytitle">Shell-related Utilities</span>
+</h2>
+<p>Shell-related Utilities &#8212; shell-подобная обработка командной строки.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+enum        <a href="glib-Shell-related-Utilities.html#GShellError">GShellError</a>;
+#define     <a href="glib-Shell-related-Utilities.html#G-SHELL-ERROR:CAPS">G_SHELL_ERROR</a>
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Shell-related-Utilities.html#g-shell-parse-argv">g_shell_parse_argv</a>              (const <a href="glib-Basic-Types.html#gchar">gchar</a> *command_line,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> *argcp,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> ***argvp,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Shell-related-Utilities.html#g-shell-quote">g_shell_quote</a>                   (const <a href="glib-Basic-Types.html#gchar">gchar</a> *unquoted_string);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Shell-related-Utilities.html#g-shell-unquote">g_shell_unquote</a>                 (const <a href="glib-Basic-Types.html#gchar">gchar</a> *quoted_string,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2814097"></a><h2>Описание</h2>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2814112"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2814122"></a><h3>
+<a name="GShellError"></a>enum GShellError</h3>
+<a class="indexterm" name="id2814134"></a><pre class="programlisting">typedef enum
+{
+  /* несоответствие или иначе искажённое квотирование */
+  G_SHELL_ERROR_BAD_QUOTING,
+  /* анализируемая строка пустая */
+  G_SHELL_ERROR_EMPTY_STRING,
+  G_SHELL_ERROR_FAILED
+} GShellError;
+</pre>
+<p>
+Коды ошибок возвращаемые функциями оболочки (shell functions).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-SHELL-ERROR-BAD-QUOTING:CAPS"></a><code class="literal">G_SHELL_ERROR_BAD_QUOTING</code></span></td>
+<td>Несоответствие или искажённое квотирование.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-SHELL-ERROR-EMPTY-STRING:CAPS"></a><code class="literal">G_SHELL_ERROR_EMPTY_STRING</code></span></td>
+<td>Анализируемая строка пустая.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-SHELL-ERROR-FAILED:CAPS"></a><code class="literal">G_SHELL_ERROR_FAILED</code></span></td>
+<td>Некоторые другие ошибки.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2814226"></a><h3>
+<a name="G-SHELL-ERROR:CAPS"></a>G_SHELL_ERROR</h3>
+<a class="indexterm" name="id2814239"></a><pre class="programlisting">#define G_SHELL_ERROR g_shell_error_quark ()
+</pre>
+<p>
+Домен ошибки для функций оболочки. Ошибки в этом домене из перечисления
+<a href="glib-Shell-related-Utilities.html#GShellError"><span class="type">GShellError</span></a>. 
+Смотрите <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> для информации о доменах ошибки.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2814273"></a><h3>
+<a name="g-shell-parse-argv"></a>g_shell_parse_argv ()</h3>
+<a class="indexterm" name="id2814286"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_shell_parse_argv              (const <a href="glib-Basic-Types.html#gchar">gchar</a> *command_line,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> *argcp,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> ***argvp,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Анализирует командную строку в одномерном массиве параметров, аналогичным с 
+shell способом, но без многих расширений выполняемых shell 
+(переменные, globs, операторы, расширение файлового имени,
+и т.д. не поддерживаются). Результат определяется в том же самом стиля как 
+вы могли бы получить из UNIX98 /bin/sh, пока ввод не содержит не поддерживаемых 
+shell расширений. Если ввод содержит такие расширения, они помещаются буквально. 
+Возможные ошибки происходят из <a href="glib-Shell-related-Utilities.html#G-SHELL-ERROR:CAPS"><span class="type">G_SHELL_ERROR</span></a>
+домена. Освобождается одномерный массив с помощью <a href="glib-String-Utility-Functions.html#g-strfreev"><code class="function">g_strfreev()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>command_line</code></em>&#160;:</span></td>
+<td> анализируемая командная строка
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>argcp</code></em>&#160;:</span></td>
+<td> расположение возвращаемого количества аргументов
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>argvp</code></em>&#160;:</span></td>
+<td> расположение возвращаемого массива аргументов
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение возвращаемой ошибки
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> при успешном выполнении, 
+     <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> если установлена ошибка
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2814459"></a><h3>
+<a name="g-shell-quote"></a>g_shell_quote ()</h3>
+<a class="indexterm" name="id2814472"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_shell_quote                   (const <a href="glib-Basic-Types.html#gchar">gchar</a> *unquoted_string);</pre>
+<p>
+Квотирует строку так чтобы оболочка (/bin/sh) интерпретировала её как <em class="parameter"><code>unquoted_string</code></em>. 
+Если вы поместите имя файла в оболочку, например, вы должны сначала квотировать его с помощью этой функции.  
+Возвращаемое значение должно освобождаться с помощью <a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a>. 
+Используемый стиль квотирования не определён (могут использоваться или одинарные или двойные кавычки).</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>unquoted_string</code></em>&#160;:</span></td>
+<td> строка литерал
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> квотированная строка
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2814554"></a><h3>
+<a name="g-shell-unquote"></a>g_shell_unquote ()</h3>
+<a class="indexterm" name="id2814566"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_shell_unquote                 (const <a href="glib-Basic-Types.html#gchar">gchar</a> *quoted_string,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Снимает квотирование строки как если бы это сделала оболочка (/bin/sh). 
+Обрабатывает кавычки только; если строка содержит file globs, арифметические операторы,
+переменные, обратные кавычки, переназначения, или другие специальные shell особенности, 
+результат будет отличаться от реального результата который дала бы shell
+(переменные, обратные кавычки, и т.д. будут помещены как литералы вместо интерпретации). 
+Эта функция гарантировано завершается успешно если применяется результат 
+<a href="glib-Shell-related-Utilities.html#g-shell-quote"><code class="function">g_shell_quote()</code></a>. 
+Если она завершилась неудачей, то возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+и устанавливает ошибку. <em class="parameter"><code>quoted_string</code></em> не должен фактически содержать кавычки или escaped текст; 
+<a href="glib-Shell-related-Utilities.html#g-shell-unquote"><code class="function">g_shell_unquote()</code></a> просто проходит через строку
+и снимает квотирование (unquotes/unescapes) как если бы это сделала shell-оболочка. Обрабатываются и двойные и одинарные кавычки, 
+а так же escapes включая завершающий символ новой строки. Возвращаемое значение должно освобождаться с  помощью 
+<a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a>. 
+Возможные ошибки находятся в домене <a href="glib-Shell-related-Utilities.html#G-SHELL-ERROR:CAPS"><span class="type">G_SHELL_ERROR</span></a>.
+</p>
+<p>
+Shell правила квотирования немного странные. Единственные кавычки сохраняют литеральную строку в точности. 
+escape-последовательность не допускается; даже \' - если вы хотите иметь ' в квотированном тексте, вы можете сделать примерно так
+'foo'\''bar'.  Двойные кавычки позволяют $, `, ", \, и символ новой строки выделять обратным слэшем. 
+Иначе двойные кавычки сохраняют всё буквально.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>quoted_string</code></em>&#160;:</span></td>
+<td> shell-quoted строка
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой ошибки или NULL
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> unquoted строка
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</body>
+</html>

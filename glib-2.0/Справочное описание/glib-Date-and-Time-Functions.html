@@ -1,0 +1,2193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Date and Time Functions</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-utilities.html" title="GLib Utilities">
+<link rel="prev" href="glib-I18N.html" title="Internationalization">
+<link rel="next" href="glib-Random-Numbers.html" title="Random Numbers">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-I18N.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-utilities.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Random-Numbers.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2728178" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2729750" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Date-and-Time-Functions"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2728178"></a><span class="refentrytitle">Функции даты и времени</span>
+</h2>
+<p>Date and Time Functions &#8212; календарные вычисления и различный материал времени.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+#define     <a href="glib-Date-and-Time-Functions.html#G-USEC-PER-SEC:CAPS">G_USEC_PER_SEC</a>
+            <a href="glib-Date-and-Time-Functions.html#GTimeVal">GTimeVal</a>;
+void        <a href="glib-Date-and-Time-Functions.html#g-get-current-time">g_get_current_time</a>              (<a href="glib-Date-and-Time-Functions.html#GTimeVal">GTimeVal</a> *result);
+void        <a href="glib-Date-and-Time-Functions.html#g-usleep">g_usleep</a>                        (<a href="glib-Basic-Types.html#gulong">gulong</a> microseconds);
+void        <a href="glib-Date-and-Time-Functions.html#g-time-val-add">g_time_val_add</a>                  (<a href="glib-Date-and-Time-Functions.html#GTimeVal">GTimeVal</a> *time_,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> microseconds);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Date-and-Time-Functions.html#g-time-val-from-iso8601">g_time_val_from_iso8601</a>         (const <a href="glib-Basic-Types.html#gchar">gchar</a> *iso_date,
+                                             <a href="glib-Date-and-Time-Functions.html#GTimeVal">GTimeVal</a> *time_);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Date-and-Time-Functions.html#g-time-val-to-iso8601">g_time_val_to_iso8601</a>           (<a href="glib-Date-and-Time-Functions.html#GTimeVal">GTimeVal</a> *time_);
+
+            <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a>;
+typedef     <a href="glib-Date-and-Time-Functions.html#GTime">GTime</a>;
+enum        <a href="glib-Date-and-Time-Functions.html#GDateDMY">GDateDMY</a>;
+typedef     <a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a>;
+enum        <a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a>;
+typedef     <a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a>;
+enum        <a href="glib-Date-and-Time-Functions.html#GDateWeekday">GDateWeekday</a>;
+
+#define     <a href="glib-Date-and-Time-Functions.html#G-DATE-BAD-DAY:CAPS">G_DATE_BAD_DAY</a>
+#define     <a href="glib-Date-and-Time-Functions.html#G-DATE-BAD-JULIAN:CAPS">G_DATE_BAD_JULIAN</a>
+#define     <a href="glib-Date-and-Time-Functions.html#G-DATE-BAD-YEAR:CAPS">G_DATE_BAD_YEAR</a>
+
+<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a>*      <a href="glib-Date-and-Time-Functions.html#g-date-new">g_date_new</a>                      (void);
+<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a>*      <a href="glib-Date-and-Time-Functions.html#g-date-new-dmy">g_date_new_dmy</a>                  (<a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a> day,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a> month,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);
+<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a>*      <a href="glib-Date-and-Time-Functions.html#g-date-new-julian">g_date_new_julian</a>               (<a href="glib-Basic-Types.html#guint32">guint32</a> julian_day);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-clear">g_date_clear</a>                    (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_dates);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-free">g_date_free</a>                     (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+
+void        <a href="glib-Date-and-Time-Functions.html#g-date-set-day">g_date_set_day</a>                  (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a> day);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-set-month">g_date_set_month</a>                (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a> month);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-set-year">g_date_set_year</a>                 (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-set-dmy">g_date_set_dmy</a>                  (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a> day,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a> month,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> y);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-set-julian">g_date_set_julian</a>               (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint32">guint32</a> julian_date);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-set-time">g_date_set_time</a>                 (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Date-and-Time-Functions.html#GTime">GTime</a> time_);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-set-time-t">g_date_set_time_t</a>               (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             time_t timet);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-set-time-val">g_date_set_time_val</a>             (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Date-and-Time-Functions.html#GTimeVal">GTimeVal</a> *timeval);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-set-parse">g_date_set_parse</a>                (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *str);
+
+void        <a href="glib-Date-and-Time-Functions.html#g-date-add-days">g_date_add_days</a>                 (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_days);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-subtract-days">g_date_subtract_days</a>            (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_days);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-add-months">g_date_add_months</a>               (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_months);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-subtract-months">g_date_subtract_months</a>          (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_months);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-add-years">g_date_add_years</a>                (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_years);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-subtract-years">g_date_subtract_years</a>           (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_years);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Date-and-Time-Functions.html#g-date-days-between">g_date_days_between</a>             (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date1,
+                                             const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date2);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Date-and-Time-Functions.html#g-date-compare">g_date_compare</a>                  (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *lhs,
+                                             const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *rhs);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-clamp">g_date_clamp</a>                    (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *min_date,
+                                             const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *max_date);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-order">g_date_order</a>                    (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date1,
+                                             <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date2);
+
+<a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a>    <a href="glib-Date-and-Time-Functions.html#g-date-get-day">g_date_get_day</a>                  (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+<a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a>  <a href="glib-Date-and-Time-Functions.html#g-date-get-month">g_date_get_month</a>                (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+<a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a>   <a href="glib-Date-and-Time-Functions.html#g-date-get-year">g_date_get_year</a>                 (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+<a href="glib-Basic-Types.html#guint32">guint32</a>     <a href="glib-Date-and-Time-Functions.html#g-date-get-julian">g_date_get_julian</a>               (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+<a href="glib-Date-and-Time-Functions.html#GDateWeekday">GDateWeekday</a> <a href="glib-Date-and-Time-Functions.html#g-date-get-weekday">g_date_get_weekday</a>             (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Date-and-Time-Functions.html#g-date-get-day-of-year">g_date_get_day_of_year</a>          (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+
+<a href="glib-Basic-Types.html#guint8">guint8</a>      <a href="glib-Date-and-Time-Functions.html#g-date-get-days-in-month">g_date_get_days_in_month</a>        (<a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a> month,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Date-and-Time-Functions.html#g-date-is-first-of-month">g_date_is_first_of_month</a>        (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Date-and-Time-Functions.html#g-date-is-last-of-month">g_date_is_last_of_month</a>         (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Date-and-Time-Functions.html#g-date-is-leap-year">g_date_is_leap_year</a>             (<a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Date-and-Time-Functions.html#g-date-get-monday-week-of-year">g_date_get_monday_week_of_year</a>  (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+<a href="glib-Basic-Types.html#guint8">guint8</a>      <a href="glib-Date-and-Time-Functions.html#g-date-get-monday-weeks-in-year">g_date_get_monday_weeks_in_year</a> (<a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Date-and-Time-Functions.html#g-date-get-sunday-week-of-year">g_date_get_sunday_week_of_year</a>  (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+<a href="glib-Basic-Types.html#guint8">guint8</a>      <a href="glib-Date-and-Time-Functions.html#g-date-get-sunday-weeks-in-year">g_date_get_sunday_weeks_in_year</a> (<a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Date-and-Time-Functions.html#g-date-get-iso8601-week-of-year">g_date_get_iso8601_week_of_year</a> (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+
+<a href="glib-Basic-Types.html#gsize">gsize</a>       <a href="glib-Date-and-Time-Functions.html#g-date-strftime">g_date_strftime</a>                 (<a href="glib-Basic-Types.html#gchar">gchar</a> *s,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> slen,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+void        <a href="glib-Date-and-Time-Functions.html#g-date-to-struct-tm">g_date_to_struct_tm</a>             (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             struct tm *tm);
+
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Date-and-Time-Functions.html#g-date-valid">g_date_valid</a>                    (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Date-and-Time-Functions.html#g-date-valid-day">g_date_valid_day</a>                (<a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a> day);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Date-and-Time-Functions.html#g-date-valid-month">g_date_valid_month</a>              (<a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a> month);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Date-and-Time-Functions.html#g-date-valid-year">g_date_valid_year</a>               (<a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Date-and-Time-Functions.html#g-date-valid-dmy">g_date_valid_dmy</a>                (<a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a> day,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a> month,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Date-and-Time-Functions.html#g-date-valid-julian">g_date_valid_julian</a>             (<a href="glib-Basic-Types.html#guint32">guint32</a> julian_date);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Date-and-Time-Functions.html#g-date-valid-weekday">g_date_valid_weekday</a>            (<a href="glib-Date-and-Time-Functions.html#GDateWeekday">GDateWeekday</a> weekday);
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2729750"></a><h2>Описание</h2>
+<p>
+Структура данных <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> представляет день 
+между 1 Января (January 1), 1 Года (Year 1), и несколькими тысячами лет в будущем (в данный момент это составляет приблизительно 65535 лет, 
+но <a href="glib-Date-and-Time-Functions.html#g-date-set-parse"><code class="function">g_date_set_parse()</code></a> анализирует только до 
+8000 года приблизительно - простой счёт в "несколько тысяч"). 
+<a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> предназначена для 
+представления ежедневных дат, не астрономических дат, не исторических дат, не
+ISO временных интервалов (timestamps) и не подобных им. Она экстраполирует текущий Григорианский календарь
+вперёд и назад во времени; не производится никаких попыток изменить календарь для соответствия временным периодам или месту расположения. 
+<a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> не хранит информацию о времени; 
+она представляет <span class="emphasis"><em>day</em></span>.
+</p>
+<p>
+<a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> реализация имеет несколько прекрасных особенностей; 
+она является 64-битной структурой, поэтому хранение большого количества дат очень эффективно. Она может принимать оба вида представления даты
+и Юлианское и день-месяц-год, так как некоторые расчёты более просты либо с одним представлением даты либо с другим. 
+Юлианское представление - это просто подсчёт дней с некоторой фиксированной даты в прошлом; 
+для <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> фиксированным днём является 1 Января, 
+1 года нашей эры (1 AD).
+("Юлианские" даты в <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> API не являются фактическими 
+Юлианскими датами в техническом смысле; технически, Юлианские даты подсчитываются начиная с Юлианского периода, 
+1 Января 4713 год до нашей эры (Julian period, Jan 1, 4713 BC)).
+</p>
+<p>
+<a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> проста в использовании. 
+Сначала вам потребуется пустая дата ("blank" date); вы можете получить динамически распределяемую дату из 
+<a href="glib-Date-and-Time-Functions.html#g-date-new"><code class="function">g_date_new()</code></a>, или вы можете объявить
+автоматическую переменную или массив и инициализировать его в нормальное состояние вызвав 
+<a href="glib-Date-and-Time-Functions.html#g-date-clear"><code class="function">g_date_clear()</code></a>. 
+Очищенная дата это нормально; это безопасно для вызова 
+<a href="glib-Date-and-Time-Functions.html#g-date-set-dmy"><code class="function">g_date_set_dmy()</code></a> 
+и других функций мутаторов для инициализации значения очищенной даты. Однако, очищенная дата первоначально 
+<span class="emphasis"><em>недоступна</em></span>, это значит что она представляет день которого не существует. 
+Она не определена для вызова любых подпрограмм расчёта даты. Если вы определяете дату от пользователя или другого
+непредсказуемого источника, вы должны проверять правильность даты с помощью 
+<a href="glib-Date-and-Time-Functions.html#g-date-valid"><code class="function">g_date_valid()</code></a>. 
+<a href="glib-Date-and-Time-Functions.html#g-date-valid"><code class="function">g_date_valid()</code></a> 
+также используется для проверки ошибок <a href="glib-Date-and-Time-Functions.html#g-date-set-parse"><code class="function">g_date_set_parse()</code></a> и других функций которые могут завершиться неудачно. 
+Даты могут быть очищены снова с помощью вызова <a href="glib-Date-and-Time-Functions.html#g-date-clear"><code class="function">g_date_clear()</code></a>.
+</p>
+<p>
+<span class="emphasis"><em>Очень важно использовать API для доступа к <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>struct.</em></span> Зачастую правильным является только представление день-месяц-год (day-month-year) или Юлианское. 
+Иногда не одно из этих представлений неправильно. Используйте API.
+</p>
+<p>
+GLib не содержит функций манипулирования временем; однако, есть <a href="glib-Date-and-Time-Functions.html#GTime"><span class="type">GTime</span></a> typedef и <a href="glib-Date-and-Time-Functions.html#GTimeVal"><span class="type">GTimeVal</span></a> структура которые представляют более точное время (в микросекундах). Вы можете запросить текущее время как <a href="glib-Date-and-Time-Functions.html#GTimeVal"><span class="type">GTimeVal</span></a> с помощью <a href="glib-Date-and-Time-Functions.html#g-get-current-time"><code class="function">g_get_current_time()</code></a>.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2730006"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2730016"></a><h3>
+<a name="G-USEC-PER-SEC:CAPS"></a>G_USEC_PER_SEC</h3>
+<a class="indexterm" name="id2730029"></a><pre class="programlisting">#define G_USEC_PER_SEC 1000000
+</pre>
+<p>
+Количество микросекунд в одной секунде (1 миллион). Этот макрос обеспечивает удобочитаемость кода.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2730046"></a><h3>
+<a name="GTimeVal"></a>GTimeVal</h3>
+<a class="indexterm" name="id2730059"></a><pre class="programlisting">typedef struct {
+  glong tv_sec;
+  glong tv_usec;
+} GTimeVal;
+</pre>
+<p>
+Представляет точное время, с секундами и микросекундами. 
+Похоже на возврат <span class="structname">struct timeval</span> вызова 
+the <code class="function"><code class="function">gettimeofday()</code></code> UNIX.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#glong">glong</a>&#160;<em class="structfield"><code>tv_sec</code></em>;</span></td>
+<td>секунды.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#glong">glong</a>&#160;<em class="structfield"><code>tv_usec</code></em>;</span></td>
+<td>микросекунды.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2730141"></a><h3>
+<a name="g-get-current-time"></a>g_get_current_time ()</h3>
+<a class="indexterm" name="id2730154"></a><pre class="programlisting">void        g_get_current_time              (<a href="glib-Date-and-Time-Functions.html#GTimeVal">GTimeVal</a> *result);</pre>
+<p>
+Аналог UNIX функции <code class="function">gettimeofday()</code>, но переносимый.</p>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>result</code></em>&#160;:</span></td>
+<td> <a href="glib-Date-and-Time-Functions.html#GTimeVal"><span class="type">GTimeVal</span></a> структура в которой хранится текущее время.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2730223"></a><h3>
+<a name="g-usleep"></a>g_usleep ()</h3>
+<a class="indexterm" name="id2730235"></a><pre class="programlisting">void        g_usleep                        (<a href="glib-Basic-Types.html#gulong">gulong</a> microseconds);</pre>
+<p>
+Приостанавливает текущий поток на определённое количество микросекунд. В секунде есть 1 миллион микросекунд (представляется с помощью макроса
+<a href="glib-Date-and-Time-Functions.html#G-USEC-PER-SEC:CAPS"><span class="type">G_USEC_PER_SEC</span></a>). <a href="glib-Date-and-Time-Functions.html#g-usleep"><code class="function">g_usleep()</code></a> может иметь ограниченную точность,
+зависит от аппаратуры и операционной системы; не полагайтесь на точную длину паузы.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>microseconds</code></em>&#160;:</span></td>
+<td>количество микросекунд для паузы.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2730305"></a><h3>
+<a name="g-time-val-add"></a>g_time_val_add ()</h3>
+<a class="indexterm" name="id2730318"></a><pre class="programlisting">void        g_time_val_add                  (<a href="glib-Date-and-Time-Functions.html#GTimeVal">GTimeVal</a> *time_,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> microseconds);</pre>
+<p>
+Добавляет полученное количество микросекунд к <em class="parameter"><code>time_</code></em>. 
+<em class="parameter"><code>microseconds</code></em> может быть также отрицательным для уменьшения значения 
+<em class="parameter"><code>time_</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>time_</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GTimeVal"><span class="type">GTimeVal</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>microseconds</code></em>&#160;:</span></td>
+<td> количество микросекунд для добавления к <em class="parameter"><code>time</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2730421"></a><h3>
+<a name="g-time-val-from-iso8601"></a>g_time_val_from_iso8601 ()</h3>
+<a class="indexterm" name="id2730437"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_time_val_from_iso8601         (const <a href="glib-Basic-Types.html#gchar">gchar</a> *iso_date,
+                                             <a href="glib-Date-and-Time-Functions.html#GTimeVal">GTimeVal</a> *time_);</pre>
+<p>
+Конвертирует строку содержащую код даты и времени ISO 8601 в 
+<a href="glib-Date-and-Time-Functions.html#GTimeVal"><span class="type">GTimeVal</span></a> и помещает её в 
+<em class="parameter"><code>time_</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>iso_date</code></em>&#160;:</span></td>
+<td> строка кода даты ISO 8601
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>time_</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GTimeVal"><span class="type">GTimeVal</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если конвертация прошла успешно.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2730557"></a><h3>
+<a name="g-time-val-to-iso8601"></a>g_time_val_to_iso8601 ()</h3>
+<a class="indexterm" name="id2730572"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_time_val_to_iso8601           (<a href="glib-Date-and-Time-Functions.html#GTimeVal">GTimeVal</a> *time_);</pre>
+<p>
+Конвертирует <em class="parameter"><code>time_</code></em> в строку кода ISO 8601, относительно Coordinated Universal Time (UTC).</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>time_</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GTimeVal"><span class="type">GTimeVal</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка содержащая дату ISO 8601
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2730653"></a><h3>
+<a name="GDate"></a>GDate</h3>
+<a class="indexterm" name="id2730665"></a><pre class="programlisting">typedef struct {
+  guint julian_days : 32; /* julian days representation - we use a
+                           *  bitfield hoping that 64 bit platforms
+                           *  will pack this whole struct in one big
+                           *  int
+                           */
+
+  guint julian : 1;    /* julian is valid */
+  guint dmy    : 1;    /* dmy is valid */
+
+  /* DMY representation */
+  guint day    : 6;
+  guint month  : 4;
+  guint year   : 16;
+} GDate;
+</pre>
+<p>
+Представляет день между 1 Января 1 Года и и несколькими тысячами лет будущего. 
+Ни к одному из членов не нужно обращаться непосредственно. Если <span class="structname">GDate</span> 
+определена из <a href="glib-Date-and-Time-Functions.html#g-date-new"><code class="function">g_date_new()</code></a>, 
+она будет безопасна для изменений, но недоступна и поэтому не безопасна для календарных расчётов.
+Если это объявить в стеке, он будет содержать мусор поэтому должен быть инициализирован с помощью 
+<a href="glib-Date-and-Time-Functions.html#g-date-clear"><code class="function">g_date_clear()</code></a>. 
+<a href="glib-Date-and-Time-Functions.html#g-date-clear"><code class="function">g_date_clear()</code></a> делает дату недопустимой
+но нормальной. Недопустимая дата не представляет день, она "пустая". Дата становится допустимой после того, как вы установите её в 
+Юлианский день или день, месяц и год.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#guint">guint</a>&#160;<em class="structfield"><code>julian_days</code></em>&#160;:&#160;32;</span></td>
+<td>Юлианское представление даты
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#guint">guint</a>&#160;<em class="structfield"><code>julian</code></em>&#160;:&#160;1;</span></td>
+<td>этот бит устанавливается если <em class="parameter"><code>julian_days</code></em> допустим
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#guint">guint</a>&#160;<em class="structfield"><code>dmy</code></em>&#160;:&#160;1;</span></td>
+<td>это устанавливается если <em class="parameter"><code>day</code></em>, <em class="parameter"><code>month</code></em> и <em class="parameter"><code>year</code></em> являются допустимыми
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#guint">guint</a>&#160;<em class="structfield"><code>day</code></em>&#160;:&#160;6;</span></td>
+<td>день в преставлении даты в виде день-месяц-год, как число между 1 и 31
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#guint">guint</a>&#160;<em class="structfield"><code>month</code></em>&#160;:&#160;4;</span></td>
+<td>месяц в представлении даты в виде день-месяц-год, как число между 1 и 12
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#guint">guint</a>&#160;<em class="structfield"><code>year</code></em>&#160;:&#160;16;</span></td>
+<td>год в представлении даты как день-месяц-год
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2730886"></a><h3>
+<a name="GTime"></a>GTime</h3>
+<a class="indexterm" name="id2730898"></a><pre class="programlisting">typedef gint32  GTime;
+</pre>
+<p>
+Просто замена для <span class="type">time_t</span>. Она устарела так как 
+<span class="emphasis"><em>не</em></span> является эквивалентом для <span class="type">time_t</span> 
+на 64-битных платформах с 64-битной <span class="type">time_t</span>. 
+Несвязана с <a href="glib-Timers.html#GTimer"><span class="type">GTimer</span></a>.
+</p>
+<p>
+Помните что <span class="type">GTime</span> определяется всегда как 32bit целочисленное,
+в отличие от <span class="type">time_t</span> которая может быть 64bit на некоторых системах. 
+Поэтому, <span class="type">GTime</span> переполнится в 2038 году, и вы не сможете использовать 
+адрес переменной <span class="type">GTime</span> как аргумент для UNIX функции <code class="function">time()</code>. 
+Вместо этого сделайте следующее:
+</p>
+<div class="informalexample"><pre class="programlisting">
+time_t ttime;
+GTime gtime;
+
+time (&amp;ttime);
+gtime = (GTime)ttime;
+</pre></div>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2730983"></a><h3>
+<a name="GDateDMY"></a>enum GDateDMY</h3>
+<a class="indexterm" name="id2730996"></a><pre class="programlisting">typedef enum
+{
+  G_DATE_DAY   = 0,
+  G_DATE_MONTH = 1,
+  G_DATE_YEAR  = 2
+} GDateDMY;
+</pre>
+<p>
+Это перечисление не используется в API, но может быть полезно если вам необходимо
+маркировать номер как день, месяц, или год.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-DATE-DAY:CAPS"></a><code class="literal">G_DATE_DAY</code></span></td>
+<td>день
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-MONTH:CAPS"></a><code class="literal">G_DATE_MONTH</code></span></td>
+<td>месяц
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-YEAR:CAPS"></a><code class="literal">G_DATE_YEAR</code></span></td>
+<td>год
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2731085"></a><h3>
+<a name="GDateDay"></a>GDateDay</h3>
+<a class="indexterm" name="id2731098"></a><pre class="programlisting">typedef guint8  GDateDay;   /* day of the month */
+</pre>
+<p>
+Целочисленное представляющее день в месяце; между 1 и 31. <a href="glib-Date-and-Time-Functions.html#G-DATE-BAD-DAY:CAPS">
+<span class="type">G_DATE_BAD_DAY</span></a> представляет недопустимый день в месяце.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2731123"></a><h3>
+<a name="GDateMonth"></a>enum GDateMonth</h3>
+<a class="indexterm" name="id2731135"></a><pre class="programlisting">typedef enum
+{
+  G_DATE_BAD_MONTH = 0,
+  G_DATE_JANUARY   = 1,
+  G_DATE_FEBRUARY  = 2,
+  G_DATE_MARCH     = 3,
+  G_DATE_APRIL     = 4,
+  G_DATE_MAY       = 5,
+  G_DATE_JUNE      = 6,
+  G_DATE_JULY      = 7,
+  G_DATE_AUGUST    = 8,
+  G_DATE_SEPTEMBER = 9,
+  G_DATE_OCTOBER   = 10,
+  G_DATE_NOVEMBER  = 11,
+  G_DATE_DECEMBER  = 12
+} GDateMonth;
+</pre>
+<p>
+Перечисление представляющее месяц; значениями являются <a href="glib-Date-and-Time-Functions.html#G-DATE-JANUARY:CAPS">
+<span class="type">G_DATE_JANUARY</span></a>, <a href="glib-Date-and-Time-Functions.html#G-DATE-FEBRUARY:CAPS">
+<span class="type">G_DATE_FEBRUARY</span></a>, и т.д.. <a href="glib-Date-and-Time-Functions.html#G-DATE-BAD-MONTH:CAPS">
+<span class="type">G_DATE_BAD_MONTH</span></a> представляет недопустимое значение.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-DATE-BAD-MONTH:CAPS"></a><code class="literal">G_DATE_BAD_MONTH</code></span></td>
+<td>недопустимое значение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-JANUARY:CAPS"></a><code class="literal">G_DATE_JANUARY</code></span></td>
+<td>Январь (January).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-FEBRUARY:CAPS"></a><code class="literal">G_DATE_FEBRUARY</code></span></td>
+<td>Февраль (February).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-MARCH:CAPS"></a><code class="literal">G_DATE_MARCH</code></span></td>
+<td>Март (March).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-APRIL:CAPS"></a><code class="literal">G_DATE_APRIL</code></span></td>
+<td>Апрель (April).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-MAY:CAPS"></a><code class="literal">G_DATE_MAY</code></span></td>
+<td>Май (May).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-JUNE:CAPS"></a><code class="literal">G_DATE_JUNE</code></span></td>
+<td>Июнь (June).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-JULY:CAPS"></a><code class="literal">G_DATE_JULY</code></span></td>
+<td>Июль (July).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-AUGUST:CAPS"></a><code class="literal">G_DATE_AUGUST</code></span></td>
+<td>Август (August).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-SEPTEMBER:CAPS"></a><code class="literal">G_DATE_SEPTEMBER</code></span></td>
+<td>Сентябрь (September).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-OCTOBER:CAPS"></a><code class="literal">G_DATE_OCTOBER</code></span></td>
+<td>Октябрь (October).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-NOVEMBER:CAPS"></a><code class="literal">G_DATE_NOVEMBER</code></span></td>
+<td>Ноябрь (November).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-DECEMBER:CAPS"></a><code class="literal">G_DATE_DECEMBER</code></span></td>
+<td>Декабрь (December).
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2731480"></a><h3>
+<a name="GDateYear"></a>GDateYear</h3>
+<a class="indexterm" name="id2731492"></a><pre class="programlisting">typedef guint16 GDateYear;
+</pre>
+<p>
+Целочисленное представляющее год; <a href="glib-Date-and-Time-Functions.html#G-DATE-BAD-YEAR:CAPS">
+<span class="type">G_DATE_BAD_YEAR</span></a> представляет недопустимое значение. Год должен быть 1 или больше; 
+отрицательное значение недопустимо. Год представляется четырьмя цифрами.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2731519"></a><h3>
+<a name="GDateWeekday"></a>enum GDateWeekday</h3>
+<a class="indexterm" name="id2731532"></a><pre class="programlisting">typedef enum
+{
+  G_DATE_BAD_WEEKDAY  = 0,
+  G_DATE_MONDAY       = 1,
+  G_DATE_TUESDAY      = 2,
+  G_DATE_WEDNESDAY    = 3,
+  G_DATE_THURSDAY     = 4,
+  G_DATE_FRIDAY       = 5,
+  G_DATE_SATURDAY     = 6,
+  G_DATE_SUNDAY       = 7
+} GDateWeekday;
+</pre>
+<p>
+Перечисление представляющее день в неделе; <a href="glib-Date-and-Time-Functions.html#G-DATE-MONDAY:CAPS">
+<span class="type">G_DATE_MONDAY</span></a>,
+<a href="glib-Date-and-Time-Functions.html#G-DATE-TUESDAY:CAPS"><span class="type">G_DATE_TUESDAY</span></a>, и т.д.. 
+<a href="glib-Date-and-Time-Functions.html#G-DATE-BAD-WEEKDAY:CAPS"><span class="type">G_DATE_BAD_WEEKDAY</span></a> недопустимый день недели.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-DATE-BAD-WEEKDAY:CAPS"></a><code class="literal">G_DATE_BAD_WEEKDAY</code></span></td>
+<td>недопустимое значение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-MONDAY:CAPS"></a><code class="literal">G_DATE_MONDAY</code></span></td>
+<td>Понедельник (Monday).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-TUESDAY:CAPS"></a><code class="literal">G_DATE_TUESDAY</code></span></td>
+<td>Вторник (Tuesday).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-WEDNESDAY:CAPS"></a><code class="literal">G_DATE_WEDNESDAY</code></span></td>
+<td>Среда (Wednesday).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-THURSDAY:CAPS"></a><code class="literal">G_DATE_THURSDAY</code></span></td>
+<td>Четверг (Thursday).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-FRIDAY:CAPS"></a><code class="literal">G_DATE_FRIDAY</code></span></td>
+<td>Пятница (Friday).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-SATURDAY:CAPS"></a><code class="literal">G_DATE_SATURDAY</code></span></td>
+<td>Суббота (Saturday).
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-DATE-SUNDAY:CAPS"></a><code class="literal">G_DATE_SUNDAY</code></span></td>
+<td>Воскресенье (Sunday).
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2731764"></a><h3>
+<a name="G-DATE-BAD-DAY:CAPS"></a>G_DATE_BAD_DAY</h3>
+<a class="indexterm" name="id2731777"></a><pre class="programlisting">#define G_DATE_BAD_DAY    0U
+</pre>
+<p>
+Представляет недопустимую <a href="glib-Date-and-Time-Functions.html#GDateDay"><span class="type">GDateDay</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2731801"></a><h3>
+<a name="G-DATE-BAD-JULIAN:CAPS"></a>G_DATE_BAD_JULIAN</h3>
+<a class="indexterm" name="id2731814"></a><pre class="programlisting">#define G_DATE_BAD_JULIAN 0U
+</pre>
+<p>
+Представляет недопустимый номер дня в Юлианском представлении.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2731830"></a><h3>
+<a name="G-DATE-BAD-YEAR:CAPS"></a>G_DATE_BAD_YEAR</h3>
+<a class="indexterm" name="id2731844"></a><pre class="programlisting">#define G_DATE_BAD_YEAR   0U
+</pre>
+<p>
+Представляет недопустимый год.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2731860"></a><h3>
+<a name="g-date-new"></a>g_date_new ()</h3>
+<a class="indexterm" name="id2731872"></a><pre class="programlisting"><a href="glib-Date-and-Time-Functions.html#GDate">GDate</a>*      g_date_new                      (void);</pre>
+<p>
+Распределяет <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> 
+и инициализирует её до нормального сотсояния. Новая дата будет очищена 
+(как если бы вы вызвали <a href="glib-Date-and-Time-Functions.html#g-date-clear"><code class="function">g_date_clear()</code></a>) 
+но недопустима (она не будет представлять существующий день). Возвращаемое значение освобождается с помощью 
+<a href="glib-Date-and-Time-Functions.html#g-date-free"><code class="function">g_date_free()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>вновь распределённая <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2731948"></a><h3>
+<a name="g-date-new-dmy"></a>g_date_new_dmy ()</h3>
+<a class="indexterm" name="id2731960"></a><pre class="programlisting"><a href="glib-Date-and-Time-Functions.html#GDate">GDate</a>*      g_date_new_dmy                  (<a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a> day,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a> month,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);</pre>
+<p>
+Аналогична <a href="glib-Date-and-Time-Functions.html#g-date-new"><code class="function">g_date_new()</code></a>, 
+но также устанавливает значение даты. Допустим вы помещаете в тройку день-месяц-год существующий день, 
+тогда возвращаемая дата будет допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>day</code></em>&#160;:</span></td>
+<td>день месяца.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>month</code></em>&#160;:</span></td>
+<td>месяц в году.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>year</code></em>&#160;:</span></td>
+<td>год
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>вновь распределённая <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> инициализированная с помощью 
+<em class="parameter"><code>дня</code></em>, <em class="parameter"><code>месяца</code></em> и <em class="parameter"><code>года</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2732099"></a><h3>
+<a name="g-date-new-julian"></a>g_date_new_julian ()</h3>
+<a class="indexterm" name="id2732112"></a><pre class="programlisting"><a href="glib-Date-and-Time-Functions.html#GDate">GDate</a>*      g_date_new_julian               (<a href="glib-Basic-Types.html#guint32">guint32</a> julian_day);</pre>
+<p>
+Аналогична <a href="glib-Date-and-Time-Functions.html#g-date-new"><code class="function">g_date_new()</code></a>, но так же устанавливает 
+значение даты. Допустим вы поместили допустимый Юлианский номер дня (больше чем 0, меньше чем разумно большое число), 
+возвращаемая дата будет допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>julian_day</code></em>&#160;:</span></td>
+<td>день начиная с 1 Января 1 Года (January 1, Year 1).
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>вновь распределённая <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> инициализированная <em class="parameter"><code>julian_day</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2732197"></a><h3>
+<a name="g-date-clear"></a>g_date_clear ()</h3>
+<a class="indexterm" name="id2732210"></a><pre class="programlisting">void        g_date_clear                    (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_dates);</pre>
+<p>
+Инициализирует одну или больше структур <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> 
+до нормального, но недопустимого состояния. Очищенные даты не будут представлять существующие даты, но не будут содержать мусор. 
+Полезно для инициализации дат объявленных в стеке.
+Допустимость может быть проверена с помощью <a href="glib-Date-and-Time-Functions.html#g-date-valid"><code class="function">g_date_valid()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td>указатель на одну или более дат для очистки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_dates</code></em>&#160;:</span></td>
+<td>количество дат для очистки.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2732300"></a><h3>
+<a name="g-date-free"></a>g_date_free ()</h3>
+<a class="indexterm" name="id2732313"></a><pre class="programlisting">void        g_date_free                     (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Освобождает <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> возвращаемую из <a href="glib-Date-and-Time-Functions.html#g-date-new"><code class="function">g_date_new()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2732385"></a><h3>
+<a name="g-date-set-day"></a>g_date_set_day ()</h3>
+<a class="indexterm" name="id2732398"></a><pre class="programlisting">void        g_date_set_day                  (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a> day);</pre>
+<p>
+Устанавливает день месяца для <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>. 
+Если результат тройки день-месяц-год недопустим, дата будет недопустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>day</code></em>&#160;:</span></td>
+<td>день для установки.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2732483"></a><h3>
+<a name="g-date-set-month"></a>g_date_set_month ()</h3>
+<a class="indexterm" name="id2732496"></a><pre class="programlisting">void        g_date_set_month                (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a> month);</pre>
+<p>
+Устанавливает месяц в году для <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.  
+Если результат тройки день-месяц-год недопустим, дата будет недопустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>month</code></em>&#160;:</span></td>
+<td>месяц для установки.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2732581"></a><h3>
+<a name="g-date-set-year"></a>g_date_set_year ()</h3>
+<a class="indexterm" name="id2732594"></a><pre class="programlisting">void        g_date_set_year                 (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);</pre>
+<p>
+Устанавливает год для <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>. 
+Если результат тройки день-месяц-год недопустим, дата будет недопустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>year</code></em>&#160;:</span></td>
+<td>год для установки.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2732679"></a><h3>
+<a name="g-date-set-dmy"></a>g_date_set_dmy ()</h3>
+<a class="indexterm" name="id2732692"></a><pre class="programlisting">void        g_date_set_dmy                  (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a> day,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a> month,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> y);</pre>
+<p>
+Устанавливает значение <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> из дня, месяца и года. 
+Тройка день-месяц-год должна быть допустимой; если вы не уверены в этом, вызовите <a href="glib-Date-and-Time-Functions.html#g-date-valid-dmy">
+<code class="function">g_date_valid_dmy()</code></a> для проверки перед установкой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>day</code></em>&#160;:</span></td>
+<td>день.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>month</code></em>&#160;:</span></td>
+<td>месяц.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>y</code></em>&#160;:</span></td>
+<td>год.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2732830"></a><h3>
+<a name="g-date-set-julian"></a>g_date_set_julian ()</h3>
+<a class="indexterm" name="id2732844"></a><pre class="programlisting">void        g_date_set_julian               (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint32">guint32</a> julian_date);</pre>
+<p>
+Устанавливает значение <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> от Юлианского номера дня.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>julian_date</code></em>&#160;:</span></td>
+<td>Юлианский номер дня (день начиная с 1 Января 1 Года).
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2732928"></a><h3>
+<a name="g-date-set-time"></a>g_date_set_time ()</h3>
+<a class="indexterm" name="id2732943"></a><pre class="programlisting">void        g_date_set_time                 (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Date-and-Time-Functions.html#GTime">GTime</a> time_);</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_date_set_time</code> устарела и не должна использоваться во вновь создаваемом коде.</p>
+</div>
+<p>
+Устанавливает значение даты из значения <a href="glib-Date-and-Time-Functions.html#GTime"><span class="type">GTime</span></a>. 
+</p>
+<p>
+<em class="parameter"><code>Устаревшее</code></em>:2.10: Вместо неё используйте <a href="glib-Date-and-Time-Functions.html#g-date-set-time-t"><code class="function">g_date_set_time_t()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>time_</code></em>&#160;:</span></td>
+<td> <a href="glib-Date-and-Time-Functions.html#GTime"><span class="type">GTime</span></a> значение для установки.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2733070"></a><h3>
+<a name="g-date-set-time-t"></a>g_date_set_time_t ()</h3>
+<a class="indexterm" name="id2733086"></a><pre class="programlisting">void        g_date_set_time_t               (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             time_t timet);</pre>
+<p>
+Устанавливает значение даты из значения <span class="type">time_t</span>. 
+</p>
+<p>
+Для установки значения даты текущего дня, вы должны написать:
+</p>
+<div class="informalexample"><pre class="programlisting"> 
+ g_date_set_time_t (date, time (NULL)); 
+</pre></div>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> 
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>timet</code></em>&#160;:</span></td>
+<td> <span class="type">time_t</span> значение для установки
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.10
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2733188"></a><h3>
+<a name="g-date-set-time-val"></a>g_date_set_time_val ()</h3>
+<a class="indexterm" name="id2733203"></a><pre class="programlisting">void        g_date_set_time_val             (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Date-and-Time-Functions.html#GTimeVal">GTimeVal</a> *timeval);</pre>
+<p>
+Устанавливает значение даты из значения <a href="glib-Date-and-Time-Functions.html#GTimeVal"><span class="type">GTimeVal</span></a>.  
+Помните что <em class="parameter"><code>tv_usec</code></em> член игнорируется, потомучто <a href="glib-Date-and-Time-Functions.html#GDate">
+<span class="type">GDate</span></a> не может использовать дополнительную точность.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> 
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>timeval</code></em>&#160;:</span></td>
+<td> <a href="glib-Date-and-Time-Functions.html#GTimeVal"><span class="type">GTimeVal</span></a> значение для установки
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.10
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2733318"></a><h3>
+<a name="g-date-set-parse"></a>g_date_set_parse ()</h3>
+<a class="indexterm" name="id2733331"></a><pre class="programlisting">void        g_date_set_parse                (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *str);</pre>
+<p>
+Анализирует строку пользовательского ввода <em class="parameter"><code>str</code></em>, и пытается выяснить какую дату она представляет, 
+принимая во внимание текущую локаль. Если строка полностью проанализирована, дата будет доступна после вызова. 
+Иначе, она будет недоступна. С помощью <a href="glib-Date-and-Time-Functions.html#g-date-valid"><code class="function">g_date_valid()</code></a> вы должны проверить выполнен ли анализ строки успешно.
+</p>
+<p>
+Эта функция не является соответствующей для форматированных файлов и т.п.; 
+она не очень точна и точность её поведения изменяется в зависимости от локали. 
+Она предназначена для эвристической подпрограммы которая предполагает 
+что пользователь подразумевает данной строкой 
+(в этом смысле она работает вполне прилично).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для заполнения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td>строка для анализа.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2733435"></a><h3>
+<a name="g-date-add-days"></a>g_date_add_days ()</h3>
+<a class="indexterm" name="id2733448"></a><pre class="programlisting">void        g_date_add_days                 (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_days);</pre>
+<p>
+Увеличивает дату некоторым количеством дней. Для перемещения понедельно, добавьте weeks*7 days. Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для увеличения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_days</code></em>&#160;:</span></td>
+<td>количество дней для перемещения даты вперёд.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2733526"></a><h3>
+<a name="g-date-subtract-days"></a>g_date_subtract_days ()</h3>
+<a class="indexterm" name="id2733540"></a><pre class="programlisting">void        g_date_subtract_days            (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_days);</pre>
+<p>
+Перемещение даты на некоторое количество дней в прошлое. Для понедельного перемещения, просто используйте weeks*7 days. 
+Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для уменьшения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_days</code></em>&#160;:</span></td>
+<td>количество дней для перемещения.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2733618"></a><h3>
+<a name="g-date-add-months"></a>g_date_add_months ()</h3>
+<a class="indexterm" name="id2733631"></a><pre class="programlisting">void        g_date_add_months               (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_months);</pre>
+<p>
+Увеличивает дату на некоторое количество месяцев. Если день месяца больше чем 28, эта подпрограмма может изменить день месяца 
+(потомучто месяц назначения может не иметь такого текущего дня). Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для увеличения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_months</code></em>&#160;:</span></td>
+<td>количество месяцев для перемещения вперёд.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2733710"></a><h3>
+<a name="g-date-subtract-months"></a>g_date_subtract_months ()</h3>
+<a class="indexterm" name="id2733724"></a><pre class="programlisting">void        g_date_subtract_months          (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_months);</pre>
+<p>
+Перемещает дату на некоторое количество месяцев в прошлое. Если текущий день месяца не существует в месяце назначения, 
+день месяца может быть изменён. Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для уменьшения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_months</code></em>&#160;:</span></td>
+<td>количество месяцев для перемещения.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2733803"></a><h3>
+<a name="g-date-add-years"></a>g_date_add_years ()</h3>
+<a class="indexterm" name="id2733816"></a><pre class="programlisting">void        g_date_add_years                (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_years);</pre>
+<p>
+Увеличивает дату некоторым количеством лет. Если датой является 29 Февраля, а год назначения не является високосным, 
+дата будет изменена на 28 Февраля. Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для увеличения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_years</code></em>&#160;:</span></td>
+<td>количество лет для перемещения вперёд.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2733895"></a><h3>
+<a name="g-date-subtract-years"></a>g_date_subtract_years ()</h3>
+<a class="indexterm" name="id2733908"></a><pre class="programlisting">void        g_date_subtract_years           (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n_years);</pre>
+<p>
+Перемещает дату на некоторое число лет в прощлое. Если текущий день не существует в году назначения 
+(то есть это 29 Февраля и вы перемещаетесь не в високосный год) то день изменяется на 28 Февраля. 
+Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для уменьшения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_years</code></em>&#160;:</span></td>
+<td>число лет для перемещения.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2733988"></a><h3>
+<a name="g-date-days-between"></a>g_date_days_between ()</h3>
+<a class="indexterm" name="id2734002"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_date_days_between             (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date1,
+                                             const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date2);</pre>
+<p>
+Расчитывает число дней между двумя датами.
+Если <em class="parameter"><code>date2</code></em> находится перед <em class="parameter"><code>date1</code></em>, 
+возвращается негативное значение. Обе даты должны быть допустимыми.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date1</code></em>&#160;:</span></td>
+<td>первая дата.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>date2</code></em>&#160;:</span></td>
+<td>вторая дата.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>количество дней между <em class="parameter"><code>date1</code></em> и <em class="parameter"><code>date2</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2734106"></a><h3>
+<a name="g-date-compare"></a>g_date_compare ()</h3>
+<a class="indexterm" name="id2734119"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_date_compare                  (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *lhs,
+                                             const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *rhs);</pre>
+<p>
+<code class="function"><code class="function">qsort()</code></code>-style функции для сравнения дат. Обе даты должны быть допустимыми.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>lhs</code></em>&#160;:</span></td>
+<td>первая дата для сравнения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>rhs</code></em>&#160;:</span></td>
+<td>вторая дата для сравнения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>0 если даты равны, меньше нуля если <em class="parameter"><code>lhs</code></em> меньше чем <em class="parameter"><code>rhs</code></em>,
+больше нуля если <em class="parameter"><code>lhs</code></em> больше чем <em class="parameter"><code>rhs</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2734238"></a><h3>
+<a name="g-date-clamp"></a>g_date_clamp ()</h3>
+<a class="indexterm" name="id2734251"></a><pre class="programlisting">void        g_date_clamp                    (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *min_date,
+                                             const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *max_date);</pre>
+<p>
+Если <em class="parameter"><code>date</code></em> находится перед <em class="parameter"><code>min_date</code></em>, устанавливает <em class="parameter"><code>date</code></em> как эквивалент <em class="parameter"><code>min_date</code></em>.
+Если <em class="parameter"><code>date</code></em> расположена после <em class="parameter"><code>max_date</code></em>, устанавливает <em class="parameter"><code>date</code></em> как эквивалент <em class="parameter"><code>max_date</code></em>.
+Любой параметр <em class="parameter"><code>min_date</code></em> и <em class="parameter"><code>max_date</code></em> может быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.  Все не-<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> даты должны быть допустимыми.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для сопоставления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>min_date</code></em>&#160;:</span></td>
+<td>минимально применимое значение для <em class="parameter"><code>date</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>max_date</code></em>&#160;:</span></td>
+<td>максимально применимое значение для <em class="parameter"><code>date</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2734441"></a><h3>
+<a name="g-date-order"></a>g_date_order ()</h3>
+<a class="indexterm" name="id2734454"></a><pre class="programlisting">void        g_date_order                    (<a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date1,
+                                             <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date2);</pre>
+<p>
+Проверяет меньше ли <em class="parameter"><code>date1</code></em> или эквивалентна <em class="parameter"><code>date2</code></em>,
+и сбрасывает значение если это не так.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date1</code></em>&#160;:</span></td>
+<td>первая дата.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>date2</code></em>&#160;:</span></td>
+<td>вторая дата.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2734535"></a><h3>
+<a name="g-date-get-day"></a>g_date_get_day ()</h3>
+<a class="indexterm" name="id2734548"></a><pre class="programlisting"><a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a>    g_date_get_day                  (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Возвращает день месяца. Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для извлечения дня месяца.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>день месяца.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2734614"></a><h3>
+<a name="g-date-get-month"></a>g_date_get_month ()</h3>
+<a class="indexterm" name="id2734627"></a><pre class="programlisting"><a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a>  g_date_get_month                (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Возвращает месяц в году. Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для извлечения месяца.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>месяц в году как <a href="glib-Date-and-Time-Functions.html#GDateMonth"><span class="type">GDateMonth</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2734701"></a><h3>
+<a name="g-date-get-year"></a>g_date_get_year ()</h3>
+<a class="indexterm" name="id2734714"></a><pre class="programlisting"><a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a>   g_date_get_year                 (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Возвращает год из <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>. Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>год на который выпадает дата.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2734787"></a><h3>
+<a name="g-date-get-julian"></a>g_date_get_julian ()</h3>
+<a class="indexterm" name="id2734800"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint32">guint32</a>     g_date_get_julian               (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Возвращает Юлианский день или "серийный номер" из <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>. 
+Юлианский день - это просто номер дня начиная с 1 Января 1 Года; то есть,
+1 Января 1 Года является 1 Юлианским днём; 2 Января 2 Года является 2 Юлианским днём, и т.д.. Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для извлечения Юлианского дня.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>Юлианский день.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2734876"></a><h3>
+<a name="g-date-get-weekday"></a>g_date_get_weekday ()</h3>
+<a class="indexterm" name="id2734890"></a><pre class="programlisting"><a href="glib-Date-and-Time-Functions.html#GDateWeekday">GDateWeekday</a> g_date_get_weekday             (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Возвращает день недели для <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>. Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>день недели как <a href="glib-Date-and-Time-Functions.html#GDateWeekday"><span class="type">GDateWeekday</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2734972"></a><h3>
+<a name="g-date-get-day-of-year"></a>g_date_get_day_of_year ()</h3>
+<a class="indexterm" name="id2734985"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_date_get_day_of_year          (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Возвращаемый день в году, где 1 Января является первым днём года. Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для извлечения дня в году.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>день в году.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2735052"></a><h3>
+<a name="g-date-get-days-in-month"></a>g_date_get_days_in_month ()</h3>
+<a class="indexterm" name="id2735065"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint8">guint8</a>      g_date_get_days_in_month        (<a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a> month,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);</pre>
+<p>
+Возвращает число дней в месяце, принимая во внимание високосные годы.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>month</code></em>&#160;:</span></td>
+<td>месяц.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>year</code></em>&#160;:</span></td>
+<td>год.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>количество дней в <em class="parameter"><code>month</code></em> в течении <em class="parameter"><code>year</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2735157"></a><h3>
+<a name="g-date-is-first-of-month"></a>g_date_is_first_of_month ()</h3>
+<a class="indexterm" name="id2735170"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_date_is_first_of_month        (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если дата является первым днём месяца. 
+Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для проверки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если дата является первым днём месяца.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2735255"></a><h3>
+<a name="g-date-is-last-of-month"></a>g_date_is_last_of_month ()</h3>
+<a class="indexterm" name="id2735269"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_date_is_last_of_month         (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если дата является последним днём месяца. 
+Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для проверки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если дата является последним днём месяца.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2735354"></a><h3>
+<a name="g-date-is-leap-year"></a>g_date_is_leap_year ()</h3>
+<a class="indexterm" name="id2735368"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_date_is_leap_year             (<a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если год является високосным.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>year</code></em>&#160;:</span></td>
+<td>год для проверки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если год високосный.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2735444"></a><h3>
+<a name="g-date-get-monday-week-of-year"></a>g_date_get_monday_week_of_year ()</h3>
+<a class="indexterm" name="id2735458"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_date_get_monday_week_of_year  (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Возвращает неделю в году, где недели начинаются с понедельника. Если дата перед первым понедельником в году, возвращается 0. 
+Дата должна быть допустимой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>неделя в году.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2735526"></a><h3>
+<a name="g-date-get-monday-weeks-in-year"></a>g_date_get_monday_weeks_in_year ()</h3>
+<a class="indexterm" name="id2735539"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint8">guint8</a>      g_date_get_monday_weeks_in_year (<a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);</pre>
+<p>
+Возвращает количество недель в году, где недели начинаются с понедельника. 
+Будет либо 52 либо 53. Дата должна быть допустимой. (Года всегда имеют 52
+периода по 7-дней, плюс 1 или 2 дополнительных дня в зависимости от того, 
+является ли год високосным. Эта функция в основном сообщает сколько 
+понедельников находится в году, то есть 53 понедельника будет если один из
+дополнительных дней окажется понедельником.)
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>year</code></em>&#160;:</span></td>
+<td>год.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>количество понедельников в году.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2735603"></a><h3>
+<a name="g-date-get-sunday-week-of-year"></a>g_date_get_sunday_week_of_year ()</h3>
+<a class="indexterm" name="id2735617"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_date_get_sunday_week_of_year  (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Возвращает неделю года на которую выпадает дата, если недели начинаются с воскресенья. 
+Дата должна быть допустимой. Может вернуть 0 если день находится перед первым воскресеньем в году.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>номер недели.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2735684"></a><h3>
+<a name="g-date-get-sunday-weeks-in-year"></a>g_date_get_sunday_weeks_in_year ()</h3>
+<a class="indexterm" name="id2735698"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint8">guint8</a>      g_date_get_sunday_weeks_in_year (<a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);</pre>
+<p>
+Возвращает количество недель в году, где недели начинаются с воскресенья. 
+Будет либо 52 либо 53. Дата должна быть допустимой. (Годы всегда имеют 52
+периода по 7-дней, плюс 1 или 2 дополнительных дня в зависимости от того, 
+является ли год високосным. Эта функция в основном сообщает вам сколько 
+воскресений в году, то есть является ли 53 воскресенье дополнительным 
+днём года.)
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>year</code></em>&#160;:</span></td>
+<td>год для подсчёта недель.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>количество недель.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2735762"></a><h3>
+<a name="g-date-get-iso8601-week-of-year"></a>g_date_get_iso8601_week_of_year ()</h3>
+<a class="indexterm" name="id2735778"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_date_get_iso8601_week_of_year (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Возвращает неделю года, где недели интерпретируются согласно ISO 8601.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td> допустимая <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> ISO 8601 число недель в году.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.6
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2735852"></a><h3>
+<a name="g-date-strftime"></a>g_date_strftime ()</h3>
+<a class="indexterm" name="id2735865"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gsize">gsize</a>       g_date_strftime                 (<a href="glib-Basic-Types.html#gchar">gchar</a> *s,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> slen,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Генерирует печатное представление даты, локале-зависимым способом. Работает просто как платформенная C библиотечная функция
+<code class="function"><code class="function">strftime()</code></code>, но принимает только дата-зависимые форматы; 
+время-зависимые форматы выдают неопределённый результат. Дата должна быть допустимой. 
+В отличие от <code class="function"><code class="function">strftime()</code></code>
+(которая использует локальную кодировку), эта функция работает со строками в кодировке UTF-8 и сохраняет результат в кодировке UTF-8.
+</p>
+<p>
+Эта функция не обеспечивает никаких дополнительных спецификаторов конвертирования для платформенной реализации библиотеки C. 
+Например, не ждите что использование <code class="function"><a href="glib-Date-and-Time-Functions.html#g-date-strftime">
+<code class="function">g_date_strftime()</code></a></code> сделает <code class="literal">F</code> обеспечив C99 
+<code class="function"><code class="function">strftime()</code></code> работая на Windows где библиотека C скомпилирована только для C89.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>s</code></em>&#160;:</span></td>
+<td>буфер назначения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>slen</code></em>&#160;:</span></td>
+<td>размер буфера.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>format</code></em>&#160;:</span></td>
+<td>строка формата.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td>допустимая <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>количество символов записанных в буфер, или 0 если буфер слишком маленький.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2736074"></a><h3>
+<a name="g-date-to-struct-tm"></a>g_date_to_struct_tm ()</h3>
+<a class="indexterm" name="id2736087"></a><pre class="programlisting">void        g_date_to_struct_tm             (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date,
+                                             struct tm *tm);</pre>
+<p>
+Заполняет дата-зависимый бит в <span class="structname">struct tm</span>
+используя значение <em class="parameter"><code>date</code></em>. Инициализирует non-date пары с чем то
+нормальным но бессмысленным.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для установки <span class="structname">struct tm</span>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>tm</code></em>&#160;:</span></td>
+<td>
+<span class="structname">struct tm</span> для заполнения.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2736180"></a><h3>
+<a name="g-date-valid"></a>g_date_valid ()</h3>
+<a class="indexterm" name="id2736193"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_date_valid                    (const <a href="glib-Date-and-Time-Functions.html#GDate">GDate</a> *date);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> представляет существующий день. Дата не должна содержать мусор; 
+она должна быть инициализирована с помощью <a href="glib-Date-and-Time-Functions.html#g-date-clear"><code class="function">g_date_clear()</code></a>
+если она не была распределена одним из вариантов <a href="glib-Date-and-Time-Functions.html#g-date-new"><code class="function">g_date_new()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>date</code></em>&#160;:</span></td>
+<td><a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> для проверки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>является ли дата допустимой.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2736299"></a><h3>
+<a name="g-date-valid-day"></a>g_date_valid_day ()</h3>
+<a class="indexterm" name="id2736312"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_date_valid_day                (<a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a> day);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если день месяца допустим 
+(день допустим если он находится в промежутке чисел от 1 до 31 включительно).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>day</code></em>&#160;:</span></td>
+<td>день для проверки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если день допустим.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2736390"></a><h3>
+<a name="g-date-valid-month"></a>g_date_valid_month ()</h3>
+<a class="indexterm" name="id2736403"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_date_valid_month              (<a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a> month);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если значение месяца допустимо. 
+Только 12 значений в перечислении <a href="glib-Date-and-Time-Functions.html#GDateMonth"><span class="type">GDateMonth</span></a>
+являются допустимыми.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>month</code></em>&#160;:</span></td>
+<td>месяц.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если месяц допустим.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2736488"></a><h3>
+<a name="g-date-valid-year"></a>g_date_valid_year ()</h3>
+<a class="indexterm" name="id2736502"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_date_valid_year               (<a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если год допустим. 
+Допустимым является год только больше 0, однако есть 16-битный предел того что может понять <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>year</code></em>&#160;:</span></td>
+<td>год.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если год допустим.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2736587"></a><h3>
+<a name="g-date-valid-dmy"></a>g_date_valid_dmy ()</h3>
+<a class="indexterm" name="id2736600"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_date_valid_dmy                (<a href="glib-Date-and-Time-Functions.html#GDateDay">GDateDay</a> day,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateMonth">GDateMonth</a> month,
+                                             <a href="glib-Date-and-Time-Functions.html#GDateYear">GDateYear</a> year);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если форма триплёта день-месяц-год допустима, 
+существует понятный день в диапазоне дней <a href="glib-Date-and-Time-Functions.html#GDate"><span class="type">GDate</span></a> 
+(1 год или больше, но не больше нескольких тысяч лет в будущее).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>day</code></em>&#160;:</span></td>
+<td>день.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>month</code></em>&#160;:</span></td>
+<td>месяц.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>year</code></em>&#160;:</span></td>
+<td>год.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если дата допустима.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2736730"></a><h3>
+<a name="g-date-valid-julian"></a>g_date_valid_julian ()</h3>
+<a class="indexterm" name="id2736743"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_date_valid_julian             (<a href="glib-Basic-Types.html#guint32">guint32</a> julian_date);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> ели Юлианский день допустим. 
+Число больше нуля в основном является допустимым Юлианским днём, однако есть 32-битный предел.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>julian_date</code></em>&#160;:</span></td>
+<td>Юлианский день для проверки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если Юлианский день допустим.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2736821"></a><h3>
+<a name="g-date-valid-weekday"></a>g_date_valid_weekday ()</h3>
+<a class="indexterm" name="id2736835"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_date_valid_weekday            (<a href="glib-Date-and-Time-Functions.html#GDateWeekday">GDateWeekday</a> weekday);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если день недели допустим. 
+Только 7 значений в перечислении <a href="glib-Date-and-Time-Functions.html#GDateWeekday"><span class="type">GDateWeekday</span></a> 
+являются допустимыми.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>weekday</code></em>&#160;:</span></td>
+<td>день недели.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если день недели допустим.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</body>
+</html>

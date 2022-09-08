@@ -1,0 +1,2225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Bookmark file parser</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-utilities.html" title="GLib Utilities">
+<link rel="prev" href="glib-Key-value-file-parser.html" title="Key-value file parser">
+<link rel="next" href="glib-Windows-Compatibility-Functions.html" title="Windows Compatibility Functions">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Key-value-file-parser.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-utilities.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Windows-Compatibility-Functions.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2857427" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2859078" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Bookmark-file-parser"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2857427"></a><span class="refentrytitle">Bookmark file parser</span>
+</h2>
+<p>Bookmark file parser &#8212; Анализ файлов содержащих закладки</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a>;
+#define     <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR:CAPS">G_BOOKMARK_FILE_ERROR</a>
+enum        <a href="glib-Bookmark-file-parser.html#GBookmarkFileError">GBookmarkFileError</a>;
+<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a>* <a href="glib-Bookmark-file-parser.html#g-bookmark-file-new">g_bookmark_file_new</a>          (void);
+void        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-free">g_bookmark_file_free</a>            (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-load-from-file">g_bookmark_file_load_from_file</a>  (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *filename,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-load-from-data">g_bookmark_file_load_from_data</a>  (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *data,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> length,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-load-from-data-dirs">g_bookmark_file_load_from_data_dirs</a>
+                                            (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *file,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **full_path,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Bookmark-file-parser.html#g-bookmark-file-to-data">g_bookmark_file_to_data</a>         (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *length,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-to-file">g_bookmark_file_to_file</a>         (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *filename,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-has-item">g_bookmark_file_has_item</a>        (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-has-group">g_bookmark_file_has_group</a>       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *group,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-has-application">g_bookmark_file_has_application</a> (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *name,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-size">g_bookmark_file_get_size</a>        (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark);
+<a href="glib-Basic-Types.html#gchar">gchar</a>**     <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-uris">g_bookmark_file_get_uris</a>        (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *length);
+
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-title">g_bookmark_file_get_title</a>       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-description">g_bookmark_file_get_description</a> (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-mime-type">g_bookmark_file_get_mime_type</a>   (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-is-private">g_bookmark_file_get_is_private</a>  (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-icon">g_bookmark_file_get_icon</a>        (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **href,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **mime_type,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+time_t      <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-added">g_bookmark_file_get_added</a>       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+time_t      <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-modified">g_bookmark_file_get_modified</a>    (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+time_t      <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-visited">g_bookmark_file_get_visited</a>     (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>**     <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-groups">g_bookmark_file_get_groups</a>      (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *length,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>**     <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-applications">g_bookmark_file_get_applications</a>
+                                            (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *length,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-app-info">g_bookmark_file_get_app_info</a>    (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *name,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **exec,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> *count,
+                                             time_t *stamp,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+
+void        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-title">g_bookmark_file_set_title</a>       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *title);
+void        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-description">g_bookmark_file_set_description</a> (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *description);
+void        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-mime-type">g_bookmark_file_set_mime_type</a>   (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *mime_type);
+void        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-is-private">g_bookmark_file_set_is_private</a>  (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> is_private);
+void        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-icon">g_bookmark_file_set_icon</a>        (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *href,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *mime_type);
+void        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-added">g_bookmark_file_set_added</a>       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             time_t added);
+void        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-groups">g_bookmark_file_set_groups</a>      (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> **groups,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> length);
+void        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-modified">g_bookmark_file_set_modified</a>    (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             time_t modified);
+void        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-visited">g_bookmark_file_set_visited</a>     (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             time_t visited);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-app-info">g_bookmark_file_set_app_info</a>    (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *name,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *exec,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> count,
+                                             time_t stamp,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+void        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-add-group">g_bookmark_file_add_group</a>       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *group);
+void        <a href="glib-Bookmark-file-parser.html#g-bookmark-file-add-application">g_bookmark_file_add_application</a> (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *name,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *exec);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-remove-group">g_bookmark_file_remove_group</a>    (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *group,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-remove-application">g_bookmark_file_remove_application</a>
+                                            (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *name,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-remove-item">g_bookmark_file_remove_item</a>     (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Bookmark-file-parser.html#g-bookmark-file-move-item">g_bookmark_file_move_item</a>       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *old_uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *new_uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2859078"></a><h2>Описание</h2>
+<p>
+<a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a> 
+позволяет вам анализировать, редактировать или создавать файлы содержащие закладки
+на URI, вместе с некоторыми meta-данными о ресурсе на который указывает URI, например
+его MIME тип, приложение которое зарегистрировало закладку и значок который должен
+использоваться для отображения закладки. Данные хранятся согласно
+<a href="http://www.gnome.org/~ebassi/bookmark-spec" target="_top">Desktop Bookmark
+Specification</a>.
+</p>
+<p>
+Синтаксис файлов закладок детально описан в Desktop Bookmark Specification, 
+здесь приведено краткое описание: файлы закладок используют подкласс спецификации
+<a href="" target="_top">XML Bookmark Exchange Language</a>, состоят из XML в 
+правильной кодировке UTF-8, под корневым элементом <code class="literal">xbel</code>;
+каждая закладка сохраняется в элементе <code class="literal">bookmark</code>, используя её URI: 
+относительные пути не могут использоваться в файле закладок. Закладка может иметь заголовок и описание
+определённые пользователем, используемые вместо URI.
+Под элементом <code class="literal">metadata</code>, с его набором атрибутов <code class="literal">owner</code>
+в <code class="literal">http://freedesktop.org</code>, хранятся meta-данные о ресурсе указанном URI. 
+Мета-данные состоят из MIME типа ресурса; приложения которое зарегистрировало закладку;
+группы к которой принадлежит закладка; флага видимости, используемом для установки закладки как "private" 
+для приложений и групп которые имеют регистрацию; URI и MIME тип значка, для изображения закладки внутри GUI.
+</p>
+<div class="informalexample"><pre class="programlisting">
+
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE xbel PUBLIC 
+  "+//IDN python.org//DTD XML Bookmark Exchange Language 1.0//EN//XML"
+  "http://www.python.org/topics/xml/dtds/xbel-1.0.dtd"&gt;
+&lt;xbel version="1.0"
+      xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info"
+      xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks"&gt;
+  &lt;bookmark href="file:///home/ebassi/bookmark-spec/bookmark-spec.xml"&gt;
+    &lt;title&gt;Desktop Bookmarks Spec&lt;/title&gt;
+    &lt;info&gt;
+      &lt;metadata owner="http://freedesktop.org"&gt;
+        &lt;mime:mime-type&gt;text/xml&lt;/mime:mime-type&gt;
+	&lt;bookmark:applications&gt;
+          &lt;bookmark:application name="GEdit" count="2" exec="gedit &lt;link linkend="u"&gt;&lt;literal&gt;u&lt;/literal&gt;&lt;/link&gt;" timestamp="1115726763"/&gt;
+          &lt;bookmark:application name="GViM" count="7" exec="gvim &lt;link linkend="f"&gt;&lt;literal&gt;f&lt;/literal&gt;&lt;/link&gt;" timestamp="1115726812"/&gt;
+	&lt;/bookmark:applications&gt;
+	&lt;bookmark:groups&gt;
+	  &lt;bookmark:group&gt;Editors&lt;/bookmark:group&gt;
+	&lt;/bookmark:groups&gt;
+      &lt;/metadata&gt;
+    &lt;/info&gt;
+  &lt;/bookmark&gt;
+&lt;/xbel&gt;
+
+</pre></div>
+<p>
+Файл закладок может содержать больше одной закладки; к каждой закладке обращаются через её URI.
+</p>
+<p>
+Важное замечание для файлов закладок в том, что когда вы добавляете закладку вы должны также добавить приложение которое зарегистрировало её, 
+используя
+<a href="glib-Bookmark-file-parser.html#g-bookmark-file-add-application"><code class="function">g_bookmark_file_add_application()</code></a> 
+или <a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-app-info"><code class="function">g_bookmark_file_set_app_info()</code></a>. 
+Если закладка не имеет приложений, то она будет сброшена при записи на диск, используя 
+<a href="glib-Bookmark-file-parser.html#g-bookmark-file-to-data"><code class="function">g_bookmark_file_to_data()</code></a> или
+<a href="glib-Bookmark-file-parser.html#g-bookmark-file-to-file"><code class="function">g_bookmark_file_to_file()</code></a>.
+</p>
+<p>
+Анализатор <a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a> добавлен в версии GLib 2.12.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2859277"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2859287"></a><h3>
+<a name="GBookmarkFile"></a>GBookmarkFile</h3>
+<a class="indexterm" name="id2859300"></a><pre class="programlisting">typedef struct _GBookmarkFile GBookmarkFile;</pre>
+<p>
+Структура <span class="structname">GBookmarkFile</span> содержит только закрытые данные к которым нет прямого доступа.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2859321"></a><h3>
+<a name="G-BOOKMARK-FILE-ERROR:CAPS"></a>G_BOOKMARK_FILE_ERROR</h3>
+<a class="indexterm" name="id2859334"></a><pre class="programlisting">#define G_BOOKMARK_FILE_ERROR	(g_bookmark_file_error_quark ())
+</pre>
+<p>
+Домен ошибки для анализатора файла закладок. Ошибки в этом домене из перечисления 
+<a href="glib-Bookmark-file-parser.html#GBookmarkFileError"><span class="type">GBookmarkFileError</span></a>. 
+Смотрите <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> для информации о доменах ошибки.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2859369"></a><h3>
+<a name="GBookmarkFileError"></a>enum GBookmarkFileError</h3>
+<a class="indexterm" name="id2859382"></a><pre class="programlisting">typedef enum
+{
+  G_BOOKMARK_FILE_ERROR_INVALID_URI,
+  G_BOOKMARK_FILE_ERROR_INVALID_VALUE,
+  G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED,
+  G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND,
+  G_BOOKMARK_FILE_ERROR_READ,
+  G_BOOKMARK_FILE_ERROR_UNKNOWN_ENCODING,
+  G_BOOKMARK_FILE_ERROR_WRITE,
+  G_BOOKMARK_FILE_ERROR_FILE_NOT_FOUND
+} GBookmarkFileError;
+</pre>
+<p>
+Коды ошибок возвращаемые анализатором файла закладок.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-BOOKMARK-FILE-ERROR-INVALID-URI:CAPS"></a><code class="literal">G_BOOKMARK_FILE_ERROR_INVALID_URI</code></span></td>
+<td>URI был не правильно сформирован
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-BOOKMARK-FILE-ERROR-INVALID-VALUE:CAPS"></a><code class="literal">G_BOOKMARK_FILE_ERROR_INVALID_VALUE</code></span></td>
+<td>запрашиваемое поле не найдено
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-BOOKMARK-FILE-ERROR-APP-NOT-REGISTERED:CAPS"></a><code class="literal">G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED</code></span></td>
+<td>запрошенное приложение не зарегистрировано
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"></a><code class="literal">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</code></span></td>
+<td>запрашиваемый URI не найден
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-BOOKMARK-FILE-ERROR-READ:CAPS"></a><code class="literal">G_BOOKMARK_FILE_ERROR_READ</code></span></td>
+<td>документ был не правильно сформирован
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-BOOKMARK-FILE-ERROR-UNKNOWN-ENCODING:CAPS"></a><code class="literal">G_BOOKMARK_FILE_ERROR_UNKNOWN_ENCODING</code></span></td>
+<td>анализируемый текст находится в неизвестной кодировке
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-BOOKMARK-FILE-ERROR-WRITE:CAPS"></a><code class="literal">G_BOOKMARK_FILE_ERROR_WRITE</code></span></td>
+<td>в процессе записи произошла ошибка
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-BOOKMARK-FILE-ERROR-FILE-NOT-FOUND:CAPS"></a><code class="literal">G_BOOKMARK_FILE_ERROR_FILE_NOT_FOUND</code></span></td>
+<td>запрашиваемый файл не найден
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2859595"></a><h3>
+<a name="g-bookmark-file-new"></a>g_bookmark_file_new ()</h3>
+<a class="indexterm" name="id2859611"></a><pre class="programlisting"><a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a>* g_bookmark_file_new          (void);</pre>
+<p>
+Создаёт новый пустой объект <a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>.
+</p>
+<p>
+Используйте <a href="glib-Bookmark-file-parser.html#g-bookmark-file-load-from-file"><code class="function">g_bookmark_file_load_from_file()</code></a>, <a href="glib-Bookmark-file-parser.html#g-bookmark-file-load-from-data"><code class="function">g_bookmark_file_load_from_data()</code></a>
+или <a href="glib-Bookmark-file-parser.html#g-bookmark-file-load-from-data-dirs"><code class="function">g_bookmark_file_load_from_data_dirs()</code></a> для чтения существующего файла закладок.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> пустой <a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+
+</td>
+</tr></tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2859710"></a><h3>
+<a name="g-bookmark-file-free"></a>g_bookmark_file_free ()</h3>
+<a class="indexterm" name="id2859725"></a><pre class="programlisting">void        g_bookmark_file_free            (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark);</pre>
+<p>
+Освобождает <a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr></tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2859796"></a><h3>
+<a name="g-bookmark-file-load-from-file"></a>g_bookmark_file_load_from_file ()</h3>
+<a class="indexterm" name="id2859812"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_load_from_file  (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *filename,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Загружает desktop bookmark file в пустую структуру <a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>.
+Если файл не загружен, то устанавливается <em class="parameter"><code>error</code></em> в <a href="glib-File-Utilities.html#GFileError"><span class="type">GFileError</span></a>
+или <a href="glib-Bookmark-file-parser.html#GBookmarkFileError"><span class="type">GBookmarkFileError</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td> пустая структура <a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>filename</code></em>&#160;:</span></td>
+<td> путь к имени файла для загрузки, в кодировке имён файлов GLib
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если desktop bookmark file не загружен
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2859991"></a><h3>
+<a name="g-bookmark-file-load-from-data"></a>g_bookmark_file_load_from_data ()</h3>
+<a class="indexterm" name="id2860006"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_load_from_data  (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *data,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> length,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Загружает файл закладок из памяти в пустую структуру <a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>.  
+Если объект не создан, то устанавливается <em class="parameter"><code>error</code></em> в
+<a href="glib-Bookmark-file-parser.html#GBookmarkFileError"><span class="type">GBookmarkFileError</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td> пустая структура <a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> desktop закладки загруженные в память
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>length</code></em>&#160;:</span></td>
+<td> размер <em class="parameter"><code>data</code></em> в байтах
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если desktop закладка не загружена.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2860204"></a><h3>
+<a name="g-bookmark-file-load-from-data-dirs"></a>g_bookmark_file_load_from_data_dirs ()</h3>
+<a class="indexterm" name="id2860220"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_load_from_data_dirs
+                                            (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *file,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **full_path,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Эта функция находит desktop bookmark file с именем <em class="parameter"><code>file</code></em> в пути который возвращает 
+<a href="glib-Miscellaneous-Utility-Functions.html#g-get-user-data-dir"><code class="function">g_get_user_data_dir()</code></a> и 
+<a href="glib-Miscellaneous-Utility-Functions.html#g-get-system-data-dirs"><code class="function">g_get_system_data_dirs()</code></a>, 
+загружает в файл <em class="parameter"><code>bookmark</code></em> и возвращает полный путь файла в 
+<em class="parameter"><code>full_path</code></em>.  Если файл не загружен, то <code class="literal">error</code> устанавливается либо в
+<a href="glib-File-Utilities.html#GFileError"><span class="type">GFileError</span></a>, либо в 
+<a href="glib-Bookmark-file-parser.html#GBookmarkFileError"><span class="type">GBookmarkFileError</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>file</code></em>&#160;:</span></td>
+<td> относительный путь имени файла для открытия и анализа
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>full_path</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой строки содержащей полный путь файла, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если файл загружен, 
+     иначе <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2860478"></a><h3>
+<a name="g-bookmark-file-to-data"></a>g_bookmark_file_to_data ()</h3>
+<a class="indexterm" name="id2860493"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_bookmark_file_to_data         (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *length,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Эта функция выводит <em class="parameter"><code>bookmark</code></em> как строку.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>length</code></em>&#160;:</span></td>
+<td> расположение для длины возвращаемой строки, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка содержащая 
+     <a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2860654"></a><h3>
+<a name="g-bookmark-file-to-file"></a>g_bookmark_file_to_file ()</h3>
+<a class="indexterm" name="id2860669"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_to_file         (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *filename,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Эта функция выводит <em class="parameter"><code>bookmark</code></em> в файл.  Пишущий процесс будет гарантировано атомарным
+при внутреннем использовании <a href="glib-File-Utilities.html#g-file-set-contents"><code class="function">g_file_set_contents()</code></a>.
+</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>filename</code></em>&#160;:</span></td>
+<td> путь к файлу для записи
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если файл полностью записан.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2860833"></a><h3>
+<a name="g-bookmark-file-has-item"></a>g_bookmark_file_has_item ()</h3>
+<a class="indexterm" name="id2860848"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_has_item        (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri);</pre>
+<p>
+Находит имеет ли desktop закладка элемент URI установленный в <em class="parameter"><code>uri</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>uri</code></em> 
+     находится внутри <em class="parameter"><code>bookmark</code></em>, иначе 
+     <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2860981"></a><h3>
+<a name="g-bookmark-file-has-group"></a>g_bookmark_file_has_group ()</h3>
+<a class="indexterm" name="id2860997"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_has_group       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *group,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Проверяет относится ли <em class="parameter"><code>group</code></em> к списку групп к которым принадлежит закладка для 
+<em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> 
+и устанавливает <em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>group</code></em>&#160;:</span></td>
+<td> имя группы для поиска
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>group</code></em> 
+     найдена.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2861213"></a><h3>
+<a name="g-bookmark-file-has-application"></a>g_bookmark_file_has_application ()</h3>
+<a class="indexterm" name="id2861229"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_has_application (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *name,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Проверяет имеет ли закладка для <em class="parameter"><code>uri</code></em> внутри <em class="parameter"><code>bookmark</code></em> 
+регистрацию приложения <em class="parameter"><code>name</code></em>.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> и устанавливает
+<em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>name</code></em>&#160;:</span></td>
+<td> имя приложения
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если приложение 
+     <em class="parameter"><code>name</code></em> найдено
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2861450"></a><h3>
+<a name="g-bookmark-file-get-size"></a>g_bookmark_file_get_size ()</h3>
+<a class="indexterm" name="id2861465"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_bookmark_file_get_size        (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark);</pre>
+<p>
+Определяет количество закладок в <em class="parameter"><code>bookmark</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> количество закладок
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2861544"></a><h3>
+<a name="g-bookmark-file-get-uris"></a>g_bookmark_file_get_uris ()</h3>
+<a class="indexterm" name="id2861560"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>**     g_bookmark_file_get_uris        (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *length);</pre>
+<p>
+Возвращает все URIs закладок в файле <em class="parameter"><code>bookmark</code></em>.
+Массив возвращаемых URIs будет <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>-завершённый, 
+поэтому <em class="parameter"><code>length</code></em> может опционально быть 
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>length</code></em>&#160;:</span></td>
+<td> расположение для количества возвращаемых URIs, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённый <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>-завершённый массив строк.
+     Используйте <a href="glib-String-Utility-Functions.html#g-strfreev"><code class="function">g_strfreev()</code></a> для его освобождения.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2861721"></a><h3>
+<a name="g-bookmark-file-get-title"></a>g_bookmark_file_get_title ()</h3>
+<a class="indexterm" name="id2861737"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_bookmark_file_get_title       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Возвращает заголовок закладки для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+Если <em class="parameter"><code>uri</code></em> это <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, 
+возвращает заголовок <em class="parameter"><code>bookmark</code></em>.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> и устанавливает
+<em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     если определённый URI не найден.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2861953"></a><h3>
+<a name="g-bookmark-file-get-description"></a>g_bookmark_file_get_description ()</h3>
+<a class="indexterm" name="id2861969"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_bookmark_file_get_description (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Находит описание закладки для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> и устанавливает
+<em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     если определённый URI не найден.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2862150"></a><h3>
+<a name="g-bookmark-file-get-mime-type"></a>g_bookmark_file_get_mime_type ()</h3>
+<a class="indexterm" name="id2862166"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_bookmark_file_get_mime_type   (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Находит MIME тип источника на который указывает <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> и устанавливает
+<em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.
+В случае когда MIME тип не найден, возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+и устанавливает <em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-INVALID-VALUE:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_INVALID_VALUE</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     если определённый URI не найден.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2862375"></a><h3>
+<a name="g-bookmark-file-get-is-private"></a>g_bookmark_file_get_is_private ()</h3>
+<a class="indexterm" name="id2862391"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_get_is_private  (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Определяет установлен ли приватный флаг закладки для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> и устанавливает
+<em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.  
+В случае когда приватный флаг не найден, возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> и
+устанавливает <em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-INVALID-VALUE:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_INVALID_VALUE</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если приватный флаг установлен, 
+     иначе <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2862609"></a><h3>
+<a name="g-bookmark-file-get-icon"></a>g_bookmark_file_get_icon ()</h3>
+<a class="indexterm" name="id2862625"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_get_icon        (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **href,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **mime_type,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Определяет значок закладки для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> и устанавливает
+<em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>href</code></em>&#160;:</span></td>
+<td> расположение для возвращаемого местонахождения значка или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>mime_type</code></em>&#160;:</span></td>
+<td> расположение для возвращаемого MIME типа значка или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемого <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если значок закладки для URI найден.
+     Вы должны освободить возвращаемые строки.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2862871"></a><h3>
+<a name="g-bookmark-file-get-added"></a>g_bookmark_file_get_added ()</h3>
+<a class="indexterm" name="id2862887"></a><pre class="programlisting">time_t      g_bookmark_file_get_added       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Определяет время добавления закладки для <em class="parameter"><code>uri</code></em> в <em class="parameter"><code>bookmark</code></em>
+</p>
+<p>
+В случае когда URI не найден, возвращает -1 и устанавливает <em class="parameter"><code>error</code></em> в 
+<a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> время добавления закладки (timestamp)
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2863052"></a><h3>
+<a name="g-bookmark-file-get-modified"></a>g_bookmark_file_get_modified ()</h3>
+<a class="indexterm" name="id2863068"></a><pre class="programlisting">time_t      g_bookmark_file_get_modified    (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Определяет время последней модификации закладки для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+В случае когда URI не найден, возвращает -1 и устанавливает <em class="parameter"><code>error</code></em> в 
+<a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Время последней модификации закладки (timestamp)
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2863229"></a><h3>
+<a name="g-bookmark-file-get-visited"></a>g_bookmark_file_get_visited ()</h3>
+<a class="indexterm" name="id2863245"></a><pre class="programlisting">time_t      g_bookmark_file_get_visited     (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Определяет время последнего посещения закладки для <em class="parameter"><code>uri</code></em> was last visited.
+</p>
+<p>
+В случае когда URI не найден, возвращает -1 и устанавливает <em class="parameter"><code>error</code></em> в 
+<a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Время последнего посещения (timestamp).
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2863404"></a><h3>
+<a name="g-bookmark-file-get-groups"></a>g_bookmark_file_get_groups ()</h3>
+<a class="indexterm" name="id2863420"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>**     g_bookmark_file_get_groups      (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *length,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Находит имена групп к которым принадлежит закладка для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> и устанавливает
+<em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.
+</p>
+<p>
+Возвращаемый массив является <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>-завершённым, 
+поэтому <em class="parameter"><code>length</code></em> может опционально быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>length</code></em>&#160;:</span></td>
+<td> расположение длины возвращаемой строки, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённый <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>-завершённый массив имён групп.
+     Используйте <a href="glib-String-Utility-Functions.html#g-strfreev"><code class="function">g_strfreev()</code></a> для его освобождения.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2863673"></a><h3>
+<a name="g-bookmark-file-get-applications"></a>g_bookmark_file_get_applications ()</h3>
+<a class="indexterm" name="id2863689"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>**     g_bookmark_file_get_applications
+                                            (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *length,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Находит имена приложений которые зарегистрированы закладкой для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> и устанавливает
+<em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>length</code></em>&#160;:</span></td>
+<td> расположение длины возвращаемого списка, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённый <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>-завершённый массив строк.
+     Используйте <a href="glib-String-Utility-Functions.html#g-strfreev"><code class="function">g_strfreev()</code></a> для его освобождения.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2863914"></a><h3>
+<a name="g-bookmark-file-get-app-info"></a>g_bookmark_file_get_app_info ()</h3>
+<a class="indexterm" name="id2863929"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_get_app_info    (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *name,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **exec,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> *count,
+                                             time_t *stamp,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Получает регистрационную информацию <em class="parameter"><code>app_name</code></em> закладки для
+<em class="parameter"><code>uri</code></em>.  
+Смотрите <a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-app-info"><code class="function">g_bookmark_file_set_app_info()</code></a> для получения информации о возвращаемых данных.
+</p>
+<p>
+Строка возвращаемая в <em class="parameter"><code>app_exec</code></em> должна быть освобождена.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> и устанавливает
+<em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.  
+В случае когда нет приложения с именем <em class="parameter"><code>app_name</code></em> зарегистрированного закладкой для 
+<em class="parameter"><code>uri</code></em>, возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> 
+и устанавливает ошибку в 
+<a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-APP-NOT-REGISTERED:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>name</code></em>&#160;:</span></td>
+<td> имя приложения
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>exec</code></em>&#160;:</span></td>
+<td> расположение для командной строки приложения, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>count</code></em>&#160;:</span></td>
+<td> расположение для возвращаемого количества регистраций, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>stamp</code></em>&#160;:</span></td>
+<td> расположение для возвращаемого времени последней регистрации, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> при успешном выполнении.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2864291"></a><h3>
+<a name="g-bookmark-file-set-title"></a>g_bookmark_file_set_title ()</h3>
+<a class="indexterm" name="id2864307"></a><pre class="programlisting">void        g_bookmark_file_set_title       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *title);</pre>
+<p>
+Устанавливает <em class="parameter"><code>title</code></em> как заголовок закладки для <em class="parameter"><code>uri</code></em> внутри
+файла закладок <em class="parameter"><code>bookmark</code></em>.
+</p>
+<p>
+Если <em class="parameter"><code>uri</code></em> это <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, 
+устанавливает заголовок <em class="parameter"><code>bookmark</code></em>.
+</p>
+<p>
+Если закладка для <em class="parameter"><code>uri</code></em> не найдена, то она создаётся.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>title</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2864476"></a><h3>
+<a name="g-bookmark-file-set-description"></a>g_bookmark_file_set_description ()</h3>
+<a class="indexterm" name="id2864492"></a><pre class="programlisting">void        g_bookmark_file_set_description (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *description);</pre>
+<p>
+Устанавливает <em class="parameter"><code>description</code></em> как описание закладки для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+Если <em class="parameter"><code>uri</code></em> это <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, 
+устанавливает описание <em class="parameter"><code>bookmark</code></em>.
+</p>
+<p>
+Если закладка для <em class="parameter"><code>uri</code></em> не найдена, то она создаётся.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>description</code></em>&#160;:</span></td>
+<td> строка
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2864656"></a><h3>
+<a name="g-bookmark-file-set-mime-type"></a>g_bookmark_file_set_mime_type ()</h3>
+<a class="indexterm" name="id2864672"></a><pre class="programlisting">void        g_bookmark_file_set_mime_type   (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *mime_type);</pre>
+<p>
+Устанавливает <em class="parameter"><code>mime_type</code></em> как MIME тип закладки для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+Если закладка для <em class="parameter"><code>uri</code></em> не найдена, то она создаётся.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>mime_type</code></em>&#160;:</span></td>
+<td> MIME тип
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2864800"></a><h3>
+<a name="g-bookmark-file-set-is-private"></a>g_bookmark_file_set_is_private ()</h3>
+<a class="indexterm" name="id2864816"></a><pre class="programlisting">void        g_bookmark_file_set_is_private  (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> is_private);</pre>
+<p>
+Устанавливает приватный флаг закладки для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+Если закладка для <em class="parameter"><code>uri</code></em> не найдена, то она создаётся.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>is_private</code></em>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если закладка должна быть помечена как закрытая
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2864948"></a><h3>
+<a name="g-bookmark-file-set-icon"></a>g_bookmark_file_set_icon ()</h3>
+<a class="indexterm" name="id2864963"></a><pre class="programlisting">void        g_bookmark_file_set_icon        (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *href,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *mime_type);</pre>
+<p>
+Устанавливает значок закладки для <em class="parameter"><code>uri</code></em>.  Если <em class="parameter"><code>href</code></em> это 
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, сбрасывает установленный в текущий момент значок.
+</p>
+<p>
+Если нет найденной закладки для <em class="parameter"><code>uri</code></em>, она создаётся.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>href</code></em>&#160;:</span></td>
+<td> URI значка для закладки, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>mime_type</code></em>&#160;:</span></td>
+<td> MIME тип значка для закладки
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2865134"></a><h3>
+<a name="g-bookmark-file-set-added"></a>g_bookmark_file_set_added ()</h3>
+<a class="indexterm" name="id2865151"></a><pre class="programlisting">void        g_bookmark_file_set_added       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             time_t added);</pre>
+<p>
+Устанавливает время добавления закладки для <em class="parameter"><code>uri</code></em> в <em class="parameter"><code>bookmark</code></em>.
+</p>
+<p>
+Если нет найденной закладки для <em class="parameter"><code>uri</code></em>, то она создаётся.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>added</code></em>&#160;:</span></td>
+<td> временная отметка или -1 для использования текущего времени
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2865278"></a><h3>
+<a name="g-bookmark-file-set-groups"></a>g_bookmark_file_set_groups ()</h3>
+<a class="indexterm" name="id2865294"></a><pre class="programlisting">void        g_bookmark_file_set_groups      (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> **groups,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> length);</pre>
+<p>
+Устанавливает список имён групп для элементов с <em class="parameter"><code>uri</code></em>.  
+Каждое предварительно установленное имя группы списка удаляется.
+</p>
+<p>
+Если <em class="parameter"><code>uri</code></em> не найден, то элементы для него создаются.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> URI элемент
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>groups</code></em>&#160;:</span></td>
+<td> массив имён групп, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для удаления всех групп
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>length</code></em>&#160;:</span></td>
+<td> количество имен групп в <em class="parameter"><code>groups</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2865455"></a><h3>
+<a name="g-bookmark-file-set-modified"></a>g_bookmark_file_set_modified ()</h3>
+<a class="indexterm" name="id2865471"></a><pre class="programlisting">void        g_bookmark_file_set_modified    (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             time_t modified);</pre>
+<p>
+Устанавливает время последнего изменения закладки для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+Если закладка для <em class="parameter"><code>uri</code></em> не найдена, то она создаётся.
+</p>
+<p>
+Время изменения закладки должно устанавливаться только когда meta-данные были фактически изменены.  
+Все функции <a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a> которые изменяют закладку
+также изменяют время модификации, за исключением
+<a href="glib-Bookmark-file-parser.html#g-bookmark-file-set-visited"><code class="function">g_bookmark_file_set_visited()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>modified</code></em>&#160;:</span></td>
+<td> временная отметка или -1 для использования текущего времени
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2865620"></a><h3>
+<a name="g-bookmark-file-set-visited"></a>g_bookmark_file_set_visited ()</h3>
+<a class="indexterm" name="id2865635"></a><pre class="programlisting">void        g_bookmark_file_set_visited     (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             time_t visited);</pre>
+<p>
+Устанавливает время последнего посещения закладки для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+Если закладка для <em class="parameter"><code>uri</code></em> не найдена, то она создаётся.
+</p>
+<p>
+Время посещения должно устанавливаться только если закладка была задействована, 
+любое использование командной строки найденное с помощью <a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-app-info"><code class="function">g_bookmark_file_get_app_info()</code></a>
+или приложение по умолчанию для закладки MIME типа найденное с использованием 
+<a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-mime-type"><code class="function">g_bookmark_file_get_mime_type()</code></a>.  
+Изменение времени "посещения" не влияет на время "модификации".</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>visited</code></em>&#160;:</span></td>
+<td> временная метка или -1 для использования текущего времени
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2865787"></a><h3>
+<a name="g-bookmark-file-set-app-info"></a>g_bookmark_file_set_app_info ()</h3>
+<a class="indexterm" name="id2865803"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_set_app_info    (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *name,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *exec,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> count,
+                                             time_t stamp,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Устанавливает meta-данные приложения <em class="parameter"><code>name</code></em> в список приложений которые были зарегистрированы закладкой
+для <em class="parameter"><code>uri</code></em> внутри <em class="parameter"><code>bookmark</code></em>.
+</p>
+<p>
+Вы должны редко использовать эту функцию; вместо неё используйте <a href="glib-Bookmark-file-parser.html#g-bookmark-file-add-application"><code class="function">g_bookmark_file_add_application()</code></a>
+и <a href="glib-Bookmark-file-parser.html#g-bookmark-file-remove-application"><code class="function">g_bookmark_file_remove_application()</code></a>.
+</p>
+<p>
+<em class="parameter"><code>name</code></em> может быть любой строкой в кодировке UTF-8 используемой для идентификации приложения.
+<em class="parameter"><code>exec</code></em> может иметь один из двух модификаторов: 
+"<code class="literal">f</code>", который будет расшифрован как локальное имя файла полученное из URI закладки; 
+"<code class="literal">u</code>", который будет расшифрован как закладка URI.
+Расшифровка выполняется автоматически когда находится сохранённая командная строка используя функцию 
+<a href="glib-Bookmark-file-parser.html#g-bookmark-file-get-app-info"><code class="function">g_bookmark_file_get_app_info()</code></a>.
+<em class="parameter"><code>count</code></em> это количество регистраций приложения закладкой; 
+если &lt; 0, текущее количество регистраций будет увеличено на одну, 
+если 0, приложение с именем <em class="parameter"><code>name</code></em> будет удалено из списка зарегистрированных приложений.
+<em class="parameter"><code>stamp</code></em> Unix время последней регистрации; если -1, используется текущее время.
+</p>
+<p>
+Если вы попытаетесь удалить приложение установив количество его регистраций в ноль, а закладка для 
+<em class="parameter"><code>uri</code></em> не найдена, то вернётся <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> и установится <em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>; 
+точно так же, в случае когда нет приложения с именем <em class="parameter"><code>name</code></em> зарегистрированного закладкой для <em class="parameter"><code>uri</code></em>, то возвращается <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> и
+устанавливается ошибка в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-APP-NOT-REGISTERED:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED</span></a>.  
+Иначе, если закладка для <em class="parameter"><code>uri</code></em> не найдена, то она создаётся.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>name</code></em>&#160;:</span></td>
+<td> имя приложения
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>exec</code></em>&#160;:</span></td>
+<td> командная строка приложения
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>count</code></em>&#160;:</span></td>
+<td> количество выполненных регистраций для приложения
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>stamp</code></em>&#160;:</span></td>
+<td> время последней регистрации для приложения
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если meta-данные приложения
+     полностью изменены.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2866240"></a><h3>
+<a name="g-bookmark-file-add-group"></a>g_bookmark_file_add_group ()</h3>
+<a class="indexterm" name="id2866256"></a><pre class="programlisting">void        g_bookmark_file_add_group       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *group);</pre>
+<p>
+Добавляет <em class="parameter"><code>group</code></em> в список групп к которым принадлежит закладка для <em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+Если закладка для <em class="parameter"><code>uri</code></em> не найдена, то она создаётся.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>group</code></em>&#160;:</span></td>
+<td> имя добавляемой группы
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2866384"></a><h3>
+<a name="g-bookmark-file-add-application"></a>g_bookmark_file_add_application ()</h3>
+<a class="indexterm" name="id2866400"></a><pre class="programlisting">void        g_bookmark_file_add_application (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *name,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *exec);</pre>
+<p>
+Добавляет приложение с именем <em class="parameter"><code>name</code></em> и <em class="parameter"><code>exec</code></em> в список 
+приложений, которые зарегистрированы закладкой для <em class="parameter"><code>uri</code></em>, в
+<em class="parameter"><code>bookmark</code></em>.
+</p>
+<p>
+Все закладки внутри <a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a> 
+должны иметь по меньшей мере одно зарегистрированное приложение.  Каждое приложение должно иметь имя,
+командная строка полезна для запуска закладки, количество регистраций закладкой приложения и время последней
+регистрации приложения этой закладкой.
+</p>
+<p>
+Если <em class="parameter"><code>name</code></em> это <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, 
+имя приложения будет тем что возвращает функция <code class="function">g_get_application()</code>; 
+если <em class="parameter"><code>exec</code></em> это <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, 
+командная строка будет состоять из имени программы которое возвращает <a href="glib-Miscellaneous-Utility-Functions.html#g-get-prgname"><code class="function">g_get_prgname()</code></a> и модификатора "<code class="literal">u</code>", который будет расшифрован как URI закладки.
+</p>
+<p>
+Эта функция автоматически обновляет количество регистраций и timestamping в случае когда приложение с именем
+<em class="parameter"><code>name</code></em> уже зарегистрировано закладкой для <em class="parameter"><code>uri</code></em> 
+внутри <em class="parameter"><code>bookmark</code></em>.
+</p>
+<p>
+Если закладка для <em class="parameter"><code>uri</code></em> не найдена, то она создаётся.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>name</code></em>&#160;:</span></td>
+<td> имя приложения зарегистрированное закладкой, или 
+     <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>exec</code></em>&#160;:</span></td>
+<td> командная строка используемая для активации закладки, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2866695"></a><h3>
+<a name="g-bookmark-file-remove-group"></a>g_bookmark_file_remove_group ()</h3>
+<a class="indexterm" name="id2866710"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_remove_group    (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *group,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Удаляет <em class="parameter"><code>group</code></em> из списка групп к которым принадлежит закладка для 
+<em class="parameter"><code>uri</code></em>.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> и устанавливает
+<em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.
+В случае когда группа не определена, возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> и
+устанавливает <em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-INVALID-VALUE:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_INVALID_VALUE</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>group</code></em>&#160;:</span></td>
+<td> имя группы для удаления
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>group</code></em> 
+     была полностью удалена.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2866952"></a><h3>
+<a name="g-bookmark-file-remove-application"></a>g_bookmark_file_remove_application ()</h3>
+<a class="indexterm" name="id2866968"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_remove_application
+                                            (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *name,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Удаляет регистрацию приложения с именем <em class="parameter"><code>name</code></em> из списка приложений которые зарегистрированы
+закладкой для <em class="parameter"><code>uri</code></em> внутри <em class="parameter"><code>bookmark</code></em>.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> и устанавливает
+<em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.
+В случае когда приложение с именем <em class="parameter"><code>app_name</code></em> не зарегистрировано закладкой для 
+<em class="parameter"><code>uri</code></em>, возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> 
+и устанавливает ошибку в 
+<a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-APP-NOT-REGISTERED:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>name</code></em>&#160;:</span></td>
+<td> имя приложения
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если приложение полностью удалено.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2867217"></a><h3>
+<a name="g-bookmark-file-remove-item"></a>g_bookmark_file_remove_item ()</h3>
+<a class="indexterm" name="id2867233"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_remove_item     (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Удаляет закладку для <em class="parameter"><code>uri</code></em> из файла закладок <em class="parameter"><code>bookmark</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если закладка была полностью удалена.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2867389"></a><h3>
+<a name="g-bookmark-file-move-item"></a>g_bookmark_file_move_item ()</h3>
+<a class="indexterm" name="id2867406"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_bookmark_file_move_item       (<a href="glib-Bookmark-file-parser.html#GBookmarkFile">GBookmarkFile</a> *bookmark,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *old_uri,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *new_uri,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Изменяет URI закладки из параметра <em class="parameter"><code>old_uri</code></em> на <em class="parameter"><code>new_uri</code></em>.  
+Любые существующие закладки для <em class="parameter"><code>new_uri</code></em> будут переписаны.  
+Если <em class="parameter"><code>new_uri</code></em> это <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, 
+тогда закладка удаляется.
+</p>
+<p>
+В случае когда URI не найден, возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> и устанавливает
+<em class="parameter"><code>error</code></em> в <a href="glib-Bookmark-file-parser.html#G-BOOKMARK-FILE-ERROR-URI-NOT-FOUND:CAPS"><span class="type">G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>bookmark</code></em>&#160;:</span></td>
+<td><a href="glib-Bookmark-file-parser.html#GBookmarkFile"><span class="type">GBookmarkFile</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>old_uri</code></em>&#160;:</span></td>
+<td> правильный URI
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>new_uri</code></em>&#160;:</span></td>
+<td> правильный URI, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если URI полностью изменён
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Basic Types</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="prev" href="glib-Version-Information.html" title="Version Information">
+<link rel="next" href="glib-Limits-of-Basic-Types.html" title="Limits of Basic Types">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Version-Information.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-fundamentals.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Limits-of-Basic-Types.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2529382" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2529600" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Basic-Types"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2529382"></a><span class="refentrytitle">Основные типы</span>
+</h2>
+<p>Basic Types &#8212; Стандартные типы GLib, определяемые для простоты использования и переносимости.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+typedef     <a href="glib-Basic-Types.html#gboolean">gboolean</a>;
+typedef     <a href="glib-Basic-Types.html#gpointer">gpointer</a>;
+typedef     <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a>;
+typedef     <a href="glib-Basic-Types.html#gchar">gchar</a>;
+typedef     <a href="glib-Basic-Types.html#guchar">guchar</a>;
+
+typedef     <a href="glib-Basic-Types.html#gint">gint</a>;
+typedef     <a href="glib-Basic-Types.html#guint">guint</a>;
+typedef     <a href="glib-Basic-Types.html#gshort">gshort</a>;
+typedef     <a href="glib-Basic-Types.html#gushort">gushort</a>;
+typedef     <a href="glib-Basic-Types.html#glong">glong</a>;
+typedef     <a href="glib-Basic-Types.html#gulong">gulong</a>;
+
+typedef     <a href="glib-Basic-Types.html#gint8">gint8</a>;
+typedef     <a href="glib-Basic-Types.html#guint8">guint8</a>;
+typedef     <a href="glib-Basic-Types.html#gint16">gint16</a>;
+typedef     <a href="glib-Basic-Types.html#guint16">guint16</a>;
+typedef     <a href="glib-Basic-Types.html#gint32">gint32</a>;
+typedef     <a href="glib-Basic-Types.html#guint32">guint32</a>;
+
+#define     <a href="glib-Basic-Types.html#G-HAVE-GINT64:CAPS">G_HAVE_GINT64</a>
+typedef     <a href="glib-Basic-Types.html#gint64">gint64</a>;
+typedef     <a href="glib-Basic-Types.html#guint64">guint64</a>;
+#define     <a href="glib-Basic-Types.html#G-GINT64-CONSTANT:CAPS">G_GINT64_CONSTANT</a>               (val)
+#define     <a href="glib-Basic-Types.html#G-GUINT64-CONSTANT:CAPS">G_GUINT64_CONSTANT</a>              (val)
+
+typedef     <a href="glib-Basic-Types.html#gfloat">gfloat</a>;
+typedef     <a href="glib-Basic-Types.html#gdouble">gdouble</a>;
+
+typedef     <a href="glib-Basic-Types.html#gsize">gsize</a>;
+typedef     <a href="glib-Basic-Types.html#gssize">gssize</a>;
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2529600"></a><h2>Описание</h2>
+<p>
+GLib определяет большое число основных используемых типов, которые можно разделить на 4 группы:
+</p>
+<div class="itemizedlist"><ul type="disc">
+<li><p>
+Новые типы которые не являются частью стандарта C - <a href="glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a>, <a href="glib-Basic-Types.html#gsize"><span class="type">gsize</span></a>, <a href="glib-Basic-Types.html#gssize"><span class="type">gssize</span></a>.
+</p></li>
+<li><p>
+Целочисленные типы которые гарантируют одинаковый размер на разных платформах -
+<a href="glib-Basic-Types.html#gint8"><span class="type">gint8</span></a>, <a href="glib-Basic-Types.html#guint8"><span class="type">guint8</span></a>, <a href="glib-Basic-Types.html#gint16"><span class="type">gint16</span></a>, <a href="glib-Basic-Types.html#guint16"><span class="type">guint16</span></a>, <a href="glib-Basic-Types.html#gint32"><span class="type">gint32</span></a>, <a href="glib-Basic-Types.html#guint32"><span class="type">guint32</span></a>, <a href="glib-Basic-Types.html#gint64"><span class="type">gint64</span></a>, <a href="glib-Basic-Types.html#guint64"><span class="type">guint64</span></a>.
+</p></li>
+<li><p>
+Типы которые проще использовать чем их стандартные аналоги C -
+<a href="glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>, <a href="glib-Basic-Types.html#gconstpointer"><span class="type">gconstpointer</span></a>, <a href="glib-Basic-Types.html#guchar"><span class="type">guchar</span></a>, <a href="glib-Basic-Types.html#guint"><span class="type">guint</span></a>, <a href="glib-Basic-Types.html#gushort"><span class="type">gushort</span></a>, <a href="glib-Basic-Types.html#gulong"><span class="type">gulong</span></a>.
+</p></li>
+<li><p>
+Типы которые соответствуют существующим стандартным типам C, но являются более полными - 
+<a href="glib-Basic-Types.html#gchar"><span class="type">gchar</span></a>, <a href="glib-Basic-Types.html#gint"><span class="type">gint</span></a>, <a href="glib-Basic-Types.html#gshort"><span class="type">gshort</span></a>, <a href="glib-Basic-Types.html#glong"><span class="type">glong</span></a>, <a href="glib-Basic-Types.html#gfloat"><span class="type">gfloat</span></a>, <a href="glib-Basic-Types.html#gdouble"><span class="type">gdouble</span></a>.
+</p></li>
+</ul></div>
+<p>
+
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2529820"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2529830"></a><h3>
+<a name="gboolean"></a>gboolean</h3>
+<a class="indexterm" name="id2529842"></a><pre class="programlisting">typedef gint   gboolean;
+</pre>
+<p>
+Стандартный <span class="type">логический</span> тип.
+Переменные этого типа содержат логическое значение <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> или <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2529883"></a><h3>
+<a name="gpointer"></a>gpointer</h3>
+<a class="indexterm" name="id2529895"></a><pre class="programlisting">typedef void* gpointer;
+</pre>
+<p>
+Указывает отсутствие типа.
+<a href="glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a> лучше выглядит и удобней в использовании чем <span class="type">void*</span>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2529922"></a><h3>
+<a name="gconstpointer"></a>gconstpointer</h3>
+<a class="indexterm" name="id2529935"></a><pre class="programlisting">typedef const void *gconstpointer;
+</pre>
+<p>
+Указывает отсутствие типа константных данных.
+Указанные данные не должны изменяться.
+</p>
+<p>
+Это обычно используется в прототипах функций для указания что 
+данные не меняются функцией.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2529957"></a><h3>
+<a name="gchar"></a>gchar</h3>
+<a class="indexterm" name="id2529969"></a><pre class="programlisting">typedef char   gchar;
+</pre>
+<p>
+Соответствует стандартному типу <span class="type">char</span>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2529988"></a><h3>
+<a name="guchar"></a>guchar</h3>
+<a class="indexterm" name="id2530000"></a><pre class="programlisting">typedef unsigned char   guchar;
+</pre>
+<p>
+Соответствует стандартному типу <span class="type">unsigned char</span>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530020"></a><h3>
+<a name="gint"></a>gint</h3>
+<a class="indexterm" name="id2530032"></a><pre class="programlisting">typedef int    gint;
+</pre>
+<p>
+Соответствует стандартному типу <span class="type">int</span>.
+Значение этого типа может быть в диапазоне от <a href="glib-Limits-of-Basic-Types.html#G-MININT:CAPS"><span class="type">G_MININT</span></a> до <a href="glib-Limits-of-Basic-Types.html#G-MAXINT:CAPS"><span class="type">G_MAXINT</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530069"></a><h3>
+<a name="guint"></a>guint</h3>
+<a class="indexterm" name="id2530081"></a><pre class="programlisting">typedef unsigned int    guint;
+</pre>
+<p>
+Соответствует стандартному типу  <span class="type">unsigned int</span>.
+Значение этого типа может быть в диапазоне от 0 до <a href="glib-Limits-of-Basic-Types.html#G-MAXUINT:CAPS"><span class="type">G_MAXUINT</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530111"></a><h3>
+<a name="gshort"></a>gshort</h3>
+<a class="indexterm" name="id2530123"></a><pre class="programlisting">typedef short  gshort;
+</pre>
+<p>
+Соответствует стандартному типу  <span class="type">short</span>.
+Значение этого типа может быть в диапазоне от <a href="glib-Limits-of-Basic-Types.html#G-MINSHORT:CAPS"><span class="type">G_MINSHORT</span></a> до <a href="glib-Limits-of-Basic-Types.html#G-MAXSHORT:CAPS"><span class="type">G_MAXSHORT</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530161"></a><h3>
+<a name="gushort"></a>gushort</h3>
+<a class="indexterm" name="id2530173"></a><pre class="programlisting">typedef unsigned short  gushort;
+</pre>
+<p>
+Соответствует стандартному типу  <span class="type">unsigned short</span>.
+Значение этого типа может быть в диапазоне от 0 до <a href="glib-Limits-of-Basic-Types.html#G-MAXUSHORT:CAPS"><span class="type">G_MAXUSHORT</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530202"></a><h3>
+<a name="glong"></a>glong</h3>
+<a class="indexterm" name="id2530214"></a><pre class="programlisting">typedef long   glong;
+</pre>
+<p>
+Соответствует стандартному типу  <span class="type">long</span>.
+Значение этого типа может быть в диапазоне от <a href="glib-Limits-of-Basic-Types.html#G-MINLONG:CAPS"><span class="type">G_MINLONG</span></a> до <a href="glib-Limits-of-Basic-Types.html#G-MAXLONG:CAPS"><span class="type">G_MAXLONG</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530253"></a><h3>
+<a name="gulong"></a>gulong</h3>
+<a class="indexterm" name="id2530265"></a><pre class="programlisting">typedef unsigned long   gulong;
+</pre>
+<p>
+Соответствует стандартному типу  <span class="type">unsigned long</span>.
+Значение этого типа может быть в диапазоне от 0 до <a href="glib-Limits-of-Basic-Types.html#G-MAXULONG:CAPS"><span class="type">G_MAXULONG</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530294"></a><h3>
+<a name="gint8"></a>gint8</h3>
+<a class="indexterm" name="id2530306"></a><pre class="programlisting">typedef signed char gint8;
+</pre>
+<p>
+Целочисленное со знаком гарантировано равно 8 битам на всех платформах.
+Значение этого типа может быть в диапазоне от -128 до 127.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530323"></a><h3>
+<a name="guint8"></a>guint8</h3>
+<a class="indexterm" name="id2530335"></a><pre class="programlisting">typedef unsigned char guint8;
+</pre>
+<p>
+Целочисленное без знака гарантировано равно 8 битам на всех платформах.
+Значение этого типа может быть в диапазоне от 0 до 255.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530352"></a><h3>
+<a name="gint16"></a>gint16</h3>
+<a class="indexterm" name="id2530364"></a><pre class="programlisting">typedef signed short gint16;
+</pre>
+<p>
+Целочисленное со знаком гарантировано равно 16 битам на всех платформах.
+Значение этого типа может быть в диапазоне от -32,768 до 32,767.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530382"></a><h3>
+<a name="guint16"></a>guint16</h3>
+<a class="indexterm" name="id2530394"></a><pre class="programlisting">typedef unsigned short guint16;
+</pre>
+<p>
+Целочисленное без знака гарантировано равно 16 битам на всех платформах.
+Значение этого типа может быть в диапазоне от 0 до 65,535.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530411"></a><h3>
+<a name="gint32"></a>gint32</h3>
+<a class="indexterm" name="id2530423"></a><pre class="programlisting">typedef signed int gint32;
+</pre>
+<p>
+Целочисленное со знаком гарантировано равно 32 битам на всех платформах.
+Значение этого типа может быть в диапазоне от -2,147,483,648 до 2,147,483,647.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530441"></a><h3>
+<a name="guint32"></a>guint32</h3>
+<a class="indexterm" name="id2530453"></a><pre class="programlisting">typedef unsigned int guint32;
+</pre>
+<p>
+Целочисленное без знака гарантировано равно 32 битам на всех платформах.
+Значение этого типа может быть в диапазоне от 0 до 4,294,967,295.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530470"></a><h3>
+<a name="G-HAVE-GINT64:CAPS"></a>G_HAVE_GINT64</h3>
+<a class="indexterm" name="id2530485"></a><pre class="programlisting">#define G_HAVE_GINT64 1          /* устаревшее, всегда верно */
+</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">G_HAVE_GINT64</code> устарела и не должна использоваться во вновь создаваемом коде. GLib нуждается в поддержке 64-bit целых начиная с версии 2.0, поэтому
+<a href="glib-Basic-Types.html#G-HAVE-GINT64:CAPS"><code class="literal">G_HAVE_GINT64</code></a> <span class="emphasis"><em>всегда</em></span> определено.</p>
+</div>
+<p>
+Этот макрос определяется если 64-битные целочисленные со знаком и без поддерживаются этой платформой. 
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530530"></a><h3>
+<a name="gint64"></a>gint64</h3>
+<a class="indexterm" name="id2530542"></a><pre class="programlisting">G_GNUC_EXTENSION typedef signed long long gint64;
+</pre>
+<p>
+Целочисленное со знаком гарантировано равно 64 битам на всех платформах.
+Значение этого типа может быть в диапазоне от -9,223,372,036,854,775,808 до
+9,223,372,036,854,775,807.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530560"></a><h3>
+<a name="guint64"></a>guint64</h3>
+<a class="indexterm" name="id2530572"></a><pre class="programlisting">G_GNUC_EXTENSION typedef unsigned long long guint64;
+</pre>
+<p>
+Целочисленное без знака гарантировано равно 64 битам на всех платформах.
+Значение этого типа может быть в диапазоне от 0 до 18,446,744,073,709,551,615.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530590"></a><h3>
+<a name="G-GINT64-CONSTANT:CAPS"></a>G_GINT64_CONSTANT()</h3>
+<a class="indexterm" name="id2530604"></a><pre class="programlisting">#define G_GINT64_CONSTANT(val)	(G_GNUC_EXTENSION (val##LL))
+</pre>
+<p>
+Этот макрос используется для вставки буквальных 64-bit целочисленных в исходный код.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>val</code></em>&#160;:</span></td>
+<td>буквальное целочисленное значение, например 0x1d636b02300a7aa7U.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530640"></a><h3>
+<a name="G-GUINT64-CONSTANT:CAPS"></a>G_GUINT64_CONSTANT()</h3>
+<a class="indexterm" name="id2530655"></a><pre class="programlisting">#define G_GUINT64_CONSTANT(val)	(G_GNUC_EXTENSION (val##ULL))
+</pre>
+<p>
+Этот макрос используется для вставки буквальных 64-bit целочисленных без знака в исходный код.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>val</code></em>&#160;:</span></td>
+<td>буквальное значение целочисленного, например 0x1d636b02300a7aa7U.
+</td>
+</tr></tbody>
+</table></div>
+<p>Начиная с версии 2.10
+
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530695"></a><h3>
+<a name="gfloat"></a>gfloat</h3>
+<a class="indexterm" name="id2530707"></a><pre class="programlisting">typedef float   gfloat;
+</pre>
+<p>
+Соответствует стандартному типу  <span class="type">float</span>.
+Значение этого типа может быть в диапазоне от -<a href="glib-Limits-of-Basic-Types.html#G-MAXFLOAT:CAPS"><span class="type">G_MAXFLOAT</span></a> to <a href="glib-Limits-of-Basic-Types.html#G-MAXFLOAT:CAPS"><span class="type">G_MAXFLOAT</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530746"></a><h3>
+<a name="gdouble"></a>gdouble</h3>
+<a class="indexterm" name="id2530758"></a><pre class="programlisting">typedef double  gdouble;
+</pre>
+<p>
+Соответствует стандартному типу  <span class="type">double</span>.
+Значение этого типа может быть в диапазоне от -<a href="glib-Limits-of-Basic-Types.html#G-MAXDOUBLE:CAPS"><span class="type">G_MAXDOUBLE</span></a> to <a href="glib-Limits-of-Basic-Types.html#G-MAXDOUBLE:CAPS"><span class="type">G_MAXDOUBLE</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530795"></a><h3>
+<a name="gsize"></a>gsize</h3>
+<a class="indexterm" name="id2530807"></a><pre class="programlisting">typedef unsigned int gsize;
+</pre>
+<p>
+Целочисленное 32-bit без знака, предназначенное представлять размер данных структур.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2530824"></a><h3>
+<a name="gssize"></a>gssize</h3>
+<a class="indexterm" name="id2530836"></a><pre class="programlisting">typedef signed int gssize;
+</pre>
+<p>
+Целочисленное 32-bit со знаком, предназначенное представлять размер данных структур.
+</p>
+<br>
+</div>
+</div>
+</div>
+</body>
+</html>

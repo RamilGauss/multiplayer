@@ -1,0 +1,1408 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Lexical Scanner</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-utilities.html" title="GLib Utilities">
+<link rel="prev" href="glib-Miscellaneous-Utility-Functions.html" title="Miscellaneous Utility Functions">
+<link rel="next" href="glib-Automatic-String-Completion.html" title="Automatic String Completion">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Miscellaneous-Utility-Functions.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-utilities.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Automatic-String-Completion.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2773943" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2774790" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Lexical-Scanner"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2773943"></a><span class="refentrytitle">Lexical Scanner</span>
+</h2>
+<p>Lexical Scanner &#8212; универсальный лексический сканер.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-Lexical-Scanner.html#GScanner">GScanner</a>;
+<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a>*   <a href="glib-Lexical-Scanner.html#g-scanner-new">g_scanner_new</a>                   (const <a href="glib-Lexical-Scanner.html#GScannerConfig">GScannerConfig</a> *config_templ);
+            <a href="glib-Lexical-Scanner.html#GScannerConfig">GScannerConfig</a>;
+
+void        <a href="glib-Lexical-Scanner.html#g-scanner-input-file">g_scanner_input_file</a>            (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> input_fd);
+void        <a href="glib-Lexical-Scanner.html#g-scanner-sync-file-offset">g_scanner_sync_file_offset</a>      (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);
+void        <a href="glib-Lexical-Scanner.html#g-scanner-input-text">g_scanner_input_text</a>            (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *text,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> text_len);
+<a href="glib-Lexical-Scanner.html#GTokenType">GTokenType</a>  <a href="glib-Lexical-Scanner.html#g-scanner-peek-next-token">g_scanner_peek_next_token</a>       (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);
+<a href="glib-Lexical-Scanner.html#GTokenType">GTokenType</a>  <a href="glib-Lexical-Scanner.html#g-scanner-get-next-token">g_scanner_get_next_token</a>        (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);
+
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Lexical-Scanner.html#g-scanner-cur-line">g_scanner_cur_line</a>              (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Lexical-Scanner.html#g-scanner-cur-position">g_scanner_cur_position</a>          (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);
+<a href="glib-Lexical-Scanner.html#GTokenType">GTokenType</a>  <a href="glib-Lexical-Scanner.html#g-scanner-cur-token">g_scanner_cur_token</a>             (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);
+<a href="glib-Lexical-Scanner.html#GTokenValue">GTokenValue</a> <a href="glib-Lexical-Scanner.html#g-scanner-cur-value">g_scanner_cur_value</a>             (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Lexical-Scanner.html#g-scanner-eof">g_scanner_eof</a>                   (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);
+
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Lexical-Scanner.html#g-scanner-set-scope">g_scanner_set_scope</a>             (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> scope_id);
+void        <a href="glib-Lexical-Scanner.html#g-scanner-scope-add-symbol">g_scanner_scope_add_symbol</a>      (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> scope_id,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> value);
+void        <a href="glib-Lexical-Scanner.html#g-scanner-scope-foreach-symbol">g_scanner_scope_foreach_symbol</a>  (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> scope_id,
+                                             <a href="glib-Hash-Tables.html#GHFunc">GHFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Lexical-Scanner.html#g-scanner-scope-lookup-symbol">g_scanner_scope_lookup_symbol</a>   (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> scope_id,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol);
+void        <a href="glib-Lexical-Scanner.html#g-scanner-scope-remove-symbol">g_scanner_scope_remove_symbol</a>   (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> scope_id,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol);
+
+#define     <a href="glib-Lexical-Scanner.html#g-scanner-freeze-symbol-table">g_scanner_freeze_symbol_table</a>   (scanner)
+#define     <a href="glib-Lexical-Scanner.html#g-scanner-thaw-symbol-table">g_scanner_thaw_symbol_table</a>     (scanner)
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Lexical-Scanner.html#g-scanner-lookup-symbol">g_scanner_lookup_symbol</a>         (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol);
+
+void        <a href="glib-Lexical-Scanner.html#g-scanner-warn">g_scanner_warn</a>                  (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);
+void        <a href="glib-Lexical-Scanner.html#g-scanner-error">g_scanner_error</a>                 (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);
+void        <a href="glib-Lexical-Scanner.html#g-scanner-unexp-token">g_scanner_unexp_token</a>           (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Lexical-Scanner.html#GTokenType">GTokenType</a> expected_token,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *identifier_spec,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol_spec,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol_name,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *message,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> is_error);
+void        (<a href="glib-Lexical-Scanner.html#GScannerMsgFunc">*GScannerMsgFunc</a>)              (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> *message,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> error);
+
+void        <a href="glib-Lexical-Scanner.html#g-scanner-destroy">g_scanner_destroy</a>               (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);
+
+enum        <a href="glib-Lexical-Scanner.html#GTokenType">GTokenType</a>;
+union       <a href="glib-Lexical-Scanner.html#GTokenValue">GTokenValue</a>;
+enum        <a href="glib-Lexical-Scanner.html#GErrorType">GErrorType</a>;
+#define     <a href="glib-Lexical-Scanner.html#G-CSET-a-2-z">G_CSET_a_2_z</a>
+#define     <a href="glib-Lexical-Scanner.html#G-CSET-A-2-Z:CAPS">G_CSET_A_2_Z</a>
+#define     <a href="glib-Lexical-Scanner.html#G-CSET-DIGITS:CAPS">G_CSET_DIGITS</a>
+#define     <a href="glib-Lexical-Scanner.html#G-CSET-LATINC:CAPS">G_CSET_LATINC</a>
+#define     <a href="glib-Lexical-Scanner.html#G-CSET-LATINS:CAPS">G_CSET_LATINS</a>
+
+#define     <a href="glib-Lexical-Scanner.html#g-scanner-add-symbol">g_scanner_add_symbol</a>            ( scanner, symbol, value )
+#define     <a href="glib-Lexical-Scanner.html#g-scanner-remove-symbol">g_scanner_remove_symbol</a>         ( scanner, symbol )
+#define     <a href="glib-Lexical-Scanner.html#g-scanner-foreach-symbol">g_scanner_foreach_symbol</a>        ( scanner, func, data )
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2774790"></a><h2>Описание</h2>
+<p>
+<a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a> и связанные с ней функции обеспечивают универсальный лексический сканер.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2774819"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2774829"></a><h3>
+<a name="GScanner"></a>GScanner</h3>
+<a class="indexterm" name="id2774842"></a><pre class="programlisting">typedef struct {
+  /* неиспользуемые поля */
+  gpointer		user_data;
+  guint			max_parse_errors;
+  
+  /* g_scanner_error() инкрементирует это поле */
+  guint			parse_errors;
+  
+  /* имя входного потока, показываемое обработчиком сообщения по умолчанию */
+  const gchar		*input_name;
+  
+  /* quarked data */
+  GData			*qdata;
+  
+  /* ссылка на конфигурацию сканера */
+  GScannerConfig	*config;
+  
+  /* поля заполняемые после g_scanner_get_next_token() */
+  GTokenType		token;
+  GTokenValue		value;
+  guint			line;
+  guint			position;
+  
+  /* поля заполняемые после g_scanner_peek_next_token() */
+  GTokenType		next_token;
+  GTokenValue		next_value;
+  guint			next_line;
+  guint			next_position;
+  
+  /* рассматриваются как закрытые */
+  GHashTable		*symbol_table;
+  gint			input_fd;
+  const gchar		*text;
+  const gchar		*text_end;
+  gchar			*buffer;
+  guint			scope_id;
+  
+  /* функция обработчик для _warn и _error */
+  GScannerMsgFunc	msg_handler;
+} GScanner;
+</pre>
+<p>
+Структура данных представляющая лексический сканер.
+</p>
+<p>
+Вы должны установить <em class="structfield"><code>input_name</code></em> после создания 
+сканера, так как оно используется обработчиком сообщений по умолчанию когда отображаются предупреждения и ошибки.
+Если вы сканируете файл, имя файла будет хорошим выбором для этого.
+</p>
+<p>
+Поля <em class="structfield"><code>user_data</code></em> и
+<em class="structfield"><code>max_parse_errors</code></em> неиспользуются.
+Если вам нужно связать дополнительные данные со сканером вы можете поместить их сюда.
+</p>
+<p>
+Если вам нужно использовать собственный обработчик сообщений вы можете установить его в поле
+<em class="structfield"><code>msg_handler</code></em>. Тип функции обработки сообщений определяет 
+<a href="glib-Lexical-Scanner.html#GScannerMsgFunc"><span class="type">GScannerMsgFunc</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2774914"></a><h3>
+<a name="g-scanner-new"></a>g_scanner_new ()</h3>
+<a class="indexterm" name="id2774926"></a><pre class="programlisting"><a href="glib-Lexical-Scanner.html#GScanner">GScanner</a>*   g_scanner_new                   (const <a href="glib-Lexical-Scanner.html#GScannerConfig">GScannerConfig</a> *config_templ);</pre>
+<p>
+Создаёт новую <a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+Структура <em class="parameter"><code>config_templ</code></em> определяет начальные установки сканера,
+которые копируются в структуру <a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a> в поле <em class="structfield"><code>config</code></em>.
+Для использования настроек по умолчанию вы можете поместить <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>config_templ</code></em>&#160;:</span></td>
+<td>начальные настройки сканера.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новая <a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2775030"></a><h3>
+<a name="GScannerConfig"></a>GScannerConfig</h3>
+<a class="indexterm" name="id2775043"></a><pre class="programlisting">typedef struct {
+  /* Наборы символов
+   */
+  gchar		*cset_skip_characters;		/* по умолчанию: " \t\n" */
+  gchar		*cset_identifier_first;
+  gchar		*cset_identifier_nth;
+  gchar		*cpair_comment_single;		/* по умолчанию: "#\n" */
+  
+  /* Чувствителен ли поиск символа к регистру?
+   */
+  guint		case_sensitive : 1;
+  
+  /* Логическое значение для настройки "на лету"
+   * конфигурации правил сканирования.
+   */
+  guint		skip_comment_multi : 1;		/* C подобный комментарий */
+  guint		skip_comment_single : 1;	/* единственная строка комментария */
+  guint		scan_comment_multi : 1;		/* сканировать множество строк коментария? */
+  guint		scan_identifier : 1;
+  guint		scan_identifier_1char : 1;
+  guint		scan_identifier_NULL : 1;
+  guint		scan_symbols : 1;
+  guint		scan_binary : 1;
+  guint		scan_octal : 1;
+  guint		scan_float : 1;
+  guint		scan_hex : 1;			/* `0x0ff0' */
+  guint		scan_hex_dollar : 1;		/* `$0ff0' */
+  guint		scan_string_sq : 1;		/* string: 'anything' */
+  guint		scan_string_dq : 1;		/* string: "\\-escapes!\n" */
+  guint		numbers_2_int : 1;		/* bin, octal, hex =&gt; int */
+  guint		int_2_float : 1;		/* int =&gt; G_TOKEN_FLOAT? */
+  guint		identifier_2_string : 1;
+  guint		char_2_token : 1;		/* возвращать G_TOKEN_CHAR? */
+  guint		symbol_2_token : 1;
+  guint		scope_0_fallback : 1;		/* позволить 0 контекст поиска? */
+  guint		store_int64 : 1; 		/* использовать значение.v_int64 вместо v_int */
+  guint		padding_dummy;
+} GScannerConfig;
+</pre>
+<p>
+Определяет настройки <a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</p>
+<p>
+<em class="structfield"><code>cset_skip_characters</code></em> определяет символы которые сканер должен пропускать 
+(по умолчанию символы пробелов:
+пробел, табуляцию, перевод каретки и перевод строки).
+</p>
+<p>
+<em class="structfield"><code>cset_identifier_first</code></em> определяет символы которые могут начинать идентификаторы 
+(по умолчанию это <a href="glib-Lexical-Scanner.html#G-CSET-a-2-z"><span class="type">G_CSET_a_2_z</span></a>, "_", и 
+<a href="glib-Lexical-Scanner.html#G-CSET-A-2-Z:CAPS"><span class="type">G_CSET_A_2_Z</span></a>).
+</p>
+<p>
+<em class="structfield"><code>cset_identifier_nth</code></em> определяет символы которые могут использоваться в идентификаторах 
+после первого символа (по умолчанию это <a href="glib-Lexical-Scanner.html#G-CSET-a-2-z"><span class="type">G_CSET_a_2_z</span></a>, "_0123456789", <a href="glib-Lexical-Scanner.html#G-CSET-A-2-Z:CAPS"><span class="type">G_CSET_A_2_Z</span></a>, <a href="glib-Lexical-Scanner.html#G-CSET-LATINS:CAPS"><span class="type">G_CSET_LATINS</span></a>,
+<a href="glib-Lexical-Scanner.html#G-CSET-LATINC:CAPS"><span class="type">G_CSET_LATINC</span></a>).
+</p>
+<p>
+<em class="structfield"><code>cpair_comment_single</code></em> определяет символы начала и конца единственной строки коментария. 
+По умолчанию это "#\n" который означает что единственная строка комментария начинается с '#' и продолжается до '\n' (конец строки).
+</p>
+<p>
+<em class="structfield"><code>case_sensitive</code></em> определяет чувствительность символов к регистру 
+(по умолчанию <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>skip_comment_multi</code></em> определяет пропускать ли многострочные комментарии и не возвращать как лексемы
+(по умолчанию <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>skip_comment_single</code></em> определяет пропускать ли однострочные комментарии и не возвращать как лексемы 
+(по умолчанию <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scan_comment_multi</code></em> определяет распознавать ли многострочные комментарии 
+(по умолчанию <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scan_identifier</code></em> определяет распознавать ли идентификатор 
+(по умолчанию <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scan_identifier_1char</code></em> определяет распознавать ли единственный символ идентификатора
+(по умолчанию <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scan_identifier_NULL</code></em> определяет возвращать ли 
+<code class="literal">NULL</code> как <span class="type">G_TOKEN_IDENTIFIER_NULL</span>.
+(по умолчанию <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scan_symbols</code></em> определяет распознавать ли символы
+(по умолчанию <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scan_binary</code></em> определяет распознавать ли двоичные числа
+(по умолчанию <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scan_octal</code></em> определяет распознавать ли восьмеричные числа
+(по умолчанию <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scan_float</code></em> определяет распознавать ли числа с плавающей точкой
+(по умолчанию <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scan_hex</code></em> определяет распознавать ли шестнадцатеричные числа
+(по умолчанию <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scan_hex_dollar</code></em> определяет распознавать ли '$' как префикс для шестнадцатеричных чисел
+(по умолчанию <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scan_string_sq</code></em> определяет заключена ли строка в одиночные кавычки
+(по умолчанию <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scan_string_dq</code></em> определяет заключена ли строка в двойные кавычки
+(по умолчанию <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>numbers_2_int</code></em> определяет должны ли двоичные, восьмеричные и шестнадцатеричные 
+числа передаваться как <span class="type">G_TOKEN_INT</span> (по умолчанию <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>int_2_float</code></em> определяет передаются ли все числа как 
+<span class="type">G_TOKEN_FLOAT</span> (по умолчанию <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>identifier_2_string</code></em> определяет передаётся ли идентификатор как строка
+(по умолчанию <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>char_2_token</code></em> определяет передаются символы устанавливая <code class="literal">token = ch</code> 
+или как <span class="type">G_TOKEN_CHAR</span> 
+(по умолчанию <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>symbol_2_token</code></em> определяет передаются ли символы установленными как 
+<code class="literal">token = v_symbol</code> или как <span class="type">G_TOKEN_SYMBOL</span> (по умолчанию <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>).
+</p>
+<p>
+<em class="structfield"><code>scope_0_fallback</code></em> определяет разыскивается ли символ 
+для контекста по умолчанию в дополнение к текущему контексту
+(по умолчанию <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>).
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2775634"></a><h3>
+<a name="g-scanner-input-file"></a>g_scanner_input_file ()</h3>
+<a class="indexterm" name="id2775647"></a><pre class="programlisting">void        g_scanner_input_file            (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> input_fd);</pre>
+<p>
+Подготавливает файл для сканирования.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>input_fd</code></em>&#160;:</span></td>
+<td>дискриптор файла.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2775723"></a><h3>
+<a name="g-scanner-sync-file-offset"></a>g_scanner_sync_file_offset ()</h3>
+<a class="indexterm" name="id2775736"></a><pre class="programlisting">void        g_scanner_sync_file_offset      (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);</pre>
+<p>
+Перематывает файловый дескриптор в текущую позицию буфера и позволяет читать файл с начала буфера. 
+Это полезно когда используется третичный сканер файлового дескриптора, который прикрепляется к текущей позиции сканера.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2775794"></a><h3>
+<a name="g-scanner-input-text"></a>g_scanner_input_text ()</h3>
+<a class="indexterm" name="id2775807"></a><pre class="programlisting">void        g_scanner_input_text            (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *text,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> text_len);</pre>
+<p>
+Подготавливает для сканирования текстовый буфер.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>text</code></em>&#160;:</span></td>
+<td>текстовый буфер для сканирования.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>text_len</code></em>&#160;:</span></td>
+<td>длина текстового буфера.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2775905"></a><h3>
+<a name="g-scanner-peek-next-token"></a>g_scanner_peek_next_token ()</h3>
+<a class="indexterm" name="id2775919"></a><pre class="programlisting"><a href="glib-Lexical-Scanner.html#GTokenType">GTokenType</a>  g_scanner_peek_next_token       (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);</pre>
+<p>
+Получает следующую лексему, не удаляя её из потока ввода.
+Символьные данные помещаются в поля
+<em class="structfield"><code>next_token</code></em>,
+<em class="structfield"><code>next_value</code></em>,
+<em class="structfield"><code>next_line</code></em>, и
+<em class="structfield"><code>next_position</code></em> структуры <a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</p>
+<p>
+Помните что пока лексема не удалена из входного потока (то есть
+следующий вызов <a href="glib-Lexical-Scanner.html#g-scanner-get-next-token"><code class="function">g_scanner_get_next_token()</code></a> будет возвращать туже лексему),
+она не будет переоценена. Это может привести к удивительным результатам 
+когда изменяется контекст заглядывания за следующую лексему. Получение 
+следующей лексемы после переключения контекста вернёт то что рассматривалось ранее, 
+независимо от любых символов которые могут быть добавлены или удалены в новом контексте. 
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>тип лексемы.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2776028"></a><h3>
+<a name="g-scanner-get-next-token"></a>g_scanner_get_next_token ()</h3>
+<a class="indexterm" name="id2776041"></a><pre class="programlisting"><a href="glib-Lexical-Scanner.html#GTokenType">GTokenType</a>  g_scanner_get_next_token        (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);</pre>
+<p>
+Получает следующую лексему удаляя её из входного потока.
+Символьные данные помещаются в поля
+<em class="structfield"><code>token</code></em>,
+<em class="structfield"><code>value</code></em>,
+<em class="structfield"><code>line</code></em>, и
+<em class="structfield"><code>position</code></em> структуры <a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>тип лексемы.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2776130"></a><h3>
+<a name="g-scanner-cur-line"></a>g_scanner_cur_line ()</h3>
+<a class="indexterm" name="id2776143"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_scanner_cur_line              (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);</pre>
+<p>
+Получает текущую строку во входном потоке (подсчёт начинается с 1).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>текущая строка.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2776208"></a><h3>
+<a name="g-scanner-cur-position"></a>g_scanner_cur_position ()</h3>
+<a class="indexterm" name="id2776221"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_scanner_cur_position          (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);</pre>
+<p>
+Получает текущую позицию в текущей строке (подсчёт начинается с 0).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>текущая позиция в строке.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2776286"></a><h3>
+<a name="g-scanner-cur-token"></a>g_scanner_cur_token ()</h3>
+<a class="indexterm" name="id2776299"></a><pre class="programlisting"><a href="glib-Lexical-Scanner.html#GTokenType">GTokenType</a>  g_scanner_cur_token             (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);</pre>
+<p>
+Получает текущий тип лексемы.
+Это просто поле <em class="structfield"><code>token</code></em> в структуре <a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>текущий тип лексемы.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2776376"></a><h3>
+<a name="g-scanner-cur-value"></a>g_scanner_cur_value ()</h3>
+<a class="indexterm" name="id2776389"></a><pre class="programlisting"><a href="glib-Lexical-Scanner.html#GTokenValue">GTokenValue</a> g_scanner_cur_value             (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);</pre>
+<p>
+Получает текущее значение лексемы.
+Это просто поле <em class="structfield"><code>value</code></em> в структуре <a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>текущее значение лексемы.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2776466"></a><h3>
+<a name="g-scanner-eof"></a>g_scanner_eof ()</h3>
+<a class="indexterm" name="id2776478"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_scanner_eof                   (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если сканер достиг конца файла или текстового буфера.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если сканер достиг конца файла или текстового буфера.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2776563"></a><h3>
+<a name="g-scanner-set-scope"></a>g_scanner_set_scope ()</h3>
+<a class="indexterm" name="id2776576"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_scanner_set_scope             (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> scope_id);</pre>
+<p>
+Устанавливает текущий контекст.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>scope_id</code></em>&#160;:</span></td>
+<td>новый id контекста.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>старый id контекста.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2776662"></a><h3>
+<a name="g-scanner-scope-add-symbol"></a>g_scanner_scope_add_symbol ()</h3>
+<a class="indexterm" name="id2776676"></a><pre class="programlisting">void        g_scanner_scope_add_symbol      (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> scope_id,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> value);</pre>
+<p>
+Добавляет символ в полученный контекст.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>scope_id</code></em>&#160;:</span></td>
+<td> id контектса.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>symbol</code></em>&#160;:</span></td>
+<td>добавляемый символ.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>value</code></em>&#160;:</span></td>
+<td>значение символа.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2776795"></a><h3>
+<a name="g-scanner-scope-foreach-symbol"></a>g_scanner_scope_foreach_symbol ()</h3>
+<a class="indexterm" name="id2776809"></a><pre class="programlisting">void        g_scanner_scope_foreach_symbol  (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> scope_id,
+                                             <a href="glib-Hash-Tables.html#GHFunc">GHFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Вызывает полученную функцию для каждой пары символ/значение в полученном контексте 
+<a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>. 
+Функция получает символ и значение каждой пары и полученный параметр <em class="parameter"><code>user_data</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>scope_id</code></em>&#160;:</span></td>
+<td> id контекста.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td>функция вызываемая для каждой пары символ/значение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>пользовательские данные помещаемые в функцию.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2776946"></a><h3>
+<a name="g-scanner-scope-lookup-symbol"></a>g_scanner_scope_lookup_symbol ()</h3>
+<a class="indexterm" name="id2776959"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_scanner_scope_lookup_symbol   (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> scope_id,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol);</pre>
+<p>
+Находит символ в контексте и возвращает его значение. Если символа нет в контексте, возвращает 
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>scope_id</code></em>&#160;:</span></td>
+<td> id контекста.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>symbol</code></em>&#160;:</span></td>
+<td>разыскиваемый символ.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>значение <em class="parameter"><code>symbol</code></em> в полученном контексте, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+если <em class="parameter"><code>symbol</code></em> не находится в полученном контексте.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2777102"></a><h3>
+<a name="g-scanner-scope-remove-symbol"></a>g_scanner_scope_remove_symbol ()</h3>
+<a class="indexterm" name="id2777116"></a><pre class="programlisting">void        g_scanner_scope_remove_symbol   (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> scope_id,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol);</pre>
+<p>
+Удаляет символ из контекста.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>scope_id</code></em>&#160;:</span></td>
+<td> id контекста.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>symbol</code></em>&#160;:</span></td>
+<td>символ для удаления.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2777214"></a><h3>
+<a name="g-scanner-freeze-symbol-table"></a>g_scanner_freeze_symbol_table()</h3>
+<a class="indexterm" name="id2777230"></a><pre class="programlisting">#define     g_scanner_freeze_symbol_table(scanner)</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_scanner_freeze_symbol_table</code> устарела начиная с версии 2.2 и не должна использоваться во вновь создаваемом коде. Этот макрос ничего не делает.</p>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2777285"></a><h3>
+<a name="g-scanner-thaw-symbol-table"></a>g_scanner_thaw_symbol_table()</h3>
+<a class="indexterm" name="id2777301"></a><pre class="programlisting">#define     g_scanner_thaw_symbol_table(scanner)</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_scanner_thaw_symbol_table</code> устарела начиная с версии 2.2 и не должна использоваться во вновь создаваемом коде. Этот макрос ничего не делает.</p>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2777356"></a><h3>
+<a name="g-scanner-lookup-symbol"></a>g_scanner_lookup_symbol ()</h3>
+<a class="indexterm" name="id2777368"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_scanner_lookup_symbol         (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol);</pre>
+<p>
+Находит символ в текущем контексте и возвращает его значение. Если символ не находится в текущем контексте, то возвращает 
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>symbol</code></em>&#160;:</span></td>
+<td>символ для поиска.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>значение <em class="parameter"><code>symbol</code></em> в текущем контексте, или 
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+если <em class="parameter"><code>symbol</code></em> не находится в текущем контексте.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2777490"></a><h3>
+<a name="g-scanner-warn"></a>g_scanner_warn ()</h3>
+<a class="indexterm" name="id2777502"></a><pre class="programlisting">void        g_scanner_warn                  (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);</pre>
+<p>
+Выводит предупреждающее сообщение через обработчик сообщений <a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>format</code></em>&#160;:</span></td>
+<td>формат сообщения. Смотрите документацию для <code class="function"><code class="function">printf()</code></code>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>параметры вставляемые в строку формата.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2777619"></a><h3>
+<a name="g-scanner-error"></a>g_scanner_error ()</h3>
+<a class="indexterm" name="id2777631"></a><pre class="programlisting">void        g_scanner_error                 (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);</pre>
+<p>
+Выводит сообщение об ошибке через обработчик сообщений <a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>format</code></em>&#160;:</span></td>
+<td>формат сообщения. Смотрите документацию для <code class="function"><code class="function">printf()</code></code>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>параметры вставляемые в строку формата.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2777744"></a><h3>
+<a name="g-scanner-unexp-token"></a>g_scanner_unexp_token ()</h3>
+<a class="indexterm" name="id2777757"></a><pre class="programlisting">void        g_scanner_unexp_token           (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Lexical-Scanner.html#GTokenType">GTokenType</a> expected_token,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *identifier_spec,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol_spec,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *symbol_name,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *message,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> is_error);</pre>
+<p>
+Выводит сообщение через msg_handler сканера, реагируя на неожиданную лексему во входном потоке.
+Помните что вы не должны вызывать 
+<a href="glib-Lexical-Scanner.html#g-scanner-peek-next-token"><code class="function">g_scanner_peek_next_token()</code></a> 
+сопровождаемый <a href="glib-Lexical-Scanner.html#g-scanner-unexp-token"><code class="function">g_scanner_unexp_token()</code></a> 
+без промежуточного вызова <a href="glib-Lexical-Scanner.html#g-scanner-get-next-token"><code class="function">g_scanner_get_next_token()</code></a>, 
+поскольку <a href="glib-Lexical-Scanner.html#g-scanner-unexp-token"><code class="function">g_scanner_unexp_token()</code></a> оценивает
+текущую лексему (не просматриваемую лексему) для создания части сообщения.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>expected_token</code></em>&#160;:</span></td>
+<td>ожидаемая лексема.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>identifier_spec</code></em>&#160;:</span></td>
+<td>строка описывающая как пользователю сканера обращаться к идентификаторам 
+   (<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для идентификатора по умолчанию).
+   Это используется если <em class="parameter"><code>expected_token</code></em> равен <span class="type">G_TOKEN_IDENTIFIER</span>
+                  или <span class="type">G_TOKEN_IDENTIFIER_NULL</span>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>symbol_spec</code></em>&#160;:</span></td>
+<td>строка описывающая как пользователь сканера обращается к символам 
+   (<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> по умолчанию к "symbol").
+   Это используется если <em class="parameter"><code>expected_token</code></em> равен <span class="type">G_TOKEN_SYMBOL</span> 
+   или какому нибудь символьному значению больше чем <span class="type">G_TOKEN_LAST</span>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>symbol_name</code></em>&#160;:</span></td>
+<td>имя символа, если текущая сканируемая лексема является символом.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>message</code></em>&#160;:</span></td>
+<td> строка сообщения выводимая в конце предупреждения/ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>is_error</code></em>&#160;:</span></td>
+<td> если <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> выводится как ошибка. 
+     Если <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> выводится как предупреждение.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2778097"></a><h3>
+<a name="GScannerMsgFunc"></a>GScannerMsgFunc ()</h3>
+<a class="indexterm" name="id2778110"></a><pre class="programlisting">void        (*GScannerMsgFunc)              (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> *message,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> error);</pre>
+<p>
+Определяет тип функции обработчика сообщений.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>message</code></em>&#160;:</span></td>
+<td>сообщение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если сообщение означает ошибку, 
+<a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> если оно обозначает предупреждение.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2778228"></a><h3>
+<a name="g-scanner-destroy"></a>g_scanner_destroy ()</h3>
+<a class="indexterm" name="id2778241"></a><pre class="programlisting">void        g_scanner_destroy               (<a href="glib-Lexical-Scanner.html#GScanner">GScanner</a> *scanner);</pre>
+<p>
+Освобождает всю память используемую <a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2778303"></a><h3>
+<a name="GTokenType"></a>enum GTokenType</h3>
+<a class="indexterm" name="id2778316"></a><pre class="programlisting">typedef enum
+{
+  G_TOKEN_EOF			=   0,
+  
+  G_TOKEN_LEFT_PAREN		= '(',
+  G_TOKEN_RIGHT_PAREN		= ')',
+  G_TOKEN_LEFT_CURLY		= '{',
+  G_TOKEN_RIGHT_CURLY		= '}',
+  G_TOKEN_LEFT_BRACE		= '[',
+  G_TOKEN_RIGHT_BRACE		= ']',
+  G_TOKEN_EQUAL_SIGN		= '=',
+  G_TOKEN_COMMA			= ',',
+  
+  G_TOKEN_NONE			= 256,
+  
+  G_TOKEN_ERROR,
+  
+  G_TOKEN_CHAR,
+  G_TOKEN_BINARY,
+  G_TOKEN_OCTAL,
+  G_TOKEN_INT,
+  G_TOKEN_HEX,
+  G_TOKEN_FLOAT,
+  G_TOKEN_STRING,
+  
+  G_TOKEN_SYMBOL,
+  G_TOKEN_IDENTIFIER,
+  G_TOKEN_IDENTIFIER_NULL,
+  
+  G_TOKEN_COMMENT_SINGLE,
+  G_TOKEN_COMMENT_MULTI,
+  G_TOKEN_LAST
+} GTokenType;
+</pre>
+<p>
+Возможные типы лексем возвращаемые из каждого вызова <a href="glib-Lexical-Scanner.html#g-scanner-get-next-token"><code class="function">g_scanner_get_next_token()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-TOKEN-EOF:CAPS"></a><code class="literal">G_TOKEN_EOF</code></span></td>
+<td>конец файла.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-TOKEN-LEFT-PAREN:CAPS"></a><code class="literal">G_TOKEN_LEFT_PAREN</code></span></td>
+<td>символ '('.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-TOKEN-LEFT-CURLY:CAPS"></a><code class="literal">G_TOKEN_LEFT_CURLY</code></span></td>
+<td>символ '{'.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-TOKEN-RIGHT-CURLY:CAPS"></a><code class="literal">G_TOKEN_RIGHT_CURLY</code></span></td>
+<td>символ '}'.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2778447"></a><h3>
+<a name="GTokenValue"></a>union GTokenValue</h3>
+<a class="indexterm" name="id2778460"></a><pre class="programlisting">union GTokenValue
+{
+  gpointer	v_symbol;
+  gchar		*v_identifier;
+  gulong	v_binary;
+  gulong	v_octal;
+  gulong	v_int;
+  guint64       v_int64;
+  gdouble	v_float;
+  gulong	v_hex;
+  gchar		*v_string;
+  gchar		*v_comment;
+  guchar	v_char;
+  guint		v_error;
+};
+</pre>
+<p>
+Объединение содержащее значения лексем.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2778479"></a><h3>
+<a name="GErrorType"></a>enum GErrorType</h3>
+<a class="indexterm" name="id2778491"></a><pre class="programlisting">typedef enum
+{
+  G_ERR_UNKNOWN,
+  G_ERR_UNEXP_EOF,
+  G_ERR_UNEXP_EOF_IN_STRING,
+  G_ERR_UNEXP_EOF_IN_COMMENT,
+  G_ERR_NON_DIGIT_IN_CONST,
+  G_ERR_DIGIT_RADIX,
+  G_ERR_FLOAT_RADIX,
+  G_ERR_FLOAT_MALFORMED
+} GErrorType;
+</pre>
+<p>
+Возможные ошибки, используются в поле <em class="structfield"><code>v_error</code></em> <a href="glib-Lexical-Scanner.html#GTokenValue"><span class="type">GTokenValue</span></a>, когда лексема равна <span class="type">G_TOKEN_ERROR</span>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-ERR-UNKNOWN:CAPS"></a><code class="literal">G_ERR_UNKNOWN</code></span></td>
+<td>неизвестная ошибка.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-ERR-UNEXP-EOF:CAPS"></a><code class="literal">G_ERR_UNEXP_EOF</code></span></td>
+<td>неопределённый конец файла.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-ERR-UNEXP-EOF-IN-STRING:CAPS"></a><code class="literal">G_ERR_UNEXP_EOF_IN_STRING</code></span></td>
+<td>незаконченная строковая константа.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-ERR-UNEXP-EOF-IN-COMMENT:CAPS"></a><code class="literal">G_ERR_UNEXP_EOF_IN_COMMENT</code></span></td>
+<td>незаконченный коментарий.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-ERR-NON-DIGIT-IN-CONST:CAPS"></a><code class="literal">G_ERR_NON_DIGIT_IN_CONST</code></span></td>
+<td>не цифровой символ в номере.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-ERR-DIGIT-RADIX:CAPS"></a><code class="literal">G_ERR_DIGIT_RADIX</code></span></td>
+<td>цифра выходящая за рамки счисления числа.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-ERR-FLOAT-RADIX:CAPS"></a><code class="literal">G_ERR_FLOAT_RADIX</code></span></td>
+<td>не десятичная плавающая точка числа.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-ERR-FLOAT-MALFORMED:CAPS"></a><code class="literal">G_ERR_FLOAT_MALFORMED</code></span></td>
+<td>некорректное число с плавающей точкой.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2778719"></a><h3>
+<a name="G-CSET-a-2-z"></a>G_CSET_a_2_z</h3>
+<a class="indexterm" name="id2778731"></a><pre class="programlisting">#define G_CSET_a_2_z	"abcdefghijklmnopqrstuvwxyz"
+</pre>
+<p>
+Набор алфавитных символов ASCII в нижнем регистре.
+Используется для определения допустимых идентификаторов символов в <a href="glib-Lexical-Scanner.html#GScannerConfig"><span class="type">GScannerConfig</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2778757"></a><h3>
+<a name="G-CSET-A-2-Z:CAPS"></a>G_CSET_A_2_Z</h3>
+<a class="indexterm" name="id2778769"></a><pre class="programlisting">#define G_CSET_A_2_Z	"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+</pre>
+<p>
+Набор алфавитных символов ASCII в верхнем регистре.
+Используется для определения допустимых идентификаторов символов в <a href="glib-Lexical-Scanner.html#GScannerConfig"><span class="type">GScannerConfig</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2778795"></a><h3>
+<a name="G-CSET-DIGITS:CAPS"></a>G_CSET_DIGITS</h3>
+<a class="indexterm" name="id2778807"></a><pre class="programlisting">#define G_CSET_DIGITS	"0123456789"
+</pre>
+<p>
+Набор цифр.
+Используется для определения допустимых идентификаторов символов в <a href="glib-Lexical-Scanner.html#GScannerConfig"><span class="type">GScannerConfig</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2778832"></a><h3>
+<a name="G-CSET-LATINC:CAPS"></a>G_CSET_LATINC</h3>
+<a class="indexterm" name="id2778844"></a><pre class="programlisting">#define     G_CSET_LATINC</pre>
+<p>
+Набор алфавитных символов ISO 8859-1 в верхнем регистре которые не являются символами ASCII. 
+Используется для определения допустимых идентификаторов символов в <a href="glib-Lexical-Scanner.html#GScannerConfig"><span class="type">GScannerConfig</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2778870"></a><h3>
+<a name="G-CSET-LATINS:CAPS"></a>G_CSET_LATINS</h3>
+<a class="indexterm" name="id2778883"></a><pre class="programlisting">#define     G_CSET_LATINS</pre>
+<p>
+Набор алфавитных символов ISO 8859-1 в нижнем регистре которые не являются символами ASCII. 
+Используется для определения допустимых идентификаторов символов в <a href="glib-Lexical-Scanner.html#GScannerConfig"><span class="type">GScannerConfig</span></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2778909"></a><h3>
+<a name="g-scanner-add-symbol"></a>g_scanner_add_symbol()</h3>
+<a class="indexterm" name="id2778925"></a><pre class="programlisting">#define     g_scanner_add_symbol( scanner, symbol, value )</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_scanner_add_symbol</code> устарела начиная с версии 2.2 и не должна использоваться во вновь создаваемом коде. Используйте вместо неё <a href="glib-Lexical-Scanner.html#g-scanner-scope-add-symbol"><code class="function">g_scanner_scope_add_symbol()</code></a>.</p>
+</div>
+<p>
+Добавляет символ к контексту по умолчанию.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>symbol</code></em>&#160;:</span></td>
+<td>добавляемый символ.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>value</code></em>&#160;:</span></td>
+<td>значение символа.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2779020"></a><h3>
+<a name="g-scanner-remove-symbol"></a>g_scanner_remove_symbol()</h3>
+<a class="indexterm" name="id2779036"></a><pre class="programlisting">#define     g_scanner_remove_symbol( scanner, symbol )</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_scanner_remove_symbol</code> устарела начиная с версии 2.2 и не должна использоваться во вновь создаваемом коде. 
+Используйте вместо неё <a href="glib-Lexical-Scanner.html#g-scanner-scope-remove-symbol"><code class="function">g_scanner_scope_remove_symbol()</code></a>.</p>
+</div>
+<p>
+Удаляет символ из контекста по умолчанию.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>symbol</code></em>&#160;:</span></td>
+<td>удаляемый символ.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2779116"></a><h3>
+<a name="g-scanner-foreach-symbol"></a>g_scanner_foreach_symbol()</h3>
+<a class="indexterm" name="id2779132"></a><pre class="programlisting">#define     g_scanner_foreach_symbol( scanner, func, data )</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_scanner_foreach_symbol</code> устарела начиная с версии 2.2 и не должна использоваться во вновь создаваемом коде. 
+Используйте вместо неё <a href="glib-Lexical-Scanner.html#g-scanner-scope-foreach-symbol"><code class="function">g_scanner_scope_foreach_symbol()</code></a>.</p>
+</div>
+<p>
+Вызываемая функция для каждого символа в контексте по умолчанию.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>scanner</code></em>&#160;:</span></td>
+<td><a href="glib-Lexical-Scanner.html#GScanner"><span class="type">GScanner</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td>функция вызываемая для каждого символа.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>данные помещаемые в функцию.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</body>
+</html>

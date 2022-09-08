@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Paths>
+  <Path root="true">../Media</Path>
+  <Path>../Media/MyGUI_Media</Path>
+  <model>../model/listModel.xml</model>
+  <shader>../shader</shader>
+  <map>../map/listMap.xml</map>
+  <texture>../texture</texture>
+  <GUI>/Demos/Demo_Themes</GUI>
+  <GUI>../../form</GUI>  
+  <GUI>/Common/Themes</GUI>
+  <GUI_skin>MyGUI_BlackBlueTheme.xml</GUI_skin>
+</Paths>

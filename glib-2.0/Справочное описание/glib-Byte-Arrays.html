@@ -1,0 +1,534 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Byte Arrays</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-data-types.html" title="GLib Data Types">
+<link rel="prev" href="glib-Pointer-Arrays.html" title="Pointer Arrays">
+<link rel="next" href="glib-Balanced-Binary-Trees.html" title="Balanced Binary Trees">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Pointer-Arrays.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-data-types.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Balanced-Binary-Trees.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2955092" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2955455" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Byte-Arrays"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2955092"></a><span class="refentrytitle">Byte Arrays</span>
+</h2>
+<p>Byte Arrays &#8212; Массив байт, который автоматически увеличивается при добавлении элементов.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>;
+<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* <a href="glib-Byte-Arrays.html#g-byte-array-new">g_byte_array_new</a>                (void);
+<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* <a href="glib-Byte-Arrays.html#g-byte-array-sized-new">g_byte_array_sized_new</a>          (<a href="glib-Basic-Types.html#guint">guint</a> reserved_size);
+<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* <a href="glib-Byte-Arrays.html#g-byte-array-append">g_byte_array_append</a>             (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             const <a href="glib-Basic-Types.html#guint8">guint8</a> *data,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> len);
+<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* <a href="glib-Byte-Arrays.html#g-byte-array-prepend">g_byte_array_prepend</a>            (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             const <a href="glib-Basic-Types.html#guint8">guint8</a> *data,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> len);
+<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* <a href="glib-Byte-Arrays.html#g-byte-array-remove-index">g_byte_array_remove_index</a>       (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> index_);
+<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* <a href="glib-Byte-Arrays.html#g-byte-array-remove-index-fast">g_byte_array_remove_index_fast</a>  (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> index_);
+<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* <a href="glib-Byte-Arrays.html#g-byte-array-remove-range">g_byte_array_remove_range</a>       (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> index_,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> length);
+void        <a href="glib-Byte-Arrays.html#g-byte-array-sort">g_byte_array_sort</a>               (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareFunc">GCompareFunc</a> compare_func);
+void        <a href="glib-Byte-Arrays.html#g-byte-array-sort-with-data">g_byte_array_sort_with_data</a>     (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc">GCompareDataFunc</a> compare_func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* <a href="glib-Byte-Arrays.html#g-byte-array-set-size">g_byte_array_set_size</a>           (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> length);
+<a href="glib-Basic-Types.html#guint8">guint8</a>*     <a href="glib-Byte-Arrays.html#g-byte-array-free">g_byte_array_free</a>               (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> free_segment);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2955455"></a><h2>Описание</h2>
+<p>
+<a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a> основан на 
+<a href="glib-Arrays.html#GArray"><span class="type">GArray</span></a>, для обеспечения массива байт который автоматически увеличивается 
+при добавлении элементов.
+</p>
+<p>
+Для создания нового <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a> используйте 
+<a href="glib-Byte-Arrays.html#g-byte-array-new"><code class="function">g_byte_array_new()</code></a>.
+</p>
+<p>
+Для добавления элементов в <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>, 
+используйте <a href="glib-Byte-Arrays.html#g-byte-array-append"><code class="function">g_byte_array_append()</code></a> и
+<a href="glib-Byte-Arrays.html#g-byte-array-prepend"><code class="function">g_byte_array_prepend()</code></a>.
+</p>
+<p>
+Для установки размера <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>, 
+используйте <a href="glib-Byte-Arrays.html#g-byte-array-set-size"><code class="function">g_byte_array_set_size()</code></a>.
+</p>
+<p>
+Для освобождения <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>, 
+используйте <a href="glib-Byte-Arrays.html#g-byte-array-free"><code class="function">g_byte_array_free()</code></a>.
+</p>
+<div class="example">
+<a name="id2955586"></a><p class="title"><b>Пример&#160;8.&#160;Using a <span class="structname">GByteArray</span></b></p>
+<pre class="programlisting">
+  GByteArray *gbarray;
+  gint i;
+
+  gbarray = g_byte_array_new ();
+  for (i = 0; i &lt; 10000; i++)
+    g_byte_array_append (gbarray, (guint8*) "abcd", 4);
+
+  for (i = 0; i &lt; 10000; i++)
+    {
+      g_assert (gbarray-&gt;data[4*i] == 'a');
+      g_assert (gbarray-&gt;data[4*i+1] == 'b');
+      g_assert (gbarray-&gt;data[4*i+2] == 'c');
+      g_assert (gbarray-&gt;data[4*i+3] == 'd');
+    }
+
+  g_byte_array_free (gbarray, TRUE);
+</pre>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2955621"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2955631"></a><h3>
+<a name="GByteArray"></a>GByteArray</h3>
+<a class="indexterm" name="id2955643"></a><pre class="programlisting">typedef struct {
+  guint8 *data;
+  guint	  len;
+} GByteArray;
+</pre>
+<p>
+Структура <span class="structname">GByteArray</span> позволяет доступ к общедоступным полям <span class="structname">GByteArray</span>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#guint8">guint8</a>&#160;*<em class="structfield"><code>data</code></em>;</span></td>
+<td>указатель на элемент данных. Данные могут перемещаться когда добавляются элементы в 
+<a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#guint">guint</a>&#160;<em class="structfield"><code>len</code></em>;</span></td>
+<td>количество элементов в <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2955729"></a><h3>
+<a name="g-byte-array-new"></a>g_byte_array_new ()</h3>
+<a class="indexterm" name="id2955741"></a><pre class="programlisting"><a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* g_byte_array_new                (void);</pre>
+<p>
+Создаёт новый <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новый <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2955793"></a><h3>
+<a name="g-byte-array-sized-new"></a>g_byte_array_sized_new ()</h3>
+<a class="indexterm" name="id2955807"></a><pre class="programlisting"><a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* g_byte_array_sized_new          (<a href="glib-Basic-Types.html#guint">guint</a> reserved_size);</pre>
+<p>
+Создаёт новый <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a> с 
+<em class="parameter"><code>reserved_size</code></em> предварительно распределённых байт. 
+Это позволяет избегать частых перераспределений, если вы добавляете много байт в массив. 
+Однако помните что размер массива остаётся 0.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>reserved_size</code></em>&#160;:</span></td>
+<td>количество предварительно распределённых байт.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новый <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2955889"></a><h3>
+<a name="g-byte-array-append"></a>g_byte_array_append ()</h3>
+<a class="indexterm" name="id2955902"></a><pre class="programlisting"><a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* g_byte_array_append             (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             const <a href="glib-Basic-Types.html#guint8">guint8</a> *data,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> len);</pre>
+<p>
+Добавляет полученные байты в конец <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+Массив автоматически увеличивает размер, если необходимо.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>array</code></em>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>байты данных для добавления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>количество добавляемых байт.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2956027"></a><h3>
+<a name="g-byte-array-prepend"></a>g_byte_array_prepend ()</h3>
+<a class="indexterm" name="id2956040"></a><pre class="programlisting"><a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* g_byte_array_prepend            (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             const <a href="glib-Basic-Types.html#guint8">guint8</a> *data,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> len);</pre>
+<p>
+Добавляет полученные данные в начало <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+Массив будет увеличиваться автоматически, если необходимо.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>array</code></em>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>байты данных для добавления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>количество добавляемых байт.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2956165"></a><h3>
+<a name="g-byte-array-remove-index"></a>g_byte_array_remove_index ()</h3>
+<a class="indexterm" name="id2956179"></a><pre class="programlisting"><a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* g_byte_array_remove_index       (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> index_);</pre>
+<p>
+Удаляет байт с полученным номером из <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+Следующие байты перемещаются вниз на одну позицию.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>array</code></em>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>index_</code></em>&#160;:</span></td>
+<td>номер байта для удаления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2956282"></a><h3>
+<a name="g-byte-array-remove-index-fast"></a>g_byte_array_remove_index_fast ()</h3>
+<a class="indexterm" name="id2956295"></a><pre class="programlisting"><a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* g_byte_array_remove_index_fast  (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> index_);</pre>
+<p>
+Удаляет байт в полученной позиции <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+Оставшиеся элементы в массиве используются для заполнения пространства, поэтому эта функция не сохраняет порядок 
+<a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>. Но она быстрее чем
+<a href="glib-Byte-Arrays.html#g-byte-array-remove-index"><code class="function">g_byte_array_remove_index()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>array</code></em>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>index_</code></em>&#160;:</span></td>
+<td>номер байта для удаления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2956419"></a><h3>
+<a name="g-byte-array-remove-range"></a>g_byte_array_remove_range ()</h3>
+<a class="indexterm" name="id2956435"></a><pre class="programlisting"><a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* g_byte_array_remove_range       (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> index_,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> length);</pre>
+<p>
+Удаляет полученное количество байт на начиная с указанной позиции 
+<a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.  
+Следующие элементы перемещаются закрывая пустоту.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>array</code></em>&#160;:</span></td>
+<td><em class="parameter"><code>GByteArray</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>index_</code></em>&#160;:</span></td>
+<td>номер первого байта для удаления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>length</code></em>&#160;:</span></td>
+<td>количество байт для удаления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2956563"></a><h3>
+<a name="g-byte-array-sort"></a>g_byte_array_sort ()</h3>
+<a class="indexterm" name="id2956576"></a><pre class="programlisting">void        g_byte_array_sort               (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareFunc">GCompareFunc</a> compare_func);</pre>
+<p>
+Сортирует массив байт, используя <em class="parameter"><code>compare_func</code></em> которая должна быть в стиле функции сравнения 
+<code class="function">qsort()</code> (возвращать отрицательное значение если первый arg меньше чем второй arg, ноль если они равны, 
+положительное значение если первый arg больше чем второй arg).
+</p>
+<p>
+Если два сравниваемых массива элементов равны, их порядок в сортируемом массиве не определён.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>array</code></em>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>compare_func</code></em>&#160;:</span></td>
+<td>функция сравнения.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2956676"></a><h3>
+<a name="g-byte-array-sort-with-data"></a>g_byte_array_sort_with_data ()</h3>
+<a class="indexterm" name="id2956690"></a><pre class="programlisting">void        g_byte_array_sort_with_data     (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc">GCompareDataFunc</a> compare_func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Похожа на <a href="glib-Byte-Arrays.html#g-byte-array-sort"><code class="function">g_byte_array_sort()</code></a>, 
+но функция сравнения принимает дополнительный аргумент пользовательских данных.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>array</code></em>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>compare_func</code></em>&#160;:</span></td>
+<td>функция сравнения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>данные помещаемые в <em class="parameter"><code>compare_func</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2956805"></a><h3>
+<a name="g-byte-array-set-size"></a>g_byte_array_set_size ()</h3>
+<a class="indexterm" name="id2956818"></a><pre class="programlisting"><a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a>* g_byte_array_set_size           (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> length);</pre>
+<p>
+Устанавливает размер <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>, расширяя если необходимо.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>array</code></em>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>length</code></em>&#160;:</span></td>
+<td>новый размер <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2956928"></a><h3>
+<a name="g-byte-array-free"></a>g_byte_array_free ()</h3>
+<a class="indexterm" name="id2956942"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint8">guint8</a>*     g_byte_array_free               (<a href="glib-Byte-Arrays.html#GByteArray">GByteArray</a> *array,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> free_segment);</pre>
+<p>
+Освобождает память распределённую для <a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+Если <em class="parameter"><code>free_segment</code></em> это <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>, она освобождает фактические байты данных.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>array</code></em>&#160;:</span></td>
+<td><a href="glib-Byte-Arrays.html#GByteArray"><span class="type">GByteArray</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>free_segment</code></em>&#160;:</span></td>
+<td>если <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> фактические байты данных так же освобождаются.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>элемент данных если <em class="parameter"><code>free_segment</code></em> это 
+    <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>, 
+    иначе <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</body>
+</html>

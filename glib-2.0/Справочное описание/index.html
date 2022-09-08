@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Справочное описание GLib</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="next" href="glib.html" title="GLib Overview">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" lang="en">
+<div class="titlepage">
+<div>
+<div><table class="navigation" id="top" width="100%" cellpadding="2" cellspacing="0"><tr><th valign="middle"><p class="title">Справочное описание GLib</p></th></tr></table></div>
+<div>
+<p class="releaseinfo">Версия GLib 2.13.0</p>
+<p>Замечания по поводу перевода присылать sergeyvp@gmail.com</p>
+</div>
+</div>
+<hr>
+</div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><span class="chapter"><a href="glib.html">GLib Overview</a></span></dt>
+<dd><dl>
+<dt>
+<span class="refentrytitle"><a href="glib-building.html">Compiling the GLib package</a></span><span class="refpurpose"> - 
+Как самостоятельно скомпилировать GLib
+</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-cross-compiling.html">Cross-compiling the GLib package</a></span><span class="refpurpose"> - 
+Как скомпилировать пакет GLib для разных архитектур
+</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-compiling.html">Compiling GLib Applications</a></span><span class="refpurpose"> - 
+Как скомпилировать ваше GLib приложение
+</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-running.html">Running GLib Applications</a></span><span class="refpurpose"> - 
+Как выполнять и отлаживать GLib приложение
+</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-changes.html">Changes to GLib</a></span><span class="refpurpose"> - 
+Несовместимые изменения сделанные между разными версиями GLib
+</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-resources.html">Mailing lists and bug reports</a></span><span class="refpurpose"> - 
+Получение помощи по GLib
+</span>
+</dt>
+</dl></dd>
+<dt><span class="chapter"><a href="glib-fundamentals.html">GLib Fundamentals</a></span></dt>
+<dd><dl>
+<dt>
+<span class="refentrytitle"><a href="glib-Version-Information.html">Version Information</a></span><span class="refpurpose"> - Переменные и функции для проверки версии GLib</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Basic-Types.html">Basic Types</a></span><span class="refpurpose"> - Стандартные типы GLib, определяемые для простоты использования и переносимости</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Limits-of-Basic-Types.html">Limits of Basic Types</a></span><span class="refpurpose"> - Переносимый метод определения лимитов стандартных типов</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Standard-Macros.html">Standard Macros</a></span><span class="refpurpose"> - Обычно используемые макросы</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Type-Conversion-Macros.html">Type Conversion Macros</a></span><span class="refpurpose"> - 
+Переносимый способ хранения целочисленных в указателях переменных</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Byte-Order-Macros.html">Byte Order Macros</a></span><span class="refpurpose"> - Переносимый способ преобразования между разными последовательностями байт</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Numerical-Definitions.html">Numerical Definitions</a></span><span class="refpurpose"> - Математические константы и разбиение плавающей точкой</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Miscellaneous-Macros.html">Miscellaneous Macros</a></span><span class="refpurpose"> - Редко используемые специализированные макросы</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Atomic-Operations.html">Atomic Operations</a></span><span class="refpurpose"> - основные атомарные операции с целочисленными и указателями</span>
+</dt>
+</dl></dd>
+<dt><span class="chapter"><a href="glib-core.html">GLib Core Application Support</a></span></dt>
+<dd><dl>
+<dt>
+<span class="refentrytitle"><a href="glib-The-Main-Event-Loop.html">The Main Event Loop</a></span><span class="refpurpose"> - Управление всеми доступными источниками событий</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Threads.html">
+Threads</a></span><span class="refpurpose"> - 
+Абстракция потока; включает потоки, различные взаимоисключения (mutexes), условия и поток закрытых данных</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Thread-Pools.html">Thread Pools</a></span><span class="refpurpose"> - Пулы потоков для одновременного выполнения работы</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Asynchronous-Queues.html">Asynchronous Queues</a></span><span class="refpurpose"> - Асинхронное взаимодействие между потоками</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Dynamic-Loading-of-Modules.html">Dynamic Loading of Modules</a></span><span class="refpurpose"> - Переносимый способ для динамической загрузки 'plug-ins'</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Memory-Allocation.html">Memory Allocation</a></span><span class="refpurpose"> - Основная обработка памяти</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-IO-Channels.html">IO Channels</a></span><span class="refpurpose"> - Переносимая поддержка использования файлов, каналов и сокетов</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Error-Reporting.html">Error Reporting</a></span><span class="refpurpose"> - Система для сообщения об ошибках</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Warnings-and-Assertions.html">Message Output and Debugging Functions</a></span><span class="refpurpose"> - Функции для вывода сообщений и помощь отладки приложений</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Message-Logging.html">Message Logging</a></span><span class="refpurpose"> - Универсальная поддержка для регистрации сообщений с разным уровнем важности</span>
+</dt>
+</dl></dd>
+<dt><span class="chapter"><a href="glib-utilities.html">GLib Utilities</a></span></dt>
+<dd><dl>
+<dt>
+<span class="refentrytitle"><a href="glib-String-Utility-Functions.html">String Utility Functions</a></span><span class="refpurpose"> - Различные строковые функции</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Character-Set-Conversion.html">Character Set Conversion</a></span><span class="refpurpose"> - конвертирование строк между разными наборами символов используя iconv()</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Unicode-Manipulation.html">Unicode Manipulation</a></span><span class="refpurpose"> - Функции оперирующие на Unicode символах и UTF-8 строках</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Base64-Encoding.html">Base64 Encoding</a></span><span class="refpurpose"> - Кодирование и декодирование данных в формат Base64</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-I18N.html">Internationalization</a></span><span class="refpurpose"> - Макросы поддерживающие gettext</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Date-and-Time-Functions.html">Date and Time Functions</a></span><span class="refpurpose"> - Календарные вычисления и различный временной материал</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Random-Numbers.html">Random Numbers</a></span><span class="refpurpose"> - Генератор псевдо-случайных чисел</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Hook-Functions.html">Hook Functions</a></span><span class="refpurpose"> - Поддержка для манипулирования списками hook-функций</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Miscellaneous-Utility-Functions.html">Miscellaneous Utility Functions</a></span><span class="refpurpose"> - Набор портируемых сервисных функций</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Lexical-Scanner.html">Lexical Scanner</a></span><span class="refpurpose"> - Универсальный лексический сканер</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Automatic-String-Completion.html">Automatic String Completion</a></span><span class="refpurpose"> - Поддержка автоматичекого завершения строк используя наборы целевых строк</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Timers.html">Timers</a></span><span class="refpurpose"> - 
+Отслеживание прошедшего времени</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Spawning-Processes.html">Spawning Processes</a></span><span class="refpurpose"> - Порождение процессов с помощью fork()/exec()</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-File-Utilities.html">File Utilities</a></span><span class="refpurpose"> - Варианты функций связанных с файлами</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Shell-related-Utilities.html">Shell-related Utilities</a></span><span class="refpurpose"> - shell-подобная обработка командной строки</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Commandline-option-parser.html">Commandline option parser</a></span><span class="refpurpose"> - Анализатор опций командной строки</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Glob-style-pattern-matching.html">Glob-style pattern matching</a></span><span class="refpurpose"> - Сравнение строк с шаблонами содержащими '*' (wildcard) и '?' (joker)</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Simple-XML-Subset-Parser.html">Simple XML Subset Parser</a></span><span class="refpurpose"> - Синтаксический анализатор подмножества XML</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Key-value-file-parser.html">Key-value file parser</a></span><span class="refpurpose"> - Анализ .ini-подобных конфигурационных файлов</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Bookmark-file-parser.html">Bookmark file parser</a></span><span class="refpurpose"> - Анализ файлов содержащих закладки</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Windows-Compatibility-Functions.html">Windows Compatibility Functions</a></span><span class="refpurpose"> - Эмуляция UNIX в Windows</span>
+</dt>
+</dl></dd>
+<dt><span class="chapter"><a href="glib-data-types.html">GLib Data Types</a></span></dt>
+<dd><dl>
+<dt>
+<span class="refentrytitle"><a href="glib-Memory-Slices.html">Memory Slices</a></span><span class="refpurpose"> - Эффективный способ распределения групп эквивалентных по размеру участков памяти</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Memory-Chunks.html">Memory Chunks</a></span><span class="refpurpose"> - Устаревший способ распределения групп эквивалентных по размеру участков памяти</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Doubly-Linked-Lists.html">Doubly-Linked Lists</a></span><span class="refpurpose"> - Связанные списки содержащие целочисленные значения или указатели на данные, с возможностью итерации по списку в обоих направлениях</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Singly-Linked-Lists.html">Singly-Linked Lists</a></span><span class="refpurpose"> - Связанные списки содержащие целочисленные значения или указатели на данные, с ограничением итерации только в одном направлении</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Double-ended-Queues.html">Double-ended Queues</a></span><span class="refpurpose"> - Двусторонняя очередь структур данных</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Trash-Stacks.html">Trash Stacks</a></span><span class="refpurpose"> - Поддержка стека неиспользуемых распределённых участков памяти</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Hash-Tables.html">Hash Tables</a></span><span class="refpurpose"> - Связь между ключами и значениями для быстрого поиска</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Strings.html">Strings</a></span><span class="refpurpose"> - Текстовые буферы которые автоматически увеличиваются при добавлении текста</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-String-Chunks.html">String Chunks</a></span><span class="refpurpose"> - Эффективное хранение групп строк</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Arrays.html">Arrays</a></span><span class="refpurpose"> - Массивы произвольных элементов, которые автоматически увеличиваются при добавлении элементов</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Pointer-Arrays.html">Pointer Arrays</a></span><span class="refpurpose"> - Массив указателей для любого типа данных, который увеличивается автоматически при добавлении элементов</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Byte-Arrays.html">Byte Arrays</a></span><span class="refpurpose"> - Массив байт, который автоматически увеличивается при добавлении элементов</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Balanced-Binary-Trees.html">Balanced Binary Trees</a></span><span class="refpurpose"> - Отсортированная коллекция пар ключ/значение оптимизированная для поиска и пересечения в определённом порядке</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-N-ary-Trees.html">N-ary Trees</a></span><span class="refpurpose"> - Деревья данных с любым количеством ответвлений</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Quarks.html">Quarks</a></span><span class="refpurpose"> - Два способа связать строку и уникальный целочисленный идентификатор</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Keyed-Data-Lists.html">Keyed Data Lists</a></span><span class="refpurpose"> - Списки элементов данных которые являются доступными при помощи строки или GQuark идентификатора</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Datasets.html">Datasets</a></span><span class="refpurpose"> - Связь групп элементов данных со специфическим расположением памяти</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Relations-and-Tuples.html">Relations and Tuples</a></span><span class="refpurpose"> - Таблицы данных которые могут быть проиндексированы любым количеством полей</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Caches.html">Caches</a></span><span class="refpurpose"> - Кеши позволяют объединять комплекс структур данных для сохранения ресурсов</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="glib-Memory-Allocators.html">Memory Allocators</a></span><span class="refpurpose"> - Устаревший способ распределения участков памяти для GList, GSList и GNode</span>
+</dt>
+</dl></dd>
+<dt><span class="chapter"><a href="tools.html">GLib Tools</a></span></dt>
+<dd><dl><dt>
+<span class="refentrytitle"><a href="glib-gettextize.html">glib-gettextize</a></span><span class="refpurpose"> - Утилита интернационализации gettext</span>
+</dt></dl></dd>
+<dt><span class="index"><a href="ix01.html">Index</a></span></dt>
+<dt><span class="index"><a href="ix02.html">Index of deprecated symbols</a></span></dt>
+<dt><span class="index"><a href="ix03.html">Index of new symbols in 2.2</a></span></dt>
+<dt><span class="index"><a href="ix04.html">Index of new symbols in 2.4</a></span></dt>
+<dt><span class="index"><a href="ix05.html">Index of new symbols in 2.6</a></span></dt>
+<dt><span class="index"><a href="ix06.html">Index of new symbols in 2.8</a></span></dt>
+<dt><span class="index"><a href="ix07.html">Index of new symbols in 2.10</a></span></dt>
+<dt><span class="index"><a href="ix08.html">Index of new symbols in 2.12</a></span></dt>
+</dl>
+</div>
+</div></body>
+</html>

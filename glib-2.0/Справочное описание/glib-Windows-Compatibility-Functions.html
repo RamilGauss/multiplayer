@@ -1,0 +1,425 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Windows Compatibility Functions</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-utilities.html" title="GLib Utilities">
+<link rel="prev" href="glib-Bookmark-file-parser.html" title="Bookmark file parser">
+<link rel="next" href="glib-data-types.html" title="GLib Data Types">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Bookmark-file-parser.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-utilities.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-data-types.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2877453" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2877659" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Windows-Compatibility-Functions"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2877453"></a><span class="refentrytitle">Windows Compatibility Functions</span>
+</h2>
+<p>Windows Compatibility Functions &#8212; Эмуляция UNIX в Windows.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+#define     <a href="glib-Windows-Compatibility-Functions.html#MAXPATHLEN:CAPS">MAXPATHLEN</a>
+#define     <a href="glib-Windows-Compatibility-Functions.html#pipe">pipe</a>                            (phandles)
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Windows-Compatibility-Functions.html#g-win32-error-message">g_win32_error_message</a>           (<a href="glib-Basic-Types.html#gint">gint</a> error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Windows-Compatibility-Functions.html#g-win32-getlocale">g_win32_getlocale</a>               (void);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Windows-Compatibility-Functions.html#g-win32-get-package-installation-directory">g_win32_get_package_installation_directory</a>
+                                            (<a href="glib-Basic-Types.html#gchar">gchar</a> *package,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> *dll_name);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Windows-Compatibility-Functions.html#g-win32-get-package-installation-subdirectory">g_win32_get_package_installation_subdirectory</a>
+                                            (<a href="glib-Basic-Types.html#gchar">gchar</a> *package,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> *dll_name,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> *subdir);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Windows-Compatibility-Functions.html#g-win32-get-windows-version">g_win32_get_windows_version</a>     (void);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Windows-Compatibility-Functions.html#g-win32-locale-filename-from-utf8">g_win32_locale_filename_from_utf8</a>
+                                            (const <a href="glib-Basic-Types.html#gchar">gchar</a> *utf8filename);
+#define     <a href="glib-Windows-Compatibility-Functions.html#G-WIN32-DLLMAIN-FOR-DLL-NAME:CAPS">G_WIN32_DLLMAIN_FOR_DLL_NAME</a>    (static, dll_name)
+#define     <a href="glib-Windows-Compatibility-Functions.html#G-WIN32-HAVE-WIDECHAR-API:CAPS">G_WIN32_HAVE_WIDECHAR_API</a>       ()
+#define     <a href="glib-Windows-Compatibility-Functions.html#G-WIN32-IS-NT-BASED:CAPS">G_WIN32_IS_NT_BASED</a>             ()
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2877659"></a><h2>Описание</h2>
+<p>
+Эти функции обеспечивают некоторый уровень эмуляции UNIX на Windows платыорме.
+Если ваше приложение реально нуждается в POSIX APIs, мы предлагаем попробовать проект Cygwin.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2877677"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2877687"></a><h3>
+<a name="MAXPATHLEN:CAPS"></a>MAXPATHLEN</h3>
+<a class="indexterm" name="id2877700"></a><pre class="programlisting">#define MAXPATHLEN 1024
+</pre>
+<p>
+Предусматривает эмуляцию UNIX в Windows; эквивалентна UNIX макрокоманде 
+<a href="glib-Windows-Compatibility-Functions.html#MAXPATHLEN:CAPS"><code class="literal">MAXPATHLEN</code></a>, 
+которая представляет максимальную длину имени файла (включая полный путь).
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2877727"></a><h3>
+<a name="pipe"></a>pipe()</h3>
+<a class="indexterm" name="id2877740"></a><pre class="programlisting">#define pipe(phandles)	_pipe (phandles, 4096, _O_BINARY)
+</pre>
+<p>
+Обеспечивает эмуляцию UNIX в Windows; смотрите документацию для <code class="function"><a href="glib-Windows-Compatibility-Functions.html#pipe"><code class="function">pipe()</code></a></code>
+в любом руководстве UNIX.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>phandles</code></em>&#160;:</span></td>
+<td> дескрипторы файла, первый для чтения, второй для записи.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2877789"></a><h3>
+<a name="g-win32-error-message"></a>g_win32_error_message ()</h3>
+<a class="indexterm" name="id2877803"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_win32_error_message           (<a href="glib-Basic-Types.html#gint">gint</a> error);</pre>
+<p>
+Переводит коды ошибок Win32 (которые возвращает <code class="function">GetLastError()</code>) в соответствующие сообщения. 
+Сообщения либо на нейтральном языке, либо на языке потоков, либо пользовательском языке, системном языке, или US English 
+(смотрите документацию для <code class="function">FormatMessage()</code>). Возвращаемая строка находится в кодировке UTF-8. 
+Она должна быть освобождена с помощью <a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> код ошибки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённое сообщение об ошибке
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2877900"></a><h3>
+<a name="g-win32-getlocale"></a>g_win32_getlocale ()</h3>
+<a class="indexterm" name="id2877914"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_win32_getlocale               (void);</pre>
+<p>
+Функция <code class="function">setlocale()</code> в библиотеке Microsoft C 
+использует имена локали из "English_United States.1252" и т.д.. Мы предпочитаем 
+стандартную UNIX форму "en_US", "zh_TW" и т.д.. Эта функция получает текущий поток 
+локали из Windows - без информации о кодировке - и возвращает её как строку в выше
+указанной форме для использования в формировании имён файлов и т.д.. 
+Возвращаемая строка должна освобождаться с помощью
+<a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённое имя локали.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2877981"></a><h3>
+<a name="g-win32-get-package-installation-directory"></a>g_win32_get_package_installation_directory ()</h3>
+<a class="indexterm" name="id2877996"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_win32_get_package_installation_directory
+                                            (<a href="glib-Basic-Types.html#gchar">gchar</a> *package,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> *dll_name);</pre>
+<p>
+Пытается определить каталог для установки программного пакета.
+Обычно используется программными пакетами GNU.
+</p>
+<p>
+<em class="parameter"><code>package</code></em> должен быть коротким идентификатором для пакета. 
+Обычно это тот же идентификатор который используется для
+<code class="literal">GETTEXT_PACKAGE</code> в конфигурационном программном обеспечении согласно
+стандартов GNU. Функция сначала ищет в Windows Registry значение <code class="literal">#InstallationDirectory</code> в ключе
+<code class="literal">#HKLM\Software\<em class="parameter"><code>package</code></em></code> и если значение существует возвращает его.
+</p>
+<p>
+Если <em class="parameter"><code>package</code></em> это <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, 
+или выше упомянутое значение не найдено в реестре, но <em class="parameter"><code>dll_name</code></em> не-<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, она должна загрузить имя DLL в текущий процесс. 
+Обычно это будет имя DLL вызывающей эту функцию, находящую для неё каталог установки. 
+Затем функция запрашивает Windows из какого каталога эта DLL была загружена. Если последний компонент этого каталога "bin" или "lib", 
+возвращается родительский каталог, иначе непосредственно сам каталог. Если эта DLL не загружена, функция выполняется как если бы
+<em class="parameter"><code>dll_name</code></em> был <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<p>
+Если и <em class="parameter"><code>package</code></em> и <em class="parameter"><code>dll_name</code></em> являются 
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, используется основной каталог 
+в котором запущен процесс, вместо использования способа описанного выше.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>package</code></em>&#160;:</span></td>
+<td> Целочисленное для программного пакета в кодировке UTF8, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, 
+     
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>dll_name</code></em>&#160;:</span></td>
+<td> Имя DLL которую обеспечивает пакет, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, 
+     в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> строка содержащая каталог установки для <em class="parameter"><code>package</code></em>. 
+     Строка в кодировке имён файлов GLib, то есть UTF-8 в Windows. Возвращаемое значение должно быть освобождено 
+     с помощью <a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a> когда больше не используется.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2877431"></a><h3>
+<a name="g-win32-get-package-installation-subdirectory"></a>g_win32_get_package_installation_subdirectory ()</h3>
+<a class="indexterm" name="id2878395"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_win32_get_package_installation_subdirectory
+                                            (<a href="glib-Basic-Types.html#gchar">gchar</a> *package,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> *dll_name,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> *subdir);</pre>
+<p>
+Возвращает вновь распределённую строку содержащую путь подкаталога <em class="parameter"><code>subdir</code></em> 
+в возвращаемом значении из вызова <a href="glib-Windows-Compatibility-Functions.html#g-win32-get-package-installation-directory"><code class="function">g_win32_get_package_installation_directory()</code></a> с параметрами <em class="parameter"><code>package</code></em> и
+<em class="parameter"><code>dll_name</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>package</code></em>&#160;:</span></td>
+<td> Идентификатор для программного пакета, в кодировке UTF-8, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>dll_name</code></em>&#160;:</span></td>
+<td> Имя DLL которую обеспечивает пакет, в кодировке UTF-8, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>subdir</code></em>&#160;:</span></td>
+<td> подкаталог установочного каталога для пакета, так же в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> строка содержащая полный путь к <em class="parameter"><code>subdir</code></em> внутри каталога установки 
+     <em class="parameter"><code>package</code></em>. Возвращаемая строка находится в кодировке имён файлов GLib, 
+     то есть UTF-8 в Windows. Возвращаемое значение должно освобождаться с помощью 
+     <a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a> когда больше не используется.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2878579"></a><h3>
+<a name="g-win32-get-windows-version"></a>g_win32_get_windows_version ()</h3>
+<a class="indexterm" name="id2878594"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_win32_get_windows_version     (void);</pre>
+<p>
+Возвращает информацию о версии для исполняемого кода операционной системы Windows. 
+Смотрите документацию MSDN для функции <code class="function">GetVersion()</code>. 
+Коротко, наиболее важный бит - это один в Win9x,
+и ноль в NT-based системах. Начиная с версии 2.14, GLib работает только 
+в NT-based системах, поэтому проверки выполняются ли ваши собственные программы в Win9x
+сомнительны. Самый младший байт - это 4 в Windows NT 4, и 5 в Windows XP. Программы которым реально
+необходима детальная информация о версии и особенностях, должны использовать Win32 API, например
+<code class="function">GetVersionEx()</code> и <code class="function">VerifyVersionInfo()</code>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Информация о версии.
+
+</td>
+</tr></tbody>
+</table></div>
+<p>Начиная с версии 2.6
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2878681"></a><h3>
+<a name="g-win32-locale-filename-from-utf8"></a>g_win32_locale_filename_from_utf8 ()</h3>
+<a class="indexterm" name="id2878697"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_win32_locale_filename_from_utf8
+                                            (const <a href="glib-Basic-Types.html#gchar">gchar</a> *utf8filename);</pre>
+<p>
+Конвертирует имя файла из UTF-8 в системную кодировку.
+</p>
+<p>
+В NT-based Windows, на файловых системах NTFS, имена файлов находятся в Unicode. 
+Весьма возможно, что имена файлов в Unicode содержат символы не представленные
+в системной кодовой странице. (Например, Греческие или Кириллические символы в Восточной Европе 
+или US Windows инсталяции, или менее общие символы CJK в CJK Windows инсталяции.)
+</p>
+<p>
+В этом случае, и если имя файла ссылается на существующий файл, и 
+файловая система хранит альтернативные короткие (8.3) имена для каталогов, 
+возвращается короткая форма имени файла. Помните что "короткое" имя
+может быть фактически длиннее чем Unicode имя, если Unicode имя имеет очень 
+короткий путь имени содержащий не-ASCII символы. Если нет возможного имени в системной кодировке для файла, 
+возвращается <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<p>
+Возвращаемое значение динамически распределяется и должно быть освобождено с помощью
+<a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a> когда больше не используется.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>utf8filename</code></em>&#160;:</span></td>
+<td> имя файла в кодировке UTF-8.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Конвертированное имя файла, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     если нет короткого имени.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.8
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2878819"></a><h3>
+<a name="G-WIN32-DLLMAIN-FOR-DLL-NAME:CAPS"></a>G_WIN32_DLLMAIN_FOR_DLL_NAME()</h3>
+<a class="indexterm" name="id2878833"></a><pre class="programlisting">#define     G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)</pre>
+<p>
+В Windows, этот макрос определяет <code class="function"><code class="function">DllMain()</code></code> функцию 
+которая сохраняет фактическое имя DLL для включения в компилируемый код.
+</p>
+<p>
+На не-Windows платформах, ничего не делает.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>static</code></em>&#160;:</span></td>
+<td> свободная или "статичная".
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>dll_name</code></em>&#160;:</span></td>
+<td>имя (указатель на) массив символов где будет хранится имя DLL. Если это используется, вы должны так же включить 
+   <code class="filename">windows.h</code>. Если вам нужно более сложную функцию точки ввода DLL, вы не должны использовать это.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2878911"></a><h3>
+<a name="G-WIN32-HAVE-WIDECHAR-API:CAPS"></a>G_WIN32_HAVE_WIDECHAR_API()</h3>
+<a class="indexterm" name="id2878927"></a><pre class="programlisting">#define G_WIN32_HAVE_WIDECHAR_API() TRUE
+</pre>
+<p>
+В Windows, этот макрос определяет выражение которое выдаёт <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>
+если код запущен в версии Windows использующей функции Win32 API широких символов, и широко-символьные версии функций библиотеки C работают. 
+(Они всегда присутствуют в DLLs, но не работают в Windows 9x и Me.)
+</p>
+<p>
+На не-Windows платформах, это не определено.
+</p>
+<p>Начиная с версии 2.6
+
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2878967"></a><h3>
+<a name="G-WIN32-IS-NT-BASED:CAPS"></a>G_WIN32_IS_NT_BASED()</h3>
+<a class="indexterm" name="id2878982"></a><pre class="programlisting">#define G_WIN32_IS_NT_BASED() TRUE
+</pre>
+<p>
+В Windows, этот макрос определяет выражение которое выдаёт <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>
+если код выполняется в операционной системе на основе Windows NT.
+</p>
+<p>
+На не-Windows платформах, это не определено.
+</p>
+<p>Начиная с версии 2.6
+
+
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

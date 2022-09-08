@@ -1,0 +1,438 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Caches</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-data-types.html" title="GLib Data Types">
+<link rel="prev" href="glib-Relations-and-Tuples.html" title="Relations and Tuples">
+<link rel="next" href="glib-Memory-Allocators.html" title="Memory Allocators">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Relations-and-Tuples.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-data-types.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Memory-Allocators.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2994424" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2994739" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Caches"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2994424"></a><span class="refentrytitle">Caches</span>
+</h2>
+<p>Caches &#8212; Кеши позволяют объединять комплекс структур данных для сохранения ресурсов.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-Caches.html#GCache">GCache</a>;
+<a href="glib-Caches.html#GCache">GCache</a>*     <a href="glib-Caches.html#g-cache-new">g_cache_new</a>                     (<a href="glib-Caches.html#GCacheNewFunc">GCacheNewFunc</a> value_new_func,
+                                             <a href="glib-Caches.html#GCacheDestroyFunc">GCacheDestroyFunc</a> value_destroy_func,
+                                             <a href="glib-Caches.html#GCacheDupFunc">GCacheDupFunc</a> key_dup_func,
+                                             <a href="glib-Caches.html#GCacheDestroyFunc">GCacheDestroyFunc</a> key_destroy_func,
+                                             <a href="glib-Hash-Tables.html#GHashFunc">GHashFunc</a> hash_key_func,
+                                             <a href="glib-Hash-Tables.html#GHashFunc">GHashFunc</a> hash_value_func,
+                                             <a href="glib-Hash-Tables.html#GEqualFunc">GEqualFunc</a> key_equal_func);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Caches.html#g-cache-insert">g_cache_insert</a>                  (<a href="glib-Caches.html#GCache">GCache</a> *cache,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> key);
+void        <a href="glib-Caches.html#g-cache-remove">g_cache_remove</a>                  (<a href="glib-Caches.html#GCache">GCache</a> *cache,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> value);
+void        <a href="glib-Caches.html#g-cache-destroy">g_cache_destroy</a>                 (<a href="glib-Caches.html#GCache">GCache</a> *cache);
+
+void        <a href="glib-Caches.html#g-cache-key-foreach">g_cache_key_foreach</a>             (<a href="glib-Caches.html#GCache">GCache</a> *cache,
+                                             <a href="glib-Hash-Tables.html#GHFunc">GHFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+void        <a href="glib-Caches.html#g-cache-value-foreach">g_cache_value_foreach</a>           (<a href="glib-Caches.html#GCache">GCache</a> *cache,
+                                             <a href="glib-Hash-Tables.html#GHFunc">GHFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+
+void        (<a href="glib-Caches.html#GCacheDestroyFunc">*GCacheDestroyFunc</a>)            (<a href="glib-Basic-Types.html#gpointer">gpointer</a> value);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    (<a href="glib-Caches.html#GCacheDupFunc">*GCacheDupFunc</a>)                (<a href="glib-Basic-Types.html#gpointer">gpointer</a> value);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    (<a href="glib-Caches.html#GCacheNewFunc">*GCacheNewFunc</a>)                (<a href="glib-Basic-Types.html#gpointer">gpointer</a> key);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2994739"></a><h2>Описание</h2>
+<p>
+<a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> позволяет объединить комплекс структур данных, в порядке сохранения
+системных ресурсов.
+</p>
+<p>
+GTK+ использует кеши для <span class="type">GtkStyles</span> и <span class="type">GdkGCs</span>. Они потребляют много ресурсов,
+поэтому <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> используется для отслеживания ситуации когда 
+<span class="type">GtkStyle</span> или <span class="type">GdkGC</span> запрашивают уже существующие свойства. 
+Если это выполнено, то используются существующие объекты вместо создания новых.
+</p>
+<p>
+<a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> использует ключи и значения.
+<a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> ключ описывает свойство специального ресурса.
+<a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> значение - это фактический ресурс.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2994842"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2994853"></a><h3>
+<a name="GCache"></a>GCache</h3>
+<a class="indexterm" name="id2994865"></a><pre class="programlisting">typedef struct _GCache GCache;</pre>
+<p>
+Структура <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> является непрозрачной структурой данных содержащей 
+информацию о <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>. 
+Доступ к ней должен осуществляться только через следующие функции.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2994898"></a><h3>
+<a name="g-cache-new"></a>g_cache_new ()</h3>
+<a class="indexterm" name="id2994911"></a><pre class="programlisting"><a href="glib-Caches.html#GCache">GCache</a>*     g_cache_new                     (<a href="glib-Caches.html#GCacheNewFunc">GCacheNewFunc</a> value_new_func,
+                                             <a href="glib-Caches.html#GCacheDestroyFunc">GCacheDestroyFunc</a> value_destroy_func,
+                                             <a href="glib-Caches.html#GCacheDupFunc">GCacheDupFunc</a> key_dup_func,
+                                             <a href="glib-Caches.html#GCacheDestroyFunc">GCacheDestroyFunc</a> key_destroy_func,
+                                             <a href="glib-Hash-Tables.html#GHashFunc">GHashFunc</a> hash_key_func,
+                                             <a href="glib-Hash-Tables.html#GHashFunc">GHashFunc</a> hash_value_func,
+                                             <a href="glib-Hash-Tables.html#GEqualFunc">GEqualFunc</a> key_equal_func);</pre>
+<p>
+Создаёт новую <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>value_new_func</code></em>&#160;:</span></td>
+<td>функция для создания нового объекта данного ключа.
+    Она вызывается функцией <a href="glib-Caches.html#g-cache-insert"><code class="function">g_cache_insert()</code></a> 
+    если объект с данным ключом ещё не существует.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>value_destroy_func</code></em>&#160;:</span></td>
+<td>функция для уничтожения объекта. Она вызывается с помощью 
+    <a href="glib-Caches.html#g-cache-remove"><code class="function">g_cache_remove()</code></a> 
+    когда объект больше не нужен (то есть количество его ссылок сброшено в 0).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>key_dup_func</code></em>&#160;:</span></td>
+<td>функция для копирования ключа. Она вызывается функцией 
+    <a href="glib-Caches.html#g-cache-insert"><code class="function">g_cache_insert()</code></a> 
+    если ключ ещё не существует в <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>key_destroy_func</code></em>&#160;:</span></td>
+<td>функция для уничтожения ключа. Она вызывается функцией 
+    <a href="glib-Caches.html#g-cache-remove"><code class="function">g_cache_remove()</code></a> 
+    когда объект больше не нужен (то есть количество его ссылок сброшено в 0).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>hash_key_func</code></em>&#160;:</span></td>
+<td>функция создаёт хеш значение из ключа.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>hash_value_func</code></em>&#160;:</span></td>
+<td>функция создаёт хеш значение из значения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>key_equal_func</code></em>&#160;:</span></td>
+<td>функция для сравнения двух ключей. Она должна вернуть <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> 
+    если два ключа равны.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новая <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2995185"></a><h3>
+<a name="g-cache-insert"></a>g_cache_insert ()</h3>
+<a class="indexterm" name="id2995198"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_cache_insert                  (<a href="glib-Caches.html#GCache">GCache</a> *cache,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> key);</pre>
+<p>
+Определяет значение соответствующее полученному ключу, создаёт если необходимо.
+Она сначала проверяет существует ли значение в <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>, 
+используя <em class="parameter"><code>key_equal_func</code></em> функцию помещённую в 
+<a href="glib-Caches.html#g-cache-new"><code class="function">g_cache_new()</code></a>.
+Если существует, возвращает это значение и увеличивает количество ссылок на одну.
+Если значение не существует в текущий момент, оно создаётся вызовом <em class="parameter"><code>value_new_func</code></em>. 
+Ключ дублируется вызовом <em class="parameter"><code>key_dup_func</code></em> и дубликат ключа и значения вставляется в 
+<a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>cache</code></em>&#160;:</span></td>
+<td><a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>key</code></em>&#160;:</span></td>
+<td>ключ описывающий <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> объект.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель на <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> значение.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2995350"></a><h3>
+<a name="g-cache-remove"></a>g_cache_remove ()</h3>
+<a class="indexterm" name="id2995363"></a><pre class="programlisting">void        g_cache_remove                  (<a href="glib-Caches.html#GCache">GCache</a> *cache,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> value);</pre>
+<p>
+Уменьшает количество ссылок на указанное значение.
+Если сброшено в 0, то значение и соответствующий ключ уничтожаются,
+используя <em class="parameter"><code>value_destroy_func</code></em> и <em class="parameter"><code>key_destroy_func</code></em> 
+помещённые в <a href="glib-Caches.html#g-cache-new"><code class="function">g_cache_new()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>cache</code></em>&#160;:</span></td>
+<td><a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>value</code></em>&#160;:</span></td>
+<td>значение для удаления.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2995464"></a><h3>
+<a name="g-cache-destroy"></a>g_cache_destroy ()</h3>
+<a class="indexterm" name="id2995477"></a><pre class="programlisting">void        g_cache_destroy                 (<a href="glib-Caches.html#GCache">GCache</a> *cache);</pre>
+<p>
+Освобождает память распределённую для <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+</p>
+<p>
+Помните что она не уничтожает ключи и значения которые содержит
+<a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>cache</code></em>&#160;:</span></td>
+<td><a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2995552"></a><h3>
+<a name="g-cache-key-foreach"></a>g_cache_key_foreach ()</h3>
+<a class="indexterm" name="id2995565"></a><pre class="programlisting">void        g_cache_key_foreach             (<a href="glib-Caches.html#GCache">GCache</a> *cache,
+                                             <a href="glib-Hash-Tables.html#GHFunc">GHFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Вызывает указанную функцию для каждого ключа в <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Примечание</h3>
+<p><em class="parameter"><code>func</code></em> принимает три параметра, значение и ключ кеш элемента и 
+<em class="parameter"><code>user_data</code></em>. Порядок значение и ключ отличается от порядка в котором 
+<a href="glib-Hash-Tables.html#g-hash-table-foreach"><code class="function">g_hash_table_foreach()</code></a> проходит пары ключ/значение 
+в callback-функцию!
+</p>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>cache</code></em>&#160;:</span></td>
+<td><a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td>функция вызываемая с каждым элементом <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> key.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>пользовательские данные помещаемые в функцию.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2995708"></a><h3>
+<a name="g-cache-value-foreach"></a>g_cache_value_foreach ()</h3>
+<a class="indexterm" name="id2995723"></a><pre class="programlisting">void        g_cache_value_foreach           (<a href="glib-Caches.html#GCache">GCache</a> *cache,
+                                             <a href="glib-Hash-Tables.html#GHFunc">GHFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_cache_value_foreach</code> устарела начиная с версии 2.10 и не должна использоваться во вновь создаваемом коде. 
+Благоразумней поместить указатели для внутренних структур данных в <em class="parameter"><code>func</code></em>; 
+используя <a href="glib-Caches.html#g-cache-key-foreach"><code class="function">g_cache_key_foreach()</code></a></p>
+</div>
+<p>
+Вызывает указанную функцию для каждого значения в <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>cache</code></em>&#160;:</span></td>
+<td><a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td>функция вызываемая с каждым значением <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>пользовательские данные помещаемые в функцию.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2995868"></a><h3>
+<a name="GCacheDestroyFunc"></a>GCacheDestroyFunc ()</h3>
+<a class="indexterm" name="id2995881"></a><pre class="programlisting">void        (*GCacheDestroyFunc)            (<a href="glib-Basic-Types.html#gpointer">gpointer</a> value);</pre>
+<p>
+Определяет тип <em class="parameter"><code>value_destroy_func</code></em> и <em class="parameter"><code>key_destroy_func</code></em> функций
+помещаемых в <a href="glib-Caches.html#g-cache-new"><code class="function">g_cache_new()</code></a>.
+В функции помещаются указатели на <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> ключ или <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> значение и она должна освободить любую память и другие ресурсы связанные с ними.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>value</code></em>&#160;:</span></td>
+<td><a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> значение для уничтожения.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2995977"></a><h3>
+<a name="GCacheDupFunc"></a>GCacheDupFunc ()</h3>
+<a class="indexterm" name="id2995989"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    (*GCacheDupFunc)                (<a href="glib-Basic-Types.html#gpointer">gpointer</a> value);</pre>
+<p>
+Определяет тип <em class="parameter"><code>key_dup_func</code></em> функции помещаемой в 
+<a href="glib-Caches.html#g-cache-new"><code class="function">g_cache_new()</code></a>.
+В функцию помещается ключ (<span class="emphasis"><em>не</em></span> значение, поскольку подразумевается образец) 
+и она должна вернуть копию ключа.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>value</code></em>&#160;:</span></td>
+<td><a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> ключ для уничтожения 
+    (<span class="emphasis"><em>не</em></span> <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> значение).
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>копия <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> ключа.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2996096"></a><h3>
+<a name="GCacheNewFunc"></a>GCacheNewFunc ()</h3>
+<a class="indexterm" name="id2996108"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    (*GCacheNewFunc)                (<a href="glib-Basic-Types.html#gpointer">gpointer</a> key);</pre>
+<p>
+Определяет тип <em class="parameter"><code>value_new_func</code></em> функции помещаемой в 
+<a href="glib-Caches.html#g-cache-new"><code class="function">g_cache_new()</code></a>.
+Она берёт <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> ключ и должна создать значение соответствующее ключу.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>key</code></em>&#160;:</span></td>
+<td><a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> key.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новое <a href="glib-Caches.html#GCache"><span class="type">GCache</span></a> значение соответствующее ключу.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</body>
+</html>

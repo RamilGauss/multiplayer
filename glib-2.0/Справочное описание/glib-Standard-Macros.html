@@ -1,0 +1,504 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Standard Macros</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="prev" href="glib-Limits-of-Basic-Types.html" title="Limits of Basic Types">
+<link rel="next" href="glib-Type-Conversion-Macros.html" title="Type Conversion Macros">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Limits-of-Basic-Types.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-fundamentals.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Type-Conversion-Macros.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2534928" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2535105" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Standard-Macros"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2534928"></a><span class="refentrytitle">Стандартные макросы</span>
+</h2>
+<p>Standard Macros &#8212; Основные макросы.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+
+#define     <a href="glib-Standard-Macros.html#G-OS-WIN32:CAPS">G_OS_WIN32</a>
+#define     <a href="glib-Standard-Macros.html#G-OS-BEOS:CAPS">G_OS_BEOS</a>
+#define     <a href="glib-Standard-Macros.html#G-OS-UNIX:CAPS">G_OS_UNIX</a>
+
+#define     <a href="glib-Standard-Macros.html#G-DIR-SEPARATOR:CAPS">G_DIR_SEPARATOR</a>
+#define     <a href="glib-Standard-Macros.html#G-DIR-SEPARATOR-S:CAPS">G_DIR_SEPARATOR_S</a>
+#define     <a href="glib-Standard-Macros.html#G-IS-DIR-SEPARATOR:CAPS">G_IS_DIR_SEPARATOR</a>              (c)
+#define     <a href="glib-Standard-Macros.html#G-SEARCHPATH-SEPARATOR:CAPS">G_SEARCHPATH_SEPARATOR</a>
+#define     <a href="glib-Standard-Macros.html#G-SEARCHPATH-SEPARATOR-S:CAPS">G_SEARCHPATH_SEPARATOR_S</a>
+
+#define     <a href="glib-Standard-Macros.html#TRUE:CAPS">TRUE</a>
+#define     <a href="glib-Standard-Macros.html#FALSE:CAPS">FALSE</a>
+
+#define     <a href="glib-Standard-Macros.html#NULL:CAPS">NULL</a>
+
+#define     <a href="glib-Standard-Macros.html#MIN:CAPS">MIN</a>                             (a, b)
+#define     <a href="glib-Standard-Macros.html#MAX:CAPS">MAX</a>                             (a, b)
+
+#define     <a href="glib-Standard-Macros.html#ABS:CAPS">ABS</a>                             (a)
+#define     <a href="glib-Standard-Macros.html#CLAMP:CAPS">CLAMP</a>                           (x, low, high)
+
+#define     <a href="glib-Standard-Macros.html#G-STRUCT-MEMBER:CAPS">G_STRUCT_MEMBER</a>                 (member_type, struct_p, struct_offset)
+#define     <a href="glib-Standard-Macros.html#G-STRUCT-MEMBER-P:CAPS">G_STRUCT_MEMBER_P</a>               (struct_p, struct_offset)
+#define     <a href="glib-Standard-Macros.html#G-STRUCT-OFFSET:CAPS">G_STRUCT_OFFSET</a>                 (struct_type, member)
+
+#define     <a href="glib-Standard-Macros.html#G-MEM-ALIGN:CAPS">G_MEM_ALIGN</a>
+
+#define     <a href="glib-Standard-Macros.html#G-CONST-RETURN:CAPS">G_CONST_RETURN</a>
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2535105"></a><h2>Описание</h2>
+<p>
+Эти макросы обеспечивают обычное выполнение некоторых особенностей.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2535121"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2535131"></a><h3>
+<a name="G-OS-WIN32:CAPS"></a>G_OS_WIN32</h3>
+<a class="indexterm" name="id2535143"></a><pre class="programlisting">#define G_OS_WIN32
+</pre>
+<p>
+Этот макрос определяется только в Windows. Поэтому вы можете группировать
+Windows-специфичный код в "#ifdef G_OS_WIN32".
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535166"></a><h3>
+<a name="G-OS-BEOS:CAPS"></a>G_OS_BEOS</h3>
+<a class="indexterm" name="id2535173"></a><pre class="programlisting">#define G_OS_BEOS
+</pre>
+<p>
+Этот макрос определяется только в BeOS. Поэтому вы можете группировать
+BeOS-специфичный код в "#ifdef G_OS_BEOS".
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535186"></a><h3>
+<a name="G-OS-UNIX:CAPS"></a>G_OS_UNIX</h3>
+<a class="indexterm" name="id2535202"></a><pre class="programlisting">#define G_OS_UNIX
+</pre>
+<p>
+Этот макрос определяется только в UNIX. Поэтому вы можете группировать
+UNIX-специфичный код в #ifdef G_OS_UNIX".
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535219"></a><h3>
+<a name="G-DIR-SEPARATOR:CAPS"></a>G_DIR_SEPARATOR</h3>
+<a class="indexterm" name="id2535235"></a><pre class="programlisting">#define     G_DIR_SEPARATOR</pre>
+<p>
+Символ разделения каталогов.
+Это '/' в UNIX и '\' в Windows.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535251"></a><h3>
+<a name="G-DIR-SEPARATOR-S:CAPS"></a>G_DIR_SEPARATOR_S</h3>
+<a class="indexterm" name="id2535265"></a><pre class="programlisting">#define     G_DIR_SEPARATOR_S</pre>
+<p>
+Разделитель каталогов как строка.
+Это "/" в UNIX и "\" в Windows.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535281"></a><h3>
+<a name="G-IS-DIR-SEPARATOR:CAPS"></a>G_IS_DIR_SEPARATOR()</h3>
+<a class="indexterm" name="id2535295"></a><pre class="programlisting">#define     G_IS_DIR_SEPARATOR(c)</pre>
+<p>
+Проверяет является ли символ разделителем каталогов.
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS">
+<code class="literal">TRUE</code></a> для '/' в UNIX
+и для '\' или '/' в Windows.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td>символ
+</td>
+</tr></tbody>
+</table></div>
+<p>Начиная с версии 2.6
+
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535348"></a><h3>
+<a name="G-SEARCHPATH-SEPARATOR:CAPS"></a>G_SEARCHPATH_SEPARATOR</h3>
+<a class="indexterm" name="id2535360"></a><pre class="programlisting">#define     G_SEARCHPATH_SEPARATOR</pre>
+<p>
+Символ разделитель пути поиска.
+Это ':' в UNIX и ';' в Windows.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535377"></a><h3>
+<a name="G-SEARCHPATH-SEPARATOR-S:CAPS"></a>G_SEARCHPATH_SEPARATOR_S</h3>
+<a class="indexterm" name="id2535391"></a><pre class="programlisting">#define     G_SEARCHPATH_SEPARATOR_S</pre>
+<p>
+Строка разделитель в пути поиска.
+Это ":" в UNIX и ";" в Windows.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535408"></a><h3>
+<a name="TRUE:CAPS"></a>TRUE</h3>
+<a class="indexterm" name="id2535420"></a><pre class="programlisting">#define	TRUE	(!FALSE)
+</pre>
+<p>
+Определяет значение <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> для <a href="glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> типа.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535454"></a><h3>
+<a name="FALSE:CAPS"></a>FALSE</h3>
+<a class="indexterm" name="id2535466"></a><pre class="programlisting">#define	FALSE	(0)
+</pre>
+<p>
+Определяет значение <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> для <a href="glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> типа.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535499"></a><h3>
+<a name="NULL:CAPS"></a>NULL</h3>
+<a class="indexterm" name="id2535512"></a><pre class="programlisting">#define     NULL</pre>
+<p>
+Определяет стандартный указатель <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535538"></a><h3>
+<a name="MIN:CAPS"></a>MIN()</h3>
+<a class="indexterm" name="id2535550"></a><pre class="programlisting">#define MIN(a, b)  (((a) &lt; (b)) ? (a) : (b))
+</pre>
+<p>
+Находит меньшее из <em class="parameter"><code>a</code></em> и <em class="parameter"><code>b</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>a</code></em>&#160;:</span></td>
+<td>числовое значение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>b</code></em>&#160;:</span></td>
+<td>числовое значение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>наименьшее из <em class="parameter"><code>a</code></em> и <em class="parameter"><code>b</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535631"></a><h3>
+<a name="MAX:CAPS"></a>MAX()</h3>
+<a class="indexterm" name="id2535643"></a><pre class="programlisting">#define MAX(a, b)  (((a) &gt; (b)) ? (a) : (b))
+</pre>
+<p>
+Находит наибольшее из <em class="parameter"><code>a</code></em> и <em class="parameter"><code>b</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>a</code></em>&#160;:</span></td>
+<td>числовое значение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>b</code></em>&#160;:</span></td>
+<td>числовое значение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>наибольшее из <em class="parameter"><code>a</code></em> и <em class="parameter"><code>b</code></em>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535723"></a><h3>
+<a name="ABS:CAPS"></a>ABS()</h3>
+<a class="indexterm" name="id2535735"></a><pre class="programlisting">#define ABS(a)	   (((a) &lt; 0) ? -(a) : (a))
+</pre>
+<p>
+Расчитывает абсолютное значение <em class="parameter"><code>a</code></em>.
+Абсолютное значение это простое число без отрицательного знака.
+</p>
+<p>
+Например,
+</p>
+<div class="itemizedlist"><ul type="disc">
+<li><p>
+ABS(-10) равно 10.
+</p></li>
+<li><p>
+ABS(10) также равно 10.
+</p></li>
+</ul></div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>a</code></em>&#160;:</span></td>
+<td>числовое значение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>абсолютное значение <em class="parameter"><code>a</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535807"></a><h3>
+<a name="CLAMP:CAPS"></a>CLAMP()</h3>
+<a class="indexterm" name="id2535819"></a><pre class="programlisting">#define CLAMP(x, low, high)  (((x) &gt; (high)) ? (high) : (((x) &lt; (low)) ? (low) : (x)))
+</pre>
+<p>
+Находит <em class="parameter"><code>x</code></em> между установленными лимитами <em class="parameter"><code>low</code></em> и <em class="parameter"><code>high</code></em>.
+</p>
+<p>
+Например,
+</p>
+<div class="itemizedlist"><ul type="disc">
+<li><p>
+CLAMP(5, 10, 15) это 10.
+</p></li>
+<li><p>
+CLAMP(15, 5, 10) это 10.
+</p></li>
+<li><p>
+CLAMP(20, 15, 25) это 20.
+</p></li>
+</ul></div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>x</code></em>&#160;:</span></td>
+<td>промежуточное числовое значение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>low</code></em>&#160;:</span></td>
+<td>допустимое минимальное значение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>high</code></em>&#160;:</span></td>
+<td>допустимое максимальное значение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>значение <em class="parameter"><code>x</code></em> заключенное между диапазоном <em class="parameter"><code>low</code></em> и <em class="parameter"><code>high</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2535950"></a><h3>
+<a name="G-STRUCT-MEMBER:CAPS"></a>G_STRUCT_MEMBER()</h3>
+<a class="indexterm" name="id2535963"></a><pre class="programlisting">#define     G_STRUCT_MEMBER(member_type, struct_p, struct_offset)</pre>
+<p>
+Возвращает элемент структуры в полученном смещении, используя полученный тип.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>member_type</code></em>&#160;:</span></td>
+<td>типовое поле структуры.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>struct_p</code></em>&#160;:</span></td>
+<td>указатель в структуре.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>struct_offset</code></em>&#160;:</span></td>
+<td>смещение поля от начала структуры, в байтах.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>элемент структуры.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2536038"></a><h3>
+<a name="G-STRUCT-MEMBER-P:CAPS"></a>G_STRUCT_MEMBER_P()</h3>
+<a class="indexterm" name="id2536051"></a><pre class="programlisting">#define     G_STRUCT_MEMBER_P(struct_p, struct_offset)</pre>
+<p>
+Возвращает указатель без типа для полученного смещения структуры.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>struct_p</code></em>&#160;:</span></td>
+<td>указатель в структуре.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>struct_offset</code></em>&#160;:</span></td>
+<td>смещение от начала структуры, в байтах.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель без типа <em class="parameter"><code>struct_p</code></em> плюс <em class="parameter"><code>struct_offset</code></em> байт.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2536123"></a><h3>
+<a name="G-STRUCT-OFFSET:CAPS"></a>G_STRUCT_OFFSET()</h3>
+<a class="indexterm" name="id2536136"></a><pre class="programlisting">#define     G_STRUCT_OFFSET(struct_type, member)</pre>
+<p>
+Возвращает смещение в байтах элемента структуры.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>struct_type</code></em>&#160;:</span></td>
+<td>тип структуры, например <span class="structname">GtkWidget</span>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>member</code></em>&#160;:</span></td>
+<td>поле структуры, например <em class="structfield"><code>window</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>смещение <em class="parameter"><code>элемента</code></em> от начала <em class="parameter"><code>struct_type</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2536215"></a><h3>
+<a name="G-MEM-ALIGN:CAPS"></a>G_MEM_ALIGN</h3>
+<a class="indexterm" name="id2536227"></a><pre class="programlisting">#define     G_MEM_ALIGN</pre>
+<p>
+Указывает количество байт по которым будет распределена память в текущей платформе.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2536244"></a><h3>
+<a name="G-CONST-RETURN:CAPS"></a>G_CONST_RETURN</h3>
+<a class="indexterm" name="id2536256"></a><pre class="programlisting">#define     G_CONST_RETURN</pre>
+<p>
+Если <code class="literal">G_DISABLE_CONST_RETURNS</code> определён, этот макрос не выполняется.
+По умолчанию, макрос расширяется до <code class="literal">const</code>. Макрос 
+должен использоваться для помещения <code class="literal">const</code> в функции 
+возвращающие значения которые не должны изменяться. В основном этот макрос 
+позволяет использовать включение <code class="literal">const</code> для возвращаемых 
+константных строк по умолчанию, пока программист не отключит это. 
+Этот макрос должен использоваться только для возвращаемых значений и для 
+<span class="emphasis"><em>out</em></span> параметров, он не действует для 
+<span class="emphasis"><em>in</em></span> параметров. 
+</p>
+<br>
+</div>
+</div>
+</div>
+</body>
+</html>

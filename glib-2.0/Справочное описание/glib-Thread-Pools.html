@@ -1,0 +1,657 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Thread Pools</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-core.html" title="GLib Core Application Support">
+<link rel="prev" href="glib-Threads.html" title="
+Threads">
+<link rel="next" href="glib-Asynchronous-Queues.html" title="Asynchronous Queues">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Threads.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-core.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Asynchronous-Queues.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2607159" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2607569" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Thread-Pools"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2607159"></a><span class="refentrytitle">Thread Pools</span>
+</h2>
+<p>Thread Pools &#8212; Пулы потоков для одновременного выполнения работы.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a>;
+<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a>* <a href="glib-Thread-Pools.html#g-thread-pool-new">g_thread_pool_new</a>              (<a href="glib-Doubly-Linked-Lists.html#GFunc">GFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> max_threads,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> exclusive,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+void        <a href="glib-Thread-Pools.html#g-thread-pool-push">g_thread_pool_push</a>              (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+void        <a href="glib-Thread-Pools.html#g-thread-pool-set-max-threads">g_thread_pool_set_max_threads</a>   (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> max_threads,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Thread-Pools.html#g-thread-pool-get-max-threads">g_thread_pool_get_max_threads</a>   (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Thread-Pools.html#g-thread-pool-get-num-threads">g_thread_pool_get_num_threads</a>   (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Thread-Pools.html#g-thread-pool-unprocessed">g_thread_pool_unprocessed</a>       (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool);
+void        <a href="glib-Thread-Pools.html#g-thread-pool-free">g_thread_pool_free</a>              (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> immediate,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> wait);
+void        <a href="glib-Thread-Pools.html#g-thread-pool-set-max-unused-threads">g_thread_pool_set_max_unused_threads</a>
+                                            (<a href="glib-Basic-Types.html#gint">gint</a> max_threads);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Thread-Pools.html#g-thread-pool-get-max-unused-threads">g_thread_pool_get_max_unused_threads</a>
+                                            (void);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Thread-Pools.html#g-thread-pool-get-num-unused-threads">g_thread_pool_get_num_unused_threads</a>
+                                            (void);
+void        <a href="glib-Thread-Pools.html#g-thread-pool-stop-unused-threads">g_thread_pool_stop_unused_threads</a>
+                                            (void);
+void        <a href="glib-Thread-Pools.html#g-thread-pool-set-sort-function">g_thread_pool_set_sort_function</a> (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc">GCompareDataFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+void        <a href="glib-Thread-Pools.html#g-thread-pool-set-max-idle-time">g_thread_pool_set_max_idle_time</a> (<a href="glib-Basic-Types.html#guint">guint</a> interval);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Thread-Pools.html#g-thread-pool-get-max-idle-time">g_thread_pool_get_max_idle_time</a> (void);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2607569"></a><h2>Описание</h2>
+<p>
+Иногда вам нужна асинхронная работа, прекращение работы и продолжение
+работы вашего потока. Если это происходит часто, накладные расходы 
+запуска и уничтожения процесса каждый раз могут быть слишком высоки. 
+В таких случаях хорошей идеей является многократное использование уже
+существующих потоков. Но реализация этого может быть утомительной и 
+подвержена ошибкам.
+</p>
+<p>
+Поэтому для вашего удобства GLib обеспечивает пулы потоков. Дополнительное 
+преимущество в том, что потоки могут использоваться совместно разными 
+подсистемами вашей программы, когда используется GLib.
+</p>
+<p>
+Для создания нового пула потоков используется <a href="glib-Thread-Pools.html#g-thread-pool-new"><code class="function">g_thread_pool_new()</code></a>. 
+Освобождается созданный пул потоков с помощью <a href="glib-Thread-Pools.html#g-thread-pool-free"><code class="function">g_thread_pool_free()</code></a>.
+</p>
+<p>
+Если вам нужно выполнить определённую задачу внутри потокового пула, вызовите <a href="glib-Thread-Pools.html#g-thread-pool-push"><code class="function">g_thread_pool_push()</code></a>.
+</p>
+<p>
+Для получения текущего количества выполняемых потоков используйте
+<a href="glib-Thread-Pools.html#g-thread-pool-get-num-threads"><code class="function">g_thread_pool_get_num_threads()</code></a>. Для получения количества ещё не обработанных задач
+используйте <a href="glib-Thread-Pools.html#g-thread-pool-unprocessed"><code class="function">g_thread_pool_unprocessed()</code></a>. Для управления максимальным количеством потоков
+пула, используйте <a href="glib-Thread-Pools.html#g-thread-pool-get-max-threads"><code class="function">g_thread_pool_get_max_threads()</code></a> и <a href="glib-Thread-Pools.html#g-thread-pool-set-max-threads"><code class="function">g_thread_pool_set_max_threads()</code></a>.
+</p>
+<p>
+Наконец вы можете контролировать количество неиспользуемых потоков, которые поддерживаются
+GLib для использования в будущем. Текущее количество может быть выбрано с помощью
+<a href="glib-Thread-Pools.html#g-thread-pool-get-num-unused-threads"><code class="function">g_thread_pool_get_num_unused_threads()</code></a>. Максимальное количество может контролироваться 
+с помощью <a href="glib-Thread-Pools.html#g-thread-pool-get-max-unused-threads"><code class="function">g_thread_pool_get_max_unused_threads()</code></a> и <a href="glib-Thread-Pools.html#g-thread-pool-set-max-unused-threads"><code class="function">g_thread_pool_set_max_unused_threads()</code></a>. 
+Все текущие неиспользуемые потоки могут быть остановлены при помощи <a href="glib-Thread-Pools.html#g-thread-pool-stop-unused-threads"><code class="function">g_thread_pool_stop_unused_threads()</code></a>.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2607741"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2607751"></a><h3>
+<a name="GThreadPool"></a>GThreadPool</h3>
+<a class="indexterm" name="id2607764"></a><pre class="programlisting">typedef struct {
+  GFunc func;
+  gpointer user_data;
+  gboolean exclusive;
+} GThreadPool;
+</pre>
+<p>
+Структура <a href="glib-Thread-Pools.html#GThreadPool"><span class="type">GThreadPool</span></a> представляет потоковый пул. Она имеет шесть общих 
+доступных только для чтения элементов, но скрытая структура больше, поэтому 
+вы не должны копировать эту структуру.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a href="glib-Doubly-Linked-Lists.html#GFunc">GFunc</a>&#160;<em class="structfield"><code>func</code></em>;</span></td>
+<td>
+Функция выполняемая в потоках этого пула
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#gpointer">gpointer</a>&#160;<em class="structfield"><code>user_data</code></em>;</span></td>
+<td>
+пользовательские данные для потоков этого пула
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#gboolean">gboolean</a>&#160;<em class="structfield"><code>exclusive</code></em>;</span></td>
+<td>
+все исключительные потоки этого пула
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2607858"></a><h3>
+<a name="g-thread-pool-new"></a>g_thread_pool_new ()</h3>
+<a class="indexterm" name="id2607871"></a><pre class="programlisting"><a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a>* g_thread_pool_new              (<a href="glib-Doubly-Linked-Lists.html#GFunc">GFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> max_threads,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> exclusive,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Эта функция создаёт новый потоковый пул.
+</p>
+<p>
+Каждый раз при вызове <a href="glib-Thread-Pools.html#g-thread-pool-push"><code class="function">g_thread_pool_push()</code></a>, или создаётся новый поток
+или повторно используется один из неиспользуемых. Большинство <em class="parameter"><code>max_threads</code></em> потоков
+выполняются параллельно для этого потокового пула. <em class="parameter"><code>max_threads</code></em> = -1
+позволяет безлимитное создание потоков для этого пула. Вновь созданный или 
+повторно используемый поток выполняет функцию <em class="parameter"><code>func</code></em> с двумя аргументами. 
+Первый для <a href="glib-Thread-Pools.html#g-thread-pool-push"><code class="function">g_thread_pool_push()</code></a> а второй <em class="parameter"><code>user_data</code></em>.
+</p>
+<p>
+Параметр <em class="parameter"><code>exclusive</code></em> определяет, владеет ли всеми исключительными потоками пул,
+или потоки доступны глобально. Если <em class="parameter"><code>exclusive</code></em> равен <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>, <em class="parameter"><code>max_threads</code></em> потоки 
+начинаются немедленно и они будут выполняться исключительно для этого пула 
+пока он не разрушен <a href="glib-Thread-Pools.html#g-thread-pool-free"><code class="function">g_thread_pool_free()</code></a>. Если <em class="parameter"><code>exclusive</code></em> равен <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>,
+потоки создаются когда необходимы и доступны всем не исключительным потоковым пулам. 
+Это подразумевает что <em class="parameter"><code>max_threads</code></em> может не быть -1 для исключительных потоковых пулов.
+</p>
+<p>
+<em class="parameter"><code>error</code></em> может быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для игнорирования ошибок, или не-<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для сообщения об ошибках. 
+Ошибка может произойти только когда <em class="parameter"><code>exclusive</code></em> установлен в <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> и не все <em class="parameter"><code>max_threads</code></em> 
+могут быть созданы.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td>
+функция выполняемая в потоке нового потокового пула
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>
+пользовательские данные передаваемые в функцию <em class="parameter"><code>func</code></em> при каждом вызове
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>max_threads</code></em>&#160;:</span></td>
+<td>
+максимальное количество потоков для параллельного выполнения в новом потоковом пуле,
+-1 означает отсутствие лимита
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>exclusive</code></em>&#160;:</span></td>
+<td>
+должен ли этот пул быть исключительным?
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td>
+расположение возвращаемой ошибки
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+новую <a href="glib-Thread-Pools.html#GThreadPool"><span class="type">GThreadPool</span></a>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2608212"></a><h3>
+<a name="g-thread-pool-push"></a>g_thread_pool_push ()</h3>
+<a class="indexterm" name="id2608226"></a><pre class="programlisting">void        g_thread_pool_push              (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Вставляет <em class="parameter"><code>data</code></em> в список задач для выполнения пулом <em class="parameter"><code>pool</code></em>. Когда количество 
+выполняемых потоков меньше чем максимально допустимое, новый поток запускается 
+(или повторно выполняется) с параметрами полученными в 
+<a href="glib-Thread-Pools.html#g-thread-pool-new"><code class="function">g_thread_pool_new()</code></a>. Иначе <em class="parameter"><code>data</code></em> 
+остаются в очереди пока поток в этом пуле не завершит предыдущие задачи и не начнет 
+обрабатывать <em class="parameter"><code>data</code></em>. 
+</p>
+<p>
+<em class="parameter"><code>error</code></em> может быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для игнорирования ошибок, или не-<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для сообщения об ошибках. 
+Ошибка может произойти только когда новый поток не может быть создан. 
+В этом случае <em class="parameter"><code>data</code></em> просто вставляются в начало очереди для выполнения.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>pool</code></em>&#160;:</span></td>
+<td><a href="glib-Thread-Pools.html#GThreadPool"><span class="type">GThreadPool</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td>
+новая задача для <em class="parameter"><code>pool</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td>
+расположение для возвращаемой ошибки
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2608409"></a><h3>
+<a name="g-thread-pool-set-max-threads"></a>g_thread_pool_set_max_threads ()</h3>
+<a class="indexterm" name="id2608422"></a><pre class="programlisting">void        g_thread_pool_set_max_threads   (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> max_threads,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Устанавливает максимально допустимое число потоков для  <em class="parameter"><code>pool</code></em>. Значение -1 означает безлимитное количество потоков.
+</p>
+<p>
+Установка <em class="parameter"><code>max_threads</code></em> в значение 0 означает полную 
+остановку работы <em class="parameter"><code>pool</code></em>. Пул замораживается до тех пор пока 
+значение <em class="parameter"><code>max_threads</code></em> не будет установлено в не-нулевое значение.
+</p>
+<p>
+Поток никогда не завершается во время выполнения вызова <em class="parameter"><code>func</code></em>, которая поставляется 
+<a href="glib-Thread-Pools.html#g-thread-pool-new"><code class="function">g_thread_pool_new()</code></a>. Вместо этого максимальное число потоков имеет эффект только для распределения новых потоков в 
+<a href="glib-Thread-Pools.html#g-thread-pool-push"><code class="function">g_thread_pool_push()</code></a>. 
+Новый поток распределяется каждый раз, когда текущее количество выполняемых потоков в пуле меньше 
+<em class="parameter"><code>pool</code></em> меньше чем максимальное число.
+</p>
+<p>
+<em class="parameter"><code>error</code></em> может быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для игнорирования ошибок, или не-<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для сообщения об ошибках. 
+Ошибка происходит только когда новый поток не может быть создан.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>pool</code></em>&#160;:</span></td>
+<td><a href="glib-Thread-Pools.html#GThreadPool"><span class="type">GThreadPool</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>max_threads</code></em>&#160;:</span></td>
+<td> новое максимальное число потоков для <em class="parameter"><code>pool</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение возвращаемой ошибки
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2608632"></a><h3>
+<a name="g-thread-pool-get-max-threads"></a>g_thread_pool_get_max_threads ()</h3>
+<a class="indexterm" name="id2608645"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_thread_pool_get_max_threads   (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool);</pre>
+<p>
+Возвращает максимальное число потоков для <em class="parameter"><code>pool</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>pool</code></em>&#160;:</span></td>
+<td><a href="glib-Thread-Pools.html#GThreadPool"><span class="type">GThreadPool</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> максимальное число потоков
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2608719"></a><h3>
+<a name="g-thread-pool-get-num-threads"></a>g_thread_pool_get_num_threads ()</h3>
+<a class="indexterm" name="id2608733"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_thread_pool_get_num_threads   (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool);</pre>
+<p>
+Возвращает текущее количество выполняемых потоков в <em class="parameter"><code>pool</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>pool</code></em>&#160;:</span></td>
+<td><a href="glib-Thread-Pools.html#GThreadPool"><span class="type">GThreadPool</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> текущее количество выполняемых потоков
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2608807"></a><h3>
+<a name="g-thread-pool-unprocessed"></a>g_thread_pool_unprocessed ()</h3>
+<a class="indexterm" name="id2608821"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_thread_pool_unprocessed       (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool);</pre>
+<p>
+Возвращает количество задач остающихся не обработанными в <em class="parameter"><code>pool</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>pool</code></em>&#160;:</span></td>
+<td><a href="glib-Thread-Pools.html#GThreadPool"><span class="type">GThreadPool</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> количество не обработанных задач
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2608895"></a><h3>
+<a name="g-thread-pool-free"></a>g_thread_pool_free ()</h3>
+<a class="indexterm" name="id2608908"></a><pre class="programlisting">void        g_thread_pool_free              (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> immediate,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> wait);</pre>
+<p>
+Освобождает все ресурсы распределённые для <em class="parameter"><code>pool</code></em>.
+</p>
+<p>
+Если <em class="parameter"><code>immediate</code></em> равен <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>, нет новых задач обрабатываемых в <em class="parameter"><code>pool</code></em>. Иначе <em class="parameter"><code>pool</code></em> не освободиться до тех пор пока последняя задача не обработана. 
+Однако помните, поток не прерывается в пуле пока выполняет задачу. Все потоки выполняющие свои 
+задачи завершают их перед тем как <em class="parameter"><code>pool</code></em> будет освобождён.
+</p>
+<p>
+Если <em class="parameter"><code>wait</code></em> равен <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>, функции не возвращают прежде чем все обрабатываемые задачи 
+(зависит от <em class="parameter"><code>immediate</code></em>, все или только выполняемые в 
+текущий момент) будут готовы. Иначе функции возвращаются немедленно.
+</p>
+<p>
+После вызова этой функции <em class="parameter"><code>pool</code></em> не должен больше использоваться.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>pool</code></em>&#160;:</span></td>
+<td><a href="glib-Thread-Pools.html#GThreadPool"><span class="type">GThreadPool</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>immediate</code></em>&#160;:</span></td>
+<td> должен ли пул <em class="parameter"><code>pool</code></em> завершиться немедленно?
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>wait</code></em>&#160;:</span></td>
+<td> должна ли функция ждать завершения всех задач?
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2609101"></a><h3>
+<a name="g-thread-pool-set-max-unused-threads"></a>g_thread_pool_set_max_unused_threads ()</h3>
+<a class="indexterm" name="id2609115"></a><pre class="programlisting">void        g_thread_pool_set_max_unused_threads
+                                            (<a href="glib-Basic-Types.html#gint">gint</a> max_threads);</pre>
+<p>
+Устанавливает максимальное количество неиспользуемых потоков в <em class="parameter"><code>max_threads</code></em>. Если
+<em class="parameter"><code>max_threads</code></em> равен -1, количество неиспользуемых потоков не лимитировано.</p>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>max_threads</code></em>&#160;:</span></td>
+<td> максимальное число неиспользуемых потоков
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2609180"></a><h3>
+<a name="g-thread-pool-get-max-unused-threads"></a>g_thread_pool_get_max_unused_threads ()</h3>
+<a class="indexterm" name="id2609194"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_thread_pool_get_max_unused_threads
+                                            (void);</pre>
+<p>
+Возвращает максимально допустимое число неиспользуемых потоков.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> максимальное число неиспользуемых потоков
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2609236"></a><h3>
+<a name="g-thread-pool-get-num-unused-threads"></a>g_thread_pool_get_num_unused_threads ()</h3>
+<a class="indexterm" name="id2609250"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_thread_pool_get_num_unused_threads
+                                            (void);</pre>
+<p>
+Возвращает текущее количество неиспользуемых потоков.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> текущее число неиспользуемых потоков
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2609292"></a><h3>
+<a name="g-thread-pool-stop-unused-threads"></a>g_thread_pool_stop_unused_threads ()</h3>
+<a class="indexterm" name="id2609306"></a><pre class="programlisting">void        g_thread_pool_stop_unused_threads
+                                            (void);</pre>
+<p>
+Останавливает все текущие неиспользуемые потоки. Это не меняет максимальное число 
+неиспользуемых потоков. Эта функция может использоваться для регулярной остановки всех 
+неиспользуемых потоков например из <a href="glib-The-Main-Event-Loop.html#g-timeout-add"><code class="function">g_timeout_add()</code></a>.</p>
+<p>
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2609345"></a><h3>
+<a name="g-thread-pool-set-sort-function"></a>g_thread_pool_set_sort_function ()</h3>
+<a class="indexterm" name="id2609361"></a><pre class="programlisting">void        g_thread_pool_set_sort_function (<a href="glib-Thread-Pools.html#GThreadPool">GThreadPool</a> *pool,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc">GCompareDataFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Устанавливает функцию для сортировки списка задач. Это позволяет обрабатывать задачи с приоритетом 
+определяемым с помощью <em class="parameter"><code>func</code></em>, а не только в порядке в котором они были добавлены в пул.
+</p>
+<p>
+Помните, если максимальное количество потоков больше 1, порядок
+выполнения потоков не может быть гарантирован на 100%. Потоки 
+планируются операционной системой и выполняются в случайном порядке. 
+Не предполагайте что потоки выполняются в порядке их создания.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>pool</code></em>&#160;:</span></td>
+<td><a href="glib-Thread-Pools.html#GThreadPool"><span class="type">GThreadPool</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td><a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc"><span class="type">GCompareDataFunc</span></a> используемая для сортировки списка задач.
+    При передаче в функцию две задачи, она должна возвращать
+    0 если порядок в котором обрабатываются задачи не важен, 
+    отрицательное значение если первая задача должна быть 
+    обработана перед второй или положительное если вторая 
+    задача должна обрабатываться перед первой.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td> пользовательские данные помещаемые в <em class="parameter"><code>func</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.10
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2609502"></a><h3>
+<a name="g-thread-pool-set-max-idle-time"></a>g_thread_pool_set_max_idle_time ()</h3>
+<a class="indexterm" name="id2609518"></a><pre class="programlisting">void        g_thread_pool_set_max_idle_time (<a href="glib-Basic-Types.html#guint">guint</a> interval);</pre>
+<p>
+Эта функция устанавливает максимальный <em class="parameter"><code>interval</code></em> 
+ожидания потоком новых задач в пуле перед остановкой. Эта функция похожа на вызов
+<a href="glib-Thread-Pools.html#g-thread-pool-stop-unused-threads"><code class="function">g_thread_pool_stop_unused_threads()</code></a> с регулярным таймаутом, но выполняется на основании потока.
+</p>
+<p>
+Установка <em class="parameter"><code>interval</code></em> в 0, не останавливает бездействующие потоки.
+ 
+Эта функция создаёт <a href="glib-Asynchronous-Queues.html#g-async-queue-timed-pop"><code class="function">g_async_queue_timed_pop()</code></a> используя
+<em class="parameter"><code>interval</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>interval</code></em>&#160;:</span></td>
+<td> максимальный <em class="parameter"><code>interval</code></em> (1/1000 секунды) бездействия потока. 
+</td>
+</tr></tbody>
+</table></div>
+<p>Начиная с версии 2.10
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2609629"></a><h3>
+<a name="g-thread-pool-get-max-idle-time"></a>g_thread_pool_get_max_idle_time ()</h3>
+<a class="indexterm" name="id2609645"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_thread_pool_get_max_idle_time (void);</pre>
+<p>
+Эта функция возвращает максимальный <em class="parameter"><code>interval</code></em> ожидания потоком новых задач в пуле перед остановкой.
+</p>
+<p>
+Если функция вернула 0, потоки ожидающие новые задачи в пуле не останавливаются.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> максимальный <em class="parameter"><code>interval</code></em> ожидания потоком новых задач в пуле перед остановкой (1/1000 секунды).
+ 
+</td>
+</tr></tbody>
+</table></div>
+<p>Начиная с версии 2.10
+</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2609711"></a><h2>Смотрите также</h2>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><a href="glib-Threads.html#GThread"><span class="type">GThread</span></a></span></td>
+<td><p>система потока GLib.</p></td>
+</tr></tbody>
+</table></div>
+<p>
+</p>
+</div>
+</div>
+</body>
+</html>

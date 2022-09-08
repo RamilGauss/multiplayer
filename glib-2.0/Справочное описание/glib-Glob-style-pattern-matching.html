@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Glob-style pattern matching</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-utilities.html" title="GLib Utilities">
+<link rel="prev" href="glib-Commandline-option-parser.html" title="Commandline option parser">
+<link rel="next" href="glib-Simple-XML-Subset-Parser.html" title="Simple XML Subset Parser">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Commandline-option-parser.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-utilities.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Simple-XML-Subset-Parser.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2829671" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2829875" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Glob-style-pattern-matching"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2829671"></a><span class="refentrytitle">Glob-style pattern matching</span>
+</h2>
+<p>Glob-style pattern matching &#8212; Сравнение строк с шаблонами содержащими '*' (wildcard) and '?' (joker).</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a>;
+<a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a>* <a href="glib-Glob-style-pattern-matching.html#g-pattern-spec-new">g_pattern_spec_new</a>            (const <a href="glib-Basic-Types.html#gchar">gchar</a> *pattern);
+void        <a href="glib-Glob-style-pattern-matching.html#g-pattern-spec-free">g_pattern_spec_free</a>             (<a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a> *pspec);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Glob-style-pattern-matching.html#g-pattern-spec-equal">g_pattern_spec_equal</a>            (<a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a> *pspec1,
+                                             <a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a> *pspec2);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Glob-style-pattern-matching.html#g-pattern-match">g_pattern_match</a>                 (<a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a> *pspec,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> string_length,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string_reversed);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Glob-style-pattern-matching.html#g-pattern-match-string">g_pattern_match_string</a>          (<a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a> *pspec,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Glob-style-pattern-matching.html#g-pattern-match-simple">g_pattern_match_simple</a>          (const <a href="glib-Basic-Types.html#gchar">gchar</a> *pattern,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2829875"></a><h2>Описание</h2>
+<p>
+Функции <code class="function">g_pattern_match*</code> сравнивают строки с шаблонами содержащими '*' и '?' символы
+с семантикой похожей на стандартную функцию <code class="function">glob()</code>: '*' соответствует произвольной, возможно пустой, 
+строке, '?' соответствует произвольному символу.
+</p>
+<p>
+Помните что в отличие от <code class="function">glob()</code>, символ '/' <span class="emphasis"><em>может</em></span> 
+соответствовать символу подстановки, диапазон символов '[...]', '*' , '?' не может быть отброшен для включения как литеры в шаблон. 
+</p>
+<p>
+Когда множество строк должны быть сопоставлены с одним и тем же шаблоном, лучше собрать шаблон в 
+<a href="glib-Glob-style-pattern-matching.html#GPatternSpec"><span class="type">GPatternSpec</span></a> используя 
+<a href="glib-Glob-style-pattern-matching.html#g-pattern-spec-new"><code class="function">g_pattern_spec_new()</code></a> и используя 
+<a href="glib-Glob-style-pattern-matching.html#g-pattern-match-string"><code class="function">g_pattern_match_string()</code></a> вместо 
+<a href="glib-Glob-style-pattern-matching.html#g-pattern-match-simple"><code class="function">g_pattern_match_simple()</code></a>.  
+Это избавляет от лишних перекомпиляций шаблона.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2829982"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2829992"></a><h3>
+<a name="GPatternSpec"></a>GPatternSpec</h3>
+<a class="indexterm" name="id2830004"></a><pre class="programlisting">typedef struct _GPatternSpec GPatternSpec;</pre>
+<p>
+<span class="structname">GPatternSpec</span> это 'скомпилированная' форма шаблона.
+Эта структура непрозрачна и её поля не должны использоваться непосредственно.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2830025"></a><h3>
+<a name="g-pattern-spec-new"></a>g_pattern_spec_new ()</h3>
+<a class="indexterm" name="id2830038"></a><pre class="programlisting"><a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a>* g_pattern_spec_new            (const <a href="glib-Basic-Types.html#gchar">gchar</a> *pattern);</pre>
+<p>
+Компилирует шаблон в <a href="glib-Glob-style-pattern-matching.html#GPatternSpec"><span class="type">GPatternSpec</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>pattern</code></em>&#160;:</span></td>
+<td>строка в кодировке UTF-8 завершённая нулём.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>вновь распределённая <a href="glib-Glob-style-pattern-matching.html#GPatternSpec"><span class="type">GPatternSpec</span></a>.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2830112"></a><h3>
+<a name="g-pattern-spec-free"></a>g_pattern_spec_free ()</h3>
+<a class="indexterm" name="id2830126"></a><pre class="programlisting">void        g_pattern_spec_free             (<a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a> *pspec);</pre>
+<p>
+Освобождает память распределённую для <a href="glib-Glob-style-pattern-matching.html#GPatternSpec"><span class="type">GPatternSpec</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>pspec</code></em>&#160;:</span></td>
+<td><a href="glib-Glob-style-pattern-matching.html#GPatternSpec"><span class="type">GPatternSpec</span></a>.
+
+
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2830189"></a><h3>
+<a name="g-pattern-spec-equal"></a>g_pattern_spec_equal ()</h3>
+<a class="indexterm" name="id2830202"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_pattern_spec_equal            (<a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a> *pspec1,
+                                             <a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a> *pspec2);</pre>
+<p>
+Сравнивает две скомпилированных спецификации шаблона и возвращает соответствуют ли они одному набору строк.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>pspec1</code></em>&#160;:</span></td>
+<td><a href="glib-Glob-style-pattern-matching.html#GPatternSpec"><span class="type">GPatternSpec</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>pspec2</code></em>&#160;:</span></td>
+<td>другая <a href="glib-Glob-style-pattern-matching.html#GPatternSpec"><span class="type">GPatternSpec</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>Эквивалентны ли скомпилированные шаблоны.
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2830299"></a><h3>
+<a name="g-pattern-match"></a>g_pattern_match ()</h3>
+<a class="indexterm" name="id2830311"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_pattern_match                 (<a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a> *pspec,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> string_length,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string_reversed);</pre>
+<p>
+Сопоставляет строку с скомпилированным шаблоном. Помещение правильной длины данной строки обязательно. 
+Переворачивание строки может быть пропущено помещением <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>,
+это более эффективно если перевёрнутая версия строки для соответствия не под рукой, та как 
+<a href="glib-Glob-style-pattern-matching.html#g-pattern-match"><code class="function">g_pattern_match()</code></a> 
+создаст её только если скомпилированный шаблон запросит обратное соответсвие.
+</p>
+<p>
+Помните что, если код пользователя будет (возможно) соответствовать строке 
+с множеством шаблонов содержащих символы подстановки, очень высока вероятность 
+что некоторые шаблоны затребуют перевернутую строку. В этом случае, более эффективно 
+обеспечить перевёрнутую строку для исключения множественного создания этого в разных вызовах 
+<a href="glib-Glob-style-pattern-matching.html#g-pattern-match"><code class="function">g_pattern_match()</code></a>.
+</p>
+<p>
+Помните так же что перевёрнутая строка в кодировке UTF-8 не может быть получена из 
+<a href="glib-String-Utility-Functions.html#g-strreverse"><code class="function">g_strreverse()</code></a>.
+Она работает только для строк не содержащих многобайтные символы.
+Glib предлагает функцию <code class="function">g_utf_strreverse()</code> для переворачивания строк в кодировке UTF-8.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>pspec</code></em>&#160;:</span></td>
+<td><a href="glib-Glob-style-pattern-matching.html#GPatternSpec"><span class="type">GPatternSpec</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>string_length</code></em>&#160;:</span></td>
+<td>длина <em class="parameter"><code>string</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td>строка в кодировке UTF-8 для сопоставления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>string_reversed</code></em>&#160;:</span></td>
+<td>перевёрнутая строка <em class="parameter"><code>string</code></em> или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>string</code></em> соответствует <em class="parameter"><code>pspec</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2830562"></a><h3>
+<a name="g-pattern-match-string"></a>g_pattern_match_string ()</h3>
+<a class="indexterm" name="id2830574"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_pattern_match_string          (<a href="glib-Glob-style-pattern-matching.html#GPatternSpec">GPatternSpec</a> *pspec,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string);</pre>
+<p>
+Сопоставляет строку с скомпилированным шаблоном. Если строка может соответствовать больше чем одному шаблону, рассмотрите использование
+<a href="glib-Glob-style-pattern-matching.html#g-pattern-match"><code class="function">g_pattern_match()</code></a> вместо этой функции
+подставляя полностью перевёрнутую строку.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>pspec</code></em>&#160;:</span></td>
+<td><a href="glib-Glob-style-pattern-matching.html#GPatternSpec"><span class="type">GPatternSpec</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td>строка в кодировке UTF-8 для сопоставления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>string</code></em> 
+соответствует <em class="parameter"><code>pspec</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2830696"></a><h3>
+<a name="g-pattern-match-simple"></a>g_pattern_match_simple ()</h3>
+<a class="indexterm" name="id2830709"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_pattern_match_simple          (const <a href="glib-Basic-Types.html#gchar">gchar</a> *pattern,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *string);</pre>
+<p>
+Сопоставляет строку с шаблоном полученным как строка.
+Если эта функция вызывается в цикле, более эффективно скомпилировать шаблон один раз с помощью
+<a href="glib-Glob-style-pattern-matching.html#g-pattern-spec-new"><code class="function">g_pattern_spec_new()</code></a> и вызвать <a href="glib-Glob-style-pattern-matching.html#g-pattern-match-string"><code class="function">g_pattern_match_string()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>pattern</code></em>&#160;:</span></td>
+<td>шаблон в кодировке UTF-8.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td>строка в кодировке UTF-8 для сопоставления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>string</code></em> 
+соответствует <em class="parameter"><code>pspec</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</body>
+</html>

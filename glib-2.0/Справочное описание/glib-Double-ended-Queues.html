@@ -1,0 +1,1366 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Double-ended Queues</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-data-types.html" title="GLib Data Types">
+<link rel="prev" href="glib-Singly-Linked-Lists.html" title="Singly-Linked Lists">
+<link rel="next" href="glib-Trash-Stacks.html" title="Trash Stacks">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Singly-Linked-Lists.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-data-types.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Trash-Stacks.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2909681" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2910776" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Double-ended-Queues"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2909681"></a><span class="refentrytitle">Double-ended Queues</span>
+</h2>
+<p>Double-ended Queues &#8212; Двусторонняя очередь структур данных.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-Double-ended-Queues.html#GQueue">GQueue</a>;
+<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a>*     <a href="glib-Double-ended-Queues.html#g-queue-new">g_queue_new</a>                     (void);
+void        <a href="glib-Double-ended-Queues.html#g-queue-free">g_queue_free</a>                    (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Double-ended-Queues.html#g-queue-is-empty">g_queue_is_empty</a>                (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Double-ended-Queues.html#g-queue-get-length">g_queue_get_length</a>              (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+void        <a href="glib-Double-ended-Queues.html#g-queue-reverse">g_queue_reverse</a>                 (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a>*     <a href="glib-Double-ended-Queues.html#g-queue-copy">g_queue_copy</a>                    (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+void        <a href="glib-Double-ended-Queues.html#g-queue-foreach">g_queue_foreach</a>                 (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GFunc">GFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+<a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      <a href="glib-Double-ended-Queues.html#g-queue-find">g_queue_find</a>                    (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);
+<a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      <a href="glib-Double-ended-Queues.html#g-queue-find-custom">g_queue_find_custom</a>             (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareFunc">GCompareFunc</a> func);
+void        <a href="glib-Double-ended-Queues.html#g-queue-sort">g_queue_sort</a>                    (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc">GCompareDataFunc</a> compare_func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+void        <a href="glib-Double-ended-Queues.html#g-queue-push-head">g_queue_push_head</a>               (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+void        <a href="glib-Double-ended-Queues.html#g-queue-push-tail">g_queue_push_tail</a>               (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+void        <a href="glib-Double-ended-Queues.html#g-queue-push-nth">g_queue_push_nth</a>                (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> n);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Double-ended-Queues.html#g-queue-pop-head">g_queue_pop_head</a>                (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Double-ended-Queues.html#g-queue-pop-tail">g_queue_pop_tail</a>                (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Double-ended-Queues.html#g-queue-pop-nth">g_queue_pop_nth</a>                 (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Double-ended-Queues.html#g-queue-peek-head">g_queue_peek_head</a>               (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Double-ended-Queues.html#g-queue-peek-tail">g_queue_peek_tail</a>               (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Double-ended-Queues.html#g-queue-peek-nth">g_queue_peek_nth</a>                (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Double-ended-Queues.html#g-queue-index">g_queue_index</a>                   (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);
+void        <a href="glib-Double-ended-Queues.html#g-queue-remove">g_queue_remove</a>                  (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);
+void        <a href="glib-Double-ended-Queues.html#g-queue-remove-all">g_queue_remove_all</a>              (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);
+void        <a href="glib-Double-ended-Queues.html#g-queue-insert-before">g_queue_insert_before</a>           (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *sibling,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+void        <a href="glib-Double-ended-Queues.html#g-queue-insert-after">g_queue_insert_after</a>            (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *sibling,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);
+void        <a href="glib-Double-ended-Queues.html#g-queue-insert-sorted">g_queue_insert_sorted</a>           (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc">GCompareDataFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+void        <a href="glib-Double-ended-Queues.html#g-queue-push-head-link">g_queue_push_head_link</a>          (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *link_);
+void        <a href="glib-Double-ended-Queues.html#g-queue-push-tail-link">g_queue_push_tail_link</a>          (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *link_);
+void        <a href="glib-Double-ended-Queues.html#g-queue-push-nth-link">g_queue_push_nth_link</a>           (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> n,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *link_);
+<a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      <a href="glib-Double-ended-Queues.html#g-queue-pop-head-link">g_queue_pop_head_link</a>           (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+<a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      <a href="glib-Double-ended-Queues.html#g-queue-pop-tail-link">g_queue_pop_tail_link</a>           (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+<a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      <a href="glib-Double-ended-Queues.html#g-queue-pop-nth-link">g_queue_pop_nth_link</a>            (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);
+<a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      <a href="glib-Double-ended-Queues.html#g-queue-peek-head-link">g_queue_peek_head_link</a>          (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+<a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      <a href="glib-Double-ended-Queues.html#g-queue-peek-tail-link">g_queue_peek_tail_link</a>          (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);
+<a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      <a href="glib-Double-ended-Queues.html#g-queue-peek-nth-link">g_queue_peek_nth_link</a>           (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Double-ended-Queues.html#g-queue-link-index">g_queue_link_index</a>              (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *link_);
+void        <a href="glib-Double-ended-Queues.html#g-queue-unlink">g_queue_unlink</a>                  (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *link_);
+void        <a href="glib-Double-ended-Queues.html#g-queue-delete-link">g_queue_delete_link</a>             (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *link_);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2910776"></a><h2>Описание</h2>
+<p>
+Структура <a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a> и связанные с ней функции обеспечивают 
+стандартную очередь структур данных. Внутренне, <a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a> 
+использует для хранения элементов те же структуры что и <a href="glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a>.  
+</p>
+<p>
+Данные содержащиеся в каждом элементе могут быть либо целочисленными значениями, используя
+<a href="glib-Type-Conversion-Macros.html" title="Type Conversion Macros">Type Conversion Macros</a>,
+или просто указатели на любой тип данных.
+</p>
+<p>
+Для создания новой <a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>, 
+используйте <a href="glib-Double-ended-Queues.html#g-queue-new"><code class="function">g_queue_new()</code></a>.
+</p>
+<p>
+Для добавления элементов, используйте <a href="glib-Double-ended-Queues.html#g-queue-push-head"><code class="function">g_queue_push_head()</code></a>, <a href="glib-Double-ended-Queues.html#g-queue-push-head-link"><code class="function">g_queue_push_head_link()</code></a>, 
+<a href="glib-Double-ended-Queues.html#g-queue-push-tail"><code class="function">g_queue_push_tail()</code></a> and <a href="glib-Double-ended-Queues.html#g-queue-push-tail-link"><code class="function">g_queue_push_tail_link()</code></a>.
+</p>
+<p>
+Для удаления элементов, используйте <a href="glib-Double-ended-Queues.html#g-queue-pop-head"><code class="function">g_queue_pop_head()</code></a> и <a href="glib-Double-ended-Queues.html#g-queue-pop-tail"><code class="function">g_queue_pop_tail()</code></a>.
+</p>
+<p>
+Для освобождения элементов очереди, используйте <a href="glib-Double-ended-Queues.html#g-queue-free"><code class="function">g_queue_free()</code></a>.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2910937"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2910947"></a><h3>
+<a name="GQueue"></a>GQueue</h3>
+<a class="indexterm" name="id2910959"></a><pre class="programlisting">typedef struct {
+  GList *head;
+  GList *tail;
+  guint  length;
+} GQueue;
+</pre>
+<p>
+Содержит общедоступные поля Queue.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a href="glib-Doubly-Linked-Lists.html#GList">GList</a>&#160;*<em class="structfield"><code>head</code></em>;</span></td>
+<td>указатель на первый элемент в очереди.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Doubly-Linked-Lists.html#GList">GList</a>&#160;*<em class="structfield"><code>tail</code></em>;</span></td>
+<td>указатель на последний элемент в очереди.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#guint">guint</a>&#160;<em class="structfield"><code>length</code></em>;</span></td>
+<td>количество элементов в очереди.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2911051"></a><h3>
+<a name="g-queue-new"></a>g_queue_new ()</h3>
+<a class="indexterm" name="id2911063"></a><pre class="programlisting"><a href="glib-Double-ended-Queues.html#GQueue">GQueue</a>*     g_queue_new                     (void);</pre>
+<p>
+Создаёт новую <a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> новая <a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2911118"></a><h3>
+<a name="g-queue-free"></a>g_queue_free ()</h3>
+<a class="indexterm" name="id2911130"></a><pre class="programlisting">void        g_queue_free                    (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Освобождает память распределённую для <a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2911196"></a><h3>
+<a name="g-queue-is-empty"></a>g_queue_is_empty ()</h3>
+<a class="indexterm" name="id2911209"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_queue_is_empty                (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> очередь пустая.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если очередь пустая.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2911297"></a><h3>
+<a name="g-queue-get-length"></a>g_queue_get_length ()</h3>
+<a class="indexterm" name="id2911313"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_queue_get_length              (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Возвращает количество элементов в <em class="parameter"><code>queue</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Количество элементов в <em class="parameter"><code>queue</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2911396"></a><h3>
+<a name="g-queue-reverse"></a>g_queue_reverse ()</h3>
+<a class="indexterm" name="id2911411"></a><pre class="programlisting">void        g_queue_reverse                 (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Переворачивает направление элементов в <em class="parameter"><code>queue</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr></tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2911479"></a><h3>
+<a name="g-queue-copy"></a>g_queue_copy ()</h3>
+<a class="indexterm" name="id2911494"></a><pre class="programlisting"><a href="glib-Double-ended-Queues.html#GQueue">GQueue</a>*     g_queue_copy                    (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Копирует <em class="parameter"><code>queue</code></em>. Помните что это поверхностная копия. Если очередь содержит указатели на данные, 
+то указатели копируются, а фактические данные нет.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> копия <em class="parameter"><code>queue</code></em>
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2911580"></a><h3>
+<a name="g-queue-foreach"></a>g_queue_foreach ()</h3>
+<a class="indexterm" name="id2911595"></a><pre class="programlisting">void        g_queue_foreach                 (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GFunc">GFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Вызывает функцию <em class="parameter"><code>func</code></em> для каждого элемента в очереди помещая 
+<em class="parameter"><code>user_data</code></em> в функцию.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td> функция вызываемая для каждого элемента данных
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td> пользовательские данные помещаемые в <em class="parameter"><code>func</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2911719"></a><h3>
+<a name="g-queue-find"></a>g_queue_find ()</h3>
+<a class="indexterm" name="id2911733"></a><pre class="programlisting"><a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      g_queue_find                    (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);</pre>
+<p>
+Находит первую связь в <em class="parameter"><code>queue</code></em> которая содержит <em class="parameter"><code>data</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> данные для поиска
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Первая связь в <em class="parameter"><code>queue</code></em> которая содержит <em class="parameter"><code>data</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2911851"></a><h3>
+<a name="g-queue-find-custom"></a>g_queue_find_custom ()</h3>
+<a class="indexterm" name="id2911867"></a><pre class="programlisting"><a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      g_queue_find_custom             (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareFunc">GCompareFunc</a> func);</pre>
+<p>
+Находит элемент в <a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>, используя полученную функцию
+для поиска желаемого элемента. Она передвигается через очередь, вызывая полученную функцию которая должна вернуть 0 
+когда желаемый элемент найден. Функция принимает два аргумента gconstpointer, элементы данных <a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a> как первый аргумент и полученные пользовательские данные как второй аргумент.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> пользовательские данные помещаемые в <em class="parameter"><code>func</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td><a href="glib-Doubly-Linked-Lists.html#GCompareFunc"><span class="type">GCompareFunc</span></a> вызываемая для каждого элемента. 
+    Она должна вернуть 0 когда желаемый элемент найден.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Найденный элемент, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если не найден.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2912030"></a><h3>
+<a name="g-queue-sort"></a>g_queue_sort ()</h3>
+<a class="indexterm" name="id2912045"></a><pre class="programlisting">void        g_queue_sort                    (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc">GCompareDataFunc</a> compare_func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Сортирует <em class="parameter"><code>queue</code></em> используя <em class="parameter"><code>compare_func</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>compare_func</code></em>&#160;:</span></td>
+<td> <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc"><span class="type">GCompareDataFunc</span></a> используемая для сортировки 
+     <em class="parameter"><code>queue</code></em>. В эту функцию помещаются два элемента очереди и она должна вернуть 0 если они равны, 
+     отрицательное значение если первый располагается перед вторым, а положительное если второй располагается перед первым.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td> пользовательские данные помещаемые в <em class="parameter"><code>compare_func</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2912186"></a><h3>
+<a name="g-queue-push-head"></a>g_queue_push_head ()</h3>
+<a class="indexterm" name="id2912200"></a><pre class="programlisting">void        g_queue_push_head               (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Добавляет новый элемент первым в очередь.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> данные для нового элемента.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2912279"></a><h3>
+<a name="g-queue-push-tail"></a>g_queue_push_tail ()</h3>
+<a class="indexterm" name="id2912292"></a><pre class="programlisting">void        g_queue_push_tail               (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Добавляет новый элемент в конец очереди.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> данные для нового элемента.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2912371"></a><h3>
+<a name="g-queue-push-nth"></a>g_queue_push_nth ()</h3>
+<a class="indexterm" name="id2912387"></a><pre class="programlisting">void        g_queue_push_nth                (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> n);</pre>
+<p>
+Вставляет новый элемент в <em class="parameter"><code>queue</code></em> в указанную позицию.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> данные для нового элемента
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n</code></em>&#160;:</span></td>
+<td> позиция расположения нового элемента. Если <em class="parameter"><code>n</code></em> отрицательное или
+     больше чем число элементов в <em class="parameter"><code>queue</code></em>, элемент добавляемый в конец очереди.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2912512"></a><h3>
+<a name="g-queue-pop-head"></a>g_queue_pop_head ()</h3>
+<a class="indexterm" name="id2912525"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_queue_pop_head                (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Удаляет первый элемент в очереди.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> данные первого элемента в очереди, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     если очередь пустая.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2912604"></a><h3>
+<a name="g-queue-pop-tail"></a>g_queue_pop_tail ()</h3>
+<a class="indexterm" name="id2912616"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_queue_pop_tail                (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Удаляет последний элемент из очереди.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> данные последнего элемента в очереди, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+     если очередь пустая.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2912696"></a><h3>
+<a name="g-queue-pop-nth"></a>g_queue_pop_nth ()</h3>
+<a class="indexterm" name="id2912710"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_queue_pop_nth                 (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);</pre>
+<p>
+Удаляет <em class="parameter"><code>n</code></em> элемент в <em class="parameter"><code>queue</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n</code></em>&#160;:</span></td>
+<td> позиция элемента.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> данные элемента, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     если <em class="parameter"><code>n</code></em> выходит за пределы <em class="parameter"><code>queue</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2912838"></a><h3>
+<a name="g-queue-peek-head"></a>g_queue_peek_head ()</h3>
+<a class="indexterm" name="id2912851"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_queue_peek_head               (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Возвращает первый элемент в queue.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> данные первого элемента в очереди, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     если очередь пустая.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2912929"></a><h3>
+<a name="g-queue-peek-tail"></a>g_queue_peek_tail ()</h3>
+<a class="indexterm" name="id2912942"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_queue_peek_tail               (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Возвращает последний элемент в очереди.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> данные последнего элемента в очереди, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     если очередь пустая.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2913021"></a><h3>
+<a name="g-queue-peek-nth"></a>g_queue_peek_nth ()</h3>
+<a class="indexterm" name="id2913036"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_queue_peek_nth                (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);</pre>
+<p>
+Возвращает <em class="parameter"><code>n</code></em> элемент в <em class="parameter"><code>queue</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n</code></em>&#160;:</span></td>
+<td> позиция элемента.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Данные для <em class="parameter"><code>n</code></em> элемента в <em class="parameter"><code>queue</code></em>, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если <em class="parameter"><code>n</code></em> 
+     выходит за пределы <em class="parameter"><code>queue</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2913176"></a><h3>
+<a name="g-queue-index"></a>g_queue_index ()</h3>
+<a class="indexterm" name="id2913190"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_queue_index                   (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);</pre>
+<p>
+Возвращает позицию первого элемента в <em class="parameter"><code>queue</code></em> который содержит <em class="parameter"><code>data</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> данные для поиска.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Позиция первого элемента в <em class="parameter"><code>queue</code></em> который содержит <em class="parameter"><code>data</code></em>, 
+     или -1 если нет элемента в <em class="parameter"><code>queue</code></em> содержащего <em class="parameter"><code>data</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2913321"></a><h3>
+<a name="g-queue-remove"></a>g_queue_remove ()</h3>
+<a class="indexterm" name="id2913336"></a><pre class="programlisting">void        g_queue_remove                  (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);</pre>
+<p>
+Удаляет первый элемент в <em class="parameter"><code>queue</code></em> который содержит <em class="parameter"><code>data</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> удаляемые данные.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2913432"></a><h3>
+<a name="g-queue-remove-all"></a>g_queue_remove_all ()</h3>
+<a class="indexterm" name="id2913447"></a><pre class="programlisting">void        g_queue_remove_all              (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> data);</pre>
+<p>
+Удаляет все элементы в <em class="parameter"><code>queue</code></em> которые содержат <em class="parameter"><code>data</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> данные для удаления
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2913543"></a><h3>
+<a name="g-queue-insert-before"></a>g_queue_insert_before ()</h3>
+<a class="indexterm" name="id2913558"></a><pre class="programlisting">void        g_queue_insert_before           (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *sibling,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Вставляет <em class="parameter"><code>data</code></em> в <em class="parameter"><code>queue</code></em> перед 
+<em class="parameter"><code>sibling</code></em>.
+</p>
+<p>
+<em class="parameter"><code>sibling</code></em> должен быть частью <em class="parameter"><code>queue</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>sibling</code></em>&#160;:</span></td>
+<td><a href="glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a> узел, который 
+    <span class="emphasis"><em>должен</em></span> быть частью <em class="parameter"><code>queue</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> данные для вставки
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2913713"></a><h3>
+<a name="g-queue-insert-after"></a>g_queue_insert_after ()</h3>
+<a class="indexterm" name="id2913729"></a><pre class="programlisting">void        g_queue_insert_after            (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *sibling,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data);</pre>
+<p>
+Вставляет <em class="parameter"><code>data</code></em> в <em class="parameter"><code>queue</code></em> после 
+<em class="parameter"><code>sibling</code></em>
+</p>
+<p>
+<em class="parameter"><code>sibling</code></em> должен быть частью <em class="parameter"><code>queue</code></em></p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>sibling</code></em>&#160;:</span></td>
+<td><a href="glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a> узел, который 
+    <span class="emphasis"><em>должен</em></span> быть частью <em class="parameter"><code>queue</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> вставляемые данные
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2913883"></a><h3>
+<a name="g-queue-insert-sorted"></a>g_queue_insert_sorted ()</h3>
+<a class="indexterm" name="id2913898"></a><pre class="programlisting">void        g_queue_insert_sorted           (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> data,
+                                             <a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc">GCompareDataFunc</a> func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Вставляет <em class="parameter"><code>data</code></em> в <em class="parameter"><code>queue</code></em> используя 
+<em class="parameter"><code>func</code></em> для определения новой позиции.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>data</code></em>&#160;:</span></td>
+<td> вставляемые данные
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>func</code></em>&#160;:</span></td>
+<td><a href="glib-Doubly-Linked-Lists.html#GCompareDataFunc"><span class="type">GCompareDataFunc</span></a> используется для сравнения
+    элементов в очереди. Она вызывается с двумя элементами, <em class="parameter"><code>queue</code></em> и 
+    <em class="parameter"><code>user_data</code></em>. Должна вернуть 0 если элементы равны, отрицательное значение если первый
+    элемент располагается перед вторым, а положительное значение если второй элемент располагается перед первым.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td> пользовательские данные помещаемые в <em class="parameter"><code>func</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2914074"></a><h3>
+<a name="g-queue-push-head-link"></a>g_queue_push_head_link ()</h3>
+<a class="indexterm" name="id2914087"></a><pre class="programlisting">void        g_queue_push_head_link          (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *link_);</pre>
+<p>
+Добавляет новый элемент первым в очередь.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>link_</code></em>&#160;:</span></td>
+<td> одиночный элемент <a href="glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a>, 
+    <span class="emphasis"><em>не</em></span> список с множеством элементов.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2914178"></a><h3>
+<a name="g-queue-push-tail-link"></a>g_queue_push_tail_link ()</h3>
+<a class="indexterm" name="id2914192"></a><pre class="programlisting">void        g_queue_push_tail_link          (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *link_);</pre>
+<p>
+Добавляет новый элемент в конец очереди.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>link_</code></em>&#160;:</span></td>
+<td> одиночный элемент <a href="glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a>, 
+     <span class="emphasis"><em>не</em></span> список с множеством элементов.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2914283"></a><h3>
+<a name="g-queue-push-nth-link"></a>g_queue_push_nth_link ()</h3>
+<a class="indexterm" name="id2914298"></a><pre class="programlisting">void        g_queue_push_nth_link           (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> n,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *link_);</pre>
+<p>
+Вставляет <em class="parameter"><code>link</code></em> в полученную позицию <em class="parameter"><code>queue</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n</code></em>&#160;:</span></td>
+<td> позиция для вставки узла. Если отрицательное или больше чем количество элементов в 
+    <em class="parameter"><code>queue</code></em>, узел добавляется в конец 
+    <em class="parameter"><code>queue</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>link_</code></em>&#160;:</span></td>
+<td> узел добавляемый в <em class="parameter"><code>queue</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2914434"></a><h3>
+<a name="g-queue-pop-head-link"></a>g_queue_pop_head_link ()</h3>
+<a class="indexterm" name="id2914447"></a><pre class="programlisting"><a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      g_queue_pop_head_link           (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Удаляет первый элемент в очереди.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>Первый <a href="glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a> элемент в очереди, 
+    или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если очередь пустая.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2914535"></a><h3>
+<a name="g-queue-pop-tail-link"></a>g_queue_pop_tail_link ()</h3>
+<a class="indexterm" name="id2914547"></a><pre class="programlisting"><a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      g_queue_pop_tail_link           (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Удаляет последний элемент в очереди.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>Элемент <a href="glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a> в конце очереди, 
+    или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если очередь пустая.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2914635"></a><h3>
+<a name="g-queue-pop-nth-link"></a>g_queue_pop_nth_link ()</h3>
+<a class="indexterm" name="id2914650"></a><pre class="programlisting"><a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      g_queue_pop_nth_link            (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);</pre>
+<p>
+Удаляет и возвращает узел в полученной позиции.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n</code></em>&#160;:</span></td>
+<td> позиция узла
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <em class="parameter"><code>n</code></em>-ный узел, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если <em class="parameter"><code>n</code></em> выходит за пределы <em class="parameter"><code>queue</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2914772"></a><h3>
+<a name="g-queue-peek-head-link"></a>g_queue_peek_head_link ()</h3>
+<a class="indexterm" name="id2914787"></a><pre class="programlisting"><a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      g_queue_peek_head_link          (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Возвращает первый узел в <em class="parameter"><code>queue</code></em></p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> первый узел в <em class="parameter"><code>queue</code></em>, или 
+     <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     если <em class="parameter"><code>queue</code></em> пустая
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2914887"></a><h3>
+<a name="g-queue-peek-tail-link"></a>g_queue_peek_tail_link ()</h3>
+<a class="indexterm" name="id2914902"></a><pre class="programlisting"><a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      g_queue_peek_tail_link          (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue);</pre>
+<p>
+Возвращает последний узел <em class="parameter"><code>queue</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> последний узел в <em class="parameter"><code>queue</code></em>, или 
+     <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     если <em class="parameter"><code>queue</code></em> пустая
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2915003"></a><h3>
+<a name="g-queue-peek-nth-link"></a>g_queue_peek_nth_link ()</h3>
+<a class="indexterm" name="id2915018"></a><pre class="programlisting"><a href="glib-Doubly-Linked-Lists.html#GList">GList</a>*      g_queue_peek_nth_link           (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> n);</pre>
+<p>
+Возвращает узел из полученной позиции</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n</code></em>&#160;:</span></td>
+<td> позиция узла
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> узел из <em class="parameter"><code>n</code></em>-ной позиции, или 
+     <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     если <em class="parameter"><code>n</code></em> выходит за пределы очереди
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2915135"></a><h3>
+<a name="g-queue-link-index"></a>g_queue_link_index ()</h3>
+<a class="indexterm" name="id2915150"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_queue_link_index              (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *link_);</pre>
+<p>
+Возвращает позицию <em class="parameter"><code>link_</code></em> в <em class="parameter"><code>queue</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><span class="type">Gqueue</span>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>link_</code></em>&#160;:</span></td>
+<td> элемент <a href="glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> позиция <em class="parameter"><code>link_</code></em>, или -1 если узел не часть <em class="parameter"><code>queue</code></em>
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2915276"></a><h3>
+<a name="g-queue-unlink"></a>g_queue_unlink ()</h3>
+<a class="indexterm" name="id2915291"></a><pre class="programlisting">void        g_queue_unlink                  (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *link_);</pre>
+<p>
+Сбрасывает <em class="parameter"><code>link_</code></em> так чтобы он не был больше частью <em class="parameter"><code>queue</code></em>. 
+Узел не освобождается.
+</p>
+<p>
+<em class="parameter"><code>link_</code></em> должен быть частью <em class="parameter"><code>queue</code></em>,</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>link_</code></em>&#160;:</span></td>
+<td><a href="glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a> элемент который 
+    <span class="emphasis"><em>должен</em></span> быть частью <em class="parameter"><code>queue</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2915420"></a><h3>
+<a name="g-queue-delete-link"></a>g_queue_delete_link ()</h3>
+<a class="indexterm" name="id2915435"></a><pre class="programlisting">void        g_queue_delete_link             (<a href="glib-Double-ended-Queues.html#GQueue">GQueue</a> *queue,
+                                             <a href="glib-Doubly-Linked-Lists.html#GList">GList</a> *link_);</pre>
+<p>
+Удаляет <em class="parameter"><code>link_</code></em> из <em class="parameter"><code>queue</code></em> и освобождает его.
+</p>
+<p>
+<em class="parameter"><code>link_</code></em> должен быть частью <em class="parameter"><code>queue</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>queue</code></em>&#160;:</span></td>
+<td><a href="glib-Double-ended-Queues.html#GQueue"><span class="type">GQueue</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>link_</code></em>&#160;:</span></td>
+<td><a href="glib-Doubly-Linked-Lists.html#GList"><span class="type">GList</span></a> элемент который 
+    <span class="emphasis"><em>должен</em></span> быть частью <em class="parameter"><code>queue</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

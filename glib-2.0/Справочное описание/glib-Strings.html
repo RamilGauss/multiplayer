@@ -1,0 +1,1069 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Strings</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-data-types.html" title="GLib Data Types">
+<link rel="prev" href="glib-Hash-Tables.html" title="Hash Tables">
+<link rel="next" href="glib-String-Chunks.html" title="String Chunks">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Hash-Tables.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-data-types.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-String-Chunks.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2933229" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2934081" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Strings"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2933229"></a><span class="refentrytitle">Strings</span>
+</h2>
+<p>Strings &#8212; Текстовые буферы которые автоматически увеличиваются при добавлении текста.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-Strings.html#GString">GString</a>;
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-new">g_string_new</a>                    (const <a href="glib-Basic-Types.html#gchar">gchar</a> *init);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-new-len">g_string_new_len</a>                (const <a href="glib-Basic-Types.html#gchar">gchar</a> *init,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-sized-new">g_string_sized_new</a>              (<a href="glib-Basic-Types.html#gsize">gsize</a> dfl_size);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-assign">g_string_assign</a>                 (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *rval);
+#define     <a href="glib-Strings.html#g-string-sprintf">g_string_sprintf</a>
+#define     <a href="glib-Strings.html#g-string-sprintfa">g_string_sprintfa</a>
+void        <a href="glib-Strings.html#g-string-printf">g_string_printf</a>                 (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);
+void        <a href="glib-Strings.html#g-string-append-printf">g_string_append_printf</a>          (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-append">g_string_append</a>                 (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *val);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-append-c">g_string_append_c</a>               (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> c);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-append-unichar">g_string_append_unichar</a>         (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> wc);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-append-len">g_string_append_len</a>             (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *val,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-prepend">g_string_prepend</a>                (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *val);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-prepend-c">g_string_prepend_c</a>              (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> c);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-prepend-unichar">g_string_prepend_unichar</a>        (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> wc);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-prepend-len">g_string_prepend_len</a>            (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *val,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-insert">g_string_insert</a>                 (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> pos,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *val);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-insert-c">g_string_insert_c</a>               (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> pos,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> c);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-insert-unichar">g_string_insert_unichar</a>         (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> pos,
+                                             <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> wc);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-insert-len">g_string_insert_len</a>             (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> pos,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *val,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-erase">g_string_erase</a>                  (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> pos,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-truncate">g_string_truncate</a>               (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> len);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-set-size">g_string_set_size</a>               (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> len);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Strings.html#g-string-free">g_string_free</a>                   (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> free_segment);
+
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-up">g_string_up</a>                     (<a href="glib-Strings.html#GString">GString</a> *string);
+<a href="glib-Strings.html#GString">GString</a>*    <a href="glib-Strings.html#g-string-down">g_string_down</a>                   (<a href="glib-Strings.html#GString">GString</a> *string);
+
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Strings.html#g-string-hash">g_string_hash</a>                   (const <a href="glib-Strings.html#GString">GString</a> *str);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Strings.html#g-string-equal">g_string_equal</a>                  (const <a href="glib-Strings.html#GString">GString</a> *v,
+                                             const <a href="glib-Strings.html#GString">GString</a> *v2);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2934081"></a><h2>Описание</h2>
+<p>
+<a href="glib-Strings.html#GString"><span class="type">GString</span></a> подобна стандартной C string, 
+за исключением того что она автоматически увеличивается при добавлении или вставке текста. Также, она хранит длину строки, 
+поэтому может использоваться для двоичных данных с включением нулевых байт.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2934106"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2934117"></a><h3>
+<a name="GString"></a>GString</h3>
+<a class="indexterm" name="id2934129"></a><pre class="programlisting">typedef struct {
+  gchar  *str;
+  gsize len;    
+  gsize allocated_len;
+} GString;
+</pre>
+<p>
+Структура <a href="glib-Strings.html#GString"><span class="type">GString</span></a> содержит общедоступные поля 
+<a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+Поле <em class="structfield"><code>str</code></em> указывает на символьные данные.
+Он может меняться при добавлении текста.
+Поле <em class="structfield"><code>len</code></em> содержит длину строки,
+не включая завершающий нулевой байт.
+</p>
+<p>
+Поле <em class="structfield"><code>str</code></em> nul-завершённое и поэтому может быть использовано как обычная C string. 
+Но она может перемещаться когда в строку добавляется или вставляется текст.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2934180"></a><h3>
+<a name="g-string-new"></a>g_string_new ()</h3>
+<a class="indexterm" name="id2934193"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_new                    (const <a href="glib-Basic-Types.html#gchar">gchar</a> *init);</pre>
+<p>
+Создаёт новую <a href="glib-Strings.html#GString"><span class="type">GString</span></a>, инициализируя полученной строкой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>init</code></em>&#160;:</span></td>
+<td>инициализируемый текст для копирования в строку.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новая <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2934267"></a><h3>
+<a name="g-string-new-len"></a>g_string_new_len ()</h3>
+<a class="indexterm" name="id2934279"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_new_len                (const <a href="glib-Basic-Types.html#gchar">gchar</a> *init,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);</pre>
+<p>
+Создаёт новую <a href="glib-Strings.html#GString"><span class="type">GString</span></a> с длиной <em class="parameter"><code>len</code></em> 
+байт буфера <em class="parameter"><code>init</code></em>.  Поскольку длина обеспечена, <em class="parameter"><code>init</code></em> 
+не должен быть nul-завершённым и может содержать встроенные nul байты.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>init</code></em>&#160;:</span></td>
+<td>начальное содержимое строки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>длина <em class="parameter"><code>init</code></em> для использования.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новая <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2934399"></a><h3>
+<a name="g-string-sized-new"></a>g_string_sized_new ()</h3>
+<a class="indexterm" name="id2934412"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_sized_new              (<a href="glib-Basic-Types.html#gsize">gsize</a> dfl_size);</pre>
+<p>
+Создаёт новую <a href="glib-Strings.html#GString"><span class="type">GString</span></a>, с достаточным пространством для 
+<em class="parameter"><code>dfl_size</code></em> байт.
+Это полезно если вы добавляете много текста в строку и не хотите перераспределять её слишком часто.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>dfl_size</code></em>&#160;:</span></td>
+<td>размер свободного пространства которое содержит распределённая строка.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новая <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2934494"></a><h3>
+<a name="g-string-assign"></a>g_string_assign ()</h3>
+<a class="indexterm" name="id2934507"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_assign                 (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *rval);</pre>
+<p>
+Копирует байты из строки в <a href="glib-Strings.html#GString"><span class="type">GString</span></a>,
+уничтожает любое предыдущее содержимое. Она скорее похожа на стандартную функцию <code class="function">strcpy()</code>, 
+за исключением того, что вам не нужно беспокоится о наличии достаточного пространства для копируемой строки.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td>целевая <a href="glib-Strings.html#GString"><span class="type">GString</span></a>. Её содержимое будет уничтожено.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>rval</code></em>&#160;:</span></td>
+<td>строка копируемая в <em class="parameter"><code>string</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>целевая <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2934629"></a><h3>
+<a name="g-string-sprintf"></a>g_string_sprintf</h3>
+<a class="indexterm" name="id2934645"></a><pre class="programlisting">#define     g_string_sprintf</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_string_sprintf</code> устарела и не должна использоваться во вновь создаваемом коде. 
+Эта функция переименована в <a href="glib-Strings.html#g-string-printf"><code class="function">g_string_printf()</code></a>.</p>
+</div>
+<p>
+Записывает форматированную строку в <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+Подобна стандартной функции <code class="function">sprintf()</code>,
+за исключением того, что буфер <a href="glib-Strings.html#GString"><span class="type">GString</span></a> автоматически расширяется для 
+вмещения результата.
+Предыдущее содержимое <a href="glib-Strings.html#GString"><span class="type">GString</span></a> уничтожается. 
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2934721"></a><h3>
+<a name="g-string-sprintfa"></a>g_string_sprintfa</h3>
+<a class="indexterm" name="id2934736"></a><pre class="programlisting">#define     g_string_sprintfa</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_string_sprintfa</code> устарела и не должна использоваться во вновь создаваемом коде. This function has been renamed to <a href="glib-Strings.html#g-string-append-printf"><code class="function">g_string_append_printf()</code></a>.</p>
+</div>
+<p>
+Добавляет форматированную строку в конец <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+Эта функция подобна <a href="glib-Strings.html#g-string-sprintf"><code class="function">g_string_sprintf()</code></a>, 
+за исключением того, что текст добавляется к <a href="glib-Strings.html#GString"><span class="type">GString</span></a>. 
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2934804"></a><h3>
+<a name="g-string-printf"></a>g_string_printf ()</h3>
+<a class="indexterm" name="id2934817"></a><pre class="programlisting">void        g_string_printf                 (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);</pre>
+<p>
+Записывает форматированную строку в <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+Это подобно стандартной функции <code class="function">sprintf()</code>,
+за исключением того, что буфер <a href="glib-Strings.html#GString"><span class="type">GString</span></a> автоматически
+расширяется для вмещения результата.
+Предыдущее содержимое <a href="glib-Strings.html#GString"><span class="type">GString</span></a> уничтожается.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>format</code></em>&#160;:</span></td>
+<td>строка формата. Смотрите документацию <code class="function">printf()</code>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>параметры вставляемые в форматируемую строку.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2934955"></a><h3>
+<a name="g-string-append-printf"></a>g_string_append_printf ()</h3>
+<a class="indexterm" name="id2934968"></a><pre class="programlisting">void        g_string_append_printf          (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);</pre>
+<p>
+Добавляет форматированную строку в конец <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+Эта функция подобна <a href="glib-Strings.html#g-string-printf"><code class="function">g_string_printf()</code></a>, 
+за исключением того, что текст добавляется к <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>format</code></em>&#160;:</span></td>
+<td>строка формата. Смотрите документацию <code class="function">printf()</code>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>параметры вставляемые в форматируемую строку.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2935097"></a><h3>
+<a name="g-string-append"></a>g_string_append ()</h3>
+<a class="indexterm" name="id2935110"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_append                 (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *val);</pre>
+<p>
+Добавляет строку в конец <a href="glib-Strings.html#GString"><span class="type">GString</span></a>, расширяя её если необходимо.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>val</code></em>&#160;:</span></td>
+<td>строка добавляемая в конец <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2935221"></a><h3>
+<a name="g-string-append-c"></a>g_string_append_c ()</h3>
+<a class="indexterm" name="id2935234"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_append_c               (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> c);</pre>
+<p>
+Добавляет бай в конец <a href="glib-Strings.html#GString"><span class="type">GString</span></a>, расширяя её если необходимо.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td>байт для добавления в конец <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2935345"></a><h3>
+<a name="g-string-append-unichar"></a>g_string_append_unichar ()</h3>
+<a class="indexterm" name="id2935358"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_append_unichar         (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> wc);</pre>
+<p>
+Конвертирует Unicode символ в UTF-8, и добавляет его в строку.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>wc</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <em class="parameter"><code>string</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2935454"></a><h3>
+<a name="g-string-append-len"></a>g_string_append_len ()</h3>
+<a class="indexterm" name="id2935467"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_append_len             (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *val,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);</pre>
+<p>
+Добавляет <em class="parameter"><code>len</code></em> байт <em class="parameter"><code>val</code></em> в <em class="parameter"><code>string</code></em>. Поскольку <em class="parameter"><code>len</code></em> обеспечена, 
+<em class="parameter"><code>val</code></em> может содержать встроенные nuls и не должна быть nul-завершённой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>val</code></em>&#160;:</span></td>
+<td>байты для добавления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>количество байт <em class="parameter"><code>val</code></em> для использования.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2935618"></a><h3>
+<a name="g-string-prepend"></a>g_string_prepend ()</h3>
+<a class="indexterm" name="id2935630"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_prepend                (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *val);</pre>
+<p>
+Добавляет строку в начало <a href="glib-Strings.html#GString"><span class="type">GString</span></a>, расширяя её если необходимо.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>val</code></em>&#160;:</span></td>
+<td>строка для добавления в начало <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2935741"></a><h3>
+<a name="g-string-prepend-c"></a>g_string_prepend_c ()</h3>
+<a class="indexterm" name="id2935754"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_prepend_c              (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> c);</pre>
+<p>
+Добавляет байт в начало <a href="glib-Strings.html#GString"><span class="type">GString</span></a>, расширяя её если необходимо.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td>байт добавляемый в начало <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2935864"></a><h3>
+<a name="g-string-prepend-unichar"></a>g_string_prepend_unichar ()</h3>
+<a class="indexterm" name="id2935877"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_prepend_unichar        (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> wc);</pre>
+<p>
+Конвертирует Unicode символ в UTF-8, и добавляет его в начало строки.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>wc</code></em>&#160;:</span></td>
+<td> Unicode символ.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <em class="parameter"><code>string</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2935973"></a><h3>
+<a name="g-string-prepend-len"></a>g_string_prepend_len ()</h3>
+<a class="indexterm" name="id2935986"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_prepend_len            (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *val,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);</pre>
+<p>
+Добавляет <em class="parameter"><code>len</code></em> байт <em class="parameter"><code>val</code></em> в <em class="parameter"><code>string</code></em>. Поскольку <em class="parameter"><code>len</code></em> обеспечена, 
+<em class="parameter"><code>val</code></em> может содержать встроенные nuls и не должна быть nul-завершённой.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>val</code></em>&#160;:</span></td>
+<td>байты для вставки в начало.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>количество байт в <em class="parameter"><code>val</code></em> для вставки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a> в которую помещён байт.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2936137"></a><h3>
+<a name="g-string-insert"></a>g_string_insert ()</h3>
+<a class="indexterm" name="id2936150"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_insert                 (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> pos,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *val);</pre>
+<p>
+Вставляет копию строки в <a href="glib-Strings.html#GString"><span class="type">GString</span></a>, расширяя её если необходимо.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>pos</code></em>&#160;:</span></td>
+<td>позиция вставляемой копии строки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>val</code></em>&#160;:</span></td>
+<td>вставляемая строка.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2936274"></a><h3>
+<a name="g-string-insert-c"></a>g_string_insert_c ()</h3>
+<a class="indexterm" name="id2936288"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_insert_c               (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> pos,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> c);</pre>
+<p>
+Вставляет байт в <a href="glib-Strings.html#GString"><span class="type">GString</span></a>, расширяя её если необходимо.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>pos</code></em>&#160;:</span></td>
+<td>позиция вставляемого байта.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td>вставляемый байт.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2936411"></a><h3>
+<a name="g-string-insert-unichar"></a>g_string_insert_unichar ()</h3>
+<a class="indexterm" name="id2936424"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_insert_unichar         (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> pos,
+                                             <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> wc);</pre>
+<p>
+Конвертирует Unicode символ в UTF-8, и вставляет его в строку в указанную позицию.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>pos</code></em>&#160;:</span></td>
+<td> позиция в которую вставляется символ, или -1 для добавления в конец строки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>wc</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <em class="parameter"><code>string</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2936543"></a><h3>
+<a name="g-string-insert-len"></a>g_string_insert_len ()</h3>
+<a class="indexterm" name="id2936556"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_insert_len             (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> pos,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *val,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);</pre>
+<p>
+Вставляет <em class="parameter"><code>len</code></em> байт <em class="parameter"><code>val</code></em> в <em class="parameter"><code>string</code></em> в позицию <em class="parameter"><code>pos</code></em>.  Поскольку <em class="parameter"><code>len</code></em> обеспечена, 
+<em class="parameter"><code>val</code></em> может содержать встроенные nuls и не должна быть nul-завершённой. 
+Если <em class="parameter"><code>pos</code></em> это -1, байты вставляются в конец строки.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>pos</code></em>&#160;:</span></td>
+<td>позиция в <em class="parameter"><code>string</code></em> куда происходит вставка, или -1 если в конец.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>val</code></em>&#160;:</span></td>
+<td>вставляемые байты.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> количество байт <em class="parameter"><code>val</code></em> для вставки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2936747"></a><h3>
+<a name="g-string-erase"></a>g_string_erase ()</h3>
+<a class="indexterm" name="id2936760"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_erase                  (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> pos,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);</pre>
+<p>
+Удаляет <em class="parameter"><code>len</code></em> байт из <a href="glib-Strings.html#GString"><span class="type">GString</span></a>, 
+сначала позиции <em class="parameter"><code>pos</code></em>.
+Остальная часть <a href="glib-Strings.html#GString"><span class="type">GString</span></a> смещается вниз для заполнения пустоты.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>pos</code></em>&#160;:</span></td>
+<td>позоция контекста для удаления.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>количество байт для удаления, или -1 для удаления всех последующих байт.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2936904"></a><h3>
+<a name="g-string-truncate"></a>g_string_truncate ()</h3>
+<a class="indexterm" name="id2936917"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_truncate               (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> len);</pre>
+<p>
+Вырезает окончание GString, оставляя первые <em class="parameter"><code>len</code></em> байт.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>новый размер <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2937025"></a><h3>
+<a name="g-string-set-size"></a>g_string_set_size ()</h3>
+<a class="indexterm" name="id2937038"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_set_size               (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> len);</pre>
+<p>
+Устанавливает длину <a href="glib-Strings.html#GString"><span class="type">GString</span></a>. 
+Если длина меньше чем текущая, строка будет обрезана. Если длина больше чем текущая, содержимое
+вновь добавленного пространства неопределено. (Однако, как всегда, string-&gt;str[string-&gt;len] будет nul байтом.)</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> новая длина
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <em class="parameter"><code>string</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2937144"></a><h3>
+<a name="g-string-free"></a>g_string_free ()</h3>
+<a class="indexterm" name="id2937157"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_string_free                   (<a href="glib-Strings.html#GString">GString</a> *string,
+                                             <a href="glib-Basic-Types.html#gboolean">gboolean</a> free_segment);</pre>
+<p>
+Освобождает память распределённую для <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+Если <em class="parameter"><code>free_segment</code></em> это <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> она так же освобождает символьные данные.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>free_segment</code></em>&#160;:</span></td>
+<td>если <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> 
+    фактические символьные данные так же освобождаются.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>символьные данные <em class="parameter"><code>string</code></em> 
+    (например <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+    если <em class="parameter"><code>free_segment</code></em> это 
+    <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>)
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2937312"></a><h3>
+<a name="g-string-up"></a>g_string_up ()</h3>
+<a class="indexterm" name="id2937326"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_up                     (<a href="glib-Strings.html#GString">GString</a> *string);</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_string_up</code> устарела начиная с версии 2.2 и не должна использоваться во вновь создаваемом коде. 
+Эта функция использует locale-специфичную функцию <code class="function">toupper()</code>, которая почти никогда не является 
+правильным выбором. 
+Используйте <a href="glib-String-Utility-Functions.html#g-string-ascii-up"><code class="function">g_string_ascii_up()</code></a> или 
+<a href="glib-Unicode-Manipulation.html#g-utf8-strup"><code class="function">g_utf8_strup()</code></a> вместо неё.</p>
+</div>
+<p>
+Конвертирует <a href="glib-Strings.html#GString"><span class="type">GString</span></a> в верхний регистр.</p>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a> 
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2937456"></a><h3>
+<a name="g-string-down"></a>g_string_down ()</h3>
+<a class="indexterm" name="id2937470"></a><pre class="programlisting"><a href="glib-Strings.html#GString">GString</a>*    g_string_down                   (<a href="glib-Strings.html#GString">GString</a> *string);</pre>
+<div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Внимание</h3>
+<p><code class="literal">g_string_down</code> устарела начиная с версии 2.2 и не должна использоваться во вновь создаваемом коде. 
+Эта функция использует locale-специфичную функцию <code class="function">tolower()</code>, которая почти никогда не является 
+правильным выбором. 
+Используйте <a href="glib-String-Utility-Functions.html#g-string-ascii-down"><code class="function">g_string_ascii_down()</code></a> или
+<a href="glib-Unicode-Manipulation.html#g-utf8-strdown"><code class="function">g_utf8_strdown()</code></a> вместо неё.</p>
+</div>
+<p>
+Конвертирует <a href="glib-Strings.html#GString"><span class="type">GString</span></a> в нижний регистр.</p>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2937600"></a><h3>
+<a name="g-string-hash"></a>g_string_hash ()</h3>
+<a class="indexterm" name="id2937613"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_string_hash                   (const <a href="glib-Strings.html#GString">GString</a> *str);</pre>
+<p>
+Создаёт новый хеш код для <em class="parameter"><code>str</code></em>; для использования с 
+<a href="glib-Hash-Tables.html#GHashTable"><span class="type">GHashTable</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td>строка для хеширования.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>хеш код для <em class="parameter"><code>str</code></em>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2937689"></a><h3>
+<a name="g-string-equal"></a>g_string_equal ()</h3>
+<a class="indexterm" name="id2937702"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_string_equal                  (const <a href="glib-Strings.html#GString">GString</a> *v,
+                                             const <a href="glib-Strings.html#GString">GString</a> *v2);</pre>
+<p>
+Сравнивает две строки на эквивалентность, возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> 
+если они равны. 
+Для использования с <a href="glib-Hash-Tables.html#GHashTable"><span class="type">GHashTable</span></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>v</code></em>&#160;:</span></td>
+<td><a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>v2</code></em>&#160;:</span></td>
+<td>другая <a href="glib-Strings.html#GString"><span class="type">GString</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> 
+если эти строки одинаковой длины и содержат одинаковые байты.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+</body>
+</html>

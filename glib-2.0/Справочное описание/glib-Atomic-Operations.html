@@ -1,0 +1,455 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Atomic Operations</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="prev" href="glib-Miscellaneous-Macros.html" title="Miscellaneous Macros">
+<link rel="next" href="glib-core.html" title="GLib Core Application Support">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Miscellaneous-Macros.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-fundamentals.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-core.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2555475" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2555777" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Atomic-Operations"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2555475"></a><span class="refentrytitle">Атомарные операции</span>
+</h2>
+<p>Atomic Operations &#8212; основные атомарные операции с целочисленными и указателями</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Atomic-Operations.html#g-atomic-int-get">g_atomic_int_get</a>                (volatile <a href="glib-Basic-Types.html#gint">gint</a> *atomic);
+void        <a href="glib-Atomic-Operations.html#g-atomic-int-set">g_atomic_int_set</a>                (volatile <a href="glib-Basic-Types.html#gint">gint</a> *atomic,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> newval);
+void        <a href="glib-Atomic-Operations.html#g-atomic-int-add">g_atomic_int_add</a>                (volatile <a href="glib-Basic-Types.html#gint">gint</a> *atomic,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> val);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Atomic-Operations.html#g-atomic-int-exchange-and-add">g_atomic_int_exchange_and_add</a>   (volatile <a href="glib-Basic-Types.html#gint">gint</a> *atomic,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> val);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Atomic-Operations.html#g-atomic-int-compare-and-exchange">g_atomic_int_compare_and_exchange</a>
+                                            (volatile <a href="glib-Basic-Types.html#gint">gint</a> *atomic,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> oldval,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> newval);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Atomic-Operations.html#g-atomic-pointer-get">g_atomic_pointer_get</a>            (volatile <a href="glib-Basic-Types.html#gpointer">gpointer</a> *atomic);
+void        <a href="glib-Atomic-Operations.html#g-atomic-pointer-set">g_atomic_pointer_set</a>            (volatile <a href="glib-Basic-Types.html#gpointer">gpointer</a> *atomic,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> newval);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Atomic-Operations.html#g-atomic-pointer-compare-and-exchange">g_atomic_pointer_compare_and_exchange</a>
+                                            (volatile <a href="glib-Basic-Types.html#gpointer">gpointer</a> *atomic,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> oldval,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> newval);
+void        <a href="glib-Atomic-Operations.html#g-atomic-int-inc">g_atomic_int_inc</a>                (<a href="glib-Basic-Types.html#gint">gint</a> *atomic);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Atomic-Operations.html#g-atomic-int-dec-and-test">g_atomic_int_dec_and_test</a>       (<a href="glib-Basic-Types.html#gint">gint</a> *atomic);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2555777"></a><h2>Описание</h2>
+<p>
+Следующие функции могут использоваться для атомарного доступа к целочисленным и указателям. 
+Иначе они реализуются как действующие ассемблерные функции на большинстве платформ и используют
+медленный переход в аварийный режим (fall-backs). Их использование может иногда уберечь вас от
+использования расточительной работы <a href="glib-Threads.html#GMutex">
+<span class="type">GMutex</span></a> для защиты целочисленных и указателей.  
+</p>
+<p>
+Самое важное использование - это подсчёт ссылок. Используя
+<a href="glib-Atomic-Operations.html#g-atomic-int-inc"><code class="function">g_atomic_int_inc()</code></a> и <a href="glib-Atomic-Operations.html#g-atomic-int-dec-and-test"><code class="function">g_atomic_int_dec_and_test()</code></a> выполняется очень быстрая операция подсчёта ссылок.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Примечание</h3>
+<p>
+Вы не должны непосредственно читать целочисленные или указатели с одновременным многопоточным 
+доступом, а использовать вместо этого функции атомарного доступа.
+Таким образом, всегда используйте <a href="glib-Atomic-Operations.html#g-atomic-int-get"><code class="function">g_atomic_int_get()</code></a> и <a href="glib-Atomic-Operations.html#g-atomic-pointer-get"><code class="function">g_atomic_pointer_get()</code></a> для чтения извне.
+Они обеспечивают необходимый механизм синхронизации как границы памяти для одновременного 
+обращения к распределённой памяти.
+</p>
+</div>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Примечание</h3>
+<p>
+Если вы используете эти функции для чего то кроме простого подсчета ссылок, 
+вы должны знать реальную реализацию этого. Существует буквально тысячи способов навредить себе. 
+Поэтому если вы сомневаетесь, используйте <a href="glib-Threads.html#GMutex"><span class="type">GMutex</span></a>. 
+Если вы не знаете что такое границы памяти не используйте ничего кроме <a href="glib-Atomic-Operations.html#g-atomic-int-inc"><code class="function">g_atomic_int_inc()</code></a> и
+<a href="glib-Atomic-Operations.html#g-atomic-int-dec-and-test"><code class="function">g_atomic_int_dec_and_test()</code></a>.
+</p>
+</div>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Примечание</h3>
+<p>
+Не безопасно устанавливать целочисленное или указатель простым назначением,
+когда к ним параллельно обращаются другие нити (threads) со следующими функциями. 
+Используйте <a href="glib-Atomic-Operations.html#g-atomic-int-compare-and-exchange">
+<code class="function">g_atomic_int_compare_and_exchange()</code></a> или
+<a href="glib-Atomic-Operations.html#g-atomic-pointer-compare-and-exchange">
+<code class="function">g_atomic_pointer_compare_and_exchange()</code></a> соответственно.
+</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2555938"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2555948"></a><h3>
+<a name="g-atomic-int-get"></a>g_atomic_int_get ()</h3>
+<a class="indexterm" name="id2555963"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_atomic_int_get                (volatile <a href="glib-Basic-Types.html#gint">gint</a> *atomic);</pre>
+<p>
+Читает значение целочисленного на которое указывает <em class="parameter"><code>atomic</code></em>. 
+Также действует как граница памяти.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>atomic</code></em>&#160;:</span></td>
+<td>указатель на целочисленное
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>значение *<em class="parameter"><code>atomic</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2556037"></a><h3>
+<a name="g-atomic-int-set"></a>g_atomic_int_set ()</h3>
+<a class="indexterm" name="id2556053"></a><pre class="programlisting">void        g_atomic_int_set                (volatile <a href="glib-Basic-Types.html#gint">gint</a> *atomic,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> newval);</pre>
+<p>
+Устанавливает значение целочисленного указанного <em class="parameter"><code>atomic</code></em>. 
+Также действует как граница памяти.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>atomic</code></em>&#160;:</span></td>
+<td>указатель на целочисленное
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>newval</code></em>&#160;:</span></td>
+<td>новое значение
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.10
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2556133"></a><h3>
+<a name="g-atomic-int-add"></a>g_atomic_int_add ()</h3>
+<a class="indexterm" name="id2556148"></a><pre class="programlisting">void        g_atomic_int_add                (volatile <a href="glib-Basic-Types.html#gint">gint</a> *atomic,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> val);</pre>
+<p>
+Атомарно добавляет <em class="parameter"><code>val</code></em> к целочисленному указанному <em class="parameter"><code>atomic</code></em>.
+Также действует как граница памяти.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>atomic</code></em>&#160;:</span></td>
+<td>указатель на целочисленное.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>val</code></em>&#160;:</span></td>
+<td>значение добавляемое к  *<em class="parameter"><code>atomic</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2556239"></a><h3>
+<a name="g-atomic-int-exchange-and-add"></a>g_atomic_int_exchange_and_add ()</h3>
+<a class="indexterm" name="id2556255"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_atomic_int_exchange_and_add   (volatile <a href="glib-Basic-Types.html#gint">gint</a> *atomic,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> val);</pre>
+<p>
+Атомарно добавляет <em class="parameter"><code>val</code></em> к целочисленному указанному <em class="parameter"><code>atomic</code></em>. Возвращает значение *<em class="parameter"><code>atomic</code></em> непосредственно перед добавлением.
+Также действует как граница памяти.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>atomic</code></em>&#160;:</span></td>
+<td>указатель на целочисленное.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>val</code></em>&#160;:</span></td>
+<td>значение добавляемое к *<em class="parameter"><code>atomic</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>значение *<em class="parameter"><code>atomic</code></em> перед добавлением.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2556370"></a><h3>
+<a name="g-atomic-int-compare-and-exchange"></a>g_atomic_int_compare_and_exchange ()</h3>
+<a class="indexterm" name="id2556386"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_atomic_int_compare_and_exchange
+                                            (volatile <a href="glib-Basic-Types.html#gint">gint</a> *atomic,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> oldval,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> newval);</pre>
+<p>
+Сравнивает <em class="parameter"><code>oldval</code></em> с целочисленным указанным <em class="parameter"><code>atomic</code></em> и если они равны, атомарно обменивает *<em class="parameter"><code>atomic</code></em> с <em class="parameter"><code>newval</code></em>.
+Также действует как граница памяти.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>atomic</code></em>&#160;:</span></td>
+<td>указатель на целочисленное.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>oldval</code></em>&#160;:</span></td>
+<td>принятое старое значение *<em class="parameter"><code>atomic</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>newval</code></em>&#160;:</span></td>
+<td>новое значение *<em class="parameter"><code>atomic</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>, если *<em class="parameter"><code>atomic</code></em> был равен <em class="parameter"><code>oldval</code></em>. Иначе <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2556560"></a><h3>
+<a name="g-atomic-pointer-get"></a>g_atomic_pointer_get ()</h3>
+<a class="indexterm" name="id2556576"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_atomic_pointer_get            (volatile <a href="glib-Basic-Types.html#gpointer">gpointer</a> *atomic);</pre>
+<p>
+Читает значение указателя на который указывает <em class="parameter"><code>atomic</code></em>. 
+Также действует как граница памяти.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>atomic</code></em>&#160;:</span></td>
+<td>указатель на <a href="glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>значение добавляемое к *<em class="parameter"><code>atomic</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2556658"></a><h3>
+<a name="g-atomic-pointer-set"></a>g_atomic_pointer_set ()</h3>
+<a class="indexterm" name="id2556674"></a><pre class="programlisting">void        g_atomic_pointer_set            (volatile <a href="glib-Basic-Types.html#gpointer">gpointer</a> *atomic,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> newval);</pre>
+<p>
+Устанавливает значение указателя на который указывает 
+<em class="parameter"><code>atomic</code></em>. 
+Также действует как граница памяти.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>atomic</code></em>&#160;:</span></td>
+<td>указатель на <a href="glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>newval</code></em>&#160;:</span></td>
+<td>новое значение
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.10
+
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2556762"></a><h3>
+<a name="g-atomic-pointer-compare-and-exchange"></a>g_atomic_pointer_compare_and_exchange ()</h3>
+<a class="indexterm" name="id2556778"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_atomic_pointer_compare_and_exchange
+                                            (volatile <a href="glib-Basic-Types.html#gpointer">gpointer</a> *atomic,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> oldval,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> newval);</pre>
+<p>
+Сравнивает <em class="parameter"><code>oldval</code></em> с указателем на который указывает <em class="parameter"><code>atomic</code></em> и если они равны, атомарно обменивает *<em class="parameter"><code>atomic</code></em> с <em class="parameter"><code>newval</code></em>. 
+Также действует как граница памяти.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>atomic</code></em>&#160;:</span></td>
+<td>указатель на <a href="glib-Basic-Types.html#gpointer"><span class="type">gpointer</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>oldval</code></em>&#160;:</span></td>
+<td>принятое старое значение *<em class="parameter"><code>atomic</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>newval</code></em>&#160;:</span></td>
+<td>новое значение *<em class="parameter"><code>atomic</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>, если *<em class="parameter"><code>atomic</code></em> был равен <em class="parameter"><code>oldval</code></em>. Иначе <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2556960"></a><h3>
+<a name="g-atomic-int-inc"></a>g_atomic_int_inc ()</h3>
+<a class="indexterm" name="id2556975"></a><pre class="programlisting">void        g_atomic_int_inc                (<a href="glib-Basic-Types.html#gint">gint</a> *atomic);</pre>
+<p>
+Атомарно увеличивает указатель на который указывает <em class="parameter"><code>atomic</code></em> на 1.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>atomic</code></em>&#160;:</span></td>
+<td>указатель на целочисленное.
+</td>
+</tr></tbody>
+</table></div>
+<p>Начиная с версии 2.4
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2557033"></a><h3>
+<a name="g-atomic-int-dec-and-test"></a>g_atomic_int_dec_and_test ()</h3>
+<a class="indexterm" name="id2557048"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_atomic_int_dec_and_test       (<a href="glib-Basic-Types.html#gint">gint</a> *atomic);</pre>
+<p>
+Атомарно уменьшает указатель на который указывает <em class="parameter"><code>atomic</code></em> на 1.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>atomic</code></em>&#160;:</span></td>
+<td>указатель на целочисленное.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>
+<a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>, если целочисленное на которое указывает <em class="parameter"><code>atomic</code></em> после уменьшения равно 0.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+
+</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2557133"></a><h2>Смотрите также</h2>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><a href="glib-Threads.html#GMutex"><span class="type">GMutex</span></a></span></td>
+<td><p>GLib взаимные исключения.</p></td>
+</tr></tbody>
+</table></div>
+<p>
+</p>
+</div>
+</div>
+</body>
+</html>

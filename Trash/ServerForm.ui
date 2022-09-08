@@ -1,0 +1,85 @@
+<ui version="4.0" >
+ <class>ServerFormClass</class>
+ <widget class="QWidget" name="ServerFormClass" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>562</width>
+    <height>658</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="0" >
+    <widget class="QTableWidget" name="tableClient" >
+     <property name="selectionMode" >
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior" >
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <row>
+      <property name="text" >
+       <string>Gwird</string>
+      </property>
+     </row>
+     <row>
+      <property name="text" >
+       <string>Gauss</string>
+      </property>
+     </row>
+     <column>
+      <property name="text" >
+       <string>Имя</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Состояние</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>IP:Port</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QTableWidget" name="tableRoom" >
+     <property name="selectionMode" >
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior" >
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <row>
+      <property name="text" >
+       <string>Gwird</string>
+      </property>
+     </row>
+     <row>
+      <property name="text" >
+       <string>Gauss</string>
+      </property>
+     </row>
+     <column>
+      <property name="text" >
+       <string>Остаток времени</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Кол-во активных</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

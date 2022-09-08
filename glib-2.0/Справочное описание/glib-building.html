@@ -1,0 +1,351 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Compiling the GLib package</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib.html" title="GLib Overview">
+<link rel="prev" href="glib.html" title="GLib Overview">
+<link rel="next" href="glib-cross-compiling.html" title="Cross-compiling the GLib package">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2"><tr valign="middle">
+<td><a accesskey="p" href="glib.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-cross-compiling.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry" lang="en">
+<a name="glib-building"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle">Компиляция пакета GLib</span></h2>
+<p>Compiling the GLib Package &#8212; 
+Как самостоятельно скомпилировать GLib
+</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect1" lang="en">
+<a name="building"></a><h2>Сборка библиотеки в UNIX</h2>
+<p>
+        В UNIX, GLib использует стандартную систему сборки GNU,
+        <span class="application">autoconf</span> для конфигурации
+        пакета и решения проблем переносимости,
+        <span class="application">automake</span> для создания makefiles
+        который выполняется с помощью GNU Coding Standards и
+        <span class="application">libtool</span> для сборки общих
+        библиотек на множестве платформ. Нормальная последовательность
+        сборки и инсталяции GLib библиотеки такая:
+
+        </p>
+<div class="literallayout"><p><br>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<strong class="userinput"><code>./configure</code></strong><br>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<strong class="userinput"><code>make</code></strong><br>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<strong class="userinput"><code>make&#160;install</code></strong><br>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</p></div>
+<p>
+      </p>
+<p>
+        Стандартные опции представленные <span class="application">GNU
+        autoconf</span> можно передать в скрипт
+        <span><strong class="command">configure</strong></span>.  Пожалуйста изучите
+        <span class="application">autoconf</span> документацию или запустите
+        <span><strong class="command">./configure --help</strong></span> для получения
+        информации о стандартных опциях.
+      </p>
+<p>
+        GTK+ документация содержит 
+        <a href="../gtk/gtk-building.html" target="_top">further details</a> 
+	о процессе сборки и способах влияния на него. 
+      </p>
+</div>
+<div class="refsect1" lang="en">
+<a name="dependencies"></a><h2>Зависимости</h2>
+<p>
+        Перед компиляцией библиотеки GLib, вам необходимо иметь
+        дополнительные инструменты и библиотеки установленные в вашей
+        системе. Два инструмента необходимы в течении процесса сборки (которые отличаются от
+        от инструментов используемых при создании GLib,
+        упомянутых выше таких как <span class="application">autoconf</span>)
+        <span><strong class="command">pkg-config</strong></span> и GNU make.
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li><p>
+	    <a href="http://www.freedesktop.org/software/pkgconfig/" target="_top">pkg-config</a>
+	    это инструмент для отслеживания флагов компиляции необходимых для
+	    библиотек которые используются библиотекой GLib. (Для каждой
+	    библиотеки, в стандартном расположении установлен текстовый файл
+	    <code class="literal">.pc</code> который содержит флаги компиляции 
+            необходимые для данной библиотеки и номер её версии.)  
+	    Версия <span><strong class="command">pkg-config</strong></span> 
+            необходимая для сборки GLib указана в каталоге
+	    <code class="filename">зависимостей</code> на
+	    <a href="ftp://ftp.gtk.org/pub/gtk/v2.2/" target="_top">GTK+ FTP
+	    сайте.</a>
+	  </p></li>
+<li><p>
+	    GTK+ makefiles будет работать с разными версиями
+	    <span><strong class="command">make</strong></span>, однако, есть некоторая тенденция
+	    небольших несовместимостей, поэтому команда разработчиков GTK+ рекомендует
+	    установить <a href="http://www.gnu.org/software/make" target="_top">GNU
+	    make</a> если она ещё не установлена в вашей системе
+	    и использовать именно её. (Она может называться <span><strong class="command">gmake</strong></span>
+	    вместо <span><strong class="command">make</strong></span>.)
+	  </p></li>
+</ul></div>
+<p>
+        GLib зависит от множества других библиотек.
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+<p>
+	  Библиотека <a href="http://www.gnu.org/software/libiconv/" target="_top">GNU
+	  libiconv</a> необходима для сборки GLib если ваша система
+	  не имеет <code class="function">iconv()</code>
+	  функции для конвертации символов в разных кодировках.
+	  Современные системы должны иметь
+	  <code class="function">iconv()</code>, однако некоторые устаревшие системы 
+	  не имеют <code class="function">iconv()</code>. На таких системах, 
+	  вы должны установить библиотеку libiconv. Она может быть найдена на:
+	  <a href="http://www.gnu.org/software/libiconv" target="_top">http://www.gnu.org/software/libiconv</a>.	  
+	</p>
+<p>
+	  Если ваша система имеет <code class="function">iconv()</code> реализацию, но
+	  вы хотите использовать libiconv вместо неё, то вы должны указать опцию
+	  --with-libiconv для скрипта configure. Это заставит использовать libiconv.  
+</p>
+<p>
+	  Помните что если вы имеете libiconv установленную в путь поиска по умолчанию
+	  (например в <code class="filename">/usr/local/</code>), но не включаете её,
+	  вы получите ошибку в процессе компиляции GLib, потому что
+	  <code class="filename">iconv.h</code> установленной libiconv скрывает системную
+	  iconv. 
+</p>
+<p>
+	  Если вы используете родную реализацию iconv в Solaris
+	  вместо libiconv, вы должны убедиться что можете 
+	  конвертировать между локальной кодировкой и UTF-8.
+	  Как минимум вам нужен пакет SUNWuiu8. Вероятно вам потребуется
+	  установить также пакеты SUNWciu8, SUNWhiu8, SUNWjiu8 и
+	  SUNWkiu8.
+	</p>
+<p>
+	  Родная iconv в Compaq Tru64 не поддерживает UTF-8,
+	  поэтому вам необходимо использовать вместо неё GNU libiconv. 
+	  (Когда используете GNU libiconv для GLib, вы также должны использовать GNU libiconv
+	  для GNU gettext.) Это также касается связанных с ней систем.
+</p>
+</li>
+<li><p>
+	  Библиотека libintl из <a href="http://www.gtk.org/software/gettext" target="_top">GNU gettext
+	  package</a> необходима если ваша система не имеет
+	  <code class="function">gettext()</code> функций для обработки
+	  базы переводимых сообщений.
+</p></li>
+<li><p>
+	  Реализация потоков (thread) необходима, если вам нужно собрать GLib
+	  без поддержки потоков (thread support), что не рекомендуется. Поддержка потоков
+	  в GLib может базироваться на некой родной реализации потоков,
+	  например POSIX threads, DCE threads или Solaris threads. 
+	</p></li>
+</ul></div>
+</div>
+<div class="refsect1" lang="en">
+<a name="extra-configuration-options"></a><h2>Дополнительные конфигурационные опции</h2>
+<p>
+        В дополнение к обычным опциям, скрипт
+        <span><strong class="command">configure</strong></span> в библиотеке GLib
+        поддерживает следующие аргументы:
+
+        </p>
+<div class="cmdsynopsis"><p><code class="command">configure</code>  [[--enable-debug=[no|minimum|yes]]] [[--disable-gc-friendly] |  [--enable-gc-friendly]] [[--disable-mem-pools] |  [--enable-mem-pools]] [[--disable-threads] |  [--enable-threads]] [[--with-threads=[none|posix|dce|win32]]] [[--disable-included-printf] |  [--enable-included-printf]] [[--disable-visibility] |  [--enable-visibility]] [[--disable-gtk-doc] |  [--enable-gtk-doc]] [[--disable-man] |  [--enable-man]]</p></div>
+<p>
+      </p>
+<p><b><code class="systemitem">--enable-debug</code>.&#160;</b>
+         Включает разное количество отладочной поддержки. Установка в значение 'no'
+         отключает g_assert(), g_return_if_fail(), g_return_val_if_fail() и
+         контроль приведения между разными типами объектов. Установка в значение 'minimum'
+         отключает только контроль приведения типов. Установка в значение 'yes' включает
+         отладку во время выполнения.
+         По умолчанию используется значение 'minimum'.
+         Помните что значение 'no' ускоряет процесс, но опасно, поскольку имеет тенденцию
+	 дестабилизировать даже программное обеспечение без ошибок
+         превращая эффект от небольших ошибок в фатальные сбои. Поэтому
+         <code class="option">--enable-debug=no</code> не должен
+         использоваться для стабильных реализаций GLib.
+</p>
+<p><b><code class="systemitem">--disable-gc-friendly</code> и
+          <code class="systemitem">--enable-gc-friendly</code>.&#160;</b>
+	  По умолчанию, а также с помощью <code class="systemitem">--disable-gc-friendly</code>
+	  Glib не очищает память для определённых объектов прежде чем они освобождаются.
+	  Например, Glib может решить переработать узлы GList поместив их
+	  в освобождённый список. Однако, профилирование памяти и инструменты отладки такие как <a href="http://www.valgrind.org" target="_top">Valgrind</a> работают лучше если
+	  приложение не сохраняет указатели в освобождённой памяти (даже если эти указатели
+	  больше не разыменованы), или не допускает указатели внутри
+	  не инициализированной памяти. Опция
+	  <code class="systemitem">--enable-gc-friendly</code> заставляет Glib очищать
+	  память в этой ситуации:
+</p>
+<div class="itemizedlist"><ul type="disc">
+<li><p>
+	    Когда сокращается GArray, Glib очищает память не доступную
+	    больше в массиве:  сокращая массив из 10 байт в 7,
+	    последние 3 байта будут очищены. Это включает удаление 
+	    единственных и множественных элементов.
+</p></li>
+
+<li><p>
+	    Когда увеличивается GArray, Glib очищает новую часть памяти.  
+	    При увеличении массива с 7 байт до 10 байт, последние 3 байта очищаются.
+</p></li>
+<li><p>
+	    Выше упомянутое также относится и к GPtrArray.
+</p></li>
+<li><p>
+	    Когда освобождаются узлы из GHashTable, Glib сначала очищает
+	    узел, который имеет указатель на ключ и значение 
+	    сохранённое в этом узле.
+</p></li>
+<li><p>
+	    Разрушая или удаляя узел GTree, Glib очищает узел,
+	    который имеет указатель на значение узлов, а также левые и правые подузлы.
+</p></li>
+</ul></div>
+<p>
+        Начиная c очистки памяти, значение
+        <code class="systemitem">--disable-gc-friendly</code> по умолчанию.
+</p>
+<p><b><code class="systemitem">--disable-mem-pools</code> и
+          <code class="systemitem">--enable-mem-pools</code>.&#160;</b>
+        Множество небольших участков памяти часто распределяются через пулы
+        в GLib и кэшируются после реализации для ускорения перераспределения.
+        Для разряженных систем памяти это поведение является плохим, поэтому
+        пулы памяти могут быть отключены, чтобы избежать чрезмерное кэширование и заставить
+        сопровождать атомарные участки через <code class="function">g_malloc()</code>
+        и <code class="function">g_free()</code> функции. Код в настоящее время влияет на:
+</p>
+<div class="itemizedlist"><ul type="disc">
+<li><p>
+         <span class="structname">GList</span>, <span class="structname">GSList</span>,
+         <span class="structname">GNode</span>, распределения <span class="structname">GHash</span>. 
+         Функции g_list_push_allocator(), 
+         g_list_pop_allocator(), g_slist_push_allocator(), 
+         g_slist_pop_allocator(), g_node_push_allocator() и 
+         g_node_pop_allocator() не доступны.
+</p></li>
+<li><p>
+         <span class="structname">GMemChunk</span>s в основном не эффективны.
+</p></li>
+<li><p>
+         <span class="structname">GSignal</span> отключает всё кэширование 
+	 (потенциально очень медленный).
+</p></li>
+<li><p>
+         <span class="structname">GType</span> не учитывает 
+         <span class="structname">GTypeInfo</span> 
+         <em class="structfield"><code>n_preallocs</code></em> поля больше.
+        </p></li>
+<li><p>
+         <span class="structname">GBSearchArray</span> флажок
+         <code class="literal">G_BSEARCH_ALIGN_POWER2</code> не функционален.
+        </p></li>
+</ul></div>
+<p>
+</p>
+<p><b><code class="systemitem">--disable-threads</code> и
+          <code class="systemitem">--enable-threads</code>.&#160;</b>
+           Если скомпилировать GLib не безопасной для многопоточности, тогда GLib
+           будет немного быстрее. Однако это не рекомендуется,
+           так как множество программ предполагает что GLib безопасна для многопоточности.
+</p>
+<p><b><code class="systemitem">--with-threads</code>.&#160;</b>
+	   Определяет использование многопоточной реализации.
+</p>
+<div class="itemizedlist"><ul type="disc">
+<li><p>
+                'posix' и 'dce' могут быть взаимозаменяемыми
+                для обозначения различных версий Posix
+                threads. Скрипт configure попытается определить, какой из них установлен.
+</p></li>
+<li><p>
+                'none' означает что GLib будет сохранять многопоточность,
+                но не имеет по умолчанию реализованной
+                многопоточности. Это должно определяться с помощью
+                <code class="function">g_thread_init()</code> программистом.
+</p></li>
+</ul></div>
+<p>
+</p>
+<p><b><code class="systemitem">--disable-included-printf</code> и
+           <code class="systemitem">--enable-included-printf</code>.&#160;</b>
+          По умолчанию скрипт <span><strong class="command">configure</strong></span> попытается
+          автоматически определить использует ли C библиотека подходящий набор
+	  функций <code class="function">printf()</code>. Точнее, 
+	  <span><strong class="command">configure</strong></span> проверит семантику
+          <code class="function">snprintf()</code> на соответствие стандарту C99 и
+	  что позиционные параметры соответствуют Single Unix
+	  Specification. Если это не так, GLib включит реализацию
+	  семейства функций <code class="function">printf()</code>.
+          Эти опции могут использоваться для непосредственного осуществления контроля
+          включения или не включения реализации семейства функций 
+	  <code class="function">printf()</code>.
+</p>
+<p><b><code class="systemitem">--disable-visibility</code> и
+           <code class="systemitem">--enable-visibility</code>.&#160;</b>
+          По умолчанию, GLib использует видимые атрибуты в формате ELF для оптимизации
+          PLT таблицы ввода если компилятор поддерживает ELF видимые атрибуты.
+          Побочный эффект в том что текущая реализация при любом изменении
+          заголовка вызывает полную перекомпиляцию, а отсутствие includes 
+	  может быть незамечено. 
+          Поэтому имеет смысл выключать эту особенность выполняя разработку
+          GLib, даже если компилятор поддерживает ELF
+          видимость атрибутов. Опция <code class="option">--disable-visibility</code> 
+          позволяет делать это.
+</p>
+<p><b><code class="systemitem">--disable-gtk-doc</code> и
+          <code class="systemitem">--enable-gtk-doc</code>.&#160;</b>
+          По умолчанию скрипт <span><strong class="command">configure</strong></span> попытается
+          автоматически определить установлен ли пакет
+          <span class="application">gtk-doc</span>. Если да,
+          то использует его для извлечения и сборки
+          документации для GLib библиотеки. Эти опции
+          используются для непосредственного контроля должен ли применяться
+          <span class="application">gtk-doc</span> или нет.
+          Если он не используется, то будут установлены предварительно сгенерированные
+          HTML файлы вместо сборки их на вашей машине.
+</p>
+<p><b><code class="systemitem">--disable-man</code> и
+          <code class="systemitem">--enable-man</code>.&#160;</b>
+          По умолчанию скрипт <span><strong class="command">configure</strong></span> попытается
+          автоматически определить установлен ли <span class="application">xsltproc</span> 
+          и необходимые таблицы стилей Docbook. Если установлены,
+          то они будут использованы для пересборки включенных страниц руководства
+          (man pages) из XML исходников. Эти опции могут использоваться для 
+	  непосредственного контроля должны ли страницы руководства (man pages)
+          пересобираться или нет. Дистрибутив включает предварительно 
+	  сгенерированные man страницы.
+</p>
+<br>
+</div>
+</div>
+</body>
+</html>

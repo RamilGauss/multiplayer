@@ -1,0 +1,698 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Error Reporting</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-core.html" title="GLib Core Application Support">
+<link rel="prev" href="glib-IO-Channels.html" title="IO Channels">
+<link rel="next" href="glib-Warnings-and-Assertions.html" title="Message Output and Debugging Functions">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-IO-Channels.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-core.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Warnings-and-Assertions.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2648972" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2649251" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Error-Reporting"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2648972"></a><span class="refentrytitle">Сообщения об ошибках</span>
+</h2>
+<p>Error Reporting &#8212; система для сообщения об ошибках.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+            <a href="glib-Error-Reporting.html#GError">GError</a>;
+<a href="glib-Error-Reporting.html#GError">GError</a>*     <a href="glib-Error-Reporting.html#g-error-new">g_error_new</a>                     (<a href="glib-Quarks.html#GQuark">GQuark</a> domain,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> code,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);
+<a href="glib-Error-Reporting.html#GError">GError</a>*     <a href="glib-Error-Reporting.html#g-error-new-literal">g_error_new_literal</a>             (<a href="glib-Quarks.html#GQuark">GQuark</a> domain,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> code,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *message);
+void        <a href="glib-Error-Reporting.html#g-error-free">g_error_free</a>                    (<a href="glib-Error-Reporting.html#GError">GError</a> *error);
+<a href="glib-Error-Reporting.html#GError">GError</a>*     <a href="glib-Error-Reporting.html#g-error-copy">g_error_copy</a>                    (const <a href="glib-Error-Reporting.html#GError">GError</a> *error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Error-Reporting.html#g-error-matches">g_error_matches</a>                 (const <a href="glib-Error-Reporting.html#GError">GError</a> *error,
+                                             <a href="glib-Quarks.html#GQuark">GQuark</a> domain,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> code);
+void        <a href="glib-Error-Reporting.html#g-set-error">g_set_error</a>                     (<a href="glib-Error-Reporting.html#GError">GError</a> **err,
+                                             <a href="glib-Quarks.html#GQuark">GQuark</a> domain,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> code,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);
+void        <a href="glib-Error-Reporting.html#g-propagate-error">g_propagate_error</a>               (<a href="glib-Error-Reporting.html#GError">GError</a> **dest,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> *src);
+void        <a href="glib-Error-Reporting.html#g-clear-error">g_clear_error</a>                   (<a href="glib-Error-Reporting.html#GError">GError</a> **err);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2649251"></a><h2>Описание</h2>
+<p>
+GLib обеспечивает стандартный метод сообщения об ошибках из вызванной функции в вызываемом коде. 
+(Это также решает проблему исключительной ситуации в других языках). Важно понять что это метод -
+<span class="emphasis"><em>data type</em></span> (<a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> объект) и <span class="emphasis"><em>набора правил.</em></span> 
+Если вы используете <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> неправильно, то ваш код не будет правильно взаимодействовать с другим кодом использующим 
+<a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, а пользователи вашего API вероятно запутаются.
+</p>
+<p>
+Прежде всего: <span class="emphasis"><em><a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> должен использоваться только для сообщения о восстанавливаемых ошибках в процессе выполнения.</em></span> 
+Обычно вы должны использовать <a href="glib-Message-Logging.html#g-warning"><code class="function">g_warning()</code></a>,
+<a href="glib-Warnings-and-Assertions.html#g-return-if-fail"><code class="function">g_return_if_fail()</code></a>, <a href="glib-Warnings-and-Assertions.html#g-assert"><code class="function">g_assert()</code></a>, <a href="glib-Message-Logging.html#g-error"><code class="function">g_error()</code></a>, или похожее средство.
+(помните что функция <a href="glib-Message-Logging.html#g-error"><code class="function">g_error()</code></a> должна использоваться 
+<span class="emphasis"><em>только</em></span> для программных ошибок, она не должна использоваться для печати любой ошибки о которой сообщено через <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>.)
+</p>
+<p>
+Примером восстанавливаемых ошибок во время выполнения программы являются 
+"file not found" (файл не найден) или "failed to parse input" (не удаётся проанализировать ввод). 
+Примером программных ошибок являются "NULL passed to <code class="function">strcmp()</code>" или
+"attempted to free the same pointer twice". Эти два вида ошибок существенно отличаются: 
+ошибки во время выполнения должны обрабатываться или о них должно быть сообщено пользователю, 
+програмные ошибки должны ликвидироваться исправлением в программе.
+Поэтому большинство функций в GLib и GTK+ не используют <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>.
+</p>
+<p>
+Функции которые могут завершиться неудачно принимают в качестве последнего параметра место расположения возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>. 
+Например:
+</p>
+<div class="informalexample"><pre class="programlisting">
+gboolean g_file_get_contents (const gchar *filename, 
+	                      gchar      **contents,
+                              gsize       *length,
+                              GError     **error);
+</pre></div>
+<p>
+Если вы поместили не-<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> значение в параметр <code class="literal">error</code>, он должен указывать на место куда может быть помещена ошибка. Например:
+</p>
+<div class="informalexample"><pre class="programlisting">
+gchar *contents;
+GError *err = NULL;
+g_file_get_contents ("foo.txt", &amp;contents, NULL, &amp;err);
+g_assert ((contents == NULL &amp;&amp; err != NULL) || (contents != NULL &amp;&amp; err == NULL));
+if (err != NULL)
+  {
+    /* Сообщаем об ошибке пользователю, и освобождаем ошибку */
+    g_assert (contents == NULL);
+    fprintf (stderr, "Unable to read file: %s\n", err-&gt;message);
+    g_error_free (err);
+  } 
+else
+  {
+    /* Используем содержимое файла */
+    g_assert (contents != NULL);
+  }
+</pre></div>
+<p>
+Помните что <code class="literal">err != NULL</code> в этом примере 
+<span class="emphasis"><em>надежно</em></span> проверяет не закончилась ли неудачей
+<a href="glib-File-Utilities.html#g-file-get-contents"><code class="function">g_file_get_contents()</code></a>. Дополнительно, <a href="glib-File-Utilities.html#g-file-get-contents"><code class="function">g_file_get_contents()</code></a> возвращает логическое которое указывает была ли она завершена удачно.
+</p>
+<p>
+Поскольку <a href="glib-File-Utilities.html#g-file-get-contents"><code class="function">g_file_get_contents()</code></a> возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> при неудаче, если вы интересуетесь только статусом завершения и не нуждаетесь в 
+отображении сообщения об ошибке, вы можете поместить <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> в параметр <code class="literal">error</code>:
+</p>
+<div class="informalexample"><pre class="programlisting">
+if (g_file_get_contents ("foo.txt", &amp;contents, NULL, NULL)) /* игнорирование ошибок */
+  /* нет произошедших ошибок */ ;
+else
+  /* ошибка */ ;
+</pre></div>
+<p>
+</p>
+<p>
+Объект <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> содержит три поля: <code class="literal">domain</code> указывает функцию сообщения об ошибках, 
+<code class="literal">code</code> указывает произошедшую специфическую ошибку, 
+а <code class="literal">message</code> читабельное для пользователя сообщение которое более 
+детально описывает ошибку насколько это возможно. Некоторые функции предназначены для связи с 
+ошибкой полученной из вызываемой функции:
+<a href="glib-Error-Reporting.html#g-error-matches"><code class="function">g_error_matches()</code></a> возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> 
+если ошибка соответствует данной domain и code,
+<a href="glib-Error-Reporting.html#g-propagate-error"><code class="function">g_propagate_error()</code></a> копирует ошибку в место хранения ошибки (таким образом вызываемая функция получает её), 
+а <a href="glib-Error-Reporting.html#g-clear-error"><code class="function">g_clear_error()</code></a> очищает место расположения ошибки освобождая ошибку и переустанавливая место хранения ошибки в 
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>. 
+Для отображения ошибки пользователю, просто отобразите 
+<code class="literal">error-&gt;message</code>, возможно наряду с дополнительным контекстом 
+известным только вызываемой функции (открываемый файл, или любой -- хотя в случае <a href="glib-File-Utilities.html#g-file-get-contents"><code class="function">g_file_get_contents()</code></a>,
+<code class="literal">error-&gt;message</code> уже содержит имя файла).
+</p>
+<p>
+При реализации функций способных сообщать об ошибках основной инструмент <a href="glib-Error-Reporting.html#g-set-error"><code class="function">g_set_error()</code></a>. 
+Обычно, если происходит фатальная ошибка вам нужна <a href="glib-Error-Reporting.html#g-set-error"><code class="function">g_set_error()</code></a>,
+затем немедленное завершение. <a href="glib-Error-Reporting.html#g-set-error"><code class="function">g_set_error()</code></a> ничего не делает если расположение ошибки помещённое в неё <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>. Например:
+</p>
+<div class="informalexample"><pre class="programlisting">
+gint
+foo_open_file (GError **error)
+{
+  gint fd;
+
+  fd = open ("file.txt", O_RDONLY);
+
+  if (fd &lt; 0)
+    {
+      g_set_error (error,
+                   FOO_ERROR,                 /* область ошибки (error domain) */
+                   FOO_ERROR_BLAH,            /* код ошибки (error code) */
+                   "Failed to open file: %s", /* форматированная строка сообщения об ошибке */
+                   g_strerror (errno));
+      return -1;
+    }
+  else
+    return fd;
+}
+</pre></div>
+<p>
+</p>
+<p>
+Немного сложнее если вы самостоятельно вызываете функцию которая может сообщить 
+<a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>. 
+Если подчинённая функция указывает на неисправимые ошибки некоторым способом отличающимся от сообщения <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, таким как возвращение <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> при удачном исполнении, вы можете просто сделать следующее:
+</p>
+<div class="informalexample"><pre class="programlisting">
+gboolean
+my_function_that_can_fail (GError **err)
+{
+  g_return_val_if_fail (err == NULL || *err == NULL, FALSE);
+
+  if (!sub_function_that_can_fail (err))
+    {
+       /* предполагается что ошибка была установлена с помощью подчинённой функции (sub-function) */
+       g_assert (err == NULL || *err != NULL);  
+       return FALSE;
+    }
+
+  /* иначе продолжаем, ошибка не происходит */
+  g_assert (err == NULL || *err == NULL);
+}
+</pre></div>
+<p>
+</p>
+<p>
+Если подчинённая функция не указывает о других ошибках кроме как сообщения <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, 
+вы должны создать временную <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> так как помещаемая в неё может быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+В этом случае используется <a href="glib-Error-Reporting.html#g-propagate-error"><code class="function">g_propagate_error()</code></a>.
+</p>
+<div class="informalexample"><pre class="programlisting">
+gboolean
+my_function_that_can_fail (GError **err)
+{
+  GError *tmp_error;
+
+  g_return_val_if_fail (err == NULL || *err == NULL, FALSE);
+
+  tmp_error = NULL;
+  sub_function_that_can_fail (&amp;tmp_error);
+
+  if (tmp_error != NULL)
+    {
+       /* сохраняем tmp_error в err, если err != NULL,
+        * иначе вызываем g_error_free() для tmp_error 
+        */
+       g_propagate_error (err, tmp_error);
+       return FALSE;
+    }
+
+  /* иначе продолжаем, ошибка не происходит */
+}
+</pre></div>
+<p>
+</p>
+<p>
+Error pileups являются всегда ошибкой. Например, этот код неправильный:
+</p>
+<div class="informalexample"><pre class="programlisting">
+gboolean
+my_function_that_can_fail (GError **err)
+{
+  GError *tmp_error;
+
+  g_return_val_if_fail (err == NULL || *err == NULL, FALSE);
+
+  tmp_error = NULL;
+  sub_function_that_can_fail (&amp;tmp_error);
+  other_function_that_can_fail (&amp;tmp_error);
+
+  if (tmp_error != NULL)
+    {
+       g_propagate_error (err, tmp_error);
+       return FALSE;
+    }
+}
+</pre></div>
+<p>
+<code class="literal">tmp_error</code> должна быть проверена немедленно после
+<code class="function"><code class="function">sub_function_that_can_fail()</code></code>, 
+и либо очищена либо распространена на верх.  
+Правило: <span class="emphasis"><em>после каждой ошибки, вы должны либо обработать ошибку, либо вернуть её в вызываемую функцию</em></span>. Помните что <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для параметра расположения ошибки эквивалентно обработке ошибки ничего не делая с ней. 
+Таким образом следующий код является хорошим примером, предполагается что ошибки в <code class="function"><code class="function">sub_function_that_can_fail()</code></code> являются не фатальными для <code class="function"><code class="function">my_function_that_can_fail()</code></code>:
+</p>
+<div class="informalexample"><pre class="programlisting">
+gboolean
+my_function_that_can_fail (GError **err)
+{
+  GError *tmp_error;
+
+  g_return_val_if_fail (err == NULL || *err == NULL, FALSE);
+
+  sub_function_that_can_fail (NULL); /* игнорирование ошибок */
+
+  tmp_error = NULL;
+  other_function_that_can_fail (&amp;tmp_error);
+
+  if (tmp_error != NULL)
+    {
+       g_propagate_error (err, tmp_error);
+       return FALSE;
+    }
+}
+</pre></div>
+<p>
+</p>
+<p>
+Помните что помещаемый <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> в параметр размещения ошибки означает <span class="emphasis"><em>игнорирование</em></span>
+ошибок; это эквивалентно 
+<code class="literal">try { <code class="function">sub_function_that_can_fail()</code>; } catch
+(...) {}</code> в C++. Это <span class="emphasis"><em>не</em></span> значит оставить ошибки не обработанными; это значит обработать ошибки ничего не делая.
+</p>
+<p>
+Области и коды ошибки традиционно именуются следующим образом:
+</p>
+<div class="itemizedlist"><ul type="disc">
+<li><p>
+Область ошибки называют согласно шаблона 
+<code class="literal">&lt;NAMESPACE&gt;_&lt;MODULE&gt;_ERROR</code>, например
+<code class="literal">G_EXEC_ERROR</code> или <a href="glib-Threads.html#G-THREAD-ERROR:CAPS"><code class="literal">G_THREAD_ERROR</code></a>.
+</p></li>
+<li><p>
+Коды ошибки находятся в перечислении называемом согласно шаблона <code class="literal">&lt;Namespace&gt;&lt;Module&gt;Error</code>; например,
+<a href="glib-Threads.html#GThreadError"><span class="type">GThreadError</span></a> или <a href="glib-Spawning-Processes.html#GSpawnError"><span class="type">GSpawnError</span></a>.
+</p></li>
+<li><p>
+Элементы перечисления кодов ошибки называются согласно шаблона <code class="literal">&lt;NAMESPACE&gt;_&lt;MODULE&gt;_ERROR_&lt;CODE&gt;</code>, например <a href="glib-Spawning-Processes.html#G-SPAWN-ERROR-FORK:CAPS"><code class="literal">G_SPAWN_ERROR_FORK</code></a> или <a href="glib-Threads.html#G-THREAD-ERROR-AGAIN:CAPS"><code class="literal">G_THREAD_ERROR_AGAIN</code></a>. 
+</p></li>
+<li><p>
+Если есть "generic" или "unknown" коды ошибки для неисправимых ошибок нет смысла различать их 
+другими специфическими кодами, они должны быть названы по шаблону <code class="literal">&lt;NAMESPACE&gt;_&lt;MODULE&gt;_ERROR_FAILED</code>, например <a href="glib-Spawning-Processes.html#G-SPAWN-ERROR-FAILED:CAPS"><code class="literal">G_SPAWN_ERROR_FAILED</code></a> or <code class="literal">G_THREAD_ERROR_FAILED</code>.
+</p></li>
+</ul></div>
+<p>
+</p>
+<p>
+Сводные правила использования <span class="type">GError:</span>
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li><p>
+           Не сообщайте о программных ошибках через <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>.
+	  </p></li>
+<li><p>
+          Последним параметром функции возвращающей ошибку должно быть место размещения 
+          <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> 
+          (то есть "<a href="glib-Error-Reporting.html#GError"><span class="type">GError</span>
+          </a>** error").  Если 
+          <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> используется с переменным количеством аргументов, то <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>** должна быть последним аргументом перед "...".
+        </p></li>
+<li><p>
+          Вызывающий может помещать <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>** если его не интересуют подробности произошедшей ошибки.
+        </p></li>
+<li><p>
+           Если <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+помещён для <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>** 
+аргумента, тогда ошибка не должна возвращаться к вызывающей функции, но ваша функция всё же должна 
+прерываться и возвращаться если произошла ошибка. Таким образом, на управление потоком не должно влиять получение или неполучение вызывающей функцией <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>.
+	  </p></li>
+<li><p>
+          Если о <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> 
+          сообщено, то ваша функция по определению <span class="emphasis"><em>имеет фатальную ошибку и не закончила то что должна была сделать</em></span>. Если произошла не фатальная ошибка, 
+          то вы обрабатываете её и не должны сообщать о ней. Если она была фатальной, то вы должны 
+          сообщить о ней и прекратить выполнение немедленно.
+        </p></li>
+<li><p>
+          <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>* должна быть инициализирована в значение <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> перед помещением её адреса в функцию которая может сообщать об ошибках.
+	  </p></li>
+<li><p>
+          "Накопление" ошибок - всегда ошибка. Таким образом, если вы назначили новую
+          <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> для <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>* которая не-<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, переписывая таким образом предыдущую ошибку, 
+          она указывает вам что нужно прервать операцию вместо продолжения. Вы можете продолжать 
+          если очистите предыдущую ошибку с помощью <a href="glib-Error-Reporting.html#g-clear-error"><code class="function">g_clear_error()</code></a>. <a href="glib-Error-Reporting.html#g-set-error"><code class="function">g_set_error()</code></a> будет предупреждать если вы накапливаете ошибки.
+	  </p></li>
+<li><p>
+          В соответствие с соглашением, если вы возвращаете логическое значение, то 
+          <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> 
+          означает успешное выполнение, а <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> означает неудачу. Если возвращено значение <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>,
+          ошибка <span class="emphasis"><em>должна</em></span> быть установлена в значение 
+          не-<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>. 
+        </p></li>
+<li><p>
+          Возвращённое значение <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> часто также означает что произошла ошибка. Вы должны разъяснить в вашей документации означает ли <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+          допустимое возвращаемое значение в случае безошибочного выполнения; если <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> допустимое значение,
+          то пользователи должны проверить была ли возвращена ошибка, чтобы увидеть выполнена ли 
+          функция успешно.
+	  </p></li>
+<li><p>
+          Когда реализуется функция которая может сообщать об ошибках, вы можете добавить 
+          проверку в начале вашей функции является ли место расположения ошибки значением
+          <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> или 
+          используется ли значение <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+          в качестве указателя ошибки
+          (например <code class="literal">g_return_if_fail (error == NULL || *error ==
+          NULL);</code>).
+	  </p></li>
+</ul></div>
+<p>
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2650529"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2650539"></a><h3>
+<a name="GError"></a>GError</h3>
+<a class="indexterm" name="id2650552"></a><pre class="programlisting">typedef struct {
+  GQuark       domain;
+  gint         code;
+  gchar       *message;
+} GError;
+</pre>
+<p>
+Структура <span class="structname">GError</span> содержит информацию о произошедшей ошибке.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a href="glib-Quarks.html#GQuark">GQuark</a>&#160;<em class="structfield"><code>domain</code></em>;</span></td>
+<td>область ошибки, например <a href="glib-File-Utilities.html#G-FILE-ERROR:CAPS"><span class="type">G_FILE_ERROR</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#gint">gint</a>&#160;<em class="structfield"><code>code</code></em>;</span></td>
+<td>код ошибки, например <a href="glib-File-Utilities.html#G-FILE-ERROR-NOENT:CAPS"><code class="literal">G_FILE_ERROR_NOENT</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a href="glib-Basic-Types.html#gchar">gchar</a>&#160;*<em class="structfield"><code>message</code></em>;</span></td>
+<td>удобное для чтения пользователем информационное сообщение об ошибке.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2650660"></a><h3>
+<a name="g-error-new"></a>g_error_new ()</h3>
+<a class="indexterm" name="id2650672"></a><pre class="programlisting"><a href="glib-Error-Reporting.html#GError">GError</a>*     g_error_new                     (<a href="glib-Quarks.html#GQuark">GQuark</a> domain,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> code,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);</pre>
+<p>
+Создаёт новую <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> с полученными <em class="parameter"><code>domain</code></em> и <em class="parameter"><code>code</code></em>,
+а сообщение форматируется с помощью <em class="parameter"><code>format</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>domain</code></em>&#160;:</span></td>
+<td> область ошибки 
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>code</code></em>&#160;:</span></td>
+<td> код ошибки
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>format</code></em>&#160;:</span></td>
+<td> <code class="function">printf()</code>-стиль форматирования для сообщения об ошибке
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> параметры для форматирования сообщения
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> новая <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2650834"></a><h3>
+<a name="g-error-new-literal"></a>g_error_new_literal ()</h3>
+<a class="indexterm" name="id2650848"></a><pre class="programlisting"><a href="glib-Error-Reporting.html#GError">GError</a>*     g_error_new_literal             (<a href="glib-Quarks.html#GQuark">GQuark</a> domain,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> code,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *message);</pre>
+<p>
+Создаёт новую <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>; в отличие от <a href="glib-Error-Reporting.html#g-error-new"><code class="function">g_error_new()</code></a>, <em class="parameter"><code>message</code></em> является строкой не в <code class="function">printf()</code>-стиле форматирования. Используйте эту функцию если <em class="parameter"><code>message</code></em> содержит текст не контролируемый вами, 
+который мог бы включать <code class="function">printf()</code> escape-последовательность.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>domain</code></em>&#160;:</span></td>
+<td> область ошибки
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>code</code></em>&#160;:</span></td>
+<td> код ошибки
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>message</code></em>&#160;:</span></td>
+<td> сообщение об ошибке
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> новая <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2651011"></a><h3>
+<a name="g-error-free"></a>g_error_free ()</h3>
+<a class="indexterm" name="id2651024"></a><pre class="programlisting">void        g_error_free                    (<a href="glib-Error-Reporting.html#GError">GError</a> *error);</pre>
+<p>
+Освобождает <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> и связанные с ней ресурсы.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td><a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2651089"></a><h3>
+<a name="g-error-copy"></a>g_error_copy ()</h3>
+<a class="indexterm" name="id2651102"></a><pre class="programlisting"><a href="glib-Error-Reporting.html#GError">GError</a>*     g_error_copy                    (const <a href="glib-Error-Reporting.html#GError">GError</a> *error);</pre>
+<p>
+Создаёт копию <em class="parameter"><code>error</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td><a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> новую <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2651183"></a><h3>
+<a name="g-error-matches"></a>g_error_matches ()</h3>
+<a class="indexterm" name="id2651196"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_error_matches                 (const <a href="glib-Error-Reporting.html#GError">GError</a> *error,
+                                             <a href="glib-Quarks.html#GQuark">GQuark</a> domain,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> code);</pre>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если 
+<em class="parameter"><code>error</code></em> соответствует <em class="parameter"><code>domain</code></em> и <em class="parameter"><code>code</code></em>, <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>
+в любом другом случае.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td><a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>domain</code></em>&#160;:</span></td>
+<td> область ошибки
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>code</code></em>&#160;:</span></td>
+<td> код ошибки
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> соответствует ли <em class="parameter"><code>error</code></em> <em class="parameter"><code>domain</code></em> и <em class="parameter"><code>code</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2651363"></a><h3>
+<a name="g-set-error"></a>g_set_error ()</h3>
+<a class="indexterm" name="id2651376"></a><pre class="programlisting">void        g_set_error                     (<a href="glib-Error-Reporting.html#GError">GError</a> **err,
+                                             <a href="glib-Quarks.html#GQuark">GQuark</a> domain,
+                                             <a href="glib-Basic-Types.html#gint">gint</a> code,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);</pre>
+<p>
+Ничего не делает если <em class="parameter"><code>err</code></em> имеет значение <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>; если <em class="parameter"><code>err</code></em> не-<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, то *<em class="parameter"><code>err</code></em> должна быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>. Новая <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> создаётся привязанной к *<em class="parameter"><code>err</code></em>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>err</code></em>&#160;:</span></td>
+<td> расположение для возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>domain</code></em>&#160;:</span></td>
+<td> область ошибки
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>code</code></em>&#160;:</span></td>
+<td> код ошибки 
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>format</code></em>&#160;:</span></td>
+<td> <code class="function">printf()</code>-стиль форматирования
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td> аргументы для <em class="parameter"><code>format</code></em> 
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2651600"></a><h3>
+<a name="g-propagate-error"></a>g_propagate_error ()</h3>
+<a class="indexterm" name="id2651614"></a><pre class="programlisting">void        g_propagate_error               (<a href="glib-Error-Reporting.html#GError">GError</a> **dest,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> *src);</pre>
+<p>
+Если <em class="parameter"><code>dest</code></em> имеет значение <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, освобождает <em class="parameter"><code>src</code></em>; иначе,
+перемещает <em class="parameter"><code>src</code></em> в *<em class="parameter"><code>dest</code></em>. *<em class="parameter"><code>dest</code></em> должен быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>dest</code></em>&#160;:</span></td>
+<td> расположение возвращаемой ошибки
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>src</code></em>&#160;:</span></td>
+<td> ошибка для перемещения в расположение указанное параметром <span class="term"><em class="parameter"><code>dest</code></em>&#160;</span>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2651734"></a><h3>
+<a name="g-clear-error"></a>g_clear_error ()</h3>
+<a class="indexterm" name="id2651747"></a><pre class="programlisting">void        g_clear_error                   (<a href="glib-Error-Reporting.html#GError">GError</a> **err);</pre>
+<p>
+Если <em class="parameter"><code>err</code></em> имеет значение <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, ничего не делает. Если <em class="parameter"><code>err</code></em> не-<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>,
+вызывает <a href="glib-Error-Reporting.html#g-error-free"><code class="function">g_error_free()</code></a> для *<em class="parameter"><code>err</code></em> и устанавливает *<em class="parameter"><code>err</code></em> в значение <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>err</code></em>&#160;:</span></td>
+<td>расположение возвращаемой <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a>
+</td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+</div>
+</body>
+</html>

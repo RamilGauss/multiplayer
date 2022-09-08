@@ -1,0 +1,1034 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Message Logging</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-core.html" title="GLib Core Application Support">
+<link rel="prev" href="glib-Warnings-and-Assertions.html" title="Message Output and Debugging Functions">
+<link rel="next" href="glib-utilities.html" title="GLib Utilities">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Warnings-and-Assertions.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-core.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-utilities.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2657755" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2658182" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Message-Logging"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2657755"></a><span class="refentrytitle">Регистрация сообщений</span>
+</h2>
+<p>Message Logging &#8212; Универсальная поддержка для регистрации сообщений с разным уровнем важности.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+#define     <a href="glib-Message-Logging.html#G-LOG-DOMAIN:CAPS">G_LOG_DOMAIN</a>
+#define     <a href="glib-Message-Logging.html#G-LOG-FATAL-MASK:CAPS">G_LOG_FATAL_MASK</a>
+#define     <a href="glib-Message-Logging.html#G-LOG-LEVEL-USER-SHIFT:CAPS">G_LOG_LEVEL_USER_SHIFT</a>
+void        (<a href="glib-Message-Logging.html#GLogFunc">*GLogFunc</a>)                     (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> log_level,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *message,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+enum        <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a>;
+
+void        <a href="glib-Message-Logging.html#g-log">g_log</a>                           (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> log_level,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);
+void        <a href="glib-Message-Logging.html#g-logv">g_logv</a>                          (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> log_level,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             va_list args);
+#define     <a href="glib-Message-Logging.html#g-message">g_message</a>                       (...)
+#define     <a href="glib-Message-Logging.html#g-warning">g_warning</a>                       (...)
+#define     <a href="glib-Message-Logging.html#g-critical">g_critical</a>                      (...)
+#define     <a href="glib-Message-Logging.html#g-error">g_error</a>                         (...)
+#define     <a href="glib-Message-Logging.html#g-debug">g_debug</a>                         (...)
+
+<a href="glib-Basic-Types.html#guint">guint</a>       <a href="glib-Message-Logging.html#g-log-set-handler">g_log_set_handler</a>               (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> log_levels,
+                                             <a href="glib-Message-Logging.html#GLogFunc">GLogFunc</a> log_func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+void        <a href="glib-Message-Logging.html#g-log-remove-handler">g_log_remove_handler</a>            (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> handler_id);
+<a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> <a href="glib-Message-Logging.html#g-log-set-always-fatal">g_log_set_always_fatal</a>       (<a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> fatal_mask);
+<a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> <a href="glib-Message-Logging.html#g-log-set-fatal-mask">g_log_set_fatal_mask</a>         (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> fatal_mask);
+void        <a href="glib-Message-Logging.html#g-log-default-handler">g_log_default_handler</a>           (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> log_level,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *message,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> unused_data);
+<a href="glib-Message-Logging.html#GLogFunc">GLogFunc</a>    <a href="glib-Message-Logging.html#g-log-set-default-handler">g_log_set_default_handler</a>       (<a href="glib-Message-Logging.html#GLogFunc">GLogFunc</a> log_func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2658182"></a><h2>Описание</h2>
+<p>
+Эти функции обеспечивают поддержку для регистрации сообщений об ошибках или отладочных сообщений. 
+</p>
+<p>
+Есть несколько встроенных уровней сообщений определённых в <a href="glib-Message-Logging.html#GLogLevelFlags"><span class="type">GLogLevelFlags</span></a>.
+Они могут быть дополнены определёнными пользователем уровнями.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2658212"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2658222"></a><h3>
+<a name="G-LOG-DOMAIN:CAPS"></a>G_LOG_DOMAIN</h3>
+<a class="indexterm" name="id2658235"></a><pre class="programlisting">#define G_LOG_DOMAIN    ((gchar*) 0)
+</pre>
+<p>
+Определяет область регистрации.
+Для приложений обычно используется по умолчанию <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> (или "") область.
+Библиотеки должны определять это так, чтобы любые сообщения которые они регистрируют
+можно было отличить от сообщений из других библиотек или кода приложений.
+Но избегайте определения их в общих заголовочных файлах.
+</p>
+<p>
+Например, GTK+ использует это в своём Makefile.am:
+</p>
+<div class="informalexample"><pre class="programlisting">
+INCLUDES = -DG_LOG_DOMAIN=\"Gtk\"
+</pre></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2658277"></a><h3>
+<a name="G-LOG-FATAL-MASK:CAPS"></a>G_LOG_FATAL_MASK</h3>
+<a class="indexterm" name="id2658291"></a><pre class="programlisting">#define G_LOG_FATAL_MASK        (G_LOG_FLAG_RECURSION | G_LOG_LEVEL_ERROR)
+</pre>
+<p>
+Регистрационные уровни GLib которые рассматриваются фатальными по умолчанию.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2658308"></a><h3>
+<a name="G-LOG-LEVEL-USER-SHIFT:CAPS"></a>G_LOG_LEVEL_USER_SHIFT</h3>
+<a class="indexterm" name="id2658321"></a><pre class="programlisting">#define G_LOG_LEVEL_USER_SHIFT  (8)
+</pre>
+<p>
+Смещение регистрационного уровня для определения пользователем уровней регистрации (0-7 использует GLib).
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2658338"></a><h3>
+<a name="GLogFunc"></a>GLogFunc ()</h3>
+<a class="indexterm" name="id2658350"></a><pre class="programlisting">void        (*GLogFunc)                     (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> log_level,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *message,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Определяет прототип функции обработчика журнала регистрации.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_domain</code></em>&#160;:</span></td>
+<td>область регистрации сообщения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_level</code></em>&#160;:</span></td>
+<td>регистрационный уровень сообщения (включая фатальный и рекурсивный флаги).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>message</code></em>&#160;:</span></td>
+<td>сообщение для обработки.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>пользовательские данные, устанавливаемые в <a href="glib-Message-Logging.html#g-log-set-handler"><code class="function">g_log_set_handler()</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2658475"></a><h3>
+<a name="GLogLevelFlags"></a>enum GLogLevelFlags</h3>
+<a class="indexterm" name="id2658488"></a><pre class="programlisting">typedef enum
+{
+  /* регистрационные флаги */
+  G_LOG_FLAG_RECURSION          = 1 &lt;&lt; 0,
+  G_LOG_FLAG_FATAL              = 1 &lt;&lt; 1,
+
+  /* уровни регистрации GLib */
+  G_LOG_LEVEL_ERROR             = 1 &lt;&lt; 2,       /* всегда фатально */
+  G_LOG_LEVEL_CRITICAL          = 1 &lt;&lt; 3,
+  G_LOG_LEVEL_WARNING           = 1 &lt;&lt; 4,
+  G_LOG_LEVEL_MESSAGE           = 1 &lt;&lt; 5,
+  G_LOG_LEVEL_INFO              = 1 &lt;&lt; 6,
+  G_LOG_LEVEL_DEBUG             = 1 &lt;&lt; 7,
+
+  G_LOG_LEVEL_MASK              = ~(G_LOG_FLAG_RECURSION | G_LOG_FLAG_FATAL)
+} GLogLevelFlags;
+</pre>
+<p>
+Флаги определяющие уровень регистрации сообщений.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2658518"></a><h3>
+<a name="g-log"></a>g_log ()</h3>
+<a class="indexterm" name="id2658530"></a><pre class="programlisting">void        g_log                           (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> log_level,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             ...);</pre>
+<p>
+Регистрирует ошибку или отладочное сообщение.
+Если уровень регистрации фатальный, вызывается функция <code class="function">abort()</code>
+для завершения программы.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_domain</code></em>&#160;:</span></td>
+<td>область регистрации, обычно <a href="glib-Message-Logging.html#G-LOG-DOMAIN:CAPS"><span class="type">G_LOG_DOMAIN</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_level</code></em>&#160;:</span></td>
+<td>уровень регистрации, или из <a href="glib-Message-Logging.html#GLogLevelFlags"><span class="type">GLogLevelFlags</span></a> или уровень определённый пользователем.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>format</code></em>&#160;:</span></td>
+<td>форматированное сообщение. Смотрите документацию <code class="function">printf()</code>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>параметры вставляемые в форматированную строку.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2658677"></a><h3>
+<a name="g-logv"></a>g_logv ()</h3>
+<a class="indexterm" name="id2658689"></a><pre class="programlisting">void        g_logv                          (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> log_level,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *format,
+                                             va_list args);</pre>
+<p>
+Регистрирует ошибку или отладочное сообщение.
+Если уровень регистрации установлен фатальный, вызывается функция <code class="function">abort()</code>
+для завершения программы.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_domain</code></em>&#160;:</span></td>
+<td>область регистрации.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_level</code></em>&#160;:</span></td>
+<td>уровень регистрации.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>format</code></em>&#160;:</span></td>
+<td>форматированная строка. Смотрите документацию <code class="function">printf()</code>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>args</code></em>&#160;:</span></td>
+<td>параметры вставляемые в форматированную строку.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2658825"></a><h3>
+<a name="g-message"></a>g_message()</h3>
+<a class="indexterm" name="id2658837"></a><pre class="programlisting">#define     g_message(...)</pre>
+<p>
+Удобная функция/макрокоманда для регистрации обычных сообщений.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>форматированная строка, сопровождаемая параметрами вставляемыми в форматированную строку (как в <code class="function">printf()</code>)
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2659054"></a><h3>
+<a name="g-warning"></a>g_warning()</h3>
+<a class="indexterm" name="id2659066"></a><pre class="programlisting">#define     g_warning(...)</pre>
+<p>
+Удобная функция/макрокоманда для регистрации предупреждающих сообщений.
+</p>
+<p>
+Вы можете создать фатальное предупреждение во время выполнения установив переменную окружения <code class="literal">G_DEBUG</code> (смотрите <a href="glib-running.html" target="_top">Running GLib Applications</a>).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>форматированная строка, сопровождаемая параметрами вставляемыми в форматированную строку (как в <code class="function">printf()</code>)
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2659306"></a><h3>
+<a name="g-critical"></a>g_critical()</h3>
+<a class="indexterm" name="id2659319"></a><pre class="programlisting">#define     g_critical(...)</pre>
+<p>
+Регистрирует критическое предупреждение "critical warning" (<span class="type">G_LOG_LEVEL_CRITICAL</span>). Определяется приложением чем отличается критическое от обычного предупреждения. 
+Вы можете вызвать <a href="glib-Message-Logging.html#g-log-set-always-fatal"><code class="function">g_log_set_always_fatal()</code></a> чтобы выйти из программы при критическом предупреждении, 
+затем использовать <a href="glib-Message-Logging.html#g-critical"><code class="function">g_critical()</code></a> для фатальных ошибок, например.
+</p>
+<p>
+Вы также можете сделать критическое предупреждение фатальным установив во время выполнения переменную окружения <code class="literal">G_DEBUG</code> (смотрите
+<a href="glib-running.html" target="_top">Running GLib Applications</a>).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>форматированная строка, сопровождаемая параметрами вставляемыми в форматированную строку (как в <code class="function">printf()</code>)
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2659591"></a><h3>
+<a name="g-error"></a>g_error()</h3>
+<a class="indexterm" name="id2659604"></a><pre class="programlisting">#define     g_error(...)</pre>
+<p>
+Удобная функция/макрокоманда для регистрации сообщения об ошибке.
+Сообщение об ошибке всегда фатально, приводит к вызову функции
+<code class="function">abort()</code> для завершения приложения.
+Эта функция приводит к дампу ядра (core dump); не используйте её для 
+ошибок о которых вы знаете. Использование этой функции указывает ошибку
+в вашей программе, то есть на ошибочное условие выполнения.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>форматированная строка, сопровождаемая параметрами вставляемыми в форматированную строку (как в <code class="function">printf()</code>)
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2659835"></a><h3>
+<a name="g-debug"></a>g_debug()</h3>
+<a class="indexterm" name="id2659849"></a><pre class="programlisting">#define     g_debug(...)</pre>
+<p>
+Удобная функция/макрокоманда для регистрации отладочных сообщений.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>форматированная строка, сопровождаемая параметрами вставляемыми в форматированную строку (как в <code class="function">printf()</code>)
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>...</code></em>&#160;:</span></td>
+<td>
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.6
+
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2660071"></a><h3>
+<a name="g-log-set-handler"></a>g_log_set_handler ()</h3>
+<a class="indexterm" name="id2660084"></a><pre class="programlisting"><a href="glib-Basic-Types.html#guint">guint</a>       g_log_set_handler               (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> log_levels,
+                                             <a href="glib-Message-Logging.html#GLogFunc">GLogFunc</a> log_func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Устанавливает обработчик журналов регистрации для области установленного уровня регистрации.
+Для обработки фатальных и рекурсивных сообщений параметр <em class="parameter"><code>log_levels</code></em> должен комбинироваться с битовыми флагами <span class="type">G_LOG_FLAG_FATAL</span> и <span class="type">G_LOG_FLAG_RECURSION</span>.
+</p>
+<p>
+Помните, что, так как уровень регистрации <span class="type">G_LOG_LEVEL_ERROR</span> всегда 
+фатальный, чтобы установить обработчик для этого уровня регистрации вы должны скомбинировать его с 
+<span class="type">G_LOG_FLAG_FATAL</span>.
+</p>
+<div class="example">
+<a name="id2660189"></a><p class="title"><b>Пример&#160;13.&#160;Добавление обработчика журнала регистрации для всех предупреждающих сообщений в области (приложении) по умолчанию</b></p>
+<pre class="programlisting">
+  g_log_set_handler (NULL, G_LOG_LEVEL_WARNING | G_LOG_FLAG_FATAL
+                     | G_LOG_FLAG_RECURSION, my_log_handler, NULL);
+</pre>
+</div>
+<div class="example">
+<a name="id2660205"></a><p class="title"><b>Пример&#160;14.&#160;Добавление обработчика журнала регистрации для всех критических сообщений из GTK+</b></p>
+<pre class="programlisting">
+  g_log_set_handler ("Gtk", G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL
+                     | G_LOG_FLAG_RECURSION, my_log_handler, NULL);
+</pre>
+</div>
+<div class="example">
+<a name="id2660220"></a><p class="title"><b>Пример&#160;15.&#160;Добавление обработчика журнала регистраций для <span class="emphasis"><em>всех</em></span> сообщений из GLib</b></p>
+<pre class="programlisting">
+  g_log_set_handler ("GLib", G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL
+                     | G_LOG_FLAG_RECURSION, my_log_handler, NULL);
+</pre>
+</div>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_domain</code></em>&#160;:</span></td>
+<td>область регистрации, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для области приложения по умолчанию "".
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_levels</code></em>&#160;:</span></td>
+<td>уровень регистрации для применения обработчика. Для обработки фатальных и рекурсивных сообщений скомбинируйте регистрационные уровни с битовыми флагами
+<span class="type">G_LOG_FLAG_FATAL</span> и <span class="type">G_LOG_FLAG_RECURSION</span>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_func</code></em>&#160;:</span></td>
+<td>функция обработки регистрации.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>данные помещаемые в обработчик регистрации.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> id нового обработчика.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2660340"></a><h3>
+<a name="g-log-remove-handler"></a>g_log_remove_handler ()</h3>
+<a class="indexterm" name="id2660353"></a><pre class="programlisting">void        g_log_remove_handler            (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> handler_id);</pre>
+<p>
+Удаляет обработчик регистрации.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_domain</code></em>&#160;:</span></td>
+<td>область регистрации.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>handler_id</code></em>&#160;:</span></td>
+<td> id обработчика, который возвращает <a href="glib-Message-Logging.html#g-log-set-handler"><code class="function">g_log_set_handler()</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2660433"></a><h3>
+<a name="g-log-set-always-fatal"></a>g_log_set_always_fatal ()</h3>
+<a class="indexterm" name="id2660446"></a><pre class="programlisting"><a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> g_log_set_always_fatal       (<a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> fatal_mask);</pre>
+<p>
+Устанавливает сообщение уровень которого всегда является фатальным, в любой области регистрации.
+Когда сообщение с этим уровнем зарегистрировано приложение закрывается.
+Вы можете только установить фатальные уровни определенные в GLib.
+<code class="literal">G_LOG_LEVEL_ERROR</code> всегда фатально.
+</p>
+<p>
+Вы можете также сделать некоторое сообщение фатальным установив во время выполнения переменную окружения <code class="literal">G_DEBUG</code> (смотрите
+<a href="glib-running.html" target="_top">Running GLib Applications</a>).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>fatal_mask</code></em>&#160;:</span></td>
+<td>маска содержащая биты установленные для каждого уровня ошибки которая будет фатальной.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>старая фатальная маска.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2660541"></a><h3>
+<a name="g-log-set-fatal-mask"></a>g_log_set_fatal_mask ()</h3>
+<a class="indexterm" name="id2660555"></a><pre class="programlisting"><a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> g_log_set_fatal_mask         (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> fatal_mask);</pre>
+<p>
+Устанавливает регистрационный уровень который является фатальным в полученной области.
+<code class="literal">G_LOG_LEVEL_ERROR</code> всегда фатально.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_domain</code></em>&#160;:</span></td>
+<td>регистрационная область.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>fatal_mask</code></em>&#160;:</span></td>
+<td>новая фатальная маска.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>старая фатальная маска для области регистрации.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2660647"></a><h3>
+<a name="g-log-default-handler"></a>g_log_default_handler ()</h3>
+<a class="indexterm" name="id2660660"></a><pre class="programlisting">void        g_log_default_handler           (const <a href="glib-Basic-Types.html#gchar">gchar</a> *log_domain,
+                                             <a href="glib-Message-Logging.html#GLogLevelFlags">GLogLevelFlags</a> log_level,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *message,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> unused_data);</pre>
+<p>
+Обработчик регистрации по умолчанию устанавливается GLib; <a href="glib-Message-Logging.html#g-log-set-default-handler"><code class="function">g_log_set_default_handler()</code></a> 
+позволяет установить альтернативу обработчика регистрации по умолчанию.
+Эта функция используется если нет обработчика регистраций установленного для специальной области
+и комбинации регистрационного уровня. Она выводит сообщения в stderr или stdout
+и если регистрационный уровень фатальный она вызывает <code class="function">abort()</code>.
+</p>
+<p>
+stderr используется для уровней <code class="literal">G_LOG_LEVEL_ERROR</code>, <code class="literal">G_LOG_LEVEL_CRITICAL</code>,
+<code class="literal">G_LOG_LEVEL_WARNING</code> и <code class="literal">G_LOG_LEVEL_MESSAGE</code>. stdout используется для остальных.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_domain</code></em>&#160;:</span></td>
+<td>регистрационная область сообщения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_level</code></em>&#160;:</span></td>
+<td>уровень сообщения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>message</code></em>&#160;:</span></td>
+<td>сообщение.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>unused_data</code></em>&#160;:</span></td>
+<td>данные помещённые из <a href="glib-Message-Logging.html#g-log"><code class="function">g_log()</code></a> которые не использованы.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2660859"></a><h3>
+<a name="g-log-set-default-handler"></a>g_log_set_default_handler ()</h3>
+<a class="indexterm" name="id2660875"></a><pre class="programlisting"><a href="glib-Message-Logging.html#GLogFunc">GLogFunc</a>    g_log_set_default_handler       (<a href="glib-Message-Logging.html#GLogFunc">GLogFunc</a> log_func,
+                                             <a href="glib-Basic-Types.html#gpointer">gpointer</a> user_data);</pre>
+<p>
+Устанавливает обработчик журнала регистраций по умолчанию если нет обработчика установленного для специальной области регистрации и комбинации уровня регистрации. По умолчанию, GLib использует 
+<a href="glib-Message-Logging.html#g-log-default-handler"><code class="function">g_log_default_handler()</code></a> как обработчик журнала регистрации.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>log_func</code></em>&#160;:</span></td>
+<td>функция обработчика регистрации.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>user_data</code></em>&#160;:</span></td>
+<td>данные помещаемые в обработчик регистрации.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>предыдущий обработчик регистрации по умолчанию
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.6
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

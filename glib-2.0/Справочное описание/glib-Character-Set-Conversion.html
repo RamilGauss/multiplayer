@@ -1,0 +1,1248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Character Set Conversion</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-utilities.html" title="GLib Utilities">
+<link rel="prev" href="glib-String-Utility-Functions.html" title="String Utility Functions">
+<link rel="next" href="glib-Unicode-Manipulation.html" title="Unicode Manipulation">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-String-Utility-Functions.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-utilities.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Unicode-Manipulation.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2689981" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2690755" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Character-Set-Conversion"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2689981"></a><span class="refentrytitle">Character Set Conversion</span>
+</h2>
+<p>Character Set Conversion &#8212; конвертирование строк между разными наборами символов используя <code class="function"><code class="function">iconv()</code></code>.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Character-Set-Conversion.html#g-convert">g_convert</a>                       (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *to_codeset,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *from_codeset,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Character-Set-Conversion.html#g-convert-with-fallback">g_convert_with_fallback</a>         (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *to_codeset,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *from_codeset,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> *fallback,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+            <a href="glib-Character-Set-Conversion.html#GIConv">GIConv</a>;
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Character-Set-Conversion.html#g-convert-with-iconv">g_convert_with_iconv</a>            (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Character-Set-Conversion.html#GIConv">GIConv</a> converter,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+#define     <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR:CAPS">G_CONVERT_ERROR</a>
+<a href="glib-Character-Set-Conversion.html#GIConv">GIConv</a>      <a href="glib-Character-Set-Conversion.html#g-iconv-open">g_iconv_open</a>                    (const <a href="glib-Basic-Types.html#gchar">gchar</a> *to_codeset,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *from_codeset);
+size_t      <a href="glib-Character-Set-Conversion.html#g-iconv">g_iconv</a>                         (<a href="glib-Character-Set-Conversion.html#GIConv">GIConv</a> converter,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **inbuf,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *inbytes_left,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **outbuf,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *outbytes_left);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Character-Set-Conversion.html#g-iconv-close">g_iconv_close</a>                   (<a href="glib-Character-Set-Conversion.html#GIConv">GIConv</a> converter);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Character-Set-Conversion.html#g-locale-to-utf8">g_locale_to_utf8</a>                (const <a href="glib-Basic-Types.html#gchar">gchar</a> *opsysstring,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Character-Set-Conversion.html#g-filename-to-utf8">g_filename_to_utf8</a>              (const <a href="glib-Basic-Types.html#gchar">gchar</a> *opsysstring,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Character-Set-Conversion.html#g-filename-from-utf8">g_filename_from_utf8</a>            (const <a href="glib-Basic-Types.html#gchar">gchar</a> *utf8string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Character-Set-Conversion.html#g-filename-from-uri">g_filename_from_uri</a>             (const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **hostname,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Character-Set-Conversion.html#g-filename-to-uri">g_filename_to_uri</a>               (const <a href="glib-Basic-Types.html#gchar">gchar</a> *filename,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *hostname,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Character-Set-Conversion.html#g-get-filename-charsets">g_get_filename_charsets</a>         (G_CONST_RETURN <a href="glib-Basic-Types.html#gchar">gchar</a> ***charsets);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Character-Set-Conversion.html#g-filename-display-name">g_filename_display_name</a>         (const <a href="glib-Basic-Types.html#gchar">gchar</a> *filename);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Character-Set-Conversion.html#g-filename-display-basename">g_filename_display_basename</a>     (const <a href="glib-Basic-Types.html#gchar">gchar</a> *filename);
+<a href="glib-Basic-Types.html#gchar">gchar</a>**     <a href="glib-Character-Set-Conversion.html#g-uri-list-extract-uris">g_uri_list_extract_uris</a>         (const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri_list);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Character-Set-Conversion.html#g-locale-from-utf8">g_locale_from_utf8</a>              (const <a href="glib-Basic-Types.html#gchar">gchar</a> *utf8string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+enum        <a href="glib-Character-Set-Conversion.html#GConvertError">GConvertError</a>;
+
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Character-Set-Conversion.html#g-get-charset">g_get_charset</a>                   (G_CONST_RETURN char **charset);
+
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2690755"></a><h2>Описание</h2>
+<p>
+
+</p>
+<div class="refsect2" lang="en">
+<a name="file-name-encodings"></a><h3>Кодировка имени файла</h3>
+<p>
+	Исторически, Unix не имел определённой кодировки для имен файла:  
+        имя файла допустимо пока в нём нет разделителей пути ("/").  
+        Однако, отображение имён файла может требовать преобразования:  
+        из набора символа в котором оно создавалось, в набор символов 
+        с которым оперирует приложение.  Рассмотрим Испанское имя файла
+	"<code class="filename">Presentaci&#243;n.sxi</code>".  Если 
+        приложение которое создавало его использует ISO-8859-1 для его кодировки,
+	то фактическое имя файла на диске должно выглядеть так:
+      </p>
+<a name="filename-iso8859-1"></a><pre class="programlisting">
+Character:  P  r  e  s  e  n  t  a  c  i  &#243;  n  .  s  x  i
+Hex code:   50 72 65 73 65 6e 74 61 63 69 f3 6e 2e 73 78 69
+      </pre>
+<p>
+	Однако, если приложение использует UTF-8, фактическое имя файла на
+	диске будет выглядеть так:
+      </p>
+<a name="filename-utf-8"></a><pre class="programlisting">
+Character:  P  r  e  s  e  n  t  a  c  i  &#243;     n  .  s  x  i
+Hex code:   50 72 65 73 65 6e 74 61 63 69 c3 b3 6e 2e 73 78 69
+      </pre>
+<p>
+	Glib использует UTF-8 для строк, и GUI toolkits такой как GTK+
+	который использует Glib делает тоже самое.  Если вы получили имя файла из
+	файловой системы, например, из
+	<code class="function">readdir(3)</code> или из <code class="function"><a href="glib-File-Utilities.html#g-dir-read-name"><code class="function">g_dir_read_name()</code></a></code>,
+	и желаете отобразить имя файла пользователю, вы
+	<span class="emphasis"><em>будете</em></span> должны конвертировать его в UTF-8.
+        Противоположный случай когда пользователь печатает имя файла и хочет его сохранить:  
+        инструментарий (toolkit) выдаст вам что строка в кодировке UTF-8, 
+        и вам необходимо конвертировать её в набор символов используемый файловой системой 
+	перед тем как вы сможете создать файл с помощью <code class="function">open(2)</code> 
+        или <code class="function">fopen(3)</code>.
+      </p>
+<p>
+	По умолчанию, Glib предполагает что имена файлов на диске находятся в кодировке UTF-8.
+	Это правильное предположение для файловых систем которые были созданы относительно недавно:
+	большинство приложений используют UTF-8 кодировку для их строк, а так же для имён файлов которые
+	они создают.  Однако, более старые файловые системы могут по прежнему создавать имена файлов
+	в "старых" кодировках, таких как ISO-8859-1.  В этом случае, по причинам совместимости, вы можете
+	инструктировать Glib использовать эту специальную кодировки для имен файлов а не UTF-8.  
+        Вы можете выполнить это определив кодировку для имён файлов в переменной окружения
+        <a href="glib-running.html#G_FILENAME_ENCODING"><code class="envar">G_FILENAME_ENCODING</code></a>.
+	Например, если ваша инсталяция использует ISO-8859-1 для имен файлов, вы можете поместить следующее в свой 
+	<code class="filename">~/.profile</code>:
+      </p>
+<pre class="programlisting">
+export G_FILENAME_ENCODING=ISO-8859-1
+      </pre>
+<p>
+	Glib обеспечивает функции <code class="function"><a href="glib-Character-Set-Conversion.html#g-filename-to-utf8"><code class="function">g_filename_to_utf8()</code></a></code>
+	и <code class="function"><a href="glib-Character-Set-Conversion.html#g-filename-from-utf8"><code class="function">g_filename_from_utf8()</code></a></code>
+	для выполнения необходимых преобразований. Эти функции конвертируют имена файлов из кодировки определённой в
+	<code class="envar">G_FILENAME_ENCODING</code> в кодировку UTF-8 и наоборот.
+	<a href="glib-Character-Set-Conversion.html#file-name-encodings-diagram" title="Figure&#160;1.&#160;Conversion between File Name Encodings">Схема&#160;1, &#8220;Конвертация между кодировками имён файлов&#8221;</a> иллюстрирует как эти функции используются 
+        для конвертации между UTF-8 и кодировкой имён файлов в файловой системе.
+      </p>
+<div class="figure">
+<a name="file-name-encodings-diagram"></a><p class="title"><b>Схема&#160;1.&#160;Конвертация между кодировками имён файлов</b></p>
+<div><img src="file-name-encodings.png" alt="Conversion between File Name Encodings"></div>
+</div>
+<div class="refsect3" lang="en">
+<a name="file-name-encodings-checklist"></a><h4>Контрольный список для записывающего приложения</h4>
+<p>
+	  Эта секция суммирует детали описанные выше.  
+          Вы можете использовать это как контрольный список
+	  необходимых вещей выполняемых для того чтобы удостоверится 
+          что ваше приложение выполняет перекодировку имён файлов корректно.
+	</p>
+<div class="orderedlist"><ol type="1">
+<li><p>
+	      Если вы получаете имя файла из файловой системы с помощью функций
+	      таких как <code class="function">readdir(3)</code> или
+	      <code class="function"><code class="function">gtk_file_chooser_get_filename()</code></code>,
+	      вы не должны выполнять никаких конвертаций для помещения этого имени файла
+	      в функции такие как <code class="function">open(2)</code>,
+	      <code class="function">rename(2)</code>, или
+	      <code class="function">fopen(3)</code> &#8212; изначальные имена файлов которые понимает файловая система.
+	    </p></li>
+<li><p>
+	      Если вам нужно отобразить имя файла, конвертируйте его в UTF-8 перед использованием
+	      <code class="function"><a href="glib-Character-Set-Conversion.html#g-filename-to-utf8"><code class="function">g_filename_to_utf8()</code></a></code>.
+	      Если конвертация не удалась, отображается строка как 
+              "<code class="literal">Unknown file name</code>".  
+              <span class="emphasis"><em>Не</em></span> конвертируйте эту 
+              строку обратно в кодировку используемую для имён файла
+	      если вы хотите поместить её в файловую систему; 
+              используйте оригинальное имя файла вместо этого.
+	      Например, окно документа в текстовом процессоре
+	      может отобразить "Unknown file name" в своём заголовке, но при этом
+	      всё ещё позволяет пользователю сохранить файл, так как это сохранит 
+              исходное имя внутренне.  Это может произойти если пользователь
+	      не имеет установленной переменной окружения <code class="envar">G_FILENAME_ENCODING</code>
+	      даже если у него есть файлы имена которых не закодированы в UTF-8.
+	    </p></li>
+<li><p>
+	      Если ваш пользовательский интерфейс позволяет пользователю печатать имя файла
+	      для сохранения или переименования, конвертируйте его в кодировку используемую для имен файлов файловой системы
+	      используя <code class="function"><a href="glib-Character-Set-Conversion.html#g-filename-from-utf8"><code class="function">g_filename_from_utf8()</code></a></code>.
+	      Поместите конвертированное имя файла в функции такие как
+	      <code class="function">fopen(3)</code>.  Если конверсия неудалась, 
+              у пользователя запрашивается другое имя файла.  Это может произойти 
+	      если пользователь печатает Японскими символами когда
+	      <code class="envar">G_FILENAME_ENCODING</code> установлена в 
+	      <code class="literal">ISO-8859-1</code>, например.
+	    </p></li>
+</ol></div>
+</div>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2691189"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2691199"></a><h3>
+<a name="g-convert"></a>g_convert ()</h3>
+<a class="indexterm" name="id2691212"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_convert                       (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *to_codeset,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *from_codeset,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку из одного символьного набора в другой.
+</p>
+<p>
+Помните что вы должны использовать <a href="glib-Character-Set-Conversion.html#g-iconv"><code class="function">g_iconv()</code></a> 
+для поточных конвертаций<sup>[<a href="#ftn.streaming-state">2</a>]</sup>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td>           строка для конвертации
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>           длина строки, или -1 если строка это nul-завершённый<sup>[<a name="nul-unsafe" href="#ftn.nul-unsafe">1</a>]</sup>. 
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>to_codeset</code></em>&#160;:</span></td>
+<td>    имя набора символов в который конвертируется <em class="parameter"><code>str</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>from_codeset</code></em>&#160;:</span></td>
+<td>  набор символов <em class="parameter"><code>str</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_read</code></em>&#160;:</span></td>
+<td>    Размещение для хранения количества байт во входной строке которые были успешно конвертированы,
+                или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+                Даже если конвертация полностью удалась, это значение может быть меньше чем
+                <em class="parameter"><code>len</code></em> если были частичные символы в конце ввода. 
+                Если произошла ошибка
+                <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-ILLEGAL-SEQUENCE:CAPS">
+                <span class="type">G_CONVERT_ERROR_ILLEGAL_SEQUENCE</span></a>, значение хранит смещение 
+                байт после последней допустимой последовательности ввода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_written</code></em>&#160;:</span></td>
+<td> количество байт сохраняемое в буфере вывода (не включая завершающий nul).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td>         расположение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+             <code class="literal">NULL</code></a> для игнорирования ошибок. 
+             Любая из ошибок в <a href="glib-Character-Set-Conversion.html#GConvertError">
+             <span class="type">GConvertError</span></a> может произойти.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Если конвертация выполнена, вновь распределённую nul-завершённую строку, которая должна быть освобождена
+     <a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a>. 
+     Иначе устанавливается <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     и <em class="parameter"><code>error</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2691531"></a><h3>
+<a name="g-convert-with-fallback"></a>g_convert_with_fallback ()</h3>
+<a class="indexterm" name="id2691544"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_convert_with_fallback         (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *to_codeset,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *from_codeset,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> *fallback,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку из одного набора символов в другой, возможно включая
+последовательности перехода в аварийный режим для символов не подходящих для вывода. 
+Помните что это не гарантирует что спецификация для последовательности аварийного режима
+в <em class="parameter"><code>fallback</code></em> будет учтена. Некоторые системы могут выполнять
+приблизительную конвертацию из <em class="parameter"><code>from_codeset</code></em>
+в <em class="parameter"><code>to_codeset</code></em> в их <code class="function">iconv()</code> функциях, 
+в этом случае GLib будет просто возвращать эту приблизительную конвертацию.
+</p>
+<p>
+Помните что вы должны использовать <a href="glib-Character-Set-Conversion.html#g-iconv"><code class="function">g_iconv()</code></a> 
+для конвертации строк<sup>[<a href="#ftn.streaming-state">2</a>]</sup>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td>          строка для конвертации
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>          длина строки, или -1 если строка это nul-terminated<sup>[<a href="#ftn.nul-unsafe">1</a>]</sup>. 
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>to_codeset</code></em>&#160;:</span></td>
+<td>   имя набора символов в который конвертируется строка <em class="parameter"><code>str</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>from_codeset</code></em>&#160;:</span></td>
+<td> набор символов <em class="parameter"><code>str</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>fallback</code></em>&#160;:</span></td>
+<td>     UTF-8 строка для использования вместо символа не представленного в целевой кодировке. 
+         (Строка должна быть доступна для представления в целевой кодировке). 
+         Если <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, символы не в целевой кодировке
+         будут представлены как Unicode escapes \uxxxx или \Uxxxxyyyy.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_read</code></em>&#160;:</span></td>
+<td>   Расположение для хранения количества байт во входной строке которые были успешно конвертированы,
+       или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+               Даже если конвертация была полностью выполнена, это значение может быть 
+               меньше чем <em class="parameter"><code>len</code></em> если есть частичные символы завершающие ввод.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_written</code></em>&#160;:</span></td>
+<td> количество байт сохранённых в буфер вывода (не включая завершающий nul).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td>        расположение для хранения произошедшей ошибки, или 
+       <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для игнорирования ошибок. 
+       Любые ошибки в <a href="glib-Character-Set-Conversion.html#GConvertError"><span class="type">GConvertError</span></a> могут произойти.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Если конвертация была полностью выполнена, вновь распределёная nul-завершённая строка, которая может быть освобождена с помощью
+     <a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a>. 
+     Иначе <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     и <em class="parameter"><code>error</code></em> будут установлены.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2691914"></a><h3>
+<a name="GIConv"></a>GIConv</h3>
+<a class="indexterm" name="id2691927"></a><pre class="programlisting">typedef struct _GIConv GIConv;</pre>
+<p>
+<span class="structname">GIConv</span> структура оболочка 
+<code class="function"><code class="function">iconv()</code></code> дескриптора конвертации. Она содержит закрытые данные и
+доступ к ней должен осуществляться с помощью функций описанных ниже.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2691961"></a><h3>
+<a name="g-convert-with-iconv"></a>g_convert_with_iconv ()</h3>
+<a class="indexterm" name="id2691975"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_convert_with_iconv            (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Character-Set-Conversion.html#GIConv">GIConv</a> converter,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку из одного набора символов в другой. 
+</p>
+<p>
+Помните что вы должны использовать <a href="glib-Character-Set-Conversion.html#g-iconv"><code class="function">g_iconv()</code></a> для поточных конвертаций<sup>[<a name="streaming-state" href="#ftn.streaming-state">2</a>]</sup>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td>           строка для конвертации
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>           длина строки, или -1 если строка это nul-terminated<sup>[<a name="ftn.nul-unsafe" href="#ftn.nul-unsafe">1</a>]</sup>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>converter</code></em>&#160;:</span></td>
+<td>     дескриптор конвертации из <a href="glib-Character-Set-Conversion.html#g-iconv-open"><code class="function">g_iconv_open()</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_read</code></em>&#160;:</span></td>
+<td>    размещение для хранения количества байт во входной строке 
+        которые были успешно конвертированы, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+                Даже если конвертация полностью выполнена, это значение может быть меньше 
+                чем <em class="parameter"><code>len</code></em>, если были частичные символы в конце ввода. 
+                Если произошла ошибка
+                <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-ILLEGAL-SEQUENCE:CAPS">
+                <span class="type">G_CONVERT_ERROR_ILLEGAL_SEQUENCE</span></a>, будет сохранено значение 
+                смещения байт после последней допустимой последовательности ввода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_written</code></em>&#160;:</span></td>
+<td> количество байт сохраняемых в буфере вывода (не включая завершающий nul).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td>         размещение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+             <code class="literal">NULL</code></a> для игнорирования ошибок. 
+             Могут произойти любые ошибки указанные в <a href="glib-Character-Set-Conversion.html#GConvertError">
+             <span class="type">GConvertError</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> если конвертация полностью выполнена, вновь распределённую nul-завершённую строку, 
+     которая может быть освобождена <a href="glib-Memory-Allocation.html#g-free">
+     <code class="function">g_free()</code></a>. Иначе <a href="glib-Standard-Macros.html#NULL:CAPS">
+     <code class="literal">NULL</code></a> и <em class="parameter"><code>error</code></em> будут установлены.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2692320"></a><h3>
+<a name="G-CONVERT-ERROR:CAPS"></a>G_CONVERT_ERROR</h3>
+<a class="indexterm" name="id2692334"></a><pre class="programlisting">#define G_CONVERT_ERROR g_convert_error_quark()
+</pre>
+<p>
+Домен ошибки (Error domain) для конвертации набора символов. Ошибки в этом домене будут из перечисления
+<a href="glib-Character-Set-Conversion.html#GConvertError"><span class="type">GConvertError</span></a>. 
+Смотрите <a href="glib-Error-Reporting.html#GError"><span class="type">GError</span></a> для детальной информации об ошибках.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2692367"></a><h3>
+<a name="g-iconv-open"></a>g_iconv_open ()</h3>
+<a class="indexterm" name="id2692380"></a><pre class="programlisting"><a href="glib-Character-Set-Conversion.html#GIConv">GIConv</a>      g_iconv_open                    (const <a href="glib-Basic-Types.html#gchar">gchar</a> *to_codeset,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *from_codeset);</pre>
+<p>
+То же самое что и стандартная подпрограмма UNIX <code class="function">iconv_open()</code>, 
+но может быть реализована через libiconv на разновидностях UNIX где имеется недостаток в родной реализации.
+</p>
+<p>
+GLib обеспечивает <a href="glib-Character-Set-Conversion.html#g-convert"><code class="function">g_convert()</code></a> 
+и <a href="glib-Character-Set-Conversion.html#g-locale-to-utf8"><code class="function">g_locale_to_utf8()</code></a> 
+которые вероятно являются более удобными чем исходные оболочки iconv.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>to_codeset</code></em>&#160;:</span></td>
+<td> определяет устанавливаемую кодировку
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>from_codeset</code></em>&#160;:</span></td>
+<td> из какой кодировки перекодируется
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>  "дескриптор конвертора", или (GIConv)-1 если открываемый конвертер недоступен.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2692502"></a><h3>
+<a name="g-iconv"></a>g_iconv ()</h3>
+<a class="indexterm" name="id2692515"></a><pre class="programlisting">size_t      g_iconv                         (<a href="glib-Character-Set-Conversion.html#GIConv">GIConv</a> converter,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **inbuf,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *inbytes_left,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **outbuf,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *outbytes_left);</pre>
+<p>
+Тоже самое как стандартная подпрограмма UNIX <code class="function">iconv()</code>, 
+но может быть реализована через libiconv на разновидностях UNIX в которых нет родной реализации.
+</p>
+<p>
+GLib обеспечивает <a href="glib-Character-Set-Conversion.html#g-convert"><code class="function">g_convert()</code></a> и <a href="glib-Character-Set-Conversion.html#g-locale-to-utf8"><code class="function">g_locale_to_utf8()</code></a> 
+которые намного удобнее чем исходные оболочки iconv.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>converter</code></em>&#160;:</span></td>
+<td> дескриптор конвертации из <a href="glib-Character-Set-Conversion.html#g-iconv-open"><code class="function">g_iconv_open()</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>inbuf</code></em>&#160;:</span></td>
+<td> байты для конвертации
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>inbytes_left</code></em>&#160;:</span></td>
+<td> входной параметр, байты остаются для конвертации в <em class="parameter"><code>inbuf</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>outbuf</code></em>&#160;:</span></td>
+<td> конвертирует вывод байт
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>outbytes_left</code></em>&#160;:</span></td>
+<td> параметр ввода-вывода, байты доступные для заполнения в <em class="parameter"><code>outbuf</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> подсчёт необратимый преобразований, или -1 при возникновении ошибки error
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2692723"></a><h3>
+<a name="g-iconv-close"></a>g_iconv_close ()</h3>
+<a class="indexterm" name="id2692736"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_iconv_close                   (<a href="glib-Character-Set-Conversion.html#GIConv">GIConv</a> converter);</pre>
+<p>
+Тоже самое что стандартная подпрограмма UNIX <code class="function">iconv_close()</code>, 
+но может быть реализована через libiconv на разновидностях UNIX где нет родной реализации. 
+Должна вызываться для очистки дескриптора конвертации из <a href="glib-Character-Set-Conversion.html#g-iconv-open"><code class="function">g_iconv_open()</code></a> когда вы выполняете конвертационные действия.
+</p>
+<p>
+GLib обеспечивает <a href="glib-Character-Set-Conversion.html#g-convert"><code class="function">g_convert()</code></a> и <a href="glib-Character-Set-Conversion.html#g-locale-to-utf8"><code class="function">g_locale_to_utf8()</code></a> 
+которые намного удобнее чем исходные оболочки iconv.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>converter</code></em>&#160;:</span></td>
+<td> дескриптор конвертации из <a href="glib-Character-Set-Conversion.html#g-iconv-open"><code class="function">g_iconv_open()</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> -1 при ошибке, 0 при удачном выполнении
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2692859"></a><h3>
+<a name="g-locale-to-utf8"></a>g_locale_to_utf8 ()</h3>
+<a class="indexterm" name="id2692872"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_locale_to_utf8                (const <a href="glib-Basic-Types.html#gchar">gchar</a> *opsysstring,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку которая находится в кодировке используемой для строк C runtime (обычно тоже самое что используется операционной системой) 
+в текущей локали в строку UTF-8.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>opsysstring</code></em>&#160;:</span></td>
+<td>   строка в кодировке текущей локали. В Windows это означает system codepage.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>           длина строки, или -1 если строка nul-завершённая<sup>[<a href="#ftn.nul-unsafe">1</a>]</sup>. 
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_read</code></em>&#160;:</span></td>
+<td>    размещение для хранения количества байт во входной строке когда конвертация полностью выполнена, 
+        или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+                Даже если конвертация выполнена, этот параметр может быть меньше чем 
+                <em class="parameter"><code>len</code></em> если есть части символов в конце ввода. 
+                Если произошла ошибка
+                <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-ILLEGAL-SEQUENCE:CAPS">
+                <span class="type">G_CONVERT_ERROR_ILLEGAL_SEQUENCE</span></a>, будет сохранено значение 
+                смещения байт после последней допустимой цепочки ввода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_written</code></em>&#160;:</span></td>
+<td> количество байт сохранённых в буфере вывода (не включая завершающий nul).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td>         расположение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+             <code class="literal">NULL</code></a> для игнорирования ошибок. 
+             Могут произойти любые ошибки в <a href="glib-Character-Set-Conversion.html#GConvertError">
+             <span class="type">GConvertError</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Конвертируемая строка, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при ошибке.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2693094"></a><h3>
+<a name="g-filename-to-utf8"></a>g_filename_to_utf8 ()</h3>
+<a class="indexterm" name="id2693108"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_filename_to_utf8              (const <a href="glib-Basic-Types.html#gchar">gchar</a> *opsysstring,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку которая в кодировке используемой GLib для
+имён файлов в строку UTF-8. Помните что в Windows GLib использует UTF-8
+для имён файлов.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>opsysstring</code></em>&#160;:</span></td>
+<td>   строка в кодировке для имён файлов
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>           длина строки, или -1 если строка это завершающий ноль (nul-terminated)<sup>[<a href="#ftn.nul-unsafe">1</a>]</sup>. 
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_read</code></em>&#160;:</span></td>
+<td>    расположение для хранения количества байт во входной строке когда конвертация полностью выполнена,
+        или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+                Даже если конвертация удалась, это значение может быть меньше чем 
+                <em class="parameter"><code>len</code></em> если есть части символов в конце ввода. 
+                Если произошла ошибка
+                <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-ILLEGAL-SEQUENCE:CAPS">
+                <span class="type">G_CONVERT_ERROR_ILLEGAL_SEQUENCE</span></a>, 
+                будет сохранено смещение байт после последней допустимой цепочки ввода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_written</code></em>&#160;:</span></td>
+<td> количество байт сохранённых в буфере вывода (не включая завершающий ноль).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td>         размещение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+             <code class="literal">NULL</code></a> для игнорирования ошибок. 
+             Могут произойти любые ошибки в <a href="glib-Character-Set-Conversion.html#GConvertError"><span class="type">GConvertError</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Конвертированная строка, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при ошибке.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2693328"></a><h3>
+<a name="g-filename-from-utf8"></a>g_filename_from_utf8 ()</h3>
+<a class="indexterm" name="id2693341"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_filename_from_utf8            (const <a href="glib-Basic-Types.html#gchar">gchar</a> *utf8string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку из UTF-8 в кодировку GLib используемую для имен файлов. 
+Помните что в Windows GLib использует UTF-8 для имён файлов.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>utf8string</code></em>&#160;:</span></td>
+<td>  строка в кодировке UTF-8.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>           длина строки, или -1 если строка это завершающий ноль (nul-terminated).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_read</code></em>&#160;:</span></td>
+<td>    расположение для хранения количества байт во входной строке при удачном выполнении конвертации,
+        или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+                Даже если конвертация выполнена, это значение может быть меньше чем
+                <em class="parameter"><code>len</code></em> если есть части символов в конце ввода. 
+                Если произошла ошибка
+                <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-ILLEGAL-SEQUENCE:CAPS">
+                <span class="type">G_CONVERT_ERROR_ILLEGAL_SEQUENCE</span></a>, сохраняется значение 
+                смещения байт после последней допустимой цепочки ввода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_written</code></em>&#160;:</span></td>
+<td> количество байт сохранённых в буфере вывода (не включая завершающий ноль).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td>         размещение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+             <code class="literal">NULL</code></a> для игнорирования ошибок. 
+             Могут произойти любые ошибки в <a href="glib-Character-Set-Conversion.html#GConvertError">
+             <span class="type">GConvertError</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Конвертируемая строка, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при ошибке.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2693555"></a><h3>
+<a name="g-filename-from-uri"></a>g_filename_from_uri ()</h3>
+<a class="indexterm" name="id2693569"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_filename_from_uri             (const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> **hostname,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует  ASCII-кодировку URI в локальное имя файла в кодировке используемой для имён файлов.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri</code></em>&#160;:</span></td>
+<td> uri описывающий имя файла (escaped, encoded in ASCII).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>hostname</code></em>&#160;:</span></td>
+<td> расположение для хранения имени узла (hostname) для URI, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+         <code class="literal">NULL</code></a>.
+           Если нет имени узла (hostname) в URI, то в этом расположении сохраняется 
+         <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+     <code class="literal">NULL</code></a> для игнорирования ошибок. 
+     Могут происходить любые ошибки в <a href="glib-Character-Set-Conversion.html#GConvertError"><span class="type">GConvertError</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> результат в виде вновь распределённой строки содержащей имя файла,
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при ошибке.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2693727"></a><h3>
+<a name="g-filename-to-uri"></a>g_filename_to_uri ()</h3>
+<a class="indexterm" name="id2693741"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_filename_to_uri               (const <a href="glib-Basic-Types.html#gchar">gchar</a> *filename,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *hostname,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует абсолютное имя файла в управляющие символы ASCII-кодировки URI, с компонентом пути упоминаемым далее в Разделе 3.3. RFC 2396.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>filename</code></em>&#160;:</span></td>
+<td> абсолютное имя файла определённое в GLib кодировке имён файлов,
+           которое является дисковыми байтами имени файла в Unix, и UTF-8 в Windows
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>hostname</code></em>&#160;:</span></td>
+<td> Имя узла в кодировке UTF-8, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если нет.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+     <code class="literal">NULL</code></a> для игнорирования ошибок. 
+     Могут происходить любые ошибки в <a href="glib-Character-Set-Conversion.html#GConvertError"><span class="type">GConvertError</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка содержащая результат URI, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при ошибке.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2693890"></a><h3>
+<a name="g-get-filename-charsets"></a>g_get_filename_charsets ()</h3>
+<a class="indexterm" name="id2693905"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_get_filename_charsets         (G_CONST_RETURN <a href="glib-Basic-Types.html#gchar">gchar</a> ***charsets);</pre>
+<p>
+Определяет привилегированные наборы символов используемые для имён файлов.
+Первый набор символов из <em class="parameter"><code>charsets</code></em> это кодировка имени файла, 
+последующие наборы символов используются когда происходят попытки сгенерировать отображаемое представление имени файла,
+смотрите <a href="glib-Character-Set-Conversion.html#g-filename-display-name"><code class="function">g_filename_display_name()</code></a>.
+</p>
+<p>
+В Unix, набор символов определяются с помощью переменных окружения <code class="envar">G_FILENAME_ENCODING</code> и
+<code class="envar">G_BROKEN_FILENAMES</code>. В Windows, набор символов используемый в GLib API всегда UTF-8, 
+а переменные окружения не имеют никакого эффекта.
+</p>
+<p>
+<code class="envar">G_FILENAME_ENCODING</code> может быть установлен для разделённого запятыми списка
+набора символов имён. Специальная лексема "<em class="parameter"><code>locale</code></em>" применяется 
+для обозначения набора символов для текущей локали. Если <code class="envar">G_FILENAME_ENCODING</code> 
+не установлена, но установлена <code class="envar">G_BROKEN_FILENAMES</code>, набор символов текущей 
+локали применяется как кодировка имени файла. Если переменные окружения не установлены совсем, 
+в качестве кодировки имени файла применяется UTF-8, но набор символов текущей локали также помещается 
+в список кодировок.
+</p>
+<p>
+Возвращаемые <em class="parameter"><code>charsets</code></em> принадлежат GLib и не должны освобождаться.
+</p>
+<p>
+Помните что в Unix, независимо от локального набора символов или значения <code class="envar">G_FILENAME_ENCODING</code>, 
+фактические имена файлов представленные в системе могут быть в любой произвольной кодировке или просто тарабарщиной (gibberish).</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>charsets</code></em>&#160;:</span></td>
+<td> расположение возвращаемого <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>-завершённого 
+     списка кодировок имён
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если кодировка имени файла UTF-8.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.6
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2694074"></a><h3>
+<a name="g-filename-display-name"></a>g_filename_display_name ()</h3>
+<a class="indexterm" name="id2694089"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_filename_display_name         (const <a href="glib-Basic-Types.html#gchar">gchar</a> *filename);</pre>
+<p>
+Конвертирует имя файла в допустимую UTF-8 строку. Конвертация необязательно 
+обратима, поэтому вы должны иметь оригинал и использовать возвращаемое значение 
+этой функции только непосредственно для отображения.
+В отличие от <a href="glib-Character-Set-Conversion.html#g-filename-to-utf8"><code class="function">g_filename_to_utf8()</code></a>, результатом гарантировано будет не-<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+даже если имя файла фактически не находится в кодировке имени файла GLib.
+</p>
+<p>
+Если GLib не может понять кодировку <em class="parameter"><code>filename</code></em>, как последний способ  
+она заменяет неизвестные символы с помощью U+FFFD, символом замены Unicode.
+Вы можете искать результат кодировки UTF-8 этого символа (который находится в восьмеричной записи "\357\277\275") для поиска вывода если 
+<em class="parameter"><code>filename</code></em> был в недопустимой кодировке.
+</p>
+<p>
+Если вы знаете полное имя пути файла вы должны использовать
+<a href="glib-Character-Set-Conversion.html#g-filename-display-basename"><code class="function">g_filename_display_basename()</code></a>, 
+так как она позволяет перекодировку имён файлов на основе их расположения.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>filename</code></em>&#160;:</span></td>
+<td> имя пути предположительно в GLib кодировке имени файла
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка содержащая перевод имени файла в правильной UTF-8 
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.6
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2694219"></a><h3>
+<a name="g-filename-display-basename"></a>g_filename_display_basename ()</h3>
+<a class="indexterm" name="id2694235"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_filename_display_basename     (const <a href="glib-Basic-Types.html#gchar">gchar</a> *filename);</pre>
+<p>
+Возвращает отображаемое базовое имя для специфического имени файла, гарантировано
+в правильной UTF-8. Отображаемое имя может быть не идентично имени файла,
+например могут быть проблемы конвертации в UTF-8, а некоторые файлы могут быть
+оттранслированы в отображении.
+</p>
+<p>
+Если GLib не может понять кодировку <em class="parameter"><code>filename</code></em>, как последний вариант она 
+заменяет неизвестные символы с помощью U+FFFD, символ замены Unicode.
+Вы можете найти результат для UTF-8 кодировки этого символа (который находится в восьмеричном представлении "\357\277\275") 
+для поиска вывода если <em class="parameter"><code>filename</code></em> был в недопустимой кодировке.
+</p>
+<p>
+Вы должны поместить полное имя пути файла в функцию чтобы можно было выполнить трансляцию известных расположений.
+</p>
+<p>
+Эта функция предпочтительней чем <a href="glib-Character-Set-Conversion.html#g-filename-display-name">
+<code class="function">g_filename_display_name()</code></a> если вам известен полный путь, так как это позволяет трансляцию.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>filename</code></em>&#160;:</span></td>
+<td> полное имя пути в кодировке имени файла GLib
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка содержащая представление базового имени файла в допустимой UTF-8
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.6
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2694347"></a><h3>
+<a name="g-uri-list-extract-uris"></a>g_uri_list_extract_uris ()</h3>
+<a class="indexterm" name="id2694362"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>**     g_uri_list_extract_uris         (const <a href="glib-Basic-Types.html#gchar">gchar</a> *uri_list);</pre>
+<p>
+Разбирает URI список соответствующий text/uri-списку
+mime type, определённого в RFC 2483, в индивидуальные URIs,
+отменяя любые коментарии. URIs являются не утверждёнными.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>uri_list</code></em>&#160;:</span></td>
+<td> URI список 
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённый <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>-завершённый список 
+     строк содержащих индивидуальные URIs. Массив должен быть освобождён с помощью <a href="glib-String-Utility-Functions.html#g-strfreev">
+     <code class="function">g_strfreev()</code></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.6
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2694451"></a><h3>
+<a name="g-locale-from-utf8"></a>g_locale_from_utf8 ()</h3>
+<a class="indexterm" name="id2694464"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_locale_from_utf8              (const <a href="glib-Basic-Types.html#gchar">gchar</a> *utf8string,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_read,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *bytes_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку из UTF-8 в кодировку используемую для строк 
+C runtime (обычно тоже самое что используется операционной системой) в текущей локали.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>utf8string</code></em>&#160;:</span></td>
+<td>    строка в кодировке UTF-8 
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td>           длина строки, или -1 если строка завершающий ноль<sup>[<a href="#ftn.nul-unsafe">1</a>]</sup>. 
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_read</code></em>&#160;:</span></td>
+<td>    расположение для хранения количества байт во входной строке
+        когда конвертация полностью выполнена, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+                Даже если конвертация завершилась успешно, это значение может быть меньше 
+                чем <em class="parameter"><code>len</code></em> если есть части символов в конце ввода. 
+                Если произошла ошибка
+                <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-ILLEGAL-SEQUENCE:CAPS">
+                <span class="type">G_CONVERT_ERROR_ILLEGAL_SEQUENCE</span></a>, сохраняется значение
+                смещения байт после последней удачной цепочки ввода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>bytes_written</code></em>&#160;:</span></td>
+<td> количество байт сохранённых в буфере вывода (не включая завершающий ноль).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td>         расположение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+             <code class="literal">NULL</code></a> для игнорирования ошибок. 
+             Могут произойти любые ошибки в <a href="glib-Character-Set-Conversion.html#GConvertError">
+             <span class="type">GConvertError</span></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> конвертированная строка, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при ошибке.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2694685"></a><h3>
+<a name="GConvertError"></a>enum GConvertError</h3>
+<a class="indexterm" name="id2694698"></a><pre class="programlisting">typedef enum 
+{
+  G_CONVERT_ERROR_NO_CONVERSION,
+  G_CONVERT_ERROR_ILLEGAL_SEQUENCE,
+  G_CONVERT_ERROR_FAILED,
+  G_CONVERT_ERROR_PARTIAL_INPUT,
+  G_CONVERT_ERROR_BAD_URI,
+  G_CONVERT_ERROR_NOT_ABSOLUTE_PATH
+} GConvertError;
+</pre>
+<p>
+Коды ошибок возвращаемые подпрограммами конвертации наборов символов.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-CONVERT-ERROR-NO-CONVERSION:CAPS"></a><code class="literal">G_CONVERT_ERROR_NO_CONVERSION</code></span></td>
+<td>Конвертация между запрошенными наборами символов не поддерживается.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-CONVERT-ERROR-ILLEGAL-SEQUENCE:CAPS"></a><code class="literal">G_CONVERT_ERROR_ILLEGAL_SEQUENCE</code></span></td>
+<td>Неправильная последовательность байт в конвертируемом вводе.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-CONVERT-ERROR-FAILED:CAPS"></a><code class="literal">G_CONVERT_ERROR_FAILED</code></span></td>
+<td>Конвертация не удалась по некоторым причинам.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-CONVERT-ERROR-PARTIAL-INPUT:CAPS"></a><code class="literal">G_CONVERT_ERROR_PARTIAL_INPUT</code></span></td>
+<td>Частичная символьная последовательность в конце ввода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-CONVERT-ERROR-BAD-URI:CAPS"></a><code class="literal">G_CONVERT_ERROR_BAD_URI</code></span></td>
+<td> недопустимый URI.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-CONVERT-ERROR-NOT-ABSOLUTE-PATH:CAPS"></a><code class="literal">G_CONVERT_ERROR_NOT_ABSOLUTE_PATH</code></span></td>
+<td>Имя пути не является абсолютным путём.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2694863"></a><h3>
+<a name="g-get-charset"></a>g_get_charset ()</h3>
+<a class="indexterm" name="id2694876"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_get_charset                   (G_CONST_RETURN char **charset);</pre>
+<p>
+Получает набор символов для текущей локали; вы можете использовать этот набор символов как аргумент для
+<a href="glib-Character-Set-Conversion.html#g-convert"><code class="function">g_convert()</code></a>, для конвертации из
+текущей локальной кодировки в некоторую другую кодировку. (Часто
+<a href="glib-Character-Set-Conversion.html#g-locale-to-utf8"><code class="function">g_locale_to_utf8()</code></a> и <a href="glib-Character-Set-Conversion.html#g-locale-from-utf8"><code class="function">g_locale_from_utf8()</code></a> являются хорошими shortcuts, всё же.)
+</p>
+<p>
+Возвращаемое значение равно <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> 
+если локальной кодировкой является UTF-8, в этом случае вы можете избежать вызова 
+<a href="glib-Character-Set-Conversion.html#g-convert"><code class="function">g_convert()</code></a>.
+</p>
+<p>
+Возвращаемая строка в <em class="parameter"><code>charset</code></em> не распределяется, и не должна освобождаться.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>charset</code></em>&#160;:</span></td>
+<td> расположение возвращаемого имени набора символов
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если возвращаемый набор символов UTF-8
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="footnotes">
+<br><hr width="100" align="left">
+<div class="footnote"><p><sup>[<a name="ftn.nul-unsafe" href="#nul-unsafe">1</a>] </sup>
+                       Помните что некоторые кодировки могут позволять nul байтам находится в строках. 
+                       В этом случае, использовать -1 для параметра <em class="parameter"><code>len</code></em> опасно.
+                     </p></div>
+<div class="footnote"><p><sup>[<a name="ftn.streaming-state" href="#streaming-state">2</a>] </sup>
+Несмотря на то, что <em class="parameter"><code>byes_read</code></em> может возвращать информацию о частичных символах, 
+функции <code class="literal">g_convert_...</code> являются в основном неподходящими для потоков. 
+Если основной конвертер поддерживает внутреннее состояние, то это не сохраняется через последовательность вызовов <a href="glib-Character-Set-Conversion.html#g-convert"><code class="function">g_convert()</code></a>, <a href="glib-Character-Set-Conversion.html#g-convert-with-iconv"><code class="function">g_convert_with_iconv()</code></a> или 
+<a href="glib-Character-Set-Conversion.html#g-convert-with-fallback"><code class="function">g_convert_with_fallback()</code></a>. 
+(Примером этому является GNU C конвертер для CP1255 который не выдаст основной символ 
+пока он знает что следующий символ не знак который можно совместить с основным символом.)
+ </p></div>
+</div>
+</div>
+</body>
+</html>

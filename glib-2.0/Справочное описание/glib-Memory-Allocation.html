@@ -1,0 +1,837 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Memory Allocation</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-core.html" title="GLib Core Application Support">
+<link rel="prev" href="glib-Dynamic-Loading-of-Modules.html" title="Dynamic Loading of Modules">
+<link rel="next" href="glib-IO-Channels.html" title="IO Channels">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Dynamic-Loading-of-Modules.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-core.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-IO-Channels.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2623226" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2623597" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Memory-Allocation"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2623226"></a><span class="refentrytitle">Memory Allocation</span>
+</h2>
+<p>Memory Allocation &#8212; Основная обработка памяти.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+#define     <a href="glib-Memory-Allocation.html#g-new">g_new</a>                           (struct_type, n_structs)
+#define     <a href="glib-Memory-Allocation.html#g-new0">g_new0</a>                          (struct_type, n_structs)
+#define     <a href="glib-Memory-Allocation.html#g-renew">g_renew</a>                         (struct_type, mem, n_structs)
+#define     <a href="glib-Memory-Allocation.html#g-try-new">g_try_new</a>                       (struct_type, n_structs)
+#define     <a href="glib-Memory-Allocation.html#g-try-new0">g_try_new0</a>                      (struct_type, n_structs)
+#define     <a href="glib-Memory-Allocation.html#g-try-renew">g_try_renew</a>                     (struct_type, mem, n_structs)
+
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Memory-Allocation.html#g-malloc">g_malloc</a>                        (<a href="glib-Basic-Types.html#gulong">gulong</a> n_bytes);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Memory-Allocation.html#g-malloc0">g_malloc0</a>                       (<a href="glib-Basic-Types.html#gulong">gulong</a> n_bytes);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Memory-Allocation.html#g-realloc">g_realloc</a>                       (<a href="glib-Basic-Types.html#gpointer">gpointer</a> mem,
+                                             <a href="glib-Basic-Types.html#gulong">gulong</a> n_bytes);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Memory-Allocation.html#g-try-malloc">g_try_malloc</a>                    (<a href="glib-Basic-Types.html#gulong">gulong</a> n_bytes);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Memory-Allocation.html#g-try-malloc0">g_try_malloc0</a>                   (<a href="glib-Basic-Types.html#gulong">gulong</a> n_bytes);
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Memory-Allocation.html#g-try-realloc">g_try_realloc</a>                   (<a href="glib-Basic-Types.html#gpointer">gpointer</a> mem,
+                                             <a href="glib-Basic-Types.html#gulong">gulong</a> n_bytes);
+
+void        <a href="glib-Memory-Allocation.html#g-free">g_free</a>                          (<a href="glib-Basic-Types.html#gpointer">gpointer</a> mem);
+extern      gboolean <a href="glib-Memory-Allocation.html#g-mem-gc-friendly">g_mem_gc_friendly</a>;
+
+#define     <a href="glib-Memory-Allocation.html#g-alloca">g_alloca</a>                        (size)
+#define     <a href="glib-Memory-Allocation.html#g-newa">g_newa</a>                          (struct_type, n_structs)
+
+#define     <a href="glib-Memory-Allocation.html#g-memmove">g_memmove</a>                       (dest,src,len)
+<a href="glib-Basic-Types.html#gpointer">gpointer</a>    <a href="glib-Memory-Allocation.html#g-memdup">g_memdup</a>                        (<a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> mem,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> byte_size);
+
+            <a href="glib-Memory-Allocation.html#GMemVTable">GMemVTable</a>;
+void        <a href="glib-Memory-Allocation.html#g-mem-set-vtable">g_mem_set_vtable</a>                (<a href="glib-Memory-Allocation.html#GMemVTable">GMemVTable</a> *vtable);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Memory-Allocation.html#g-mem-is-system-malloc">g_mem_is_system_malloc</a>          (void);
+
+extern      GMemVTable	*<a href="glib-Memory-Allocation.html#glib-mem-profiler-table">glib_mem_profiler_table</a>;
+void        <a href="glib-Memory-Allocation.html#g-mem-profile">g_mem_profile</a>                   (void);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2623597"></a><h2>Описание</h2>
+<p>
+Эти функции обеспечивают поддержку распределения и освобождения памяти.
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Примечание</h3>
+<p>
+Если любой вызов распределения памяти завершается неудачно, приложение закрывается.
+Это означает что нет необходимости проверять успешность выполнения вызова.
+</p>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2623622"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2623632"></a><h3>
+<a name="g-new"></a>g_new()</h3>
+<a class="indexterm" name="id2623645"></a><pre class="programlisting">#define     g_new(struct_type, n_structs)</pre>
+<p>
+Распределяет <em class="parameter"><code>n_structs</code></em> элементов типа <em class="parameter"><code>struct_type</code></em>.
+Возвращаемый указатель приводится к указателю для данного типа.
+Если <em class="parameter"><code>n_structs</code></em> равен 0, то возвращается <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<p>
+Так как возвращаемый указатель уже приведён к правильному типу,
+обычно не требуется явное приведение, это может скрыть ошибки распределения памяти.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>struct_type</code></em>&#160;:</span></td>
+<td>тип элементов для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_structs</code></em>&#160;:</span></td>
+<td>количество элементов для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель для распределенной памяти, приведённый к указателю типа <em class="parameter"><code>struct_type</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2623746"></a><h3>
+<a name="g-new0"></a>g_new0()</h3>
+<a class="indexterm" name="id2623758"></a><pre class="programlisting">#define     g_new0(struct_type, n_structs)</pre>
+<p>
+Распределяет <em class="parameter"><code>n_structs</code></em> элементов типа <em class="parameter"><code>struct_type</code></em>, инициализирует в 0's.
+Возвращаемый указатель приведён к указателю полученного типа.
+Если <em class="parameter"><code>n_structs</code></em> равен 0 возвращается <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<p>
+Так как возвращаемый указатель уже приведён к правильному типу,
+обычно не требуется явное приведение, это может скрыть ошибки распределения памяти.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>struct_type</code></em>&#160;:</span></td>
+<td>тип элементов для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_structs</code></em>&#160;:</span></td>
+<td>количество элементов для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель для распределённой памяти, приведённый к указателю типа <em class="parameter"><code>struct_type</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2623860"></a><h3>
+<a name="g-renew"></a>g_renew()</h3>
+<a class="indexterm" name="id2623872"></a><pre class="programlisting">#define     g_renew(struct_type, mem, n_structs)</pre>
+<p>
+Перераспределяет память указанную параметром <em class="parameter"><code>mem</code></em>, 
+так чтобы она имела свободное пространство для <em class="parameter"><code>n_structs</code></em> 
+элементов типа <em class="parameter"><code>struct_type</code></em>. Возвращает новый адрес памяти, 
+которая возможно была перемещена.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>struct_type</code></em>&#160;:</span></td>
+<td>тип элементов для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>mem</code></em>&#160;:</span></td>
+<td>текущая распределённая память.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_structs</code></em>&#160;:</span></td>
+<td>количество элементов для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель на вновь распределенную память, приведен к указателю типа <em class="parameter"><code>struct_type</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2623972"></a><h3>
+<a name="g-try-new"></a>g_try_new()</h3>
+<a class="indexterm" name="id2623987"></a><pre class="programlisting">#define     g_try_new(struct_type, n_structs)</pre>
+<p>
+Пытается распределить <em class="parameter"><code>n_structs</code></em> элементов типа <em class="parameter"><code>struct_type</code></em> и возвращает 
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если неудаётся. 
+В отличие от <a href="glib-Memory-Allocation.html#g-new"><code class="function">g_new()</code></a>, которая закрывает программу при неудаче.
+Возвращаемый указатель приведён к указателю полученного типа. 
+Если <em class="parameter"><code>n_structs</code></em> равен 0 возвращается <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>struct_type</code></em>&#160;:</span></td>
+<td>тип элементов для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_structs</code></em>&#160;:</span></td>
+<td>количество элементов для рапределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель на распределенную память, приведённый к указателю типа <em class="parameter"><code>struct_type</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.8
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2624108"></a><h3>
+<a name="g-try-new0"></a>g_try_new0()</h3>
+<a class="indexterm" name="id2624123"></a><pre class="programlisting">#define     g_try_new0(struct_type, n_structs)</pre>
+<p>
+Пытается распределить <em class="parameter"><code>n_structs</code></em> элементов типа <em class="parameter"><code>struct_type</code></em>, инициализируя 0 
+и возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при неудаче. В отличие от <a href="glib-Memory-Allocation.html#g-new0"><code class="function">g_new0()</code></a>, которая закрывает программу при неудаче.
+Возвращаемый указатель приводится к указателю полученного типа.
+Если <em class="parameter"><code>n_counts</code></em> равен 0, то возвращается <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>struct_type</code></em>&#160;:</span></td>
+<td>тип элементов для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_structs</code></em>&#160;:</span></td>
+<td>количество элементов для рапределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель на распределенную память, приведённый к указателю типа <em class="parameter"><code>struct_type</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.8
+
+
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2624244"></a><h3>
+<a name="g-try-renew"></a>g_try_renew()</h3>
+<a class="indexterm" name="id2624259"></a><pre class="programlisting">#define     g_try_renew(struct_type, mem, n_structs)</pre>
+<p>
+Пытается перераспределить память указанную параметром <em class="parameter"><code>mem</code></em>, 
+так чтобы появилось пространство для <em class="parameter"><code>n_structs</code></em> элементов типа <em class="parameter"><code>struct_type</code></em> и возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при неудаче. 
+В отличие от <a href="glib-Memory-Allocation.html#g-renew"><code class="function">g_renew()</code></a>, которая закрывает программу при неудаче.
+Возвращает новый адрес памяти, которая могла быть перемещена.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>struct_type</code></em>&#160;:</span></td>
+<td>тип элементов для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>mem</code></em>&#160;:</span></td>
+<td>текущее распределение памяти.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_structs</code></em>&#160;:</span></td>
+<td>количество элементов для рапределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель на вновь распределённую память, приведённый к указателю типа <em class="parameter"><code>struct_type</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.8
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2624385"></a><h3>
+<a name="g-malloc"></a>g_malloc ()</h3>
+<a class="indexterm" name="id2624397"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_malloc                        (<a href="glib-Basic-Types.html#gulong">gulong</a> n_bytes);</pre>
+<p>
+Распределяет <em class="parameter"><code>n_bytes</code></em> байт памяти.
+Если <em class="parameter"><code>n_bytes</code></em> равен 0, возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_bytes</code></em>&#160;:</span></td>
+<td>количество байт для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель на распределённую память.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2624477"></a><h3>
+<a name="g-malloc0"></a>g_malloc0 ()</h3>
+<a class="indexterm" name="id2624490"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_malloc0                       (<a href="glib-Basic-Types.html#gulong">gulong</a> n_bytes);</pre>
+<p>
+Распределяет <em class="parameter"><code>n_bytes</code></em> байт памяти, инициализируя 0's.
+Если <em class="parameter"><code>n_bytes</code></em> равен 0, возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_bytes</code></em>&#160;:</span></td>
+<td>количество байт для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель на распределённую память.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2624570"></a><h3>
+<a name="g-realloc"></a>g_realloc ()</h3>
+<a class="indexterm" name="id2624583"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_realloc                       (<a href="glib-Basic-Types.html#gpointer">gpointer</a> mem,
+                                             <a href="glib-Basic-Types.html#gulong">gulong</a> n_bytes);</pre>
+<p>
+Перераспределяет память указанную параметром <em class="parameter"><code>mem</code></em>, 
+так чтобы было свободное пространство для 
+<em class="parameter"><code>n_bytes</code></em> байт памяти. 
+Возвращает новый адрес памяти, которая могла быть перемещена. 
+<em class="parameter"><code>mem</code></em> может быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, в этом случае предполагается нулевая длина. 
+<em class="parameter"><code>n_bytes</code></em> может быть 0, в этом случае возвращается <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>mem</code></em>&#160;:</span></td>
+<td>память для перераспределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_bytes</code></em>&#160;:</span></td>
+<td>новый размер памяти в байтах.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>новый адрес распределённой памяти.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2624709"></a><h3>
+<a name="g-try-malloc"></a>g_try_malloc ()</h3>
+<a class="indexterm" name="id2624722"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_try_malloc                    (<a href="glib-Basic-Types.html#gulong">gulong</a> n_bytes);</pre>
+<p>
+Пытается распределить <em class="parameter"><code>n_bytes</code></em>, и возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при неудаче. 
+В отличие от <a href="glib-Memory-Allocation.html#g-malloc"><code class="function">g_malloc()</code></a>, которая закрывает программу при неудаче.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_bytes</code></em>&#160;:</span></td>
+<td>количество байт для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>распределённую память или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2624818"></a><h3>
+<a name="g-try-malloc0"></a>g_try_malloc0 ()</h3>
+<a class="indexterm" name="id2624832"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_try_malloc0                   (<a href="glib-Basic-Types.html#gulong">gulong</a> n_bytes);</pre>
+<p>
+Пытается распределить <em class="parameter"><code>n_bytes</code></em>, инициализируя 0's, и возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при неудаче. 
+В отличие от <a href="glib-Memory-Allocation.html#g-malloc0"><code class="function">g_malloc0()</code></a>, которая закрывает программу при неудаче.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_bytes</code></em>&#160;:</span></td>
+<td>количество байт для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>распределённую память или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.8
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2624933"></a><h3>
+<a name="g-try-realloc"></a>g_try_realloc ()</h3>
+<a class="indexterm" name="id2624946"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_try_realloc                   (<a href="glib-Basic-Types.html#gpointer">gpointer</a> mem,
+                                             <a href="glib-Basic-Types.html#gulong">gulong</a> n_bytes);</pre>
+<p>
+Пытается перераспределить <em class="parameter"><code>mem</code></em> в новый размер 
+<em class="parameter"><code>n_bytes</code></em>, и возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при неудаче. 
+В отличие от <a href="glib-Memory-Allocation.html#g-realloc"><code class="function">g_realloc()</code></a>, которая закрывает программу при неудаче. 
+Если <em class="parameter"><code>mem</code></em> равен <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, работает также как <a href="glib-Memory-Allocation.html#g-try-malloc"><code class="function">g_try_malloc()</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>mem</code></em>&#160;:</span></td>
+<td>предварительно распределённая память, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_bytes</code></em>&#160;:</span></td>
+<td>количество байт для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>распределённую память или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2625105"></a><h3>
+<a name="g-free"></a>g_free ()</h3>
+<a class="indexterm" name="id2625117"></a><pre class="programlisting">void        g_free                          (<a href="glib-Basic-Types.html#gpointer">gpointer</a> mem);</pre>
+<p>
+Освобождает память указанную параметром <em class="parameter"><code>mem</code></em>.
+Если <em class="parameter"><code>mem</code></em> равен <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, то функция ничего не делает.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>mem</code></em>&#160;:</span></td>
+<td>память для освобождения.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2625186"></a><h3>
+<a name="g-mem-gc-friendly"></a>g_mem_gc_friendly</h3>
+<a class="indexterm" name="id2625199"></a><pre class="programlisting">extern gboolean g_mem_gc_friendly;
+</pre>
+<p>
+Эта переменная равна <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если переменная окружения <code class="envar">G_DEBUG</code> включает ключ <a href="glib-running.html#G_DEBUG">gc-friendly</a>.  
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2625237"></a><h3>
+<a name="g-alloca"></a>g_alloca()</h3>
+<a class="indexterm" name="id2625249"></a><pre class="programlisting">#define     g_alloca(size)</pre>
+<p>
+Распределяет <em class="parameter"><code>size</code></em> байт в стек; эти байты освобождаются когда
+ текущий кадр стека очищается. Этот макрос по существу просто оболочка функции 
+<code class="function"><code class="function">alloca()</code></code> предоставляемой в большинстве 
+вариантов UNIX. 
+Поэтому он обеспечивает те же самые преимущества и ловушки как <code class="function"><code class="function">alloca()</code></code>:
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"></span></td>
+<td><p>
+    + <code class="function"><code class="function">alloca()</code></code> очень быстрая, так как на большинстве систем она выполняет просто регулировку регистра указателей стека.
+  </p></td>
+</tr>
+<tr>
+<td><span class="term"></span></td>
+<td><p>
+    + она не вызывает фрагментации памяти, в пределах её области, разделяемые <code class="function"><code class="function">alloca()</code></code> блоки просто увеличиваются и освобождаются одновременно с завершением функции.
+  </p></td>
+</tr>
+<tr>
+<td><span class="term"></span></td>
+<td><p>
+    - распределяемый размер должен вписываться в текущий кадр стека. Например в потоковом окружении 
+      Linux, размер стека посредством потока ограничен 2 мегабайтами,
+      поэтому разряжен при использовании <code class="function"><code class="function">alloca()</code></code>.
+  </p></td>
+</tr>
+<tr>
+<td><span class="term"></span></td>
+<td><p>
+    - неудачное распределение из-за недостатка пространства в стеке не указывается возвращением
+      <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+      как например это происходит при использовании <code class="function"><code class="function">malloc()</code></code>. 
+      Вместо этого, большинство систем вероятно обработает это так же как
+      отсутствие свободного пространства стека из бесконечной рекурсивной функции, 
+      то есть произойдет ошибка сегментации (segmentation fault).
+  </p></td>
+</tr>
+<tr>
+<td><span class="term"></span></td>
+<td><p>
+    - особое внимание должно быть уделено при смешивании 
+      <code class="function"><code class="function">alloca()</code></code> 
+      с массивами переменного размера GNU C.
+      Распределённое пространство стека с помощью <code class="function"><code class="function">alloca()</code></code> 
+      в той же области где массив переменного размера, будет освобождено вместе 
+      с массивом переменного размера при выходе из этой области, а не 
+      на выходе внешней области функции.
+  </p></td>
+</tr>
+</tbody>
+</table></div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>size</code></em>&#160;:</span></td>
+<td>   количество байт для распределения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>пространство для <em class="parameter"><code>size</code></em> байт, распределяемое в стеке
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2625488"></a><h3>
+<a name="g-newa"></a>g_newa()</h3>
+<a class="indexterm" name="id2625500"></a><pre class="programlisting">#define     g_newa(struct_type, n_structs)</pre>
+<p>
+Оболочка <a href="glib-Memory-Allocation.html#g-alloca"><code class="function">g_alloca()</code></a> в более типо-безопасной манере.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>struct_type</code></em>&#160;:</span></td>
+<td>тип участка памяти для распределения
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n_structs</code></em>&#160;:</span></td>
+<td>  Количество участков для распределения
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>  указатель на пространство стека для <em class="parameter"><code>n_structs</code></em> участков типа <em class="parameter"><code>struct_type</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2625580"></a><h3>
+<a name="g-memmove"></a>g_memmove()</h3>
+<a class="indexterm" name="id2625593"></a><pre class="programlisting">#define     g_memmove(dest,src,len)</pre>
+<p>
+Копирует блок памяти длиной <em class="parameter"><code>len</code></em> байт, из <em class="parameter"><code>src</code></em> в <em class="parameter"><code>dest</code></em>.
+Источник и адресат могут перекрываться.
+</p>
+<p>
+Для использования этой функции вы должны самостоятельно включить  
+<code class="filename">string.h</code>, потому что этот макрос обычно простое решение для 
+<code class="function">memmove()</code> и GLib не будет включать  
+<code class="filename">string.h</code> за вас.</p>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>dest</code></em>&#160;:</span></td>
+<td> адресат для копируемых байт.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>src</code></em>&#160;:</span></td>
+<td> источник копируемых байт.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> количество копируемых байт.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2625706"></a><h3>
+<a name="g-memdup"></a>g_memdup ()</h3>
+<a class="indexterm" name="id2625718"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gpointer">gpointer</a>    g_memdup                        (<a href="glib-Basic-Types.html#gconstpointer">gconstpointer</a> mem,
+                                             <a href="glib-Basic-Types.html#guint">guint</a> byte_size);</pre>
+<p>
+Распределяет <em class="parameter"><code>byte_size</code></em> байт памяти и копирует <em class="parameter"><code>byte_size</code></em> байт из <em class="parameter"><code>mem</code></em>. Если <em class="parameter"><code>mem</code></em> равен <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> возвращается <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>mem</code></em>&#160;:</span></td>
+<td>память для копирования.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>byte_size</code></em>&#160;:</span></td>
+<td>количество копируемых байт.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td>указатель на вновь распределенную копию памяти, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если параметр <em class="parameter"><code>mem</code></em>
+равен <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2625868"></a><h3>
+<a name="GMemVTable"></a>GMemVTable</h3>
+<a class="indexterm" name="id2625880"></a><pre class="programlisting">typedef struct {
+  gpointer (*malloc)      (gsize    n_bytes);
+  gpointer (*realloc)     (gpointer mem,
+			   gsize    n_bytes);
+  void     (*free)        (gpointer mem);
+  /* опционально; устанавливается в NULL если не используется! */
+  gpointer (*calloc)      (gsize    n_blocks,
+			   gsize    n_block_bytes);
+  gpointer (*try_malloc)  (gsize    n_bytes);
+  gpointer (*try_realloc) (gpointer mem,
+			   gsize    n_bytes);
+} GMemVTable;
+</pre>
+<p>
+Устанавливает функцию используемую для распределения памяти. Также <a href="glib-Memory-Allocation.html#GMemVTable"><span class="type">GMemVTable</span></a> может использоваться 
+для всех распределений в той же самой программе; вызов <a href="glib-Memory-Allocation.html#g-mem-set-vtable"><code class="function">g_mem_set_vtable()</code></a>,
+если он существует, должен быть приоритетным для любого использования GLib.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="structfield"><code>malloc</code></em>&#160;()</span></td>
+<td>функция используемая для распределения памяти.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>realloc</code></em>&#160;()</span></td>
+<td>функция используемая для перераспределения памяти.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>free</code></em>&#160;()</span></td>
+<td>функция используемая для освобождения памяти.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>calloc</code></em>&#160;()</span></td>
+<td>функция используемая для распределения памяти заполняемой нулями (allocating zero-filled memory).
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>try_malloc</code></em>&#160;()</span></td>
+<td>функция используемая для распределения памяти без обработки ошибок по умолчанию.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="structfield"><code>try_realloc</code></em>&#160;()</span></td>
+<td>функция используемая для перераспределения памяти без обработки ошибок по умолчанию.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2626014"></a><h3>
+<a name="g-mem-set-vtable"></a>g_mem_set_vtable ()</h3>
+<a class="indexterm" name="id2626027"></a><pre class="programlisting">void        g_mem_set_vtable                (<a href="glib-Memory-Allocation.html#GMemVTable">GMemVTable</a> *vtable);</pre>
+<p>
+Заставляет <a href="glib-Memory-Allocation.html#GMemVTable"><span class="type">GMemVTable</span></a> использовать для распределения памяти. Вы можете это использовать для обеспечения выбора функций 
+распределения памяти. <span class="emphasis"><em>Эти функции должны вызываться перед использованием любых других функций GLib.</em></span> Параметр <em class="parameter"><code>vtable</code></em> нужен только для обеспечения <code class="function"><code class="function">malloc()</code></code>, <code class="function"><code class="function">realloc()</code></code>, и <code class="function"><code class="function">free()</code></code> функций; GLib может по умолчанию обеспечить реализацию других.  
+Реализации <code class="function"><code class="function">malloc()</code></code>
+и <code class="function"><code class="function">realloc()</code></code> должны возвращать 
+<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> при неудаче, 
+GLib обрабатывает контроль ошибок за вас. <em class="parameter"><code>vtable</code></em> копируется,
+ поэтому не сохраняется после вызова этой функции.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>vtable</code></em>&#160;:</span></td>
+<td>таблица функций распределения памяти.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2626184"></a><h3>
+<a name="g-mem-is-system-malloc"></a>g_mem_is_system_malloc ()</h3>
+<a class="indexterm" name="id2626198"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_mem_is_system_malloc          (void);</pre>
+<p>
+Проверяет использует ли программа распределения памяти <a href="glib-Memory-Allocation.html#g-malloc"><code class="function">g_malloc()</code></a> системную реализацию malloc. Если возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> память распределяемая с помощью <code class="function">malloc()</code> взаимозаменяема памятью распределяемой с использованием <a href="glib-Memory-Allocation.html#g-malloc"><code class="function">g_malloc()</code></a>. 
+Эта функция полезна для избежания дополнительных копий распределения памяти возвращаемой с помощью
+не-GLib-based API.
+</p>
+<p>
+Разные функции распределения могут быть установлены с помощью <a href="glib-Memory-Allocation.html#g-mem-set-vtable"><code class="function">g_mem_set_vtable()</code></a>.</p>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> если <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a>, <code class="function">malloc()</code> и <a href="glib-Memory-Allocation.html#g-malloc"><code class="function">g_malloc()</code></a> могут использоваться совместно.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2626327"></a><h3>
+<a name="glib-mem-profiler-table"></a>glib_mem_profiler_table</h3>
+<a class="indexterm" name="id2626340"></a><pre class="programlisting">extern GMemVTable	*glib_mem_profiler_table;
+</pre>
+<p>
+<a href="glib-Memory-Allocation.html#GMemVTable"><span class="type">GMemVTable</span></a> содержит 
+профилированные варианты функций распределения памяти. 
+Используйте их вместе с <a href="glib-Memory-Allocation.html#g-mem-profile"><code class="function">g_mem_profile()</code></a>
+для получения информации об образце распределения памяти вашей программой.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2626377"></a><h3>
+<a name="g-mem-profile"></a>g_mem_profile ()</h3>
+<a class="indexterm" name="id2626390"></a><pre class="programlisting">void        g_mem_profile                   (void);</pre>
+<p>
+Определяет суммарное использование памяти.
+</p>
+<p>
+Она выдаёт частоту распределений различных размеров,
+общее количество распределённых байт,
+общее количество освобождённых байт
+и разницу между двумя предыдущими значениями, 
+то есть количество всё ещё используемых байт.
+</p>
+<p>
+Помните что эта функция не определит ничего пока вы предварительно не установите 
+<a href="glib-Memory-Allocation.html#glib-mem-profiler-table"><span class="type">glib_mem_profiler_table</span></a> с помощью <a href="glib-Memory-Allocation.html#g-mem-set-vtable"><code class="function">g_mem_set_vtable()</code></a>.
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>

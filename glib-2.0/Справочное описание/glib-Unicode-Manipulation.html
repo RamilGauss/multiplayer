@@ -1,0 +1,3069 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Unicode Manipulation</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="index.html" title="GLib Reference Manual">
+<link rel="up" href="glib-utilities.html" title="GLib Utilities">
+<link rel="prev" href="glib-Character-Set-Conversion.html" title="Character Set Conversion">
+<link rel="next" href="glib-Base64-Encoding.html" title="Base64 Encoding">
+<meta name="generator" content="GTK-Doc V1.7 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+<link rel="chapter" href="glib.html" title="GLib Overview">
+<link rel="chapter" href="glib-fundamentals.html" title="GLib Fundamentals">
+<link rel="chapter" href="glib-core.html" title="GLib Core Application Support">
+<link rel="chapter" href="glib-utilities.html" title="GLib Utilities">
+<link rel="chapter" href="glib-data-types.html" title="GLib Data Types">
+<link rel="chapter" href="tools.html" title="GLib Tools">
+<link rel="index" href="ix01.html" title="Index">
+<link rel="index" href="ix02.html" title="Index of deprecated symbols">
+<link rel="index" href="ix03.html" title="Index of new symbols in 2.2">
+<link rel="index" href="ix04.html" title="Index of new symbols in 2.4">
+<link rel="index" href="ix05.html" title="Index of new symbols in 2.6">
+<link rel="index" href="ix06.html" title="Index of new symbols in 2.8">
+<link rel="index" href="ix07.html" title="Index of new symbols in 2.10">
+<link rel="index" href="ix08.html" title="Index of new symbols in 2.12">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="glib-Character-Set-Conversion.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="glib-utilities.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">Справочное описание GLib</th>
+<td><a accesskey="n" href="glib-Base64-Encoding.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts"><nobr><a href="#id2699879" class="shortcut">Начало</a>
+                  &#160;|&#160;
+                  <a href="#id2701603" class="shortcut">Описание</a></nobr></td></tr>
+</table>
+<div class="refentry" lang="en">
+<a name="glib-Unicode-Manipulation"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2>
+<a name="id2699879"></a><span class="refentrytitle">Unicode Manipulation</span>
+</h2>
+<p>Unicode Manipulation &#8212; функции оперирующие на Unicode символах и UTF-8 строках.</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Краткое описание</h2>
+<pre class="synopsis">
+
+#include &lt;glib.h&gt;
+
+
+typedef     <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>;
+typedef     <a href="glib-Unicode-Manipulation.html#gunichar2">gunichar2</a>;
+
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-validate">g_unichar_validate</a>              (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> ch);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-isalnum">g_unichar_isalnum</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-isalpha">g_unichar_isalpha</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-iscntrl">g_unichar_iscntrl</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-isdigit">g_unichar_isdigit</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-isgraph">g_unichar_isgraph</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-islower">g_unichar_islower</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-isprint">g_unichar_isprint</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-ispunct">g_unichar_ispunct</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-isspace">g_unichar_isspace</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-isupper">g_unichar_isupper</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-isxdigit">g_unichar_isxdigit</a>              (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-istitle">g_unichar_istitle</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-isdefined">g_unichar_isdefined</a>             (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-iswide">g_unichar_iswide</a>                (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-iswide-cjk">g_unichar_iswide_cjk</a>            (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-toupper">g_unichar_toupper</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-tolower">g_unichar_tolower</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-totitle">g_unichar_totitle</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Unicode-Manipulation.html#g-unichar-digit-value">g_unichar_digit_value</a>           (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Unicode-Manipulation.html#g-unichar-xdigit-value">g_unichar_xdigit_value</a>          (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+enum        <a href="glib-Unicode-Manipulation.html#GUnicodeType">GUnicodeType</a>;
+<a href="glib-Unicode-Manipulation.html#GUnicodeType">GUnicodeType</a> <a href="glib-Unicode-Manipulation.html#g-unichar-type">g_unichar_type</a>                 (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+enum        <a href="glib-Unicode-Manipulation.html#GUnicodeBreakType">GUnicodeBreakType</a>;
+<a href="glib-Unicode-Manipulation.html#GUnicodeBreakType">GUnicodeBreakType</a> <a href="glib-Unicode-Manipulation.html#g-unichar-break-type">g_unichar_break_type</a>      (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+void        <a href="glib-Unicode-Manipulation.html#g-unicode-canonical-ordering">g_unicode_canonical_ordering</a>    (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> *string,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> len);
+<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>*   <a href="glib-Unicode-Manipulation.html#g-unicode-canonical-decomposition">g_unicode_canonical_decomposition</a>
+                                            (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> ch,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *result_len);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-unichar-get-mirror-char">g_unichar_get_mirror_char</a>       (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> ch,
+                                             <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> *mirrored_ch);
+enum        <a href="glib-Unicode-Manipulation.html#GUnicodeScript">GUnicodeScript</a>;
+<a href="glib-Unicode-Manipulation.html#GUnicodeScript">GUnicodeScript</a> <a href="glib-Unicode-Manipulation.html#g-unichar-get-script">g_unichar_get_script</a>         (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> ch);
+
+#define     <a href="glib-Unicode-Manipulation.html#g-utf8-next-char">g_utf8_next_char</a>                (p)
+<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>    <a href="glib-Unicode-Manipulation.html#g-utf8-get-char">g_utf8_get_char</a>                 (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p);
+<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>    <a href="glib-Unicode-Manipulation.html#g-utf8-get-char-validated">g_utf8_get_char_validated</a>       (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> max_len);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-offset-to-pointer">g_utf8_offset_to_pointer</a>        (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> offset);
+<a href="glib-Basic-Types.html#glong">glong</a>       <a href="glib-Unicode-Manipulation.html#g-utf8-pointer-to-offset">g_utf8_pointer_to_offset</a>        (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *pos);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-prev-char">g_utf8_prev_char</a>                (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-find-next-char">g_utf8_find_next_char</a>           (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *end);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-find-prev-char">g_utf8_find_prev_char</a>           (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *p);
+<a href="glib-Basic-Types.html#glong">glong</a>       <a href="glib-Unicode-Manipulation.html#g-utf8-strlen">g_utf8_strlen</a>                   (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> max);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-strncpy">g_utf8_strncpy</a>                  (<a href="glib-Basic-Types.html#gchar">gchar</a> *dest,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *src,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> n);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-strchr">g_utf8_strchr</a>                   (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-strrchr">g_utf8_strrchr</a>                  (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-strreverse">g_utf8_strreverse</a>               (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);
+<a href="glib-Basic-Types.html#gboolean">gboolean</a>    <a href="glib-Unicode-Manipulation.html#g-utf8-validate">g_utf8_validate</a>                 (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> max_len,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> **end);
+
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-strup">g_utf8_strup</a>                    (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-strdown">g_utf8_strdown</a>                  (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-casefold">g_utf8_casefold</a>                 (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-normalize">g_utf8_normalize</a>                (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Unicode-Manipulation.html#GNormalizeMode">GNormalizeMode</a> mode);
+enum        <a href="glib-Unicode-Manipulation.html#GNormalizeMode">GNormalizeMode</a>;
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Unicode-Manipulation.html#g-utf8-collate">g_utf8_collate</a>                  (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str1,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *str2);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-collate-key">g_utf8_collate_key</a>              (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf8-collate-key-for-filename">g_utf8_collate_key_for_filename</a> (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);
+
+<a href="glib-Unicode-Manipulation.html#gunichar2">gunichar2</a>*  <a href="glib-Unicode-Manipulation.html#g-utf8-to-utf16">g_utf8_to_utf16</a>                 (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_read,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>*   <a href="glib-Unicode-Manipulation.html#g-utf8-to-ucs4">g_utf8_to_ucs4</a>                  (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_read,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>*   <a href="glib-Unicode-Manipulation.html#g-utf8-to-ucs4-fast">g_utf8_to_ucs4_fast</a>             (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written);
+<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>*   <a href="glib-Unicode-Manipulation.html#g-utf16-to-ucs4">g_utf16_to_ucs4</a>                 (const <a href="glib-Unicode-Manipulation.html#gunichar2">gunichar2</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_read,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-utf16-to-utf8">g_utf16_to_utf8</a>                 (const <a href="glib-Unicode-Manipulation.html#gunichar2">gunichar2</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_read,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Unicode-Manipulation.html#gunichar2">gunichar2</a>*  <a href="glib-Unicode-Manipulation.html#g-ucs4-to-utf16">g_ucs4_to_utf16</a>                 (const <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_read,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gchar">gchar</a>*      <a href="glib-Unicode-Manipulation.html#g-ucs4-to-utf8">g_ucs4_to_utf8</a>                  (const <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_read,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);
+<a href="glib-Basic-Types.html#gint">gint</a>        <a href="glib-Unicode-Manipulation.html#g-unichar-to-utf8">g_unichar_to_utf8</a>               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> *outbuf);
+</pre>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2701603"></a><h2>Описание</h2>
+<p>
+Эта секция описывает множество функций для работы с 
+Unicode символами и строками.  Они аналогичны традиционной классификации
+символа <code class="filename">ctype.h</code> и функциям приведения и 
+преобразования, UTF-8 аналогичны таким же строковым функциям, 
+функции выполнения нормализации, преобразование регистра и сопоставление в 
+UTF-8 строках и наконец функции для преобразования между UTF-8, UTF-16 и UCS-4 кодировками Unicode.
+</p>
+<p>
+Реализация Unicode функций в GLib базируется на таблице данных символов 
+Unicode (Unicode Character Data tables), которая доступна из
+<a href="http://www.unicode.org" target="_top">www.unicode.org</a>.
+GLib 2.8 поддерживает Unicode 4.0, GLib 2.10 поддерживает Unicode 4.1,
+GLib 2.12 поддерживает Unicode 5.0.
+</p>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2701644"></a><h2>Детали</h2>
+<div class="refsect2" lang="en">
+<a name="id2701654"></a><h3>
+<a name="gunichar"></a>gunichar</h3>
+<a class="indexterm" name="id2701666"></a><pre class="programlisting">typedef guint32 gunichar;
+</pre>
+<p>
+Тип который может содержать любой код символа UCS-4. 
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2701682"></a><h3>
+<a name="gunichar2"></a>gunichar2</h3>
+<a class="indexterm" name="id2701695"></a><pre class="programlisting">typedef guint16 gunichar2;
+</pre>
+<p>
+Тип который может содержать любой указатель кода UTF-16<sup>[<a name="utf16_surrogate_pairs" href="#ftn.utf16_surrogate_pairs">3</a>]</sup>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2701726"></a><h3>
+<a name="g-unichar-validate"></a>g_unichar_validate ()</h3>
+<a class="indexterm" name="id2701740"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_validate              (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> ch);</pre>
+<p>
+Проверяет является ли <em class="parameter"><code>ch</code></em> допустимым символом Unicode. Любые возможные целочисленные значения
+<em class="parameter"><code>ch</code></em> не будут допустимы. 0 рассматривается как правильный символ, 
+хотя обычно он является концом строки.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>ch</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>ch</code></em> является допустимым Unicode символом.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2701830"></a><h3>
+<a name="g-unichar-isalnum"></a>g_unichar_isalnum ()</h3>
+<a class="indexterm" name="id2701843"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_isalnum               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли символ алфавитно-цифровым.
+Получая некоторый UTF-8 текст, определяет значение символа с помощью 
+<a href="glib-Unicode-Manipulation.html#g-utf8-get-char"><code class="function">g_utf8_get_char()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>c</code></em> является алфавитно-цифровым символом
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2701931"></a><h3>
+<a name="g-unichar-isalpha"></a>g_unichar_isalpha ()</h3>
+<a class="indexterm" name="id2701944"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_isalpha               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли символ алфавитным (то есть буквой).
+Получая некоторый UTF-8 текст, определяет значение символа с помощью
+<a href="glib-Unicode-Manipulation.html#g-utf8-get-char"><code class="function">g_utf8_get_char()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>c</code></em> является алфавитным символом
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2702032"></a><h3>
+<a name="g-unichar-iscntrl"></a>g_unichar_iscntrl ()</h3>
+<a class="indexterm" name="id2702046"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_iscntrl               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли символ управляющим символом.
+Получая некоторый UTF-8 текст, определяет значение символа с помощью
+<a href="glib-Unicode-Manipulation.html#g-utf8-get-char"><code class="function">g_utf8_get_char()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>c</code></em> является управляющим символом
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2702133"></a><h3>
+<a name="g-unichar-isdigit"></a>g_unichar_isdigit ()</h3>
+<a class="indexterm" name="id2702147"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_isdigit               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли символ числовым (то есть цифрой).  Это распространяется на 
+ASCII 0-9 а так же цифры в других языках/сценариях.  Получая некоторый UTF-8 текст, 
+определяет значение символа с помощью <a href="glib-Unicode-Manipulation.html#g-utf8-get-char"><code class="function">g_utf8_get_char()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>c</code></em> является цифрой
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2702236"></a><h3>
+<a name="g-unichar-isgraph"></a>g_unichar_isgraph ()</h3>
+<a class="indexterm" name="id2702249"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_isgraph               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли символ печатным и не пробелом
+(возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> для управляющих символов, 
+символов форматирования, и пробелов). Похожа на <a href="glib-Unicode-Manipulation.html#g-unichar-isprint"><code class="function">g_unichar_isprint()</code></a>, но возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> для пробелов. 
+Получая некоторый UTF-8 текст, определяет значение символа с помощью
+<a href="glib-Unicode-Manipulation.html#g-utf8-get-char"><code class="function">g_utf8_get_char()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>c</code></em> является печатным символом отличающимся от пробела
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2702370"></a><h3>
+<a name="g-unichar-islower"></a>g_unichar_islower ()</h3>
+<a class="indexterm" name="id2702383"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_islower               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли символ буквой в нижнем регистре.
+Получая некоторый UTF-8 текст, определяет значение символа с помощью
+<a href="glib-Unicode-Manipulation.html#g-utf8-get-char"><code class="function">g_utf8_get_char()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>c</code></em> является буквой нижнего регистра
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2702471"></a><h3>
+<a name="g-unichar-isprint"></a>g_unichar_isprint ()</h3>
+<a class="indexterm" name="id2702484"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_isprint               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли символ печатным.
+В отличие от <a href="glib-Unicode-Manipulation.html#g-unichar-isgraph"><code class="function">g_unichar_isgraph()</code></a>, возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> для пробелов.
+Получая некоторый UTF-8 текст, определяет значение символа с помощью
+<a href="glib-Unicode-Manipulation.html#g-utf8-get-char"><code class="function">g_utf8_get_char()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>c</code></em> является печатным
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2702593"></a><h3>
+<a name="g-unichar-ispunct"></a>g_unichar_ispunct ()</h3>
+<a class="indexterm" name="id2702606"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_ispunct               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли символ символом пунктуации или знаком.
+Получая некоторый UTF-8 текст, определяет значение символа с помощью
+<a href="glib-Unicode-Manipulation.html#g-utf8-get-char"><code class="function">g_utf8_get_char()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>c</code></em> является символом пунктуации или знаком
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2702694"></a><h3>
+<a name="g-unichar-isspace"></a>g_unichar_isspace ()</h3>
+<a class="indexterm" name="id2702708"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_isspace               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли символ пробелом, табуляцией, или строковым разделителем
+(перевод строки, возврат каретки, и т.д.).  Получая некоторый UTF-8 текст, определяет
+значение символа с помощью <a href="glib-Unicode-Manipulation.html#g-utf8-get-char"><code class="function">g_utf8_get_char()</code></a>.
+</p>
+<p>
+(Помните: не нужно использовать это для прерывания слова; вы должны использовать
+Pango или эквивалент для получения правильного прерывания слова, алгоритм довольно сложен.)</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>c</code></em> является символом пробела
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2702802"></a><h3>
+<a name="g-unichar-isupper"></a>g_unichar_isupper ()</h3>
+<a class="indexterm" name="id2702815"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_isupper               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли символ символом верхнего регистра.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>c</code></em> является символом верхнего регистра
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2702891"></a><h3>
+<a name="g-unichar-isxdigit"></a>g_unichar_isxdigit ()</h3>
+<a class="indexterm" name="id2702904"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_isxdigit              (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли символ шестнадцатеричным числом.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если символ является шестнадцатеричным числом
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2702975"></a><h3>
+<a name="g-unichar-istitle"></a>g_unichar_istitle ()</h3>
+<a class="indexterm" name="id2702989"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_istitle               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли символ символом заголовочного регистра (titlecase). Некоторые символы в 
+Unicode которые являются составными, такие как DZ диаграф
+имеют три варианта регистра вместо двух. Форма заголовочного регистра (titlecase)
+используется в начале слова, где только первый символ напечатан только прописными буквами. 
+Форма заголовочного регистра (titlecase) из DZ диаграфа это U+01F2 ЛАТИНСКАЯ ПРОПИСНАЯ БУКВА D СО СТРОЧНОЙ БУКВОЙ Z.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если символ в заголовочном регистре (titlecase)
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2703064"></a><h3>
+<a name="g-unichar-isdefined"></a>g_unichar_isdefined ()</h3>
+<a class="indexterm" name="id2703078"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_isdefined             (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет является ли полученный символ назначенным в Unicode стандарте.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если символ имеет назначенное значение
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2703149"></a><h3>
+<a name="g-unichar-iswide"></a>g_unichar_iswide ()</h3>
+<a class="indexterm" name="id2703162"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_iswide                (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет если символ обычно отрисовывается в ячейке двойной ширины.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если символ широкий
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2703233"></a><h3>
+<a name="g-unichar-iswide-cjk"></a>g_unichar_iswide_cjk ()</h3>
+<a class="indexterm" name="id2703249"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_iswide_cjk            (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет если символ обычно отрисовывается в ячейке двойной ширины 
+устаревшей East Asian локали.  Если символ шире согласно
+<a href="glib-Unicode-Manipulation.html#g-unichar-iswide"><code class="function">g_unichar_iswide()</code></a>, 
+то он также сообщает ширину этой функции, но обратное не обязательно верно.  Смотрите
+<a href="http://www.unicode.org/reports/tr11/" target="_top">Unicode Standard
+Annex <span class="type">11</span></a> для детального изучения.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если символ шириной устаревшей East Asian локали
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.12
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2703354"></a><h3>
+<a name="g-unichar-toupper"></a>g_unichar_toupper ()</h3>
+<a class="indexterm" name="id2703367"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>    g_unichar_toupper               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Конвертирует символ в верхний регистр.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> результат конвертации <em class="parameter"><code>c</code></em> в верхний регистр.
+              Если <em class="parameter"><code>c</code></em> не является символом нижнего регистра или заголовочного регистра (titlecase),
+              или не имеет эквивалента в верхнем регистре, <em class="parameter"><code>c</code></em> возвращается без изменений.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2703447"></a><h3>
+<a name="g-unichar-tolower"></a>g_unichar_tolower ()</h3>
+<a class="indexterm" name="id2703460"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>    g_unichar_tolower               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Конвертирует символ в нижний регистр.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> результат конвертации <em class="parameter"><code>c</code></em> в нижний регистр.
+              Если <em class="parameter"><code>c</code></em> не является символом верхнего регистра или заголовочного регистра (titlecase),
+              или не имеет эквивалента в нижнем регистре, то <em class="parameter"><code>c</code></em> возвращается без изменений.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2703540"></a><h3>
+<a name="g-unichar-totitle"></a>g_unichar_totitle ()</h3>
+<a class="indexterm" name="id2703553"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>    g_unichar_totitle               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Конвертирует символ в заголовочный регистр.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> результат конвертации <em class="parameter"><code>c</code></em> в заголовочный регистр.
+              Если <em class="parameter"><code>c</code></em> не является символом верхнего регистра или символом нижнего регистра,
+              то <em class="parameter"><code>c</code></em> возвращается без изменений.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2703632"></a><h3>
+<a name="g-unichar-digit-value"></a>g_unichar_digit_value ()</h3>
+<a class="indexterm" name="id2703646"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_unichar_digit_value           (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет числовое значение символа как десятичное число.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Если <em class="parameter"><code>c</code></em> десятичное число (согласно
+<a href="glib-Unicode-Manipulation.html#g-unichar-isdigit"><code class="function">g_unichar_isdigit()</code></a>), его числовое значение. 
+Иначе, -1.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2703724"></a><h3>
+<a name="g-unichar-xdigit-value"></a>g_unichar_xdigit_value ()</h3>
+<a class="indexterm" name="id2703737"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_unichar_xdigit_value          (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет числовое значение символа как шестнадцатеричное число.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> Если <em class="parameter"><code>c</code></em> это шестнадцатеричное число (согласно
+<a href="glib-Unicode-Manipulation.html#g-unichar-isxdigit"><code class="function">g_unichar_isxdigit()</code></a>), его цифровое значение. 
+Иначе, -1.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2703816"></a><h3>
+<a name="GUnicodeType"></a>enum GUnicodeType</h3>
+<a class="indexterm" name="id2703829"></a><pre class="programlisting">typedef enum
+{
+  G_UNICODE_CONTROL,
+  G_UNICODE_FORMAT,
+  G_UNICODE_UNASSIGNED,
+  G_UNICODE_PRIVATE_USE,
+  G_UNICODE_SURROGATE,
+  G_UNICODE_LOWERCASE_LETTER,
+  G_UNICODE_MODIFIER_LETTER,
+  G_UNICODE_OTHER_LETTER,
+  G_UNICODE_TITLECASE_LETTER,
+  G_UNICODE_UPPERCASE_LETTER,
+  G_UNICODE_COMBINING_MARK,
+  G_UNICODE_ENCLOSING_MARK,
+  G_UNICODE_NON_SPACING_MARK,
+  G_UNICODE_DECIMAL_NUMBER,
+  G_UNICODE_LETTER_NUMBER,
+  G_UNICODE_OTHER_NUMBER,
+  G_UNICODE_CONNECT_PUNCTUATION,
+  G_UNICODE_DASH_PUNCTUATION,
+  G_UNICODE_CLOSE_PUNCTUATION,
+  G_UNICODE_FINAL_PUNCTUATION,
+  G_UNICODE_INITIAL_PUNCTUATION,
+  G_UNICODE_OTHER_PUNCTUATION,
+  G_UNICODE_OPEN_PUNCTUATION,
+  G_UNICODE_CURRENCY_SYMBOL,
+  G_UNICODE_MODIFIER_SYMBOL,
+  G_UNICODE_MATH_SYMBOL,
+  G_UNICODE_OTHER_SYMBOL,
+  G_UNICODE_LINE_SEPARATOR,
+  G_UNICODE_PARAGRAPH_SEPARATOR,
+  G_UNICODE_SPACE_SEPARATOR
+} GUnicodeType;
+</pre>
+<p>
+Это возможная классификация символа из спецификации Unicode.
+Смотрите <a href="http://www.unicode.org/Public/UNIDATA/UnicodeData.html" target="_top">http://www.unicode.org/Public/UNIDATA/UnicodeData.html</a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-UNICODE-CONTROL:CAPS"></a><code class="literal">G_UNICODE_CONTROL</code></span></td>
+<td>Основная категория "Other, Control" (Cc)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-FORMAT:CAPS"></a><code class="literal">G_UNICODE_FORMAT</code></span></td>
+<td>Основная категория "Other, Format" (Cf)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-UNASSIGNED:CAPS"></a><code class="literal">G_UNICODE_UNASSIGNED</code></span></td>
+<td>Основная категория "Other, Not Assigned" (Cn)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-PRIVATE-USE:CAPS"></a><code class="literal">G_UNICODE_PRIVATE_USE</code></span></td>
+<td>Основная категория "Other, Private Use" (Co)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SURROGATE:CAPS"></a><code class="literal">G_UNICODE_SURROGATE</code></span></td>
+<td>Основная категория "Other, Surrogate" (Cs)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-LOWERCASE-LETTER:CAPS"></a><code class="literal">G_UNICODE_LOWERCASE_LETTER</code></span></td>
+<td>Основная категория "Letter, Lowercase" (Ll)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-MODIFIER-LETTER:CAPS"></a><code class="literal">G_UNICODE_MODIFIER_LETTER</code></span></td>
+<td>Основная категория "Letter, Modifier" (Lm)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-OTHER-LETTER:CAPS"></a><code class="literal">G_UNICODE_OTHER_LETTER</code></span></td>
+<td>Основная категория "Letter, Other" (Lo)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-TITLECASE-LETTER:CAPS"></a><code class="literal">G_UNICODE_TITLECASE_LETTER</code></span></td>
+<td>Основная категория "Letter, Titlecase" (Lt)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-UPPERCASE-LETTER:CAPS"></a><code class="literal">G_UNICODE_UPPERCASE_LETTER</code></span></td>
+<td>Основная категория "Letter, Uppercase" (Lu)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-COMBINING-MARK:CAPS"></a><code class="literal">G_UNICODE_COMBINING_MARK</code></span></td>
+<td>Основная категория "Mark, Spacing Combining" (Mc)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-ENCLOSING-MARK:CAPS"></a><code class="literal">G_UNICODE_ENCLOSING_MARK</code></span></td>
+<td>Основная категория "Mark, Enclosing" (Me)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-NON-SPACING-MARK:CAPS"></a><code class="literal">G_UNICODE_NON_SPACING_MARK</code></span></td>
+<td>Основная категория "Mark, Nonspacing" (Mn)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-DECIMAL-NUMBER:CAPS"></a><code class="literal">G_UNICODE_DECIMAL_NUMBER</code></span></td>
+<td>Основная категория "Number, Decimal Digit" (Nd)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-LETTER-NUMBER:CAPS"></a><code class="literal">G_UNICODE_LETTER_NUMBER</code></span></td>
+<td>Основная категория "Number, Letter" (Nl)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-OTHER-NUMBER:CAPS"></a><code class="literal">G_UNICODE_OTHER_NUMBER</code></span></td>
+<td>Основная категория "Number, Other" (No)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-CONNECT-PUNCTUATION:CAPS"></a><code class="literal">G_UNICODE_CONNECT_PUNCTUATION</code></span></td>
+<td>Основная категория "Punctuation, Connector" (Pc)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-DASH-PUNCTUATION:CAPS"></a><code class="literal">G_UNICODE_DASH_PUNCTUATION</code></span></td>
+<td>Основная категория "Punctuation, Dash" (Pd)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-CLOSE-PUNCTUATION:CAPS"></a><code class="literal">G_UNICODE_CLOSE_PUNCTUATION</code></span></td>
+<td>Основная категория "Punctuation, Close" (Pe)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-FINAL-PUNCTUATION:CAPS"></a><code class="literal">G_UNICODE_FINAL_PUNCTUATION</code></span></td>
+<td>Основная категория "Punctuation, Final quote" (Pf)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-INITIAL-PUNCTUATION:CAPS"></a><code class="literal">G_UNICODE_INITIAL_PUNCTUATION</code></span></td>
+<td>Основная категория "Punctuation, Initial quote" (Pi)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-OTHER-PUNCTUATION:CAPS"></a><code class="literal">G_UNICODE_OTHER_PUNCTUATION</code></span></td>
+<td>Основная категория "Punctuation, Other" (Po)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-OPEN-PUNCTUATION:CAPS"></a><code class="literal">G_UNICODE_OPEN_PUNCTUATION</code></span></td>
+<td>Основная категория "Punctuation, Open" (Ps)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-CURRENCY-SYMBOL:CAPS"></a><code class="literal">G_UNICODE_CURRENCY_SYMBOL</code></span></td>
+<td>Основная категория "Symbol, Currency" (Sc)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-MODIFIER-SYMBOL:CAPS"></a><code class="literal">G_UNICODE_MODIFIER_SYMBOL</code></span></td>
+<td>Основная категория "Symbol, Modifier" (Sk)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-MATH-SYMBOL:CAPS"></a><code class="literal">G_UNICODE_MATH_SYMBOL</code></span></td>
+<td>Основная категория "Symbol, Math" (Sm)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-OTHER-SYMBOL:CAPS"></a><code class="literal">G_UNICODE_OTHER_SYMBOL</code></span></td>
+<td>Основная категория "Symbol, Other" (So)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-LINE-SEPARATOR:CAPS"></a><code class="literal">G_UNICODE_LINE_SEPARATOR</code></span></td>
+<td>Основная категория "Separator, Line" (Zl)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-PARAGRAPH-SEPARATOR:CAPS"></a><code class="literal">G_UNICODE_PARAGRAPH_SEPARATOR</code></span></td>
+<td>Основная категория "Separator, Paragraph" (Zp)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SPACE-SEPARATOR:CAPS"></a><code class="literal">G_UNICODE_SPACE_SEPARATOR</code></span></td>
+<td>Основная категория "Separator, Space" (Zs)
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2704574"></a><h3>
+<a name="g-unichar-type"></a>g_unichar_type ()</h3>
+<a class="indexterm" name="id2704587"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#GUnicodeType">GUnicodeType</a> g_unichar_type                 (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Класифицирует Unicode символ по типу.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> тип символа.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2704647"></a><h3>
+<a name="GUnicodeBreakType"></a>enum GUnicodeBreakType</h3>
+<a class="indexterm" name="id2704661"></a><pre class="programlisting">typedef enum
+{
+  G_UNICODE_BREAK_MANDATORY,
+  G_UNICODE_BREAK_CARRIAGE_RETURN,
+  G_UNICODE_BREAK_LINE_FEED,
+  G_UNICODE_BREAK_COMBINING_MARK,
+  G_UNICODE_BREAK_SURROGATE,
+  G_UNICODE_BREAK_ZERO_WIDTH_SPACE,
+  G_UNICODE_BREAK_INSEPARABLE,
+  G_UNICODE_BREAK_NON_BREAKING_GLUE,
+  G_UNICODE_BREAK_CONTINGENT,
+  G_UNICODE_BREAK_SPACE,
+  G_UNICODE_BREAK_AFTER,
+  G_UNICODE_BREAK_BEFORE,
+  G_UNICODE_BREAK_BEFORE_AND_AFTER,
+  G_UNICODE_BREAK_HYPHEN,
+  G_UNICODE_BREAK_NON_STARTER,
+  G_UNICODE_BREAK_OPEN_PUNCTUATION,
+  G_UNICODE_BREAK_CLOSE_PUNCTUATION,
+  G_UNICODE_BREAK_QUOTATION,
+  G_UNICODE_BREAK_EXCLAMATION,
+  G_UNICODE_BREAK_IDEOGRAPHIC,
+  G_UNICODE_BREAK_NUMERIC,
+  G_UNICODE_BREAK_INFIX_SEPARATOR,
+  G_UNICODE_BREAK_SYMBOL,
+  G_UNICODE_BREAK_ALPHABETIC,
+  G_UNICODE_BREAK_PREFIX,
+  G_UNICODE_BREAK_POSTFIX,
+  G_UNICODE_BREAK_COMPLEX_CONTEXT,
+  G_UNICODE_BREAK_AMBIGUOUS,
+  G_UNICODE_BREAK_UNKNOWN,
+  G_UNICODE_BREAK_NEXT_LINE,
+  G_UNICODE_BREAK_WORD_JOINER,
+  G_UNICODE_BREAK_HANGUL_L_JAMO,
+  G_UNICODE_BREAK_HANGUL_V_JAMO,
+  G_UNICODE_BREAK_HANGUL_T_JAMO,
+  G_UNICODE_BREAK_HANGUL_LV_SYLLABLE,
+  G_UNICODE_BREAK_HANGUL_LVT_SYLLABLE
+} GUnicodeBreakType;
+</pre>
+<p>
+Это классификация возможных прерываний строк.
+Пять типов корейской азбуки (Hangul) добавлены в Unicode 4.1, поэтому были введены 
+в GLib 2.10.  Помните что новые типы могут быть добавлены в будущем.
+Приложения должны быть готовы обрабатывать не известные значения.
+Они могут расцениваться как <code class="literal">G_UNICODE_BREAK_UNKNOWN</code>.
+Смотрите <a href="http://www.unicode.org/unicode/reports/tr14/" target="_top">http://www.unicode.org/unicode/reports/tr14/</a>.
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2704719"></a><h3>
+<a name="g-unichar-break-type"></a>g_unichar_break_type ()</h3>
+<a class="indexterm" name="id2704733"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#GUnicodeBreakType">GUnicodeBreakType</a> g_unichar_break_type      (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Определяет тип прерывания <em class="parameter"><code>c</code></em>. <em class="parameter"><code>c</code></em> должен быть Unicode символом
+(для извлечения символа из текста в кодировке UTF-8, используйте
+<a href="glib-Unicode-Manipulation.html#g-utf8-get-char"><code class="function">g_utf8_get_char()</code></a>). 
+Тип прерывания используется для поиска конца слова и строки ("границы текста"), Pango реализует алгоритмы разрешения границ Unicode
+и обычно вы должны использовать функции такие как <code class="function">pango_break()</code> вместо того, чтобы беспокоится о типе границы самостоятельно.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> тип границы <em class="parameter"><code>c</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2704837"></a><h3>
+<a name="g-unicode-canonical-ordering"></a>g_unicode_canonical_ordering ()</h3>
+<a class="indexterm" name="id2704851"></a><pre class="programlisting">void        g_unicode_canonical_ordering    (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> *string,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> len);</pre>
+<p>
+Расчитывает канонический порядок строки на месте.  
+Это перераспределяет разложение символов в строке 
+согласно их классам объединения.  Смотрите руководство Unicode 
+для большей информации.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>string</code></em>&#160;:</span></td>
+<td> строка в кодировке UCS-4.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> максимальная длина строки <em class="parameter"><code>string</code></em> для использования.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2704931"></a><h3>
+<a name="g-unicode-canonical-decomposition"></a>g_unicode_canonical_decomposition ()</h3>
+<a class="indexterm" name="id2704946"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>*   g_unicode_canonical_decomposition
+                                            (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> ch,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> *result_len);</pre>
+<p>
+Расчитывает каноническую декомпозицию символа Unicode.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>ch</code></em>&#160;:</span></td>
+<td> Unicode символ.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>result_len</code></em>&#160;:</span></td>
+<td> расположение для хранения длины возвращаемого значения.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка Unicode символов.
+  <em class="parameter"><code>result_len</code></em> устанавливается в результирующую длину строки.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2705037"></a><h3>
+<a name="g-unichar-get-mirror-char"></a>g_unichar_get_mirror_char ()</h3>
+<a class="indexterm" name="id2705053"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_unichar_get_mirror_char       (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> ch,
+                                             <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> *mirrored_ch);</pre>
+<p>
+В Unicode, некоторые символы являются зеркальными (<em class="firstterm">mirrored</em>). Это значит
+что их изображение является отражённым горизонтально в тексте который расположен с право на лево. 
+Например, "(" стал бы зеркальным отражением,
+")", в тексте с обратной ориентацией (right-to-left).
+</p>
+<p>
+Если <em class="parameter"><code>ch</code></em> имеет зеркальное свойство Unicode и есть другой символ unicode
+который обычно имеет глиф являющийся зеркальным изображением <em class="parameter"><code>ch</code></em>'s
+глифа и параметр <em class="parameter"><code>mirrored_ch</code></em> установлен, он помещает символ в адрес указанный
+<em class="parameter"><code>mirrored_ch</code></em>.  Иначе размещается оригинальный символ.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>ch</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>mirrored_ch</code></em>&#160;:</span></td>
+<td> расположение для хранения отражённого символа
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если <em class="parameter"><code>ch</code></em> 
+     имеет зеркальный символ, иначе <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a>
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.4
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2705203"></a><h3>
+<a name="GUnicodeScript"></a>enum GUnicodeScript</h3>
+<a class="indexterm" name="id2705216"></a><pre class="programlisting">typedef enum 
+{                         /* ISO 15924 code */
+  G_UNICODE_SCRIPT_INVALID_CODE = -1,
+  G_UNICODE_SCRIPT_COMMON       = 0,   /* Zyyy */
+  G_UNICODE_SCRIPT_INHERITED,          /* Qaai */
+  G_UNICODE_SCRIPT_ARABIC,             /* Arab */
+  G_UNICODE_SCRIPT_ARMENIAN,           /* Armn */
+  G_UNICODE_SCRIPT_BENGALI,            /* Beng */
+  G_UNICODE_SCRIPT_BOPOMOFO,           /* Bopo */
+  G_UNICODE_SCRIPT_CHEROKEE,           /* Cher */
+  G_UNICODE_SCRIPT_COPTIC,             /* Qaac */
+  G_UNICODE_SCRIPT_CYRILLIC,           /* Cyrl (Cyrs) */
+  G_UNICODE_SCRIPT_DESERET,            /* Dsrt */
+  G_UNICODE_SCRIPT_DEVANAGARI,         /* Deva */
+  G_UNICODE_SCRIPT_ETHIOPIC,           /* Ethi */
+  G_UNICODE_SCRIPT_GEORGIAN,           /* Geor (Geon, Geoa) */
+  G_UNICODE_SCRIPT_GOTHIC,             /* Goth */
+  G_UNICODE_SCRIPT_GREEK,              /* Grek */
+  G_UNICODE_SCRIPT_GUJARATI,           /* Gujr */
+  G_UNICODE_SCRIPT_GURMUKHI,           /* Guru */
+  G_UNICODE_SCRIPT_HAN,                /* Hani */
+  G_UNICODE_SCRIPT_HANGUL,             /* Hang */
+  G_UNICODE_SCRIPT_HEBREW,             /* Hebr */
+  G_UNICODE_SCRIPT_HIRAGANA,           /* Hira */
+  G_UNICODE_SCRIPT_KANNADA,            /* Knda */
+  G_UNICODE_SCRIPT_KATAKANA,           /* Kana */
+  G_UNICODE_SCRIPT_KHMER,              /* Khmr */
+  G_UNICODE_SCRIPT_LAO,                /* Laoo */
+  G_UNICODE_SCRIPT_LATIN,              /* Latn (Latf, Latg) */
+  G_UNICODE_SCRIPT_MALAYALAM,          /* Mlym */
+  G_UNICODE_SCRIPT_MONGOLIAN,          /* Mong */
+  G_UNICODE_SCRIPT_MYANMAR,            /* Mymr */
+  G_UNICODE_SCRIPT_OGHAM,              /* Ogam */
+  G_UNICODE_SCRIPT_OLD_ITALIC,         /* Ital */
+  G_UNICODE_SCRIPT_ORIYA,              /* Orya */
+  G_UNICODE_SCRIPT_RUNIC,              /* Runr */
+  G_UNICODE_SCRIPT_SINHALA,            /* Sinh */
+  G_UNICODE_SCRIPT_SYRIAC,             /* Syrc (Syrj, Syrn, Syre) */
+  G_UNICODE_SCRIPT_TAMIL,              /* Taml */
+  G_UNICODE_SCRIPT_TELUGU,             /* Telu */
+  G_UNICODE_SCRIPT_THAANA,             /* Thaa */
+  G_UNICODE_SCRIPT_THAI,               /* Thai */
+  G_UNICODE_SCRIPT_TIBETAN,            /* Tibt */
+  G_UNICODE_SCRIPT_CANADIAN_ABORIGINAL, /* Cans */
+  G_UNICODE_SCRIPT_YI,                 /* Yiii */
+  G_UNICODE_SCRIPT_TAGALOG,            /* Tglg */
+  G_UNICODE_SCRIPT_HANUNOO,            /* Hano */
+  G_UNICODE_SCRIPT_BUHID,              /* Buhd */
+  G_UNICODE_SCRIPT_TAGBANWA,           /* Tagb */
+
+  /* Unicode-4.0 additions */
+  G_UNICODE_SCRIPT_BRAILLE,            /* Brai */
+  G_UNICODE_SCRIPT_CYPRIOT,            /* Cprt */
+  G_UNICODE_SCRIPT_LIMBU,              /* Limb */
+  G_UNICODE_SCRIPT_OSMANYA,            /* Osma */
+  G_UNICODE_SCRIPT_SHAVIAN,            /* Shaw */
+  G_UNICODE_SCRIPT_LINEAR_B,           /* Linb */
+  G_UNICODE_SCRIPT_TAI_LE,             /* Tale */
+  G_UNICODE_SCRIPT_UGARITIC,           /* Ugar */
+      
+  /* Unicode-4.1 additions */
+  G_UNICODE_SCRIPT_NEW_TAI_LUE,        /* Talu */
+  G_UNICODE_SCRIPT_BUGINESE,           /* Bugi */
+  G_UNICODE_SCRIPT_GLAGOLITIC,         /* Glag */
+  G_UNICODE_SCRIPT_TIFINAGH,           /* Tfng */
+  G_UNICODE_SCRIPT_SYLOTI_NAGRI,       /* Sylo */
+  G_UNICODE_SCRIPT_OLD_PERSIAN,        /* Xpeo */
+  G_UNICODE_SCRIPT_KHAROSHTHI,         /* Khar */
+
+  /* Unicode-5.0 additions */
+  G_UNICODE_SCRIPT_UNKNOWN,            /* Zzzz */
+  G_UNICODE_SCRIPT_BALINESE,           /* Bali */
+  G_UNICODE_SCRIPT_CUNEIFORM,          /* Xsux */
+  G_UNICODE_SCRIPT_PHOENICIAN,         /* Phnx */
+  G_UNICODE_SCRIPT_PHAGS_PA,           /* Phag */
+  G_UNICODE_SCRIPT_NKO                 /* Nkoo */
+} GUnicodeScript;
+</pre>
+<p>
+Перечисление <a href="glib-Unicode-Manipulation.html#GUnicodeScript"><span class="type">GUnicodeScript</span></a> 
+идентифицирует различные системы записи. Значения соответствуют именам определённым в стандарте Unicode. 
+Перечисление было добавлено в GLib 2.14. 
+Помните что новые типы могут быть добавлены в будущем. Приложения должны уметь обрабатывать неизвестные значения.
+Смотрите <a href="http://www.unicode.org/reports/tr24/" target="_top">Unicode Standard Annex
+<span class="type">24:</span> Script names</a>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-INVALID-CODE:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_INVALID_CODE</code></span></td>
+<td>значение никогда не возвращаемое из <a href="glib-Unicode-Manipulation.html#g-unichar-get-script"><code class="function">g_unichar_get_script()</code></a>
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-COMMON:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_COMMON</code></span></td>
+<td>    символ используемый в множестве различных писменностях
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-INHERITED:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_INHERITED</code></span></td>
+<td> маркер глифа который берёт его письменность из основного глифа к которому он прикреплён
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-ARABIC:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_ARABIC</code></span></td>
+<td>    Арабский язык
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-ARMENIAN:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_ARMENIAN</code></span></td>
+<td>  Армянский язык
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-BENGALI:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_BENGALI</code></span></td>
+<td>   Бенгальский язык
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-BOPOMOFO:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_BOPOMOFO</code></span></td>
+<td>  Китайский (Bopomofo)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-CHEROKEE:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_CHEROKEE</code></span></td>
+<td>  Cherokee
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-COPTIC:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_COPTIC</code></span></td>
+<td>  Коптский язык (Coptic)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-CYRILLIC:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_CYRILLIC</code></span></td>
+<td>  Кириллица (Cyrillic)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-DESERET:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_DESERET</code></span></td>
+<td>   Deseret
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-DEVANAGARI:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_DEVANAGARI</code></span></td>
+<td>   Деванагари (Devanagari)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-ETHIOPIC:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_ETHIOPIC</code></span></td>
+<td>  Древнеэфиопский (Ethiopic)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-GEORGIAN:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_GEORGIAN</code></span></td>
+<td>  Грузинский (Georgian)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-GOTHIC:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_GOTHIC</code></span></td>
+<td>  Готический (Gothic)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-GREEK:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_GREEK</code></span></td>
+<td>  Греческий (Greek)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-GUJARATI:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_GUJARATI</code></span></td>
+<td>  Gujarati
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-GURMUKHI:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_GURMUKHI</code></span></td>
+<td>  Gurmukhi
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-HAN:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_HAN</code></span></td>
+<td>  Ханьшуй (Han)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-HANGUL:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_HANGUL</code></span></td>
+<td>  Хангул (Hangul)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-HEBREW:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_HEBREW</code></span></td>
+<td>  Иврит (Hebrew)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-HIRAGANA:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_HIRAGANA</code></span></td>
+<td>  Хирагана (Hiragana)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-KANNADA:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_KANNADA</code></span></td>
+<td>  Канада (Kannada)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-KATAKANA:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_KATAKANA</code></span></td>
+<td>  Японская слоговая азбука катакана (Katakana)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-KHMER:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_KHMER</code></span></td>
+<td>  Кхмер (Khmer)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-LAO:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_LAO</code></span></td>
+<td>  Лао (Lao)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-LATIN:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_LATIN</code></span></td>
+<td>  Латинский (Latin)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-MALAYALAM:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_MALAYALAM</code></span></td>
+<td>  Малайялам (Malayalam)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-MONGOLIAN:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_MONGOLIAN</code></span></td>
+<td>  Монгольский (Mongolian)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-MYANMAR:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_MYANMAR</code></span></td>
+<td>   Myanmar
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-OGHAM:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_OGHAM</code></span></td>
+<td>  Огам (Ogham)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-OLD-ITALIC:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_OLD_ITALIC</code></span></td>
+<td>  Староитальянский (Old Italic)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-ORIYA:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_ORIYA</code></span></td>
+<td>  Язык ория (Oriya)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-RUNIC:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_RUNIC</code></span></td>
+<td>  Руническое письмо (Runic)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-SINHALA:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_SINHALA</code></span></td>
+<td>  Сингальский язык (Sinhala)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-SYRIAC:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_SYRIAC</code></span></td>
+<td>  Сирийский язык (Syriac)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-TAMIL:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_TAMIL</code></span></td>
+<td>  Тамильский язык (Tamil)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-TELUGU:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_TELUGU</code></span></td>
+<td>  Язык телугу (Telugu)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-THAANA:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_THAANA</code></span></td>
+<td>  Таана (Thaana)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-THAI:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_THAI</code></span></td>
+<td>  Тайский язык (Thai)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-TIBETAN:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_TIBETAN</code></span></td>
+<td>  Тибетский (Tibetan)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-CANADIAN-ABORIGINAL:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_CANADIAN_ABORIGINAL</code></span></td>
+<td>  Канадский язык аборигенов (Canadian Aboriginal)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-YI:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_YI</code></span></td>
+<td>  Идиш (Yi)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-TAGALOG:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_TAGALOG</code></span></td>
+<td>  Тагальский язык (Tagalog)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-HANUNOO:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_HANUNOO</code></span></td>
+<td>   Hanunoo
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-BUHID:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_BUHID</code></span></td>
+<td>   Buhid
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-TAGBANWA:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_TAGBANWA</code></span></td>
+<td>  Tagbanwa
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-BRAILLE:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_BRAILLE</code></span></td>
+<td>  Шрифт Брайля (Braille)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-CYPRIOT:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_CYPRIOT</code></span></td>
+<td>  Киприотский (Cypriot)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-LIMBU:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_LIMBU</code></span></td>
+<td>  Limbu
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-OSMANYA:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_OSMANYA</code></span></td>
+<td>  Сомалийский алфавит (Osmanya)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-SHAVIAN:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_SHAVIAN</code></span></td>
+<td>   Shavian
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-LINEAR-B:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_LINEAR_B</code></span></td>
+<td>  Линейный B (Linear B)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-TAI-LE:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_TAI_LE</code></span></td>
+<td>  Tai Le
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-UGARITIC:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_UGARITIC</code></span></td>
+<td>  Ugaritic
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-NEW-TAI-LUE:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_NEW_TAI_LUE</code></span></td>
+<td>  New Tai Lue
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-BUGINESE:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_BUGINESE</code></span></td>
+<td>  Buginese
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-GLAGOLITIC:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_GLAGOLITIC</code></span></td>
+<td>  Glagolitic
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-TIFINAGH:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_TIFINAGH</code></span></td>
+<td>  Tifinagh
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-SYLOTI-NAGRI:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_SYLOTI_NAGRI</code></span></td>
+<td>  Syloti Nagri
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-OLD-PERSIAN:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_OLD_PERSIAN</code></span></td>
+<td> Старый персидский (Old Persian)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-KHAROSHTHI:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_KHAROSHTHI</code></span></td>
+<td> Kharoshthi
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-UNKNOWN:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_UNKNOWN</code></span></td>
+<td> неизвестный указатель кода
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-BALINESE:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_BALINESE</code></span></td>
+<td> Балинизиский (Balinese)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-CUNEIFORM:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_CUNEIFORM</code></span></td>
+<td> Cuneiform
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-PHOENICIAN:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_PHOENICIAN</code></span></td>
+<td> Финский (Phoenician)
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-PHAGS-PA:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_PHAGS_PA</code></span></td>
+<td>  Phags-pa
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-UNICODE-SCRIPT-NKO:CAPS"></a><code class="literal">G_UNICODE_SCRIPT_NKO</code></span></td>
+<td>  N'Ko
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2706956"></a><h3>
+<a name="g-unichar-get-script"></a>g_unichar_get_script ()</h3>
+<a class="indexterm" name="id2706972"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#GUnicodeScript">GUnicodeScript</a> g_unichar_get_script         (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> ch);</pre>
+<p>
+Находит <a href="glib-Unicode-Manipulation.html#GUnicodeScript"><span class="type">GUnicodeScript</span></a> для специфического символа 
+(как определено в Unicode Standard Annex <span class="type">24</span>). Проверка на правильность <em class="parameter"><code>ch</code></em> 
+для Unicode символа не производится; если вы поместите недопустимый символ, результат будет неопределённым.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>ch</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Unicode-Manipulation.html#GUnicodeScript"><span class="type">GUnicodeScript</span></a> для символа.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.14
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2707071"></a><h3>
+<a name="g-utf8-next-char"></a>g_utf8_next_char()</h3>
+<a class="indexterm" name="id2707084"></a><pre class="programlisting">#define     g_utf8_next_char(p)</pre>
+<p>
+Пропускает следующий символ в UTF-8 строке. Строка должна быть допустимой; 
+это максимально быстрая макрокоманда и никакого контроля ошибок не проводится.
+Вы должны использовать эту макрокоманду для посимвольной итерации строки. 
+Эта макрокоманда возвращает начало следующего символа UTF-8.
+Перед использованием этой макрокоманды используйте <a href="glib-Unicode-Manipulation.html#g-utf8-validate"><code class="function">g_utf8_validate()</code></a> для проверки правильности строк которые могут содержать недопустимые символы UTF-8.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><em class="parameter"><code>p</code></em>&#160;:</span></td>
+<td>указатель на начало допустимого символа UTF-8.
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2707134"></a><h3>
+<a name="g-utf8-get-char"></a>g_utf8_get_char ()</h3>
+<a class="indexterm" name="id2707147"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>    g_utf8_get_char                 (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p);</pre>
+<p>
+Конвертирует последовательность байт в кодировке UTF-8 в Unicode символ.
+Если <em class="parameter"><code>p</code></em> не указывает на допустимый символ в кодировке UTF-8, результат будет неопределённым. 
+Если вы не уверены в том что последовательность байт является допустимым кодом Unicode символов, вы должны использовать вместо этой функции <a href="glib-Unicode-Manipulation.html#g-utf8-get-char-validated"><code class="function">g_utf8_get_char_validated()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>p</code></em>&#160;:</span></td>
+<td> указатель на Unicode символ в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> результирующий символ
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2707228"></a><h3>
+<a name="g-utf8-get-char-validated"></a>g_utf8_get_char_validated ()</h3>
+<a class="indexterm" name="id2707242"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>    g_utf8_get_char_validated       (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> max_len);</pre>
+<p>
+Конвертирует последовательность байт в кодировке UTF-8 в Unicode символ.
+Эта функция проверяет незаконченность символов, для недопустимых символов
+таких как символы которые выходят за диапазон Unicode и слишком длинных 
+допустимых символов.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>p</code></em>&#160;:</span></td>
+<td> указатель на Unicode символ в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>max_len</code></em>&#160;:</span></td>
+<td> максимальное количество байт для чтения, или -1, если нет максимума.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> результирующий символ. Если <em class="parameter"><code>p</code></em> указатель на часть
+   последовательности конца строки которая могла начать допустимый символ, 
+   возвращается (gunichar)-2; иначе, если <em class="parameter"><code>p</code></em> не является указателем 
+   на допустимый в UTF-8 кодировке Unicode символ, возвращается (gunichar)-1.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2707344"></a><h3>
+<a name="g-utf8-offset-to-pointer"></a>g_utf8_offset_to_pointer ()</h3>
+<a class="indexterm" name="id2707357"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_offset_to_pointer        (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> offset);</pre>
+<p>
+Конвертирует из целочисленного символа смещения в указатель на позицию внутри строки.
+</p>
+<p>
+Начиная с версии 2.10, эта функция позволяет помещать отрицательное <em class="parameter"><code>offset</code></em> для
+смещения назад. Это в основном полезно при движении с конца вместо движения вперед если <em class="parameter"><code>offset</code></em> 
+это последняя четверть строки, так как передвижение вперёд в три раза быстрее чем назад.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>offset</code></em>&#160;:</span></td>
+<td> символьное смещение внутри строки <em class="parameter"><code>str</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> результирующий указатель
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2707466"></a><h3>
+<a name="g-utf8-pointer-to-offset"></a>g_utf8_pointer_to_offset ()</h3>
+<a class="indexterm" name="id2707479"></a><pre class="programlisting"><a href="glib-Basic-Types.html#glong">glong</a>       g_utf8_pointer_to_offset        (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *pos);</pre>
+<p>
+Конвертирует из указателя внутри строки в целочисленное смещение символов.
+</p>
+<p>
+Начиная с версии 2.10, эта функция позволяет <em class="parameter"><code>pos</code></em> быть перед 
+<em class="parameter"><code>str</code></em>, и возвращает негативное смещение в этом случае.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>pos</code></em>&#160;:</span></td>
+<td> указатель на позицию внутри <em class="parameter"><code>str</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> результирующее символьное смещение
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2707584"></a><h3>
+<a name="g-utf8-prev-char"></a>g_utf8_prev_char ()</h3>
+<a class="indexterm" name="id2707597"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_prev_char                (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p);</pre>
+<p>
+Находит предыдущий символ UTF-8 в строке перед <em class="parameter"><code>p</code></em>.
+</p>
+<p>
+<em class="parameter"><code>p</code></em> не должен быть в начале символа UTF-8. Никакая проверка не проводится для найденого
+символа кроме фактической допустимости начального байта. Если <em class="parameter"><code>p</code></em> 
+может оказаться первым символом строки, вы должны использовать <a href="glib-Unicode-Manipulation.html#g-utf8-find-prev-char">
+<code class="function">g_utf8_find_prev_char()</code></a> вместо этой функции.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>p</code></em>&#160;:</span></td>
+<td> указатель на позицию в UTF-8 строке
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> указатель на найденный символ.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2707694"></a><h3>
+<a name="g-utf8-find-next-char"></a>g_utf8_find_next_char ()</h3>
+<a class="indexterm" name="id2707707"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_find_next_char           (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *end);</pre>
+<p>
+Ищет начало следующего символа UTF-8 в строке после <em class="parameter"><code>p</code></em>.
+</p>
+<p>
+<em class="parameter"><code>p</code></em> не должен быть началом UTF-8 символа. Для найденного символа не проводится никакой проверки
+фактической правильности символа, кроме допустимости начального байта.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>p</code></em>&#160;:</span></td>
+<td> указатель на позицию внутри строки UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>end</code></em>&#160;:</span></td>
+<td> указатель на конец строки, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     для указания что строка nul-завершённая, в этом случае он будет возвращённым значением 
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> указатель на найденный символ или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2707831"></a><h3>
+<a name="g-utf8-find-prev-char"></a>g_utf8_find_prev_char ()</h3>
+<a class="indexterm" name="id2707844"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_find_prev_char           (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *p);</pre>
+<p>
+Учитывая позицию <em class="parameter"><code>p</code></em> со строкой UTF-8 <em class="parameter"><code>str</code></em>, находит начало
+предыдущего символа UTF-8 строки перед <em class="parameter"><code>p</code></em>. Возвращает <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если нет символов
+UTF-8 представленных в строке <em class="parameter"><code>str</code></em> перед <em class="parameter"><code>p</code></em>.
+</p>
+<p>
+<em class="parameter"><code>p</code></em> не должен быть началом UTF-8 символа. Никакой проверки не проводится
+для найденного символа за исключением соответствия начального байта.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> указатель на начало строки UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>p</code></em>&#160;:</span></td>
+<td> указатель на некоторую позицию внутри строки <em class="parameter"><code>str</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> указатель на найденный символ или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2707995"></a><h3>
+<a name="g-utf8-strlen"></a>g_utf8_strlen ()</h3>
+<a class="indexterm" name="id2708008"></a><pre class="programlisting"><a href="glib-Basic-Types.html#glong">glong</a>       g_utf8_strlen                   (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> max);</pre>
+<p>
+Возвращает длину строки в символах.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>p</code></em>&#160;:</span></td>
+<td> указатель на начало строки UTF-8.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>max</code></em>&#160;:</span></td>
+<td> максимальное число байт для проверки. Если <em class="parameter"><code>max</code></em>
+      меньше чем 0, то строка предположительно будет nul-завершённой. 
+      Если <em class="parameter"><code>max</code></em> это 0, <em class="parameter"><code>p</code></em> не будет проверен и может 
+      быть <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> длина строки в символах
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2708120"></a><h3>
+<a name="g-utf8-strncpy"></a>g_utf8_strncpy ()</h3>
+<a class="indexterm" name="id2708133"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_strncpy                  (<a href="glib-Basic-Types.html#gchar">gchar</a> *dest,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *src,
+                                             <a href="glib-Basic-Types.html#gsize">gsize</a> n);</pre>
+<p>
+Как стандартная C функция <code class="function">strncpy()</code>, но копирует полученное количество символов а не байт. 
+Строка <em class="parameter"><code>src</code></em> должна быть допустимым UTF-8 текстом. 
+(Используйте <a href="glib-Unicode-Manipulation.html#g-utf8-validate"><code class="function">g_utf8_validate()</code></a> 
+для всех текстов перед попыткой использования UTF-8 функций.)</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>dest</code></em>&#160;:</span></td>
+<td> буфер для заполнения символами из <em class="parameter"><code>src</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>src</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>n</code></em>&#160;:</span></td>
+<td> количество символов
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <em class="parameter"><code>dest</code></em>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2708278"></a><h3>
+<a name="g-utf8-strchr"></a>g_utf8_strchr ()</h3>
+<a class="indexterm" name="id2708291"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_strchr                   (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Находит крайнее левое появление полученного символа Unicode в строке UTF-8, 
+ограничивая поиск в <em class="parameter"><code>len</code></em> байт.
+Если <em class="parameter"><code>len</code></em> равен -1, допускается неограниченный поиск.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>p</code></em>&#160;:</span></td>
+<td> nul-завершённая строка UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> максимальная длина <em class="parameter"><code>p</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если строка не содержит символ, 
+  иначе, указатель на начало крайнего левого появления символа в строке.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2708425"></a><h3>
+<a name="g-utf8-strrchr"></a>g_utf8_strrchr ()</h3>
+<a class="indexterm" name="id2708438"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_strrchr                  (const <a href="glib-Basic-Types.html#gchar">gchar</a> *p,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c);</pre>
+<p>
+Находит крайний правый полученный Unicode символ в строке UTF-8, 
+поиск ограничивается <em class="parameter"><code>len</code></em> байтами.
+Если <em class="parameter"><code>len</code></em> это -1, допускается неограниченный поиск.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>p</code></em>&#160;:</span></td>
+<td> nul-завершённая строка UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> максимальная длина <em class="parameter"><code>p</code></em>
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> Unicode символ
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> если строка не содержит символа, 
+  иначе, указатель на начало крайнего правого появления символа в строке.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2708573"></a><h3>
+<a name="g-utf8-strreverse"></a>g_utf8_strreverse ()</h3>
+<a class="indexterm" name="id2708588"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_strreverse               (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);</pre>
+<p>
+Переворачивает строку в кодировке UTF-8. <em class="parameter"><code>str</code></em> должна быть допустимым текстом в кодировке UTF-8. 
+(Используйте <a href="glib-Unicode-Manipulation.html#g-utf8-validate"><code class="function">g_utf8_validate()</code></a> для всех текстов
+перед попыткой использования сервисных функций UTF-8.)
+</p>
+<p>
+Помните что в отличие от <a href="glib-String-Utility-Functions.html#g-strreverse"><code class="function">g_strreverse()</code></a>, 
+эта функция возвращает вновь распределённую память, которая должна быть освобождена с помощью 
+<a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a> когда больше не нужна.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> максимальная длина <em class="parameter"><code>str</code></em> для использования. 
+     Если <em class="parameter"><code>len</code></em> &lt; 0, то строка nul-завершённая.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка которая является перевёрнутой строкой <em class="parameter"><code>str</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.2
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2708738"></a><h3>
+<a name="g-utf8-validate"></a>g_utf8_validate ()</h3>
+<a class="indexterm" name="id2708750"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gboolean">gboolean</a>    g_utf8_validate                 (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> max_len,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> **end);</pre>
+<p>
+Утверждает правильность текста в кодировке UTF-8. <em class="parameter"><code>str</code></em> это текст для подтверждения;
+если <em class="parameter"><code>str</code></em> nul-завершённая, то <em class="parameter"><code>max_len</code></em> может быть -1, иначе
+<em class="parameter"><code>max_len</code></em> должен быть количеством байт для подтверждения.
+Если <em class="parameter"><code>end</code></em> это non-<a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, 
+то конец подтверждённого диапазона будет сохранён здесь (то есть начало первого недопустимого символа, если некоторые байты недопустимы, 
+или иначе конец подтверждённого текста).
+</p>
+<p>
+Помните что <a href="glib-Unicode-Manipulation.html#g-utf8-validate"><code class="function">g_utf8_validate()</code></a> возвращает <a href="glib-Standard-Macros.html#FALSE:CAPS"><code class="literal">FALSE</code></a> если <em class="parameter"><code>max_len</code></em> 
+положительное и NUL был встречен перед прочтением <em class="parameter"><code>max_len</code></em> байт.
+</p>
+<p>
+Возвращает <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если вся <em class="parameter"><code>str</code></em> была допустимой. Многие GLib и GTK+
+подпрограммы <span class="emphasis"><em>требуют</em></span> допустимого ввода UTF-8;
+поэтому данные прочтённые из файла или сети должны быть проверены с помощью 
+<a href="glib-Unicode-Manipulation.html#g-utf8-validate"><code class="function">g_utf8_validate()</code></a> перед выполнением других действий с ними.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> указатель на символьные данные
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>max_len</code></em>&#160;:</span></td>
+<td> максимальное количество байт для подтверждения, или -1 чтобы действовать пока не встретится NUL
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>end</code></em>&#160;:</span></td>
+<td> расположение для возвращаемого конца подтверждённых данных
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> <a href="glib-Standard-Macros.html#TRUE:CAPS"><code class="literal">TRUE</code></a> если текст соответствует кодировке UTF-8
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2708983"></a><h3>
+<a name="g-utf8-strup"></a>g_utf8_strup ()</h3>
+<a class="indexterm" name="id2708996"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_strup                    (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);</pre>
+<p>
+Конвертирует все Unicode символы строки в верхний регистр. 
+Точный способ которым это выполняется зависит от текущей локали, 
+и может привести к увеличению количества символов в строке. 
+(Например, немецкая ess-zet будет изменена на SS.)</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> длина <em class="parameter"><code>str</code></em>, в байтах, или -1 если <em class="parameter"><code>str</code></em> nul-завершённая.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка, все символы которой конвертированы в верхний регистр.  
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2709095"></a><h3>
+<a name="g-utf8-strdown"></a>g_utf8_strdown ()</h3>
+<a class="indexterm" name="id2709108"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_strdown                  (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);</pre>
+<p>
+Конвертирует все Unicode символы строки в нижний регистр. 
+Точный способ которым это выполняется зависит от текущей локали, 
+и может привести к изменению количества символов в строке. 
+</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> длина <em class="parameter"><code>str</code></em>, в байтах, или -1 если <em class="parameter"><code>str</code></em> nul-завершённая.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка, в которой все символы конвертированы в нижний регистр.  
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2709206"></a><h3>
+<a name="g-utf8-casefold"></a>g_utf8_casefold ()</h3>
+<a class="indexterm" name="id2709218"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_casefold                 (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);</pre>
+<p>
+Конвертирует строку в форму которая не зависит от регистра. 
+Результат не будет соответствовать никакому специальному регистру, 
+но может быть сравнен для равенства или упорядочен с результатом вызова
+<a href="glib-Unicode-Manipulation.html#g-utf8-casefold"><code class="function">g_utf8_casefold()</code></a> для других строк.
+</p>
+<p>
+Помните что вызов <a href="glib-Unicode-Manipulation.html#g-utf8-casefold"><code class="function">g_utf8_casefold()</code></a> сопровождаемый 
+<a href="glib-Unicode-Manipulation.html#g-utf8-collate"><code class="function">g_utf8_collate()</code></a>
+только приближает к правильному лингвистическому регистру нечувствительному к упорядочиванию, 
+однако это достаточно хорошо. Получение более точного и правильного результата требует более сложной функции сопоставления
+которая принимает во внимание чувствительность к регистру. GLib в настоящее время не поддерживает такую функцию.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> длина <em class="parameter"><code>str</code></em>, в байтах, или -1 если <em class="parameter"><code>str</code></em> nul-завершённая.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка, которая является регистронезависимой <em class="parameter"><code>str</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2709362"></a><h3>
+<a name="g-utf8-normalize"></a>g_utf8_normalize ()</h3>
+<a class="indexterm" name="id2709374"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_normalize                (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len,
+                                             <a href="glib-Unicode-Manipulation.html#GNormalizeMode">GNormalizeMode</a> mode);</pre>
+<p>
+Конвертирует строку в изначальную форму, стандартизируя такие проблемы как, представлен ли символ с акцентом как основной 
+и комбинирующий акцент, или как единственный составной символ. В основном вы должны вызвать 
+<a href="glib-Unicode-Manipulation.html#g-utf8-normalize"><code class="function">g_utf8_normalize()</code></a> 
+перед сравнением двух Unicode строк.
+</p>
+<p>
+Режим нормализации <a href="glib-Unicode-Manipulation.html#G-NORMALIZE-DEFAULT:CAPS"><code class="literal">G_NORMALIZE_DEFAULT</code></a> 
+только стандартизирует различия которые не затрагивают текстовое содержание, такие как упомянутые выше акценты представления. 
+<a href="glib-Unicode-Manipulation.html#G-NORMALIZE-ALL:CAPS"><code class="literal">G_NORMALIZE_ALL</code></a> также стандартизирует
+символы "совместимости" в Unicode, такие как SUPERSCRIPT THREE в стандартные формы (в данном случае DIGIT THREE). Форматирование информации
+может быть потеряно но в большинстве текстовых операций такие символы должны быть рассмотрены одинаково.
+Например, <a href="glib-Unicode-Manipulation.html#g-utf8-collate"><code class="function">g_utf8_collate()</code></a> нормализуется с помощью
+<a href="glib-Unicode-Manipulation.html#G-NORMALIZE-ALL:CAPS"><code class="literal">G_NORMALIZE_ALL</code></a> как первый шаг.
+</p>
+<p>
+<a href="glib-Unicode-Manipulation.html#G-NORMALIZE-DEFAULT-COMPOSE:CAPS"><code class="literal">G_NORMALIZE_DEFAULT_COMPOSE</code></a> и 
+<a href="glib-Unicode-Manipulation.html#G-NORMALIZE-ALL-COMPOSE:CAPS"><code class="literal">G_NORMALIZE_ALL_COMPOSE</code></a>
+являются подобными <a href="glib-Unicode-Manipulation.html#G-NORMALIZE-DEFAULT:CAPS"><code class="literal">G_NORMALIZE_DEFAULT</code></a> и 
+<a href="glib-Unicode-Manipulation.html#G-NORMALIZE-ALL:CAPS"><code class="literal">G_NORMALIZE_ALL</code></a>,
+но возвращают результат с составными формами а не в максимально разложенной форме. Это часто полезно если вы хотите преобразовать строку
+в устаревшую кодировку или поместить её в систему с меньшей способностью обрабатывать Unicode.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> длина <em class="parameter"><code>str</code></em>, в байтах, или -1 если <em class="parameter"><code>str</code></em> nul-завершённая.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>mode</code></em>&#160;:</span></td>
+<td> тип выполняемой нормализации.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка, которая представляет нормализованную форму <em class="parameter"><code>str</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2709622"></a><h3>
+<a name="GNormalizeMode"></a>enum GNormalizeMode</h3>
+<a class="indexterm" name="id2709635"></a><pre class="programlisting">typedef enum {
+  G_NORMALIZE_DEFAULT,
+  G_NORMALIZE_NFD = G_NORMALIZE_DEFAULT,
+  G_NORMALIZE_DEFAULT_COMPOSE,
+  G_NORMALIZE_NFC = G_NORMALIZE_DEFAULT_COMPOSE,
+  G_NORMALIZE_ALL,
+  G_NORMALIZE_NFKD = G_NORMALIZE_ALL,
+  G_NORMALIZE_ALL_COMPOSE,
+  G_NORMALIZE_NFKC = G_NORMALIZE_ALL_COMPOSE
+} GNormalizeMode;
+</pre>
+<p>
+Определяет как трансформировать Unicode строку в каноническую форму, 
+стандартизирует такие проблемы как представлен ли символ с акцентом 
+основного символа и акцентом комбинирования или как единственный составной символ. 
+Unicode строки должны в основном быть нормализованы после их сравнения.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><a name="G-NORMALIZE-DEFAULT:CAPS"></a><code class="literal">G_NORMALIZE_DEFAULT</code></span></td>
+<td> стандартизирует различия которые не затрагивают текстовое содержимое, такие как описанный выше метод представления акцента.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-NORMALIZE-NFD:CAPS"></a><code class="literal">G_NORMALIZE_NFD</code></span></td>
+<td> другое имя для <a href="glib-Unicode-Manipulation.html#G-NORMALIZE-DEFAULT:CAPS"><code class="literal">G_NORMALIZE_DEFAULT</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-NORMALIZE-DEFAULT-COMPOSE:CAPS"></a><code class="literal">G_NORMALIZE_DEFAULT_COMPOSE</code></span></td>
+<td> тоже что <a href="glib-Unicode-Manipulation.html#G-NORMALIZE-DEFAULT:CAPS"><code class="literal">G_NORMALIZE_DEFAULT</code></a>, 
+     но с составными формами вместо максимально разложенных форм.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-NORMALIZE-NFC:CAPS"></a><code class="literal">G_NORMALIZE_NFC</code></span></td>
+<td> другое имя для <a href="glib-Unicode-Manipulation.html#G-NORMALIZE-DEFAULT-COMPOSE:CAPS"><code class="literal">G_NORMALIZE_DEFAULT_COMPOSE</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-NORMALIZE-ALL:CAPS"></a><code class="literal">G_NORMALIZE_ALL</code></span></td>
+<td> помимо <a href="glib-Unicode-Manipulation.html#G-NORMALIZE-DEFAULT:CAPS"><code class="literal">G_NORMALIZE_DEFAULT</code></a> 
+  также стандартизирует символы "совместимости" в Unicode, такие как SUPERSCRIPT THREE для стандартных форм 
+  (в этом случае DIGIT THREE). Форматирование информации может быть нарушено, но для большинства текстовых операций такие символы должны
+  быть рассмотрены одинаково.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-NORMALIZE-NFKD:CAPS"></a><code class="literal">G_NORMALIZE_NFKD</code></span></td>
+<td>другое имя для <a href="glib-Unicode-Manipulation.html#G-NORMALIZE-ALL:CAPS"><code class="literal">G_NORMALIZE_ALL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-NORMALIZE-ALL-COMPOSE:CAPS"></a><code class="literal">G_NORMALIZE_ALL_COMPOSE</code></span></td>
+<td> аналогично <a href="glib-Unicode-Manipulation.html#G-NORMALIZE-ALL:CAPS"><code class="literal">G_NORMALIZE_ALL</code></a>, 
+  но с составными формами вместо максимально разложенных форм.
+</td>
+</tr>
+<tr>
+<td><span class="term"><a name="G-NORMALIZE-NFKC:CAPS"></a><code class="literal">G_NORMALIZE_NFKC</code></span></td>
+<td>другое имя для <a href="glib-Unicode-Manipulation.html#G-NORMALIZE-ALL-COMPOSE:CAPS"><code class="literal">G_NORMALIZE_ALL_COMPOSE</code></a>.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2709929"></a><h3>
+<a name="g-utf8-collate"></a>g_utf8_collate ()</h3>
+<a class="indexterm" name="id2709942"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_utf8_collate                  (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str1,
+                                             const <a href="glib-Basic-Types.html#gchar">gchar</a> *str2);</pre>
+<p>
+Сравнивает две строки для правильного использования лингвистических правил текущей локали. 
+Сортируя большое количество строк, она будет значительно быстрее определять ключи сопоставления с помощью 
+<a href="glib-Unicode-Manipulation.html#g-utf8-collate-key"><code class="function">g_utf8_collate_key()</code></a> и 
+сравнивать ключи и сортируя с помощью <code class="function">strcmp()</code>, вместо сортировки оригинальных строк.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str1</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>str2</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> &lt; 0 если <em class="parameter"><code>str1</code></em> сравнивается перед <em class="parameter"><code>str2</code></em>, 
+  0 если сравнение эквивалентно, &gt; 0 если <em class="parameter"><code>str1</code></em> сравнивается после <em class="parameter"><code>str2</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2710074"></a><h3>
+<a name="g-utf8-collate-key"></a>g_utf8_collate_key ()</h3>
+<a class="indexterm" name="id2710088"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_collate_key              (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);</pre>
+<p>
+Конвертирует строку в ключ сопоставления который можно сравнить 
+с другим ключом сравнения произведенным той же функцией используя 
+<code class="function">strcmp()</code>. 
+Результат сравнения ключей сопоставления двух строк с помощью 
+<code class="function">strcmp()</code> всегда будет сопоставим с результатом 
+сравнения оригинальных ключей с помощью <a href="glib-Unicode-Manipulation.html#g-utf8-collate"><code class="function">g_utf8_collate()</code></a>.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> длина <em class="parameter"><code>str</code></em>, в байтах, или -1 если <em class="parameter"><code>str</code></em> nul-завершённая.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка. Эта строка должна быть освобождена с помощью 
+     <a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a> когда больше не нужна.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2710227"></a><h3>
+<a name="g-utf8-collate-key-for-filename"></a>g_utf8_collate_key_for_filename ()</h3>
+<a class="indexterm" name="id2710243"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf8_collate_key_for_filename (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#gssize">gssize</a> len);</pre>
+<p>
+Конвертирует строку в ключ сопоставления который можно сравнить с 
+другим ключом произведённым этой же функцией с помощью <code class="function">strcmp()</code>. 
+</p>
+<p>
+Для правильной сортировки имён файлов, эта функция обрабатывает точку '.' 
+как специфичный случай. Большинство словарей считают это незначительным, 
+производя таким образом порядок "event.c" "eventgenerator.c" "event.h" 
+вместо "event.c" "event.h" "eventgenerator.c". Кроме того, хотелось бы
+обрабатывать разумно числа, так чтобы "file1" "file10" "file5"
+сортировались как "file1" "file5" "file10".</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> длина <em class="parameter"><code>str</code></em>, в байтах, или -1 если <em class="parameter"><code>str</code></em> nul-завершённая.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> вновь распределённая строка. Эта строка должна быть освобождена с помощью 
+     <a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a> когда больше не нужна.
+
+</td>
+</tr>
+</tbody>
+</table></div>
+<p>Начиная с версии 2.8
+</p>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2710374"></a><h3>
+<a name="g-utf8-to-utf16"></a>g_utf8_to_utf16 ()</h3>
+<a class="indexterm" name="id2710387"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#gunichar2">gunichar2</a>*  g_utf8_to_utf16                 (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_read,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку из UTF-8 в UTF-16. Символ 0 будет добавлен к результату после конвертации текста.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> максимальная длина (количество символов) <em class="parameter"><code>str</code></em> для использования. 
+     Если <em class="parameter"><code>len</code></em> &lt; 0, то строка nul-завершённая.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_read</code></em>&#160;:</span></td>
+<td> расположение для хранения количества прочтённых байт, или 
+    <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+             Если <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, то 
+             <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-PARTIAL-INPUT:CAPS">
+             <code class="literal">G_CONVERT_ERROR_PARTIAL_INPUT</code></a> будет возвращён в случае,
+             если <em class="parameter"><code>str</code></em> содержит завершённый частично символ. 
+             Если произошла ошибка, то здесь сохраняется индекс недопустимого ввода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_written</code></em>&#160;:</span></td>
+<td> расположение для хранения записанного числа <span class="type">gunichar2</span>, 
+                или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+                Значение сохраняемое здесь не включает завершающий 0.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+     <code class="literal">NULL</code></a> для игнорирования ошибок. 
+     Могут происходить любые ошибки из <a href="glib-Character-Set-Conversion.html#GConvertError"><span class="type">GConvertError</span></a>      кроме <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-NO-CONVERSION:CAPS">
+     <code class="literal">G_CONVERT_ERROR_NO_CONVERSION</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> указатель на вновь распределённую строку UTF-16.
+              Это значение может быть освобождено с помощью <a href="glib-Memory-Allocation.html#g-free">
+              <code class="function">g_free()</code></a>. Если произошла ошибка, <a href="glib-Standard-Macros.html#NULL:CAPS">
+              <code class="literal">NULL</code></a> будет возвращён и установлена <em class="parameter"><code>error</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2710668"></a><h3>
+<a name="g-utf8-to-ucs4"></a>g_utf8_to_ucs4 ()</h3>
+<a class="indexterm" name="id2710681"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>*   g_utf8_to_ucs4                  (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_read,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку из UTF-8 в 32-bit фиксированной ширины представленный как UCS-4. 
+Заверщающий 0 будет добавлен к строке после конвертации текста.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> максимальная длина <em class="parameter"><code>str</code></em> для использования. 
+     Если <em class="parameter"><code>len</code></em> &lt; 0, то строка nul-завершённая.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_read</code></em>&#160;:</span></td>
+<td> расположение для хранения прочитанных байт, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+             Если <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, то <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-PARTIAL-INPUT:CAPS"><code class="literal">G_CONVERT_ERROR_PARTIAL_INPUT</code></a> будет возвращён в случае,
+             если <em class="parameter"><code>str</code></em> содержит завершающую часть символа. Если произошла ошибка, то здесь 
+             сохраняется индекс недопустимого ввода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_written</code></em>&#160;:</span></td>
+<td> расположение для хранения записанных символов или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+     Значение сохраняемое здесь не включает завершающий символ 0. 
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+     <code class="literal">NULL</code></a> для игнорирования ошибок. 
+     Могут произойти любые ошибки из <a href="glib-Character-Set-Conversion.html#GConvertError"><span class="type">GConvertError</span></a> 
+     кроме <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-NO-CONVERSION:CAPS">
+     <code class="literal">G_CONVERT_ERROR_NO_CONVERSION</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> указатель на вновь распределённую строку UCS-4.
+              Это значение должно быть освобождено с помощью <a href="glib-Memory-Allocation.html#g-free">
+              <code class="function">g_free()</code></a>. Если произошла ошибка, то возвращается 
+              <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> и устанавливается
+              <em class="parameter"><code>error</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2710956"></a><h3>
+<a name="g-utf8-to-ucs4-fast"></a>g_utf8_to_ucs4_fast ()</h3>
+<a class="indexterm" name="id2710970"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>*   g_utf8_to_ucs4_fast             (const <a href="glib-Basic-Types.html#gchar">gchar</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written);</pre>
+<p>
+Конвертирует строку из UTF-8 в 32-bit представление фиксированной ширины UCS-4, 
+принимая правильный ввод UTF-8.
+Эта функция примерно в два раза быстрее чем <a href="glib-Unicode-Manipulation.html#g-utf8-to-ucs4"><code class="function">g_utf8_to_ucs4()</code></a>,
+но не производит никакой проверки ошибок ввода.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-8
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> максимальная длина <em class="parameter"><code>str</code></em> для использования. Если 
+     <em class="parameter"><code>len</code></em> &lt; 0, то строка nul-завершённая.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_written</code></em>&#160;:</span></td>
+<td> расположение для хранения количества символов в результате, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> указатель на вновь распределённую строку UCS-4.
+     Это значение должно быть освобождено с помощью <a href="glib-Memory-Allocation.html#g-free"><code class="function">g_free()</code></a>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2711122"></a><h3>
+<a name="g-utf16-to-ucs4"></a>g_utf16_to_ucs4 ()</h3>
+<a class="indexterm" name="id2711135"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a>*   g_utf16_to_ucs4                 (const <a href="glib-Unicode-Manipulation.html#gunichar2">gunichar2</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_read,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку из UTF-16 в UCS-4. Результат будет завершён символом 0.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-16
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> максимальная длина (число <span class="type">gunichar2</span>) <em class="parameter"><code>str</code></em> для использования. 
+     Если <em class="parameter"><code>len</code></em> &lt; 0, то строка завершается символом 0.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_read</code></em>&#160;:</span></td>
+<td> расположение для хранения прочтенных слов, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+             Если <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, то <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-PARTIAL-INPUT:CAPS"><code class="literal">G_CONVERT_ERROR_PARTIAL_INPUT</code></a> будет возвращён в случае,
+             если <em class="parameter"><code>str</code></em> содержит часть завершающего символа. 
+             Если произошла ошибка то здесь сохраняется индекс недопустимого ввода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_written</code></em>&#160;:</span></td>
+<td> расположение для хранения количества записанных символов, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+     <code class="literal">NULL</code></a>.
+     Значение сохраняемое здесь не включает завершающий символ 0.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+     <code class="literal">NULL</code></a> для игнорирования ошибок. Могут произойти любые ошибки из 
+     <a href="glib-Character-Set-Conversion.html#GConvertError"><span class="type">GConvertError</span></a> кроме
+     <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-NO-CONVERSION:CAPS">
+     <code class="literal">G_CONVERT_ERROR_NO_CONVERSION</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> указатель на вновь распределённую строку UCS-4.
+              Это значение должно быть освобождено с помощью <a href="glib-Memory-Allocation.html#g-free">
+              <code class="function">g_free()</code></a>. Если произошла ошибка, то возврашается
+              <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> и
+              устанавливается <em class="parameter"><code>error</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2711414"></a><h3>
+<a name="g-utf16-to-utf8"></a>g_utf16_to_utf8 ()</h3>
+<a class="indexterm" name="id2711427"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_utf16_to_utf8                 (const <a href="glib-Unicode-Manipulation.html#gunichar2">gunichar2</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_read,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку из UTF-16 в UTF-8. Результат будет завершён 0 байтом.
+</p>
+<p>
+Помните что ввод находится уже в родном порядке байт (endianness),
+начальный символ byte-order-mark специально не обрабатывается.
+<a href="glib-Character-Set-Conversion.html#g-convert"><code class="function">g_convert()</code></a> 
+может быть использована для конвертации буфера байт данных UTF-16 неоднозначного порядка байт (endianess).</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UTF-16
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> максимальная длина (число <span class="type">gunichar2</span>)  <em class="parameter"><code>str</code></em> для использования. 
+     Если <em class="parameter"><code>len</code></em> &lt; 0, то строка завершается символом 0.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_read</code></em>&#160;:</span></td>
+<td> расположение для хранения количества прочитанных слов, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+     <code class="literal">NULL</code></a>.
+             Если <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, то <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-PARTIAL-INPUT:CAPS"><code class="literal">G_CONVERT_ERROR_PARTIAL_INPUT</code></a> будет возвращено в случае,
+             если <em class="parameter"><code>str</code></em> содержит часть завершающего символа. 
+             Если произошла ошибка то здесь сохраняется индекс недопустимого ввода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_written</code></em>&#160;:</span></td>
+<td> расположение для хранения количества записанных байт, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+     <code class="literal">NULL</code></a>.
+                Значение записанное здесь не включает завершающий 0 байт.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для хранения произошедшей ошибки, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> для игнорирования ошибок. 
+     Могут произойти любые ошибки из <a href="glib-Character-Set-Conversion.html#GConvertError">
+     <span class="type">GConvertError</span></a> кроме <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-NO-CONVERSION:CAPS">
+     <code class="literal">G_CONVERT_ERROR_NO_CONVERSION</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> указатель на вновь распределённую строку UTF-8.
+              Это значение должно быть освобождено с помощью <a href="glib-Memory-Allocation.html#g-free">
+              <code class="function">g_free()</code></a>. Если произошла ошибка, <a href="glib-Standard-Macros.html#NULL:CAPS">
+              <code class="literal">NULL</code></a> будет возвращён и установлена <em class="parameter"><code>error</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2711723"></a><h3>
+<a name="g-ucs4-to-utf16"></a>g_ucs4_to_utf16 ()</h3>
+<a class="indexterm" name="id2711736"></a><pre class="programlisting"><a href="glib-Unicode-Manipulation.html#gunichar2">gunichar2</a>*  g_ucs4_to_utf16                 (const <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_read,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку из UCS-4 в UTF-16. Символ 0 будет добавлен к результату после конвертации текста.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UCS-4
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> максимальная длина (число символов) <em class="parameter"><code>str</code></em> для использования. 
+     Если <em class="parameter"><code>len</code></em> &lt; 0, то строка завершается символом 0.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_read</code></em>&#160;:</span></td>
+<td> расположение для хранения количества прочитанных байт, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+             Если произошла ошибка то здесь сохраняется индекс недопустимого ввода.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_written</code></em>&#160;:</span></td>
+<td> расположение для хранения числа <span class="type">gunichar2</span> записей, 
+     или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>. 
+     Значение сохраняемое здесь не включает завершающий 0.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS">
+     <code class="literal">NULL</code></a> для игнорирования ошибок. 
+     Могут произойти любые ошибки из <a href="glib-Character-Set-Conversion.html#GConvertError">
+     <span class="type">GConvertError</span></a> кроме <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-NO-CONVERSION:CAPS">
+     <code class="literal">G_CONVERT_ERROR_NO_CONVERSION</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> указатель на вновь распределённую строку UTF-16.
+              Это значение должно быть освобождено с помощью <a href="glib-Memory-Allocation.html#g-free">
+              <code class="function">g_free()</code></a>. Если произошла ошибка, <a href="glib-Standard-Macros.html#NULL:CAPS">
+              <code class="literal">NULL</code></a> будет возвращён и установлена <em class="parameter"><code>error</code></em>.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2711986"></a><h3>
+<a name="g-ucs4-to-utf8"></a>g_ucs4_to_utf8 ()</h3>
+<a class="indexterm" name="id2711999"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gchar">gchar</a>*      g_ucs4_to_utf8                  (const <a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> *str,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> len,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_read,
+                                             <a href="glib-Basic-Types.html#glong">glong</a> *items_written,
+                                             <a href="glib-Error-Reporting.html#GError">GError</a> **error);</pre>
+<p>
+Конвертирует строку из 32-bit фиксированной ширины представленной как UCS-4.
+в UTF-8. Результат будет завершён 0 байтом.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>str</code></em>&#160;:</span></td>
+<td> строка в кодировке UCS-4
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>len</code></em>&#160;:</span></td>
+<td> максимальная длина (количество символов) <em class="parameter"><code>str</code></em> для использования. 
+     Если <em class="parameter"><code>len</code></em> &lt; 0, то строка завершается 0 символом.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_read</code></em>&#160;:</span></td>
+<td> расположение для хранения количества прочитанных символов, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>items_written</code></em>&#160;:</span></td>
+<td> расположение для хранения записанных байт или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>.
+                Значение сохраняемое здесь не включает завершающий 0 байт. 
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>error</code></em>&#160;:</span></td>
+<td> расположение для хранения произошедшей ошибки, или <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> 
+     для игнорирования ошибок. Могут происходить любые ошибки из <a href="glib-Character-Set-Conversion.html#GConvertError">
+     <span class="type">GConvertError</span></a> кроме
+     <a href="glib-Character-Set-Conversion.html#G-CONVERT-ERROR-NO-CONVERSION:CAPS">
+     <code class="literal">G_CONVERT_ERROR_NO_CONVERSION</code></a>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> указатель на вновь распределённую строку UTF-8.
+              Это значение должно быть освобождено с помощью <a href="glib-Memory-Allocation.html#g-free">
+              <code class="function">g_free()</code></a>. Если произошла ошибка, <a href="glib-Standard-Macros.html#NULL:CAPS">
+              <code class="literal">NULL</code></a> будет возвращён и установлена <em class="parameter"><code>error</code></em>. 
+              В этом случае, <em class="parameter"><code>items_read</code></em> будет установлен в позицию первого недопустимого 
+              символа ввода.
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2" lang="en">
+<a name="id2712253"></a><h3>
+<a name="g-unichar-to-utf8"></a>g_unichar_to_utf8 ()</h3>
+<a class="indexterm" name="id2712266"></a><pre class="programlisting"><a href="glib-Basic-Types.html#gint">gint</a>        g_unichar_to_utf8               (<a href="glib-Unicode-Manipulation.html#gunichar">gunichar</a> c,
+                                             <a href="glib-Basic-Types.html#gchar">gchar</a> *outbuf);</pre>
+<p>
+Конвертирует единственный символ в UTF-8.</p>
+<p>
+
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><span class="term"><em class="parameter"><code>c</code></em>&#160;:</span></td>
+<td> символ в кодировке Unicode
+</td>
+</tr>
+<tr>
+<td><span class="term"><em class="parameter"><code>outbuf</code></em>&#160;:</span></td>
+<td> буфер вывода, должен иметь последние 6 байт свободными.
+     Если <a href="glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>, то длина будет вычислена и возвращена
+     и ничего не будет записано в буфер <em class="parameter"><code>outbuf</code></em>.
+</td>
+</tr>
+<tr>
+<td><span class="term"><span class="emphasis"><em>Возвращает</em></span>&#160;:</span></td>
+<td> количество записанных байт
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1" lang="en">
+<a name="id2712367"></a><h2>Смотрите также</h2>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><span class="term"><a href="glib-Character-Set-Conversion.html#g-locale-to-utf8"><code class="function">g_locale_to_utf8()</code></a>, <a href="glib-Character-Set-Conversion.html#g-locale-from-utf8"><code class="function">g_locale_from_utf8()</code></a></span></td>
+<td><p>
+Удобные функции для конвертации между UTF-8 и локальной кодировкой. 
+</p></td>
+</tr></tbody>
+</table></div>
+<p>
+</p>
+</div>
+<div class="footnotes">
+<br><hr width="100" align="left">
+<div class="footnote">
+<em class="firstterm"><sup>[<a name="ftn.utf16_surrogate_pairs" href="#utf16_surrogate_pairs">3</a>] </sup>суррогатные пары</em></div>
+</div>
+</div>
+</body>
+</html>
