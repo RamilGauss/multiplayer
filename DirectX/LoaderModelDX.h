@@ -16,7 +16,9 @@ public:
 protected:
 
   bool LoadMainFile();
-
+  bool LoadFileResource();
+  bool LoadPart(int i);
+  bool LoadVector(char* strNumPart,char* key,D3DXVECTOR3& vector);
 };
 
 

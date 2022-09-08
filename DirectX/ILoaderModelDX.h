@@ -16,7 +16,7 @@ public:
     unsigned char      mIndex;
     char   strPathShader[MAX_PATH];// относительный путь
     WCHAR  strTexture[MAX_PATH];
-    WCHAR  strName[MAX_PATH];
+    char   strName[MAX_PATH];
     DWORD* indexes;
     TEffectDX::VERTEX* vertex;
     DWORD  sizeIndexes;// расчет по файлу
@@ -96,6 +96,8 @@ protected:
 protected:
 
   TBL_ConfigFile mFileIniMain;
+  TBL_ConfigFile mFileIniRes;
+
   char pStrFilenameData[MAX_PATH];
   char pStrPathPrimitive[MAX_PATH];
   char pStrFilenameDataMainIni[MAX_PATH];
