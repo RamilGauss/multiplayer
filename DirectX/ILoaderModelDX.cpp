@@ -5,8 +5,9 @@
 
 ILoaderModelDX::ILoaderModelDX()
 {
-  pStrFilenameData[0] = '\0';
-  pStrPathPrimitive[0] = '\0';
+  pStrPathShader[0]          = '\0';
+  pStrFilenameData[0]        = '\0';
+  pStrPathPrimitive[0]       = '\0';
   pStrFilenameDataMainIni[0] = '\0';
 
   mID_unique   = eUndefID;
@@ -61,5 +62,18 @@ unsigned short ILoaderModelDX::GetID_Unique()
 float ILoaderModelDX::GetLOD()
 {
   return mLOD; 
+}
+//-----------------------------------------------------------
+void ILoaderModelDX::UpPath(char* pPath)
+{
+  int len = strlen(pPath);
+  for(int i = len -1 ; i >= 0 ; i--)
+  {
+    if(pPath[i]=='\\')
+    {
+      pPath[i] = '\0';
+      return;
+    }
+  }
 }
 //-----------------------------------------------------------

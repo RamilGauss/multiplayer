@@ -1368,14 +1368,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<Filter
-			Name="Shader"
-			>
-			<File
-				RelativePath="..\Shader\SimpleSample.fx"
-				>
-			</File>
-		</Filter>
 	</Files>
 	<Globals>
 		<Global

@@ -18,6 +18,11 @@ TLoaderModelDX::~TLoaderModelDX()
 bool TLoaderModelDX::Load(LPCWSTR strFilenameData)
 {
   USES_CONVERSION;
+
+  strcpy(pStrPathShader,W2A(strFilenameData));
+  UpPath(&pStrPathShader[0]);
+  strcat(pStrPathShader,"\\shader");
+
   strcpy(pStrFilenameData ,W2A(strFilenameData));
   strcpy(pStrFilenameDataMainIni,pStrFilenameData);
   strcat(pStrFilenameDataMainIni,"\\main.ini");
@@ -87,7 +92,7 @@ bool TLoaderModelDX::LoadPart(int i)
   char * str = mFileIniRes.GetValue(strNumPart,"strPathShader");
   if(str)
   {
-    strcpy(mArrDefGroup[i].strPathShader,pStrFilenameData);
+    strcpy(mArrDefGroup[i].strPathShader,pStrPathShader);
     strcat(mArrDefGroup[i].strPathShader,"\\");
     strcat(mArrDefGroup[i].strPathShader,str);
     g_free(str);

@@ -95,10 +95,14 @@ protected:
   
   void Done();
 
+  void UpPath(char* sPath);
+
 protected:
 
   TBL_ConfigFile mFileIniMain;
   TBL_ConfigFile mFileIniRes;
+
+  char pStrPathShader[MAX_PATH];
 
   char pStrFilenameData[MAX_PATH];
   char pStrPathPrimitive[MAX_PATH];

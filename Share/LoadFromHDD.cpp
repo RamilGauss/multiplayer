@@ -72,7 +72,7 @@ unsigned int TLoadFromHDD::Size()
 //---------------------------------------------------------------
 void TLoadFromHDD::Read(void* buffer, int size)
 {
-	fread(buffer, size,1,pFile);
+	size = fread(buffer, size,1,pFile);
 }
 //---------------------------------------------------------------
 void TLoadFromHDD::Close()

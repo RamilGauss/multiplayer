@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'WaitForm.ui'
 **
-** Created: Thu 17. May 23:37:26 2012
+** Created: Fri 18. May 21:18:23 2012
 **      by: Qt User Interface Compiler version 4.4.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
