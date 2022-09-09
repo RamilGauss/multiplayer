@@ -85,12 +85,12 @@ void CallBackDisconnectManagerGUI(void* data, int size)// оставить
 //-----------------------------------------------------------------------------------------
 TManagerGUIClient::TManagerGUIClient(QWidget* parent):TManagerGUI(parent)
 {
-  pManagerGUIClient = this;
+
 }
 //-----------------------------------------------------------------------
 TManagerGUIClient::~TManagerGUIClient()
 {
-  pManagerGUIClient = NULL;
+
 }
 //-----------------------------------------------------------------------
 void TManagerGUIClient::WorkPacket(TManagerGUIEvent* event)
@@ -148,18 +148,26 @@ void TManagerGUIClient::WorkPacket(TManagerGUIEvent* event)
   delete[] pData;
 }
 //---------------------------------------------------------------------------------------------
-void TManagerGUIClient::startEvent()
+void TManagerGUIClient::StartEvent()
 {
-  pClient->Register(CallBackPacketManagerGUI,nsCallBackType::eRcvPacket);
-  pClient->Register(CallBackStreamManagerGUI,nsCallBackType::eRcvStream);
-  pClient->Register(CallBackDisconnectManagerGUI,nsCallBackType::eDisconnect);
+  pManagerGUIClient = this;
+  if(pClient)
+  {
+    pClient->Register(CallBackPacketManagerGUI,nsCallBackType::eRcvPacket);
+    pClient->Register(CallBackStreamManagerGUI,nsCallBackType::eRcvStream);
+    pClient->Register(CallBackDisconnectManagerGUI,nsCallBackType::eDisconnect);
+  }
 }
 //---------------------------------------------------------------------------------------------
-void TManagerGUIClient::stopEvent()
+void TManagerGUIClient::StopEvent()
 {
-  pClient->Unregister(CallBackPacketManagerGUI,nsCallBackType::eRcvPacket);
-  pClient->Unregister(CallBackStreamManagerGUI,nsCallBackType::eRcvStream);
-  pClient->Unregister(CallBackDisconnectManagerGUI,nsCallBackType::eDisconnect);
+  if(pClient)
+  {
+    pClient->Unregister(CallBackPacketManagerGUI,nsCallBackType::eRcvPacket);
+    pClient->Unregister(CallBackStreamManagerGUI,nsCallBackType::eRcvStream);
+    pClient->Unregister(CallBackDisconnectManagerGUI,nsCallBackType::eDisconnect);
+  }
+  pManagerGUIClient = NULL;
 }
 //---------------------------------------------------------------------------------------------
 void TManagerGUIClient::AnswerFromServer_Enter(unsigned char mCodeAnswer)

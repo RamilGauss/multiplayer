@@ -608,7 +608,7 @@ bool ServerTank::SetListTank(TA_Get_List_Tank *answerListTank, unsigned int ip, 
   answerListTank->setCnt(cnt);
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = (TTank*)pClient->mGarage.mArrTanks.Get(i);
+    TTank* pTank = (TTank*)pClient->mGarage.GetTank(i);
     int typeTank = pTank->GetTypeTank();
     answerListTank->setTypeTank(i,typeTank);
 		answerListTank->setFlgBlockTank(i,pTank->pRoom?1:0);

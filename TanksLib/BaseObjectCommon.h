@@ -37,9 +37,10 @@ you may contact in writing [ramil2085@gmail.com].
 #define BaseObjectCommonH
 
 #include "BaseObjectDX.h"
+#include "BaseObjectPrediction.h"
 
 
-class TBaseObjectCommon : public TBaseObjectDX
+class TBaseObjectCommon : public TBaseObjectDX, public TBaseObjectPrediction
 {
 
 public:

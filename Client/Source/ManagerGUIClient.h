@@ -55,8 +55,8 @@ public:
 
 protected:
 
-  virtual void startEvent();
-  virtual void stopEvent();
+  virtual void StartEvent();
+  virtual void StopEvent();
 
   virtual void OpenFirstForm();
 

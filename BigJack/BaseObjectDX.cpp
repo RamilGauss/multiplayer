@@ -41,12 +41,14 @@ you may contact in writing [ramil2085@gmail.com].
 
 using namespace nsStruct3D;
 
-TBaseObjectDX::TBaseObjectDX()
+TBaseObjectDX::TBaseObjectDX(int typeDX)
 {
   flgShow = true;// показан ли объект на сцене
-
+  mTimeCreation = 0;
   mModel = NULL;
   pLoadedTree = NULL;
+
+  mTypeDX = typeDX;// по-умолчанию не чисто анимированный
 }
 //------------------------------------------------------------------------------------------------
 TBaseObjectDX::~TBaseObjectDX()

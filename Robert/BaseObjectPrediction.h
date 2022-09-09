@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BoundingBox.h"
 #include "BaseObject.h"
 
-class TBaseObjectPrediction : public TBaseObject
+class TBaseObjectPrediction : virtual public TBaseObject
 {
 public:
   // тип объекта, важно для Prediction

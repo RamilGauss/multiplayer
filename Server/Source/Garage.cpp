@@ -78,6 +78,13 @@ int TGarage::GetCurTank()
 //------------------------------------------------------------------------------
 TTank* TGarage::GetPointerCurTank()
 {
-  return (TTank*)mArrTanks.Get(mCurTank);
+  return GetTank(mCurTank);
 }
 //------------------------------------------------------------------------------
+TTank* TGarage::GetTank(int i)
+{
+  TTank* pTank = (TTank*) ((TBaseObject*)mArrTanks.Get(i))->GetPtrInherits();
+  return pTank;
+}
+//----------------------------------------------------------------------------------
+

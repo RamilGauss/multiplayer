@@ -50,6 +50,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ManagerModelDX.h"
 #include <set>
 #include "DXUT_Class.h"
+#include "glibconfig.h"
 
 
 class TBaseObjectDX;
@@ -59,16 +60,18 @@ class TManagerDirectX
 {
 protected:
 
-  float mTime_ms;// время для рендера, используется для анимации
+  guint32 mTime_ms;// время для рендера, используется для анимации
 
   TDXUT mDXUT;
 
   TManagerModelDX mManagerModel;
 
   // все объекты
-  std::list<TBaseObjectDX*> mListAllObject;
+  std::list<TBaseObjectDX*> mListAllObject;// движок не освобождает память из-под этих объектов
   // список на отрисовку
-  std::list<TBaseObjectDX*> mListReadyRender;
+  std::list<TBaseObjectDX*> mListReadyRender;// временный список
+
+  std::list<TBaseObjectDX*> mListAnimateObject;// только анимированные. создаются движком(эффект движка), движок сам должен освободить память
 
   CModelViewerCamera mCamera;                // A model viewing camera
 
@@ -94,7 +97,7 @@ public:
   void NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext);
   //------------------------------------------------------------------------
   void Init(HWND hwnd = NULL);
-  void Work(float time_ms);
+  void Work(guint32 time_ms);
   void Done();
   //------------------------------------------------------------------------
   void AddObject(TBaseObjectDX* pObject);
@@ -107,7 +110,7 @@ public:
   void SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
                  D3DVECTOR& coord,     // где
                  D3DVECTOR& orient,    // ориентация эффекта
-                 float time_past/* прошло времени, мс*/ = 0);
+                 guint32 time_past/* прошло времени, мс*/ = 0);
   //----------------------------------------------------------------
   //                             ~INTERFACE
   //----------------------------------------------------------------
@@ -137,6 +140,7 @@ protected:
 
   void Optimize();
   void Render(IDirect3DDevice9* pd3dDevice);
+  void Animate();// для анимации и подготовки стека шейдера
 
 };
 

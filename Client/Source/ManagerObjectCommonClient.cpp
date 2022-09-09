@@ -101,15 +101,14 @@ TManagerObjectCommonClient::~TManagerObjectCommonClient()
 //--------------------------------------------------------------------
 void TManagerObjectCommonClient::Work()
 {
-  float time_ms = GetTimeWork();
-  guint32 iTime = ht_GetMSCount();
+  guint32 time_ms = ht_GetMSCount();
   if(IsLoadMap())
   {
     mProgressBar.VisualEvent(mProcentLoadMap);
   }
   else
   {
-    if(iTime>mLastTimeFreshData+eTimeoutFreshData)
+    if(time_ms>mLastTimeFreshData+eTimeoutFreshData)
     {
       mPrediction.Calc();
       mLastTimeFreshData = ht_GetMSCount();

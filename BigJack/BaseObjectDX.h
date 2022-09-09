@@ -38,20 +38,21 @@ you may contact in writing [ramil2085@gmail.com].
 #define BaseObjectDXH
 
 #include "ModelDX.h"
-#include "BaseObjectPrediction.h"
+#include "BaseObject.h"
 #include <vector>
 #include "TreeJoint.h"
+#include "glibconfig.h"
 
 class TManagerObjectDX;
 
-class TBaseObjectDX : public TBaseObjectPrediction
+class TBaseObjectDX : virtual public TBaseObject
 {
 protected:
 
   bool flgShow;// показан ли объект на сцене
   
 public:
-  TBaseObjectDX();
+  TBaseObjectDX(int typeDX = eDirtyAnimate);
   virtual ~TBaseObjectDX();
 
   void SetModel(TModelDX* pModel);
@@ -62,14 +63,28 @@ public:
   void SetShow(bool show){flgShow=show;}
 
   // вернет true - объект жив, false - закончил жить
-  // должно быть задано время начало жизни, см. TBaseObject::mTimeCreation
-  virtual bool Animate(float time_ms){return true;};
+  // должно быть задано время начало жизни, см. TBaseObject::mTimeCreation - хрень хрень
+  // только для полностью анимированных объектов!!!
+  // данная функция подготавливает стек шейдера для данного момента времени
+  virtual bool Animate(guint32 time_ms/*dirty animate ignore this parameter*/) = 0;//{return true;};
+
+
+  enum{eDirtyAnimate = 0,
+       ePureAnimate  = 1,// вызывается
+  };
+  int GetTypeDX(){return mTypeDX;}
+  void SetTimeCreation(guint32 t){mTimeCreation=t;};
 
 protected:
 
   void Done();
 
   TModelDX* mModel;// внешний вид 
+
+  int mTypeDX;
+
+  // время создания, необходимо для расчета анимации и расчета физики
+  guint32 mTimeCreation;// мс
   
 };
 //-----------------------------------------------------------------

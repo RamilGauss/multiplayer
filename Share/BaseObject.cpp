@@ -46,6 +46,7 @@ static TManagerBaseObject mManagerObject;
 
 TBaseObject::TBaseObject()
 {
+  mPtrInherits = NULL;
   ID_model = 0;
   ID_map = 0;
   SetOneMatrix(&mWorld);
@@ -80,15 +81,9 @@ void TBaseObject::SetTree(TTreeJoint::TLoadedJoint* pTree)
 {
   delete pLoadedTree;
   pLoadedTree = new TTreeJoint::TLoadedJoint;
-  *pLoadedTree = *pTree;
-  mTree.Setup(pLoadedTree);
-  mTree.SetOrderMatrixByName(&mVectorOrderPart);
-
-  SetWorld(pLoadedTree->world);
-
-  int cnt = mTree.GetCountPart();
-  for(int i = 0 ; i < 7/*cnt*/ ; i++) 
-    mVectorMatrix.push_back(SetOneMatrix(new D3DXMATRIXA16));
+  *pLoadedTree = *pTree;// копируем структуру
+  mTree.Setup(pLoadedTree);// инициализация внутренностей иерархии
+  mTree.SetOrderMatrixByName(&mVectorOrderPart);// в таком порядке будут строиться матрицы
 
   SetDefaultMatrix();  
   SetupState();
@@ -97,6 +92,13 @@ void TBaseObject::SetTree(TTreeJoint::TLoadedJoint* pTree)
 //------------------------------------------------------------------------------------------------
 void TBaseObject::SetDefaultMatrix() 
 {
+  int cnt = mTree.GetCountPart();
+  for(int i = 0 ; i < cnt ; i++) 
+    mVectorMatrix.push_back(SetOneMatrix(new D3DXMATRIXA16));
+  mTree.GetMatrix(&mVectorMatrix);
+/*
+  // ####
+  // убрать это после настройки Tree
   FLOAT Angle = float(M_PI);
   for(int j = 3 ; j < 7 ; j++)
   {
@@ -114,6 +116,7 @@ void TBaseObject::SetDefaultMatrix()
   mVectorMatrix[1]->_42 = -0.079083f;// Turret
   mVectorMatrix[1]->_43 = 0.987328f;// Turret
   //0 - Hull
+  */
 }
 //------------------------------------------------------------------------------------------------
 void TBaseObject::SetupState()

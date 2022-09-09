@@ -50,7 +50,7 @@ class TRoom : public TManagerObjectCommon
 
   TTransportProtocol* mTransport;
 
-  TArrayObject mArrTank;
+  TArrayObject mArrTank;// содержит указатели на TObject, но из-за виртуального наследования нельзя перейти к TBaseObjectCommon, использовать GetPtrInherits()
 
   guint32 mTimeBeginCountDown;// начался обратный отсчет
   guint32 mTimeAfterCountDown;// после окончания обратного отсчета (начался собственно сам бой)

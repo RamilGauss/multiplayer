@@ -53,11 +53,11 @@ void TManagerGUIEditorModel::WorkPacket(TManagerGUIEvent* event)
 
 }
 //---------------------------------------------------------------------------------------------
-void TManagerGUIEditorModel::startEvent()
+void TManagerGUIEditorModel::StartEvent()
 {
 }
 //---------------------------------------------------------------------------------------------
-void TManagerGUIEditorModel::stopEvent()
+void TManagerGUIEditorModel::StopEvent()
 {
 }
 //---------------------------------------------------------------------------------------------

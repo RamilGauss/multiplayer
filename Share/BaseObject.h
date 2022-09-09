@@ -51,8 +51,6 @@ class TBaseObject : public TObject
 {
   // свойства, характерные для физики и графики
   // ориентация, координаты, состояние
-protected:
-  //static TManagerBaseObject mManagerObject;
 public:
   TBaseObject();
   virtual ~TBaseObject();
@@ -68,6 +66,8 @@ public:
   virtual D3DXMATRIXA16 GetWorld(){return mWorld;}
 
   void SetTree(TTreeJoint::TLoadedJoint* pTree);
+
+  void* GetPtrInherits(){return mPtrInherits;}
 
 protected:
   D3DXMATRIXA16* SetOneMatrix(D3DXMATRIXA16* matrix);
@@ -102,8 +102,7 @@ protected:
   std::vector<D3DXMATRIXA16*> mVectorMatrix;
 
 
-  // время создания, необходимо для расчета анимации и расчета физики
-  float mTimeCreation;// мс
+  void* mPtrInherits;// назначить в TBaseObjectCommon (решение проблемы виртуального наследования)
 
 };
 

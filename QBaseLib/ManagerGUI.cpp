@@ -50,7 +50,8 @@ TManagerGUI::TManagerGUI(QWidget* parent):QObject(parent)
 //-----------------------------------------------------------------------
 TManagerGUI::~TManagerGUI()
 {
-  Done();
+  //Done();
+  //stopGUI();
 }
 //-----------------------------------------------------------------------
 void TManagerGUI::startGUI(TClientTank*          _pClient,
@@ -59,14 +60,14 @@ void TManagerGUI::startGUI(TClientTank*          _pClient,
   pClient  = _pClient; 
   pGame    = _pGame;
 
-  startEvent();
+  StartEvent();
 }
 //-----------------------------------------------------------------------
 void TManagerGUI::stopGUI()
 {
+  StopEvent();
   Done();
-  stopEvent();
-  QApplication::exit();///close();//_exit(0);
+  //QApplication::exit();///close();//_exit(0);
 }
 //-----------------------------------------------------------------------
 void TManagerGUI::customEvent( QEvent * e  )
@@ -117,8 +118,6 @@ void TManagerGUI::Done()
 
   pClient=NULL;
   pGame = NULL;
-
-  stopEvent();
 }
 //---------------------------------------------------------------------------------------------
 void TManagerGUI::WorkStream(TManagerGUIEvent* event)

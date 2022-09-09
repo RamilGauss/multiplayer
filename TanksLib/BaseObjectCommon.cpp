@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 TBaseObjectCommon::TBaseObjectCommon()
 {
-
+  mPtrInherits = this;
 }
 //-------------------------------------------------------------
 TBaseObjectCommon::~TBaseObjectCommon()

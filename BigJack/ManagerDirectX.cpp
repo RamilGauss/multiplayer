@@ -53,7 +53,7 @@ using namespace nsStruct3D;
 
 TManagerDirectX::TManagerDirectX(): mDXUT(this)
 {
-  mTime_ms = 0.0f;
+  mTime_ms = 0;
 }
 //--------------------------------------------------------------------------------------------------------
 TManagerDirectX::~TManagerDirectX()
@@ -130,9 +130,15 @@ void TManagerDirectX::Clear()
 void TManagerDirectX::SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
                D3DVECTOR& coord,     // где
                D3DVECTOR& orient,    // ориентация эффекта
-               float time_past/*// прошло времени, мс*/)
+               guint32 time_past/*// прошло времени, мс*/)
 {
-
+/*
+  TBaseObjectDX* pObjectDX = MakerEffect.New(id_effect);
+  pObjectDX->SetTimeCreation(mTime_ms - time_past);
+  pObjectDX->SetCoord(coord);
+  pObjectDX->SetOrient(orient);
+  mListAnimateObject.push_back(pObjectDX);
+*/
 }
 //--------------------------------------------------------------------------------------------------------
 void TManagerDirectX::NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext)
@@ -273,6 +279,7 @@ void TManagerDirectX::OnFrameMove( double fTime, float fElapsedTime, void* pUser
 //--------------------------------------------------------------------------------------
 void TManagerDirectX::OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
 {
+  Animate();
   Optimize();
   Render(pd3dDevice);
 }
@@ -308,7 +315,7 @@ void TManagerDirectX::Done()
   mManagerModel.DestroyModel();
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::Work(float time_ms)
+void TManagerDirectX::Work(guint32 time_ms)
 {
   mTime_ms = time_ms;
   mDXUT.Work();
@@ -356,5 +363,34 @@ void TManagerDirectX::UnregisterSet(std::set<void*>* setCallback, void* pFunc)
 void TManagerDirectX::RegisterSet(std::set<void*>* setCallback, void* pFunc)
 {
   setCallback->insert(pFunc);
+}
+//--------------------------------------------------------------------------------------
+void TManagerDirectX::Animate()
+{
+  list<TBaseObjectDX*>::iterator bit = mListAnimateObject.begin();
+  list<TBaseObjectDX*>::iterator eit = mListAnimateObject.end();
+  while(bit!=eit)
+  {
+    if((*bit)->Animate(mTime_ms)==false)
+    {
+      // уничтожить эффект
+      delete (*bit);
+      list<TBaseObjectDX*>::iterator nit = bit;
+      nit++;
+      mListAnimateObject.erase(bit);
+      bit = nit;
+    }
+    else
+      bit++;
+  }
+  //---------------------------------------------------------------
+  bit = mListAllObject.begin();
+  eit = mListAllObject.end();
+  while(bit!=eit)
+  {
+    bool res = (*bit)->Animate(mTime_ms);
+    BL_ASSERT(res);
+    bit++;
+  }
 }
 //--------------------------------------------------------------------------------------

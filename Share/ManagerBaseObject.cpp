@@ -59,7 +59,7 @@ void TManagerBaseObject::AddObject(TBaseObject* pObject)
   map<unsigned int, TTreeJoint::TLoadedJoint*>::iterator fit = mMapID_Tree.find(id);
   map<unsigned int, TTreeJoint::TLoadedJoint*>::iterator eit = mMapID_Tree.end();
   if(fit!=eit)
-    pLoaded = (TTreeJoint::TLoadedJoint*)fit->first;
+    pLoaded = (TTreeJoint::TLoadedJoint*)fit->second;
   else
   {
     map<unsigned int,string>::iterator it = mMapID_Path.find(id);

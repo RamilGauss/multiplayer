@@ -67,6 +67,9 @@ public:
   TTank* GetPointerCurTank();
 
   TClient* GetMasterClient(){return pMasterClient;};
+  
+  TTank* GetTank(int i);
+
 };
 
 

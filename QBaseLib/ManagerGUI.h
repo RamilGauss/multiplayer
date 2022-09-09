@@ -110,8 +110,8 @@ protected:
 
 protected:
 
-  virtual void startEvent(){};
-  virtual void stopEvent(){};
+  virtual void StartEvent() = 0;
+  virtual void StopEvent() = 0;
 
   virtual void customEvent( QEvent * e );
 

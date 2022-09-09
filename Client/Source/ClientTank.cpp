@@ -77,6 +77,10 @@ TClientTank::TClientTank()
 //--------------------------------------------------------------
 TClientTank::~TClientTank()
 {
+  mTransport.Unregister(ClientCallBackRcvPacket,nsCallBackType::eRcvPacket);
+  mTransport.Unregister(ClientCallBackRcvStream,nsCallBackType::eRcvStream);
+  mTransport.Unregister(ClientCallBackRcvDisconnect,nsCallBackType::eDisconnect);
+
   stop();
   pClient = NULL;
 }

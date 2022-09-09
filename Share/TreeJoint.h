@@ -37,16 +37,32 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef TreeJointH
 #define TreeJointH
 
-//#include "DXUT.h"
 #include <vector>
 #include <d3dx10math.h>
 
+/*
+По иерархии
+ M(n) = M(n)*M(n-1)*..*M(0) - с самого низа на верх
+ причем M(0) = M(root)
+             Mroot                 - по именам a
+          /   |   \  
+         M1   M1   M1              -  b c d
+         |         |  \          
+         M2        M2  M2          -  e f g
+                   | 
+                   M3              -   h
+       Mh = Mh*Mf*Md*Ma;
+       World = Mh*world;
+       WorldViewProj = World*View*Proj;
+*/
+
 class TTreeJoint
 {
-  bool flgNeedSetup;
-  bool flgWasSort;
+  bool flgNeedSetup; // отладка
+  bool flgWasSort;   // отладка
 public:
   TTreeJoint();
+  ~TTreeJoint();
   //--------------------------------------------------
   // заготовка для настройки дерева
   struct TChild
@@ -79,9 +95,9 @@ public:
   };
   struct TLoadedJoint
   {
-    D3DXMATRIXA16 world;
-    std::string root;
-    std::vector<TPart*> vectorPart;
+    D3DXMATRIXA16 world;// матрица root, относительно него все строится
+    std::string root;   // название корня
+    std::vector<TPart*> vectorPart;// части для соединения, одна из этих частей всегда root (по имени)
     ~TLoadedJoint()
     {
       int cnt = vectorPart.size();
@@ -103,26 +119,44 @@ public:
     }
   };
   //--------------------------------------------------
-  void Setup(TLoadedJoint* pLoadedTree);
+  // INTERFACE
+  // Начальная настройка
+  // 1. Setup(..)
+  // 2. SetOrderMatrixByName(..)
+  // 3. GetMatrix(..)
+  // ...
+  // Изменение одной из матриц
+  // N. ChangeMatrix(..)
+  // N+1. GetMatrix(..)
+  // ...
+  // M. SetDefault()
+  // M+1. GetMatrix(..)
+  //----------------------
+  void Setup(TLoadedJoint* pLoadedTree);// -
 
-  int GetCountPart();
-  void SetOrderMatrixByName(std::vector<std::string>* order);// вызвать до вызова ChangeMatrix и GetMatrix
+  int GetCountPart();// +
+  void SetOrderMatrixByName(std::vector<std::string>* order);// вызвать до вызова ChangeMatrix и GetMatrix // +
   
   // умножить матрицу по-умолчанию на новую матрицу и произвести изменения по всем детям
-  void ChangeMatrix(std::string& name, std::vector<D3DXMATRIXA16*>* matrix);
+  void ChangeMatrix(std::string& name, D3DXMATRIXA16* matrix);// +
   // заполнить матрицей
-  void GetMatrix(std::vector<D3DXMATRIXA16*>* matrix);
+  void GetMatrix(std::vector<D3DXMATRIXA16*>* matrix);// +
   // сбросить все матрицы в дефолт
-  void SetDefault();
+  void SetDefault(); // +
 
 protected:
+  
+  void Done();
+protected:
+
   struct TNodeJoint
   {
     TNodeJoint* pParent;
     std::vector<TNodeJoint*> mVectorChild;
     std::string   name;
-    D3DXMATRIXA16 matrixDef;
-    D3DXMATRIXA16 matrix;
+    D3DXMATRIXA16 matrixDef; // то что считали с файла настроек
+    D3DXMATRIXA16 matrix;    // эта матрица получается умножением матрицы по-умолчанию на заданную матрицу через метод ChangeMatrix
+    D3DXMATRIXA16 matrix_pro;// произведение по иерархии
     
     TNodeJoint():matrixDef(1.0f,0.0f,0.0f,0.0f,
                            0.0f,1.0f,0.0f,0.0f,
@@ -130,12 +164,23 @@ protected:
                            0.0f,0.0f,0.0f,1.0f)
     {
       pParent = NULL;
+      SetMatrixDef();
     }
+    void SetMatrixDef(){matrix = matrixDef;}
   };
   
-  TNodeJoint mRoot;// корень есть всегда
+  TNodeJoint* mRoot;// корень есть всегда
 
-  std::vector<TNodeJoint*> mVectorNode;
+  std::vector<TNodeJoint*> mVectorNode;// общее кол-во
+
+  TLoadedJoint* mLoadedTree;// временно при Setup-е
+  //------------------------------------------------------
+  void ProductAllMatrix();
+  void ProductChild(TNodeJoint* pNode);
+  void ProductUp(TNodeJoint* pNode);
+
+
+  void FindBranch(TPart* pPart, TNodeJoint* pParent);
 };
 
 #endif

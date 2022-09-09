@@ -125,7 +125,7 @@ void TRoom::Done()
   // разослать результаты боя
   for(int i = 0 ; i < mArrTank.Count() ; i++)
   {
-    TTank* pTank = (TTank*)(mArrTank.Get(i));
+    TTank* pTank = GetTank(i);
 
     TClient* pClient = pTank->GetMasterClient();
     if(pClient->GetCurRoom()==pTank->pRoom)// а вдруг клиент на другом танке в другом бою?
@@ -200,7 +200,7 @@ void TRoom::WorkCountDown()
     int cnt = mArrTank.Count();
     for(int i = 0 ; i < cnt ; i++)
     {
-      TTank* pTank = (TTank*)mArrTank.Get(i);
+      TTank* pTank = GetTank(i);
       TClient* pClient = pTank->GetMasterClient();
       WriteTransportStream(pClient,&S_Count_Down);
     }
@@ -220,7 +220,7 @@ void TRoom::WorkFight()
   s_coord.setCntTank(cnt);
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = (TTank*)mArrTank.Get(i);
+    TTank* pTank = GetTank(i);
     TClient* pClient = pTank->GetMasterClient();
     if(pClient->GetCurRoom()==this)// уменьшить трафик
       WriteTransportStream(pClient,&s_coord);
@@ -241,7 +241,7 @@ void TRoom::WorkFight()
     //------------------------------------------------------------------------------------
     for(int i = 0 ; i < cnt ; i++)
     {
-      TTank* pTank = (TTank*)mArrTank.Get(i);
+      TTank* pTank = GetTank(i);
       TClient* pClient = pTank->GetMasterClient();
       if(pClient->GetCurRoom()==this)// уменьшить трафик
         WriteTransportAnswer(pClient,&event_packet);
@@ -264,7 +264,7 @@ void TRoom::MakeGroup()
   int cnt = mArrTank.Count();
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = (TTank*)mArrTank.Get(i);
+    TTank* pTank = GetTank(i);
     if(i>cnt/2)
       pTank->mGroup = 1;
     else
@@ -289,7 +289,7 @@ void TRoom::WorkLoadMap()
   int cnt = mArrTank.Count();
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = (TTank*)mArrTank.Get(i);
+    TTank* pTank = GetTank(i);
     TClient* pClient = pTank->GetMasterClient();
     WriteTransportStream(pClient,&S_Load_Map);
   }
@@ -386,7 +386,7 @@ void TRoom::SendInitCoordTank(TClient* pClient)
   packet.setCountTank(cnt);
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = (TTank*)mArrTank.Get(i);
+    TTank* pTank = GetTank(i);
     // ### заменить на GetMirror()
     //packet.setID(i,i);
     //packet.setX(i,pTank->mCoord.x);
@@ -452,7 +452,7 @@ int TRoom::GetActiveClient()
   int cnt = mArrTank.Count();
   for(int i = 0 ; i < cnt ; i++ )
   {
-    TTank* pTank = (TTank*)mArrTank.Get(i);
+    TTank* pTank = GetTank(i);
     if(pTank)
     if(pTank->GetMasterClient()->GetCurRoom()==this)
       cntActive++;
@@ -462,7 +462,7 @@ int TRoom::GetActiveClient()
 //----------------------------------------------------------------------------------
 TTank* TRoom::GetTank(int i)
 {
-  TTank* pTank = (TTank*)mArrTank.Get(i);
+  TTank* pTank = (TTank*) ((TBaseObject*)mArrTank.Get(i))->GetPtrInherits();
   return pTank;
 }
 //----------------------------------------------------------------------------------
