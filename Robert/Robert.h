@@ -49,7 +49,7 @@ class TRobert : public IPhysicEngine
 public:
 
   TRobert();
-  ~TRobert();
+  virtual ~TRobert();
 
   void AddObject(IBaseObjectPrediction* pObject);
   void Clear();

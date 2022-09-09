@@ -39,14 +39,33 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BL_Debug.h"
 #include "ClientGame.h"
 #include "MakerPhysicEngine.h"
+#include "IGraphicEngine.h"
+#include "IManagerTime.h"
+#include "IManagerObjectCommon.h"
 #include "MakerGraphicEngine.h"
+#include "StrNameSrcEvent.h"
+#include "MakerManagerObjectCommon.h"
+
+#include "HiTimer.h"
+#include "NetSystem.h"
+#include "ErrorReg.h"
+#include <glib/gthread.h>
+#include "IXML.h"
+#include "common_defs.h"
+#include "MakerManagerTime.h"
 
 
 using namespace std;
 
 TClientGame::TClientGame()
 {
-
+  g_thread_init( NULL );
+  err_Init();
+  errSTR_Init();
+  errSTD_Init();
+  errSDK_Init();
+  ht_Init();
+  ns_Init();
 }
 //------------------------------------------------------------------------
 TClientGame::~TClientGame()
@@ -56,19 +75,23 @@ TClientGame::~TClientGame()
 //------------------------------------------------------------------------
 void TClientGame::Work(const char* sNameDLL)// начало работы
 {
-  Init(sNameDLL);
+  if(Init(sNameDLL)==false)
+    return;
 
   flgNeedStop = false;
   flgActive   = true;
   //------------------------------------------------------
   while(flgNeedStop==false)
   {
-    // обработать события окна
+    // обработать события графического ядра - Key+Mouse, GUI, внутренние события GE.
     if(HandleGraphicEngineEvent()==false)
       break;
+    // опросить объекты на наличие событий
+    CollectEvent();
 
     // обработать события
-    HandleExternalEvent();
+    if(HandleExternalEvent()==false)
+      break;
     // расчеты, необходимые для рендера, в зависимости от времени предыдущего расчета
     Calc();
     Render();
@@ -79,45 +102,87 @@ void TClientGame::Work(const char* sNameDLL)// начало работы
   Done();
 }
 //------------------------------------------------------------------------
-void TClientGame::Init(const char* sNameDLL)
+bool TClientGame::Init(const char* sNameDLL)
 {
+  // загрузка DLL
+  CHECK_RET(LoadDLL(sNameDLL))
+  // политика: нет DLL - нет движка.
+
+  // создатель объектов
+  IMakerObjectCommon* pMakerObjectCommon = mClientDeveloperTool->GetMakerObjectCommon();
+
   // создать двигатели и проинициализировать менеджеры
   TMakerGraphicEngine makerGraphicEngine;
   mGraphicEngine = makerGraphicEngine.New();
-  mGraphicEngine->SetKeyMouseHandler(&mMKM);
   mGraphicEngine->Init();// создали окно
+  mGraphicEngine->SetSelfName(STR_SRC_EVENT_GRAPHIC_ENGINE);
+  mGraphicEngine->SetDstObject(this);
+  mGraphicEngine->SetTitleWindow(mClientDeveloperTool->GetTitleWindow().data());
   //------------------------------------------
   TMakerPhysicEngine makerPhysicEngine;
   mPhysicEngine = makerPhysicEngine.New();
+  mPhysicEngine->SetSelfName(STR_SRC_EVENT_PHYSIC_ENGINE);
+  mPhysicEngine->SetDstObject(this);
   //------------------------------------------
-  TMakerNET_Engine makerNET;
-  mNET = makerNET.New();
+  //TMakerNET_Engine makerNET;
+  //mNET = makerNET.New();
+  //------------------------------------------
+  TMakerManagerObjectCommon makerMOC;
+  mMOC = makerMOC.New();
+  mMOC->Init(pMakerObjectCommon);
+  mMOC->SetSelfName(STR_SRC_EVENT_MANAGER_OBJECT_COMMON);
+  mMOC->SetDstObject(this);
+  //------------------------------------------
+  TMakerManagerTime makerMTime;
+  mMTime = makerMTime.New();
+  //------------------------------------------
+  //------------------------------------------
+  IClientDeveloperTool::TComponentClient components;
+  components.mGraphicEngine = mGraphicEngine;
+  components.mMTime         = mMTime;
+  components.mMOC           = mMOC;
+  components.mPhysicEngine  = mPhysicEngine;
+  mClientDeveloperTool->Init(&components);
+  return true;
 }
 //------------------------------------------------------------------------
 void TClientGame::Done()
 {
   delete mGraphicEngine;
   mGraphicEngine = NULL;
+  delete mPhysicEngine;
+  mPhysicEngine = NULL;
+  delete mMOC;
+  mMOC = NULL;
+  delete mMTime;
+  mMTime = NULL;
 }
 //------------------------------------------------------------------------
-void TClientGame::HandleExternalEvent()
+bool TClientGame::HandleExternalEvent()
 {
-
+  TEvent* pEvent = GetEvent();
+  while(pEvent)
+  {
+    // обработка события
+    if(HandleEvent(pEvent)==false)
+    {
+      delete pEvent;
+      return false;
+    }
+    delete pEvent;
+    pEvent = GetEvent();
+  }
+  return true;
 }
 //------------------------------------------------------------------------
 void TClientGame::Calc()
 {
-  mDeveloperTool->Calc();
+  mClientDeveloperTool->Calc();
 }
 //------------------------------------------------------------------------
 void TClientGame::Render()
 {
-  mGraphicEngine->Work(mMTime.GetTime());
-}
-//------------------------------------------------------------------------
-void TClientGame::SetEvent(const char* sFrom, unsigned int key, void* pData, int sizeData)
-{
-
+  mGraphicEngine->Work(mMTime->GetTime());
 }
 //------------------------------------------------------------------------
 bool TClientGame::HandleGraphicEngineEvent()
@@ -125,5 +190,13 @@ bool TClientGame::HandleGraphicEngineEvent()
   return mGraphicEngine->HandleInternalEvent();
 }
 //------------------------------------------------------------------------
-
-
+void TClientGame::CollectEvent()
+{
+  // опросить интерфейсы, у которых нет своего потока
+}
+//------------------------------------------------------------------------
+bool TClientGame::HandleEvent(TEvent* pEvent)
+{
+  return mClientDeveloperTool->HandleEvent(pEvent);
+}
+//------------------------------------------------------------------------

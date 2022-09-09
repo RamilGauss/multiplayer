@@ -248,9 +248,6 @@ protected:
         bool m_ReleasingSwapChain;		  // if true, the app is releasing its swapchain
         bool m_IsInGammaCorrectMode;		// Tell DXUTRes and DXUTMisc that we are in gamma correct mode
 
-        // Gauss 06.11.2012
-        bool m_DoPresentRender;// показать результат рендеринга / show result of rendering
-
         LPDXUTCALLBACKMODIFYDEVICESETTINGS m_ModifyDeviceSettingsFunc; // modify Direct3D device settings callback
         LPDXUTCALLBACKDEVICEREMOVED m_DeviceRemovedFunc;        // Direct3D device removed callback
         LPDXUTCALLBACKFRAMEMOVE m_FrameMoveFunc;            // frame move callback
@@ -352,8 +349,6 @@ public:
         m_state.m_CounterData.fPSComputationLimited = -1.0f;
         m_state.m_CounterData.fPostTransformCacheHitRate = -1.0f;
         m_state.m_CounterData.fTextureCacheHitRate = -1.0f;
-
-        m_state.m_DoPresentRender = true;
     }
 
     void Destroy()
@@ -1340,9 +1335,11 @@ LRESULT CALLBACK DXUTStaticWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         bMouseButtons[3] = bSideButton1;
         bMouseButtons[4] = bSideButton2;
 
+        UINT state = uMsg;
+
         LPDXUTCALLBACKMOUSE pCallbackMouse = GetDXUTState().GetMouseFunc();
         if( pCallbackMouse )
-            pCallbackMouse( bLeftButton, bRightButton, bMiddleButton, bSideButton1, bSideButton2, nMouseWheelDelta,
+            pCallbackMouse( state, bLeftButton, bRightButton, bMiddleButton, bSideButton1, bSideButton2, nMouseWheelDelta,
                             xPos, yPos, GetDXUTState().GetMouseFuncUserContext() );
     }
 
@@ -2616,9 +2613,8 @@ HRESULT DXUTChangeDevice( DXUTDeviceSettings* pNewDeviceSettings,
     }
 
     // Make the window visible
-    // Gauss 28.08.2012 изменение №2
-    //###if( !IsWindowVisible( DXUTGetHWND() ) )
-    //###    ShowWindow( DXUTGetHWND(), SW_SHOW );
+    if( !IsWindowVisible( DXUTGetHWND() ) )
+        ShowWindow( DXUTGetHWND(), SW_SHOW );
 
     // Ensure that the display doesn't power down when fullscreen but does when windowed
     if( !DXUTIsWindowed() )
@@ -6555,10 +6551,12 @@ LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam,
     bMouseButtons[2] = bRightButton;
     bMouseButtons[3] = bSideButton1;
     bMouseButtons[4] = bSideButton2;
+    
+    UINT state = uMsg;
 
     LPDXUTCALLBACKMOUSE pCallbackMouse = GetDXUTState().GetMouseFunc();
     if( pCallbackMouse )
-      pCallbackMouse( bLeftButton, bRightButton, bMiddleButton, bSideButton1, bSideButton2, nMouseWheelDelta,
+      pCallbackMouse( state ,bLeftButton, bRightButton, bMiddleButton, bSideButton1, bSideButton2, nMouseWheelDelta,
       xPos, yPos, GetDXUTState().GetMouseFuncUserContext() );
   }
 

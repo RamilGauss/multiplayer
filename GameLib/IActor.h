@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef IActorH
 #define IActorH
 
-#include "BaseObjectCommon.h"
+#include "IBaseObjectCommon.h"
 #include <string>
 
 class TClient;

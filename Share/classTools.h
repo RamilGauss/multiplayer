@@ -41,7 +41,7 @@ you may contact in writing [ramil2085@gmail.com].
  * Макрос, определяющий класс без конструктора копирования и 
  * без оператора присваивания 
  */
-#define NO_COPY_CLASS( classname )					\
+#define NO_COPY_OBJECT( classname )					\
 	private:                                  \
     classname(const classname&);            \
     classname& operator=(const classname&);

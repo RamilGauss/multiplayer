@@ -38,7 +38,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <QCoreApplication.h>
 #include <QMessageBox>
 #include "TransportProtocolPacket.h"
-#include "ClientTank.h"
+#include "NET_LevelClientServer.h"
 
 
 TManagerGUIClient* pManagerGUIClient = NULL;

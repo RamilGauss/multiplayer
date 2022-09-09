@@ -49,7 +49,7 @@ class TGarage
   TClient* pMasterClient;
 
   //TManagerObjectCommon mMOC;
-  TMakerObject mMakerBehaviorServer;
+  TMakerObjectCommon mMakerBehaviorServer;
 
 public:
   TArrayObject mArrTanks; // пока без БД тут будет только ТТ

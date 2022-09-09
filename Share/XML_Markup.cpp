@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -72,20 +72,16 @@ int TXML_Markup::GetCountSection(const char* name)
 // навигация
 bool TXML_Markup::EnterSection(const char* name, int num)
 {
+  if(name==NULL) return false;
   int cntElem = 0;
   while(mMarkup.FindElem())
   { 
-    if(name==NULL)
-      cntElem++;
-    else
+    string sName = mMarkup.GetTagName();
+    if(strcmp(name,sName.data())==0)
     {
-      string sName = mMarkup.GetTagName();
-      if(strcmp(name,sName.data())==0)
-      {
-        if(num==cntElem)
-          return mMarkup.IntoElem();
-        cntElem++;
-      }
+      if(num==cntElem)
+        return mMarkup.IntoElem();
+      cntElem++;
     }
   }
   return false;
@@ -106,6 +102,22 @@ bool TXML_Markup::AddSection(const char* name)
 {
   mMarkup.SavePos();
     bool res = mMarkup.AddElem(name, " ");
+  mMarkup.RestorePos();
+  return res;
+}
+//------------------------------------------------------------------
+bool TXML_Markup::AddSection(const char *name, int numAttr, TAttrInfo *pAttribs)
+{
+  mMarkup.SavePos();
+
+    bool res = mMarkup.AddElem(name, " ");
+    for(int iAttr = 0; iAttr < numAttr; iAttr++)
+    {
+      res &= mMarkup.SetAttrib(pAttribs[iAttr].Name.data(), pAttribs[iAttr].Value.data());
+      if (!res) 
+        break;
+    }
+
   mMarkup.RestorePos();
   return res;
 }
@@ -134,7 +146,7 @@ bool TXML_Markup::RemoveSection(const char* name, int num)
   return res;
 }
 //------------------------------------------------------------------
-bool TXML_Markup::WriteSection(const char* name, int num, std::string buffer)
+bool TXML_Markup::WriteSection(const char* name, int num, string buffer)
 {
   mMarkup.SavePos();
   bool res = false;
@@ -157,7 +169,7 @@ bool TXML_Markup::WriteSection(const char* name, int num, std::string buffer)
 }
 //------------------------------------------------------------------
 // чтение
-std::string TXML_Markup::ReadSection(const char* name, int num)
+string TXML_Markup::ReadSection(const char* name, int num)
 {
   string content;
   mMarkup.SavePos();
@@ -212,7 +224,7 @@ void TXML_Markup::ResetPos()
   mMarkup.ResetPos();
 }
 //------------------------------------------------------------------
-bool TXML_Markup::WriteSectionAttr(const char* name, int num, const char* nameAttr, std::string buffer)
+bool TXML_Markup::WriteSectionAttr(const char* name, int num, const char* nameAttr, string buffer)
 {
   mMarkup.SavePos();
   bool res = false;
@@ -235,7 +247,7 @@ bool TXML_Markup::WriteSectionAttr(const char* name, int num, const char* nameAt
 }
 //------------------------------------------------------------------
 // чтение
-std::string TXML_Markup::ReadSectionAttr(const char* name, int num, const char* nameAttr)
+string TXML_Markup::ReadSectionAttr(const char* name, int num, const char* nameAttr)
 {
   string content;
   mMarkup.SavePos();

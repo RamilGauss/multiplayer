@@ -33,37 +33,47 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef ManagerObjectCommonH
-#define ManagerObjectCommonH
+#ifndef IManagerObjectCommonH
+#define IManagerObjectCommonH
 
-#include "IGraphicEngine.h"
-#include "Camera.h"
-#include "LoaderObjectCommon.h"
-#include "InterpretatorPredictionTank.h"
-#include "ApplicationProtocolPacketAnswer.h"
-#include "glib/gthread.h"
+#include "SrcEvent.h"
 #include <vector>
-#include "ProgressBar.h"
-#include "CallBackRegistrator.h"
-#include "FilterWinApi.h"
-#include "ControlCamera.h"
-#include "ManagerEventWinApi.h"
-#include "ControlEventWinApiGE.h"
-#include "ControlEventWinApiNET.h"
-#include "ControlEventWinApiGUI.h"
 
 class IBaseObjectCommon;
+class IMakerObjectCommon;
 
-class IManagerObjectCommon
+class IManagerObjectCommon : public TSrcEvent
 {
+protected:
+  std::vector< IBaseObjectCommon* > mVectorObject;
+
 public:
+
+  // события внутри объекта
+  typedef enum
+  {
+    eBeginLoadMap = 0,
+    eLoadingMap10,       // каждые 10% от прогресса загрузки
+    eEndLoadMap,
+    eStoppedLoadMap,
+    //---------------------------
+    eErrorLoadMap,
+  }tEvent;
 
   IManagerObjectCommon();
   virtual ~IManagerObjectCommon();
 
-  virtual void Init() = 0;
-  virtual void Work() = 0;
-  virtual void Done() = 0;
+  virtual void Init(IMakerObjectCommon* _pMakerObjectCommon) = 0;
+  virtual void Clear() = 0;// убить все объекты
+  virtual void Done() = 0; // работа с Менеджером закончена
+  virtual void LoadMap(unsigned int id_map) = 0;// загрузить карту в параллельном потоке
+  virtual int  GetProgressLoadMap() = 0;// прогресс загрузки карты
+  virtual IBaseObjectCommon* CreateObject(unsigned int id_model) = 0;
+
+  void AddObject(IBaseObjectCommon* pObject);// отдать на контроль
+  IBaseObjectCommon* Get(int index);// отдать объект на изменение свойств (в основном для отладки)
+  int GetCountObject();
+
 };
 
 #endif

@@ -39,7 +39,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Logger.h"
 #include "LoaderModelDX.h"
 #include "BL_Debug.h"
-#include "MakerLoaderModelDX.h"
+#include "MakerLoaderModelGE.h"
 #include <stdlib.h>
 #include <d3dx10math.h>
 #include "SortByAlphabetic.h"
@@ -67,17 +67,20 @@ TModelDX::~TModelDX()
 //----------------------------------------------------------------------------------------------------
 void TModelDX::Draw(vector<unsigned char>* state, // какое состояние нарисовать (От ObjectDX)
                     vector<unsigned char>* mask,  // какую из частей нарисовать (От ObjectDX)
-                    vector<TVector4_4*>* matrix,// ориентация составных частей внутри объекта, кол-во совпадает с cSubset (От ObjectDX)
-                    TVector4_4* pWorld,// где и как расположен объект         (От ObjectDX)
+                    vector<TMatrix16*>* matrix,// ориентация составных частей внутри объекта, кол-во совпадает с cSubset (От ObjectDX)
+                    TMatrix16* pWorld,// где и как расположен объект         (От ObjectDX)
                     float alphaTransparency,
-                    D3DXMATRIXA16* mView)/*для определения дистанции*/ // расположение и ориентация камеры    (от ManagerDirectX)                   
+                    TMatrix16* pView)/*для определения дистанции*/ // расположение и ориентация камеры    (от ManagerDirectX)                   
 {
+  D3DXMATRIXA16 mView;
+  MATRIX16_EQUAL_M_P(mView,pView)
+
   D3DXMATRIXA16 mWorld;// только из набора видимых
-  SET_MATRIX16_P_M(pWorld,mWorld)
+  MATRIX16_EQUAL_M_P(mWorld,pWorld)
 
   //1 Выбрать по ЛОДу mesh
   // расчет расстояния
-  float dist = GetDist(&mWorld,mView);
+  float dist = GetDist(&mWorld,&mView);
   //2 Настроить pEffect на координаты и ориентацию - передать в pEffect матрицу
   // если mArrMatrixSubset==NULL, то координаты и ориентация частей модели неизменны
   //3 Выбрать по состоянию subSet
@@ -108,15 +111,15 @@ void TModelDX::Draw(vector<unsigned char>* state, // какое состояние нарисовать 
           pEffect = pCurLOD->damage[i];
       }
       D3DXMATRIXA16 m;// только из набора видимых
-      TVector4_4* pV = matrix->operator [](iView);// только из набора видимых
-      SET_MATRIX16_P_M(pV,m)
+      TMatrix16* pV = matrix->operator [](iView);// только из набора видимых
+      MATRIX16_EQUAL_M_P(m,pV)
 
-      D3DXMATRIXA16 mWorld_pro = m * (*mWorld);
+      D3DXMATRIXA16 mWorld_pro = m * mWorld;
       //-------------------------------------------------
       pEffect->GetAlphaTransparency(alphaTransparency);
       pEffect->SetInnerShaderParam();
       pEffect->SetMatrixWorld(&mWorld_pro);
-      SetShaderStack(pEffect,i);// все части, включаю дубликаты
+      SetShaderStack(pEffect,i);// все части, включая дубликаты
       Draw(pEffect);
       iView++;
     }
@@ -146,11 +149,11 @@ bool TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strAbsPath/*путь к фай
   Done();
   m_pd3dDevice = pd3dDevice;
   // загрузка данных примитивов, текстур и индексов.
-  GlobalLoggerDX.WriteF_time("Загрузка Mesh, ID=%u\n",mID);
+  GlobalLoggerGE.WriteF_time("Загрузка Mesh, ID=%u\n",mID);
   if(Load(strAbsPath)==false) 
     return false;
 
-  GlobalLoggerDX.WriteF_time("Конец загрузки Mesh, ID=%u\n",mID);
+  GlobalLoggerGE.WriteF_time("Конец загрузки Mesh, ID=%u\n",mID);
 
   int cnt = mVectorAllEffect.size();
   // структурировать данные
@@ -199,12 +202,12 @@ void TModelDX::ResetDevice()
 //----------------------------------------------------------------------------------------------------
 bool TModelDX::Load(LPCWSTR strFilenameData)
 {
-  ILoaderModelDX* pLoadModel;
-  pLoadModel = GetLoaderModelDX(m_pd3dDevice);
+  ILoaderModelGE* pLoadModel;
+  pLoadModel = GetLoaderModelGE(m_pd3dDevice);
   if(pLoadModel->Load(strFilenameData)==false)
   {
     USES_CONVERSION;
-    GlobalLoggerDX.WriteF_time("Не удалось загрузить модель: %s.\n",W2A(strFilenameData));
+    GlobalLoggerGE.WriteF_time("Не удалось загрузить модель: %s.\n",W2A(strFilenameData));
     delete pLoadModel;
     return false;
   }
@@ -213,7 +216,7 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
   int cnt = pLoadModel->GetCountGroup();
   for(int i = 0 ; i < cnt ; i++)
   {
-    ILoaderModelDX::TDefGroup *pDef = pLoadModel->GetGroup(i);
+    ILoaderModelGE::TDefGroup *pDef = pLoadModel->GetGroup(i);
     // заполнение
     AddEffectDX(pDef);
   }
@@ -222,7 +225,7 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
   return true;
 }
 //----------------------------------------------------------------------------------------------------
-bool TModelDX::AddEffectDX(ILoaderModelDX::TDefGroup * pDefGroup)
+bool TModelDX::AddEffectDX(ILoaderModelGE::TDefGroup * pDefGroup)
 {
   TEffectDX* pEffect = new TEffectDX;
 
@@ -239,9 +242,9 @@ bool TModelDX::AddEffectDX(ILoaderModelDX::TDefGroup * pDefGroup)
   USES_CONVERSION;
   pMaterial->strShader = A2W(pDefGroup->strPathShader.data());
 
-  pMaterial->vAmbient   = pDefGroup->vAmbient;
-  pMaterial->vDiffuse   = pDefGroup->vDiffuse;
-  pMaterial->vSpecular  = pDefGroup->vSpecular;
+  pMaterial->vAmbient   = D3DXVECTOR3(pDefGroup->vAmbient.x, pDefGroup->vAmbient.y, pDefGroup->vAmbient.z );
+  pMaterial->vDiffuse   = D3DXVECTOR3(pDefGroup->vDiffuse.x, pDefGroup->vDiffuse.y, pDefGroup->vDiffuse.z );
+  pMaterial->vSpecular  = D3DXVECTOR3(pDefGroup->vSpecular.x,pDefGroup->vSpecular.y,pDefGroup->vSpecular.z);
 
   pMaterial->nShininess = pDefGroup->nShininess;
 
@@ -249,7 +252,7 @@ bool TModelDX::AddEffectDX(ILoaderModelDX::TDefGroup * pDefGroup)
 
   LoadTexture(pEffect);
 
-  pEffect->pMesh = pDefGroup->pMesh;
+  pEffect->pMesh = (ID3DXMesh*)pDefGroup->pMesh;
 
   mVectorAllEffect.push_back(pEffect);
   return true;
@@ -258,7 +261,7 @@ bool TModelDX::AddEffectDX(ILoaderModelDX::TDefGroup * pDefGroup)
 unsigned int TModelDX::GetIndexVisualGroupByName(char* sName, int num)
 {
   TLOD* pLOD = &mVectorLOD[0];
-  std::vector<TEffectDX*>*  v = pLOD->GetNonZeroVector();
+  vector<TEffectDX*>*  v = pLOD->GetNonZeroVector();
   int cnt = v->size();
   int iFound = 0;
   for(int i = 0 ; i < cnt ; i++)
@@ -270,28 +273,28 @@ unsigned int TModelDX::GetIndexVisualGroupByName(char* sName, int num)
       iFound++;
     }
   }
-  GlobalLoggerDX.WriteF_time("Не найден эффект модели имя %s номер %d\n",sName,num);
+  GlobalLoggerGE.WriteF_time("Не найден эффект модели имя %s номер %d\n",sName,num);
   return 0;
 }
 //----------------------------------------------------------------------------------------------------
 const char* TModelDX::GetNameByIndex(int index)
 {
   TLOD* pLOD = &mVectorLOD[0];
-  std::vector<TEffectDX*>*  v = pLOD->GetNonZeroVector();
+  vector<TEffectDX*>*  v = pLOD->GetNonZeroVector();
   return v->operator [](index)->mMaterial.strName.data();
 }
 //----------------------------------------------------------------------------------------------------
 int TModelDX::GetNumUseByIndex(int index)
 {
   TLOD* pLOD = &mVectorLOD[0];
-  std::vector<TEffectDX*>*  v = pLOD->GetNonZeroVector();
+  vector<TEffectDX*>*  v = pLOD->GetNonZeroVector();
   return v->operator [](index)->mMaterial.mNumUse;
 }
 //----------------------------------------------------------------------------------------------------
 int TModelDX::GetCntEffect()
 {
   TLOD* pLOD = &mVectorLOD[0];
-  std::vector<TEffectDX*>*  v = pLOD->GetNonZeroVector();
+  vector<TEffectDX*>*  v = pLOD->GetNonZeroVector();
   return v->size();
 }
 //----------------------------------------------------------------------------------------------------
@@ -338,7 +341,7 @@ void TModelDX::LoadEffect(TEffectDX* pEffectDX)
   pEffectDX->p = (ID3DXEffect*)mManagerResourceDX->Load(pEffectDX->mMaterial.strShader.data());
 
   //start = ht_GetMSCount() - start;
-  //GlobalLoggerDX.WriteF_time("Загрузка эффекта t=%u\n",start);
+  //GlobalLoggerGE.WriteF_time("Загрузка эффекта t=%u\n",start);
 }
 //----------------------------------------------------------------------------------------------------
 void TModelDX::SortPartByAlphabetic()
@@ -347,7 +350,7 @@ void TModelDX::SortPartByAlphabetic()
   for(int i = 0 ; i < cntLod ; i++)
   {
     TLOD* pLOD = &mVectorLOD.at(i);
-    std::vector<TEffectDX*>* pVecEffect = NULL;
+    vector<TEffectDX*>* pVecEffect = NULL;
     switch(i)
     {
       case 0:
@@ -374,7 +377,7 @@ void TModelDX::SortPartByAlphabetic()
     TSortByAlphabetic sort;
     sort.Sort(&vectorName_Use);
     // в соответствии с вектором индексов согласуем вектор эффектов
-    std::vector<TEffectDX*> pNewEffect;
+    vector<TEffectDX*> pNewEffect;
     for(int iPart = 0 ; iPart < cntPart ; iPart++)
     {
       int index = vectorName_Use.at(iPart).index;
@@ -385,7 +388,7 @@ void TModelDX::SortPartByAlphabetic()
   }
 }
 //----------------------------------------------------------------------------------------------------
-void TModelDX::SetShaderStackMask(std::vector<int>* pVectorMask)// по этой маске настраиваются шейдеры эффектов
+void TModelDX::SetShaderStackMask(vector<int>* pVectorMask)// по этой маске настраиваются шейдеры эффектов
 {
   mVectorShaderStackMask = *pVectorMask;
 }

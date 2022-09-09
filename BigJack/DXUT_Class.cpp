@@ -41,6 +41,42 @@ using namespace std;
 TDXUT* pDXUT_Realize = NULL;
 
 //--------------------------------------------------------------------------------------
+void CALLBACK OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
+{
+  if(pDXUT_Realize)
+    pDXUT_Realize->OnKeyEvent( nChar, bKeyDown, bAltDown, pUserContext );
+}
+//--------------------------------------------------------------------------------------
+void TDXUT::OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
+{
+  if(pGE)
+    pGE->OnKeyEvent( nChar, bKeyDown, bAltDown, pUserContext );
+}
+//--------------------------------------------------------------------------------------
+void CALLBACK OnMouseEvent( UINT state, bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext )
+{
+  if(pDXUT_Realize)
+    pDXUT_Realize->OnMouseEvent(state, bLeftButtonDown, bRightButtonDown, bMiddleButtonDown, bSideButton1Down, bSideButton2Down, nMouseWheelDelta, xPos, yPos, pUserContext );
+}
+//--------------------------------------------------------------------------------------
+void TDXUT::OnMouseEvent( UINT state, bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext )
+{
+  if(pGE)
+    pGE->OnMouseEvent( state, nMouseWheelDelta, xPos, yPos, pUserContext );
+}
+//--------------------------------------------------------------------------------------
+void CALLBACK OnGUIEvent(UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext)
+{
+  if(pDXUT_Realize)
+    pDXUT_Realize->OnGUIEvent( nEvent, nControlID, pControl, pUserContext );
+}
+//--------------------------------------------------------------------------------------
+void TDXUT::OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext )
+{
+  if(pGE)
+    return pGE->OnGUIEvent( nEvent, nControlID, pControl, pUserContext );
+}
+//--------------------------------------------------------------------------------------
 // Called during device initialization, this code checks the device for some 
 // minimum set of capabilities, and rejects those that don't pass by returning false.
 //--------------------------------------------------------------------------------------
@@ -236,6 +272,8 @@ HRESULT TDXUT::Init()
   flgWasLostEvent    = false;
   flgWasDestroyEvent = false;
 
+  DXUTSetCallbackKeyboard(::OnKeyEvent);
+  DXUTSetCallbackMouse(::OnMouseEvent);
   DXUTSetCallbackMsgProc( ::MsgProc );
   //----------------------------------------------------
   DXUTSetCallbackD3D9DeviceAcceptable( ::IsDeviceAcceptable );
@@ -306,5 +344,22 @@ void TDXUT::ToggleFullScreen()
 HWND TDXUT::GetHWND()
 {
   return DXUTGetHWND();
+}
+//--------------------------------------------------------------------------------------
+void* TDXUT::GetFuncEventGUI()
+{
+  return ::OnGUIEvent;
+}
+//--------------------------------------------------------------------------------------
+void TDXUT::SetTitleWindow(const char* sTitle)
+{
+  HWND hWnd = GetHWND();
+  SetWindowTextA(hWnd,sTitle); 
+}
+//--------------------------------------------------------------------------------------
+void TDXUT::GetSizeWindow(int &w, int &h)
+{
+  w = DXUTGetWindowWidth();
+  h = DXUTGetWindowHeight();
 }
 //--------------------------------------------------------------------------------------

@@ -36,7 +36,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "Logger.h"
 
-TSaveOnHDD GlobalLoggerDX;
+TSaveOnHDD GlobalLoggerGE;
 TSaveOnHDD GlobalLoggerP;  // Prediction
 TSaveOnHDD GlobalLoggerMOC;// ManagerObjectCommon
 TSaveOnHDD GlobalLoggerForm; // GameForm
@@ -53,7 +53,7 @@ void InitLogger(TSaveOnHDD& saver, char* sName)
 void InitLogger(char* sNick)
 {
   ::sNick = sNick;
-  InitLogger(GlobalLoggerDX,"DirectX");
+  InitLogger(GlobalLoggerGE,"DirectX");
   InitLogger(GlobalLoggerP,"Prediction");
   InitLogger(GlobalLoggerMOC,"MOC");
   InitLogger(GlobalLoggerForm,"Form");

@@ -36,34 +36,22 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef ManagerObjectCommonH
 #define ManagerObjectCommonH
 
-#include "IGraphicEngine.h"
-#include "Camera.h"
 #include "LoaderObjectCommon.h"
-#include "InterpretatorPredictionTank.h"
-#include "ApplicationProtocolPacketAnswer.h"
 #include "glib/gthread.h"
-#include <vector>
-#include "ProgressBar.h"
-#include "CallBackRegistrator.h"
-#include "FilterWinApi.h"
-#include "ControlCamera.h"
-#include "ManagerEventWinApi.h"
-#include "ControlEventWinApiGE.h"
-#include "ControlEventWinApiNET.h"
-#include "ControlEventWinApiGUI.h"
+#include "IManagerObjectCommon.h"
 
 class IBaseObjectCommon;
 
-class TManagerObjectCommon
+class TManagerObjectCommon : public IManagerObjectCommon
 {
 protected:
-  enum{eLoadMapEnd=0,
+  GThread* thread;
+
+  enum{
+    eLoadMapEnd=0,
   };
-  TCallBackRegistrator mCallbackLoadMapEndEvent;
 
   unsigned int mID_map;
-
-  GThread* thread;
 
   volatile unsigned char mProcentLoadMap;
   
@@ -71,91 +59,33 @@ protected:
   volatile bool flgLoadMap;         // процесс загрузки идет
   volatile bool flgNeedStopThreadLoadMap;    // необходимо остановить загрузку
 
-  guint32 mLastTimeFreshData;
-
 protected:
   
-  std::vector< IBaseObjectCommon* > mVectorObject;
-  
-  TLoaderObjectCommon mLoaderObject;
+  TLoaderMap mLoaderObject;
 
 public:
 
   TManagerObjectCommon();
   virtual ~TManagerObjectCommon();
 
-  void* GetWndProc_GraphicEngine();
-  bool IsFullScreen();
-
-  void Init(HWND hwnd = NULL);
-  virtual void Work() = 0;
-  void Done();
-
-  void* GetSurfaceCurrentFrame(int& w, int& h);// формат X8R8G8B8, может вернуть NULL
-  void  EndSurfaceUse();
-
-
-  // какие-то данные
-  virtual void Translate(unsigned short type, char*pData, int size){};
-  // в наследуемом классе добав€тс€ методы дл€ управлени€ - например через сеть или чтение репле€ и воспроизведение бо€
-  /*...*/
+  virtual void Init(IMakerObjectCommon* pMakerObjectCommon);
+  virtual void Done();
+  virtual void Clear();
+  virtual void LoadMap(unsigned int id_map);
+  virtual int  GetProgressLoadMap();
+  virtual IBaseObjectCommon* CreateObject(unsigned int id_model);
 
 protected:
 
-  friend void* Thread(void*p);
+  //friend void* Thread(void*p);
 
-  void ThreadLoadMap();
-  void NotifyLoadMapEndEvent();
+  //void ThreadLoadMap();
+  //void NotifyLoadMapEndEvent();
 
-  void AddFromLoaderObjectInCommonList();
-  void AddFromLoaderObjectInMDX();
-  void AddFromLoaderObjectInPrediction();
-
-  void ClearSceneVectorObject();
-  void ClearProgressBarVectorObject();
-
-
-  // прогресс загрузки карты
-  bool IsLoadMap(unsigned char* procent = NULL );// от 0 до 100 
-  void SetCameraDelta(int x, int y);
   // загрузить карту
-  void LoadMap(unsigned int id_map);
   void EndLoadMap();// очень криво и отвратительно, что есть такой метод! но пока только так.
   void StopLoadMap();// синхронно, придетс€ подождать маленько
 
-  IBaseObjectCommon* Get(int index);// отдать объект на изменение свойств объекта
-  void AddObject(IBaseObjectCommon* pObject);
-  void Fresh();
-
-  void SetEffect(unsigned int id_effect, // номер эффекта
-    D3DVECTOR& coord,     // где
-    D3DVECTOR& orient,    // ориентаци€ эффекта
-    guint32 time_past = 0); // прошло времени, мс
-
-
-  friend void CallBackMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-  friend void CallBackFrameMove( double fTime, float fElapsedTime, void* pUserContext );
-
-  virtual void OnMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-  virtual void OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
-
-
-  virtual float GetTimeWork() = 0;
-
-  void HandleOnMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-  // примочка дл€ транцсл€ции событий в Qt
-  void SetWinApiEvent(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-
-  //----------------------------------------------------
-  // фильтры на обработку событий WinApi
-  TFilterWinApi mFilter;
-  TManagerEventWinApi       mManagerEventWinApi;
-  
-  TControlEventWinApiGE  mControlEventGE;
-  TControlEventWinApiNET mControlEventNET;
-  TControlEventWinApiGUI mControlEventGUI;
 };
 
 #endif

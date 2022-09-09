@@ -47,7 +47,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ClientMain.h"
 #include "WaitForm.h"
 #include "GameForm.h"
-#include "ClientTank.h"
+#include "NET_LevelClientServer.h"
 #include "ManagerGUI.h"
 #include "ManagerObjectCommonClient.h"
 
@@ -67,12 +67,12 @@ int main(int argc, char *argv[])
   QApplication a(argc, argv);
   //---------------------------------------
   // что бы не смущать стек - создадим все объекты в Heap-е
-  TManagerGUIClient* pManagerGUI = new TManagerGUIClient;
-  TClientTank*       pClientTank = new TClientTank;// транспорт
+  TManagerGUIClient*      pManagerGUI = new TManagerGUIClient;
+  TNET_LevelClientServer* pNET_LevelClientServer = new TNET_LevelClientServer;// транспорт
   // менеджер двигателей
   TManagerObjectCommon* pManagerObjectCommon = new TManagerObjectCommonClient;
 
-  pManagerGUI->startGUI(pClientTank,pManagerObjectCommon);
+  pManagerGUI->startGUI(pNET_LevelClientServer,pManagerObjectCommon);
   // формы:
   // обычные 
   TGameRoomPrepare* pGameRoomPrepare = new TGameRoomPrepare;
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
   delete pGameForm;
 
   delete pManagerGUI;
-  delete pClientTank;
+  delete pNET_LevelClientServer;
   delete pManagerObjectCommon;
 
 

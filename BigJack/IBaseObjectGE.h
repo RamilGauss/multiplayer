@@ -41,7 +41,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <vector>
 #include "glibconfig.h"
 
-class TModelDX;
+class IModelGE;
 
 class IBaseObjectGE : virtual public IBaseObject
 {
@@ -54,10 +54,10 @@ public:
   IBaseObjectGE(int typeDX = eDirtyAnimate);
   virtual ~IBaseObjectGE();
 
-  void SetModel(TModelDX* pModel);
-  TModelDX* GetModel();
+  void SetModel(IModelGE* pModel);
+  IModelGE* GetModel();
 
-  void Draw(D3DXMATRIXA16* mView);
+  void Draw(nsStruct3D::TMatrix16* mView);
 
   void SetShow(bool show){flgShow=show;}
 
@@ -78,7 +78,8 @@ public:
   void  SetAlphaTransparency(float val){mAlphaTransparency = val;}
 
 protected:
-  TModelDX* mModel;// внешний вид 
+  //TModelDX* mModel;// внешний вид 
+  IModelGE* mModel;// внешний вид 
 
   int mTypeGE;
 

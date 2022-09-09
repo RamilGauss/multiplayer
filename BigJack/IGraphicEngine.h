@@ -37,14 +37,15 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef IGraphicEngineH
 #define IGraphicEngineH
 
-//#include "DXUT.h"
 #include "glibconfig.h"
 #include "Struct3D.h"
-//#include "MakerDirectX_Realize.h"
+#include "SrcEvent.h"
+#include "GraphicEngineGUI.h"
+#include <list>
 
 class IBaseObjectGE;
 
-class IGraphicEngine
+class IGraphicEngine : public TSrcEvent
 {
 protected:
   guint32 mTime_ms;// время для рендера, используется для анимации
@@ -56,6 +57,8 @@ public:
 
   virtual bool IsFullScreen() = 0;
   virtual void ToggleFullScreen() = 0;
+  virtual void SetTitleWindow(const char* sTitle) = 0;
+  virtual void ForceResizeEventGUI() = 0;
   //------------------------------------------------------------------------
   virtual void Init() = 0;
   virtual void Work(guint32 time_ms) = 0;
@@ -89,9 +92,69 @@ public:
   virtual void AddLight() = 0;
   virtual void RemoveLight(int index) = 0;
   // ###
+
+  typedef enum
+  {
+    eKeyEmpty = 0,
+    eAlt   = 1<<1,
+    eCtrl  = 1<<2,
+    eShift = 1<<3,
+  }tKeyModifier;
+  typedef enum
+  {
+    eMouseEmpty = 0,
+    eLClick = 1<<1,
+    eMClick = 1<<2,
+    eRClick = 1<<3,
+  }tMouseButton;
+  typedef enum
+  {
+    eButtonDown     = 1<<1,
+    eButtonUp       = 1<<2,
+    eButtonDblClick = 1<<3,
+    eWheel          = 1<<4,
+    eMove           = 1<<5,
+  }tTypeMouseEvent;
+
+  struct TKeyEvent
+  {
+    int key;
+    bool pressed/*or released*/;
+    tKeyModifier modifier;
+  };
+  struct TMouseEvent
+  {
+    tTypeMouseEvent state;
+    int x;
+    int y;
+    tMouseButton button;
+    int delta_wheel;
+  };
+  // работа с GUI
+  int GetCountGUI();
+  void AddGUI(TGraphicEngineGUI* pForm);
+  void ClearGUI();
   //----------------------------------------------------------------
   //                             ~INTERFACE
   //----------------------------------------------------------------
+protected:
+  typedef std::list<TGraphicEngineGUI*> TListGUI;
+  TListGUI mListGUI;
+
+  void ResetGUI(int Width, int Height);
+  void RenderGUI();
+  void GUIEvent(unsigned int nEvent, int nControlID, void* pGUI);
+  virtual void* GetFuncEventGUI() = 0;
+#ifdef WIN32
+  bool MsgProcGUI(unsigned int hWnd, 
+                  unsigned int uMsg, 
+                  unsigned int wParam, 
+                  unsigned int lParam);
+#else
+#endif
+protected:
+  virtual void* GetObjectForInitGUI() = 0;
+
 };
 
 

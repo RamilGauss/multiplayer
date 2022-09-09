@@ -43,7 +43,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <QTimer>
 #include "ApplicationProtocolPacketAnswer.h"
 #include "TypeTank.h"
-#include "ClientTank.h"
+#include "NET_LevelClientServer.h"
 
 
 //-------------------------------------------------------------------------------------------

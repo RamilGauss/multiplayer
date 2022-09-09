@@ -55,7 +55,7 @@ IBaseObject::IBaseObject()
   mV = 0;
   mA = 0;
 
-  VectorIdentity(&mWorld);
+  SetMatrixIdentity(&mWorld);
   //D3DXMatrixIdentity(&mWorld);
 }
 //------------------------------------------------------------------------------------------------
@@ -105,8 +105,8 @@ void IBaseObject::SetDefaultMatrix()
   {
     //D3DXMATRIXA16* mIdentity = new D3DXMATRIXA16;
     //D3DXMatrixIdentity((D3DXMATRIX*)mIdentity);
-    TVector4_4* pIdentity = new TVector4_4;
-    VectorIdentity(pIdentity);
+    TMatrix16* pIdentity = new TMatrix16;
+    SetMatrixIdentity(pIdentity);
 
     mVectorMatrix.push_back(pIdentity);
   }
@@ -201,8 +201,9 @@ void IBaseObject::Notify(int event)
   mCallBackEvent.Notify(&event,sizeof(event));
 }
 //------------------------------------------------------------------------------------------------
-void IBaseObject::SetWorld(TVector4_4* world)
+void IBaseObject::SetWorld(TMatrix16* world)
 {
-  mWorld=*world;Notify(eWorld);
+  mWorld=*world;
+  Notify(eWorld);
 }
 //------------------------------------------------------------------------------------------------

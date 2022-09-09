@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #define ManagerObjectCommonClientH
 
 
-#include "ClientTank.h"
+#include "NET_LevelClientServer.h"
 #include "ManagerObjectCommon.h"
 #include "ApplicationProtocolPacketAnswer.h"
 

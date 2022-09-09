@@ -43,161 +43,153 @@ you may contact in writing [ramil2085@gmail.com].
 using namespace nsStruct3D;
 
 //-------------------------------------------------------------------------
-void VectorIdentity(TVector4_4* pV)
+void SetMatrixIdentity(TMatrix16* pV)
 {
-  pV->_11 = 1.0f;  pV->_12 = 0.0f;  pV->_13 = 0.0f;  pV->_14 = 0.0f;
-  pV->_21 = 0.0f;  pV->_22 = 1.0f;  pV->_23 = 0.0f;  pV->_24 = 0.0f;
-  pV->_31 = 0.0f;  pV->_32 = 0.0f;  pV->_33 = 1.0f;  pV->_34 = 0.0f;
-  pV->_41 = 0.0f;  pV->_42 = 0.0f;  pV->_43 = 0.0f;  pV->_44 = 1.0f;
+  MATRIX16_OP_P(pV,0.0f,=)
+  
+  pV->_11 = 1.0f;  pV->_22 = 1.0f;  pV->_33 = 1.0f; pV->_44 = 1.0f;
 }
 //-------------------------------------------------------------------------
-void VectorIdentity(TVector3_3* pV)
+void SetMatrixIdentity(TMatrix9* pV)
 {
   pV->_11 = 1.0f;  pV->_12 = 0.0f;  pV->_13 = 0.0f;
   pV->_21 = 0.0f;  pV->_22 = 1.0f;  pV->_23 = 0.0f;
   pV->_31 = 0.0f;  pV->_32 = 0.0f;  pV->_33 = 1.0f;
 }
 //-------------------------------------------------------------------------
+void SetMatrixRotateX(TMatrix16* pV, float ugol)
+{
+#ifdef WIN32
+  SET_MATRIX_ROTATE_WIN(pV,ugol,X)
+#else
+#endif
+}
+//-------------------------------------------------------------------------
+void SetMatrixRotateY(TMatrix16* pV, float ugol)
+{
+#ifdef WIN32
+  SET_MATRIX_ROTATE_WIN(pV,ugol,Y)
+#else
+#endif
+}
+//-------------------------------------------------------------------------
+void SetMatrixRotateZ(TMatrix16* pV, float ugol)
+{
+#ifdef WIN32
+  SET_MATRIX_ROTATE_WIN(pV,ugol,Z)
+#else
+#endif
+}
+//-------------------------------------------------------------------------
 // assignment operators
-TVector4_4& TVector4_4::operator += ( const TVector4_4& v)
+TMatrix16& TMatrix16::operator += ( const TMatrix16& v)
 {
-  _11 += v._11;  _12 += v._12;  _13 += v._13;  _14 += v._14;
-  _21 += v._21;  _22 += v._22;  _23 += v._23;  _24 += v._24;
-  _31 += v._31;  _32 += v._32;  _33 += v._33;  _34 += v._34;
-  _41 += v._41;  _42 += v._42;  _43 += v._43;  _44 += v._44;
+  MATRIX16_OP_P_M(this,v, += )
   return *this;
 }
 //-------------------------------------------------------------------------
-TVector4_4& TVector4_4::operator -= ( const TVector4_4& v)
+TMatrix16& TMatrix16::operator -= ( const TMatrix16& v)
 {
-  _11 -= v._11;  _12 -= v._12;  _13 -= v._13;  _14 -= v._14;
-  _21 -= v._21;  _22 -= v._22;  _23 -= v._23;  _24 -= v._24;
-  _31 -= v._31;  _32 -= v._32;  _33 -= v._33;  _34 -= v._34;
-  _41 -= v._41;  _42 -= v._42;  _43 -= v._43;  _44 -= v._44;
+  MATRIX16_OP_P_M(this,v, -= )
   return *this;
 }
 //-------------------------------------------------------------------------
-TVector4_4& TVector4_4::operator *= ( float v)
+TMatrix16& TMatrix16::operator *= ( float v)
 {
-  _11 *= v;  _12 *= v;  _13 *= v;  _14 *= v;
-  _21 *= v;  _22 *= v;  _23 *= v;  _24 *= v;
-  _31 *= v;  _32 *= v;  _33 *= v;  _34 *= v;
-  _41 *= v;  _42 *= v;  _43 *= v;  _44 *= v;
-
+  MATRIX16_OP_P(this,v,*=)
   return *this;
 }
 //-------------------------------------------------------------------------
-TVector4_4& TVector4_4::operator /= ( float v)
+TMatrix16& TMatrix16::operator /= ( float v)
 {
-  _11 /= v;  _12 /= v;  _13 /= v;  _14 /= v;
-  _21 /= v;  _22 /= v;  _23 /= v;  _24 /= v;
-  _31 /= v;  _32 /= v;  _33 /= v;  _34 /= v;
-  _41 /= v;  _42 /= v;  _43 /= v;  _44 /= v;
-
+  MATRIX16_OP_P(this,v,/=)
   return *this;
 }
 //-------------------------------------------------------------------------
-TVector4_4 TVector4_4::operator + () const
+TMatrix16 TMatrix16::operator + () const
 {
   return *this;
 }
 //-------------------------------------------------------------------------
-TVector4_4 TVector4_4::operator - () const
+TMatrix16 TMatrix16::operator - () const
 {
   return *this;
 }
 //-------------------------------------------------------------------------
-TVector4_4 TVector4_4::operator + ( const TVector4_4& v) const
+TMatrix16 TMatrix16::operator + ( const TMatrix16& v) const
 {
-  TVector4_4 res = *this;
-  res._11 += v._11;  res._12 += v._12;  res._13 += v._13;  res._14 += v._14;
-  res._21 += v._21;  res._22 += v._22;  res._23 += v._23;  res._24 += v._24;
-  res._31 += v._31;  res._32 += v._32;  res._33 += v._33;  res._34 += v._34;
-  res._41 += v._41;  res._42 += v._42;  res._43 += v._43;  res._44 += v._44;
-    
+  TMatrix16 res = *this;
+  MATRIX16_OP_M_M(res,v,+=)  
   return res;
 }
 //-------------------------------------------------------------------------
-TVector4_4 TVector4_4::operator - ( const TVector4_4& v) const
+TMatrix16 TMatrix16::operator - ( const TMatrix16& v) const
 {
-  TVector4_4 res = *this;
-  res._11 -= v._11;  res._12 -= v._12;  res._13 -= v._13;  res._14 -= v._14;
-  res._21 -= v._21;  res._22 -= v._22;  res._23 -= v._23;  res._24 -= v._24;
-  res._31 -= v._31;  res._32 -= v._32;  res._33 -= v._33;  res._34 -= v._34;
-  res._41 -= v._41;  res._42 -= v._42;  res._43 -= v._43;  res._44 -= v._44;
+  TMatrix16 res = *this;
+  MATRIX16_OP_M_M(res,v,-=)
+  return res;
+}
+//-------------------------------------------------------------------------
+TMatrix16 TMatrix16::operator * ( float v) const
+{
+  TMatrix16 res = *this;
+  MATRIX16_OP_M(res,v,*=)
 
   return res;
 }
 //-------------------------------------------------------------------------
-TVector4_4 TVector4_4::operator * ( float v) const
+TMatrix16 TMatrix16::operator / ( float v) const
 {
-  TVector4_4 res = *this;
-  res._11 *= v;  res._12 *= v;  res._13 *= v;  res._14 *= v;
-  res._21 *= v;  res._22 *= v;  res._23 *= v;  res._24 *= v;
-  res._31 *= v;  res._32 *= v;  res._33 *= v;  res._34 *= v;
-  res._41 *= v;  res._42 *= v;  res._43 *= v;  res._44 *= v;
+  TMatrix16 res = *this;
+  MATRIX16_OP_M(res,v,/=)
 
   return res;
 }
 //-------------------------------------------------------------------------
-TVector4_4 TVector4_4::operator / ( float v) const
+bool TMatrix16::operator == ( const TMatrix16& v) const
 {
-  TVector4_4 res = *this;
-  res._11 /= v;  res._12 /= v;  res._13 /= v;  res._14 /= v;
-  res._21 /= v;  res._22 /= v;  res._23 /= v;  res._24 /= v;
-  res._31 /= v;  res._32 /= v;  res._33 /= v;  res._34 /= v;
-  res._41 /= v;  res._42 /= v;  res._43 /= v;  res._44 /= v;
-
-  return res;
+  for(int k = 0 ; k < 4 ; k++)
+    for(int n = 0 ; n < 4 ; n++)
+      if(BASE_MATRIX_OP(this,v,!=,->,.,k,n))
+        return false;
+  return true;
 }
 //-------------------------------------------------------------------------
-bool TVector4_4::operator == ( const TVector4_4& v) const
+bool TMatrix16::operator != ( const TMatrix16& v) const
 {
-  if(
-    (_11 == v._11) && (_12 == v._12) && (_13 == v._13) && (_14 == v._14) &&
-    (_21 == v._21) && (_22 == v._22) && (_23 == v._23) && (_24 == v._24) &&
-    (_31 == v._31) && (_32 == v._32) && (_33 == v._33) && (_34 == v._34) &&
-    (_41 == v._41) && (_42 == v._42) && (_43 == v._43) && (_44 == v._44) ) 
-    return true;
-
-  return false;
+  for(int k = 0 ; k < 4 ; k++)
+    for(int n = 0 ; n < 4 ; n++)
+      if(BASE_MATRIX_OP(this,v,==,->,.,k,n))
+        return false;
+  return true;
 }
 //-------------------------------------------------------------------------
-bool TVector4_4::operator != ( const TVector4_4& v) const
-{
-  if(
-    (_11 != v._11) || (_12 != v._12) || (_13 != v._13) || (_14 != v._14) ||
-    (_21 != v._21) || (_22 != v._22) || (_23 != v._23) || (_24 != v._24) ||
-    (_31 != v._31) || (_32 != v._32) || (_33 != v._33) || (_34 != v._34) ||
-    (_41 != v._41) || (_42 != v._42) || (_43 != v._43) || (_44 != v._44) ) 
-    return true;
-
-  return false;
-}
-//-------------------------------------------------------------------------
-TVector4_4& TVector4_4::operator *= ( const TVector4_4& v)
+TMatrix16& TMatrix16::operator *= ( const TMatrix16& v)
 {
 #ifdef WIN32
   D3DXMATRIX In1,In2,Out;
-  SET_MATRIX16_P_M(this,In1)
-  SET_MATRIX16_M_M(v,In2)
+  
+  MATRIX16_EQUAL_M_P(In1,this)
+  MATRIX16_EQUAL_M_M(In2,v)
 
   D3DXMatrixMultiply(&Out,&In1,&In2);
-  SET_MATRIX16_M_P(Out,this)
+  MATRIX16_EQUAL_P_M(this,Out)
+#else
 #endif
   return *this;
 }
 //-------------------------------------------------------------------------
-TVector4_4 TVector4_4::operator * ( const TVector4_4& v) const
+TMatrix16 TMatrix16::operator * ( const TMatrix16& v) const
 {
 #ifdef WIN32
-  TVector4_4 res;
+  TMatrix16 res;
   D3DXMATRIX In1,In2,Out;
-  SET_MATRIX16_P_M(this,In1)
-  SET_MATRIX16_M_M(v,In2)
+  MATRIX16_EQUAL_M_P(In1,this)
+  MATRIX16_EQUAL_M_M(In2,v)
 
   D3DXMatrixMultiply(&Out,&In1,&In2);
-  SET_MATRIX16_M_M(Out,res)
+  MATRIX16_EQUAL_M_M(res,Out)
+#else
 #endif
   return res;
 }

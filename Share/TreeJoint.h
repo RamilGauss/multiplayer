@@ -73,7 +73,7 @@ public:
   {
     std::string   name;
     //D3DXMATRIXA16 matrix;
-    nsStruct3D::TVector4_4 matrix;
+    nsStruct3D::TMatrix16 matrix;
   };
   struct TPart
   {
@@ -103,7 +103,7 @@ public:
   struct TLoadedJoint
   {
     //D3DXMATRIXA16 world;// матрица root, относительно него все строится
-    nsStruct3D::TVector4_4 world;
+    nsStruct3D::TMatrix16 world;
     std::string root;   // название корня
     std::vector<TPart*> vectorPart;// части для соединения, одна из этих частей всегда root (по имени)
     ~TLoadedJoint()
@@ -148,9 +148,9 @@ public:
   void SetOrderMatrixByName(std::vector<std::string>* order);// вызвать до вызова ChangeMatrix и GetMatrix // +
   
   // умножить матрицу по-умолчанию на новую матрицу и произвести изменения по всем детям
-  void ChangeMatrix(std::string& name, nsStruct3D::TVector4_4/*D3DXMATRIXA16*/* matrix, bool def = true);// +
+  void ChangeMatrix(std::string& name, nsStruct3D::TMatrix16/*D3DXMATRIXA16*/* matrix, bool def = true);// +
   // заполнить матрицей
-  void GetMatrix(std::vector<nsStruct3D::TVector4_4/*D3DXMATRIXA16*/*>* matrix);// +
+  void GetMatrix(std::vector<nsStruct3D::TMatrix16/*D3DXMATRIXA16*/*>* matrix);// +
   // сбросить все матрицы в дефолт
   void SetDefault(); // +
 
@@ -164,14 +164,14 @@ protected:
     TNodeJoint* pParent;
     std::vector<TNodeJoint*> mVectorChild;
     std::string   name;
-    nsStruct3D::TVector4_4/*D3DXMATRIXA16*/ matrixDef; // то что считали с файла настроек
-    nsStruct3D::TVector4_4/*D3DXMATRIXA16*/ matrix;    // эта матрица получается умножением матрицы по-умолчанию на заданную матрицу через метод ChangeMatrix
-    nsStruct3D::TVector4_4/*D3DXMATRIXA16*/ matrix_pro;// произведение по иерархии
+    nsStruct3D::TMatrix16/*D3DXMATRIXA16*/ matrixDef; // то что считали с файла настроек
+    nsStruct3D::TMatrix16/*D3DXMATRIXA16*/ matrix;    // эта матрица получается умножением матрицы по-умолчанию на заданную матрицу через метод ChangeMatrix
+    nsStruct3D::TMatrix16/*D3DXMATRIXA16*/ matrix_pro;// произведение по иерархии
     
     TNodeJoint()
     {
       //D3DXMatrixIdentity(&matrixDef);
-      VectorIdentity(&matrixDef);
+      SetMatrixIdentity(&matrixDef);
       pParent = NULL;
       SetMatrixDef();
     }

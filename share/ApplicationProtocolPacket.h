@@ -43,7 +43,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <malloc.h>
 #include <memory.h>
 //#include "ServerStruct.h"
-#include "GlobalParamsTank.h"
+#include "GlobalParams.h"
 
 #if defined( WIN32 )
 #pragma pack(push, 1)

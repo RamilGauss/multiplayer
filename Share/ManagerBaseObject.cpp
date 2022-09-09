@@ -34,7 +34,7 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 #include "ManagerBaseObject.h"
-#include "GlobalParamsTank.h"
+#include "GlobalParams.h"
 #include "file_operation.h"
 #include "LoaderListPathID.h"
 #include "IBaseObject.h"
@@ -63,18 +63,18 @@ void TManagerBaseObject::SetTree(IBaseObject* pObject)
 {
   TTreeJoint::TLoadedJoint* pLoaded = NULL;
   unsigned int id = pObject->GetID_Model();
-  map<unsigned int, TTreeJoint::TLoadedJoint*>::iterator fit = mMapID_Tree.find(id);
-  map<unsigned int, TTreeJoint::TLoadedJoint*>::iterator eit = mMapID_Tree.end();
+  TMapID_Tree::iterator fit = mMapID_Tree.find(id);
+  TMapID_Tree::iterator eit = mMapID_Tree.end();
   if(fit!=eit)
     pLoaded = (TTreeJoint::TLoadedJoint*)fit->second;
   else
   {
-    map<unsigned int,string>::iterator it = mMapID_Path.find(id);
+    TMapID_Path::iterator it = mMapID_Path.find(id);
     if(mMapID_Path.end()==it) {BL_FIX_BUG();return;}
     if(mLoaderTree.Load((char*)it->second.data())==false) {BL_FIX_BUG();return;}
     pLoaded = mLoaderTree.TakeTree();
 
-    map<unsigned int, TTreeJoint::TLoadedJoint*>::value_type val(id,pLoaded);
+    TMapID_Tree::value_type val(id,pLoaded);
     mMapID_Tree.insert(val);
   }
   pObject->SetTree(pLoaded);
@@ -82,8 +82,8 @@ void TManagerBaseObject::SetTree(IBaseObject* pObject)
 //-------------------------------------------------------------------------------------------
 void TManagerBaseObject::Done()
 {
-  map<unsigned int, TTreeJoint::TLoadedJoint*>::iterator bit = mMapID_Tree.begin();
-  map<unsigned int, TTreeJoint::TLoadedJoint*>::iterator eit = mMapID_Tree.end();
+  TMapID_Tree::iterator bit = mMapID_Tree.begin();
+  TMapID_Tree::iterator eit = mMapID_Tree.end();
   while(bit!=eit)
   {
     delete bit->second;
@@ -110,8 +110,8 @@ bool TManagerBaseObject::LoadListPath()
 //--------------------------------------------------------------------------------------
 void TManagerBaseObject::PrepareForTreeJoint()
 {
-  std::map<unsigned int, std::string>::iterator bit = mMapID_Path.begin();
-  std::map<unsigned int, std::string>::iterator eit = mMapID_Path.end();
+  TMapID_Path::iterator bit = mMapID_Path.begin();
+  TMapID_Path::iterator eit = mMapID_Path.end();
   while(bit!=eit)
   {
     (*bit).second += NameJointFile;

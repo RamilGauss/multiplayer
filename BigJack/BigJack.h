@@ -56,7 +56,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ManagerResourceDX.h"
 #include "ShaderStack.h"
 #include "ViewerFPS.h"
-
+#include "DXUTgui.h"
 
 
 class IBaseObjectGE;
@@ -66,10 +66,9 @@ class TBigJack : public IGraphicEngine
 {
 protected:
 
-  TDXUT mDXUT;
-  //IDirect3DSurface9* mSurfaceBackBuffer;
-  //IDirect3DSurface9* mSurfaceRender;
+  CDXUTDialogResourceManager mDialogResourceManager;
 
+  IDirectX_Realize* mDXUT;
 
   TManagerResourceDX mManagerResourceDX;
   TManagerModelDX mManagerModelDX;
@@ -115,7 +114,9 @@ public:
 
   virtual bool IsFullScreen();
   virtual void ToggleFullScreen();
-  
+  virtual void SetTitleWindow(const char* sTitle);
+  virtual void ForceResizeEventGUI();
+
   virtual void  GetResolutionFrame(int& h, int& w );// формат X8R8G8B8
   virtual void  SetResolutionFrame(int  h, int  w );// формат X8R8G8B8
   //------------------------------------------------------------------------
@@ -152,19 +153,23 @@ protected:
   // Для внутренних событий движка.
   //----------------------------------------------------------------
   friend class TDXUT;
-  virtual bool IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat, D3DFORMAT BackBufferFormat, bool bWindowed,void* pUserContext );
-  virtual bool ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext );
-  virtual HRESULT OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
-  virtual HRESULT OnResetDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
-  virtual void OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
-  virtual void OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext );
-  virtual LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,void* pUserContext );
-  virtual void OnLostDevice( void* pUserContext );
-  virtual void OnDestroyDevice( void* pUserContext );
+  bool IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat, D3DFORMAT BackBufferFormat, bool bWindowed,void* pUserContext );
+  bool ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext );
+  HRESULT OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
+  HRESULT OnResetDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
+  void OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
+  void OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext );
+  LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,void* pUserContext );
+  void OnLostDevice( void* pUserContext );
+  void OnDestroyDevice( void* pUserContext );
+  void OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
+  
+  void OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext );
+  void OnMouseEvent( int state, 
+                     int nMouseWheelDelta, 
+                     int xPos, int yPos, void* pUserContext );
 
 protected:
-  //std::set<TCallBackMsg>       mSetCallbackMsg;
-  //std::set<TCallBackFrameMove> mSetCallbackFrameMove;
 
   void RegisterSet  (std::set<void*>* setCallback, void* pFunc);
   void UnregisterSet(std::set<void*>* setCallback, void* pFunc);
@@ -179,10 +184,9 @@ protected:
 
   void SetCommonShaderStack();
 
-
-  void OnLostDevice_Surface();
-  void OnResetDevice_Surface(IDirect3DDevice9 *pd3dDevice);
-
+  virtual void* GetFuncEventGUI();
+  
+  virtual void* GetObjectForInitGUI();
 
 };
 

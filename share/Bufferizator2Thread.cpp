@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Bufferizator2Thread.h"
 //#include "TransportProtocolPacket.h"
 #include "ApplicationProtocolDef.h"
-//#include "ClientTank.h"
+//#include "NET_LevelClientServer.h"
 
 #if 0
 

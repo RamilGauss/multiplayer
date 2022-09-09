@@ -61,14 +61,14 @@ public:
   IBaseObject();
   virtual ~IBaseObject();
 
-  void SetWorld(nsStruct3D::TVector4_4* world);
+  void SetWorld(nsStruct3D::TMatrix16* world);
   void SetID_Model(unsigned int id);
   void SetID_Map(unsigned int id){ID_map = id;}
 
   unsigned int GetID_Model(){return ID_model;}
   unsigned int GetID_Map(){return ID_map;}
   std::vector<unsigned char>* GetState(){return &mState;}
-  const nsStruct3D::TVector4_4* GetWorld()const {return &mWorld;}
+  const nsStruct3D::TMatrix16* GetWorld()const {return &mWorld;}
 
   void SetVelocity(float v){mV=v;}// м/с - хрень
   float GetVelocity(){return mV;}
@@ -96,11 +96,11 @@ protected:
   unsigned int ID_map;  // идентификатор на карте
   unsigned int ID_model;// идентификатор модели
 
-  nsStruct3D::TVector4_4 mWorld; // здесь вся инфа по ориентации и координатам объекта
+  nsStruct3D::TMatrix16 mWorld; // здесь вся инфа по ориентации и координатам объекта
 
   std::vector<unsigned char> mState;// графика, говорит движку какую из частей рисовать, для физики определяет поведение объекта
   std::vector<unsigned char> mMask; // и физика и графика какие части рисовать и использовать
-  std::vector<nsStruct3D::TVector4_4*> mVectorMatrix;// и физика и графика, cnt=cntAllJoint
+  std::vector<nsStruct3D::TMatrix16*> mVectorMatrix;// и физика и графика, cnt=cntAllJoint
 
   // size = sizeAllPart
   struct TPart 

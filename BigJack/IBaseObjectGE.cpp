@@ -34,16 +34,14 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 #define _USE_MATH_DEFINES
 
-#ifdef WIN32
-  #include "DXUT.h"
-#endif
-
 #include <cmath>
 #include "IBaseObjectGE.h"
 
-#include "ModelDX.h"
+#include "IModelGE.h"
+#include "Struct3D.h"
+#include "ShaderStack.h"
 
-//using namespace nsStruct3D;
+using namespace nsStruct3D;
 using namespace std;
 
 IBaseObjectGE::IBaseObjectGE(int typeDX)
@@ -62,7 +60,8 @@ IBaseObjectGE::~IBaseObjectGE()
   Done();
 }
 //------------------------------------------------------------------------------------------------
-void IBaseObjectGE::Draw(D3DXMATRIXA16* mView)
+//void IBaseObjectGE::Draw(D3DXMATRIXA16* mView)
+void IBaseObjectGE::Draw(TMatrix16* mView)
 {          
   if(flgShow==false) return;
 
@@ -77,7 +76,7 @@ void IBaseObjectGE::Draw(D3DXMATRIXA16* mView)
                mView );// расположение и ориентация камеры   (от ManagerDirectX)
 }
 //------------------------------------------------------------------------------------------------
-void IBaseObjectGE::SetModel(TModelDX* pModel)
+void IBaseObjectGE::SetModel(IModelGE* pModel)
 {
   mModel = pModel;
   // скинуть инфу об именах в базовый объект
@@ -88,7 +87,7 @@ void IBaseObjectGE::SetModel(TModelDX* pModel)
   EventSetModelGE();
 }
 //------------------------------------------------------------------------------------------------
-TModelDX* IBaseObjectGE::GetModel()
+IModelGE* IBaseObjectGE::GetModel()
 {
   return mModel;
 }

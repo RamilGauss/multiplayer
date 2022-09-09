@@ -39,8 +39,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "SaveOnHDD.h"
 
-//см. ClientTank.h
-extern TSaveOnHDD GlobalLoggerDX; // DirectX
+extern TSaveOnHDD GlobalLoggerGE; // DirectX
 extern TSaveOnHDD GlobalLoggerP;  // Prediction
 extern TSaveOnHDD GlobalLoggerMOC;// ManagerObjectCommon
 extern TSaveOnHDD GlobalLoggerForm; // GameForm

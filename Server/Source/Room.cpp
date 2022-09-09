@@ -44,6 +44,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Client.h"
 
 using namespace nsServerStruct;
+using namespace std;
 
 
 TRoom::TRoom()
@@ -67,7 +68,7 @@ void TRoom::AddTank(IActor* pTank)
   mArrTank.Add(pTank);
   // подготовка к бою
   //pTank->mSpeed = 0;
-  pTank->mMaskPushButton = 0;// ничего не нажато
+  //pTank->mMaskPushButton = 0;// ничего не нажато
 }
 //----------------------------------------------------------------
 void TRoom::SetTransport(TTransportProtocol* pTransport)
@@ -228,8 +229,8 @@ void TRoom::WorkFight()
   //------------------------------------------------------------------------------------
   if(mPrediction.mListFreshEvent.size())
   {
-    std::list<TPrediction::TEvent*>::iterator it = mPrediction.mListFreshEvent.begin();
-    std::list<TPrediction::TEvent*>::iterator eit = mPrediction.mListFreshEvent.end();
+    list<TPrediction::TEvent*>::iterator it = mPrediction.mListFreshEvent.begin();
+    list<TPrediction::TEvent*>::iterator eit = mPrediction.mListFreshEvent.end();
     TA_Event_In_Fight event_packet;
     event_packet.setCnt(mPrediction.mListFreshEvent.size());
     while(it!=eit)// формирование пакета
@@ -297,8 +298,8 @@ void TRoom::WorkLoadMap()
 //----------------------------------------------------------------------------------
 void TRoom::AnalizPacket()// здесь отослать корректирующий пакет (можно партиями)
 {
-  std::list<TAction*>::iterator it  = mListFreshAction.begin();
-  std::list<TAction*>::iterator eit = mListFreshAction.end();
+  list<TAction*>::iterator it  = mListFreshAction.begin();
+  list<TAction*>::iterator eit = mListFreshAction.end();
   while(it!=eit)
   {
     unsigned short type = (*it)->pDefPacket->packet->getType();
@@ -413,8 +414,8 @@ void TRoom::SendStateObject(TClient* pClient)
 #if 0
   TA_Correct_Packet_State_Object packet;
   // все данные хранятся в списке объектов
-  std::list<IBaseObjectPrediction*>::iterator it  = mPrediction.mListDamageObject.begin();
-  std::list<IBaseObjectPrediction*>::iterator eit = mPrediction.mListDamageObject.end();
+  list<IBaseObjectPrediction*>::iterator it  = mPrediction.mListDamageObject.begin();
+  list<IBaseObjectPrediction*>::iterator eit = mPrediction.mListDamageObject.end();
 
   int cnt = mPrediction.mListDamageObject.size();
   if(cnt==0) return;//###

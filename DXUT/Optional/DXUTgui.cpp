@@ -1860,6 +1860,10 @@ HRESULT CDXUTDialog::InitControl( CDXUTControl* pControl )
 
     V_RETURN( pControl->OnInit() );
 
+    // Gauss 29.11.2012 
+    if(pControl->m_pDialog==NULL)
+      pControl->m_pDialog = this;
+
     return S_OK;
 }
 

@@ -155,7 +155,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ButtonWin.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CheckBoxWin.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ComboBoxWin.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DXUT_Class.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EditBoxWin.cpp"
 				>
 			</File>
 			<File
@@ -167,15 +183,31 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GraphicEngineGUI.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GraphicEngineGUI_Private.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\IBaseObjectGE.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ILoaderModelDX.cpp"
+				RelativePath=".\IGraphicEngine.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ILoaderModelGE.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\IMeshFile.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ListBoxWin.cpp"
 				>
 			</File>
 			<File
@@ -191,6 +223,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MakerGUI.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerLoaderModelGE.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerEffect.cpp"
 				>
 			</File>
@@ -200,10 +240,6 @@
 			</File>
 			<File
 				RelativePath=".\ManagerResourceDX.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ManagerShader.cpp"
 				>
 			</File>
 			<File
@@ -227,7 +263,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\RadioButtonWin.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ShaderStack.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SliderWin.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\StaticWin.cpp"
 				>
 			</File>
 			<File
@@ -241,7 +289,23 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\BaseGUI_Win.h"
+				>
+			</File>
+			<File
 				RelativePath=".\BigJack.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ButtonWin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CheckBoxWin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ComboBoxWin.h"
 				>
 			</File>
 			<File
@@ -253,6 +317,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\EditBoxWin.h"
+				>
+			</File>
+			<File
 				RelativePath=".\EffectDX.h"
 				>
 			</File>
@@ -261,7 +329,31 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GraphicEngineGUI.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GraphicEngineGUI_Private.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IBaseGUI.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IBaseObjectGE.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IButton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ICheckBox.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IComboBox.h"
 				>
 			</File>
 			<File
@@ -269,19 +361,47 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IEditBox.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IGraphicEngine.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IGraphicEngineGUI.h"
+				RelativePath=".\IGUI_Win.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ILoaderModelDX.h"
+				RelativePath=".\IListBox.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ILoaderModelGE.h"
 				>
 			</File>
 			<File
 				RelativePath=".\IMeshFile.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IModelGE.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IRadioButton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ISlider.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IStatic.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ListBoxWin.h"
 				>
 			</File>
 			<File
@@ -297,7 +417,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\MakerLoaderModelDX.h"
+				RelativePath=".\MakerGUI.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerLoaderModelGE.h"
 				>
 			</File>
 			<File
@@ -314,10 +438,6 @@
 			</File>
 			<File
 				RelativePath=".\ManagerResourceDX.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ManagerShader.h"
 				>
 			</File>
 			<File
@@ -341,11 +461,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\RadioButtonWin.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ShaderStack.h"
 				>
 			</File>
 			<File
-				RelativePath=".\SoundDX.h"
+				RelativePath=".\SliderWin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\StaticWin.h"
 				>
 			</File>
 			<File
@@ -359,10 +487,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

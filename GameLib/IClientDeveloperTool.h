@@ -36,14 +36,59 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef IClientDeveloperToolH
 #define IClientDeveloperToolH
 
+#include "IDeveloperTool.h"
+#include "DstEvent.h"
+#include <string>
 
-class IClientDeveloperTool
+class IMakerObjectCommon;
+
+class TNET_LevelClientServer;
+class IPhysicEngine;
+class IGraphicEngine; // отрисовка сцены
+class IManagerObjectCommon;
+class IManagerTime;
+
+class IClientDeveloperTool : public IDeveloperTool
 {
+protected:
+  IMakerObjectCommon* mMakerObjectCommon;
+public:
+  struct TComponentClient
+  {
+    //IReplay*              mReplay;        // HDD
+    //ISoundEngine*         mSound;         // Sound 
+    TNET_LevelClientServer* mNET;           // Melissa
+    IPhysicEngine*          mPhysicEngine;  // Robert
+    IGraphicEngine*         mGraphicEngine; // BigJack отрисовка сцены
+    IManagerObjectCommon*   mMOC;           // GameLib
+    IManagerTime*           mMTime;         // GameLib
+    TComponentClient()
+    {
+      //mReplay;        // HDD
+      //mSound;         // Sound 
+      mNET = NULL;           // Melissa
+      mPhysicEngine = NULL;  // Robert
+      mGraphicEngine = NULL; // BigJack отрисовка сцены
+      mMOC = NULL;           // GameLib
+      mMTime = NULL;         // GameLib
+    }
+  };
+protected:
+  // компоненты
+  TComponentClient mComponent;
 
 public:
   IClientDeveloperTool(){};
   virtual ~IClientDeveloperTool(){};
 
+  virtual void Init(TComponentClient* pComponent) = 0;
+
+  virtual std::string GetTitleWindow() = 0;
+
+  virtual bool HandleEvent(TEvent* pEvent) = 0;// если необходимо прервать работу движка - вернуть false
+
+  virtual void Calc() = 0;
+  virtual IMakerObjectCommon* GetMakerObjectCommon() = 0;
 
 };
 

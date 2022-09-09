@@ -37,17 +37,18 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef IPhysicEngineH
 #define IPhysicEngineH
 
-#include "BaseObjectPrediction.h"
+#include "IBaseObjectPrediction.h"
 #include <list>
+#include "SrcEvent.h"
 
 // предсказатель
 // Robert - физический движок
-class IPhysicEngine
+class IPhysicEngine : public TSrcEvent
 {
 public:
 
-  IPhysicEngine();
-  virtual ~IPhysicEngine();
+  IPhysicEngine(){};
+  virtual ~IPhysicEngine(){};
 
   virtual void AddObject(IBaseObjectPrediction* pObject) = 0;
   virtual void Clear() = 0;

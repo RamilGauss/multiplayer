@@ -73,7 +73,7 @@ void* TManagerEffect::Load(const wchar_t* sPath)
       NULL, NULL, dwShaderFlags, NULL, &pEffect, NULL ) );
 #ifdef LOG_TIME_COMPILE_SHADER
     start = ht_GetMSCount() - start;
-    GlobalLoggerDX.WriteF_time("ManagerEffect: LoadShader, compile=%u\n",start);
+    GlobalLoggerGE.WriteF_time("ManagerEffect: LoadShader, compile=%u\n",start);
 #endif
 
     p = pEffect;

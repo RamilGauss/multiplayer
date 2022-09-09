@@ -36,27 +36,30 @@ you may contact in writing [ramil2085@gmail.com].
 #define LoaderObjectCommonH
 
 
-#include "MakerObject.h"
+#include "IMakerObjectCommon.h"
 #include <map>
 #include <vector>
 
 class IBaseObjectCommon;
 
-class TLoaderObjectCommon
+class TLoaderMap
 {
 protected:
 
-  TMakerObject mMakerObject;// создает объект заданного типа поведения
+  IMakerObjectCommon* mMakerObjectCommon;// создает объект заданного типа поведения
 
-  std::map<unsigned int,std::string> mMapID;
+  typedef std::map<unsigned int,std::string> TMapIDName;
+  TMapIDName mMapID;
 
-  std::vector<IBaseObjectCommon*> mVectorObject;
-
+  typedef std::vector<IBaseObjectCommon*> TVectorBaseObjectCommon;
+  TVectorBaseObjectCommon mVectorObject;
 
 public:
 
-  TLoaderObjectCommon();
-  virtual ~TLoaderObjectCommon();
+  TLoaderMap();
+  virtual ~TLoaderMap();
+
+  void SetMakerObjectCommon(IMakerObjectCommon* pMakerObjectCommon);
   
   int GetCountObject();
   IBaseObjectCommon* Get(int i);

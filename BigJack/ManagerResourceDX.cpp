@@ -121,7 +121,7 @@ int TManagerResourceDX::FindExt(const wchar_t* sPath)
 
   USES_CONVERSION;
   
-  GlobalLoggerDX.WriteF_time("Загрузчик ресурсов. Неопределенное расширение. %s\n",W2A(sPath));
+  GlobalLoggerGE.WriteF_time("Загрузчик ресурсов. Неопределенное расширение. %s\n",W2A(sPath));
   return -1;
 }
 //--------------------------------------------------------------------

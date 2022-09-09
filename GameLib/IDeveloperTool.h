@@ -41,6 +41,7 @@ class IDeveloperTool
 {
 
 public:
+
   IDeveloperTool(){};
   virtual ~IDeveloperTool(){};
 

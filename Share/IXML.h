@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -40,8 +40,14 @@ you may contact in writing [ramil2085@gmail.com].
 #include <string>
 
 #define CHECK_RET(f) \
-if(f==false) \
-return false;
+          if(f==false) \
+          return false;
+
+struct TAttrInfo
+{
+  std::string Name;
+  std::string Value;
+};
 
 class IXML
 {
@@ -64,6 +70,7 @@ public:
   virtual bool RemoveChildSection(const char* childName, int numChild, const char* name, int num);
 
   virtual bool AddSection(const char* name) = 0;
+  virtual bool AddSection(const char *name, int attrCount, TAttrInfo *pAttribs) = 0;
   virtual bool RemoveSection(const char* name, int num) = 0;
 
   // изменение содержимого
@@ -78,12 +85,13 @@ public:
   // сбросить содержимое изменений в файл
   virtual bool Save(const char* sPath = NULL) = 0;
 
-  // доделанное чтение
+  // инвариантное чтение
   bool ReadFloat(const char* name, int num, float & v);
   bool ReadInt(const char* name, int num, int & v);
   bool ReadUint(const char* name, int num, unsigned int & v);
-  bool ReadFloat3(const char* name, int num, float * v3);// разделитель или "space" или ";"
+  bool ReadFloat3(const char* name, int num, float * v3);// разделитель ";"
   bool ReadFloat4(const char* name, int num, float * v4);
+
 };
 
 #endif

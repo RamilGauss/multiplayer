@@ -151,31 +151,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\BaseObjectCommon.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Camera.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\ClientGame.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ControlCamera.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ControlEventWinApiGE.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ControlEventWinApiGUI.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ControlEventWinApiNET.cpp"
 				>
 			</File>
 			<File
@@ -183,11 +159,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IControlEventWinApi.cpp"
+				RelativePath=".\IBaseObjectCommon.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\InterpretatorPredictionTank.cpp"
+				RelativePath=".\IGame.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IMakerObjectCommon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IManagerObjectCommon.cpp"
 				>
 			</File>
 			<File
@@ -195,11 +179,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\MakerObject.cpp"
+				RelativePath=".\MakerManagerObjectCommon.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ManagerEventWinApi.cpp"
+				RelativePath=".\MakerManagerTime.cpp"
 				>
 			</File>
 			<File
@@ -210,20 +194,12 @@
 				RelativePath=".\ManagerTime.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\TankTower.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\BaseObjectCommon.h"
-				>
-			</File>
 			<File
 				RelativePath=".\Camera.h"
 				>
@@ -233,23 +209,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ControlCamera.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ControlEventWinApiGE.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ControlEventWinApiGUI.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ControlEventWinApiNET.h"
-				>
-			</File>
-			<File
-				RelativePath=".\EventWinApi.h"
+				RelativePath=".\DeveloperTool_DLL.h"
 				>
 			</File>
 			<File
@@ -257,11 +217,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IClientDeveloperTool.h"
+				RelativePath=".\IBaseObjectCommon.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IControlEventWinApi.h"
+				RelativePath=".\IClientDeveloperTool.h"
 				>
 			</File>
 			<File
@@ -273,6 +233,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IMakerObjectCommon.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IManagerObjectCommon.h"
 				>
 			</File>
@@ -281,7 +245,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\InterpretatorPredictionTank.h"
+				RelativePath=".\IServerDeveloperTool.h"
 				>
 			</File>
 			<File
@@ -289,11 +253,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\MakerObject.h"
+				RelativePath=".\MakerManagerObjectCommon.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ManagerEventWinApi.h"
+				RelativePath=".\MakerManagerTime.h"
 				>
 			</File>
 			<File
@@ -305,11 +269,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\namespace_ID_BEHAVIOR.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TankTower.h"
+				RelativePath=".\StrNameSrcEvent.h"
 				>
 			</File>
 		</Filter>
@@ -319,10 +279,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

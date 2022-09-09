@@ -36,7 +36,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "ClientMain.h"
 #include "NetSystem.h"
-#include "ClientTank.h"
+#include "NET_LevelClientServer.h"
 #include "ApplicationProtocolDef.h"
 #include "WaitForm.h"
 #include <QMessageBox>

@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "GameForm.h"
 #include "GCS.h"
 #include "BL_Debug.h"
-#include "ClientTank.h"
+#include "NET_LevelClientServer.h"
 #include "GlobalParamsTank.h"
 #include <QMessageBox>
 #include <QTimer>

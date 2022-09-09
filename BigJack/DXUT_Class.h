@@ -57,6 +57,8 @@ public:
   virtual void* GetWndProc();
   virtual bool IsFullScreen();
   virtual void ToggleFullScreen();
+  virtual void SetTitleWindow(const char* sTitle);
+  virtual void GetSizeWindow(int &w, int &h);
 
   virtual HRESULT Init();
   virtual void Work();
@@ -66,6 +68,9 @@ public:
   virtual float GetFPS();
 
   virtual HWND GetHWND();
+  
+  virtual void* GetFuncEventGUI();
+  //void SetSrcGUI(TGraphicEngineGUI* pForm);
 
 protected:
 
@@ -73,8 +78,9 @@ protected:
   friend bool CALLBACK ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext );
   friend void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
   friend LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing, void* pUserContext );
-  friend void CALLBACK KeyboardProc( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext );
   friend void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
+  friend void CALLBACK OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext );
+  friend void CALLBACK OnMouseEvent( UINT state, bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext );
 
   // must
   friend void CALLBACK OnLostDevice( void* pUserContext );   
@@ -92,6 +98,9 @@ protected:
   LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing, void* pUserContext );
   void OnLostDevice( void* pUserContext );
   void OnDestroyDevice( void* pUserContext );
+  void OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
+  void OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext );
+  void OnMouseEvent( UINT state, bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext );
 
 };
 

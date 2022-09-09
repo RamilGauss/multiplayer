@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <stddef.h>
 #include "LoaderListPathID.h"
 #include "file_operation.h"
-#include "GlobalParamsTank.h"
+#include "GlobalParams.h"
 #include "Logger.h"
 #include "BL_Debug.h"
 
@@ -45,22 +45,22 @@ using namespace std;
 
 const char* sNameSettingMap = "main.xml";
 
-TLoaderObjectCommon::TLoaderObjectCommon()
+TLoaderMap::TLoaderMap()
 {
   LoadListMap();
 }
 //-------------------------------------------------------------
-TLoaderObjectCommon::~TLoaderObjectCommon()
+TLoaderMap::~TLoaderMap()
 {
   Done();
 }
 //-------------------------------------------------------------
-IBaseObjectCommon* TLoaderObjectCommon::LoadObject(unsigned int id_model)
+IBaseObjectCommon* TLoaderMap::LoadObject(unsigned int id_model)
 {
-  return mMakerObject.New(id_model);
+  return mMakerObjectCommon->New(id_model);
 }
 //-------------------------------------------------------------
-void TLoaderObjectCommon::LoadMap(unsigned int id_map)
+void TLoaderMap::LoadMap(unsigned int id_map)
 {
   string sPath = mMapID[id_map];
   if(sPath.length()==0) return;
@@ -69,7 +69,7 @@ void TLoaderObjectCommon::LoadMap(unsigned int id_map)
   // собственно загрузка
 }
 //-------------------------------------------------------------
-void TLoaderObjectCommon::LoadListMap()
+void TLoaderMap::LoadListMap()
 {
   // открыть файл, содержащий список путей к картам и запомнить в ассоциативный список
   TLoaderListPathID loader;
@@ -81,25 +81,25 @@ void TLoaderObjectCommon::LoadListMap()
   PrepareMapPath();
 }
 //-------------------------------------------------------------
-int TLoaderObjectCommon::GetCountObject()
+int TLoaderMap::GetCountObject()
 {
   return mVectorObject.size();
 }
 //-------------------------------------------------------------
-IBaseObjectCommon* TLoaderObjectCommon::Get(int i)
+IBaseObjectCommon* TLoaderMap::Get(int i)
 {
   return mVectorObject[i];
 }
 //-------------------------------------------------------------
-void TLoaderObjectCommon::Done()
+void TLoaderMap::Done()
 {
   mVectorObject.clear();
 }
 //-------------------------------------------------------------
-void TLoaderObjectCommon::PrepareMapPath()
+void TLoaderMap::PrepareMapPath()
 {
-  map<unsigned int,string>::iterator bit = mMapID.begin();
-  map<unsigned int,string>::iterator eit = mMapID.end();
+  TMapIDName::iterator bit = mMapID.begin();
+  TMapIDName::iterator eit = mMapID.end();
   
   while(bit!=eit)
   {
@@ -108,8 +108,13 @@ void TLoaderObjectCommon::PrepareMapPath()
   }
 }
 //-------------------------------------------------------------
-void TLoaderObjectCommon::Delete(IBaseObjectCommon* pObject)
+void TLoaderMap::Delete(IBaseObjectCommon* pObject)
 {
-  mMakerObject.Delete(pObject);
+  mMakerObjectCommon->Delete(pObject);
+}
+//-------------------------------------------------------------
+void TLoaderMap::SetMakerObjectCommon(IMakerObjectCommon* pMakerObjectCommon)
+{
+  mMakerObjectCommon = pMakerObjectCommon;
 }
 //-------------------------------------------------------------

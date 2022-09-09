@@ -126,7 +126,7 @@ void TTreeJoint::Setup(TLoadedJoint* pLoadedTree,TNumUseMap* mapUse)
   ProductAllMatrix();
 }
 //-------------------------------------------------------------------------
-void TTreeJoint::ChangeMatrix(std::string& name, TVector4_4/*D3DXMATRIXA16*/* matrix, bool def)
+void TTreeJoint::ChangeMatrix(std::string& name, TMatrix16/*D3DXMATRIXA16*/* matrix, bool def)
 {
   int cnt = GetCountPart();
   for(int i = 0 ; i < cnt ; i++ )
@@ -144,13 +144,13 @@ void TTreeJoint::ChangeMatrix(std::string& name, TVector4_4/*D3DXMATRIXA16*/* ma
 }
 //-------------------------------------------------------------------------
 // заполнить матрицей
-void TTreeJoint::GetMatrix(std::vector<TVector4_4/*D3DXMATRIXA16*/*>* matrix)
+void TTreeJoint::GetMatrix(std::vector<TMatrix16/*D3DXMATRIXA16*/*>* matrix)
 {
   int cnt = GetCountPart();
   for(int i = 0 ; i < cnt ; i++ )
   {
     TNodeJoint* pNode = mVectorNode.at(i);
-    TVector4_4/*D3DXMATRIXA16*/* pM = matrix->operator [](i);
+    TMatrix16/*D3DXMATRIXA16*/* pM = matrix->operator [](i);
     *pM = pNode->matrix_pro;// умноженная по иерархии
   }
 }

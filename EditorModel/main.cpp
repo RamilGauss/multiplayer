@@ -33,50 +33,12 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "DXUT.h"
-#include <QtGui/QApplication>
-
-#include <QtCore/QTextCodec>
-#include <QWindowsStyle>
-#include "HiTimer.h"
-#include "NetSystem.h"
-#include "ErrorReg.h"
-#include <glib/gthread.h>
-#include "ManagerGUIEditorModel.h"
-#include "EditorModel.h"
-#include "ManagerGUI.h"
-#include "ManagerObjectCommonEditorModel.h"
+#include "ClientGame.h"
 
 
 int main(int argc, char *argv[])
 {
-  g_thread_init( NULL );
-  err_Init();
-  errSTR_Init();
-  errSTD_Init();
-  errSDK_Init();
-  ht_Init();
-  ns_Init();
-
-  QTextCodec::setCodecForTr(QTextCodec::codecForName("CP1251"));
-
-  QApplication a(argc, argv);
-  //---------------------------------------
-  // менеджер двигателей
-  TManagerObjectCommon* pMOC = new TManagerObjectCommonEditorModel;
-  
-  TManagerGUIEditorModel* pManagerGUI = new TManagerGUIEditorModel;
-  pManagerGUI->startGUI(NULL,pMOC);
-
-  TEditorModel* pEditorModel = new TEditorModel;
-  pManagerGUI->AddFormInList(pEditorModel, "editorModel");
-
-  a.exec();
-
-  delete pEditorModel;// освободим ресурсы игры
-  delete pMOC;
-  delete pManagerGUI;
-
-
+  TClientGame game;
+  game.Work("..\\DeveloperToolDLL\\ViewerDLL.dll");
   return 0;
 }

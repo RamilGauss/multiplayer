@@ -36,24 +36,36 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef IGameH
 #define IGameH
 
+#include "IClientDeveloperTool.h"
+#include "IServerDeveloperTool.h"
+
 
 class IGame
 {
-protected:
+  typedef IClientDeveloperTool*(*GetClientDeveloperTool)();
+  typedef IServerDeveloperTool*(*GetServerDeveloperTool)();
+  typedef void (*FreeDeveloperTool)(IDeveloperTool*);
 
-
+  GetClientDeveloperTool mGetClientDeveloperTool;
+  GetServerDeveloperTool mGetServerDeveloperTool;
+  FreeDeveloperTool      mFreeDeveloperTool;
+protected:  
+  IClientDeveloperTool* mClientDeveloperTool;
+  IServerDeveloperTool* mServerDeveloperTool;
 
 public:
+
+
   IGame();
   virtual ~IGame();
 
   virtual void Work(const char* sNameDLL) = 0;// начало работы
+
+  bool LoadDLL(const char* sNameDLL);
+
+private:
+  void FreeLib();
   
-
-protected:
-
-
-
 };
 
 #endif

@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="EditorModel"
+	Name="ViewerModel"
 	ProjectGUID="{DA5DE3BC-5DC6-4233-93E8-7F40A836F05C}"
 	RootNamespace="EditorModel"
 	Keyword="Qt4VSv1.0"

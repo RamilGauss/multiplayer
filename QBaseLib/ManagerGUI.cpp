@@ -54,7 +54,7 @@ TManagerGUI::~TManagerGUI()
   //stopGUI();
 }
 //-----------------------------------------------------------------------
-void TManagerGUI::startGUI(TClientTank*          _pClient,
+void TManagerGUI::startGUI(TNET_LevelClientServer*          _pClient,
                            TManagerObjectCommon* _pGame)
 {
   pClient  = _pClient; 

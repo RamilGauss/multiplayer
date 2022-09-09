@@ -56,7 +56,7 @@ public:
   TTreeJoint::TLoadedJoint* TakeTree();
 
 protected:
-  bool LoadMatrix4x4(const char* name,int num, nsStruct3D::TVector4_4/*D3DXMATRIXA16*/* pM);
+  bool LoadMatrix4x4(const char* name,int num, nsStruct3D::TMatrix16/*D3DXMATRIXA16*/* pM);
   bool LoadJoint(int i);
   //bool LoadVector4(TBL_ConfigFile* fileIni,char* strNumPart,char* key,D3DXVECTOR4& vector4);
   //float FindFloat_Semicolon(char** buffer,bool* ok);

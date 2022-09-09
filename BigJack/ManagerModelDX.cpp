@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ManagerModelDX.h"
 #include <d3d9.h>
 #include "ModelDX.h"
-#include "GlobalParamsTank.h"
+#include "GlobalParams.h"
 #include "LoadFromHDD.h"
 #include "Logger.h"
 #include "BL_Debug.h"
@@ -61,7 +61,7 @@ TManagerModelDX::~TManagerModelDX()
 //--------------------------------------------------------------------------------------
 TModelDX* TManagerModelDX::Load(unsigned int id)
 {
-  GlobalLoggerDX.WriteF_time("Начало загрузки модели ID=%u\n",id);
+  GlobalLoggerGE.WriteF_time("Начало загрузки модели ID=%u\n",id);
 
   string sPath = mMapPathModel[id];
   TModelDX* pModel = NULL;
@@ -72,7 +72,7 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
     USES_CONVERSION;
     if(pModel->Init(mD3dDevice,A2W(sPath.data()))==false)
     {
-      GlobalLoggerDX.WriteF_time("Не удалось загрузить модель sPath=%s, id=%u\n",sPath.data(),id);
+      GlobalLoggerGE.WriteF_time("Не удалось загрузить модель sPath=%s, id=%u\n",sPath.data(),id);
       delete pModel;
       return NULL;
     }
@@ -82,11 +82,11 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
   }
   else
   {
-    GlobalLoggerDX.WriteF_time("Не удалось найти модель sPath=%s, id=%u\n",sPath.data(),id);
+    GlobalLoggerGE.WriteF_time("Не удалось найти модель sPath=%s, id=%u\n",sPath.data(),id);
     BL_FIX_BUG();
   }
   
-  GlobalLoggerDX.WriteF_time("Конец загрузки модели ID=%u\n",id);
+  GlobalLoggerGE.WriteF_time("Конец загрузки модели ID=%u\n",id);
   return pModel;
 }
 //--------------------------------------------------------------------------------------
@@ -138,14 +138,14 @@ bool TManagerModelDX::LoadListPath()
   FindAbsPath(PATH_LIST_MODELS,sAbsPath,sizeof(sAbsPath));
   if(loader.Load(sAbsPath,&mMapPathModel)==false)
   {
-    GlobalLoggerDX.WriteF_time("Не удалось загрузить список моделей.\n");
+    GlobalLoggerGE.WriteF_time("Не удалось загрузить список моделей.\n");
     BL_FIX_BUG();
     return false;
   }
   
   PrepareForDX();
 
-  GlobalLoggerDX.WriteF_time("Список моделей загружен успешно.\n");
+  GlobalLoggerGE.WriteF_time("Список моделей загружен успешно.\n");
   return true;
 }
 //--------------------------------------------------------------------------------------

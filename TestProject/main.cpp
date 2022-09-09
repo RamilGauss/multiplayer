@@ -44,11 +44,10 @@ using namespace nsStruct3D;
 
 int main(int argc, char *argv[])
 {
-  TVector4_4 a,b;
-  VectorIdentity(&a);
-  VectorIdentity(&b);
-  a._11 = 10;
-  b *= a;
+  TMatrix16 a,b;
+  MATRIX16_OP_M(a,1.0f,=)
+  b._11 = 1;
+  SET_MATRIX16_M_M(a,b)
 
   return 0;
 }

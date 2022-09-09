@@ -36,39 +36,30 @@ you may contact in writing [ramil2085@gmail.com].
 
 #ifndef LoaderModelDXTestH
 #define LoaderModelDXTestH
-#pragma once
+//#pragma once
 
-#include "DXUT.h"
-#include "ILoaderModelDX.h"
-#include "MeshLoader.h"
+#include "ILoaderModelGE.h"
 
-// для экспериментов (для WoT)
-#include "IMeshFile.h"
-#include "BL_ConfigFile.h"
-#include "IXML.h"
-
-class TLoaderModelDX : public ILoaderModelDX
+class TLoaderModelDX : public ILoaderModelGE
 {
-  IMeshFile mMeshFile;
-
-  TBL_ConfigFile mFileIniMain;
-  IXML* mXML;
+protected:
+  IDirect3DDevice9* m_pd3dDevice;
 
 public:
   TLoaderModelDX(IDirect3DDevice9* _m_pd3dDevice);
   virtual ~TLoaderModelDX();
 
-  virtual bool Load(LPCWSTR strFilenameData);
+  //virtual bool Load(LPCWSTR strFilenameData);
 
 protected:
 
-  bool LoadMainFile();
-  bool LoadFileResource();
-  bool LoadPart(int i);
-  bool LoadVector(const char* key,D3DXVECTOR3& vector);
-  bool LoadVector4(const char* key,D3DXVECTOR4& vector4);
+  //bool LoadMainFile();
+  //bool LoadFileResource();
+  //bool LoadPart(int i);
+  //bool LoadVector(const char* key,nsStruct3D::TVector3/*D3DXVECTOR3*/& vector);
+  //bool LoadVector4(const char* key,nsStruct3D::TVector4/*D3DXVECTOR4*/& vector4);
 
-  bool LoadMesh(TDefGroup *mArrDefGroup);
+  virtual void* LoadMesh(const char* strPathPrimitives);
 };
 
 

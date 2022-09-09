@@ -77,7 +77,7 @@ class ServerTank
   guint32 mLastTime;
 
 	// список комнат
-	TList<TRoom>  mListRoom;
+	TList<TRoom>  mListRoom;// ### заменить на list<TRoom>
 	// список клиентов
   TArrayObject mArrClients;
 
@@ -135,7 +135,7 @@ public:
   };
 
 	ServerTank(int numNetWork = 0);
-	~ServerTank();
+	virtual ~ServerTank();
 
 	void start();
 	void stop();

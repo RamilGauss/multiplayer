@@ -39,7 +39,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include <QWidget>
 
-class TClientTank;
+class TNET_LevelClientServer;
 class TManagerObjectCommon;
 
 //class TBase_DXUT_Event : public QWidget, public IDXUT_Event
@@ -64,7 +64,7 @@ public:
   virtual void showGUI(){QWidget::show();}
   virtual void hideGUI(){QWidget::hide();};
 
-  void SetupMOC_Client(TClientTank  *_pClient,
+  void SetupMOC_Client(TNET_LevelClientServer  *_pClient,
                        TManagerObjectCommon* _pGame)
   {
     pClient  = _pClient;
@@ -77,7 +77,7 @@ protected:
   virtual void SetupEvent(){};
 
 protected:
-  TClientTank  *pClient;
+  TNET_LevelClientServer  *pClient;
   TManagerObjectCommon* pGame;
   
 };

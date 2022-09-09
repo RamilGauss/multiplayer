@@ -45,9 +45,11 @@ class IBaseObject;
 
 class TManagerBaseObject
 {
+  typedef std::map<unsigned int, std::string> TMapID_Path;
+  typedef std::map<unsigned int, TTreeJoint::TLoadedJoint*> TMapID_Tree;
 
-  std::map<unsigned int, std::string> mMapID_Path;
-  std::map<unsigned int, TTreeJoint::TLoadedJoint*> mMapID_Tree;
+  TMapID_Path mMapID_Path;
+  TMapID_Tree mMapID_Tree;
 
   TLoaderTree mLoaderTree;
 public:

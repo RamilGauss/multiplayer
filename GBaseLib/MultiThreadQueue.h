@@ -72,7 +72,7 @@ class TMultiThreadQueue
 
 private:
 		int QueueSize;
-    int SizeElem;
+    int MaxSizeElem;
 
 		TElem* Queue;
 
@@ -80,15 +80,15 @@ private:
         EndPos;   // второй поток
 		volatile int CurrentQueueSize;// используется в 2 потоках
 public:
-		TMultiThreadQueue(int _QueueSize, int _SizeElem)
+		TMultiThreadQueue(int _QueueSize, int _MaxSizeElem)
 		{
 			QueueSize = _QueueSize;
-      SizeElem = _SizeElem;
+      MaxSizeElem = _MaxSizeElem;
 
 			Queue = (TElem*)new TElem[QueueSize];
 			for (int i = 0; i < QueueSize; i++)
 			{
-				Queue[i].pData = new char[SizeElem];
+				Queue[i].pData = new char[MaxSizeElem];
 			}
 
 			BeginPos = 0;

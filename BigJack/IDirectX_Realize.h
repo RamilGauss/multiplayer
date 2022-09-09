@@ -36,25 +36,26 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef IDirectX_RealizeH
 #define IDirectX_RealizeH
 
-//#include "DXUT.h"
 #include <windows.h>
 
 class TBigJack;
+class TGraphicEngineGUI;
 
 class IDirectX_Realize
 {
 protected:
 
-  //IGraphicEngine * pGE;
   TBigJack * pGE;
 
 public:
   IDirectX_Realize(TBigJack * _pGE){pGE=_pGE;}
   virtual ~IDirectX_Realize(){};
 
-  virtual void*   GetWndProc() = 0;
-  virtual bool    IsFullScreen() = 0;
-  virtual void    ToggleFullScreen() = 0;
+  virtual void* GetWndProc() = 0;
+  virtual bool  IsFullScreen() = 0;
+  virtual void  ToggleFullScreen() = 0;
+  virtual void  SetTitleWindow(const char* sTitle) = 0;
+  virtual void  GetSizeWindow(int &w, int &h) = 0;
 
   virtual HRESULT Init() = 0;
   virtual void    Work() = 0;
@@ -63,6 +64,11 @@ public:
   virtual float   GetFPS() = 0;
 
   virtual HWND    GetHWND() = 0;
+  
+
+  virtual void*   GetFuncEventGUI() = 0;
+  //virtual void    SetSrcGUI(TGraphicEngineGUI* pForm) = 0;
+
 protected:
 };
 

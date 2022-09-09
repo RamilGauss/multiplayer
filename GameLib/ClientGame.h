@@ -36,46 +36,36 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef ClientGameH
 #define ClientGameH
 
-
-#include "ManagerObjectCommon.h"
-#include "IPhysicEngine.h"
-#include "INET_Engine.h"
 #include "IClientDeveloperTool.h"
-#include "IManagerTime.h"
-
+#include "DstEvent.h"
+#include "IGame.h"
 
 /*
-    Краткая концепция
-Постулат: Менеджер компонентов (МК) является игровым движком.
-От него наследуется Клиент и Сервер. Это два движка.
-
-Исходя из этого:
 1. Должен содержать строгое кол-во компонентов (в соответствии со своим предназначением).
-2. Ядро МК занимается рендером, расчетом и диспетчеризацией событий между компонентами
-3. Вводится понятие "Источник событий" SrcEvent и "Поглотитель событий" DstEvent.
-4. 
+2. Ядро МК занимается рендером, расчетом и диспетчеризацией событий между компонентами.
+3. Вводится понятие "Источник событий" SrcEvent.
+
 */
 
+class TNET_LevelClientServer;
+class IPhysicEngine;
+class IGraphicEngine; // отрисовка сцены
+class IManagerObjectCommon;
+class IManagerTime;
 
-class TClientGame : public IGame
+class TClientGame : public IGame, public TDstEvent
 {
 protected:
   volatile bool flgNeedStop;
   volatile bool flgActive;
 
-
-
-  //IAI*                mAI;
-  //IReplay*            mReplay;
-  //ISoundEngine*       mSound;
-  INET_Engine*          mNET;
-  IPhysicEngine*        mPhysicEngine;
-  IGraphicEngine*       mGraphicEngine; // отрисовка сцены
-  IManagerObjectCommon* mMOC;
-  IManagerTime*         mMTime;
-
-  // обработка событий
-  IClientDeveloperTool* mDeveloperTool;
+  //IReplay*              mReplay;        // HDD
+  //ISoundEngine*         mSound;         // Sound 
+  TNET_LevelClientServer* mNET;           // Melissa
+  IPhysicEngine*          mPhysicEngine;  // Robert
+  IGraphicEngine*         mGraphicEngine; // BigJack отрисовка сцены
+  IManagerObjectCommon*   mMOC;           // GameLib
+  IManagerTime*           mMTime;         // GameLib
 
 public:
   TClientGame();
@@ -83,18 +73,17 @@ public:
 
   void Work(const char* sNameDLL);// начало работы
   
-  // диспетчеризация событий
-  // решение принимается на основании скрипта (что-то типа машины состояния)
-  void SetEvent(const char* sFrom, unsigned int key, void* pData, int sizeData);
-
 protected:
-  void Init(const char* sNameDLL);
+  bool Init(const char* sNameDLL);
   void Done();
 
   bool HandleGraphicEngineEvent();
-  void HandleExternalEvent();
+  bool HandleExternalEvent();
+  void CollectEvent();
   void Calc();
   void Render();
+
+  bool HandleEvent(TEvent* pEvent);
 
 };
 

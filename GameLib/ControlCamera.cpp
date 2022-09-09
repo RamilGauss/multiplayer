@@ -35,7 +35,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "ControlCamera.h"
 #include "BL_Debug.h"
-#include "BaseObjectCommon.h"
+#include "IBaseObjectCommon.h"
 #include "BaseObject.h"
 
 using namespace std;

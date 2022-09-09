@@ -38,7 +38,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "common_defs.h"
 #include "HiTimer.h"
 #include "BL_Debug.h"
-#include "GlobalParamsTank.h"
+#include "GlobalParams.h"
 #include "NetSystem.h"
 #include <Winsock2.h>
 #include <limits.h>

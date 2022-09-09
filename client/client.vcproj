@@ -169,10 +169,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Source\ClientTank.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Source\GameForm.cpp"
 				>
 			</File>
@@ -190,6 +186,10 @@
 			</File>
 			<File
 				RelativePath=".\Source\ManagerObjectCommonClient.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\NET_LevelClientServer.cpp"
 				>
 			</File>
 			<File
@@ -227,10 +227,6 @@
 						Outputs="&quot;.\GeneratedFiles\$(ConfigurationName)\moc_$(InputName).cpp&quot;"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\Source\ClientTank.h"
-				>
 			</File>
 			<File
 				RelativePath=".\Source\GameForm.h"
@@ -312,6 +308,10 @@
 			</File>
 			<File
 				RelativePath=".\Source\ManagerObjectCommonClient.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Source\NET_LevelClientServer.h"
 				>
 			</File>
 			<File

@@ -169,11 +169,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DstEvent.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\file_operation.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\GlobalParamsTank.cpp"
+				RelativePath=".\GlobalParams.cpp"
 				>
 			</File>
 			<File
@@ -234,6 +238,10 @@
 			</File>
 			<File
 				RelativePath=".\SortByAlphabetic.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SrcEvent.cpp"
 				>
 			</File>
 			<File
@@ -319,7 +327,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Container.h"
+				>
+			</File>
+			<File
 				RelativePath=".\DateChanges.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DstEvent.h"
 				>
 			</File>
 			<File
@@ -327,7 +343,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GlobalParamsTank.h"
+				RelativePath=".\GlobalParams.h"
 				>
 			</File>
 			<File
@@ -387,11 +403,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Rect.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SaveOnHDD.h"
 				>
 			</File>
 			<File
 				RelativePath=".\SortByAlphabetic.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SrcEvent.h"
 				>
 			</File>
 			<File

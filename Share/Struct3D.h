@@ -37,47 +37,129 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef Struct3DH
 #define Struct3DH
 
-#define SET_MATRIX16_M_M(In,Out) \
-Out._11 = In._11;  Out._12 = In._12;  Out._13 = In._13;  Out._14 = In._14; \
-Out._21 = In._21;  Out._22 = In._22;  Out._23 = In._23;  Out._24 = In._24; \
-Out._31 = In._31;  Out._32 = In._32;  Out._33 = In._33;  Out._34 = In._34; \
-Out._41 = In._41;  Out._42 = In._42;  Out._43 = In._43;  Out._44 = In._44;
+#define INDEX_I(M,k,n,I) \
+M I m[k][n]
 
-#define SET_MATRIX16_M_P(In,pOut) \
-pOut->_11 = In._11;  pOut->_12 = In._12;  pOut->_13 = In._13;  pOut->_14 = In._14; \
-pOut->_21 = In._21;  pOut->_22 = In._22;  pOut->_23 = In._23;  pOut->_24 = In._24; \
-pOut->_31 = In._31;  pOut->_32 = In._32;  pOut->_33 = In._33;  pOut->_34 = In._34; \
-pOut->_41 = In._41;  pOut->_42 = In._42;  pOut->_43 = In._43;  pOut->_44 = In._44;
+// M1 и M2 - TMatrix16 или D3DXMATRIX
+// OP - операция, например -=, +
+// I1 и I2 - как происходит адресация, через . или ->
+// k и n - индексы в матрице
+#define BASE_MATRIX_OP(M1,M2,OP,I1,I2,k,n) \
+INDEX_I(M1,k,n,I1) OP INDEX_I(M2,k,n,I2)
 
-#define SET_MATRIX16_P_M(pIn,Out) \
-Out._11 = pIn->_11;  Out._12 = pIn->_12;  Out._13 = pIn->_13;  Out._14 = pIn->_14; \
-Out._21 = pIn->_21;  Out._22 = pIn->_22;  Out._23 = pIn->_23;  Out._24 = pIn->_24; \
-Out._31 = pIn->_31;  Out._32 = pIn->_32;  Out._33 = pIn->_33;  Out._34 = pIn->_34; \
-Out._41 = pIn->_41;  Out._42 = pIn->_42;  Out._43 = pIn->_43;  Out._44 = pIn->_44;
+#define MATRIX_ALL(M1,M2,OP,I1,I2,Ck,Cn) \
+for(int counter_k = 0 ; counter_k < Ck ; counter_k++) \
+for(int counter_n = 0 ; counter_n < Cn ; counter_n++) \
+BASE_MATRIX_OP(M1,M2,OP,I1,I2,counter_k,counter_n);
 
+#define MATRIX16_OP(M1,M2,OP,I1,I2) \
+MATRIX_ALL(M1,M2,OP,I1,I2,4,4)
 
+//----------------------------------------------------------------------
+#define BASE_MATRIX_OP_VALUE(M,VALUE,OP,I,k,n) \
+INDEX_I(M,k,n,I) OP VALUE
+
+#define MATRIX_ALL_VALUE(M,VALUE,OP,I,Ck,Cn) \
+for(int k = 0 ; k < Ck ; k++) \
+for(int n = 0 ; n < Cn ; n++) \
+BASE_MATRIX_OP_VALUE(M,VALUE,OP,I,k,n);
+
+#define MATRIX16_OP_V(M,VALUE,OP,I) \
+MATRIX_ALL_VALUE(M,VALUE,OP,I,4,4)
+
+//----------------------------------------------------------------------
+// Макросы для использования
+// OP - операция, например, a *= b; M1 = "a", M2 = "b", OP = "*="
+// MATRIX16_OP_M_M( a, b, *= )
+//----------------------------------------------------------------------
+// матрица - матрица
+#define MATRIX16_OP_M_M(M1,M2,OP) \
+MATRIX16_OP(M1,M2,OP, . , .)
+
+#define MATRIX16_OP_M_P(M1,M2,OP) \
+MATRIX16_OP(M1,M2,OP, . , ->)
+
+#define MATRIX16_OP_P_M(M1,M2,OP) \
+MATRIX16_OP(M1,M2,OP, -> , .)
+
+#define MATRIX16_OP_P_P(M1,M2,OP) \
+MATRIX16_OP(M1,M2,OP, -> , ->)
+//----------------------------------------------------------------------
+// матрица - float/double
+#define MATRIX16_OP_M(M,VALUE,OP) \
+MATRIX16_OP_V(M,VALUE,OP, . )
+
+#define MATRIX16_OP_P(M,VALUE,OP) \
+MATRIX16_OP_V(M,VALUE,OP, ->)
+//----------------------------------------------------------------------
+// проверка на равенство двух матриц
+#define MATRIX16_EQUAL_M_M(a,b) \
+MATRIX16_OP_M_M(a,b,=)
+
+#define MATRIX16_EQUAL_M_P(a,b) \
+MATRIX16_OP_M_P(a,b,=)
+
+#define MATRIX16_EQUAL_P_M(a,b) \
+MATRIX16_OP_P_M(a,b,=)
+
+#define MATRIX16_EQUAL_P_P(a,b) \
+MATRIX16_OP_P_P(a,b,=)
+//----------------------------------------------------------------------
+#define SET_MATRIX_ROTATE_WIN(pV,ugol,AXE) \
+D3DXMATRIX InOut; \
+MATRIX16_EQUAL_M_P(InOut,pV) \
+D3DXMatrixRotation##AXE(&InOut,ugol); \
+MATRIX16_EQUAL_P_M(pV,InOut)
+//----------------------------------------------------------------------
 
 namespace nsStruct3D
 {
 
 #pragma pack(push, 1)
 
+class TPoint2
+{
+public:
+  unsigned int x;
+  unsigned int y;
+  TPoint2(){x=0;y=0;}
+};
+
 class TVector3
 {
+public:
   float x;
   float y;
   float z;
+  TVector3(float _x,float _y,float _z)
+  {
+    x=_x;y=_y;z=_z;
+  }
+  TVector3()
+  {
+    x=0;y=0;z=0;
+  }
 };
 //-----------------------------------------------------------------
 class TVector4
 {
+public:
   float x;
   float y;
   float z;
-  float k;
+  float w;
+  TVector4(float _x,float _y,float _z,float _w)
+  {
+    x=_x;y=_y;z=_z;w=_w;
+  }
+  TVector4()
+  {
+    x=0;y=0;z=0;w=0;
+  }
+
 };
 //-----------------------------------------------------------------
-class TVector3_3
+class TMatrix9
 {
   union {
     struct {
@@ -89,7 +171,7 @@ class TVector3_3
   };
 };
 //-----------------------------------------------------------------
-class TVector4_4
+class TMatrix16
 {
 public:
   union {
@@ -103,40 +185,43 @@ public:
   };
 
   // assignment operators
-  TVector4_4& operator += ( const TVector4_4& );
-  TVector4_4& operator -= ( const TVector4_4& );
-  TVector4_4& operator *= ( float );
-  TVector4_4& operator /= ( float );
+  TMatrix16& operator += ( const TMatrix16& );
+  TMatrix16& operator -= ( const TMatrix16& );
+  TMatrix16& operator *= ( float );
+  TMatrix16& operator /= ( float );
 
-  TVector4_4& operator *= ( const TVector4_4& );
-  //TVector4_4& operator /= ( const TVector4_4& );
+  TMatrix16& operator *= ( const TMatrix16& );
+  //TMatrix16& operator /= ( const TMatrix16& );
 
   // unary operators
-  TVector4_4 operator + () const;
-  TVector4_4 operator - () const;
+  TMatrix16 operator + () const;
+  TMatrix16 operator - () const;
 
   // binary operators
-  TVector4_4 operator + ( const TVector4_4& ) const;
-  TVector4_4 operator - ( const TVector4_4& ) const;
+  TMatrix16 operator + ( const TMatrix16& ) const;
+  TMatrix16 operator - ( const TMatrix16& ) const;
   
-  TVector4_4 operator * ( const TVector4_4& ) const;
-  //TVector4_4 operator / ( const TVector4_4& ) const;
+  TMatrix16 operator * ( const TMatrix16& ) const;
+  //TMatrix16 operator / ( const TMatrix16& ) const;
 
-  TVector4_4 operator * ( float ) const;
-  TVector4_4 operator / ( float ) const;
+  TMatrix16 operator * ( float ) const;
+  TMatrix16 operator / ( float ) const;
 
-  //friend TVector4_4 operator * ( float, const TVector4_4& );
+  //friend TMatrix16 operator * ( float, const TMatrix16& );
 
-  bool operator == ( const TVector4_4& ) const;
-  bool operator != ( const TVector4_4& ) const;
+  bool operator == ( const TMatrix16& ) const;
+  bool operator != ( const TMatrix16& ) const;
 };
 
 #pragma pack(pop)
 
 }
 
-extern void VectorIdentity(nsStruct3D::TVector4_4* pV);
-extern void VectorIdentity(nsStruct3D::TVector3_3* pV);
+extern void SetMatrixIdentity(nsStruct3D::TMatrix16* pV);
+extern void SetMatrixIdentity(nsStruct3D::TMatrix9* pV);
 
+extern void SetMatrixRotateX(nsStruct3D::TMatrix16* pV, float ugol);
+extern void SetMatrixRotateY(nsStruct3D::TMatrix16* pV, float ugol);
+extern void SetMatrixRotateZ(nsStruct3D::TMatrix16* pV, float ugol);
 
 #endif

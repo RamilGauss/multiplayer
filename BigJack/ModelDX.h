@@ -43,16 +43,17 @@ you may contact in writing [ramil2085@gmail.com].
 #include "EffectDX.h"
 #include "TObject.h"
 #include <d3dx9math.h>
-#include "ILoaderModelDX.h"
+#include "ILoaderModelGE.h"
 #include <d3d9types.h>
 #include <vector>
 #include <map>
 #include "ShaderStack.h"
 #include "ExecShaderStack.h"
+#include "IModelGE.h"
 
 class TManagerResourceDX;
 
-class TModelDX : public TObject
+class TModelDX : public IModelGE
 {
 protected:
 
@@ -70,43 +71,43 @@ protected:
 public:
   
   TModelDX(TManagerResourceDX* managerResourceDX);
-  ~TModelDX();
-  unsigned int GetID(){return mID;}
-  void SetID(unsigned int id){mID=id;}
+  virtual ~TModelDX();
+  virtual unsigned int GetID(){return mID;}
+  virtual void SetID(unsigned int id){mID=id;}
 
-  int GetCntEffect();
+  virtual int GetCntEffect();
 
   /*
     Рендер маски частей
     с ориентацией и положением частей
     в мировых координатах
   */
-  void TModelDX::Draw(std::vector<unsigned char>* state, //                           (От ObjectDX)
-                      std::vector<unsigned char>* mask,  //                           (От ObjectDX)
-                      std::vector<nsStruct3D::TVector4_4/*D3DXMATRIXA16*/*>* matrix,//кол-во совпадает с cSubset (От ObjectDX)
-                      nsStruct3D::TVector4_4/*D3DXMATRIXA16*/* mWorld,    // где и как расположен объект         (От ObjectDX)
-                      float alphaTransparency,  // прозрачность                        (От ObjectDX)
-                      D3DXMATRIXA16* mView); // расположение и ориентация камеры    (от ManagerDirectX)
+  virtual void Draw(std::vector<unsigned char>* state, //                           (От ObjectDX)
+                    std::vector<unsigned char>* mask,  //                           (От ObjectDX)
+                    std::vector<nsStruct3D::TMatrix16/*D3DXMATRIXA16*/*>* matrix,//кол-во совпадает с cSubset (От ObjectDX)
+                    nsStruct3D::TMatrix16/*D3DXMATRIXA16*/* mWorld,    // где и как расположен объект         (От ObjectDX)
+                    float alphaTransparency,  // прозрачность                        (От ObjectDX)
+                    nsStruct3D::TMatrix16* pView); // расположение и ориентация камеры    (от ManagerDirectX)
 
   bool Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath);
   void Destroy();
   void LostDevice();
   void ResetDevice();
-  void SortPartByAlphabetic();
+  virtual void SortPartByAlphabetic();
 
-  unsigned int GetIndexVisualGroupByName(char* sName, int num);
-  const char* GetNameByIndex(int index);
-  int GetNumUseByIndex(int index);
+  virtual unsigned int GetIndexVisualGroupByName(char* sName, int num);
+  virtual const char* GetNameByIndex(int index);
+  virtual int GetNumUseByIndex(int index);
 
   
-  void SetShaderStackMask(std::vector<int>* pVectorMask);// по этой маске настраиваются шейдеры эффектов
-  TShaderStack* GetShaderStack(int index);// взять стек для настройки
+  virtual void SetShaderStackMask(std::vector<int>* pVectorMask);// по этой маске настраиваются шейдеры эффектов
+  virtual TShaderStack* GetShaderStack(int index);// взять стек для настройки
 
 protected:
   void Done();
   //---------------------------------------------------------
   void SetupVectorLOD();
-  bool AddEffectDX(ILoaderModelDX::TDefGroup* pDefGroup);
+  bool AddEffectDX(ILoaderModelGE::TDefGroup* pDefGroup);
   float GetDist(D3DXMATRIXA16* mWorld, D3DXMATRIXA16* mView);
   void Draw(TEffectDX* pEffect);
 

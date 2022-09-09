@@ -35,7 +35,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 
 #include "Win_Func.h"
-#include "GlobalParamsTank.h"
+#include "GlobalParams.h"
 #include <windows.h>
 
 

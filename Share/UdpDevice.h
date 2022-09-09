@@ -85,6 +85,6 @@ private:
     unsigned long  m_Socket_uint; 
   };
 
-	NO_COPY_CLASS(UdpDevice);
+	NO_COPY_OBJECT(UdpDevice);
 };
 #endif // !defined(EA_1739A613_F421_4f4a_BABC_19C44CED496A__INCLUDED_)

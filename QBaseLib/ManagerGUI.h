@@ -92,7 +92,7 @@ public:
   TManagerGUI(QWidget* parent=NULL);
   virtual ~TManagerGUI();
   
-  void startGUI(TClientTank*_pClient,TManagerObjectCommon*_pGame);
+  void startGUI(TNET_LevelClientServer*_pClient,TManagerObjectCommon*_pGame);
   void stopGUI();
 
   void AddFormInList(TBaseGUI* pStrForm, char* name);
@@ -100,7 +100,7 @@ public:
 protected:
 
   // транспорт
-  TClientTank*                  pClient;
+  TNET_LevelClientServer*                  pClient;
   // управляющий двигателями
   TManagerObjectCommon*         pGame;
 

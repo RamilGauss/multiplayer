@@ -36,36 +36,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ManagerObjectCommon.h"
 #include <stddef.h>
 #include "Logger.h"
-#include "ApplicationProtocolPacketAnswer.h"
-#include "namespace_ID_BEHAVIOR.h"
 #include "HiTimer.h"
-#include "BaseObjectCommon.h"
-#include "MakerGraphicEngine.h"
 
-
-TManagerObjectCommon* pMOC = NULL;
-//-----------------------------------------------------------------------------
-void CallBackMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
-{
-  if(pMOC==NULL) return;
-
-  pMOC->HandleOnMsg(hWnd, uMsg, wParam, lParam);
-}
-//-----------------------------------------------------------------------------
-void CallBackFrameMove( double fTime, float fElapsedTime, void* pUserContext )
-{
-  if(pMOC==NULL) return;
-  
-  pMOC->OnFrameMove( fTime, fElapsedTime, pUserContext );
-}
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-#define CHECK_END if(flgNeedStopThreadLoadMap==false) \
-{ \
-  flgActiveLoadThread = false; \
-  EndLoadMap(); \
-  return; \
-}
 
 //-----------------------------------------------------------------------------
 TManagerObjectCommon::TManagerObjectCommon()
@@ -73,37 +45,22 @@ TManagerObjectCommon::TManagerObjectCommon()
   thread                   = NULL;
   flgLoadMap               = false;
   flgActiveLoadThread      = false;
-  mLastTimeFreshData       = 0;
-
-  pMOC = this;
-  TMakerGraphicEngine makerScene;
-  mMDX_Scene = makerScene.New();
-  mMDX_Scene->Register(CallBackMsg,IGraphicEngine::eTypeMsg);
-  mMDX_Scene->Register(CallBackFrameMove,IGraphicEngine::eTypeFrameMove);
-
-  //mMDX_Scene->SetShowPresentRender(false);
 }
 //--------------------------------------------------------------------
 TManagerObjectCommon::~TManagerObjectCommon()
 {
-  pMOC = this;
-  mMDX_Scene->Unregister(CallBackMsg,IGraphicEngine::eTypeMsg);
-  mMDX_Scene->Unregister(CallBackFrameMove,IGraphicEngine::eTypeFrameMove);
   Done();
-
-  delete mMDX_Scene;
-  mMDX_Scene = NULL;
 }
 //--------------------------------------------------------------------
-void* Thread(void* p)
-{
-  ((TManagerObjectCommon*)p)->ThreadLoadMap();
-  return NULL;
-}
+//void* Thread(void* p)
+//{
+  //((TManagerObjectCommon*)p)->ThreadLoadMap();
+  //return NULL;
+//}
 //--------------------------------------------------------------------
-void TManagerObjectCommon::ThreadLoadMap()
-{
-  GlobalLoggerMOC.WriteF_time("Началась загрузка карты.\n");
+//void TManagerObjectCommon::ThreadLoadMap()
+//{
+  /*GlobalLoggerMOC.WriteF_time("Началась загрузка карты.\n");
   flgActiveLoadThread = true;
 
   mProcentLoadMap = 0;
@@ -127,116 +84,27 @@ void TManagerObjectCommon::ThreadLoadMap()
   flgActiveLoadThread = false;
   
   GlobalLoggerMOC.WriteF_time("Загрузка карты завершена (поток MOC).\n");
-  GlobalLoggerMOC.WriteF_time("Ожидание корректирующего пакета.\n");
-}
+  GlobalLoggerMOC.WriteF_time("Ожидание корректирующего пакета.\n");*/
+//}
 //--------------------------------------------------------------------
 void TManagerObjectCommon::LoadMap(unsigned int id_map)
 {
-  flgNeedStopThreadLoadMap = false;
-  flgLoadMap               = true;
-  mID_map = id_map;
-  thread = g_thread_create(Thread, this, true, NULL);
+  //flgNeedStopThreadLoadMap = false;
+  //flgLoadMap               = true;
+  //mID_map = id_map;
+  //thread = g_thread_create(Thread, this, true, NULL);
 }
 //--------------------------------------------------------------------
-bool TManagerObjectCommon::IsLoadMap(unsigned char* procent)
+int TManagerObjectCommon::GetProgressLoadMap()
 {
-  if(flgLoadMap)
-  {
-    if(procent)
-      *procent = mProcentLoadMap;
-    return true;
-  }
-  return false;
-}
-//--------------------------------------------------------------------
-void TManagerObjectCommon::AddObject(IBaseObjectCommon* pObject)
-{
-  mVectorObject.push_back(pObject);
-  mMDX_Scene->AddObject(pObject);
-  mPrediction.AddObject(pObject);
-}
-//--------------------------------------------------------------------
-void TManagerObjectCommon::AddFromLoaderObjectInCommonList()
-{
-  int cnt = mLoaderObject.GetCountObject();
-  mVectorObject.reserve(cnt);
-  for(int i = 0 ; i < cnt ; i++ )
-  {
-    mVectorObject.push_back(mLoaderObject.Get(i));
-  }
-}
-//--------------------------------------------------------------------
-void TManagerObjectCommon::AddFromLoaderObjectInMDX()
-{
-  int cnt = mVectorObject.size();
-  for(int i = 0 ; i < cnt ; i++ )
-  {
-    mMDX_Scene->AddObject((IBaseObjectGE*)mVectorObject[i]);
-  }
-}
-//--------------------------------------------------------------------
-void TManagerObjectCommon::AddFromLoaderObjectInPrediction()
-{
-  int cnt = mVectorObject.size();
-  for(int i = 0 ; i < cnt ; i++ )
-  {
-    mPrediction.AddObject((IBaseObjectPrediction*)mVectorObject[i]);
-  }
+  return 100;
 }
 //--------------------------------------------------------------------
 void TManagerObjectCommon::Done()
 {
-  mMDX_Scene->Done();// отцепиться от WinApi и DirectX
-  ClearSceneVectorObject();
-  ClearProgressBarVectorObject();
+  Clear();
 }
 //--------------------------------------------------------------------
-void TManagerObjectCommon::ClearSceneVectorObject()
-{
-  mPrediction.Clear();
-  mMDX_Scene->Clear();
-  int cnt = mVectorObject.size();
-  for(int i = 0 ; i < cnt ; i++ )
-    mLoaderObject.Delete(mVectorObject[i]);
-
-  mVectorObject.clear();
-}
-//--------------------------------------------------------------------
-void TManagerObjectCommon::ClearProgressBarVectorObject()
-{
-  mProgressBar.Clear();
-}
-//--------------------------------------------------------------------
-void TManagerObjectCommon::Fresh()
-{
-  mLastTimeFreshData = ht_GetMSCount();
-}
-//--------------------------------------------------------------------
-void TManagerObjectCommon::SetCameraDelta(int x, int y)
-{
-
-  //mMDX_Scene->SetViewParams();
-}
-//--------------------------------------------------------------------
-IBaseObjectCommon* TManagerObjectCommon::Get(int index)
-{
-  IBaseObjectCommon* pObject = mVectorObject.at(index);
-  return pObject;
-}
-//--------------------------------------------------------------
-void TManagerObjectCommon::NotifyLoadMapEndEvent()
-{
-  mCallbackLoadMapEndEvent.Notify(NULL,0);
-}
-//--------------------------------------------------------------
-void TManagerObjectCommon::SetEffect(unsigned int id_effect, // номер эффекта
-               D3DVECTOR& coord,     // где
-               D3DVECTOR& orient,    // ориентация эффекта
-               guint32 time_past ) // прошло времени, мс
-{
-  mMDX_Scene->SetEffect(id_effect,coord,orient,time_past);
-}
-//--------------------------------------------------------------
 void TManagerObjectCommon::EndLoadMap()
 {
   GlobalLoggerMOC.WriteF_time("Загрузка карты завершена (поток Form).\n");
@@ -250,50 +118,23 @@ void TManagerObjectCommon::StopLoadMap()// синхронно, придется подождать маленьк
   flgNeedStopThreadLoadMap = true;
 }
 //-------------------------------------------------------------------------------------------------------------  
-void TManagerObjectCommon::Init(HWND hwnd)
+void TManagerObjectCommon::Init(IMakerObjectCommon* pMakerObjectCommon)
 {
-  mMDX_Scene->Init(hwnd);
+  mLoaderObject.SetMakerObjectCommon(pMakerObjectCommon);
 }
 //--------------------------------------------------------------------------------------------------------
-void TManagerObjectCommon::OnMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+void TManagerObjectCommon::Clear()
 {
+  int cnt = mVectorObject.size();
+  for(int i = 0 ; i < cnt ; i++ )
+    mLoaderObject.Delete(mVectorObject[i]);
 
+  mVectorObject.clear();
 }
 //--------------------------------------------------------------------------------------------------------
-void TManagerObjectCommon::OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
+IBaseObjectCommon* TManagerObjectCommon::CreateObject(unsigned int id_model)
 {
-
+  IBaseObjectCommon* pObject = mLoaderObject.LoadObject(id_model);
+  return pObject;
 }
 //--------------------------------------------------------------------------------------------------------
-void TManagerObjectCommon::SetWinApiEvent(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-  mFilter.WinApiEvent(&hWnd, &uMsg, &wParam, &lParam);
-}
-//--------------------------------------------------------------------------------------------------------
-void TManagerObjectCommon::HandleOnMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-  SetWinApiEvent(hWnd, uMsg, wParam, lParam);
-  OnMsg( hWnd, uMsg, wParam, lParam );
-  mManagerEventWinApi.Notify(hWnd, uMsg, wParam, lParam);
-}
-//--------------------------------------------------------------------------------------------------------
-void* TManagerObjectCommon::GetWndProc_GraphicEngine()
-{
-  return mMDX_Scene->GetWndProc();
-}
-//--------------------------------------------------------------------------------------------------------  
-bool TManagerObjectCommon::IsFullScreen()
-{
-  return mMDX_Scene->IsFullScreen();
-}
-//--------------------------------------------------------------------------------------------------------  
-void* TManagerObjectCommon::GetSurfaceCurrentFrame(int& w, int& h)// формат X8R8G8B8, может вернуть NULL
-{
-  return mMDX_Scene->GetSurfaceCurrentFrame(w,h);
-}
-//--------------------------------------------------------------------------------------------------------  
-void TManagerObjectCommon::EndSurfaceUse()
-{
-  mMDX_Scene->EndSurfaceUse();
-}
-//--------------------------------------------------------------------------------------------------------  

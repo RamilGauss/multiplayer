@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <QMessageBox>
 #include <QSettings>
 #include "ApplicationProtocolPacketAnswer.h"
-#include "ClientTank.h"
+#include "NET_LevelClientServer.h"
 
 //-------------------------------------------------------------------------------------------
 TClientMain::TClientMain(QWidget *parent)

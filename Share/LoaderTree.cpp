@@ -97,7 +97,7 @@ TTreeJoint::TLoadedJoint* TLoaderTree::TakeTree()
   return p;
 }
 //--------------------------------------------------------------------------------
-bool TLoaderTree::LoadMatrix4x4(const char* name,int num, TVector4_4/*D3DXMATRIXA16*/* pM)
+bool TLoaderTree::LoadMatrix4x4(const char* name,int num, TMatrix16/*D3DXMATRIXA16*/* pM)
 {
   CHECK_RET(mXML->EnterSection(name,num))
   for(int k = 0 ; k < 4 ; k++)
