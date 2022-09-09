@@ -43,6 +43,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BaseObjectDX.h"
 #include "BL_Debug.h"
 #include "SDKmisc.h"
+#include <DXGI.h>
 
 
 #define LOG_DX
@@ -53,7 +54,7 @@ using namespace nsStruct3D;
 
 #pragma warning(disable: 4355)
 
-TBigJack::TBigJack()//: mDXUT(this)
+TBigJack::TBigJack()
 {
   mTime_ms = 0;
 
@@ -65,6 +66,10 @@ TBigJack::TBigJack()//: mDXUT(this)
     mMainShaderStack.Push("Proj",(void*)mCamera.GetProjMatrix(),     sizeof(D3DXMATRIXA16));
   mIndexCameraPosition = 
     mMainShaderStack.Push("CameraPosition",(void*)mCamera.GetEyePt(),sizeof(D3DXMATRIXA16));
+
+  mSurfaceBackBuffer = NULL;
+  mSurfaceRender     = NULL;
+
 }
 //--------------------------------------------------------------------------------------------------------
 TBigJack::~TBigJack()
@@ -82,6 +87,10 @@ void TBigJack::Optimize()
 
 }
 //--------------------------------------------------------------------------------------------------------
+#if 1
+  static IDirect3DSurface9* pSurfaceSrc = NULL;
+  static IDirect3DSurface9 *pSurfaceRender = NULL;
+#endif
 void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
 {
   HRESULT hr;
@@ -104,6 +113,11 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
 
     mViewerFPS.Render(mDXUT->GetFPS());
     V( pd3dDevice->EndScene() );
+
+    //int w,h;
+    //OnLostDevice_Surface();
+    //OnResetDevice_Surface(pd3dDevice);
+    //GetSurfaceCurrentFrame(w,h);
   }
 }
 //--------------------------------------------------------------------------------------------------------
@@ -270,6 +284,9 @@ HRESULT TBigJack::OnResetDevice( IDirect3DDevice9* pd3dDevice,
   mCamera.SetProjParams( D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f );
 
   mCamera.SetWindow( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
+
+  OnResetDevice_Surface(pd3dDevice);
+
   return S_OK;
 }
 //--------------------------------------------------------------------------------------
@@ -303,6 +320,7 @@ void TBigJack::OnLostDevice( void* pUserContext )
   mManagerModelDX.LostDevice();
   mManagerResourceDX.Lost();
   mViewerFPS.Lost();
+  OnLostDevice_Surface();
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::OnDestroyDevice( void* pUserContext )
@@ -448,5 +466,85 @@ void TBigJack::MakeVectorOnRender()
   mListReadyRender.insert(mListReadyRender.end(),
                           mListTransparencyObject.begin(),
                           mListTransparencyObject.end());
+}
+//--------------------------------------------------------------------------------------
+void* TBigJack::GetSurfaceCurrentFrame(int& w, int& h)
+{
+  HRESULT hr;
+  guint32 start = ht_GetMSCount();
+  V(D3DXLoadSurfaceFromSurface(
+      mSurfaceRender,
+      NULL,
+      NULL,
+      mSurfaceBackBuffer,
+      NULL,
+      NULL,
+      D3DX_FILTER_NONE,
+      0))
+
+  start = ht_GetMSCount()-start;
+
+  D3DSURFACE_DESC surfaceDesc; 
+  mSurfaceRender->GetDesc(&surfaceDesc); 
+
+  w = surfaceDesc.Width; 
+  h = surfaceDesc.Height;
+
+  D3DLOCKED_RECT lockedRect; 
+  V(mSurfaceRender->LockRect(
+    &lockedRect,   // pointer to receive locked data 
+    0,             // lock entire surface 
+    0))            // no lock flags specified 
+
+  return lockedRect.pBits;
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::EndSurfaceUse()
+{
+  mSurfaceRender->UnlockRect();
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::GetResolutionFrame(int& h, int& w )// формат X8R8G8B8
+{
+
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::SetResolutionFrame(int  h, int  w )// формат X8R8G8B8
+{
+
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::OnLostDevice_Surface()
+{
+  SAFE_RELEASE(mSurfaceBackBuffer);
+  SAFE_RELEASE(mSurfaceRender);
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::OnResetDevice_Surface(IDirect3DDevice9 *pd3dDevice)
+{
+  HRESULT hr;
+  if(SUCCEEDED(pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &mSurfaceBackBuffer))) 
+  {
+    D3DSURFACE_DESC surfaceDesc; 
+    mSurfaceBackBuffer->GetDesc(&surfaceDesc); 
+
+    V ( pd3dDevice->CreateOffscreenPlainSurface(
+      surfaceDesc.Width,
+      surfaceDesc.Height,
+      surfaceDesc.Format,
+      surfaceDesc.Pool,
+      &mSurfaceRender,
+      NULL
+      ))
+
+
+    //V(pd3dDevice->CreateRenderTarget(surfaceDesc.Width, surfaceDesc.Height,
+    //  surfaceDesc.Format,surfaceDesc.MultiSampleType,surfaceDesc.MultiSampleQuality,
+    //  false,
+    //  &mSurfaceRender,
+    //  NULL))
+  }
+  else
+    BL_FIX_BUG();
 }
 //--------------------------------------------------------------------------------------

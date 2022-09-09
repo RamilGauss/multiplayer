@@ -248,6 +248,9 @@ protected:
         bool m_ReleasingSwapChain;		  // if true, the app is releasing its swapchain
         bool m_IsInGammaCorrectMode;		// Tell DXUTRes and DXUTMisc that we are in gamma correct mode
 
+        // Gauss 06.11.2012
+        bool m_DoPresentRender;// показать результат рендеринга / show result of rendering
+
         LPDXUTCALLBACKMODIFYDEVICESETTINGS m_ModifyDeviceSettingsFunc; // modify Direct3D device settings callback
         LPDXUTCALLBACKDEVICEREMOVED m_DeviceRemovedFunc;        // Direct3D device removed callback
         LPDXUTCALLBACKFRAMEMOVE m_FrameMoveFunc;            // frame move callback
@@ -349,6 +352,8 @@ public:
         m_state.m_CounterData.fPSComputationLimited = -1.0f;
         m_state.m_CounterData.fPostTransformCacheHitRate = -1.0f;
         m_state.m_CounterData.fTextureCacheHitRate = -1.0f;
+
+        m_state.m_DoPresentRender = true;
     }
 
     void Destroy()
@@ -3285,28 +3290,28 @@ void DXUTRender3DEnvironment9()
         hr = pd3dDevice->Present( NULL, NULL, NULL, NULL );
         if( FAILED( hr ) )
         {
-            if( D3DERR_DEVICELOST == hr )
-            {
-                GetDXUTState().SetDeviceLost( true );
-            }
-            else if( D3DERR_DRIVERINTERNALERROR == hr )
-            {
-                // When D3DERR_DRIVERINTERNALERROR is returned from Present(),
-                // the application can do one of the following:
-                // 
-                // - End, with the pop-up window saying that the application cannot continue 
-                //   because of problems in the display adapter and that the user should 
-                //   contact the adapter manufacturer.
-                //
-                // - Attempt to restart by calling IDirect3DDevice9::Reset, which is essentially the same 
-                //   path as recovering from a lost device. If IDirect3DDevice9::Reset fails with 
-                //   D3DERR_DRIVERINTERNALERROR, the application should end immediately with the message 
-                //   that the user should contact the adapter manufacturer.
-                // 
-                // The framework attempts the path of resetting the device
-                // 
-                GetDXUTState().SetDeviceLost( true );
-            }
+          if( D3DERR_DEVICELOST == hr )
+          {
+            GetDXUTState().SetDeviceLost( true );
+          }
+          else if( D3DERR_DRIVERINTERNALERROR == hr )
+          {
+            // When D3DERR_DRIVERINTERNALERROR is returned from Present(),
+            // the application can do one of the following:
+            // 
+            // - End, with the pop-up window saying that the application cannot continue 
+            //   because of problems in the display adapter and that the user should 
+            //   contact the adapter manufacturer.
+            //
+            // - Attempt to restart by calling IDirect3DDevice9::Reset, which is essentially the same 
+            //   path as recovering from a lost device. If IDirect3DDevice9::Reset fails with 
+            //   D3DERR_DRIVERINTERNALERROR, the application should end immediately with the message 
+            //   that the user should contact the adapter manufacturer.
+            // 
+            // The framework attempts the path of resetting the device
+            // 
+            GetDXUTState().SetDeviceLost( true );
+          }
         }
     }
 
@@ -6926,13 +6931,12 @@ LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam,
     {
       switch( wParam )
       {
-        // Gauss ### 29.08.2012
-        //case VK_ESCAPE:
-        //{
-        //  if( GetDXUTState().GetHandleEscape() )
-        //    SendMessage( hWnd, WM_CLOSE, 0, 0 );
-        //  break;
-        //}
+        case VK_ESCAPE:
+        {
+          if( GetDXUTState().GetHandleEscape() )
+            SendMessage( hWnd, WM_CLOSE, 0, 0 );
+          break;
+        }
         case VK_PAUSE:
         {
           if( GetDXUTState().GetHandlePause() )
@@ -6982,10 +6986,5 @@ LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam,
 void* WINAPI DXUTGetStaticWndProc()
 {
   return DXUTStaticWndProc_Changed;
-}
-//----------------------------------------------------------------------------------------------------
-void WINAPI DXUTSetCallDefWindowProc(bool v)
-{
-  GetDXUTState().SetCallDefWindowProc(v);
 }
 //----------------------------------------------------------------------------------------------------

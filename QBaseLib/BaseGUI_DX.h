@@ -69,7 +69,7 @@ protected:
 
   virtual void RenderChild();
 
-  void SaveRender();
+  void RenderDX_Qt();
 
 protected slots:
   void sl_Rendering();

@@ -80,6 +80,10 @@ public:
   virtual void Init(HWND hwnd = NULL) = 0;
   virtual void Work(guint32 time_ms) = 0;
   virtual void Done() = 0;
+  virtual void* GetSurfaceCurrentFrame(int& w, int& h) = 0;// формат X8R8G8B8, может вернуть NULL
+  virtual void  EndSurfaceUse() = 0;
+  virtual void  GetResolutionFrame(int& h, int& w ) = 0;// формат X8R8G8B8
+  virtual void  SetResolutionFrame(int  h, int  w ) = 0;// формат X8R8G8B8
   //------------------------------------------------------------------------
   virtual void AddObject(TBaseObjectDX* pObject) = 0;
   virtual void Clear() = 0;

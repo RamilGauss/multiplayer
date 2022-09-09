@@ -80,6 +80,8 @@ TManagerObjectCommon::TManagerObjectCommon()
   mMDX_Scene = makerScene.New();
   mMDX_Scene->Register(CallBackMsg,IGraphicEngine::eTypeMsg);
   mMDX_Scene->Register(CallBackFrameMove,IGraphicEngine::eTypeFrameMove);
+
+  //mMDX_Scene->SetShowPresentRender(false);
 }
 //--------------------------------------------------------------------
 TManagerObjectCommon::~TManagerObjectCommon()
@@ -284,5 +286,15 @@ void* TManagerObjectCommon::GetWndProc_GraphicEngine()
 bool TManagerObjectCommon::IsFullScreen()
 {
   return mMDX_Scene->IsFullScreen();
+}
+//--------------------------------------------------------------------------------------------------------  
+void* TManagerObjectCommon::GetSurfaceCurrentFrame(int& w, int& h)// формат X8R8G8B8, может вернуть NULL
+{
+  return mMDX_Scene->GetSurfaceCurrentFrame(w,h);
+}
+//--------------------------------------------------------------------------------------------------------  
+void TManagerObjectCommon::EndSurfaceUse()
+{
+  mMDX_Scene->EndSurfaceUse();
 }
 //--------------------------------------------------------------------------------------------------------  

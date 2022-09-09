@@ -98,6 +98,10 @@ public:
   virtual void Work() = 0;
   void Done();
 
+  void* GetSurfaceCurrentFrame(int& w, int& h);// формат X8R8G8B8, может вернуть NULL
+  void  EndSurfaceUse();
+
+
   // какие-то данные
   virtual void Translate(unsigned short type, char*pData, int size){};
   // в наследуемом классе добавятся методы для управления - например через сеть или чтение реплея и воспроизведение боя

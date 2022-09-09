@@ -341,7 +341,6 @@ HRESULT   WINAPI DXUTCreateState(); // Optional method to create DXUT's memory. 
 void      WINAPI DXUTDestroyState(); // Optional method to destroy DXUT's memory.  If its not called by the application it will be automatically called after the application exits WinMain 
 // Gauss 1.11.2012
 void* WINAPI DXUTGetStaticWndProc();
-void  WINAPI DXUTSetCallDefWindowProc(bool v);
 //--------------------------------------------------------------------------------------
 // DXUT core layer includes
 //--------------------------------------------------------------------------------------

@@ -255,7 +255,7 @@ HRESULT TDXUT::Init(HWND hwnd )
   DXUTSetCursorSettings( true, true );
 
   if(FAILED(DXUTInit( true, true ))) return false; // Parse the command line and show msgboxes
-  DXUTSetHotkeyHandling( true, true, true );  // handle the defaul hotkeys
+  DXUTSetHotkeyHandling( true, false, false );  // handle the defaul hotkeys
   
   if(hwnd==NULL)
     V_RETURN(DXUTCreateWindow( L"TDXUT" ))

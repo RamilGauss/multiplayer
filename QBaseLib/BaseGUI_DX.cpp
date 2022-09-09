@@ -40,6 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BaseGUI_DX.h"
 #include "ManagerObjectCommon.h"
 #include "Logger.h"
+#include "HiTimer.h"
 
 static TBaseGUI_DX* PtrBaseGUI_DX = NULL;
 typedef LRESULT (CALLBACK *DeclWndProc)(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -68,8 +69,10 @@ TBaseGUI_DX::TBaseGUI_DX( QWidget* pParent)
   //###
   pWndProcGUI = NULL;
   //setMinimumSize( 400, 400); 
-  setAttribute( Qt::WA_OpaquePaintEvent, true);  
-  setAttribute( Qt::WA_PaintOnScreen, true); 
+  //setAttribute( Qt::WA_OpaquePaintEvent, true);  
+  //setAttribute( Qt::WA_PaintOnScreen, true); 
+  //setAttribute( Qt::WA_PaintOnScreen); 
+  //setAttribute( Qt::WA_NoSystemBackground);
 
   setMouseTracking(true);
 
@@ -115,14 +118,15 @@ void TBaseGUI_DX::sl_Rendering()
     GlobalLoggerForm.WriteF_time("toggle in full screen 1, state=0x%X\n",windowState());
     GlobalLoggerForm.WriteF("--------------------------------------------------\n");
   }*/
+  //guint32 start = ht_GetMSCount();
 
   pGame->Work();
   
-  //SetBITForQt();
-  SaveRender();
+  //RenderDX_Qt();
+  //start = ht_GetMSCount() - start;
+
   // перерисовать всех детей
-  RenderChild();
-  //repaint();
+  //RenderChild();
 
   //SetBITForQt();
 }
@@ -164,7 +168,9 @@ void* TBaseGUI_DX::WndProc( void* phWnd, void* puMsg, void* pwParam, void* plPar
   //###
 
   resultGE = pWndProcGraphicEngine(hWnd, uMsg, wParam, lParam);
-  resultGUI = pWndProcGUI(hWnd, uMsg, wParam, lParam);
+  //resultGUI = pWndProcGUI(hWnd, uMsg, wParam, lParam);
+
+  //RenderChild();//###
 
   return (void*)resultGE;
 }
@@ -191,11 +197,19 @@ void TBaseGUI_DX::RenderChild()
 
 }
 //---------------------------------------------------------------------------------------------
-void TBaseGUI_DX::SaveRender()
+void TBaseGUI_DX::RenderDX_Qt()
 {
-  QPixmap pixmap(size());
-  QPainter painter(&pixmap);
-  render(&painter);
-  //bool resSave = pixmap.save(tr("D:\\Hahaha.jpeg"));
+  int w,h;
+  void* pFrame = pGame->GetSurfaceCurrentFrame(w,h);
+  if(pFrame)
+  {
+    QImage image((uchar*)pFrame,w,h,QImage::Format_ARGB32);
+    image.save(tr("D:\\Hahaha.jpeg"));
+    pGame->EndSurfaceUse();
+
+    QPainter painter(this);
+    painter.drawImage(0,0,image);
+    painter.end();
+  }
 }
 //--------------------------------------------------------------------------------------

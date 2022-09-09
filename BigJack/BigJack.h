@@ -65,9 +65,9 @@ class TBaseObjectDX;
 class TBigJack : public IGraphicEngine
 {
 protected:
+  IDirect3DSurface9* mSurfaceBackBuffer;
+  IDirect3DSurface9* mSurfaceRender;
 
-  //TDXUT mDXUT;
-  //IDirectX_Realize* mDXUT;
 
   TManagerResourceDX mManagerResourceDX;
   TManagerModelDX mManagerModelDX;
@@ -109,6 +109,12 @@ public:
   virtual void Init(HWND hwnd = NULL);
   virtual void Work(guint32 time_ms);
   virtual void Done();
+  
+  virtual void* GetSurfaceCurrentFrame(int& w, int& h);// формат X8R8G8B8, может вернуть NULL
+  virtual void  EndSurfaceUse();
+
+  virtual void  GetResolutionFrame(int& h, int& w );// формат X8R8G8B8
+  virtual void  SetResolutionFrame(int  h, int  w );// формат X8R8G8B8
   //------------------------------------------------------------------------
   virtual void AddObject(TBaseObjectDX* pObject);
   virtual void Clear();
@@ -169,6 +175,11 @@ protected:
 
 
   void SetCommonShaderStack();
+
+
+  void OnLostDevice_Surface();
+  void OnResetDevice_Surface(IDirect3DDevice9 *pd3dDevice);
+
 
 };
 
