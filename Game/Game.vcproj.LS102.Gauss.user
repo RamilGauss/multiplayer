@@ -11,7 +11,7 @@
 			<DebugSettings
 				Command="$(TargetPath)"
 				WorkingDirectory=""
-				CommandArguments="-con ../DeveloperToolDLL/TestTask.dll &quot;ip=192.168.23.226, port=1000&quot;"
+				CommandArguments="-con ../DeveloperToolDLL/ViewerModel.dll &quot;ip=192.168.23.226, port=1000&quot;"
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"

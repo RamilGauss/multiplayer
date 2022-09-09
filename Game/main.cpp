@@ -188,6 +188,7 @@ bool GetArgvArgcConsole(int argc, char** argv, TVectorStr& vec_argv)
 {
   for(int i = 0 ; i < argv ; i++)
     vec_argv.push_back(string(argv[i]));
+  return bool(argv>0);
 }
 #endif
 //-------------------------------------------------------------------------------
