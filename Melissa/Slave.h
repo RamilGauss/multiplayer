@@ -33,63 +33,29 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#ifndef MELISSA_SLAVE_H
+#define MELISSA_SLAVE_H
 
-#ifndef INET_TransportH
-#define INET_TransportH
+#include "ActiveServer.h"
 
-#include "CallBackRegistrator.h"
-#include "UdpDevice.h"
-#include "glib/gthread.h"
-#include "TransportProtocolPacket.h"
-#include "hArray.h"
-#include "GCS.h"
-#include "BL_Debug.h"
-
-// Melissa - транспорт
-class INET_Transport
+namespace nsMelissa
 {
-public:
-  //типы callback вызовов
-  enum{
-    eRcvPacket  = 0,		   
-    eRcvStream  = 1,
-    eDisconnect = 2,
+  class MELISSA_EI TSlave : public TActiveServer
+  {
+
+  public:
+    TSlave();
+    virtual ~TSlave();
+    
+    virtual void SaveContext(void* data, int size);
+    virtual unsigned int GetClientKeyBySession(ISession* pSession);
+    virtual ISession* GetSessionByClientKey(unsigned int key);
+
+	protected:
+
+	private:
+
   };
-
-	struct InfoData
-	{
-		unsigned int   ip_dst;     
-		unsigned short port_dst;   
-		unsigned int   ip_src;     
-		unsigned short port_src;   
-		void*          packet;
-		int            size;
-    InfoData(){size=0;packet = NULL;}
-    ~InfoData(){}
-	};
-
-	enum{eWaitSynchro=5,// сек
-  };
-
-
-  INET_Transport(char* pPathLog=NULL){};
-  virtual ~INET_Transport(){};
-	virtual void InitLog(char* pPathLog) = 0;
-
-  virtual bool Open(unsigned short port,int numNetWork=0) = 0;
-
-	virtual void Write(InfoData* data, bool check = true, bool add_in_queque = true) = 0;
-
-	// чтение - зарегистрируйся
-  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
-  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
-
-	virtual void Start() = 0;// для активной работы
-	virtual void Stop()  = 0;
-
-  // синхронная функция
-  virtual bool Synchro(unsigned int ip, unsigned short port) = 0; // вызов только для клиента
-};
-
+}
 
 #endif

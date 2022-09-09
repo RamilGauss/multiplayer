@@ -71,7 +71,7 @@ void TManagerTime::SetTimeStamp(int stamp)
 
 }
 //------------------------------------------------------------------------
-guint32 TManagerTime::GetTime()
+unsigned int TManagerTime::GetTime()
 {
   return 0;
 }

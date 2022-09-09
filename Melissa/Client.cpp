@@ -33,33 +33,23 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_ICLIENT_H
-#define MELISSA_ICLIENT_H
-
-#include "IBase.h"
+#include "Client.h"
 
 namespace nsMelissa
 {
-  class /*MELISSA_EI*/ IClient : public IBase
-  {
+TClient::TClient()
+{
 
-  public:
-    typedef enum 
-    {
-      eConnect, 
-      eDisconnect, 
-      eRecv,
-    }eTypeEvent;
-
-    IClient(){}
-    virtual ~IClient(){}
-
-    virtual bool Init(const char* sPathDLL, unsigned int numSubNet, unsigned short port) = 0;
-    // async
-    virtual void Connect(unsigned int ip, unsigned short port) = 0;
-    virtual void Disconnect() = 0;
-    virtual void Send(void* p, int size) = 0;
-  };
 }
+//-------------------------------------------------------------------------
+TClient::~TClient()
+{
 
-#endif
+}
+//-------------------------------------------------------------------------
+void TClient::Login(unsigned int ip, unsigned short port, void* data, int size)
+{
+
+}
+//-------------------------------------------------------------------------
+}

@@ -92,7 +92,7 @@ void TTankTower::SetMirror(char *pData,int size)
 
 }
 //-----------------------------------------------------------------------
-bool TTankTower::Animate(guint32 time_ms)
+bool TTankTower::Animate(unsigned int time_ms)
 {
   RotateTurret(M_PI/4.1f);
   RotateVerticalGun(-0.2f);

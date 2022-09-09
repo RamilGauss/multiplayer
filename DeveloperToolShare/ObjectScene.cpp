@@ -53,7 +53,7 @@ void TObjectScene::SetMirror(char *pData,int size)
 {
 }
 //-----------------------------------------------------------------------
-bool TObjectScene::Animate(guint32 time_ms)
+bool TObjectScene::Animate(unsigned int time_ms)
 {
   return true;
 }

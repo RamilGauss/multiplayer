@@ -33,40 +33,30 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "BasePacketAppl.h"
+#ifndef WRAPPER_TRANSPORT_H
+#define WRAPPER_TRANSPORT_H
 
-TBasePacketAppl::TBasePacketAppl()
+#include "..\Melissa\ITransport.h"
+
+class TWrapperTransport : public nsMelissa::ITransport
 {
 
-}
-//---------------------------------------------------------------------
-TBasePacketAppl::~TBasePacketAppl()
-{
+public:
+	TWrapperTransport();
+	virtual ~TWrapperTransport();
+	//типы callback вызовов
+	virtual void InitLog(char* pPathLog);
+	virtual bool Open(unsigned char subNet, unsigned short port );
+	virtual void Write(unsigned int ip, unsigned short port, void* packet, int size, bool check = true);
+	virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type);
+	virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type);
+	virtual void Start();
+	virtual void Stop();
+	virtual bool Synchro(unsigned int ip, unsigned short port); // вызов только для клиента
 
-}
-//---------------------------------------------------------------------
-bool TBasePacketAppl::Set(void* p, int size)
-{
-  return mC.Set(p,size);
-}
-//---------------------------------------------------------------------
-void* TBasePacketAppl::Get(int &size)
-{
-  size = mC.GetSize();
-  return mC.GetPtr();
-}
-//---------------------------------------------------------------------
+protected:
+private:
 
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
+#endif

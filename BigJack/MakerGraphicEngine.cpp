@@ -36,4 +36,4 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MakerGraphicEngine.h"
 #include "BigJack.h"
 
-MACRO_MAKER_CPP_USE_P(GraphicEngine,TBigJack,ICamera* pCamera,pCamera)
+MACRO_MAKER_CPP_USE_P_SAME(GraphicEngine,BigJack,ICamera* pCamera,pCamera)

@@ -51,7 +51,7 @@ public:
   virtual void SetTimeToEnd() = 0;
   virtual int  GetCountTimeStamp() = 0;
   virtual void SetTimeStamp(int stamp) = 0;
-  virtual guint32 GetTime() = 0;
+  virtual unsigned int GetTime() = 0;
 
 };
 

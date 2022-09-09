@@ -47,33 +47,33 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 bool GBASELIB_EI ht_Init();
 
 // Получение тиков процессора (с тактовой частотой процессора)
-guint64 GBASELIB_EI ht_GetTickCount();
+unsigned __int64 GBASELIB_EI ht_GetTickCount();
 
 // Задержка на микросекунды
-void GBASELIB_EI ht_usleep( guint32 us );
+void GBASELIB_EI ht_usleep( unsigned int us );
 
 // Задержка на миллисекунды
-void GBASELIB_EI ht_msleep( guint32 ms );
+void GBASELIB_EI ht_msleep( unsigned int ms );
 
 // Задержка на микросекунды c дополнительной проверкой состояния
 // Результат: true - выход по результату func, false - выход по таймауту
 typedef bool (*THT_CheckFunc)(void);
-bool GBASELIB_EI ht_sleep( guint32 us, THT_CheckFunc func );
+bool GBASELIB_EI ht_sleep( unsigned int us, THT_CheckFunc func );
 
 // Перевод микросекунд в тики
-guint64 GBASELIB_EI ht_us2tick( guint32 us );
+unsigned __int64 GBASELIB_EI ht_us2tick( unsigned int us );
 
 // Перевод тиков в микросекунд
-guint32 GBASELIB_EI ht_tick2us( guint64 tick );
+unsigned int GBASELIB_EI ht_tick2us( unsigned __int64 tick );
 
 // Получение тиков процессора пересчитанных в микросекунды
-inline guint32 ht_GetUSCount()
+inline unsigned int ht_GetUSCount()
 {
   return ht_tick2us( ht_GetTickCount() );
 }
 // Время в миллисекундах с момента запуска ЭВМ или программы.
 // Точность от 55 мсек и выше
-guint32 GBASELIB_EI ht_GetMSCount();
+unsigned int GBASELIB_EI ht_GetMSCount();
 //------------------------------------------------------------------------------
 #if !defined(MS2US)
   // Перевести миллисекунды в микросекунды

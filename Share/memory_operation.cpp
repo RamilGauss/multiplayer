@@ -40,6 +40,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 void* mo_realloc(void* old_mem, int old_size, int new_size)
 {
+	BL_ASSERT(new_size>=0);
   if(old_size)
   {
     void* volatileBuffer = malloc(old_size);
@@ -57,7 +58,7 @@ void* mo_realloc(void* old_mem, int old_size, int new_size)
 //--------------------------------------------------------------------------
 char* mo_realloc_bound(char* old_mem, int old_size, int size_bound, int size_paste)
 {
-  BL_ASSERT(old_size==0);
+  BL_ASSERT(old_size!=0);
 
   char* new_mem = (char*)malloc(old_size+size_paste);
   memcpy(new_mem, old_mem,size_bound);
@@ -69,6 +70,8 @@ char* mo_realloc_bound(char* old_mem, int old_size, int size_bound, int size_pas
 //--------------------------------------------------------------------------
 void* mo_realloc_new(void* old_mem, int old_size, int new_size)
 {
+	BL_ASSERT(new_size>=0);
+
   if(old_size)
   {
     void* volatileBuffer = new char[old_size];
@@ -86,7 +89,7 @@ void* mo_realloc_new(void* old_mem, int old_size, int new_size)
 //--------------------------------------------------------------------------
 char* mo_realloc_bound_new(char* old_mem, int old_size, int size_bound, int size_paste)
 {
-  BL_ASSERT(old_size==0);
+  BL_ASSERT(old_size!=0);
 
   char* new_mem = new char[old_size+size_paste];
   memcpy(new_mem, old_mem,size_bound);

@@ -33,36 +33,57 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "MelissaMaker.h"
-#include <stddef.h>
+#include "Master.h"
 
-using namespace nsMelissa;
+namespace nsMelissa
+{
 
-IClient* GetClient()
+TMaster::TMaster()
 {
-  return NULL;
+
 }
-//-------------------------------------------------------------------------------
-IServer* GetServer(TypeServer type, const char* sPathDLL)
+//-------------------------------------------------------------------------
+TMaster::~TMaster()
 {
-  switch(type)
-  {
-    case eSlave:
-      break;
-    case eSlaveMaster:
-      break;
-    case eMaster:
-      break;
-    case eMasterSuperServer:
-      break;
-    case eSuperServer:
-      break;
-  }
-  return NULL;
+
 }
-//-------------------------------------------------------------------------------
-void Free(IBase* p)
+//-------------------------------------------------------------------------
+unsigned int TMaster::TryCreateGroup(std::list<unsigned int>& l)
 {
-  delete p;
+	return (unsigned int)(-1);
 }
-//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+void TMaster::DestroyGroup(unsigned int id_group)
+{
+
+}
+//-------------------------------------------------------------------------
+void TMaster::LeaveGroup(unsigned int id_client)
+{
+
+}
+//-------------------------------------------------------------------------
+void TMaster::GetListForGroup(unsigned int id_group, std::list<unsigned int>& l)
+{
+
+}
+//-------------------------------------------------------------------------
+void TMaster::SetResultLogin(bool res, ISession* pSession, 
+                    unsigned int id_client, 
+                    void* resForClient, int sizeResClient)
+{
+
+}
+//-------------------------------------------------------------------------
+ISession* TMaster::GetSlaveByClient(unsigned int id_client)
+{
+	return NULL;
+}
+//-------------------------------------------------------------------------
+ISession* TMaster::GetSlaveByGroup(unsigned int id_group)
+{
+	return NULL;
+}
+//-------------------------------------------------------------------------
+}
+

@@ -38,5 +38,5 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "GUI_Class.h"
 
 
-MACRO_MAKER_CPP_USE(GUI,TGUI_Class)
+MACRO_MAKER_CPP_USE_SAME(GUI,GUI_Class)
 

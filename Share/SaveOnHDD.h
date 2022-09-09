@@ -44,9 +44,14 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <list>
 #include "Container.h"
 
+/*
+  Сохранение файла. 
+  Вывод в консоль.
+  Буферизация при отсутствии открытого файла.
+*/
+
 class SHARE_EI TSaveOnHDD
 {
-
 	char sPath[260];
 
 	FILE* pFile;
@@ -64,11 +69,13 @@ public:
 	TSaveOnHDD(char* path = NULL);
 	virtual ~TSaveOnHDD();
 
+  // в случае append==false - стирает содержимое файла
 	virtual bool ReOpen(char* path, bool append = false );
 
 	virtual bool IsOpen();
 
 	virtual void Write(void* buffer, int size);
+  // форматированная строка, по типу printf(...)
   virtual void WriteF(const char* format, ... );
   virtual void WriteF_time(const char* format, ... );
 

@@ -40,6 +40,15 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "MacroMaker.h"
 
-MACRO_MAKER_H_EXPORT_USE(SHARE_EI,XML);
+//MACRO_MAKER_H_EXPORT_USE_SAME(SHARE_EI,XML);
+
+class IXML;
+class SHARE_EI TMakerXML
+{
+public:
+	IXML* New();
+	void Delete(IXML*);
+};
+
 
 #endif

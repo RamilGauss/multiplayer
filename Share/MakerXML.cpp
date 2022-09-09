@@ -36,5 +36,4 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MakerXML.h"
 #include "XML_Markup.h"
 
-MACRO_MAKER_CPP_USE(XML,TXML_Markup);
-
+MACRO_MAKER_CPP_USE_SAME(XML,XML_Markup);

@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MacroMaker.h"
 #include "TypeDef.h"
 
-MACRO_MAKER_H_EXPORT_USE(SHARE_EI,Camera)
+MACRO_MAKER_H_EXPORT_USE_SAME(SHARE_EI,Camera)
 
 #endif
 

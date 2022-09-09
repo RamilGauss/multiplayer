@@ -40,6 +40,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <stddef.h>
 #include "MacroMaker.h"
 
-MACRO_MAKER_H_USE_P(DirectX_Realize,void* userData = NULL)
+MACRO_MAKER_H_USE_P_SAME(DirectX_Realize, void* userData = NULL)
 
 #endif

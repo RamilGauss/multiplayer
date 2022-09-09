@@ -60,7 +60,7 @@ class TMultiThreadQueue
   //---------------------------------------------------------------------------
   struct TElem
   {
-    guint32 time_ms;
+    unsigned int time_ms;
 
     void* pData;
     int   size;
@@ -96,7 +96,7 @@ public:
 			CurrentQueueSize = 0;
 		};
 
-		~TMultiThreadQueue()
+		virtual ~TMultiThreadQueue()
 		{
        Clear();
     };
@@ -115,7 +115,7 @@ public:
       return true;
     }
 		//Извлечь элемент из очереди
-		bool Pop(void* buffer,int &size, guint32& time_ms)
+		bool Pop(void* buffer,int &size, unsigned int& time_ms)
     {
       if(CurrentQueueSize == 0) 
         return false;
@@ -130,7 +130,7 @@ public:
       return true;
     }
     //Извлечь самый последний элемент из очереди
-    bool PopFresh(void* buffer,int &size, guint32 &time_ms)
+    bool PopFresh(void* buffer,int &size, unsigned int &time_ms)
     {
       if(CurrentQueueSize == 0) 
         return false;

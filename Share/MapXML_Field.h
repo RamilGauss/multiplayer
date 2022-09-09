@@ -57,10 +57,12 @@ class SHARE_EI TMapXML_Field
 public:
 
   TMapXML_Field();
-  ~TMapXML_Field();
+  virtual ~TMapXML_Field();
   
+  // зугрузить XML
   bool Load(const char* sAbsPath);
 
+  // вернуть по ключу значение 
 	const char* GetSecond(const char* name, unsigned int index = 0);
   unsigned int GetCount(const char* name);
 

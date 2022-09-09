@@ -141,13 +141,13 @@ bool TClientGame::Init(const char* sNameDLL, const char* arg)
   TMakerGraphicEngine makerGraphicEngine;
   mCClient.mGraphicEngine = makerGraphicEngine.New(mCClient.mControlCamera);
   mCClient.mGraphicEngine->Init();// создали окно
-  mCClient.mGraphicEngine->SetSelfName(ID_SRC_EVENT_GRAPHIC_ENGINE);
+  mCClient.mGraphicEngine->SetSelfID(ID_SRC_EVENT_GRAPHIC_ENGINE);
   mCClient.mGraphicEngine->SetDstObject(this);
   mCClient.mGraphicEngine->SetTitleWindow(mClientDeveloperTool->GetTitleWindow().data());
   //------------------------------------------
   TMakerPhysicEngine makerPhysicEngine;
   mCClient.mPhysicEngine = makerPhysicEngine.New();
-  mCClient.mPhysicEngine->SetSelfName(ID_SRC_EVENT_PHYSIC_ENGINE);
+  mCClient.mPhysicEngine->SetSelfID(ID_SRC_EVENT_PHYSIC_ENGINE);
   mCClient.mPhysicEngine->SetDstObject(this);
   //------------------------------------------
   TMakerManagerStateMachine makerMStateManager;
@@ -156,13 +156,13 @@ bool TClientGame::Init(const char* sNameDLL, const char* arg)
   //TMakerNET_Engine makerNET;
   //mNET = makerNET.New();
   //mNET->Init();// создали окно
-  //mNET->SetSelfName(STR_SRC_EVENT_GRAPHIC_ENGINE);
+  //mNET->SetSelfID(STR_SRC_EVENT_GRAPHIC_ENGINE);
   //mNET->SetDstObject(this);
   //------------------------------------------
   TMakerManagerObjectCommon makerMOC;
   mCClient.mMOC = makerMOC.New();
   mCClient.mMOC->Init(pMakerObjectCommon);
-  mCClient.mMOC->SetSelfName(ID_SRC_EVENT_MANAGER_OBJECT_COMMON);
+  mCClient.mMOC->SetSelfID(ID_SRC_EVENT_MANAGER_OBJECT_COMMON);
   mCClient.mMOC->SetDstObject(this);
   //------------------------------------------
   TMakerManagerTime makerMTime;

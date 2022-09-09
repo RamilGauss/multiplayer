@@ -53,7 +53,7 @@ void TObjectLight::SetMirror(char *pData,int size)
 {
 }
 //-----------------------------------------------------------------------
-bool TObjectLight::Animate(guint32 time_ms)
+bool TObjectLight::Animate(unsigned int time_ms)
 {
   return true;
 }

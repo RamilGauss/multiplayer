@@ -35,8 +35,10 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 
 #include <stdio.h>
-#include "BL_AppFile.h"
+#include <string>
+using namespace std;
 
+#include "BL_AppFile.h"
 //------------------------------------------------------------------------------
 #if defined(_WIN32)//-----------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -50,6 +52,26 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 	#pragma link "shlwapi.lib"     
 #endif
 static FILE* ferr;
+
+//-----------------------------------------------------------------------------
+// Сообщение об ошибке зафиксированной в теле программы
+// lpszMsg - текст сообщения
+// вернет реакцию пользователя на сообщение - OK - true, Cancel - false
+//******************************************************************************
+bool BL_MessageBug( const char* lpszMsg )
+{
+  std::string text;
+  text = lpszMsg;
+  char caption[MAX_PATH];
+  if( ::GetModuleFileNameA( NULL, caption, MAX_PATH ) )
+    PathStripPathA( caption );
+  else
+    lstrcpy( caption, "Зафиксирован сбой" );
+
+  if( ::MessageBoxA( NULL, text.data(), caption, MB_OKCANCEL | MB_SYSTEMMODAL | MB_TOPMOST ) != IDOK )
+    return false;
+  return true;
+}
 //-----------------------------------------------------------------------------
 // Сообщение об ошибке зафиксированной в теле программы
 // lpszFileName - имя файла где зафиксирована ошибка
@@ -62,13 +84,7 @@ void BL_MessageBug( const char* lpszFileName, int nLine )
   {
     char text[MAX_PATH];
     wsprintf( text, "%s, %d", lpszFileName, nLine );
-    char caption[MAX_PATH];
-    if( ::GetModuleFileName( NULL, caption, MAX_PATH ) )
-      PathStripPath( caption );
-    else
-      lstrcpy( caption, "Зафиксирован сбой" );
-
-    if( ::MessageBox( NULL, text, caption, MB_OKCANCEL | MB_SYSTEMMODAL | MB_TOPMOST ) != IDOK )
+    if(BL_MessageBug( text )==false)
       show = false;
   }
 }

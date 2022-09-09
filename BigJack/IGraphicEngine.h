@@ -51,7 +51,7 @@ class IGraphicEngine : public TSrcEvent
   bool flgCreateWindow;
 
 protected:
-  guint32 mTime_ms;// время для рендера, используется для анимации
+  unsigned int mTime_ms;// время для рендера, используется для анимации
   
   IGUI_Core* mGUI;// NOT Thread Safe
 
@@ -73,7 +73,7 @@ public:
   virtual void SetTitleWindow(const char* sTitle) = 0;
   //------------------------------------------------------------------------
   virtual void Init() = 0;
-  virtual void Work(guint32 time_ms) = 0;
+  virtual void Work(unsigned int time_ms) = 0;
   virtual bool HandleInternalEvent() = 0;// true - success, false - exit
   virtual void Done() = 0;
   virtual void GetResolutionFrame(int& h, int& w ) = 0;// формат X8R8G8B8
@@ -86,7 +86,7 @@ public:
   virtual void SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
     nsStruct3D::TVector3* coord3,     // где
     nsStruct3D::TVector3* orient3,    // ориентация эффекта
-    guint32 time_past/* прошло времени, мс*/ = 0) = 0;
+    unsigned int time_past/* прошло времени, мс*/ = 0) = 0;
   virtual void SetViewFPS(bool val) = 0;
   // источники освещения
   // ввод освещения накладывает условия на шейдер. он обязан содержать интерфейс

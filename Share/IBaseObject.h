@@ -36,14 +36,15 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef BaseObjectH
 #define BaseObjectH
 
+#include <map>
+#include <vector>
 
 #include "TObject.h"
 #include "Struct3D.h"
-#include <vector>
 #include "TreeJoint.h"
 #include "CallBackRegistrator.h"
-#include <map>
 
+// базовый класс объектов сцены, физики
 
 class SHARE_EI IBaseObject : public TObject
 {
@@ -62,13 +63,14 @@ public:
   virtual ~IBaseObject();
 
   void SetWorld(nsStruct3D::TMatrix16* world);
+  const nsStruct3D::TMatrix16* GetWorld()const {return &mWorld;}
+
   void SetID_Model(unsigned int id);
   void SetID_Map(unsigned int id){ID_map = id;}
 
   unsigned int GetID_Model(){return ID_model;}
   unsigned int GetID_Map(){return ID_map;}
   std::vector<unsigned char>* GetState(){return &mState;}
-  const nsStruct3D::TMatrix16* GetWorld()const {return &mWorld;}
 
   virtual const nsStruct3D::TMatrix16* GetMatrixForCamera(){return GetWorld();}
 

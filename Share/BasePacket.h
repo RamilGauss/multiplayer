@@ -37,6 +37,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define BasePacketApplH
 
 #include "MarkUpContainer.h"
+#include "TObject.h"
 
 // готовые макросы:
 /*
@@ -87,8 +88,15 @@ void Get##NameParam(TypeElem& v, TypeCnt index) \
 }
 //--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
+// класс служит заготовкой для упаковки в пакеты сложной структуры
+// Как использовать:
+// 1. Пронаследоваться.
+// 2. Переопределяем GetType и Init.
+// 3. Дописываем методы, с помощью которых можно получать доступ к полям пакета.
+// в Init с помощью макросов и mC размечаем структуру пакета.
 
-class SHARE_EI TBasePacketAppl
+// наследуется от TObject для возможности использования в hArray
+class SHARE_EI TBasePacket : public TObject
 {
 protected:
 
@@ -96,14 +104,16 @@ protected:
  
 public:
 
-	TBasePacketAppl();
-  virtual ~TBasePacketAppl();
-  
-  
+	TBasePacket();
+  virtual ~TBasePacket();
+
   virtual bool Set(void* p, int size);
   virtual void* Get(int &size);
   
   virtual int GetType() = 0;
+
+	void  SetData(void* pData, int size);
+	void* GetData(int& size);
 	
 protected:
 

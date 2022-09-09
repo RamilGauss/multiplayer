@@ -38,14 +38,10 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include <stdio.h>
 
-//char strVersionClient[100];
-//char strVersionServer[100];
-//char strVersionViewerModel[100];
-//char strVersionConverterMesh[100];
 char strVerGameEngine[260];
 char strVerGraphicEngine[260];
 char strVerPhysicEngine[260];
-char strVerNETEngine[260];
+char strVerNetEngine[260];
 
 class TStrVersion
 {
@@ -59,14 +55,10 @@ static TStrVersion strVersion;
 //-------------------------------------------------------------------------------------
 TStrVersion::TStrVersion()
 {
-  //sprintf(strVersionClient,"Клиент \"%s\" v%0.3f NET DX9",NAME_GAME,VERSION_PROGRAMM/1000.0f);
-  //sprintf(strVersionServer,"Сервер \"%s\" v%0.3f NET DX9",NAME_GAME,VERSION_PROGRAMM/1000.0f);
-  //sprintf(strVersionViewerModel,"Просмоторщик моделей v%0.3f",VERSION_VIEWER_MODEL/1000.0f);
-  //sprintf(strVersionConverterMesh,"Конвертер Obj->Bj v%0.3f",VERSION_CONVERTER_MESH/1000.0f);
   sprintf(strVerGameEngine,   "\"Tornado GameEngine\" v%0.3f, numComponents=%d",
     VER_GAME_ENGINE/1000.0f,COUNT_GAME_ENGINE_MODULES);
   sprintf(strVerGraphicEngine,"\"BigJack\" v%0.3f DX9",VER_GRAPHIC_ENGINE/1000.0f);
   sprintf(strVerPhysicEngine, "\"Robert\" v%0.3f ",VER_PHYSIC_ENGINE/1000.0f);
-  sprintf(strVerNETEngine,    "\"Melissa\" v%0.3f NET",VER_NET_ENGINE/1000.0f);
+  sprintf(strVerNetEngine,    "\"Melissa\" v%0.3f NET",VER_NET_ENGINE/1000.0f);
 }
 //-------------------------------------------------------------------------------------

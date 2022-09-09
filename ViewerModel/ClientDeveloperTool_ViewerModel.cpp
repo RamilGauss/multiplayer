@@ -246,7 +246,7 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent, const 
 
   int cnt[3] = {3,3,3};
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
-  guint32 start = ht_GetMSCount();
+  unsigned int start = ht_GetMSCount();
 #endif 
   CreateObjects(cnt[0],cnt[1],cnt[2]);
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL

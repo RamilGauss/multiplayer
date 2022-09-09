@@ -37,6 +37,16 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "TypeDef.h"
 
+/*
+  mo_realloc_XXX - выделить память и скопировать туда содержимое старой памяти. 
+               Если размер новой памяти будет меньше чем старой, то копирование будет неполным.
+  
+  mo_realloc_bound_XXX - увеличение размера памяти путем вставки новой памяти в определенную 
+               зону по смещению size_bound.
+               Новая память(то что вставили) будет содержать мусор. В остальной памяти будет копия
+               старой памяти.
+*/
+
 
 // через malloc и free
 extern SHARE_EI void* mo_realloc(void* old_mem, int old_size, int new_size);

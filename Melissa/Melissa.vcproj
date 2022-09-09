@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="Melissa"
-	ProjectGUID="{61137ABF-2CDC-4178-869F-963EE9A497A5}"
+	ProjectGUID="{0E4224F3-AE4D-4E4C-914C-800A97AA5594}"
 	RootNamespace="Melissa"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
@@ -18,10 +18,10 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\Lib\$(ConfigurationName)"
+			OutputDirectory="..\Exe\$(ConfigurationName)"
 			IntermediateDirectory="..\Temp\$(ConfigurationName)\$(ProjectName)"
-			ConfigurationType="4"
-			CharacterSet="0"
+			ConfigurationType="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -41,15 +41,14 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Share;..\GBaseLib;..\glib-2.0;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;"
+				AdditionalIncludeDirectories="..\glib-2.0;..\GBaseLib;..\Share"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;MELISSA_EI=__declspec(dllexport);MELISSA_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4996;4251"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -61,11 +60,20 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\$(ProjectName).lib"
+				Name="VCLinkerTool"
+				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib glib-2.0.lib gthread-2.0.lib GBaseLib.lib Share.lib"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				ImportLibrary="..\Lib\$(ConfigurationName)\$(TargetName).lib"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -77,15 +85,18 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\Lib\$(ConfigurationName)"
+			OutputDirectory="..\Exe\$(ConfigurationName)"
 			IntermediateDirectory="..\Temp\$(ConfigurationName)\$(ProjectName)"
-			ConfigurationType="4"
-			CharacterSet="0"
+			ConfigurationType="2"
+			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -107,8 +118,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\Share;..\GBaseLib;..\glib-2.0;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories="..\glib-2.0;..\GBaseLib;..\Share"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;MELISSA_EI=__declspec(dllexport);MELISSA_EXPORTS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -125,10 +136,21 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				AdditionalDependencies="shlwapi.lib d3dx10.lib d3dx9.lib d3d9.lib ws2_32.lib dxerr.lib glib-2.0.lib gthread-2.0.lib GBaseLib.lib Share.lib"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -138,6 +160,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -153,15 +178,53 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\MakerNET_Transport.cpp"
+				RelativePath=".\ActiveServer.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\MelissaMaker.cpp"
+				RelativePath=".\Base.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\NetTransport.cpp"
+				RelativePath=".\BaseServer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Client.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dllmain.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\Master.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Slave.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SuperServer.cpp"
 				>
 			</File>
 		</Filter>
@@ -171,35 +234,47 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\IBase.h"
+				RelativePath=".\ActiveServer.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IClient.h"
+				RelativePath=".\Base.h"
 				>
 			</File>
 			<File
-				RelativePath=".\INET_Transport.h"
+				RelativePath=".\BaseServer.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IServer.h"
+				RelativePath=".\Client.h"
 				>
 			</File>
 			<File
-				RelativePath=".\MakerNET_Transport.h"
+				RelativePath=".\IMakerTransport.h"
 				>
 			</File>
 			<File
-				RelativePath=".\MelissaMaker.h"
+				RelativePath=".\IManagerSession.h"
 				>
 			</File>
 			<File
-				RelativePath=".\NetTransport.h"
+				RelativePath=".\ISession.h"
 				>
 			</File>
 			<File
-				RelativePath=".\TransportProtocolPacket.h"
+				RelativePath=".\ITransport.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Master.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Slave.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SuperServer.h"
 				>
 			</File>
 		</Filter>

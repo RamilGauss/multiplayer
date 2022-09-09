@@ -40,18 +40,20 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <set>
 #include "TypeDef.h"
 
+// класс для массового уведомления всех зарегистрированных функций
 
 class SHARE_EI TCallBackRegistrator
 {
-
 public:
 	typedef void(*TCallBackFunc)(void* data, int size);
   
   TCallBackRegistrator();
-	~TCallBackRegistrator();
-
+	virtual ~TCallBackRegistrator();
+  // разослать уведомления через все callback функции
   void Notify(void* data, int size);
+  // регистрация функции
   void Register(TCallBackFunc pFunc);
+  // отказаться от регистрации
   void Unregister(TCallBackFunc pFunc);
 
 protected:

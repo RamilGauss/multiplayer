@@ -36,4 +36,4 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MakerManagerStateMachine.h"
 #include "ManagerStateMachine.h"
 
-MACRO_MAKER_CPP_USE(ManagerStateMachine,TManagerStateMachine)
+MACRO_MAKER_CPP_USE_SAME(ManagerStateMachine,ManagerStateMachine)

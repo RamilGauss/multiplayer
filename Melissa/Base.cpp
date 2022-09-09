@@ -33,22 +33,50 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_IBASE_H
-#define MELISSA_IBASE_H
-
-#include "SrcEvent.h"
+#include "Base.h"
 
 namespace nsMelissa
 {
-  class /*MELISSA_EI*/ IBase : public TSrcEvent
-  {
-  public:
-    IBase(){}
-    virtual ~IBase(){}
 
-    virtual void Work() = 0;
+TBase::TBase()
+{
 
-  };
+}
+//-------------------------------------------------------------------------
+TBase::~TBase()
+{
+
+}
+//-------------------------------------------------------------------------
+void TBase::Init(unsigned char subNet, unsigned short port)
+{
+
+}
+//-------------------------------------------------------------------------
+void TBase::DisconnectUp()
+{
+
+}
+//-------------------------------------------------------------------------
+void TBase::SendUp(void* data, int size, bool check)
+{
+
+}
+//-------------------------------------------------------------------------
+void TBase::Work()
+{
+
+}
+//-------------------------------------------------------------------------
+bool TBase::IsConnectUp()
+{
+	return true;
+}
+//-------------------------------------------------------------------------
+bool TBase::IsConnect(ISession* pSession)
+{
+	return true;
+}
+//-------------------------------------------------------------------------
 }
 
-#endif

@@ -40,6 +40,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "ClientGame.h"
 #include <string>
 #include <map>
+#include "BL_Debug.h"
 
 using namespace std;
 
@@ -59,7 +60,7 @@ using namespace std;
 //   -ss - super-server
 //-----------------------------------------
 // ¬торой параметр:
-// им€ DLL (сама библиотека должна лежать в папке ../DeveloperToolDLL/ )
+// им€ DLL
 //-----------------------------------------
 // “ретий параметр:
 // строка, адресованна€ воплощению игры
@@ -101,6 +102,7 @@ TMapStrInt mapTypeGame;
 int typeGameKey = tUndef;
 
 void init();
+void ViewHowUse();
 
 #ifdef WIN32
 bool GetArgvArgcWin(TVectorStr& vec_argv);
@@ -119,10 +121,17 @@ int main(int argc, char** argv)
 #else
   GetArgvArgcConsole(argc, argv, vec_argv)
 #endif
-  ==false) return 0;
+  ==false) 
+  {
+    ViewHowUse();
+    return -1;
+  }
 
   if(vec_argv.size()<2)
-    return 0;
+  {
+    ViewHowUse();
+    return -2;
+  }
   //-----------------------------------------------------------------  
   TMapIter fit = mapTypeGame.find(vec_argv.at(1));
   if(fit!=mapTypeGame.end())
@@ -191,4 +200,29 @@ bool GetArgvArgcConsole(int argc, char** argv, TVectorStr& vec_argv)
   return bool(argv>0);
 }
 #endif
+//-------------------------------------------------------------------------------
+void ViewHowUse()
+{
+  BL_MessageBug(
+  "Ќекорректный ввод параметров\n"
+  "ѕервый параметр:\n"
+  "тип создаваемого воплощени€ игры\n"
+  "  -coff - off-line-клиент\n"
+  "  -con - on-line-клиент\n"
+  "  -son - сервер дл€ малого кол-ва клиентов\n"
+  "дл€ massive-on-line\n"
+  "  -s - сервер slave\n"
+  "  -m - master-server\n"
+  "  -ss - super-server\n"
+  "----------------------------------------\n"
+  "¬торой параметр:\n"
+  "им€ DLL\n"
+  "----------------------------------------\n"
+  "“ретий параметр:\n"
+  "строка, адресованна€ воплощению игры\n"
+  "----------------------------------------\n"
+  "первый и второй параметр €вл€ютс€ об€зательными, третий - необ€зательный.\n"
+  "Ќапример:\n"
+  "Game.exe -con Client.dll \"ip=192.168.23.226, port=1000\"\n");
+}
 //-------------------------------------------------------------------------------

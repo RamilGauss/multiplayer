@@ -93,6 +93,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
   #ifndef MELISSA_EI
     #define MELISSA_EI __declspec( dllimport )
   #endif
+	#ifndef NET_TRANSPORT_EI
+		#define NET_TRANSPORT_EI __declspec( dllimport )
+	#endif
 
 #else //TD_WINDOWS
   
@@ -100,6 +103,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
   #define   SHARE_EI
   #define   QBASELIB_EI
   #define   MELISSA_EI
+  #define   NET_TRANSPORT_EI
 
 #endif //TD_WINDOWS
 

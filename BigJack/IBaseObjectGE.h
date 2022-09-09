@@ -67,13 +67,13 @@ public:
   // только для полностью анимированных объектов!!!
   // данная функция подготавливает данные для стека шейдера для данного момента времени
   // окончательная реализация стека должна быть в методе SetupShaderStackModelGE
-  virtual bool Animate(guint32 time_ms/*dirty animate ignore this parameter*/) = 0;//{return true;};
+  virtual bool Animate(unsigned int time_ms/*dirty animate ignore this parameter*/) = 0;//{return true;};
 
   enum{eDirtyAnimate = 0,
        ePureAnimate  = 1,// см. mTypeGE
   };
   int GetTypeGE(){return mTypeGE;}
-  void SetTimeCreation(guint32 t){mTimeCreation=t;};
+  void SetTimeCreation(unsigned int t){mTimeCreation=t;};
 
   float GetAlphaTransparency(){return mAlphaTransparency;}
   void  SetAlphaTransparency(float val){mAlphaTransparency = val;}
@@ -92,7 +92,7 @@ protected:
   int mTypeGE;
 
   // время создания, необходимо для расчета анимации
-  guint32 mTimeCreation;// мс
+  unsigned int mTimeCreation;// мс
 
 	std::vector<void*> mVectorUseCubeMap;//вектор IDirect3DCubeTexture9**
 protected:

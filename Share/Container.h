@@ -51,14 +51,16 @@ protected:
 public:
   TContainer();
   virtual ~TContainer();
-
+  // освободить память
   virtual void Done();
+  // копировать внутрь данные
   virtual void SetData(char* p, int s);
+  // получить доступ к данным
   virtual char* GetData(int &s);
-
+  // более короткая версия для получения доступа
   virtual void* GetPtr()const;
   virtual int GetSize()const;
-
+  // что бы не освобождать память с помощью Done()
   virtual void Unlink();
 };
 

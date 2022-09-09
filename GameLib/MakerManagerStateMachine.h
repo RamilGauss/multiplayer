@@ -38,7 +38,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "MacroMaker.h"
 
-MACRO_MAKER_H_USE(ManagerStateMachine)
+MACRO_MAKER_H_USE_SAME(ManagerStateMachine)
 
 
 #endif

@@ -40,9 +40,16 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <vector>
 #include "TypeDef.h"
 #include "DescEvent.h"
+#include "List.h"
 
-template <class TClass> class TList;
 class TSrcEvent;
+
+/*
+  поглотитель событий. работает в связке с TSrcEvent
+  пронаследоваться,
+  зарегистрировать источники с помощью функции AddSrcEvent
+  и получать события через GetEvent
+*/
 
 class SHARE_EI TDstEvent
 {

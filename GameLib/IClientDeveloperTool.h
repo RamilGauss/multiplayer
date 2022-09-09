@@ -39,7 +39,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@mail
 #include "IDeveloperTool.h"
 #include "DstEvent.h"
 #include <string>
-#include "MelissaMaker.h"
+#include "..\Melissa\Client.h"
 
 class TLogger;
 
@@ -66,7 +66,7 @@ public:
     IControlCamera*         mControlCamera; // Camera
     IManagerStateMachine*   mMStateMachine; // конечный автомат, для HotKeys, Net (обработка пакетов)
     IGUI*                   mGUI;           // GUI, MyGUI!
-    nsMelissa::IClient*     mNET;           // Melissa
+    nsMelissa::TClient*     mClient;           // Melissa
     IPhysicEngine*          mPhysicEngine;  // Robert
     IGraphicEngine*         mGraphicEngine; // BigJack отрисовка сцены
     IManagerObjectCommon*   mMOC;           // GameLib
@@ -78,7 +78,7 @@ public:
       mControlCamera = NULL; // Camera
       mMStateMachine = NULL; // конечный автомат, для HotKeys
       mGUI           = NULL; // MyGUI
-      mNET           = NULL; // Melissa
+      mClient        = NULL; // Melissa
       mPhysicEngine  = NULL; // Robert
       mGraphicEngine = NULL; // BigJack отрисовка сцены
       mMOC           = NULL; // GameLib

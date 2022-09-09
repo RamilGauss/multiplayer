@@ -38,4 +38,4 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 class TBigJack;
 
-MACRO_MAKER_CPP_USE_P(DirectX_Realize,TDXUT,void* userData,(TBigJack*)userData)
+MACRO_MAKER_CPP_USE_P_SAME(DirectX_Realize,DXUT,void* userData,(TBigJack*)userData)

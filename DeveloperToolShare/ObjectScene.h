@@ -48,7 +48,7 @@ public:
   virtual bool GetMirror(char ** pData,int &size);
   virtual void SetMirror(char *pData,int size);
   virtual void SetHuman(char* pData, int size);
-  virtual bool Animate(guint32 time_ms);
+  virtual bool Animate(unsigned int time_ms);
 
 protected:
   virtual void SetupShaderStackModelGE();

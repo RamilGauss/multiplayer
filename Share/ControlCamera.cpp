@@ -201,8 +201,8 @@ void TControlCamera::ApplySpeed()
   if(mSpeedShift==TVector3()) 
     return;
 
-  guint32 now = ht_GetMSCount();
-  guint32 dt = now - mLastTime; // сколько прошло времени
+  unsigned int now = ht_GetMSCount();
+  unsigned int dt = now - mLastTime; // сколько прошло времени
   if(dt==0) 
     return;
   // новая позиция

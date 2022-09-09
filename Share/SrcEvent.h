@@ -41,6 +41,13 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 class TDstEvent;
 
+/*
+  источник событий. работает в связке с TDstEvent
+  пронаследоваться,
+  добавлять события AddEvent
+*/
+
+
 class SHARE_EI TSrcEvent
 {
   int sSelfID;
@@ -51,13 +58,12 @@ public:
   TSrcEvent();
   virtual ~TSrcEvent();
 
-  void SetSelfName(int selfID);
+  void SetSelfID(int selfID);
 
   void SetDstObject(TDstEvent* p);
 protected:
+  // копирует данные
   void AddEvent(void* data, int size);
-
-
 };
 
 #endif

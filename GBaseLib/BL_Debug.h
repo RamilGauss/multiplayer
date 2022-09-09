@@ -40,6 +40,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "TypeDef.h"
 
 // Вывести на экран сообщение об отказе.
+GBASELIB_EI bool BL_MessageBug( const char* lpszMsg );
+
+// Вывести на экран сообщение об отказе.
 GBASELIB_EI void BL_MessageBug( const char* lpszFileName, int nLine );
 
 #ifdef _DEBUG

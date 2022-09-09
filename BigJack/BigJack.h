@@ -155,7 +155,7 @@ public:
 
   //------------------------------------------------------------------------
   virtual void Init();
-  virtual void Work(guint32 time_ms);
+  virtual void Work(unsigned int time_ms);
   virtual bool HandleInternalEvent();
   virtual void Done();
 
@@ -173,7 +173,7 @@ public:
   virtual void SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
     nsStruct3D::TVector3* coord3,     // где
     nsStruct3D::TVector3* orient3,    // ориентация эффекта
-    guint32 time_past/* прошло времени, мс*/ = 0);
+    unsigned int time_past/* прошло времени, мс*/ = 0);
   virtual void SetViewFPS(bool val);
   // источники освещения
   // ввод освещение накладывает условия на шейдер. он обязан содержать интерфейс

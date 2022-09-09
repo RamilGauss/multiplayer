@@ -80,7 +80,8 @@ ILoaderModelGE::ILoaderModelGE()
 ILoaderModelGE::~ILoaderModelGE()
 {
   Done();
-  delete mXML;
+	TMakerXML makerXML;
+  makerXML.Delete(mXML);
 }
 //-----------------------------------------------------------
 int ILoaderModelGE::GetCountGroup()

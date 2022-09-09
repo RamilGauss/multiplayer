@@ -37,4 +37,4 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "ControlCamera.h"
 #include "MakerControlCamera.h"
 
-MACRO_MAKER_CPP_USE(ControlCamera,TControlCamera)
+MACRO_MAKER_CPP_USE_SAME(ControlCamera,ControlCamera)

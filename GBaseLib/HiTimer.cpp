@@ -41,7 +41,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define MS_SEC    1000
 #define US_SEC    (1000*1000)
 
-static guint64 tickPerSecond; // кол-во тиков в секунду
+static unsigned __int64 tickPerSecond; // кол-во тиков в секунду
 
 //==============================================================================
 #if TD_TARGET != TD_LINUX//=====================================================
@@ -60,7 +60,7 @@ bool ht_Init()
   return true;
 }
 //------------------------------------------------------------------------------
-guint64 ht_GetTickCount()
+unsigned __int64 ht_GetTickCount()
 {
   LARGE_INTEGER counter;
   if( !QueryPerformanceCounter( &counter ) )
@@ -71,12 +71,12 @@ guint64 ht_GetTickCount()
 }
 //------------------------------------------------------------------------------
 // Задержка на милисекунды
-void ht_msleep( guint32 ms )
+void ht_msleep( unsigned int ms )
 {
   Sleep( ms );
 }
 //------------------------------------------------------------------------------
-guint32 ht_GetMSCount()
+unsigned int ht_GetMSCount()
 {
   return GetTickCount();
 }
@@ -95,16 +95,16 @@ guint32 ht_GetMSCount()
 #include <string.h>
 
 //    Получение тиков процессора (с тактовой частотой процессора)
-guint64 ht_GetTickCount()
+unsigned __int64 ht_GetTickCount()
 {
-  guint32 iax = 0, idx = 0;
+  unsigned int iax = 0, idx = 0;
   union T64as32
   {
     struct
     {
-      guint32 ax,dx;
+      unsigned int ax,dx;
     } _PACKED s ;
-    guint64 l;
+    unsigned __int64 l;
   } _PACKED;
   T64as32 rec;
 
@@ -151,9 +151,9 @@ unsigned char ht_CurrentSecond()
 }
 //------------------------------------------------------------------------------
 // Расчет скорости работы процессора
-static guint64 ht_SpeedCPU()
+static unsigned __int64 ht_SpeedCPU()
 {
-  guint64 sec, old_sec, tb, te;
+  unsigned __int64 sec, old_sec, tb, te;
 
   sec = ht_CurrentSecond();
   old_sec = sec;
@@ -176,7 +176,7 @@ static guint64 ht_SpeedCPU()
 }
 //------------------------------------------------------------------------------
 // Задержка на милисекунды
-void ht_msleep( guint32 ms )
+void ht_msleep( unsigned int ms )
 {
   usleep( ms*1000 );
 }
@@ -184,7 +184,7 @@ void ht_msleep( guint32 ms )
 static long baseTimeSec;
 // Время в милисекундах с момента запуска ЭВМ или программы.
 // Точность 1/18 сек (~55 мсек)
-guint32 ht_GetMSCount()
+unsigned int ht_GetMSCount()
 {
   timeval tv;
   gettimeofday( &tv, NULL );
@@ -212,7 +212,7 @@ int getSizeFile(int fd)
 	}
 }
 //------------------------------------------------------------------------------
-bool QueryPerformanceFrequency( guint64 *frequency )
+bool QueryPerformanceFrequency( unsigned __int64 *frequency )
 {
 	const char* sPathCPUInfo = "/proc/cpuinfo";
 	int fd = open(sPathCPUInfo,O_EXCL,S_IREAD);
@@ -252,7 +252,7 @@ bool QueryPerformanceFrequency( guint64 *frequency )
 	//printf("sFreq=%s\n",sFreq);
 
 	double d_freq = atof(sFreq);
-	*frequency = (guint64)(d_freq*1000000);
+	*frequency = (unsigned __int64)(d_freq*1000000);
 
 	//printf("freq = %u Hz\n",*((unsigned int*)frequency));
 
@@ -271,7 +271,7 @@ bool ht_Init()
  // gettimeofday( &tv, NULL );
  // baseTimeSec = tv.tv_sec;
  // return true;
-	guint64 frequency;
+	unsigned __int64 frequency;
 	if( !QueryPerformanceFrequency( &frequency ) )
 	{
 		tickPerSecond = 1;
@@ -284,21 +284,21 @@ bool ht_Init()
 #endif//========================================================================
 //==============================================================================
 //------------------------------------------------------------------------------
-guint64 ht_us2tick( guint32 us )
+unsigned __int64 ht_us2tick( unsigned int us )
 {
   return tickPerSecond * us / US_SEC;
 }
 //------------------------------------------------------------------------------
-guint32 ht_tick2us( guint64 tick )
+unsigned int ht_tick2us( unsigned __int64 tick )
 {
-  return guint32(tick * US_SEC / tickPerSecond);
+  return unsigned int(tick * US_SEC / tickPerSecond);
 }
 //------------------------------------------------------------------------------
 // Задержка на микросекунды
-void ht_usleep( guint32 us )
+void ht_usleep( unsigned int us )
 {
-  guint64 start  = ht_GetTickCount();
-  guint64 finish = start + tickPerSecond * us / US_SEC;
+  unsigned __int64 start  = ht_GetTickCount();
+  unsigned __int64 finish = start + tickPerSecond * us / US_SEC;
   for(; ht_GetTickCount() < finish ;)
   {
   }
@@ -306,10 +306,10 @@ void ht_usleep( guint32 us )
 //------------------------------------------------------------------------------
 // Задержка на микросекунды c дополнительной проверкой состояния
 // Результат: true - выход по результату func, false - выход по таймауту
-bool ht_usleep( guint32 us, THT_CheckFunc func )
+bool ht_usleep( unsigned int us, THT_CheckFunc func )
 {
-  guint64 start  = ht_GetTickCount();
-  guint64 finish = start + tickPerSecond * us / US_SEC;
+  unsigned __int64 start  = ht_GetTickCount();
+  unsigned __int64 finish = start + tickPerSecond * us / US_SEC;
   for( ; ht_GetTickCount() < finish; )
     if( func() )
       return true;

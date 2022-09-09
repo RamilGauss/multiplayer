@@ -42,7 +42,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define A2UTF8  CMarkup::AToUTF8
 #define UTF82A  CMarkup::UTF8ToA
 
-
+/*
+  реализация XML-парсера на CMarkUp.
+*/
 
 class TXML_Markup : public IXML
 {

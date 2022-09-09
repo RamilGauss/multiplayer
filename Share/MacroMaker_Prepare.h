@@ -25,7 +25,7 @@ along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/license
 In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
+the "TornadoEngine" Source Code.  If not, please request a copy in writing at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -33,38 +33,39 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MelissaMakerH
-#define MelissaMakerH
+#ifndef DEF_MACRO_MAKER_PREPARE_H
+#define DEF_MACRO_MAKER_PREPARE_H
 
-#include "IBase.h"
-#include "IClient.h"
-#include "IServer.h"
-
-#if defined(WIN32)
-  #define DllExport extern "C" __declspec( dllexport )
+// подготовка ( то, что дл€ использовани€, смотри ниже )
+#define MACRO_MAKER_H_DECL(DECL, NameInterface, NameRealize, param_for_decl) \
+class I##NameInterface; \
+class DECL TMaker##NameRealize \
+{ \
+public: \
+	I##NameInterface* New(param_for_decl); \
+	void Delete(I##NameInterface*); \
+};
+//---------------------------------------------------------
+#define MACRO_MAKER_H(NameInterface, NameRealize, param_for_decl) \
+	MACRO_MAKER_H_DECL(,NameInterface, NameRealize, param_for_decl)
+//---------------------------------------------------------
+#ifdef WIN32
+#define MACRO_MAKER_H_EXPORT(decl, NameInterface, NameRealize, param_for_decl) \
+	MACRO_MAKER_H_DECL(decl, NameInterface, NameRealize, param_for_decl)
 #else
-  #define DllExport extern "C"
+#define MACRO_MAKER_H_EXPORT(decl, NameInterface, NameRealize, param_for_decl) \
+	MACRO_MAKER_H_DECL(,NameInterface, NameRealize, param_for_decl)
 #endif
-
-#define StrGetClientMelissa "GetClient"
-#define StrGetServerMelissa "GetServer"
-#define StrFreeMelissa      "Free"
-
-namespace nsMelissa
-{
-  typedef enum
-  {
-    eSlave,
-    eSlaveMaster,
-    eMaster,
-    eMasterSuperServer,
-    eSuperServer,
-  }TypeServer;
-
-  DllExport IClient* GetClient();
-  DllExport IServer* GetServer(TypeServer type, const char* sPathDLL);
-
-  DllExport void Free(IBase* p);
+//---------------------------------------------------------
+//---------------------------------------------------------
+#define MACRO_MAKER_CPP(NameInterface, NameRealize, ClassRealize, param_for_decl, param_for_def) \
+I##NameInterface* TMaker##NameRealize::New(param_for_decl) \
+{ \
+	return new T##ClassRealize(param_for_def); \
+} \
+void TMaker##NameRealize::Delete(I##NameInterface* ptr) \
+{ \
+	delete ptr;\
 }
 
 #endif

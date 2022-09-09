@@ -38,6 +38,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "TypeDef.h"
 
+// интерфейс - попытка кросплатформенной реализации работы с Dll
+
 class SHARE_EI ILoaderDLL
 {
 public:

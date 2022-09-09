@@ -37,4 +37,4 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MakerManagerTime.h"
 
 
-MACRO_MAKER_CPP_USE(ManagerTime,TManagerTime)
+MACRO_MAKER_CPP_USE_SAME(ManagerTime,ManagerTime)

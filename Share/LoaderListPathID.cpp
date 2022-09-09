@@ -54,7 +54,8 @@ TLoaderListPathID::TLoaderListPathID()
 //--------------------------------------------------------------------------------------
 TLoaderListPathID::~TLoaderListPathID()
 {
-  delete mXML;
+	TMakerXML makerXML;
+	makerXML.Delete(mXML);
 }
 //--------------------------------------------------------------------------------------
 bool TLoaderListPathID::Load(char* sAbsPath, map<unsigned int,string>* pMap)

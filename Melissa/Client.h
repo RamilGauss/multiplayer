@@ -33,19 +33,25 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_ISERVER_H
-#define MELISSA_ISERVER_H
+#ifndef MELISSA_CLIENT_H
+#define MELISSA_CLIENT_H
 
-#include "IBase.h"
+#include "Base.h"
 
 namespace nsMelissa
 {
-  class /*MELISSA_EI*/ IServer : public IBase
+  class MELISSA_EI TClient : public TBase
   {
-
   public:
-    IServer(){}
-    virtual ~IServer(){}
+
+    TClient();
+    virtual ~TClient();
+
+    virtual void Login(unsigned int ip, unsigned short port, void* data, int size);
+
+	protected:
+
+	private:
 
   };
 }

@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="CheckTransportNET_Server"
+	Name="CheckTransportNetServer"
 	ProjectGUID="{9EFF54C3-67A6-40F2-8263-299BE313A9DA}"
 	RootNamespace="CheckTransportNET_Client"
 	Keyword="Win32Proj"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib winmm.lib comctl32.lib Imm32.lib Version.lib GBaseLib.lib Share.lib Melissa.lib"
+				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib winmm.lib comctl32.lib Imm32.lib Version.lib GBaseLib.lib Share.lib NetTransport.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\Lib;&quot;..\Lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
@@ -92,8 +92,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="..\Exe\$(ConfigurationName)"
+			IntermediateDirectory="..\Temp\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -117,6 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="&quot;..\glib-2.0&quot;;..\GBaseLib;..\Share;..\Melissa;..\CheckTransport_Share"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -135,7 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib winmm.lib comctl32.lib Imm32.lib Version.lib GBaseLib.lib Share.lib NetTransport.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\Lib;&quot;..\Lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"

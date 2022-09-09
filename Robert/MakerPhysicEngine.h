@@ -39,7 +39,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "MacroMaker.h"
 
-MACRO_MAKER_H_USE(PhysicEngine)
+MACRO_MAKER_H_USE_SAME(PhysicEngine)
 
 #endif
 

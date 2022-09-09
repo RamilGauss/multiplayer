@@ -38,8 +38,19 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #pragma warning(disable:4355)
 
-#include "..\GBaseLib\BL_Debug.h"
+#include "BL_Debug.h"
 #include "TypeDef.h"
+
+/*
+  Пример использования:
+class TClass{
+protected:
+  TClass():                      // запрет на создание
+  TOnly_N_Object(1,NAME_CLASS){};// только один объект
+};
+
+*/
+
 
 #define NAME_CLASS typeid(this).name()
 

@@ -359,7 +359,7 @@ void TModelDX::LoadTexture(TEffectDX* pEffectDX)
 //----------------------------------------------------------------------------------------------------
 void TModelDX::LoadEffect(TEffectDX* pEffectDX)
 {
-  //guint32 start = ht_GetMSCount();
+  //unsigned int start = ht_GetMSCount();
 
   pEffectDX->SetEffect( (ID3DXEffect*)mManagerResourceDX->Load(pEffectDX->mMaterial.strShader.data()) );
 

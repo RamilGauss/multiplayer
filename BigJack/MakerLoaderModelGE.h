@@ -40,7 +40,7 @@ class ILoaderModelGE;
 
 #include "MacroMaker.h"
 
-MACRO_MAKER_H_USE_P(LoaderModelGE,void* parameter)
+MACRO_MAKER_H_USE_P_SAME(LoaderModelGE,void* parameter)
 
 #endif
 

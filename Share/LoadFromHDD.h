@@ -40,14 +40,14 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include <stdio.h>
 #include "TypeDef.h"
-
+/*
+  Загрузка из файла
+*/
 
 class SHARE_EI TLoadFromHDD
 {
-
-char sPath[260];
-
-FILE* pFile;
+  char sPath[260];
+  FILE* pFile;
 
 public:
 
@@ -62,9 +62,7 @@ public:
 
 	void Close();
 
-
 };
-
 
 #endif
 

@@ -52,7 +52,7 @@ class TControlCamera : public IControlCamera
 
   // при изменении скорости
   nsStruct3D::TVector3 mSpeedShift;// x - forward, y - right, z - up
-  guint32              mLastTime;// время изменения, мс
+  unsigned int         mLastTime;// время изменения, мс
 
 public:
   TControlCamera();

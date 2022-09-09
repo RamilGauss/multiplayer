@@ -1,21 +1,26 @@
 #ifndef SHARE_TESTH
 #define SHARE_TESTH
 
-#include "..\Melissa\INET_Transport.h"
+#include "..\NetTransport\INetTransport.h"
+#include "..\NetTransport\MakerNetTransport.h"
 
+#define PORT_CLIENT 1234
+#define PORT_SERVER 1235
+#define SIZE_PACKET 1370
+#define CNT_RECV_PACKET 100000
 
-extern INET_Transport* pNET_Transport;
-extern char packet[1450];//8170];
-extern int cntPacket;
-extern unsigned short port_client;
-extern unsigned short port_server;
+extern char packet[SIZE_PACKET];
+
+extern 
+//TMakerNetTransport
+TMakerNetDoser 
+g_MakerNetTransport;
 
 extern void Init();
 
 extern void RecvPacket(void* p, int s);
 extern void RecvStream(void* p, int s);
 extern void Disconnect(void* p, int s);
-
 
 #endif
 

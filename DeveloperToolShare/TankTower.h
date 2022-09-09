@@ -94,7 +94,7 @@ public:
 
   virtual void SetHuman(char* pData, int size);
 
-  virtual bool Animate(guint32 time_ms);
+  virtual bool Animate(unsigned int time_ms);
 
 protected:
   // debug only
@@ -199,12 +199,12 @@ public:
   // установленные модули
   unsigned int maskModule;
 
-  guint32 mTimeRefreshOrientAim;
+  unsigned int mTimeRefreshOrientAim;
 
   // маска нажатых клавиш
-  guint32 mTimeRefreshPushButton;// когда последний раз менялась маска
+  unsigned int mTimeRefreshPushButton;// когда последний раз менялась маска
   unsigned int mMaskPushButton; // см. ePushButton
-  guint32 mRestReload;
+  unsigned int mRestReload;
 
 };
 

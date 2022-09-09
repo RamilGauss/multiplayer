@@ -234,7 +234,7 @@ void TBigJack::Clear()
 void TBigJack::SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
                        TVector3* coord3,     // где
                        TVector3* orient3,    // ориентация эффекта
-                       guint32 time_past/* прошло времени, мс*/)
+                       unsigned int time_past/* прошло времени, мс*/)
 {
 /*
   IBaseObjectGE* pObjectDX = MakerEffect.New(id_effect);
@@ -468,7 +468,7 @@ void TBigJack::Done()
   SetIsCreateWindow(false);
 }
 //--------------------------------------------------------------------------------------
-void TBigJack::Work(guint32 time_ms)
+void TBigJack::Work(unsigned int time_ms)
 {
   mTime_ms = time_ms;
   mDXUT->Work();

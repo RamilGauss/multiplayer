@@ -3,8 +3,8 @@
 #include <map>
 #include <string>
 #include <windows.h>
-#include "..\Melissa\MakerNET_Engine.h"
-#include "..\Melissa\INET_Engine.h"
+#include "..\NetTransport\MakerNetTransport.h"
+#include "..\NetTransport\INetTransport.h"
 #include "..\Share\GlobalParams.h"
 #include "..\glib-2.0\glib\gthread.h"
 #include "..\GBaseLib\ErrorReg.h"
@@ -13,26 +13,30 @@
 #include "SaveOnHDD.h"
 #include "..\CheckTransport_Share\share_test.h"
 
-
 using namespace std;
-
 //-----------------------------------------------------------------------
 int numNetWork = 0;
 int main(int argc, char** argv)
 {
   Init();
 
-  TMakerNET_Engine maker;
-  pNET_Transport = maker.New();
-  pNET_Transport->InitLog("server.txt");//###
+  INetTransport* pNetTransport = g_MakerNetTransport.New();
+  pNetTransport->InitLog("server.txt");
 
-  bool res = pNET_Transport->Open(port_server,numNetWork);
-  pNET_Transport->Register(RecvPacket,nsCallBackType::eRcvPacket);
-  pNET_Transport->Register(RecvStream,nsCallBackType::eRcvStream);
-  pNET_Transport->Register(Disconnect,nsCallBackType::eDisconnect);
+  bool res = pNetTransport->Open(PORT_SERVER);
+  pNetTransport->Register(RecvPacket,INetTransport::eRcvPacket);
+  pNetTransport->Register(RecvStream,INetTransport::eRcvStream);
+  pNetTransport->Register(Disconnect,INetTransport::eDisconnect);
 
-  pNET_Transport->Start();
+  pNetTransport->Start();
 
   _getch();
+
+  pNetTransport->Stop();
+  pNetTransport->Unregister(RecvPacket,INetTransport::eRcvPacket);
+  pNetTransport->Unregister(RecvStream,INetTransport::eRcvStream);
+  pNetTransport->Unregister(Disconnect,INetTransport::eDisconnect);
+
+  g_MakerNetTransport.Delete(pNetTransport);
   return 0;
 }

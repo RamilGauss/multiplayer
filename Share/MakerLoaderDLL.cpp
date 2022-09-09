@@ -36,5 +36,5 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MakerLoaderDLL.h"
 #include "LoaderDLL.h"
 
-MACRO_MAKER_CPP_USE(LoaderDLL,TLoaderDLL)
+MACRO_MAKER_CPP_USE_SAME(LoaderDLL,LoaderDLL)
 

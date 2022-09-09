@@ -42,7 +42,7 @@ using namespace std;
 //--------------------------------------------------------------------
 TMarkUpContainer::TMarkUpContainer()
 {
-
+	SetSizeAppendix(0);
 }
 //--------------------------------------------------------------------
 TMarkUpContainer::~TMarkUpContainer()
@@ -106,7 +106,7 @@ void* TMarkUpContainer::Get(const char* name, bool type_counter, int index)
   return ptr;
 }
 //--------------------------------------------------------------------
-void* TMarkUpContainer::GetPtr()
+void* TMarkUpContainer::GetPtr() const
 {
   return mC.GetPtr();
 }
@@ -155,6 +155,7 @@ bool TMarkUpContainer::Set(void* p, int size)
 //--------------------------------------------------------------------
 void TMarkUpContainer::Done()
 {
+	SetSizeAppendix(0);
   mC.Done();
 
   mMarkUp.clear();
@@ -164,7 +165,7 @@ void TMarkUpContainer::Done()
 void TMarkUpContainer::Update()
 {
   vector<int> vecDisVar;// вектор несоответствий
-  // считаем кол-во несоответствий по типу eVar
+  // считаем кол-во несоответствий по типам
   int cntSection = mVectorSection.size();
   for(int i = 0 ; i < cntSection ; i++ )
   {
@@ -177,7 +178,7 @@ void TMarkUpContainer::Update()
         char* ptr = (char*)GetPtr() + desc_p.shift;
         int freshCnt = GetValueBy(ptr,desc_p.c.v.sizeCnt);
         if(desc_p.cntVar!=freshCnt)
-        vecDisVar.push_back(i);
+					vecDisVar.push_back(i);
       }
         break;
       case eMarkUp:
@@ -185,7 +186,7 @@ void TMarkUpContainer::Update()
         char* ptr = (char*)GetPtr() + desc_p.shift;
         int freshSize = GetValueBy(ptr, desc_p.c.v.sizeCnt);
         if(desc_p.sizeMarkUp!=freshSize)
-        vecDisVar.push_back(i);
+					vecDisVar.push_back(i);
       }
         break;
       default:;
@@ -219,7 +220,7 @@ void TMarkUpContainer::Update()
       default:;
     }
     //-----------------------------------------------------------------------------
-    int new_size  = GetSize() - d_size;        // новый размер
+    int newSize  = GetSize() - d_size;        // новый размер
 
     void* newPtr = GetPtr();
     if(d_size < 0)
@@ -238,7 +239,7 @@ void TMarkUpContainer::Update()
       memmove(ptrBoundLow, ptrBoundLow + d_size, sizeMove);
     }
     mC.Unlink();
-    mC.SetData((char*)newPtr,new_size);
+    mC.SetData((char*)newPtr,newSize);
     delete[](char*)newPtr;
     
     // освежить сдвиги для дальних полей
@@ -345,5 +346,44 @@ int TMarkUpContainer::GetSizeByDesc(TDesc_Private& desc_p)
     default:;
   }
   return res;
+}
+//--------------------------------------------------------------------
+void TMarkUpContainer::SetDataAppendix(void* p, int size)
+{
+	if(mSizeAppendix!=size)
+	{
+		int newSize = GetSize() + size - GetSizeAppendix();
+		void* newPtr = mo_realloc_new(GetPtr(), GetSize(), newSize);
+		SetSizeAppendix(size);
+
+		mC.Unlink();
+		mC.SetData((char*)newPtr, newSize);
+		delete[](char*)newPtr;
+	}
+
+	void* pBeginAppendix = GetPtrAppendix();
+	memcpy(pBeginAppendix, p, GetSizeAppendix());
+}
+//--------------------------------------------------------------------
+void* TMarkUpContainer::GetDataAppendix(int& size)
+{
+	size = GetSizeAppendix();
+	return GetPtrAppendix();
+}
+//--------------------------------------------------------------------
+int TMarkUpContainer::GetSizeAppendix()
+{
+	return mSizeAppendix;
+}
+//--------------------------------------------------------------------
+void TMarkUpContainer::SetSizeAppendix(int v)
+{
+	mSizeAppendix = v;
+}
+//--------------------------------------------------------------------
+void* TMarkUpContainer::GetPtrAppendix()
+{
+	int sizeWithoutAppendix = GetSize() - GetSizeAppendix();
+	return (char*)GetPtr() + sizeWithoutAppendix;
 }
 //--------------------------------------------------------------------

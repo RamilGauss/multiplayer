@@ -37,4 +37,4 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MakerCamera.h"
 #include "Camera.h"
 
-MACRO_MAKER_CPP_USE(Camera,TCamera)
+MACRO_MAKER_CPP_USE_SAME(Camera,Camera)

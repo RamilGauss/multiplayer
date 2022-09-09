@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\BigJack;..\Robert;.\;..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;..\DXUT\Optional;..\DXUT\Core;..\QBaseLib;..\GUI;..\Melissa"
+				AdditionalIncludeDirectories="..\BigJack;..\Robert;.\;..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;..\DXUT\Optional;..\DXUT\Core;..\QBaseLib;..\GUI;..\Melissa;..\NetTransport"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -208,6 +208,14 @@
 				RelativePath=".\ManagerTime.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\WrapperMakerTransport.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\WrapperTransport.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -292,6 +300,14 @@
 			</File>
 			<File
 				RelativePath=".\NameSrcEventID.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WrapperMakerTransport.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WrapperTransport.h"
 				>
 			</File>
 		</Filter>

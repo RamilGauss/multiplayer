@@ -1,7 +1,7 @@
-end(63 ms):
-	Make NET=0
+end(9 516 ms):
+	Make Net=0
 	InitLog=0
 	Open=47
-	Start=0
-	Before send=0
-	Send=16 
+	Start=3 563
+	Before send=1 328
+	Send=4 578 

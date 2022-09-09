@@ -33,13 +33,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "MakerNetTransport.h"
 
-#ifndef MakerNET_TransportH
-#define MakerNET_TransportH
+#include "NetDoser.h"
 
-#include <stddef.h>
-#include "MacroMaker.h"
-
-MACRO_MAKER_H_USE_P(NET_Transport,char* pPathLog=NULL)
-
-#endif
+MACRO_MAKER_CPP_USE_P(NetTransport,NetDoser,NetDoser, char* pPathLog, pPathLog)
+MACRO_MAKER_CPP_USE_P_SAME(NetTransport,NetTransport, char* pPathLog, pPathLog)

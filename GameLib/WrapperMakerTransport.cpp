@@ -33,7 +33,29 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "MakerNET_Transport.h"
-#include "NetTransport.h"
+#include "WrapperMakerTransport.h"
+#include "WrapperTransport.h"
 
-MACRO_MAKER_CPP_USE_P(NET_Transport,TNetTransport,char* pPathLog,pPathLog)
+using namespace nsMelissa;
+
+TWrapperMakerTransport::TWrapperMakerTransport()
+{
+
+}
+//-------------------------------------------------------------------------
+TWrapperMakerTransport::~TWrapperMakerTransport()
+{
+
+}
+//-------------------------------------------------------------------------
+ITransport* TWrapperMakerTransport::New()
+{
+	return new TWrapperTransport;
+}
+//-------------------------------------------------------------------------
+void TWrapperMakerTransport::Delete(ITransport* pTransport)
+{
+	delete pTransport;
+}
+//-------------------------------------------------------------------------
+

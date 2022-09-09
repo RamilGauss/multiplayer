@@ -41,7 +41,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "MacroMaker.h"
 
-MACRO_MAKER_H_EXPORT_USE(SHARE_EI,ControlCamera)
+MACRO_MAKER_H_EXPORT_USE_SAME(SHARE_EI,ControlCamera)
 
 #endif
 

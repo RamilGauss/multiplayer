@@ -59,7 +59,8 @@ TLoaderTree::TLoaderTree()
 TLoaderTree::~TLoaderTree()
 {
   delete pLoadedTree;
-  delete mXML;
+	TMakerXML makerXML;
+	makerXML.Delete(mXML);
 }
 //-----------------------------------------------------------------------------
 bool TLoaderTree::Load(char* sPath)
