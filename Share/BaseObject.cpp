@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -39,8 +39,11 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "BaseObject.h"
 #include "ManagerBaseObject.h"
+#include <map>
+#include "BL_Debug.h"
 
 using namespace nsStruct3D;
+using namespace std;
 
 static TManagerBaseObject mManagerObject;
 
@@ -49,7 +52,7 @@ TBaseObject::TBaseObject()
   mPtrInherits = NULL;
   ID_model = 0;
   ID_map = 0;
-  SetOneMatrix(&mWorld);
+  D3DXMatrixIdentity(&mWorld);
 }
 //------------------------------------------------------------------------------------------------
 TBaseObject::~TBaseObject()
@@ -65,16 +68,8 @@ TBaseObject::~TBaseObject()
 //------------------------------------------------------------------------------------------------
 void TBaseObject::SetState(std::vector<unsigned char>* state)
 {
+  BL_ASSERT(mState.size()==state->size());
   mState = *state;
-}
-//------------------------------------------------------------------------------------------------
-D3DXMATRIXA16* TBaseObject::SetOneMatrix(D3DXMATRIXA16* matrix)
-{
-  matrix->_11 = 1;matrix->_12 = 0;matrix->_13 = 0;matrix->_14 = 0;
-  matrix->_21 = 0;matrix->_22 = 1;matrix->_23 = 0;matrix->_24 = 0;
-  matrix->_31 = 0;matrix->_32 = 0;matrix->_33 = 1;matrix->_34 = 0;
-  matrix->_41 = 0;matrix->_42 = 0;matrix->_43 = 0;matrix->_44 = 1;
-  return matrix;
 }
 //------------------------------------------------------------------------------------------------
 void TBaseObject::SetTree(TTreeJoint::TLoadedJoint* pTree)
@@ -82,60 +77,105 @@ void TBaseObject::SetTree(TTreeJoint::TLoadedJoint* pTree)
   delete pLoadedTree;
   pLoadedTree = new TTreeJoint::TLoadedJoint;
   *pLoadedTree = *pTree;// копируем структуру
-  mTree.Setup(pLoadedTree);// инициализация внутренностей иерархии
+}
+//------------------------------------------------------------------------------------------------
+// считываем данные либо из СУБД либо с GUI -
+// считать с объекта информацию о частях, 
+// выставить использование на первой неповторяющейся части и задать в окне в виде CheckBox
+void TBaseObject::SetMapUse(map<string, int>* mapUse)
+{
+  if(mapUse)
+    mMapUse = *mapUse;
+  mTree.Setup(pLoadedTree,&mMapUse);// инициализация внутренностей иерархии
   mTree.SetOrderMatrixByName(&mVectorOrderPart);// в таком порядке будут строиться матрицы
 
-  SetDefaultMatrix();  
-  SetupState();
-  SetupMask();
+  SetDefaultMatrix();// в соответствии с деревом настроить матрицы по-умолчанию
+  SetupState();// теперь известно сколько элементов
+  SetupMask();// известно кол-во и порядок следования элементов
 }
 //------------------------------------------------------------------------------------------------
 void TBaseObject::SetDefaultMatrix() 
 {
   int cnt = mTree.GetCountPart();
   for(int i = 0 ; i < cnt ; i++) 
-    mVectorMatrix.push_back(SetOneMatrix(new D3DXMATRIXA16));
-  mTree.GetMatrix(&mVectorMatrix);
-/*
-  // ####
-  // убрать это после настройки Tree
-  FLOAT Angle = float(M_PI);
-  for(int j = 3 ; j < 7 ; j++)
   {
-    D3DXMatrixRotationZ(mVectorMatrix[j],Angle );// track
-    mVectorMatrix[j]->_43 = -1.08f;
+    D3DXMATRIXA16* mIdentity = new D3DXMATRIXA16;
+    D3DXMatrixIdentity((D3DXMATRIX*)mIdentity);
+    mVectorMatrix.push_back(mIdentity);
   }
-
-  D3DXMatrixRotationZ(mVectorMatrix[2],Angle );// 
-  mVectorMatrix[2]->_43 = 0.987328f+0.367343f;// Gun
-  mVectorMatrix[2]->_42 = 1.421399f-0.079083f;// Gun
-  mVectorMatrix[2]->_41 = 0.064711f-0.010775f;// Gun
-  //0,064711 0,367343 1,421399	
-
-  mVectorMatrix[1]->_41 = -0.010775f;// Turret 0,987328 -0,079083
-  mVectorMatrix[1]->_42 = -0.079083f;// Turret
-  mVectorMatrix[1]->_43 = 0.987328f;// Turret
-  //0 - Hull
-  */
+  mTree.GetMatrix(&mVectorMatrix);
 }
 //------------------------------------------------------------------------------------------------
 void TBaseObject::SetupState()
 {
-  int cnt = mVectorMatrix.size();
+  int cnt = mTree.GetCountPart();
+  if(cnt==mState.size()) return;
+  //------------------------------------
+  mState.clear();
   for(int i = 0 ; i < cnt ; i++ )
     mState.push_back(1);// по-умолчанию
 }
 //------------------------------------------------------------------------------------------------
 void TBaseObject::SetupMask()
 {
-  int cnt = mVectorMatrix.size();
-  for(int i = 0 ; i < cnt ; i++ )
-    mMask.push_back(1);
+  BL_ASSERT(mVectorNamePart.size());// сначала должна быть проинициализирована модель!
+  //-------------------------------------------------------------------------------
+  int cntMask = mVectorNamePart.size();
+  mMask.clear();
+  for(int i = 0 ; i < cntMask ; i++ )
+    mMask.push_back(0);// размер маски должен быть таким же как все части модели
+  //-----------------------------------------------
+  int sumMask = 0;
+  // mMask - маска
+  // mapUse - имя - номер, не сортированный
+  // mVectorNamePart - перечисление имен частей, сортированный
+  for(int i = 0 ; i < cntMask ; i++)
+  {
+    TPart part = mVectorNamePart.at(i);
+    // заполнить часть маски для данного имени
+    map<string,int>::iterator fit = mMapUse.find(part.name);
+    if(fit->second==part.use)
+    {
+      mMask.at(i) = 1;
+      sumMask++;
+    }
+  }
+  BL_ASSERT(sumMask==mVectorOrderPart.size());
 }
 //------------------------------------------------------------------------------------------------
 void TBaseObject::SetID_Model(unsigned int id)
 {
   ID_model=id;
   mManagerObject.AddObject(this);
+}
+//------------------------------------------------------------------------------------------------
+int TBaseObject::GetCountPart(const char* name,vector<string>* pVec)
+{
+  int found = 0;
+  int cnt = pVec->size();
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    if(pVec->at(i).compare(name)==0)
+      found++;
+  }
+  return found;
+}
+//------------------------------------------------------------------------------------------------
+void TBaseObject::GetDefaultMapUse(std::map<std::string,int>* mapUse)
+{
+  *mapUse = mMapUse;
+}
+//------------------------------------------------------------------------------------------------
+void TBaseObject::SetupDefaultMapUse()
+{
+  mMapUse.clear();
+  int cnt = mVectorOrderPart.size();
+  for(int i = 0 ; i < cnt ; i++)
+  { 
+    string name = mVectorOrderPart.at(i);
+    map<string,int>::value_type val(name,0);
+    mMapUse.insert(val);
+  }
+  SetMapUse();
 }
 //------------------------------------------------------------------------------------------------

@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -225,7 +225,12 @@ you may contact in writing [ramil2085@gmail.com].
  - Анимация: разделение объектов на чисто анимированные и "грязно".
 16.09.2012:
  - Болею,  голова вообще не соображает. Потом Tree доделаю.
- - Модели в ВОТ зеркальны.
+ - Модели в ВОТ зеркальные.
+20.09.2012:
+ - Умею вращать башней и двигать пушкой у танка.
+27.09.2012:
+ - Добавлена поддержка XML формата. Чтение, запись. Через CMarkup.
+ - Перенаправил поток событий на Qt от DXUT.
 
 //----------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------
@@ -235,20 +240,33 @@ you may contact in writing [ramil2085@gmail.com].
 41) проблема совместимости загрузки карты на клиенте и сервере -
 59) Разгадал загадку анимации траков во время резкого разгона или торможения и пушки во время выстрела:
 разные части у пушки и ходовой заданы с помощью Bounding Box, а траки обрабатываются в шейдере (за 3 прохода),
-придумал: дробить при загрузке моедели если кол-во BB > 1 в соответсвии с BB(рещается проблема движения пушки
+придумал: дробить при загрузке модели если кол-во BB > 1 в соответствии с BB(решается проблема движения пушки
  и роликов). А для траков Unity 3d - глянь инфу.
 65) TBaseObject-> TBaseObjectDX + TBaseObjectPrediction ->TBaseCommon->TTank+TBullet+TTree+TBush+TTerrain+TBuilding
 использовать виртуальное наследование.
 66) Описать взаимодействие TManagerCommonObject + TGameForm = Translate+VisualEvent+KeyMouseEvent -
 67) Реализовать классы поведения: Tree, Terrain и т.д. -
 68) Формат карты и моделей -
-69) TBaseObjectDX::SetModel - 
 71) Сделать TManagerObjectCommon абстрактным и перенести методы в TManagerObjectCommonClient - 
-73) Заменить world на root matrix в Joint - 
-74) Доделать Tree - 
 76) таблица эффектов id-path
 77) path Effect содержит id_model и описание поведения. MakerEffectDX - 
-
+78) Продумать архитектуру с учетом возможности оптимизации при расчете на клиенте физики в зависимости от расстояния до камеры
+79) Продумать архитектуры на сервере с учетом отправки на клиента не всех стримов танков, в заивимости от расстояния и возможности визуального контакта.
+80) Шейдерный стек -
+81) довести до ума камеру, которая вращается вокруг объекта. Степень свободы камеры должна быть равна 2. Только вокруг осей
+Х и оси Z - 
+82) Добавить управление освещением в BigJack
+83) Исправить  недоработку: добавить номер для реализации Turret например.
+  [JOINT0]
+  strName=Turret
+  numUse=0 - номер реализации, например, номер башни 0
+  cntJoint=5
+  ...
+  [JOINT1]
+  strName=Turret
+  numUse=1 - номер реализации, например, номер башни 1, соответственно матрица соединения пушки другая
+  cntJoint=5
+  ...
 //----------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------
     INFO

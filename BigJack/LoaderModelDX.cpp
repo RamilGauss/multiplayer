@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -38,16 +38,45 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Logger.h"
 #include "BL_Debug.h"
 #include "glib/gmem.h"
+#include "MakerXML.h"
+
+const char* sPathShader = "\\shader";
+const char* sPathMainFileConfig = "\\main.xml";
+
+const char* SectionLOD = "lod";
+const char* SectionPart = "part";
+
+const char* SectionPathShader = "strPathShader";
+const char* SectionTechnique  = "strTechnique";
+const char* SectionTexture    = "texture";
+const char* SectionName       = "name";
+const char* SectionNumUse     = "numUse";
+const char* SectionAmbient    = "vAmbient";
+const char* SectionDiffuse    = "vDiffuse";
+const char* SectionSpecular   = "vSpecular";
+const char* SectionShininess  = "nShininess";
+const char* SectionAlpha      = "fAlpha";
+const char* SectionbSpecular  = "bSpecular";
+const char* SectionTypeLOD    = "mTypeLOD";
+const char* SectionflgNormal  = "mflgNormal";
+const char* SectionPrimitives = "primitives";
+
 
 using namespace nsStruct3D;
+using namespace std;
+
+#pragma warning(disable:4800)
 
 TLoaderModelDX::TLoaderModelDX(  IDirect3DDevice9* _m_pd3dDevice):
 ILoaderModelDX(_m_pd3dDevice)
 {
+  TMakerXML makerXML;
+  mXML = makerXML.New();
 }
 //--------------------------------------------------------------------------------
 TLoaderModelDX::~TLoaderModelDX()
 {
+  delete mXML;
 }
 //--------------------------------------------------------------------------------
 bool TLoaderModelDX::Load(LPCWSTR strFilenameData)
@@ -59,12 +88,12 @@ bool TLoaderModelDX::Load(LPCWSTR strFilenameData)
   UpPath(&pStrPathShader[0]);
   UpPath(&pStrPathShader[0]);
   UpPath(&pStrPathShader[0]);
-  strcat(pStrPathShader,"\\shader");
+  strcat(pStrPathShader,sPathShader);
 
   strcpy(pStrFilenameData ,W2A(strFilenameData));
   UpPath(&pStrFilenameData[0]);
-  strcpy(pStrFilenameDataMainIni,pStrFilenameData);
-  strcat(pStrFilenameDataMainIni,"\\main.ini");
+  strcpy(pStrFilenameDataMain,pStrFilenameData);
+  strcat(pStrFilenameDataMain,sPathMainFileConfig);
   if(LoadMainFile()==false) 
   {
     GlobalLoggerDX.WriteF_time("Не удалось загрузить ресурсы для модели.\n");
@@ -75,205 +104,133 @@ bool TLoaderModelDX::Load(LPCWSTR strFilenameData)
 //--------------------------------------------------------------------------------
 bool TLoaderModelDX::LoadMainFile()
 {
-  mFileIniMain.Close();
-  mFileIniMain.Open(pStrFilenameDataMainIni);
-  if(mFileIniMain.IsOpen()==false)
+  mXML->Load(pStrFilenameDataMain);
+  if(mXML->IsOpen()==false)
     return false;
 
+  // кол-во записей
+  string sRoot = mXML->GetNameSection(0);
+  if(sRoot.length()==0) return false;
+  if(mXML->EnterSection(sRoot.data(),0)==false) return false;
+  //--------------------------------------
   // считать данные:
-  mLOD         = (float)mFileIniMain.GetDouble("MAIN","LOD",1);
-  int cntGroup = mFileIniMain.GetInteger("MAIN","CntGroup",0);
+  if(mXML->ReadFloat(SectionLOD,0,mLOD)==false) return false;
+  int cntGroup = mXML->GetCountSection(SectionPart);// кол-во частей
   Done();
   for(int i = 0 ; i < cntGroup ; i++)
   {
     mVectorGroup.push_back(new TDefGroup);
-    if(LoadPart(&mFileIniMain,i)==false) 
-    {
-      mFileIniMain.Close();
+    if(LoadPart(i)==false) 
       return false;
-    }
   }
-  mFileIniMain.Close();
+  //--------------------------------------
+  mXML->LeaveSection();
   return true;
 }
 //--------------------------------------------------------------------------------
-bool TLoaderModelDX::LoadPart(TBL_ConfigFile* fileIni, int i)
+bool TLoaderModelDX::LoadPart(int i)
 {
-  char strNumPart[20];
-  sprintf(strNumPart,"PART%d",i);
-
-  //------------------------------------------------------------
-  char * str = fileIni->GetValue(strNumPart,"strPathShader");
-  if(str)
+  if(mXML->EnterSection(SectionPart,i)==false) return false;
+  //-----------------------------------------------
+  string str = mXML->ReadSection(SectionPathShader,0);
+  if(str.length())
   {
     mVectorGroup[i]->strPathShader = pStrPathShader;
     mVectorGroup[i]->strPathShader += "\\";
-    mVectorGroup[i]->strPathShader += str;
-    g_free(str);
-    str = NULL;
+    mVectorGroup[i]->strPathShader += str.data();
   }
   else return false;
   //------------------------------------------------------------
-  str = fileIni->GetValue(strNumPart,"strTechnique");
-  if(str)
-  {
-    mVectorGroup[i]->strTechnique = str;
-    g_free(str);
-    str = NULL;
-  }
+  str = mXML->ReadSection(SectionTechnique,0);
+  if(str.length())
+    mVectorGroup[i]->strTechnique = str.data();
   else return false;
   //------------------------------------------------------------
-  str = fileIni->GetValue(strNumPart,"strTexture");
-  if(str)
+  str = mXML->ReadSection(SectionTexture,0);
+  if(str.length())
   {
     USES_CONVERSION;
     mVectorGroup[i]->strTexture = A2W(pStrFilenameData);
     mVectorGroup[i]->strTexture += L"\\";
-    mVectorGroup[i]->strTexture += A2W(str);
-    g_free(str);
-    str = NULL;
+    mVectorGroup[i]->strTexture += A2W(str.data());
   }
   else return false;
   //------------------------------------------------------------
-  str = fileIni->GetValue(strNumPart,"strName");
-  if(str)
+  str = mXML->ReadSection(SectionName,0);
+  if(str.length())
   {
-    mVectorGroup[i]->strName = str;
-    g_free(str);
-    str = NULL;
+    mVectorGroup[i]->strName = str.data();
   }
   else return false;
   //------------------------------------------------------------
-  if(LoadVector(fileIni,strNumPart,"vAmbient",mVectorGroup[i]->vAmbient)==false) 
+  int numUse;
+  if(mXML->ReadInt(SectionNumUse,0,numUse)==false)
     return false;
-  if(LoadVector(fileIni,strNumPart,"vDiffuse",mVectorGroup[i]->vDiffuse)==false) 
+  mVectorGroup[i]->mNumUse = numUse;
+  //------------------------------------------------------------
+  if(LoadVector(SectionAmbient,mVectorGroup[i]->vAmbient)==false) 
     return false;
-  if(LoadVector(fileIni,strNumPart,"vSpecular",mVectorGroup[i]->vSpecular)==false) 
+  if(LoadVector(SectionDiffuse,mVectorGroup[i]->vDiffuse)==false) 
     return false;
-
-  mVectorGroup[i]->nShininess = fileIni->GetInteger(strNumPart,"nShininess",0);
-  mVectorGroup[i]->fAlpha     = (float)fileIni->GetDouble(strNumPart,"fAlpha");
-  mVectorGroup[i]->bSpecular  = fileIni->GetBool(strNumPart,"bSpecular",false);
-  mVectorGroup[i]->mTypeLOD   = fileIni->GetBool(strNumPart,"mTypeLOD",false);
-  mVectorGroup[i]->mflgNormal = fileIni->GetBool(strNumPart,"mflgNormal",true);
+  if(LoadVector(SectionSpecular,mVectorGroup[i]->vSpecular)==false) 
+    return false;
+  //------------------------------------------------------------
+  int val;
+  float fval;
+  if(mXML->ReadInt(SectionShininess,0,val)==false) return false;
+  mVectorGroup[i]->nShininess = val;
+  if(mXML->ReadFloat(SectionAlpha,0,fval)==false) return false;
+  mVectorGroup[i]->fAlpha     = fval;
+  if(mXML->ReadInt(SectionbSpecular,0,val)==false) return false;
+  mVectorGroup[i]->bSpecular  = bool(val);
+  if(mXML->ReadInt(SectionTypeLOD,0,val)==false) return false;
+  mVectorGroup[i]->mTypeLOD   = bool(val);
+  if(mXML->ReadInt(SectionflgNormal,0,val)==false) return false;
+  mVectorGroup[i]->mflgNormal = bool(val);
   //-----------------------------------------------------------------------
-  if(LoadMesh(fileIni,strNumPart,mVectorGroup[i])==false)
+  if(LoadMesh(mVectorGroup[i])==false)
     return false;
 
+  mXML->LeaveSection();
   return true;
 }
 //--------------------------------------------------------------------------------
-bool TLoaderModelDX::LoadVector4(TBL_ConfigFile* fileIni,char* strNumPart,char* key,D3DXVECTOR4& vector4)
+bool TLoaderModelDX::LoadVector4(const char* key,D3DXVECTOR4& vector4)
 {
-  char* str = fileIni->GetValue(strNumPart,key);
-  if(str)
-  {
-    char* buffer = str;
-    bool ok;
-    vector4.x = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str);return false;}
-    vector4.y = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str);return false;}
-    vector4.z = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str);return false;}
-    vector4.w = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str);return false;}
-    g_free(str);
-    return true;
-  }
-  return false;
+  float v4[4];
+  if(mXML->ReadFloat4(key,0,&v4[0])==false) return false;
+
+  vector4.x = v4[0];
+  vector4.y = v4[1];
+  vector4.z = v4[2];
+  vector4.w = v4[3];
+  return true;
 }
 //--------------------------------------------------------------------------------
-bool TLoaderModelDX::LoadVector(TBL_ConfigFile* fileIni,char* strNumPart,char* key,D3DXVECTOR3& vector)
+bool TLoaderModelDX::LoadVector(const char* key,D3DXVECTOR3& vector)
 {
-  char* str = fileIni->GetValue(strNumPart,key);
-  if(str)
-  {
-    char* buffer = str;
-    bool ok;
-    vector.x = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str);return false;}
-    vector.y = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str);return false;}
-    vector.z = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str);return false;}
-    g_free(str);
-    return true;
-  }
-  return false;
+  float v3[3];
+  if(mXML->ReadFloat3(key,0,&v3[0])==false) return false;
+
+  vector.x = v3[0];
+  vector.y = v3[1];
+  vector.z = v3[2];
+  return true;
 }
 //--------------------------------------------------------------------------------
-char* TLoaderModelDX::FindSemicolon(char* buffer)
+bool TLoaderModelDX::LoadMesh(TDefGroup *mArrDefGroup)
 {
-  for(int i = 0 ; true ; i++ )
-  {
-    if(buffer[i]=='\0') return NULL;
-    if(buffer[i]==';') return &buffer[i];
-  }
-  return NULL;
-}
-//--------------------------------------------------------------------------------
-float TLoaderModelDX::FindFloat_Semicolon(char** buffer,bool* ok)
-{
-  char cpyBuffer[50];
-  char* buffer1;
-  char* buffer0 = *buffer;
-  int size;
-  //---------------------------------------------------
-  buffer1 = FindSemicolon(buffer0);
-  if(buffer1==NULL)
-  {
-    *buffer = NULL;
-    *ok = false;
-    return 0.0f;
-  }
-  size = buffer1-buffer0;
-  memcpy(cpyBuffer,buffer0,size);
-  cpyBuffer[size] = '\0';
-  float res = (float)atof(cpyBuffer);
-  *buffer = buffer1+1;
-  *ok = true;
-  return res; 
-}
-//--------------------------------------------------------------------------------
-bool TLoaderModelDX::LoadMesh(TBL_ConfigFile* fileIni,char* strNumPart,TDefGroup *mArrDefGroup)
-{
-  //HRESULT hr;
   char strPathPrimitives[MAX_PATH];
-  char* str = fileIni->GetValue(strNumPart,"primitives");
-  if(str)
+  string str = mXML->ReadSection(SectionPrimitives,0);
+  if(str.length())
   {
     strcpy(strPathPrimitives,pStrFilenameData);
     strcat(strPathPrimitives,"\\");
-    strcat(strPathPrimitives,str);
-    g_free(str);
+    strcat(strPathPrimitives,str.data());
   }
   else return false;
 
   mArrDefGroup->pMesh = mMeshFile.Load(m_pd3dDevice,strPathPrimitives);
   return (mArrDefGroup->pMesh!=NULL);
-}
-//--------------------------------------------------------------------------------
-int TLoaderModelDX::FindInt_Semicolon(char** buffer,bool* ok)
-{
-  char cpyBuffer[50];
-  char* buffer1;
-  char* buffer0 = *buffer;
-  int size;
-  //---------------------------------------------------
-  buffer1 = FindSemicolon(buffer0);
-  if(buffer1==NULL)
-  {
-    *buffer = NULL;
-    *ok = false;
-    return 0;
-  }
-  size = buffer1-buffer0;
-  memcpy(cpyBuffer,buffer0,size);
-  cpyBuffer[size] = '\0';
-  int res = atoi(cpyBuffer);
-  *buffer = buffer1+1;
-  *ok = true;
-  return res; 
 }
 //--------------------------------------------------------------------------------

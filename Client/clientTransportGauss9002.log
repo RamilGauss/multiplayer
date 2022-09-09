@@ -3,8 +3,8 @@ TransportInfo:
 	 type=C,
 	 cn_in=0,
 	 cn_out=0,
-	 time=7:24:46.359,
-	 localTime=7:24:46.359,
+	 time=7:25:39.609,
+	 localTime=7:25:39.609,
 	 cntTry=0,
 	 DST=192.168.23.226:4321,
 	 SRC=192.168.23.226:9002

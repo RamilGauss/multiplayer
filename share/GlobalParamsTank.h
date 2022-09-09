@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -39,8 +39,8 @@ you may contact in writing [ramil2085@gmail.com].
 
 #define ServerLocalPort 4321
 
-#define VERSION_PROGRAMM ((unsigned short)48) // unsigned short
-#define VERSION_EDITOR   ((unsigned short)16)
+#define VERSION_PROGRAMM ((unsigned short)50) 
+#define VERSION_EDITOR   ((unsigned short)18)
 #define VERSION_CONVERTER_MESH   ((unsigned short)1000)
 //-------------------------------------------------------------------------------------------
 extern char strVersionClient[100];
@@ -53,6 +53,8 @@ extern char strVersionConverterMesh[100];
 #define STR_VERSION_SERVER strVersionServer
 #define STR_VERSION_EDITOR strVersionEditor
 #define STR_VERSION_CONVERTER_MESH strVersionConverterMesh
+
+#define NAME_GAME "TankS"
 
 
 #define DURATION_FIGHT_MINUTE 15 // длительность боя,минут
@@ -82,8 +84,8 @@ QMessageBox::warning( NULL, QObject::tr(STR_VERSION_CLIENT),sError );
 
 
 
-#define PATH_LIST_MODELS "..\\model\\listModel.ini"
-#define PATH_LIST_MAP "..\\map\\listMap.ini"
+#define PATH_LIST_MODELS "..\\model\\listModel.xml"
+#define PATH_LIST_MAP "..\\map\\listMap.xml"
 
 
 /* описание структуры хранения моделей и карт

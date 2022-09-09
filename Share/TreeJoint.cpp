@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -81,39 +81,47 @@ int TTreeJoint::GetCountPart()
   return mVectorNode.size();
 }
 //-------------------------------------------------------------------------
-void TTreeJoint::Setup(TLoadedJoint* pLoadedTree)
+void TTreeJoint::Setup(TLoadedJoint* pLoadedTree,TNumUseMap* mapUse)
 {
   Done();
   mLoadedTree = pLoadedTree;
+  mMapUse = mapUse;
   //-----------------------------------------
   // поиск root
-  int cnt = pLoadedTree->vectorPart.size();
+  int cnt = mLoadedTree->vectorPart.size();
   for(int i = 0 ; i < cnt ; i++)
   {
-    TPart* pPart = pLoadedTree->vectorPart.at(i);
-    if(pPart->name.compare(pLoadedTree->root)==0)
-    {
-      // нашли root
-      TNodeJoint* pNode = new TNodeJoint;
-      mVectorNode.push_back(pNode);
-      mRoot = pNode;
-      //---------------------------
-      mRoot->name = pLoadedTree->root;
-      mRoot->matrixDef = pLoadedTree->world;
-      mRoot->SetMatrixDef();
-      // теперь данная ветка сама найдет ветки для своих детей
-      FindBranch(pPart, mRoot);// + инициализация структуры TNodeJoint
-      flgNeedSetup = false;
-      break;
+    TPart* pPart = mLoadedTree->vectorPart.at(i);
+    if(pPart->name.compare(mLoadedTree->root)==0)
+    { 
+      TNumUseMap::iterator fit = mMapUse->find(pPart->name);
+      if(fit!=mMapUse->end()) // если нашли
+      if(fit->second==pPart->numUse) // совпало
+      {
+        // нашли root
+        TNodeJoint* pNode = new TNodeJoint;
+        mVectorNode.push_back(pNode);
+        mRoot = pNode;
+        //---------------------------
+        mRoot->name = mLoadedTree->root;
+        mRoot->matrixDef = mLoadedTree->world;
+        mRoot->SetMatrixDef();
+        mRoot->matrix_pro = mRoot->matrix;
+        // теперь данная ветка сама найдет ветки для своих детей
+        FindBranch(pPart, mRoot);// + инициализация структуры TNodeJoint
+        flgNeedSetup = false;
+        break;
+      }
     }
   }
   mLoadedTree = NULL;
+  mMapUse = NULL;
   BL_ASSERT(flgNeedSetup==false);
   //-----------------------------------------
   ProductAllMatrix();
 }
 //-------------------------------------------------------------------------
-void TTreeJoint::ChangeMatrix(std::string& name, D3DXMATRIXA16* matrix)
+void TTreeJoint::ChangeMatrix(std::string& name, D3DXMATRIXA16* matrix, bool def)
 {
   int cnt = GetCountPart();
   for(int i = 0 ; i < cnt ; i++ )
@@ -121,7 +129,9 @@ void TTreeJoint::ChangeMatrix(std::string& name, D3DXMATRIXA16* matrix)
     TNodeJoint* pNode = mVectorNode.at(i);
     if(pNode->name.compare(name)==0)
     {
-      pNode->matrix = *matrix;
+      if(def)
+        pNode->SetMatrixDef();
+      pNode->matrix = (*matrix)*pNode->matrix;
       break;
     }
   }
@@ -211,12 +221,17 @@ void TTreeJoint::FindBranch(TPart* pPart, TNodeJoint* pParent)
     pNode->matrixDef = pChild->matrix;// матрица
     pNode->SetMatrixDef();
     // поиск
-    for(int i = 0 ; i < cnt ; i++)
+    for(int j = 0 ; j < cntTree ; j++)
     {
-      TPart* pFPart = mLoadedTree->vectorPart.at(i);
+      TPart* pFPart = mLoadedTree->vectorPart.at(j);
       if(pFPart->name.compare(pNode->name)==0)
       {
-        FindBranch(pFPart,pNode);
+        TNumUseMap::iterator fit = mMapUse->find(pFPart->name);
+        if((fit!=mMapUse->end()        )&&// если нашли
+           (fit->second==pFPart->numUse)) // совпало
+        {
+          FindBranch(pFPart,pNode);
+        }
       }
     }
   }

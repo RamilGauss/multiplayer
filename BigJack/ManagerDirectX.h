@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -111,6 +111,19 @@ public:
                  D3DVECTOR& coord,     // где
                  D3DVECTOR& orient,    // ориентация эффекта
                  guint32 time_past/* прошло времени, мс*/ = 0);
+  // источники освещения
+  // ###
+  // ввод освещение накладывает условия на шейдер. он обязан содержать интерфейс
+  int GetCountLight(){return 1;}
+  const D3DVECTOR* GetCoordLight(int index){return NULL;}
+  const D3DVECTOR* GetCoordAtLight(int index){return NULL;}
+  unsigned int GetColorLight(int index){return 0;}
+  void SetCoordLight(int index,D3DVECTOR* m){}
+  void SetCoordAtLight(int index,D3DVECTOR* m){}
+  void SetColorLight(int index, unsigned int color){}
+  void AddLight(){}
+  void RemoveLight(int index){}
+  // ###
   //----------------------------------------------------------------
   //                             ~INTERFACE
   //----------------------------------------------------------------

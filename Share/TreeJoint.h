@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -39,6 +39,8 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include <vector>
 #include <d3dx10math.h>
+#include <map>
+#include <string>
 
 /*
 По иерархии
@@ -73,6 +75,7 @@ public:
   struct TPart
   {
     std::string name;
+    int numUse;// номер башни например
     std::vector<TChild*> vectorChild;
     ~TPart()
     {
@@ -83,6 +86,7 @@ public:
     TPart& operator =(const TPart& p)
     {
       name = p.name;
+      numUse = p.numUse;
       int cnt = p.vectorChild.size();
       for(int i = 0 ; i < cnt ; i++)
       {
@@ -132,13 +136,15 @@ public:
   // M. SetDefault()
   // M+1. GetMatrix(..)
   //----------------------
-  void Setup(TLoadedJoint* pLoadedTree);// -
+  typedef std::map<std::string, int> TNumUseMap;
+
+  void Setup(TLoadedJoint* pLoadedTree,TNumUseMap* mapUse);// -
 
   int GetCountPart();// +
   void SetOrderMatrixByName(std::vector<std::string>* order);// вызвать до вызова ChangeMatrix и GetMatrix // +
   
   // умножить матрицу по-умолчанию на новую матрицу и произвести изменения по всем детям
-  void ChangeMatrix(std::string& name, D3DXMATRIXA16* matrix);// +
+  void ChangeMatrix(std::string& name, D3DXMATRIXA16* matrix, bool def = true);// +
   // заполнить матрицей
   void GetMatrix(std::vector<D3DXMATRIXA16*>* matrix);// +
   // сбросить все матрицы в дефолт
@@ -158,11 +164,9 @@ protected:
     D3DXMATRIXA16 matrix;    // эта матрица получается умножением матрицы по-умолчанию на заданную матрицу через метод ChangeMatrix
     D3DXMATRIXA16 matrix_pro;// произведение по иерархии
     
-    TNodeJoint():matrixDef(1.0f,0.0f,0.0f,0.0f,
-                           0.0f,1.0f,0.0f,0.0f,
-                           0.0f,0.0f,1.0f,0.0f,
-                           0.0f,0.0f,0.0f,1.0f)
+    TNodeJoint()
     {
+      D3DXMatrixIdentity(&matrixDef);
       pParent = NULL;
       SetMatrixDef();
     }
@@ -174,6 +178,7 @@ protected:
   std::vector<TNodeJoint*> mVectorNode;// общее кол-во
 
   TLoadedJoint* mLoadedTree;// временно при Setup-е
+  TNumUseMap* mMapUse;
   //------------------------------------------------------
   void ProductAllMatrix();
   void ProductChild(TNodeJoint* pNode);

@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -42,6 +42,8 @@ you may contact in writing [ramil2085@gmail.com].
 
 using namespace std;
 
+const char* NameJointFile = "joint.xml";
+
 TManagerBaseObject::TManagerBaseObject()
 {
   LoadListPath();
@@ -53,6 +55,11 @@ TManagerBaseObject::~TManagerBaseObject()
 }
 //-------------------------------------------------------------------------------------------
 void TManagerBaseObject::AddObject(TBaseObject* pObject)
+{
+  SetTree(pObject);
+}
+//-------------------------------------------------------------------------------------------
+void TManagerBaseObject::SetTree(TBaseObject* pObject)
 {
   TTreeJoint::TLoadedJoint* pLoaded = NULL;
   unsigned int id = pObject->GetID_Model();
@@ -107,7 +114,7 @@ void TManagerBaseObject::PrepareForTreeJoint()
   std::map<unsigned int, std::string>::iterator eit = mMapID_Path.end();
   while(bit!=eit)
   {
-    (*bit).second += "joint.ini";
+    (*bit).second += NameJointFile;
     bit++;
   }
 }

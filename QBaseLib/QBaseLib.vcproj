@@ -160,6 +160,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FilterWinApi.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerGUI.cpp"
 				>
 			</File>
@@ -222,6 +226,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\FilterWinApi.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerGUI.h"
 				>
 				<FileConfiguration
@@ -268,18 +276,6 @@
 			SourceControlFiles="false"
 			>
 			<File
-				RelativePath=".\GeneratedFiles\Release\moc_BaseGUI.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\GeneratedFiles\Debug\moc_BaseGUI.cpp"
 				>
 				<FileConfiguration
@@ -292,10 +288,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GeneratedFiles\Debug\moc_BaseGUI_DX.cpp"
+				RelativePath=".\GeneratedFiles\Release\moc_BaseGUI.cpp"
 				>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -308,6 +304,18 @@
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\GeneratedFiles\Debug\moc_BaseGUI_DX.cpp"
+				>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool

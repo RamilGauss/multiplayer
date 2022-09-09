@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -42,6 +42,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "MakerLoaderModelDX.h"
 #include <stdlib.h>
 #include <d3dx10math.h>
+#include "SortByAlphabetic.h"
 
 using namespace nsStruct3D;
 using namespace std;
@@ -226,14 +227,13 @@ bool TModelDX::AddEffectDX(ILoaderModelDX::TDefGroup * pDefGroup)
 
   pEffect->mTypeLOD     = pDefGroup->mTypeLOD;
   pEffect->mflgNormal   = pDefGroup->mflgNormal;
-  pEffect->sName        = pDefGroup->strName;
-
   //----------------------------------------------------------
   // Load material textures
   TEffectDX::Material* pMaterial = &pEffect->mMaterial;
   // заполнить материал данными
   pMaterial->strTechnique = pDefGroup->strTechnique;
   pMaterial->strName      = pDefGroup->strName;
+  pMaterial->mNumUse      = pDefGroup->mNumUse;
   pMaterial->strTexture   = pDefGroup->strTexture;
   USES_CONVERSION;
   pMaterial->strShader = A2W(pDefGroup->strPathShader.data());
@@ -263,7 +263,7 @@ unsigned int TModelDX::GetIndexVisualGroupByName(char* sName, int num)
   int iFound = 0;
   for(int i = 0 ; i < cnt ; i++)
   {
-    if(strcmp(v->operator [](i)->sName.data(),sName)==0)
+    if(strcmp(v->operator [](i)->mMaterial.strName.data(),sName)==0)
     {
       if(iFound==num)
         return i;
@@ -274,18 +274,19 @@ unsigned int TModelDX::GetIndexVisualGroupByName(char* sName, int num)
   return 0;
 }
 //----------------------------------------------------------------------------------------------------
-//D3DXMATRIXA16* TModelDX::GetMatrixByName(char* sNameBlendBone/*к чему*/, int num, char* sNamePart/*что*/)
-//{
-//  unsigned int index = GetIndexVisualGroupByName(sNameBlendBone, num);
-//  TLOD* pLOD = &mVectorLOD[0];
-//  std::vector<TEffectDX*>*  v = pLOD->GetNonZeroVector();
-//  TEffectDX* pEffectDX = v->operator [](index);
-//  if(pEffectDX)
-//    return pEffectDX->GetBlendMatrixByName(sNamePart);
-//  else
-//    GlobalLoggerDX.WriteF_time("Не найден эффект модели имя %s номер %d\n",sNameBlendBone,num);
-//  return NULL;
-//}
+const char* TModelDX::GetNameByIndex(int index)
+{
+  TLOD* pLOD = &mVectorLOD[0];
+  std::vector<TEffectDX*>*  v = pLOD->GetNonZeroVector();
+  return v->operator [](index)->mMaterial.strName.data();
+}
+//----------------------------------------------------------------------------------------------------
+int TModelDX::GetNumUseByIndex(int index)
+{
+  TLOD* pLOD = &mVectorLOD[0];
+  std::vector<TEffectDX*>*  v = pLOD->GetNonZeroVector();
+  return v->operator [](index)->mMaterial.mNumUse;
+}
 //----------------------------------------------------------------------------------------------------
 int TModelDX::GetCntEffect()
 {
@@ -389,6 +390,50 @@ void TModelDX::LoadEffect(TEffectDX* pEffectDX)
   else// дубликат
   {
     pEffectDX->p = fit->second;
+  }
+}
+//----------------------------------------------------------------------------------------------------
+void TModelDX::SortPartByAlphabetic()
+{
+  int cntLod = mVectorLOD.size();
+  for(int i = 0 ; i < cntLod ; i++)
+  {
+    TLOD* pLOD = &mVectorLOD.at(i);
+    std::vector<TEffectDX*>* pVecEffect = NULL;
+    switch(i)
+    {
+      case 0:
+        pVecEffect = &(pLOD->normal);
+        break;
+      case 1:
+        pVecEffect = &(pLOD->damage);
+        break;
+      default:;     
+    }
+    //----------------------------------------------------
+    int cntPart = pVecEffect->size();
+    vector<TSortByAlphabetic::T> vectorName_Use;
+    for(int iPart = 0 ; iPart < cntPart ; iPart++)
+    {
+      TEffectDX* pEffectDX = pVecEffect->at(iPart);
+      TSortByAlphabetic::T t;
+      t.s = pEffectDX->mMaterial.strName;
+      t.v = pEffectDX->mMaterial.mNumUse;
+      t.index = iPart;
+      vectorName_Use.push_back(t);
+    }
+    // сортируем
+    TSortByAlphabetic sort;
+    sort.Sort(&vectorName_Use);
+    // в соответствии с вектором индексов согласуем вектор эффектов
+    std::vector<TEffectDX*> pNewEffect;
+    for(int iPart = 0 ; iPart < cntPart ; iPart++)
+    {
+      int index = vectorName_Use.at(iPart).index;
+      TEffectDX* pEffectDX = pVecEffect->at(index);
+      pNewEffect.push_back(pEffectDX);
+    }
+    *pVecEffect = pNewEffect;
   }
 }
 //----------------------------------------------------------------------------------------------------

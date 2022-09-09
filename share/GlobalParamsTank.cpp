@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -56,8 +56,8 @@ static TStrVersion strVersion;
 //-------------------------------------------------------------------------------------
 TStrVersion::TStrVersion()
 {
-  sprintf(strVersionClient,"Клиент \"Tanks\" v%0.3f NET DX9",VERSION_PROGRAMM/1000.0f);
-  sprintf(strVersionServer,"Сервер \"Tanks\" v%0.3f NET DX9",VERSION_PROGRAMM/1000.0f);
+  sprintf(strVersionClient,"Клиент \"%s\" v%0.3f NET DX9",NAME_GAME,VERSION_PROGRAMM/1000.0f);
+  sprintf(strVersionServer,"Сервер \"%s\" v%0.3f NET DX9",NAME_GAME,VERSION_PROGRAMM/1000.0f);
   sprintf(strVersionEditor,"Редактор моделей v%0.3f",VERSION_EDITOR/1000.0f);
   sprintf(strVersionConverterMesh,"Конвертер Obj->Bj v%0.3f",VERSION_CONVERTER_MESH/1000.0f);
 }

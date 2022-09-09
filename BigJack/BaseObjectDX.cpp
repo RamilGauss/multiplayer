@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -40,6 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <d3d9.h>
 
 using namespace nsStruct3D;
+using namespace std;
 
 TBaseObjectDX::TBaseObjectDX(int typeDX)
 {
@@ -72,6 +73,10 @@ void TBaseObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj,const D3DXVEC
 void TBaseObjectDX::SetModel(TModelDX* pModel)
 {
   mModel = pModel;
+  // скинуть инфу об именах в базовый объект
+  SetupVectorNamePart();
+  SetupVectorOrderPart();
+  SetupDefaultMapUse();
 }
 //------------------------------------------------------------------------------------------------
 TModelDX* TBaseObjectDX::GetModel()
@@ -81,5 +86,34 @@ TModelDX* TBaseObjectDX::GetModel()
 //------------------------------------------------------------------------------------------------
 void TBaseObjectDX::Done()
 {
+}
+//------------------------------------------------------------------------------------------------
+void TBaseObjectDX::SetupVectorNamePart()
+{
+  int cnt = mModel->GetCntEffect();
+  for(int i = 0 ; i < cnt ; i++)
+  { 
+    TPart part;
+    part.name = mModel->GetNameByIndex(i);
+    part.use  = mModel->GetNumUseByIndex(i);
+    mVectorNamePart.push_back(part);
+  }
+}
+//------------------------------------------------------------------------------------------------
+void TBaseObjectDX::SetupVectorOrderPart()
+{
+  int cnt = mModel->GetCntEffect();
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    string name = mModel->GetNameByIndex(i);
+    if(mVectorOrderPart.size()==0)
+      mVectorOrderPart.push_back(name);
+    else
+    {
+      int lastIndex = mVectorOrderPart.size()-1;
+      if(mVectorOrderPart.at(lastIndex).compare(name)!=0)
+        mVectorOrderPart.push_back(name);
+    }
+  }
 }
 //------------------------------------------------------------------------------------------------

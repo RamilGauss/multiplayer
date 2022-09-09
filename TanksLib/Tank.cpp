@@ -25,14 +25,16 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
 you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
+#define _USE_MATH_DEFINES
 
+#include <cmath>
 
 #include "Tank.h"
 #include "TypeTank.h"
@@ -40,12 +42,22 @@ you may contact in writing [ramil2085@gmail.com].
 
 TTank::TTank()
 {
-  mProperty.mID_tank = 0;
   pRoom = NULL;
+
+
+  // свойства по-умолчанию, временно, пока нет Ѕƒ
+  mProperty.mID_tank = 0;
 
   mTower = 0; // номер, 0 - базова€ (сток)
   mGun = 0;
 
+  mProperty.mSpeedRotateTower  = 0.2f;
+  mProperty.mSpeedReductionGun = 0.1f;
+
+  mProperty.mVMaxGunUgol = 15.0f/180.0f*M_PI;  // вверх, рад
+  mProperty.mVMinGunUgol = -5.0f/180.0f*M_PI;  // вниз, рад
+  mProperty.mHMaxGunUgol = 0.0f;  // по часовой стрелке, рад
+  mProperty.mHMinGunUgol = 0.0f;  // против часовой стрелке, рад
 }
 //------------------------------------------------------------------------
 TTank::~TTank()

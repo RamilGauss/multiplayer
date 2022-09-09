@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -44,10 +44,15 @@ you may contact in writing [ramil2085@gmail.com].
 
 // для экспериментов (для WoT)
 #include "IMeshFile.h"
+#include "BL_ConfigFile.h"
+#include "IXML.h"
 
 class TLoaderModelDX : public ILoaderModelDX
 {
   IMeshFile mMeshFile;
+
+  TBL_ConfigFile mFileIniMain;
+  IXML* mXML;
 
 public:
   TLoaderModelDX(IDirect3DDevice9* _m_pd3dDevice);
@@ -55,21 +60,15 @@ public:
 
   virtual bool Load(LPCWSTR strFilenameData);
 
-
 protected:
 
   bool LoadMainFile();
   bool LoadFileResource();
-  bool LoadPart(TBL_ConfigFile* fileIni,int i);
-  bool LoadVector(TBL_ConfigFile* fileIni,char* strNumPart,char* key,D3DXVECTOR3& vector);
-  bool LoadVector4(TBL_ConfigFile* fileIni,char* strNumPart,char* key,D3DXVECTOR4& vector4);
+  bool LoadPart(int i);
+  bool LoadVector(const char* key,D3DXVECTOR3& vector);
+  bool LoadVector4(const char* key,D3DXVECTOR4& vector4);
 
-  bool LoadMesh(TBL_ConfigFile* fileIni,char* strNumPart, TDefGroup *mArrDefGroup);
-
-protected:
-  char* FindSemicolon(char* in_buffer);
-  float FindFloat_Semicolon(char** buffer,bool* ok);
-  int FindInt_Semicolon(char** buffer,bool* ok);
+  bool LoadMesh(TDefGroup *mArrDefGroup);
 };
 
 

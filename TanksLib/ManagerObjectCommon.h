@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -44,6 +44,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <vector>
 #include "ProgressBar.h"
 #include "CallBackRegistrator.h"
+#include "../QBaseLib/FilterWinApi.h"
 
 class TBaseObjectCommon;
 
@@ -65,9 +66,6 @@ protected:
   volatile bool flgNeedStopThreadLoadMap;    // необходимо остановить загрузку
 
   guint32 mLastTimeFreshData;
-  enum{
-    eTimeoutFreshData=10, // мс
-  };
 
 protected:
   
@@ -125,7 +123,7 @@ protected:
   void SetEffect(unsigned int id_effect, // номер эффекта
     D3DVECTOR& coord,     // где
     D3DVECTOR& orient,    // ориентаци€ эффекта
-    float time_past = 0); // прошло времени, мс
+    guint32 time_past = 0); // прошло времени, мс
 
 
   friend void CallBackMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
@@ -136,6 +134,12 @@ protected:
 
 
   virtual float GetTimeWork() = 0;
+
+
+  // примочка дл€ транцсл€ции событий в Qt
+  void SetWinApiEvent(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+  TFilterWinApi mFilter;
 };
 
 #endif

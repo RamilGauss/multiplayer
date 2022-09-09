@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -70,6 +70,7 @@ public:
   struct Material
   {
     std::string strName;
+    int         mNumUse;// в массиве может быть несколько частей с одинаковым именем, этот параметр поможет выбрать одну из частей
 
     D3DXVECTOR3 vAmbient;
     D3DXVECTOR3 vDiffuse;
@@ -128,8 +129,6 @@ public:
 
   unsigned char mTypeLOD;
   bool          mflgNormal;
-
-  std::string   sName;
 
 };
 

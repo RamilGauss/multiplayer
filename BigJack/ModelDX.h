@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -85,8 +85,11 @@ public:
   void Destroy();
   void LostDevice();
   void ResetDevice();
+  void SortPartByAlphabetic();
 
   unsigned int GetIndexVisualGroupByName(char* sName, int num);
+  const char* GetNameByIndex(int index);
+  int GetNumUseByIndex(int index);
 
 protected:
 
@@ -121,7 +124,7 @@ protected:
   float mLOD;// 2 состояния по ЛОДу, расстояние от камеры до центра координат
 
 
-  // для оптимизации загрузки, чтобы исключить повторную загрузки текстур
+  // для оптимизации загрузки, чтобы исключить повторную загрузку текстур
   std::map<std::wstring, IDirect3DTexture9*> mMapPathTexture;
   void LoadTexture(TEffectDX::Material* pMaterial);
   void ReleaseTexture();

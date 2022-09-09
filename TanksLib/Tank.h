@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -99,9 +99,6 @@ public:
   virtual bool GetMirror(char** pData, int& size){return false;}
   virtual void SetMirror(char* pData, int size){}
 
-  // реакция на человеческую реакцию
-  virtual void SetHuman(char* pData, int size){};
-
   virtual int GetSizeProperty();
   virtual char* GetProperty();
   virtual void SetProperty(char* pData,int size);
@@ -124,8 +121,10 @@ protected:
   TClient* pMasterClient;
 //--------------------------------------------------------------------------------
   // для Клиента
-public:
   std::string sClientName;
+public:
+  const char* GetClientName(){return sClientName.data();}
+  void        SetClientName(char* str){sClientName.insert(0,str);}
 //--------------------------------------------------------------------------------
 
 public:
@@ -134,6 +133,26 @@ public:
   struct TProperty
   {
     unsigned int mID_tank;
+    // базовые
+    float mMassa;                    //масса, кг
+    float mPower;                    //мощность двигателя, Вт
+    float mSpeedRotate;              //мощность поворота, град/сек
+    float mDistView;                 //дальность обзора, м
+    float mVisibilityStatic;         //видимость неподвижный
+    float mVisibilityDinamic;        //          подвижный, коэф
+    float mSpeedRotateTower;         // скорость вращения башни, рад/сек
+    float mSpeedReductionGun;        // скорость движения пушки, рад/с
+    // Property, которые не меняются
+    float mMaxSpeedForward;          //максимальная скорость вперед, м/с
+    float mMaxSpeedBackward;         //максимальная скорость назад, м/с
+    float mRadiusRadio;              // радиус действия радио, м - зависит от рации и радиста
+
+    // максимальный угол вертикальной наводки у пушки
+    float mVMaxGunUgol;  // вверх, рад
+    float mVMinGunUgol;  // вниз, рад
+    // максимальный угол вертикальной наводки у пушки
+    float mHMaxGunUgol;  // по часовой стрелке, рад
+    float mHMinGunUgol;  // против часовой стрелке, рад
   };
   #pragma pack(pop)
 
@@ -153,9 +172,6 @@ public:
 
   // состояние
 
-  // Property, которые не меняются
-  float mMaxSpeed;                 //максимальная скорость, км/ч
-  float mRadiusRadio;              // радиус действия радио, м - зависит от рации и радиста
   // ББ
   TDefShell mShellBron; // зависит от пушки
   // ОФ
@@ -174,16 +190,6 @@ public:
 
   // Property, которые меняются
   TProperty mProperty;
-
-  // базовые
-  float mMassa;                    //масса, кг
-  float mPower;                    //мощность двигателя, Вт
-  float mSpeedRotate;              //мощность поворота, град/сек
-  float mDistView;                 //дальность обзора, м
-  float mVisibilityStatic;         //видимость неподвижный
-  float mVisibilityDinamic;        //          подвижный, коэф
-  float mSpeedRotateTower;         // скорость вращения башни, град/сек
-  float mSpeedReductionGun;        // скорость движения пушки, град/с
 
   // характеристики орудия
   unsigned short mCntCommonShell;   // общее кол-во снарядов

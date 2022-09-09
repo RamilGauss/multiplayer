@@ -43,7 +43,7 @@
 				UseUnicodeResponseFiles="false"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;..\glib-2.0&quot;;..\GBaseLib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;MARKUP_STL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -181,6 +181,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IXML.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\LiveWall.cpp"
 				>
 			</File>
@@ -201,11 +205,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MakerXML.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerBaseObject.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Map.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Markup.cpp"
 				>
 			</File>
 			<File
@@ -218,6 +230,10 @@
 			</File>
 			<File
 				RelativePath=".\SaveOnHDD.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SortByAlphabetic.cpp"
 				>
 			</File>
 			<File
@@ -238,6 +254,10 @@
 			</File>
 			<File
 				RelativePath=".\Win_Func.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\XML_Markup.cpp"
 				>
 			</File>
 		</Filter>
@@ -311,6 +331,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IXML.h"
+				>
+			</File>
+			<File
 				RelativePath=".\List.h"
 				>
 			</File>
@@ -335,11 +359,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MakerXML.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerBaseObject.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Map.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Markup.h"
 				>
 			</File>
 			<File
@@ -352,6 +384,10 @@
 			</File>
 			<File
 				RelativePath=".\SaveOnHDD.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SortByAlphabetic.h"
 				>
 			</File>
 			<File
@@ -380,6 +416,10 @@
 			</File>
 			<File
 				RelativePath=".\Win_Func.h"
+				>
+			</File>
+			<File
+				RelativePath=".\XML_Markup.h"
 				>
 			</File>
 		</Filter>

@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -48,7 +48,15 @@ public:
   virtual bool GetMirror(char ** pData,int &size);
   virtual void SetMirror(char *pData,int size);
 
-  virtual bool Animate(guint32 time_ms){return true;};
+  virtual void SetHuman(char* pData, int size);
+
+  virtual bool Animate(guint32 time_ms);
+
+protected:
+  // debug only
+  void RotateTurret(float ugol);
+  void RotateVerticalGun(float ugol);
+
 
 };
 

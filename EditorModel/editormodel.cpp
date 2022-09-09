@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -79,10 +79,10 @@ void TEditorModel::Translate(unsigned short type, char*pData, int size)
 //  pGame->VisualEvent(iTime, fElapsedTime);
 //}
 //---------------------------------------------------------------------------------------------
-//void TEditorModel::mousePressEvent ( QMouseEvent * event ) 
-//{
-//  mBeginPoint = event->pos();
-//}
+void TEditorModel::mousePressEvent ( QMouseEvent * event ) 
+{
+  //mBeginPoint = event->pos();
+}
 ////---------------------------------------------------------------------------------------------
 //void TEditorModel::keyPressEvent( QKeyEvent * event )
 //{
@@ -123,4 +123,9 @@ void TEditorModel::Translate(unsigned short type, char*pData, int size)
 //  pGame->AddObject(pObject);
 //  //###
 //}
-////--------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+bool TEditorModel::event ( QEvent * event )  
+{
+  return false;
+}
+//--------------------------------------------------------------------------------------------------------

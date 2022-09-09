@@ -2,9 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\client.vcproj", "{A4EE1FDE-FDDC-4CE4-AC31-71559907C174}"
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
 	ProjectSection(ProjectDependencies) = postProject
 		{CD7A413A-B10E-4B83-AD7E-55C96422E915} = {CD7A413A-B10E-4B83-AD7E-55C96422E915}
 		{15D68F42-EE7B-4CC9-A54D-5A37B96DEF2C} = {15D68F42-EE7B-4CC9-A54D-5A37B96DEF2C}
@@ -18,9 +15,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\client.vcp
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server\server.vcproj", "{4D2DD4B8-016F-44E8-85A2-C0F40A53251B}"
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
 	ProjectSection(ProjectDependencies) = postProject
 		{CD7A413A-B10E-4B83-AD7E-55C96422E915} = {CD7A413A-B10E-4B83-AD7E-55C96422E915}
 		{15D68F42-EE7B-4CC9-A54D-5A37B96DEF2C} = {15D68F42-EE7B-4CC9-A54D-5A37B96DEF2C}
@@ -52,9 +46,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BigJack", "BigJack\BigJack.vcproj", "{600BBB4D-1A07-4D9E-8C52-6FDE93C3902A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QBaseLib", "QBaseLib\QBaseLib.vcproj", "{CD7A413A-B10E-4B83-AD7E-55C96422E915}"
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TanksLib", "TanksLib\TanksLib.vcproj", "{187CFE85-D0F7-4E23-9216-24CFDB66EB60}"
 EndProject
@@ -76,9 +67,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProject", "TestProject\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EditorModel", "EditorModel\EditorModel.vcproj", "{DA5DE3BC-5DC6-4233-93E8-7F40A836F05C}"
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
 	ProjectSection(ProjectDependencies) = postProject
 		{CD7A413A-B10E-4B83-AD7E-55C96422E915} = {CD7A413A-B10E-4B83-AD7E-55C96422E915}
 		{15D68F42-EE7B-4CC9-A54D-5A37B96DEF2C} = {15D68F42-EE7B-4CC9-A54D-5A37B96DEF2C}
@@ -92,16 +80,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EditorModel", "EditorModel\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QTest", "QTest\QTest.vcproj", "{9A9C631C-C337-4FFA-94D6-AE397EAFFA24}"
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testWin", "testWin\testWin.vcproj", "{FE60C5E9-AB3D-41F3-A1CF-794049903AEE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF0D719A-E5DE-4F17-9741-FCBDD15B3FE0} = {DF0D719A-E5DE-4F17-9741-FCBDD15B3FE0}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConverterMesh", "ConverterMesh\ConverterMesh.vcproj", "{30A49B01-DC35-41A1-9C92-045BB09D5A64}"
-	GlobalSection(Qt) = preSolution
-		Integration = True
-	EndGlobalSection
 	ProjectSection(ProjectDependencies) = postProject
 		{CD7A413A-B10E-4B83-AD7E-55C96422E915} = {CD7A413A-B10E-4B83-AD7E-55C96422E915}
 		{15D68F42-EE7B-4CC9-A54D-5A37B96DEF2C} = {15D68F42-EE7B-4CC9-A54D-5A37B96DEF2C}
@@ -220,5 +205,23 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	GlobalSection(Qt) = preSolution
+		Integration = True
+	EndGlobalSection
+	GlobalSection(Qt) = preSolution
+		Integration = True
 	EndGlobalSection
 EndGlobal

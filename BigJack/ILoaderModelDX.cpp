@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -44,7 +44,7 @@ ILoaderModelDX::ILoaderModelDX( IDirect3DDevice9* _m_pd3dDevice )
   pStrPathShader[0]          = '\0';
   pStrFilenameData[0]        = '\0';
   pStrPathPrimitive[0]       = '\0';
-  pStrFilenameDataMainIni[0] = '\0';
+  pStrFilenameDataMain[0] = '\0';
 }
 //-----------------------------------------------------------
 ILoaderModelDX::~ILoaderModelDX()

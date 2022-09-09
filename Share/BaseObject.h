@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -55,55 +55,66 @@ public:
   TBaseObject();
   virtual ~TBaseObject();
 
-  virtual void SetWorld(D3DXMATRIXA16& world){mWorld=world;}
-  virtual void SetState(std::vector<unsigned char>* state);
-  virtual void SetID_Model(unsigned int id);
-  virtual void SetID_Map(unsigned int id){ID_map = id;}
+  void SetWorld(D3DXMATRIXA16& world){mWorld=world;}
+  void SetID_Model(unsigned int id);
+  void SetID_Map(unsigned int id){ID_map = id;}
 
-  virtual unsigned int GetID_Model(){return ID_model;}
-  virtual unsigned int GetID_Map(){return ID_map;}
-  virtual std::vector<unsigned char>* GetState(){return &mState;}
-  virtual D3DXMATRIXA16 GetWorld(){return mWorld;}
+  unsigned int GetID_Model(){return ID_model;}
+  unsigned int GetID_Map(){return ID_map;}
+  std::vector<unsigned char>* GetState(){return &mState;}
+  D3DXMATRIXA16 GetWorld(){return mWorld;}
+
 
   void SetTree(TTreeJoint::TLoadedJoint* pTree);
-
+  void SetMapUse(std::map<std::string,int>* mapUse = NULL);// использовать при смене используемых частей и при (собственно) начальном задании
+  void SetState(std::vector<unsigned char>* state);
+  
+  void GetDefaultMapUse(std::map<std::string,int>* mapUse);
+  
   void* GetPtrInherits(){return mPtrInherits;}
-
-protected:
-  D3DXMATRIXA16* SetOneMatrix(D3DXMATRIXA16* matrix);
 
 protected:
   TTreeJoint::TLoadedJoint* pLoadedTree;
   TTreeJoint mTree;
 
-  unsigned int ID_map;// идентификатор на карте
+  unsigned int ID_map;  // идентификатор на карте
   unsigned int ID_model;// идентификатор модели
-
-  std::vector<unsigned char> mState;
 
   D3DXMATRIXA16 mWorld; // здесь вся инфа по ориентации и координатам объекта
 
+  std::vector<unsigned char> mState;// графика, говорит движку какую из частей рисовать, для физики определяет поведение объекта
+  std::vector<unsigned char> mMask; // и физика и графика какие части рисовать и использовать
+  std::vector<D3DXMATRIXA16*> mVectorMatrix;// и физика и графика, cnt=cntAllJoint
 
-  std::vector<unsigned char> mMask;
-  std::vector<std::string> mVectorOrderPart;
+  // size = sizeAllPart
+  struct TPart 
+  {
+    std::string name;
+    int use;
+  };
+  std::vector<TPart> mVectorNamePart;// перечислены имена частей моделей. графический вектор должен точно совпадать.
+  // этот вектор используется для заполнения маски частей
+  //size = sizeAllJoint
+  std::vector<std::string> mVectorOrderPart;// порядок названий частей, без повторений, cnt=cntJoint
+  std::map<std::string, int>  mMapUse;// cnt=cntAllPartModel
 
   // настроить матрицу расположения и ориентации локальных видимых частей
   void SetDefaultMatrix();//### эксперимент
-  virtual void SetupState();
-  virtual void SetupMask();
+  void SetupState();
+  void SetupMask();
 
-  virtual std::vector<std::string>* GetOrderPart(){return &mVectorOrderPart;};
+  void SetupDefaultMapUse();
+
+  //virtual std::vector<std::string>* GetOrderPart(){return &mVectorOrderPart;};
 
   // маска отрисовки частей модели
   // например, нарисовать Пушку1, а не Пушку0 и т.д.
   // 1 0 0 1 1 1 1
 
 
-  std::vector<D3DXMATRIXA16*> mVectorMatrix;
-
-
   void* mPtrInherits;// назначить в TBaseObjectCommon (решение проблемы виртуального наследования)
 
+  int GetCountPart(const char* name, std::vector<std::string>* pVec);
 };
 
 

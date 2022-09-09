@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -41,12 +41,15 @@ you may contact in writing [ramil2085@gmail.com].
 #include "HiTimer.h"
 #include "BaseObjectCommon.h"
 
+
 TManagerObjectCommon* pMOC = NULL;
 //-----------------------------------------------------------------------------
 void CallBackMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
   if(pMOC==NULL) return;
   
+  pMOC->SetWinApiEvent(hWnd, uMsg, wParam, lParam);
+
   pMOC->OnMsg( hWnd, uMsg, wParam, lParam );
 }
 //-----------------------------------------------------------------------------
@@ -224,7 +227,7 @@ void TManagerObjectCommon::NotifyLoadMapEndEvent()
 void TManagerObjectCommon::SetEffect(unsigned int id_effect, // номер эффекта
                D3DVECTOR& coord,     // где
                D3DVECTOR& orient,    // ориентация эффекта
-               float time_past ) // прошло времени, мс
+               guint32 time_past ) // прошло времени, мс
 {
   mMDX_Scene.SetEffect(id_effect,coord,orient,time_past);
 }
@@ -270,3 +273,9 @@ void TManagerObjectCommon::OnFrameMove( double fTime, float fElapsedTime, void* 
 
 }
 //--------------------------------------------------------------------------------------------------------
+void TManagerObjectCommon::SetWinApiEvent(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+  mFilter.WinApiEvent(&hWnd, &uMsg, &wParam, &lParam);
+}
+//--------------------------------------------------------------------------------------------------------
+

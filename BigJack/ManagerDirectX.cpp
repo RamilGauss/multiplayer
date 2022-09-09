@@ -25,13 +25,16 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
 you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
+#define _USE_MATH_DEFINES
+
+#include <cmath>
 
 #include "DXUT.h"
 #include "ManagerDirectX.h"
@@ -231,29 +234,17 @@ HRESULT TManagerDirectX::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3D
   // Setup the camera's view parameters
   D3DXVECTOR3 vecEye( 0.0f, -10.0f, 0.0001f );
   D3DXVECTOR3 vecAt ( 0.0f, 0.0f, 0.0f );
-  //###
-  //// Setup the camera's view parameters
-  //D3DXVECTOR3 vecEye( 0.0f, 10.0f, 0.0001f );
-  //D3DXVECTOR3 vecAt ( 0.0f, 0.0f, 0.0f );
-  //D3DXVECTOR3 vUp( 0,1,0 );
-  ////D3DXMatrixLookAtLH( &mView, &vecEye, &vecAt, &vUp );
-  ////###
-  //D3DXVECTOR3 dvec = vecAt - vecEye;
-  //D3DXVECTOR3 zaxis; 
-  //D3DXVec3Normalize(&zaxis,&dvec);
-  //D3DXVECTOR3 xaxis; 
-  //D3DXVec3Cross( &xaxis, &vUp, &zaxis);
-  //D3DXVec3Normalize(&xaxis,&xaxis);
-
-  //D3DXVECTOR3 yaxis; 
-  //D3DXVec3Cross(&yaxis,&zaxis, &xaxis);// = cross(zaxis, xaxis);
-  //mView = D3DXMATRIXA16(xaxis.x,                       yaxis.x,                      zaxis.x,                      0.0f,
-  //  xaxis.y,                       yaxis.y,                      zaxis.y,                      0.0f,
-  //  xaxis.z,                       yaxis.z,                      zaxis.z,                      0.0f,
-  //  -D3DXVec3Dot(&xaxis, &vecEye), -D3DXVec3Dot(&yaxis,&vecEye), -D3DXVec3Dot(&zaxis,&vecEye), 1.0f);
-  ////###
 
   mCamera.SetViewParams( &vecEye, &vecAt );
+  // повернуть на 180 градусов
+  const D3DXMATRIX* mView = mCamera.GetViewMatrix();
+  D3DXMATRIX matrix;
+  D3DXMATRIX newView;
+  D3DXMatrixIdentity(&matrix);
+  D3DXMatrixRotationZ(&matrix,M_PI);
+  //newView = (*mView)*matrix;
+  mCamera.SetViewMatrix(&newView);
+  //mCamera.SetEnableYAxisMovement(false);
   return S_OK;
 }
 //--------------------------------------------------------------------------------------
@@ -305,7 +296,11 @@ void TManagerDirectX::OnDestroyDevice( void* pUserContext )
 //--------------------------------------------------------------------------------------
 void TManagerDirectX::Init(HWND hwnd )
 {
-  mDXUT.Init(hwnd);
+  HRESULT hr = mDXUT.Init(hwnd);
+  if(hr!=S_OK)
+  {
+    GlobalLoggerDX.WriteF_time("Init fail. hr=0x%X\n",hr);
+  }
 }
 //--------------------------------------------------------------------------------------
 void TManagerDirectX::Done()

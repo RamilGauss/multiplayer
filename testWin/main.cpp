@@ -1,63 +1,61 @@
+/*
+===========================================================================
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Гудаков Рамиль Сергеевич 
+2011, 2012
+===========================================================================
+                        Common Information
+"Tanks" GPL Source Code
+
+This file is part of the "Tanks" GPL Source Code.
+
+"Tanks" Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+"Tanks" Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the "Tanks" Source Code is also subject to certain additional terms. 
+You should have received a copy of these additional terms immediately following 
+the terms and conditions of the GNU General Public License which accompanied
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
+===========================================================================
+                                  Contacts
+If you have questions concerning this license or the applicable additional terms,
+you may contact in writing [ramil2085@gmail.com].
+===========================================================================
+*/ 
+
 #include <windows.h>
 #include <vector>
+#include "MakerXML.h"
+#include "SortByAlphabetic.h"
 
-class TBase
-{
-protected:
-  void* pInheritsThis;
-public:
-  TBase(){pInheritsThis=NULL;}
-  void* GetBaseThis(){return this;}
-  void* GetInherits(){return pInheritsThis;}
-};
+using namespace std;
 
-class TA : public TBase
-{
-  void* pA;
-public:
-  TA(){pA = this;}
-  void* GetAThis(){return pA;}
-};
-
-class TB : virtual public TA
-{
-  void* pB;
-public:
-  TB(){pB = this;}
-  void* GetBThis(){return pB;}
-};
-class TC : virtual public TA
-{
-  void* pC;
-public:
-  TC(){pC = this;}
-  void* GetCThis(){return pC;}
-};
-
-class TD : public TB, public TC
-{
-  void* pD;
-public:
-  TD(){pD = this;}
-  void* GetDThis(){return pD;}
-};
-
-
-class TRealize : public TD
-{
-  void* pR;
-public:
-  TRealize(){pInheritsThis = this;pR = this;}
-  void* GetRThis(){return pR;}
-
-};
 
 INT WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 {
-  /*TRealize d;
-  TBase* pBase     = &d; 
-  void*  pPtrBase  = pBase->GetBaseThis();
-  void*  pInherits = pBase->GetInherits();*/
+  TMakerXML m;
+  IXML* pXML = m.New();
+  pXML->Load("d:\\joint.xml");
 
+  float v4[4];
+  bool res;
+  string content;
+  int cntSection = pXML->GetCountSection();
+  res = pXML->EnterSection("root",0);// <-
+    res = pXML->EnterSection("world",0);
+      res = pXML->ReadFloat4("row",0,&v4[0]);
+    pXML->LeaveSection();
+  res = pXML->LeaveSection();// ->
+  pXML->Save();
   return 0;
 }

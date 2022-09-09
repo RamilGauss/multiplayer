@@ -1,5 +1,42 @@
+/*
+===========================================================================
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Гудаков Рамиль Сергеевич 
+2011, 2012
+===========================================================================
+                        Common Information
+"Tanks" GPL Source Code
+
+This file is part of the "Tanks" GPL Source Code.
+
+"Tanks" Source Code is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+"Tanks" Source Code is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
+
+In addition, the "Tanks" Source Code is also subject to certain additional terms. 
+You should have received a copy of these additional terms immediately following 
+the terms and conditions of the GNU General Public License which accompanied
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
+===========================================================================
+                                  Contacts
+If you have questions concerning this license or the applicable additional terms,
+you may contact in writing [ramil2085@gmail.com].
+===========================================================================
+*/ 
+
 #include "DXUT_Class.h"
 #include "ManagerDirectX.h"
+
+using namespace std;
 
 TDXUT* pDXUT_Realize = NULL;
 
@@ -193,8 +230,9 @@ TDXUT::~TDXUT()
   pDXUT_Realize = NULL;
 }
 //--------------------------------------------------------------------------------------
-void TDXUT::Init(HWND hwnd )
+HRESULT TDXUT::Init(HWND hwnd )
 {
+  HRESULT hr;
   flgWasLostEvent    = false;
   flgWasDestroyEvent = false;
 
@@ -214,19 +252,20 @@ void TDXUT::Init(HWND hwnd )
   //----------------------------------------------------
   DXUTSetCursorSettings( true, true );
 
-  DXUTInit( true, true ); // Parse the command line and show msgboxes
+  if(FAILED(DXUTInit( true, true ))) return false; // Parse the command line and show msgboxes
   DXUTSetHotkeyHandling( true, true, true );  // handle the defaul hotkeys
   
   if(hwnd==NULL)
-    DXUTCreateWindow( L"TDXUT" );
+    V_RETURN(DXUTCreateWindow( L"TDXUT" ))
   else
   {
     // установить реакции
     // на "нашу" функцию
     LONG_PTR res = SetWindowLongPtr(hwnd,GWLP_WNDPROC,(LONG_PTR)DXUTStaticWndProc_Changed);
-    DXUTSetWindow( hwnd, hwnd, hwnd, false );
+    V_RETURN(DXUTSetWindow( hwnd, hwnd, hwnd, false ))
   }
   DXUTCreateDevice( true, 1024, 768 );
+  return S_OK;
 }
 //--------------------------------------------------------------------------------------
 void TDXUT::Work()
@@ -245,5 +284,11 @@ int TDXUT::Done()
   }
   pMDX = NULL;
   return res;
+}
+//--------------------------------------------------------------------------------------
+std::string TDXUT::GetError()
+{
+  //DXUTGetErr
+  return string();
 }
 //--------------------------------------------------------------------------------------

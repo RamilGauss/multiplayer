@@ -155,10 +155,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\DefineDX.h"
-				>
-			</File>
-			<File
 				RelativePath=".\DXUT_Class.cpp"
 				>
 			</File>
@@ -187,6 +183,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ManagerResourceDX.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerShader.cpp"
 				>
 			</File>
@@ -206,6 +206,10 @@
 				RelativePath=".\ProgressBar.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\ShaderStack.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -214,6 +218,10 @@
 			>
 			<File
 				RelativePath=".\BaseObjectDX.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Define_DX.h"
 				>
 			</File>
 			<File
@@ -253,6 +261,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ManagerResourceDX.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerShader.h"
 				>
 			</File>
@@ -270,6 +282,10 @@
 			</File>
 			<File
 				RelativePath=".\ProgressBar.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ShaderStack.h"
 				>
 			</File>
 			<File

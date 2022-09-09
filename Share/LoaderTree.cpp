@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -34,156 +34,118 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 #include "LoaderTree.h"
 #include "glib/gmem.h"
+#include "MakerXML.h"
+
+namespace TreeSection
+{
+
+const char* SectionMatrix = "matrix";
+const char* SectionRow    = "row";
+const char* SectionJoint  = "joint";
+const char* SectionName   = "name";
+const char* SectionNumUse = "numUse";
+const char* SectionChild  = "child";
+}
+
+using namespace std;
+using namespace TreeSection;
 
 TLoaderTree::TLoaderTree()
 {
   pLoadedTree = NULL;
+  TMakerXML makerXML;
+  mXML = makerXML.New();
 }
 //-----------------------------------------------------------------------------
 TLoaderTree::~TLoaderTree()
 {
   delete pLoadedTree;
+  delete mXML;
 }
 //-----------------------------------------------------------------------------
 bool TLoaderTree::Load(char* sPath)
 {
   delete pLoadedTree;
   pLoadedTree = new TTreeJoint::TLoadedJoint;
-  TBL_ConfigFile mFileIniMain;
-  mFileIniMain.Close();
-  mFileIniMain.Open(sPath);
-  if(mFileIniMain.IsOpen()==false)
-    return false;
-
-  TBL_ConfigFile* fileIni = &mFileIniMain;
-  for(int k = 0 ; k < 4 ; k++)
-  {
-    char sWorld[100];
-    sprintf(sWorld,"world%d",k);// матрица из 4 строк
-    D3DXVECTOR4 vector4;
-    if(LoadVector4(fileIni,"JOINT",sWorld,vector4)==false) return false;
-    for(int m = 0 ; m < 4 ; m++)
-      pLoadedTree->world.m[k][m] = vector4[m];
-  }
+  CHECK_RET(mXML->Load(sPath))
+  string sRoot = mXML->GetNameSection(0);
+  CHECK_RET(mXML->EnterSection(sRoot.data(),0))
+  //--------------------------------------------
+  LoadMatrix4x4(SectionMatrix,0,&(pLoadedTree->world));
 
   // загрузить Joint
   // имя корня
-  int cntJoint = fileIni->GetInteger("JOINT","cnt",0);
-  char* str = fileIni->GetValue("JOINT","root");
-  if(str)
-  {
-    pLoadedTree->root = str;
-    g_free(str);
-    str = NULL;
-  }
+  string str = mXML->ReadSection(SectionName,0);
+  if(str.length())
+    pLoadedTree->root = str.data();
   else return false;
   //------------------------------------------------------------------
   // загрузить части
+  int cntJoint = mXML->GetCountSection(SectionJoint);
   for(int i = 0 ; i < cntJoint ; i++)
-  {
-    TTreeJoint::TPart* pPart = new TTreeJoint::TPart;
-    char sj[100];
-    sprintf(sj,"JOINT%d",i);
-    char* str = fileIni->GetValue(sj,"strName");
-    if(str)
-    {
-      pPart->name = str;
-      g_free(str);
-      str = NULL;
-    }
-    else return false;
-    // загрузить детей
-    int cntChild = fileIni->GetInteger(sj,"cntJoint",0);
-    if(cntChild==0) return false;
-    for(int j = 0 ; j < cntChild; j++)
-    {
-      TTreeJoint::TChild* pChild = new TTreeJoint::TChild;
-      char sChild[100];
-      sprintf(sChild,"nameJoint%d",j);// имя ребенка
-      str = fileIni->GetValue(sj,sChild);
-      if(str)
-      {
-        pChild->name = str;
-        g_free(str);
-        str = NULL;
-      }
-      else return false;
-      //----------------------------------------------    
-      for(int k = 0 ; k < 4 ; k++)
-      {
-        char sMatrix[100];
-        sprintf(sMatrix,"matrix%d_%d",j,k);// матрица из 4 строк
-        D3DXVECTOR4 vector4;
-        if(LoadVector4(fileIni,sj,sMatrix,vector4)==false) return false;
-        for(int m = 0 ; m < 4 ; m++)
-          pChild->matrix.m[k][m] = vector4[m];
-      }
-      pPart->vectorChild.push_back(pChild);
-    }
+    CHECK_RET(LoadJoint(i)) 
 
-    pLoadedTree->vectorPart.push_back(pPart);
-  }
+  mXML->ResetPos();
   return true;
 }
 //---------------------------------------------------------------------------------------
-bool TLoaderTree::LoadVector4(TBL_ConfigFile* fileIni,char* strNumPart,char* key,D3DXVECTOR4& vector4)
-{
-  char* str = fileIni->GetValue(strNumPart,key);
-  if(str)
-  {
-    char* buffer = str;
-    bool ok;
-    vector4.x = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str);return false;}
-    vector4.y = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str);return false;}
-    vector4.z = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str);return false;}
-    vector4.w = FindFloat_Semicolon(&buffer,&ok);
-    if(ok==false) {g_free(str);return false;}
-    g_free(str);
-    return true;
-  }
-  return false;
-}
-//--------------------------------------------------------------------------------
-float TLoaderTree::FindFloat_Semicolon(char** buffer,bool* ok)
-{
-  char cpyBuffer[50];
-  char* buffer1;
-  char* buffer0 = *buffer;
-  int size;
-  //---------------------------------------------------
-  buffer1 = FindSemicolon(buffer0);
-  if(buffer1==NULL)
-  {
-    *buffer = NULL;
-    *ok = false;
-    return 0.0f;
-  }
-  size = buffer1-buffer0;
-  memcpy(cpyBuffer,buffer0,size);
-  cpyBuffer[size] = '\0';
-  float res = (float)atof(cpyBuffer);
-  *buffer = buffer1+1;
-  *ok = true;
-  return res; 
-}
-//--------------------------------------------------------------------------------
-char* TLoaderTree::FindSemicolon(char* buffer)
-{
-  for(int i = 0 ; true ; i++ )
-  {
-    if(buffer[i]=='\0') return NULL;
-    if(buffer[i]==';') return &buffer[i];
-  }
-  return NULL;
-}
-//--------------------------------------------------------------------------------
 TTreeJoint::TLoadedJoint* TLoaderTree::TakeTree()
 {
   TTreeJoint::TLoadedJoint* p = pLoadedTree;
   pLoadedTree = NULL;
   return p;
+}
+//--------------------------------------------------------------------------------
+bool TLoaderTree::LoadMatrix4x4(const char* name,int num, D3DXMATRIXA16* pM)
+{
+  CHECK_RET(mXML->EnterSection(name,num))
+  for(int k = 0 ; k < 4 ; k++)
+  {
+    float v4[4];
+    CHECK_RET(mXML->ReadFloat4(SectionRow,k,&v4[0]))
+    for(int m = 0 ; m < 4 ; m++)
+      pM->m[k][m] = v4[m];
+  }
+  mXML->LeaveSection();
+  return true;
+}
+//--------------------------------------------------------------------------------
+bool TLoaderTree::LoadJoint(int i)
+{
+  CHECK_RET(mXML->EnterSection(SectionJoint,i))
+
+  TTreeJoint::TPart* pPart = new TTreeJoint::TPart;
+  // name
+  string str = mXML->ReadSection(SectionName,0);
+  if(str.length())
+    pPart->name = str;
+  else return false;
+  // numUse
+  int numUse;
+  CHECK_RET(mXML->ReadInt(SectionNumUse,0,numUse))
+  pPart->numUse = numUse;
+  // загрузить детей
+  int cntChild = mXML->GetCountSection(SectionChild);
+  if(cntChild==0) return false;
+  for(int j = 0 ; j < cntChild; j++)
+  {
+    CHECK_RET(mXML->EnterSection(SectionChild,j))
+    //---------------------------------------------------------
+    TTreeJoint::TChild* pChild = new TTreeJoint::TChild;
+    str = mXML->ReadSection(SectionName,0);
+    if(str.length())
+      pChild->name = str.data();
+    else return false;
+    //----------------------------------------------    
+    CHECK_RET(LoadMatrix4x4(SectionMatrix,0,&(pChild->matrix)))
+    pPart->vectorChild.push_back(pChild);
+    //--------------------------------------------------------
+    mXML->LeaveSection();
+  }
+
+  pLoadedTree->vectorPart.push_back(pPart);
+  
+  mXML->LeaveSection();
+  return true;
 }
 //--------------------------------------------------------------------------------

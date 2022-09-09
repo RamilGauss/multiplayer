@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -70,7 +70,7 @@ public:
 
 
   enum{eDirtyAnimate = 0,
-       ePureAnimate  = 1,// вызывается
+       ePureAnimate  = 1,// см. mTypeDX
   };
   int GetTypeDX(){return mTypeDX;}
   void SetTimeCreation(guint32 t){mTimeCreation=t;};
@@ -83,9 +83,15 @@ protected:
 
   int mTypeDX;
 
-  // время создания, необходимо для расчета анимации и расчета физики
+  // время создания, необходимо для расчета анимации
   guint32 mTimeCreation;// мс
+
+  // такие же функции должны быть и в Prediction
+  void SetupVectorNamePart();
+  void SetupVectorOrderPart();
   
+  //--------------------------------------
+  //std::vector<unsigned char> mMaskDX;
 };
 //-----------------------------------------------------------------
 

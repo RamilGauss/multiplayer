@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -34,17 +34,20 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 #include "TankTower.h"
+#include "HiTimer.h"
+
+using namespace std;
 
 
 TTankTower::TTankTower()
 {
-  mVectorOrderPart.push_back("Hull");
-  mVectorOrderPart.push_back("Turret");
-  mVectorOrderPart.push_back("Gun");
-  mVectorOrderPart.push_back("ChassisR");
-  mVectorOrderPart.push_back("ChassisL");
-  mVectorOrderPart.push_back("TrackR");
-  mVectorOrderPart.push_back("TrackL");
+  //mVectorOrderPart.push_back("Hull");
+  //mVectorOrderPart.push_back("Turret");
+  //mVectorOrderPart.push_back("Gun");
+  //mVectorOrderPart.push_back("ChassisR");
+  //mVectorOrderPart.push_back("ChassisL");
+  //mVectorOrderPart.push_back("TrackR");
+  //mVectorOrderPart.push_back("TrackL");
 }
 //------------------------------------------------------------------------
 TTankTower::~TTankTower()
@@ -62,5 +65,36 @@ void TTankTower::SetMirror(char *pData,int size)
 {
 
 }
+//-----------------------------------------------------------------------
+bool TTankTower::Animate(guint32 time_ms)
+{
+  return true;
+}
 //------------------------------------------------------------------------
+void TTankTower::RotateTurret(float ugol)
+{
+  // вращаем башню
+  D3DXMATRIXA16 matrix;
+  D3DXMatrixIdentity(&matrix);
+  D3DXMatrixRotationZ(&matrix, ugol);
 
+  mTree.ChangeMatrix(string("Turret"),&matrix);
+  mTree.GetMatrix(&mVectorMatrix);
+}
+//------------------------------------------------------------------------
+void TTankTower::RotateVerticalGun(float ugol)
+{
+  // двигаем пушкой
+  D3DXMATRIXA16 matrix;
+  D3DXMatrixIdentity(&matrix);
+  D3DXMatrixRotationX(&matrix, ugol);
+
+  mTree.ChangeMatrix(string("Gun"),&matrix);
+  mTree.GetMatrix(&mVectorMatrix);
+}
+//------------------------------------------------------------------------
+void TTankTower::SetHuman(char* pData, int size)
+{
+  
+}
+//------------------------------------------------------------------------

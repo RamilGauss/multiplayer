@@ -25,7 +25,7 @@ along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 In addition, the "Tanks" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from id Software at the address below.
+the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -36,33 +36,46 @@ you may contact in writing [ramil2085@gmail.com].
 #include "LoaderListPathID.h"
 #include "BL_Debug.h"
 #include "glib/gmem.h"
+#include "MakerXML.h"
 
 
 using namespace std;
 
+const char* Section_ID    = "id";
+const char* Section_path        = "path";
+const char* Section_ID_behavior = "id_behavior";
+
 TLoaderListPathID::TLoaderListPathID()
 {
   sCurrentPath[0] = '\0';
+  TMakerXML makerXML;
+  mXML = makerXML.New();
 }
 //--------------------------------------------------------------------------------------
 TLoaderListPathID::~TLoaderListPathID()
 {
+  delete mXML;
 }
 //--------------------------------------------------------------------------------------
 bool TLoaderListPathID::Load(char* sPath, map<unsigned int,string>* pMap)
 {
   bool res = true;
-  iniReader.Open(sPath);
+  CHECK_RET(mXML->Load(sPath))
   if(!FindCurrentPath(sPath))
     res = false;
   else
   {
     pMap->clear();
     // кол-во записей
-    int cnt = iniReader.GetInteger("MAIN","cnt",0);
+    string sRoot = mXML->GetNameSection(0);
+    if(sRoot.length()==0) return false;
+    CHECK_RET(mXML->EnterSection(sRoot.data(),0))
+    //--------------------------------------
+    int cnt = mXML->GetCountSection();
     if(cnt==0)
       res = false;
     else
+    {
       for(int i = 0 ; i < cnt ; i++ )
       {
         if(LoadPartPath(i,pMap)==false)
@@ -71,32 +84,31 @@ bool TLoaderListPathID::Load(char* sPath, map<unsigned int,string>* pMap)
           break;
         }
       }
+    }
+    //--------------------------------------
+    mXML->LeaveSection();
   }
 
-  iniReader.Close();
   return res;
 }
 //--------------------------------------------------------------------------------------
 bool TLoaderListPathID::LoadPartPath(int i, map<unsigned int,string>* pMap)
 {
-  char strNumPart[20];
-  sprintf(strNumPart,"PART%d",i);
-
-  unsigned int id = iniReader.GetInteger(strNumPart,"id_model",0);
-  char* sPath = iniReader.GetValue(strNumPart,"path");
-  if(sPath)
-  {
-    char buffer[400];
-    strcpy(buffer,sCurrentPath);
-    strcat(buffer,sPath);
-    strcat(buffer,"\\");
-    pMap->insert(map<unsigned int,string>::value_type(id,string(buffer)));
-    
-    g_free(sPath);
-    sPath = NULL;
-  }
-  else
-    return false;
+  string sPart = mXML->GetNameSection(i);
+  CHECK_RET(mXML->EnterSection(sPart.data(),i))
+  //------------------------------------------------
+  unsigned int id;
+  CHECK_RET(mXML->ReadUint(Section_ID,0,id))
+  string sPath = mXML->ReadSection(Section_path,0);
+  if(sPath.length()==0) return false;
+  //----------------------------------
+  char buffer[400];
+  strcpy(buffer,sCurrentPath);
+  strcat(buffer,sPath.data());
+  strcat(buffer,"\\");
+  pMap->insert(map<unsigned int,string>::value_type(id,string(buffer)));
+  //------------------------------------------------
+  mXML->LeaveSection();
 
   return true;
 }
@@ -119,17 +131,22 @@ bool TLoaderListPathID::FindCurrentPath(char* sPath)
 bool TLoaderListPathID::LoadBehavior(char* sPath, std::map<unsigned int,unsigned int>* pMapID_model_ID_Behavior)
 {
   bool res = true;
-  iniReader.Open(sPath);
+  CHECK_RET(mXML->Load(sPath))
   if(!FindCurrentPath(sPath))
     res = false;
   else
   {
     pMapID_model_ID_Behavior->clear();
     // кол-во записей
-    int cnt = iniReader.GetInteger("MAIN","cnt",0);
+    string sRoot = mXML->GetNameSection(0);
+    if(sRoot.length()==0) return false;
+    CHECK_RET(mXML->EnterSection(sRoot.data(),0))
+    //--------------------------------------
+    int cnt = mXML->GetCountSection();
     if(cnt==0)
       res = false;
     else
+    {
       for(int i = 0 ; i < cnt ; i++ )
       {
         if(LoadPartID_Behavior(i,pMapID_model_ID_Behavior)==false)
@@ -138,20 +155,25 @@ bool TLoaderListPathID::LoadBehavior(char* sPath, std::map<unsigned int,unsigned
           break;
         }
       }
+    }
+    //--------------------------------------
+    mXML->LeaveSection();
   }
 
-  iniReader.Close();
   return res;
 }
 //--------------------------------------------------------------------------------------
 bool TLoaderListPathID::LoadPartID_Behavior(int i, map<unsigned int,unsigned int>* pMap)
 {
-  char strNumPart[20];
-  sprintf(strNumPart,"PART%d",i);
-
-  unsigned int id_model = iniReader.GetInteger(strNumPart,"id_model",0);
-  unsigned int id_behavior = iniReader.GetInteger(strNumPart,"id_behavior",0);
-  pMap->insert(map<unsigned int,unsigned int>::value_type(id_model,id_behavior));
+  string sPart = mXML->GetNameSection(i);
+  CHECK_RET(mXML->EnterSection(sPart.data(),i))
+  //------------------------------------------------
+  unsigned int id,id_behavior;
+  CHECK_RET(mXML->ReadUint(Section_ID,0,id))
+  CHECK_RET(mXML->ReadUint(Section_ID_behavior,0,id_behavior))
+  pMap->insert(map<unsigned int,unsigned int>::value_type(id,id_behavior));
+  //------------------------------------------------
+  mXML->LeaveSection();
 
   return true;
 }
