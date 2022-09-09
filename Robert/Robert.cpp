@@ -33,45 +33,39 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef GarageH
-#define GarageH
 
-#include "hArray.h"
-#include "MakerObject.h"
+#include "Robert.h"
+#include "ApplicationProtocolPacketCmd.h"
 
+//using namespace nsServerStruct;
 
-class TClient;
-class TTank;
-
-class TGarage
+TRobert::TRobert()
 {
-  int mCurTank;// текущий танк
-  TClient* pMasterClient;
 
-  //TManagerObjectCommon mMOC;
-  TMakerObject mMakerBehaviorServer;
+}
+//--------------------------------------------------------------------
+TRobert::~TRobert()
+{
 
-public:
-  TArrayObject mArrTanks; // пока без БД тут будет только ТТ
-  //TArrayObject mArrSomething;// снаряды на складе, и др.
+}
+//--------------------------------------------------------------------
+void TRobert::InitState()
+{
 
-  TGarage(TClient* pClient){pMasterClient=pClient;mCurTank=0;InitArrTank();};
-  ~TGarage()
-  {
-    mArrTanks.Clear();
-  }
+}
+//--------------------------------------------------------------------
+void TRobert::Calc()
+{
 
-  void InitArrTank();
+}
+//--------------------------------------------------------------------
+void TRobert::AddObject(TBaseObjectPrediction* pObject)
+{
 
-  bool SetCurTank(int i);
-  int  GetCurTank();
-  TTank* GetPointerCurTank();
-
-  TClient* GetMasterClient(){return pMasterClient;};
-  
-  TTank* GetTank(int i);
-
-};
-
-
-#endif
+}
+//--------------------------------------------------------------------
+void TRobert::Clear()
+{
+  mListObject.clear();
+}
+//--------------------------------------------------------------------

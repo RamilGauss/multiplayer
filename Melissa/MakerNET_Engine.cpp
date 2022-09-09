@@ -33,48 +33,13 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "MakerNET_Engine.h"
+#include "TransportProtocol.h"
 
-#ifndef PredictionH
-#define PredictionH
 
-#include "BaseObjectPrediction.h"
-#include <list>
-
-// предсказатель
-// Robert - физический движок
-class TPrediction
+//-----------------------------------------------------------------------------
+INET_Engine* TMakerNET_Engine::New(char* pPathLog)
 {
-
-protected:
-
-
-public:
-
-  TPrediction();
-  ~TPrediction();
-
-  void AddObject(TBaseObjectPrediction* pObject);
-  void Clear();
-
-
-  void InitState();
-
-  void Calc();
-
-
-public:
-  std::list<TBaseObjectPrediction*> mListObject;
-  // список разрушенных или поврежденных объектов.
-  std::list<TBaseObjectPrediction*> mListDamageObject;
-
-  struct TEvent
-  {
-
-  };
-  std::list<TEvent*> mListFreshEvent;
-
-};
-
-
-#endif
-
+  return new TTransportProtocol();
+}
+//-----------------------------------------------------------------------------

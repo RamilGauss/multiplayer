@@ -79,13 +79,6 @@ protected:
   
   TLoaderObjectCommon mLoaderObject;
 
-  TInterpretatorPredictionTank mPrediction;// физика
-  IGraphicEngine* mMDX_Scene; // отрисовка сцены
-  TControlCamera mControlCamera;
-  
-  // прогресс загрузки карты/данных
-  TProgressBar mProgressBar;
-
 public:
 
   TManagerObjectCommon();

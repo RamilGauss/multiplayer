@@ -33,45 +33,46 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef GarageH
-#define GarageH
-
-#include "hArray.h"
-#include "MakerObject.h"
+#include "ManagerTime.h"
 
 
-class TClient;
-class TTank;
-
-class TGarage
+TManagerTime::TManagerTime()
 {
-  int mCurTank;// текущий танк
-  TClient* pMasterClient;
 
-  //TManagerObjectCommon mMOC;
-  TMakerObject mMakerBehaviorServer;
+}
+//------------------------------------------------------------------------
+TManagerTime::~TManagerTime()
+{
 
-public:
-  TArrayObject mArrTanks; // пока без БД тут будет только ТТ
-  //TArrayObject mArrSomething;// снаряды на складе, и др.
+}
+//------------------------------------------------------------------------
+void TManagerTime::SetTimeSpeed(float relative)// отношение реального к игровому
+{
 
-  TGarage(TClient* pClient){pMasterClient=pClient;mCurTank=0;InitArrTank();};
-  ~TGarage()
-  {
-    mArrTanks.Clear();
-  }
+}
+//------------------------------------------------------------------------
+void TManagerTime::SetTimeToBegin()
+{
 
-  void InitArrTank();
+}
+//------------------------------------------------------------------------
+void TManagerTime::SetTimeToEnd()
+{
 
-  bool SetCurTank(int i);
-  int  GetCurTank();
-  TTank* GetPointerCurTank();
+}
+//------------------------------------------------------------------------
+int TManagerTime::GetCountTimeStamp()
+{
+  return 0;
+} 
+//------------------------------------------------------------------------
+void TManagerTime::SetTimeStamp(int stamp)
+{
 
-  TClient* GetMasterClient(){return pMasterClient;};
-  
-  TTank* GetTank(int i);
-
-};
-
-
-#endif
+}
+//------------------------------------------------------------------------
+guint32 TManagerTime::GetTime()
+{
+  return 0;
+}
+//------------------------------------------------------------------------

@@ -33,45 +33,23 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef GarageH
-#define GarageH
 
-#include "hArray.h"
-#include "MakerObject.h"
+#ifndef MakerPhysicEngineH
+#define MakerPhysicEngineH
 
+#include "IPhysicEngine.h"
 
-class TClient;
-class TTank;
-
-class TGarage
+class TMakerPhysicEngine
 {
-  int mCurTank;// текущий танк
-  TClient* pMasterClient;
-
-  //TManagerObjectCommon mMOC;
-  TMakerObject mMakerBehaviorServer;
-
 public:
-  TArrayObject mArrTanks; // пока без БД тут будет только ТТ
-  //TArrayObject mArrSomething;// снаряды на складе, и др.
 
-  TGarage(TClient* pClient){pMasterClient=pClient;mCurTank=0;InitArrTank();};
-  ~TGarage()
-  {
-    mArrTanks.Clear();
-  }
-
-  void InitArrTank();
-
-  bool SetCurTank(int i);
-  int  GetCurTank();
-  TTank* GetPointerCurTank();
-
-  TClient* GetMasterClient(){return pMasterClient;};
+  TMakerPhysicEngine(){};
+  virtual ~TMakerPhysicEngine(){};
   
-  TTank* GetTank(int i);
+  IPhysicEngine *New();
 
 };
 
 
 #endif
+

@@ -63,19 +63,20 @@ TMakerObject::~TMakerObject()
 TBaseObjectCommon* TMakerObject::New(unsigned int id_model)
 {
   unsigned int id_behavior = GetID_ModelByID_Behavior(id_model);
-  return NewByID_Behavior(id_behavior, id_model);
+  TBaseObjectCommon* pObject = NewByID_Behavior(id_behavior);
+  pObject->SetID_Model(id_model);
+  return pObject;
 }
 //------------------------------------------------------------------------
-TBaseObjectCommon* TMakerObject::NewByID_Behavior(unsigned int id_behavior, unsigned int id_model)
+TBaseObjectCommon* TMakerObject::NewByID_Behavior(unsigned int id_behavior)
 {
-  TBaseObjectCommon*pObject = NULL;
+  TBaseObjectCommon* pObject = NULL;
   switch(id_behavior)
   {
     case ID_TANK_TOWER:
       pObject = new TTankTower();
-      pObject->SetID_Model(id_model);
       break;
-    default:;
+    default:BL_FIX_BUG();
   }
   return pObject;
 }
@@ -86,5 +87,10 @@ unsigned int TMakerObject::GetID_ModelByID_Behavior(unsigned int id_model)
   if(fit == mMapID.end())
     return ID_NULL;
   return fit->second;
+}
+//------------------------------------------------------------------------
+void TMakerObject::Delete(TBaseObjectCommon* pObject)
+{
+  delete pObject;
 }
 //------------------------------------------------------------------------

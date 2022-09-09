@@ -37,25 +37,25 @@ you may contact in writing [ramil2085@gmail.com].
 namespace nsID_BEHAVIOR
 {
   enum{
-    ID_NULL = 0,// недействительное значение
+    ID_NULL               = 0,// недействительное значение
     
-    ID_TREE = 1,
-    ID_BUILDING=2,
-    ID_TERRAIN=3,
-    ID_BUSH=4,
+    ID_TREE               = 1,
+    ID_BUILDING           = 2,
+    ID_TERRAIN            = 3,
+    ID_BUSH               = 4,
     // bullet
-    ID_BULLET_EXPLOSION=5,
-    ID_BULLET_UNEXPLOSION=6,
+    ID_BULLET_EXPLOSION   = 5,
+    ID_BULLET_UNEXPLOSION = 6,
     // tank
-    ID_TANK_TOWER=7,
+    ID_TANK_TOWER         = 7,
     
     // visible
-    ID_UFO=8,
-    ID_BIRD=9,
+    ID_UFO                = 8,
+    ID_BIRD               = 9,
     // invisible
-    ID_WALL=10,
+    ID_WALL               = 10,
 
-    ID_EXPLOSION=11,
+    ID_EXPLOSION          = 11,
   };
   
 

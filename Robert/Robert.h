@@ -33,45 +33,46 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef GarageH
-#define GarageH
 
-#include "hArray.h"
-#include "MakerObject.h"
+#ifndef RobertH
+#define RobertH
 
 
-class TClient;
-class TTank;
+#include "IPhysicEngine.h"
+//#include "BaseObjectPrediction.h"
+//#include <list>
 
-class TGarage
+// предсказатель
+// Robert - физический движок
+class TRobert : public IPhysicEngine
 {
-  int mCurTank;// текущий танк
-  TClient* pMasterClient;
-
-  //TManagerObjectCommon mMOC;
-  TMakerObject mMakerBehaviorServer;
-
 public:
-  TArrayObject mArrTanks; // пока без БД тут будет только ТТ
-  //TArrayObject mArrSomething;// снаряды на складе, и др.
 
-  TGarage(TClient* pClient){pMasterClient=pClient;mCurTank=0;InitArrTank();};
-  ~TGarage()
+  TRobert();
+  ~TRobert();
+
+  void AddObject(TBaseObjectPrediction* pObject);
+  void Clear();
+
+
+  void InitState();
+
+  void Calc();
+
+
+/*public:
+  std::list<TBaseObjectPrediction*> mListObject;
+  // список разрушенных или поврежденных объектов.
+  std::list<TBaseObjectPrediction*> mListDamageObject;
+
+  struct TEvent
   {
-    mArrTanks.Clear();
-  }
 
-  void InitArrTank();
-
-  bool SetCurTank(int i);
-  int  GetCurTank();
-  TTank* GetPointerCurTank();
-
-  TClient* GetMasterClient(){return pMasterClient;};
-  
-  TTank* GetTank(int i);
-
+  };
+  std::list<TEvent*> mListFreshEvent;
+*/
 };
 
 
 #endif
+

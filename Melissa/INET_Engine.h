@@ -33,43 +33,57 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef GarageH
-#define GarageH
 
+#ifndef INET_EngineH
+#define INET_EngineH
+
+#include "CallBackRegistrator.h"
+#include "UdpDevice.h"
+#include "glib/gthread.h"
+#include "TransportProtocolPacket.h"
 #include "hArray.h"
-#include "MakerObject.h"
+#include "GCS.h"
+#include "BL_Debug.h"
 
-
-class TClient;
-class TTank;
-
-class TGarage
+// Melissa - транспорт
+class INET_Engine
 {
-  int mCurTank;// текущий танк
-  TClient* pMasterClient;
-
-  //TManagerObjectCommon mMOC;
-  TMakerObject mMakerBehaviorServer;
-
 public:
-  TArrayObject mArrTanks; // пока без БД тут будет только ТТ
-  //TArrayObject mArrSomething;// снаряды на складе, и др.
 
-  TGarage(TClient* pClient){pMasterClient=pClient;mCurTank=0;InitArrTank();};
-  ~TGarage()
-  {
-    mArrTanks.Clear();
-  }
+	struct InfoData
+	{
+		unsigned int   ip_dst;     // dst ip
+		unsigned short port_dst;   // dst port
+		unsigned int   ip_src;     // dst ip
+		unsigned short port_src;   // dst port
+		void*          packet; // выделено malloc
+		int            size;
+    InfoData(){packet = NULL;}
+    ~InfoData(){}
+	};
 
-  void InitArrTank();
+	enum{ePacket=0,
+       eStream=1,
+       eWaitSynchro=5,// сек
+  };
 
-  bool SetCurTank(int i);
-  int  GetCurTank();
-  TTank* GetPointerCurTank();
 
-  TClient* GetMasterClient(){return pMasterClient;};
-  
-  TTank* GetTank(int i);
+	INET_Engine(char* pPathLog=NULL);
+	virtual ~INET_Engine();
+	virtual void InitLog(char* pPathLog) = 0;
+
+  virtual bool Open(unsigned short port,int numNetWork=0) = 0;
+
+	virtual void write(InfoData* data, bool check = true) = 0;
+	// чтение - зарегистрируйся
+  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
+  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
+
+	virtual void start() = 0;
+	virtual void stop()  = 0;
+
+  // синхронная функция
+  virtual bool synchro(unsigned int ip, unsigned short port) = 0; // вызов только для клиента
 
 };
 

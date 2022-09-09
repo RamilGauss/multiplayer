@@ -44,9 +44,10 @@ you may contact in writing [ramil2085@gmail.com].
 #include "hArray.h"
 #include "GCS.h"
 #include "BL_Debug.h"
+#include "INET_Engine.h"
 
 // Melissa - транспорт
-class TTransportProtocol
+class TTransportProtocol : public INET_Engine
 {
   // для сервера, в клиенте такая ситуация маловероятна
   // при отправке известному клиенту
@@ -81,22 +82,8 @@ class TTransportProtocol
 
 public:
 
-	struct InfoData
-	{
-		unsigned int   ip_dst;     // dst ip
-		unsigned short port_dst;   // dst port
-		unsigned int   ip_src;     // dst ip
-		unsigned short port_src;   // dst port
-		void*          packet; // выделено malloc
-		int            size;
-    InfoData(){packet = NULL;}
-    ~InfoData(){}
-	};
-
-	enum{ePacket=0,eStream=1,};
-
 	TTransportProtocol(char* pPathLog=NULL);
-	~TTransportProtocol();
+	virtual ~TTransportProtocol();
 	void InitLog(char* pPathLog);
 
   bool Open(unsigned short port,int numNetWork=0);
@@ -109,9 +96,6 @@ public:
 	void start();
 	void stop();
 
-  enum{
-		eWaitSynchro=5,
-	};// сек
   // синхронная функция
   bool synchro(unsigned int ip, unsigned short port); // вызов только для клиента
 protected:

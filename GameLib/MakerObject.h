@@ -48,9 +48,18 @@ public:
   TMakerObject();
   virtual ~TMakerObject();
 
-  virtual TBaseObjectCommon* New(unsigned int id_behavior);
+  TBaseObjectCommon* New(unsigned int id_model);
+
+
+  // данное требование объясняется просто: что создали в либине, то и уничтожили там же,
+  // т.к. в родительской библиотеки при вызове деструктора линковщик не найдет деструктор для наследника
+
+  // ### In future must overload
+  virtual void Delete(TBaseObjectCommon* pObject);// просто вызвать delete pObject;
+
 protected:
-  virtual TBaseObjectCommon* NewByID_Behavior(unsigned int id_behavior, unsigned int id_model);
+  // ### In future must overload
+  virtual TBaseObjectCommon* NewByID_Behavior(unsigned int id_behavior);
 
   unsigned int GetID_ModelByID_Behavior(unsigned int id_model);
 };

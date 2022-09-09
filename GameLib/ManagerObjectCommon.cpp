@@ -197,9 +197,8 @@ void TManagerObjectCommon::ClearSceneVectorObject()
   mMDX_Scene->Clear();
   int cnt = mVectorObject.size();
   for(int i = 0 ; i < cnt ; i++ )
-  {
-    delete mVectorObject[i];
-  }
+    mLoaderObject.Delete(mVectorObject[i]);
+
   mVectorObject.clear();
 }
 //--------------------------------------------------------------------

@@ -33,44 +33,19 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef GarageH
-#define GarageH
 
-#include "hArray.h"
-#include "MakerObject.h"
+#ifndef MakerNET_EngineH
+#define MakerNET_EngineH
 
+#include "INET_Engine.h"
 
-class TClient;
-class TTank;
-
-class TGarage
+class TMakerNET_Engine
 {
-  int mCurTank;// текущий танк
-  TClient* pMasterClient;
-
-  //TManagerObjectCommon mMOC;
-  TMakerObject mMakerBehaviorServer;
-
 public:
-  TArrayObject mArrTanks; // пока без БД тут будет только ТТ
-  //TArrayObject mArrSomething;// снаряды на складе, и др.
+  TMakerNET_Engine(){};
+  virtual ~TMakerNET_Engine(){};
 
-  TGarage(TClient* pClient){pMasterClient=pClient;mCurTank=0;InitArrTank();};
-  ~TGarage()
-  {
-    mArrTanks.Clear();
-  }
-
-  void InitArrTank();
-
-  bool SetCurTank(int i);
-  int  GetCurTank();
-  TTank* GetPointerCurTank();
-
-  TClient* GetMasterClient(){return pMasterClient;};
-  
-  TTank* GetTank(int i);
-
+  INET_Engine* New(char* pPathLog=NULL);
 };
 
 

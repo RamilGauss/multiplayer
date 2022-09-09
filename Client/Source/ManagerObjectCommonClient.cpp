@@ -104,7 +104,7 @@ void TManagerObjectCommonClient::Work()
   guint32 time_ms = ht_GetMSCount();
   if(IsLoadMap())
   {
-    mProgressBar.VisualEvent(mProcentLoadMap);
+    //mProgressBar.VisualEvent(mProcentLoadMap);
   }
   else
   {

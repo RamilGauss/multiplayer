@@ -46,7 +46,7 @@ class TLoaderObjectCommon
 {
 protected:
 
-  TMakerObject mMakerObject;// создает объект заданного типа
+  TMakerObject mMakerObject;// создает объект заданного типа поведения
 
   std::map<unsigned int,std::string> mMapID;
 
@@ -61,10 +61,11 @@ public:
   int GetCountObject();
   TBaseObjectCommon* Get(int i);
 
+  
+  void Delete(TBaseObjectCommon* pObject);
 
   TBaseObjectCommon* LoadObject(unsigned int id_model);
   void LoadMap(unsigned int id_map);
-
 
   void LoadListMap();
 

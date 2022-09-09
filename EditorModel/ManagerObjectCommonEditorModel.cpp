@@ -97,7 +97,7 @@ void TManagerObjectCommonEditorModel::LoadModel()
   else
     return;
 
-  TMakerObject maker;
+  //TMakerObject maker;
   //TBaseObjectCommon* pObject = mLoaderObject.LoadObject(0);//####
 
   //AddObject(pObject);//###
@@ -117,7 +117,7 @@ void TManagerObjectCommonEditorModel::LoadModel()
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
   guint32 start = ht_GetMSCount();
 #endif 
-  CreateObject(cnt[0],cnt[1],cnt[2]);
+  CreateObjects(cnt[0],cnt[1],cnt[2]);
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
   start = ht_GetMSCount() - start;
   float v = start/float(cnt[0]*cnt[1]*cnt[2]);
@@ -130,9 +130,8 @@ float TManagerObjectCommonEditorModel::GetTimeWork()
   return 0.0f;
 }
 //---------------------------------------------------------------------------------------------
-void TManagerObjectCommonEditorModel::CreateObject(int cntK,int cntJ,int cntI)
+void TManagerObjectCommonEditorModel::CreateObjects(int cntK,int cntJ,int cntI)
 {
-  TMakerObject maker;
   D3DXMATRIXA16 w;
   D3DXMatrixIdentity(&w);
   float sizeK = 4,sizeJ = 12, sizeI = 5;

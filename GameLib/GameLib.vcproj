@@ -191,11 +191,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ManagerComponent.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerEventWinApi.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\ManagerObjectCommon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerTime.cpp"
 				>
 			</File>
 			<File
@@ -257,11 +265,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ManagerComponent.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerEventWinApi.h"
 				>
 			</File>
 			<File
 				RelativePath=".\ManagerObjectCommon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerTime.h"
 				>
 			</File>
 			<File

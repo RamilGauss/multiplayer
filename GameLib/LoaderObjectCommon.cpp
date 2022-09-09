@@ -43,6 +43,8 @@ you may contact in writing [ramil2085@gmail.com].
 
 using namespace std;
 
+const char* sNameSettingMap = "main.xml";
+
 TLoaderObjectCommon::TLoaderObjectCommon()
 {
   LoadListMap();
@@ -96,13 +98,18 @@ void TLoaderObjectCommon::Done()
 //-------------------------------------------------------------
 void TLoaderObjectCommon::PrepareMapPath()
 {
-  std::map<unsigned int,std::string>::iterator bit = mMapID.begin();
-  std::map<unsigned int,std::string>::iterator eit = mMapID.end();
+  map<unsigned int,string>::iterator bit = mMapID.begin();
+  map<unsigned int,string>::iterator eit = mMapID.end();
   
   while(bit!=eit)
   {
-    bit->second += "main.ini";
+    bit->second += sNameSettingMap;
     bit++;
   }
+}
+//-------------------------------------------------------------
+void TLoaderObjectCommon::Delete(TBaseObjectCommon* pObject)
+{
+  mMakerObject.Delete(pObject);
 }
 //-------------------------------------------------------------

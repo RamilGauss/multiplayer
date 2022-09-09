@@ -33,40 +33,29 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "glibconfig.h"
 
-#include "Prediction.h"
-#include "ApplicationProtocolPacketCmd.h"
-//#include "..\Server\Source\ServerStruct.h"
 
-//using namespace nsServerStruct;
+#ifndef ManagerTimeH
+#define ManagerTimeH
 
-TPrediction::TPrediction()
+class TManagerTime
 {
+protected:
+  
 
-}
-//--------------------------------------------------------------------
-TPrediction::~TPrediction()
-{
+public:
+  TManagerTime();
+  virtual ~TManagerTime();
 
-}
-//--------------------------------------------------------------------
-void TPrediction::InitState()
-{
+  // управление игровым временем
+  void SetTimeSpeed(float relative = 1.0f);// отношение реального к игровому
+  void SetTimeToBegin();
+  void SetTimeToEnd();
+  int  GetCountTimeStamp();
+  void SetTimeStamp(int stamp);
+  guint32 GetTime();
 
-}
-//--------------------------------------------------------------------
-void TPrediction::Calc()
-{
+};
 
-}
-//--------------------------------------------------------------------
-void TPrediction::AddObject(TBaseObjectPrediction* pObject)
-{
-
-}
-//--------------------------------------------------------------------
-void TPrediction::Clear()
-{
-  mListObject.clear();
-}
-//--------------------------------------------------------------------
+#endif

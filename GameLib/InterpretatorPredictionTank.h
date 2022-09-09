@@ -40,8 +40,8 @@ you may contact in writing [ramil2085@gmail.com].
 //#include "Tank.h"
 //#include "ObjectPrediction.h"
 #include <list>
-#include "Prediction.h"
-
+#include "Robert.h"
+/*
 // предсказатель
 // Robert - физический движок
 class TInterpretatorPredictionTank : public TPrediction
@@ -62,8 +62,8 @@ public:
 //
 //  void Calc();
 //
-//  void SetOrientAim(unsigned int id_Tank /*TTank*pTank*/, nsServerStruct::TPacketServer* pDefPacket);
-//  void SetKeyEvent(unsigned int id_Tank /*TTank*pTank*/, nsServerStruct::TPacketServer* pDefPacket);
+//  void SetOrientAim(unsigned int id_Tank , nsServerStruct::TPacketServer* pDefPacket);
+//  void SetKeyEvent(unsigned int id_Tank , nsServerStruct::TPacketServer* pDefPacket);
 //
 //
 //public:
@@ -78,6 +78,6 @@ public:
 
 };
 
-
+*/
 #endif
 

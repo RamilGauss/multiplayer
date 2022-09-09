@@ -31,18 +31,45 @@ the "Tanks" Source Code.  If not, please request a copy in writing from at the a
 If you have questions concerning this license or the applicable additional terms,
 you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
-*/ 
+*/
 
+#include <iostream>
 #include <string>
-#include "ApplicationProtocolPacketAnswer.h"
-#include "TankTower.h"
+#include <algorithm>
+#include "HiTimer.h"
 
+using namespace std;
 
+const int max_fib = 2000;
+int arr_fib[max_fib];
 
+int fib(int i)
+{
+  if(i==0) return 0;
+  if(i==1) return 1;
+
+  return fib(i-1)+fib(i-2);
+}
+//----------------------------------------------------------
+int fib_opt(int i)
+{
+  if(i==0) return 0;
+  if(i==1) return 1;
+
+  if(arr_fib[i]!=0) return arr_fib[i];
+
+  arr_fib[i] = fib_opt(i-1)+fib_opt(i-2);
+  return arr_fib[i];
+}
+//----------------------------------------------------------
 int main(int argc, char *argv[])
 {
+  guint32 start = ht_GetMSCount();
 
+  int res = fib(32);
 
+  start = ht_GetMSCount()-start;
 
   return 0;
 }
+

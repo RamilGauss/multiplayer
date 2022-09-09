@@ -33,45 +33,73 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef GarageH
-#define GarageH
-
-#include "hArray.h"
-#include "MakerObject.h"
+#ifndef ManagerComponentH
+#define ManagerComponentH
 
 
-class TClient;
-class TTank;
+#include "ManagerObjectCommon.h"
+#include "IPhysicEngine.h"
+#include "INET_Engine.h"
 
-class TGarage
+
+/*
+    Краткая концепция
+Постулат: Менеджер компонентов (МК) является игровым движком.
+От него наследуется Клиент и Сервер. Это два движка.
+
+Исходя из этого:
+1. Должен содержать строгое кол-во компонентов (в соответствии со своим предназначением).
+2. Ядро МК занимается рендером, расчетом и диспетчеризацией событий между компонентами
+3. Вводится понятие "Источник событий" SrcEvent и "Поглотитель событий" DstEvent.
+4. 
+*/
+
+
+class TManagerComponent
 {
-  int mCurTank;// текущий танк
-  TClient* pMasterClient;
+protected:
+  volatile bool flgNeedStop;
+  volatile bool flgActive;
 
-  //TManagerObjectCommon mMOC;
-  TMakerObject mMakerBehaviorServer;
+
+
+  //IAI*               mAI;
+  //IReplay*           mReplay;
+  //ISoundEngine*      mSound;
+  INET_Engine*         mNET;
+  IPhysicEngine*       mPhysicEngine;
+  IGraphicEngine*      mGraphicEngine; // отрисовка сцены
+  TManagerGUI          mMGUI;
+  TManagerKeyMouse     mMKM;
+  TManagerObjectCommon mMOC;
+  TManagerTime         mMTime;
+
 
 public:
-  TArrayObject mArrTanks; // пока без БД тут будет только ТТ
-  //TArrayObject mArrSomething;// снаряды на складе, и др.
+  TManagerComponent();
+  virtual ~TManagerComponent();
 
-  TGarage(TClient* pClient){pMasterClient=pClient;mCurTank=0;InitArrTank();};
-  ~TGarage()
-  {
-    mArrTanks.Clear();
-  }
-
-  void InitArrTank();
-
-  bool SetCurTank(int i);
-  int  GetCurTank();
-  TTank* GetPointerCurTank();
-
-  TClient* GetMasterClient(){return pMasterClient;};
+  void Work(const char* sNameDLL);// начало работы
   
-  TTank* GetTank(int i);
+  // диспетчеризация событий
+  // решение принимается на основании скрипта (что-то типа машины состояния)
+  void SetEvent(const char* sFrom, unsigned int key, void* pData, int sizeData);
+
+protected:
+  void Init(const char* sNameDLL);
+  void Done();
+
+
+  typedef enum{ eNoWindowEvent,
+        eQuit,
+      } tResHandleWindowEvent;
+
+
+  tResHandleWindowEvent HandleWindowEvent();
+  void HandleExternalEvent();
+  void Calc();
+  void Render();
 
 };
-
 
 #endif

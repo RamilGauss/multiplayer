@@ -60,7 +60,7 @@ protected:
   void LoadModel();
 
 
-  void CreateObject(int cntK,int cntJ,int cntI);
+  void CreateObjects(int cntK,int cntJ,int cntI);
 
 
 };
