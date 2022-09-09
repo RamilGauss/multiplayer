@@ -39,10 +39,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "Struct3D.h"
 #include <vector>
-
-#include "IMeshFile.h"
 #include "IXML.h"
-
 
 class ILoaderModelGE
 {
@@ -99,8 +96,8 @@ public:
   int GetCountGroup();
 
 public:
-  // virtual
-  virtual bool Load(LPCWSTR strFilenameData);
+
+  virtual bool Load(wchar_t* strFilenameData);
 
 protected:
   
@@ -116,7 +113,6 @@ protected:
   char pStrPathPrimitive[MAX_PATH];
   char pStrFilenameDataMain[MAX_PATH];
 
-  IMeshFile mMeshFile;
   IXML*     mXML;
 
 protected:

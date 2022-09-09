@@ -36,25 +36,9 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef MeshFileBjH
 #define MeshFileBjH
 
-#include "DXUT.h"
+#include "IMeshFile.h"
 
-// бинарный формат хранения Mesh
-// только вершины (координаты, нормали, текстурные координаты) и индексы
-namespace nsBigJack{
-  // Vertex format
-
-#pragma pack(push, 1)
-  struct VERTEX
-  {
-    D3DXVECTOR3 position;
-    D3DXVECTOR3 normal;
-    D3DXVECTOR2 texcoord;
-  };
-#pragma pack(pop)
-}
-
-
-class TMeshFileBj
+class TMeshFileBj : public IMeshFile
 {
 
 public:
@@ -62,29 +46,18 @@ public:
   TMeshFileBj();
   virtual ~TMeshFileBj();
 
-  virtual ID3DXMesh* Load(IDirect3DDevice9* pd3dDevice, const char* strFilename);
-  virtual bool Save(const char* strFilename,ID3DXMesh* pMesh);
+  virtual bool Load(const char* strFilename, 
+     nsMeshStruct::VERTEX*&      ppVertex, unsigned int& cntV,
+                  unsigned int*& ppIndex,  unsigned int& cntI);
+
+  virtual bool Save(const char* strFilename, 
+     nsMeshStruct::VERTEX*       ppVertex, unsigned int cntV,
+                   unsigned int* ppIndex, unsigned int  cntI); 
 
 protected:
 
-  bool LoadBj(const char* strFilename);
   void Done();
-  bool FillFile(const char* strBj, ID3DXMesh* pMesh);
-
-  void MakeArrVertex(char* pData, DWORD cnt);
-  void MakeArrIndex(char* pData, DWORD cnt);
-  void MakeArrAttribute();
-
   char* pReadData;
-
-  DWORD* mArrIndices;
-  DWORD mIndicesCnt;
-
-  nsBigJack::VERTEX* mArrVertices;
-  DWORD mVerticesCnt;
-
-  DWORD* mArrAttributes;
-  DWORD mAttributesCnt;
 };
 
 #endif

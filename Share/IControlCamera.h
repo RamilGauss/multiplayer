@@ -40,19 +40,24 @@ you may contact in writing [ramil2085@gmail.com].
 
 class IBaseObject;
 
+/*
+  ѕриоритет задани€ координат и ориентации
+  1. Linked object (по маске)
+  2. Orient
+  3. Set/Add XXX
+*/
+
 class SHARE_EI IControlCamera : public ICamera
 {
 
 public:
 
-  enum{
-    eX          =1<<0,
-    eY          =1<<1,
-    eZ          =1<<2,
-    eRoll       =1<<3,
-    eRotateDown =1<<4,
-    eRotateRight=1<<5,
-  };
+  typedef enum
+  {
+    eNotLinked, 
+    eCoord,
+    eOrientAndCoord,
+  }TypeLinked;
 
 
   IControlCamera(){}
@@ -60,18 +65,23 @@ public:
 
   virtual IBaseObject* GetLinkedObject() = 0;
   // если указатель на объект существует, то берем с объекта параметры, которые указаны в маске
-  // делаем SetXXX иначе SetXXX, который задан снаружи. ѕотом деламе AddXXX, который задан снаружи.
-  virtual void Link(IBaseObject* pObject, int maskUse ) = 0;
+  // делаем SetXXX иначе SetXXX, который задан снаружи. ѕотом делаем AddXXX, который задан снаружи.
+  virtual void Link(IBaseObject* pObject, TypeLinked maskUse ) = 0;
   virtual void Unlink() = 0;
 
-  virtual ICamera* GetCamera() = 0;
+  //virtual ICamera* GetCamera() = 0;// debug only
 
-  // смещение от eye обзора. Ќапример, от 3 лица вид координаты точка больше 0
+  // смещение от eye обзора. Ќапример, от 3 лица dist > 0
   // от 1 лица координаты равны нулю
   // вли€ет на вращение камеры (задает центр вращени€)
   virtual float GetDistObj()             = 0;
   virtual void  SetDistObj(float radius) = 0;
   virtual void  AddDistObj(float dR)     = 0;
+
+  // дл€ свободной камеры, у.е./сек
+  virtual void SetSpeedForward(float v) = 0;
+  virtual void SetSpeedRight(float v) = 0;
+  virtual void SetSpeedUp(float v) = 0;
 };
 
 #endif

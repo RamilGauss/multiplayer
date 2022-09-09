@@ -49,7 +49,7 @@ class SHARE_EI TLogger : public TOnly_N_Object
   typedef std::map<std::string,TSaveOnHDD*> TMapStrPtr;
   TMapStrPtr mMapNamePtr;
 
-  const char* sPrefix;
+  std::string sPrefix;
 
 protected:
   TLogger():                            // запрет на создание

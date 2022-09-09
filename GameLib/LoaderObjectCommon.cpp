@@ -40,6 +40,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "GlobalParams.h"
 #include "Logger.h"
 #include "BL_Debug.h"
+#include "MapXML_Field.h"
+#include "StorePathResources.h"
 
 using namespace std;
 
@@ -74,7 +76,7 @@ void TLoaderMap::LoadListMap()
   // открыть файл, содержащий список путей к картам и запомнить в ассоциативный список
   TLoaderListPathID loader;
   char sAbsPath[300];
-  FindAbsPath(PATH_LIST_MAP,sAbsPath,sizeof(sAbsPath));
+  FindAbsPath((char*)GetStorePathResources()->GetSecond("map"),sAbsPath,sizeof(sAbsPath));
   if(loader.Load(sAbsPath,&mMapID)==false)
     BL_FIX_BUG();
 

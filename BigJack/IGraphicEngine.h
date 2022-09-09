@@ -78,10 +78,7 @@ public:
   //------------------------------------------------------------------------
   virtual void AddObject(IBaseObjectGE* pObject) = 0;
   virtual void Clear() = 0;
-  // камера
-  virtual void SetViewParams(nsStruct3D::TVector3* pvEyePt3, nsStruct3D::TVector3* pvLookatPt3) = 0;// расположение камеры
 
-  // 21 декабр€ 2012 года реализую:
   // клиентские эффекты движка, не вли€ют на физические параметры объектов
   virtual void SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
     nsStruct3D::TVector3* coord3,     // где

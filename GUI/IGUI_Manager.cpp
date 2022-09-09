@@ -35,6 +35,8 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "IGUI_Manager.h"
 
+using namespace std;
+
 IGUI_ManagerForm::IGUI_ManagerForm()
 {
 }
@@ -46,73 +48,35 @@ IGUI_ManagerForm::~IGUI_ManagerForm()
 //-------------------------------------------------------------------
 void IGUI_ManagerForm::Add(std::string& name, void* pForm)
 {
-  mMapNameForm.insert(TMapNamePtr::value_type(name, pForm));
-  mMapFormName.insert(TMapPtrName::value_type(pForm,name));
+  mMapNameForm.Add(name, pForm);
 }
 //-------------------------------------------------------------------
-void* IGUI_ManagerForm::GetFormByName(std::string& name)
+void* IGUI_ManagerForm::GetFormByName(string& name)
 {
-  TMapNamePtr::iterator fitName = mMapNameForm.find(name);
-  TMapNamePtr::iterator eitName = mMapNameForm.end();
-  if(fitName!=eitName)
-  {
-    return fitName->second;
-  }
-  return NULL;
+  void* p = NULL;
+  mMapNameForm.GetValueByKey(name,p);
+  return p;
 }
 //-------------------------------------------------------------------
-const char* IGUI_ManagerForm::GetNameForm(void* pForm)
+string IGUI_ManagerForm::GetNameForm(void* pForm)
 {
-  TMapPtrName::iterator fitPtr = mMapFormName.find(pForm);
-  TMapPtrName::iterator eitPtr = mMapFormName.end();
-  if(fitPtr!=eitPtr)
-  {
-    return fitPtr->second.data();
-  }
-  return NULL;
+  string str;
+  mMapNameForm.GetValueByKey(str,pForm);
+  return str;
 }
 //-------------------------------------------------------------------
-bool IGUI_ManagerForm::RemoveFormByName(std::string name)
+bool IGUI_ManagerForm::RemoveFormByName(string name)
 {
-  bool res = false;
-  TMapNamePtr::iterator fitName = mMapNameForm.find(name);
-  TMapNamePtr::iterator eitName = mMapNameForm.end();
-  if(fitName!=eitName)
-  {
-    TMapPtrName::iterator fitPtr = mMapFormName.find(fitName->second);
-    TMapPtrName::iterator eitPtr = mMapFormName.end();
-    if(fitPtr!=eitPtr)
-    {
-      mMapNameForm.erase(fitName);
-      mMapFormName.erase(fitPtr);
-      res = true;
-    }
-  }
-  return res;
+  return mMapNameForm.RemoveValueByKey(name);
 }
 //-------------------------------------------------------------------
 bool IGUI_ManagerForm::RemoveForm(void* pForm)
 {
-  bool res = false;
-  TMapPtrName::iterator fitPtr = mMapFormName.find(pForm);
-  TMapPtrName::iterator eitPtr = mMapFormName.end();
-  if(fitPtr!=eitPtr)
-  {
-    TMapNamePtr::iterator fitName = mMapNameForm.find(fitPtr->second);
-    TMapNamePtr::iterator eitName = mMapNameForm.end();
-    if(fitName!=eitName)
-    {
-      mMapNameForm.erase(fitName);
-      mMapFormName.erase(fitPtr);
-      res = true;
-    }
-  }
-  return res;
+  return mMapNameForm.RemoveValue(pForm);
 }
 //-------------------------------------------------------------------
 void IGUI_ManagerForm::Clear()
 {
-  mMapNameForm.clear();
-  mMapFormName.clear();
+  mMapNameForm.Clear();
 }
 //-------------------------------------------------------------------

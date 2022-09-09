@@ -108,7 +108,6 @@ void IGame::FreeLib()
 {
   bool res = false;
 #ifdef WIN32
-  #pragma warning(disable: 4800)
   res = (bool)FreeLibrary(hModule);
 #else
 #endif

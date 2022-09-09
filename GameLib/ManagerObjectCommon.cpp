@@ -135,6 +135,7 @@ void TManagerObjectCommon::Clear()
 IBaseObjectCommon* TManagerObjectCommon::CreateObject(unsigned int id_model)
 {
   IBaseObjectCommon* pObject = mLoaderObject.LoadObject(id_model);
+  AddObject(pObject);
   return pObject;
 }
 //--------------------------------------------------------------------------------------------------------

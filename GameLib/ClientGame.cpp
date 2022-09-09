@@ -62,6 +62,10 @@ you may contact in writing [ramil2085@gmail.com].
 #include "NameSrcEventID.h"
 
 #include "IControlCamera.h"
+#include "file_operation.h"
+#include "StorePathResources.h"
+#include "MapXML_Field.h"
+#include "MakerManagerStateMachine.h"
 
 using namespace std;
 using namespace nsEvent;
@@ -82,9 +86,9 @@ TClientGame::~TClientGame()
 
 }
 //------------------------------------------------------------------------
-void TClientGame::Work(const char* sNameDLL)// начало работы
+void TClientGame::Work(const char* sNameDLL, const char* arg)// начало работы
 {
-  if(Init(sNameDLL)==false)
+  if(Init(sNameDLL,arg)==false)
     return;
 
   flgNeedStop = false;
@@ -102,7 +106,7 @@ void TClientGame::Work(const char* sNameDLL)// начало работы
     if(HandleExternalEvent()==false)
       break;
     // расчеты, необходимые для рендера, в зависимости от времени предыдущего расчета
-    Calc();
+    PrepareForRender();
     Render();
   }
   //------------------------------------------------------
@@ -111,34 +115,43 @@ void TClientGame::Work(const char* sNameDLL)// начало работы
   Done();
 }
 //------------------------------------------------------------------------
-bool TClientGame::Init(const char* sNameDLL)
+bool TClientGame::Init(const char* sNameDLL, const char* arg)
 {
   InitLog();
   // загрузка DLL
   CHECK_RET(LoadDLL(sNameDLL))
-  if(mGetClientDeveloperTool==NULL)
+  if(mGetClientDeveloperTool==NULL)// политика: нет DLL - нет движка.
     return false;
-  // политика: нет DLL - нет движка.
+  
+  // подготовить пути для ресурсов
+  string sRelPathXML = mClientDeveloperTool->GetPathXMLFile();
+  char sAbsPath[300];
+  FindAbsPath((char*)sRelPathXML.data(),sAbsPath,sizeof(sAbsPath));
+  if(GetStorePathResources()->Load(sAbsPath)==false)
+    return false;
 
   // камера
   TMakerControlCamera makerControlCamera;
-  mControlCamera = makerControlCamera.New();
+  mCClient.mControlCamera = makerControlCamera.New();
 
   // создатель объектов
   IMakerObjectCommon* pMakerObjectCommon = mClientDeveloperTool->GetMakerObjectCommon();
 
   // создать двигатели и проинициализировать менеджеры
   TMakerGraphicEngine makerGraphicEngine;
-  mGraphicEngine = makerGraphicEngine.New(mControlCamera->GetCamera());
-  mGraphicEngine->Init();// создали окно
-  mGraphicEngine->SetSelfName(ID_SRC_EVENT_GRAPHIC_ENGINE);
-  mGraphicEngine->SetDstObject(this);
-  mGraphicEngine->SetTitleWindow(mClientDeveloperTool->GetTitleWindow().data());
+  mCClient.mGraphicEngine = makerGraphicEngine.New(mCClient.mControlCamera);
+  mCClient.mGraphicEngine->Init();// создали окно
+  mCClient.mGraphicEngine->SetSelfName(ID_SRC_EVENT_GRAPHIC_ENGINE);
+  mCClient.mGraphicEngine->SetDstObject(this);
+  mCClient.mGraphicEngine->SetTitleWindow(mClientDeveloperTool->GetTitleWindow().data());
   //------------------------------------------
   TMakerPhysicEngine makerPhysicEngine;
-  mPhysicEngine = makerPhysicEngine.New();
-  mPhysicEngine->SetSelfName(ID_SRC_EVENT_PHYSIC_ENGINE);
-  mPhysicEngine->SetDstObject(this);
+  mCClient.mPhysicEngine = makerPhysicEngine.New();
+  mCClient.mPhysicEngine->SetSelfName(ID_SRC_EVENT_PHYSIC_ENGINE);
+  mCClient.mPhysicEngine->SetDstObject(this);
+  //------------------------------------------
+  TMakerManagerStateMachine makerMStateManager;
+  mCClient.mMStateMachine = makerMStateManager.New();
   //------------------------------------------
   //TMakerNET_Engine makerNET;
   //mNET = makerNET.New();
@@ -147,28 +160,21 @@ bool TClientGame::Init(const char* sNameDLL)
   //mNET->SetDstObject(this);
   //------------------------------------------
   TMakerManagerObjectCommon makerMOC;
-  mMOC = makerMOC.New();
-  mMOC->Init(pMakerObjectCommon);
-  mMOC->SetSelfName(ID_SRC_EVENT_MANAGER_OBJECT_COMMON);
-  mMOC->SetDstObject(this);
+  mCClient.mMOC = makerMOC.New();
+  mCClient.mMOC->Init(pMakerObjectCommon);
+  mCClient.mMOC->SetSelfName(ID_SRC_EVENT_MANAGER_OBJECT_COMMON);
+  mCClient.mMOC->SetDstObject(this);
   //------------------------------------------
   TMakerManagerTime makerMTime;
-  mMTime = makerMTime.New();
+  mCClient.mMTime = makerMTime.New();
   //------------------------------------------
   TMakerGUI makerGUI;
-  mGUI = makerGUI.New();
-  mGraphicEngine->SetGUI(mGUI);
+  mCClient.mGUI = makerGUI.New();
+  mCClient.mGraphicEngine->SetGUI(mCClient.mGUI);
   //------------------------------------------
   //------------------------------------------
   mClientDeveloperTool->SetInitLogFunc(::GetLogger);
-  IClientDeveloperTool::TComponentClient components;
-  components.mControlCamera = mControlCamera;
-  components.mGUI           = mGUI;
-  components.mGraphicEngine = mGraphicEngine;
-  components.mMTime         = mMTime;
-  components.mMOC           = mMOC;
-  components.mPhysicEngine  = mPhysicEngine;
-  mClientDeveloperTool->Init(&components);
+  mClientDeveloperTool->Init(&mCClient,arg);
   return true;
 }
 //------------------------------------------------------------------------
@@ -177,26 +183,30 @@ void TClientGame::Done()
   mClientDeveloperTool->Done();// освободить ресурсы DevTool
 
   // а теперь модули
+  TMakerManagerStateMachine makerMStateManager;
+  makerMStateManager.Delete(mCClient.mMStateMachine);
+  mCClient.mMStateMachine = NULL;
+
   TMakerGUI makerGUI;
-  makerGUI.Delete(mGUI);
-  mGUI = NULL;
-  mGraphicEngine->ZeroGUI();
+  makerGUI.Delete(mCClient.mGUI);
+  mCClient.mGUI = NULL;
+  mCClient.mGraphicEngine->ZeroGUI();
 
   TMakerGraphicEngine makerGE;
-  makerGE.Delete(mGraphicEngine);
-  mGraphicEngine = NULL;
+  makerGE.Delete(mCClient.mGraphicEngine);
+  mCClient.mGraphicEngine = NULL;
 
   TMakerPhysicEngine makerPE;
-  makerPE.Delete(mPhysicEngine);
-  mPhysicEngine = NULL;
+  makerPE.Delete(mCClient.mPhysicEngine);
+  mCClient.mPhysicEngine = NULL;
 
   TMakerManagerObjectCommon makerMOC;
-  makerMOC.Delete(mMOC);
-  mMOC = NULL;
+  makerMOC.Delete(mCClient.mMOC);
+  mCClient.mMOC = NULL;
 
   TMakerManagerTime makerMTimer;
-  makerMTimer.Delete(mMTime);
-  mMTime = NULL;
+  makerMTimer.Delete(mCClient.mMTime);
+  mCClient.mMTime = NULL;
 }
 //------------------------------------------------------------------------
 bool TClientGame::HandleExternalEvent()
@@ -216,19 +226,19 @@ bool TClientGame::HandleExternalEvent()
   return true;
 }
 //------------------------------------------------------------------------
-void TClientGame::Calc()
+void TClientGame::PrepareForRender()
 {
-  mClientDeveloperTool->Calc();
+  mClientDeveloperTool->PrepareForRender();
 }
 //------------------------------------------------------------------------
 void TClientGame::Render()
 {
-  mGraphicEngine->Work(mMTime->GetTime());
+  mCClient.mGraphicEngine->Work(mCClient.mMTime->GetTime());
 }
 //------------------------------------------------------------------------
 bool TClientGame::HandleGraphicEngineEvent()
 {
-  return mGraphicEngine->HandleInternalEvent();
+  return mCClient.mGraphicEngine->HandleInternalEvent();
 }
 //------------------------------------------------------------------------
 void TClientGame::CollectEvent()

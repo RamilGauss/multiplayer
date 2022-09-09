@@ -92,15 +92,13 @@ public:
 
   virtual bool Open(unsigned short port,int numNetWork=0);
 
-	virtual void Write(InfoData* data, bool check = true);
+	virtual void Write(InfoData* data, bool check = true, bool add_in_queque = true);
 	// чтение - зарегистрируйс€
   virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type);
   virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type);
 
 	virtual void Start();
 	virtual void Stop();
-
-  virtual void Work(){};
 
   // синхронна€ функци€
   virtual bool Synchro(unsigned int ip, unsigned short port); // вызов только дл€ клиента
@@ -121,13 +119,14 @@ protected:
 
 protected:
 	
-  class TDefPacket  : public TObject
+  class TDescPacket  : public TObject
   {
   protected:
     InfoData*        infoData;// new
     //----------------------
     void* mReadyPacket;
     int   mSizePacket;
+    bool  isQueue;// зависимость от очереди, целевой сокет примет пакеты в определенном пор€дке.
     //----------------------
   public:  
     void SetData(InfoData* pInfoD )
@@ -220,8 +219,10 @@ protected:
       return infoData->port_dst;
     }
 
-    TDefPacket(){infoData=NULL;mReadyPacket=NULL;mSizePacket=0;}
-    ~TDefPacket(){delete infoData;free(mReadyPacket);}
+    void SetIsQueue(bool v){isQueue=v;}
+    bool GetIsQueue()const{return isQueue;}
+    TDescPacket(){isQueue=true;infoData=NULL;mReadyPacket=NULL;mSizePacket=0;}
+    ~TDescPacket(){delete infoData;free(mReadyPacket);}
   };
 
   // пакеты, ожидающие квитанцию
@@ -241,8 +242,8 @@ protected:
 	virtual int GetTimeout();
 	void SendUnchecked();
 
-  bool Send(TDefPacket* pDefPacket);
-  void Disconnect(TDefPacket* pDefPacket);
+  bool Send(TDescPacket* pDefPacket);
+  void Disconnect(TDescPacket* pDefPacket);
 
 protected:
 	bool Write(void *p, int size, unsigned int ip, unsigned short port);
@@ -258,6 +259,7 @@ protected:
 protected:
   class  InfoConnect : public TObject
   {
+    // информаци€ по сокету
     public:
       InfoConnect(){cn_in_s=0;cn_out_s=0;cn_in_p=0;cn_out_p=0;};
       unsigned int   ip;
@@ -270,6 +272,7 @@ protected:
 			unsigned short cn_out_p;    // циклический номер при Send
   };
 
+  // информаци€ по сокету. какой текущий номер пакета
   TArrayObject mArrFresh;
 
   bool IsPacketFresh();
@@ -282,7 +285,10 @@ protected:
 
 	InfoConnect* GetInfoConnect(unsigned int ip,unsigned short port);
 
-	bool FindInArrWaitCheck(TDefPacket* pDefPacket);
+	bool FindInArrWaitCheckQ(TDescPacket* pDefPacket);
+
+  // в массиве pArr найти и удалить €чейки, которые найдутс€ по pDefPacket
+  void SearchAndDelete(TArrayObject* pArr, TDescPacket* pDefPacket);
 };
 
 

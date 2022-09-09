@@ -37,10 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef RobertH
 #define RobertH
 
-
 #include "IPhysicEngine.h"
-//#include "BaseObjectPrediction.h"
-//#include <list>
 
 // предсказатель
 // Robert - физический движок

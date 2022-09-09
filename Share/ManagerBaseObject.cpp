@@ -39,6 +39,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "LoaderListPathID.h"
 #include "IBaseObject.h"
 #include "BL_Debug.h"
+#include "StorePathResources.h"
+#include "MapXML_Field.h"
 
 using namespace std;
 
@@ -96,7 +98,8 @@ bool TManagerBaseObject::LoadListPath()
 {
   TLoaderListPathID loader;
   char sAbsPath[300];
-  FindAbsPath(PATH_LIST_MODELS,sAbsPath,sizeof(sAbsPath));
+  FindAbsPath((char*)GetStorePathResources()->GetSecond("model"),
+              sAbsPath,sizeof(sAbsPath));
   if(loader.Load(sAbsPath,&mMapID_Path)==false)
   {
     BL_FIX_BUG();

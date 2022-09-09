@@ -38,25 +38,31 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "IControlCamera.h"
 
+// Not Thread Safe!
+
 class TControlCamera : public IControlCamera
 {
-  
   ICamera* mCamera;
 
   IBaseObject* mLinkObj;
 
   float mDist;
+  
+  TypeLinked mMask;
 
+  // при изменении скорости
+  nsStruct3D::TVector3 mSpeedShift;// x - forward, y - right, z - up
+  guint32              mLastTime;// время изменения, мс
 
 public:
   TControlCamera();
   virtual ~TControlCamera();
 
   virtual IBaseObject* GetLinkedObject();
-  virtual void Link(IBaseObject* pObject, int mask);
+  virtual void Link(IBaseObject* pObject, TypeLinked mask);
   virtual void Unlink();
 
-  virtual ICamera* GetCamera();
+  //virtual ICamera* GetCamera();
 
   // смещение от eye обзора. Например, от 3 лица вид координаты точка больше 0
   // от 1 лица координаты равны нулю
@@ -64,15 +70,21 @@ public:
   virtual float GetDistObj();
   virtual void  SetDistObj(float v);
   virtual void  AddDistObj(float dV);
+
+  // для свободной камеры
+  virtual void SetSpeedForward(float v);
+  virtual void SetSpeedRight(float v);
+  virtual void SetSpeedUp(float v);
   //---------------------------------------------------
   // интерфейс камеры
+  virtual void UpdateForRender();
   // выдать результат манипуляций
   virtual const nsStruct3D::TMatrix16* GetView();
   virtual const nsStruct3D::TMatrix16* GetProj();
   virtual const nsStruct3D::TVector3*  GetEyePt();
 
   // базовая настройка
-  virtual void SetView(nsStruct3D::TMatrix16* view);
+  //virtual void SetView(nsStruct3D::TMatrix16* view);
   virtual void SetProj(nsStruct3D::TMatrix16* proj);
   virtual void SetProjParams( float fFOV, float fAspect, float fNearPlane, float fFarPlane );
   virtual void SetOrient(nsStruct3D::TVector3* up, bool use = true);
@@ -91,6 +103,13 @@ public:
   virtual void RotateDown(float angle);
   virtual void RotateRight(float angle);
   virtual void Roll(float angle);
+
+  virtual void SetDir(nsStruct3D::TVector3* right, nsStruct3D::TVector3* up, nsStruct3D::TVector3* lookat);
+
+protected:
+  void ApplySpeed();
+  void InitLastTime();
+  void GetFromLinkObj();
 };
 
 #endif

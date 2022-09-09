@@ -168,6 +168,24 @@ bool TXML_Markup::WriteSection(const char* name, int num, string buffer)
   return res;
 }
 //------------------------------------------------------------------
+bool TXML_Markup::WriteSection(int index, string buffer)
+{
+  mMarkup.SavePos();
+  bool res = false;
+  int cntElem = 0;
+  while(mMarkup.FindElem())
+  { 
+    if(index==cntElem)
+    {
+      res = mMarkup.SetElemContent(buffer.data());
+      break;
+    }
+    cntElem++;
+  }
+  mMarkup.RestorePos();
+  return res;
+}
+//------------------------------------------------------------------
 // чтение
 string TXML_Markup::ReadSection(const char* name, int num)
 {
@@ -193,7 +211,27 @@ string TXML_Markup::ReadSection(const char* name, int num)
   return content;
 }
 //------------------------------------------------------------------
-string TXML_Markup::GetNameSection(int num)
+string TXML_Markup::ReadSection(int index)
+{
+  string content;
+  mMarkup.SavePos();
+
+  int cntElem = 0;
+  while(mMarkup.FindElem())
+  { 
+    if(index==cntElem)
+    {
+      content = mMarkup.GetElemContent();
+      break;
+    }
+    cntElem++;
+  }
+
+  mMarkup.RestorePos();
+  return content;
+}
+//------------------------------------------------------------------
+string TXML_Markup::GetNameSection(int index)
 {
   string name;
   mMarkup.SavePos();
@@ -201,7 +239,7 @@ string TXML_Markup::GetNameSection(int num)
   int cntElem = 0;
   while(mMarkup.FindElem())
   { 
-    if(num==cntElem)
+    if(index==cntElem)
     {
       name = mMarkup.GetTagName();
       break;
@@ -246,6 +284,24 @@ bool TXML_Markup::WriteSectionAttr(const char* name, int num, const char* nameAt
   return res;
 }
 //------------------------------------------------------------------
+bool TXML_Markup::WriteSectionAttr(int index, const char* nameAttr, string buffer)
+{
+  mMarkup.SavePos();
+  bool res = false;
+  int cntElem = 0;
+  while(mMarkup.FindElem())
+  { 
+    if(index==cntElem)
+    {
+      res = mMarkup.SetAttrib(nameAttr,buffer.data());
+      break;
+    }
+    cntElem++;
+  }
+  mMarkup.RestorePos();
+  return res;
+}
+//------------------------------------------------------------------
 // чтение
 string TXML_Markup::ReadSectionAttr(const char* name, int num, const char* nameAttr)
 {
@@ -265,6 +321,26 @@ string TXML_Markup::ReadSectionAttr(const char* name, int num, const char* nameA
       }
       cntElem++;
     }
+  }
+
+  mMarkup.RestorePos();
+  return content;
+}
+//------------------------------------------------------------------
+string TXML_Markup::ReadSectionAttr(int index, const char* nameAttr)
+{
+  string content;
+  mMarkup.SavePos();
+
+  int cntElem = 0;
+  while(mMarkup.FindElem())
+  { 
+    if(index==cntElem)
+    {
+      content = mMarkup.GetAttrib(nameAttr);
+      break;
+    }
+    cntElem++;
   }
 
   mMarkup.RestorePos();

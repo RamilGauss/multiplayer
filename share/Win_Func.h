@@ -38,7 +38,7 @@ you may contact in writing [ramil2085@gmail.com].
 #define Win_FuncH
 
 
-extern void WinMessageBox(char* sError);
+//extern void WinMessageBox(char* sError);
 
 
 

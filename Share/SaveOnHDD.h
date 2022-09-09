@@ -74,14 +74,18 @@ class SHARE_EI TSaveOnHDD
       size = 0;
     }
   };
-  std::vector< std::vector< unsigned char > > mVectorBuffer;
+
+  typedef std::vector< unsigned char > TVectorUchar;
+  typedef std::vector< TVectorUchar > TVectorVectorUchar;
+
+  TVectorVectorUchar mVectorBuffer;
 
 public:
 
 	TSaveOnHDD(char* path = NULL);
 	virtual ~TSaveOnHDD();
 
-	virtual bool ReOpen(char* path);
+	virtual bool ReOpen(char* path, bool append = false );
 
 	virtual bool IsOpen();
 

@@ -61,13 +61,14 @@ class SHARE_EI ICamera
 public:
   virtual ~ICamera(){};
 
+  virtual void UpdateForRender() = 0;
   // выдать результат манипул€ций
   virtual const nsStruct3D::TMatrix16* GetView() = 0;
   virtual const nsStruct3D::TVector3*  GetEyePt()= 0;
   virtual const nsStruct3D::TMatrix16* GetProj() = 0;
 
   // базова€ настройка
-  virtual void SetView(nsStruct3D::TMatrix16* view) = 0;
+  //virtual void SetView(nsStruct3D::TMatrix16* view) = 0;
   virtual void SetProj(nsStruct3D::TMatrix16* proj) = 0;
 
   virtual void SetProjParams( float fFOV, float fAspect, float fNearPlane, float fFarPlane ) = 0;
@@ -79,7 +80,7 @@ public:
 
   // манипул€ции
   // положение
-  virtual void SetPositionLookAt(nsStruct3D::TVector3* pPosLookAt) = 0;
+  virtual void SetPositionLookAt(nsStruct3D::TVector3* pPosLookAt)     = 0;
   virtual void SetPosition(nsStruct3D::TVector3* pPos)                 = 0;
   virtual void MoveInDirection(float dist, nsStruct3D::TVector3* pDir) = 0;
   virtual void MoveForward(float dist)                                 = 0;// вдоль осей камеры
@@ -92,6 +93,8 @@ public:
   virtual void RotateDown(float angle)  = 0;
   virtual void RotateRight(float angle) = 0;
   virtual void Roll(float angle)        = 0;
+
+  virtual void SetDir(nsStruct3D::TVector3* right, nsStruct3D::TVector3* up, nsStruct3D::TVector3* lookat) = 0;
 };
 
 #endif

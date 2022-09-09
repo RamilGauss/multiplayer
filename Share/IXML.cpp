@@ -103,3 +103,52 @@ bool IXML::ReadFloat4(const char* name, int num, float * v4)
   return true;
 }
 //------------------------------------------------------------------
+bool IXML::ReadFloat(int index, float & v)
+{
+  string s = ReadSection(index);
+  if(s.length()==0)
+    return false;
+  v = (float)atof(s.data());
+  return true;
+}
+//------------------------------------------------------------------
+bool IXML::ReadInt(int index, int & v)
+{
+  string s = ReadSection(index);
+  if(s.length()==0)
+    return false;
+  v = atoi(s.data());
+  return true;
+}
+//------------------------------------------------------------------
+bool IXML::ReadUint(int index, unsigned int & v)
+{
+  string s = ReadSection(index);
+  if(s.length()==0)
+    return false;
+  v = atoi(s.data());
+  return true;
+}
+//------------------------------------------------------------------
+bool IXML::ReadFloat3(int index, float * v3)// разделитель или "space" или ";"
+{
+  string s = ReadSection(index);
+  int size = s.length();
+  if(size==0)
+    return false;
+  if(sscanf(s.data(),"%f;%f;%f",&v3[0],&v3[1],&v3[2])!=3) return false;
+
+  return true;
+}
+//------------------------------------------------------------------
+bool IXML::ReadFloat4(int index, float * v4)
+{
+  string s = ReadSection(index);
+  int size = s.length();
+  if(size==0)
+    return false;
+  if(sscanf(s.data(),"%f;%f;%f;%f",&v4[0],&v4[1],&v4[2],&v4[3])!=4) return false;
+
+  return true;
+}
+//------------------------------------------------------------------

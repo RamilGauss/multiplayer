@@ -42,9 +42,9 @@ you may contact in writing [ramil2085@gmail.com].
 using namespace nsStruct3D;
 using namespace std;
 
-const char* sPathShader = "\\shader";
-const char* sPathTexture = "\\texture";
-const char* sPathMainFileConfig = "\\main.xml";
+const char* sPathShader = "/shader";
+const char* sPathTexture = "/texture";
+const char* sPathMainFileConfig = "/main.xml";
 
 const char* SectionLOD = "lod";
 const char* SectionPart = "part";
@@ -115,7 +115,7 @@ void ILoaderModelGE::UpPath(char* pPath)
   }
 }
 //-----------------------------------------------------------
-bool ILoaderModelGE::Load(LPCWSTR strFilenameData)
+bool ILoaderModelGE::Load(wchar_t* strFilenameData)
 {
   USES_CONVERSION;
 

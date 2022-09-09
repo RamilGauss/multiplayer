@@ -32,8 +32,6 @@ If you have questions concerning this license or the applicable additional terms
 you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
-
-
 #include "memory_operation.h"
 #include <malloc.h>
 #include <memory.h>
@@ -65,6 +63,35 @@ char* mo_realloc_bound(char* old_mem, int old_size, int size_bound, int size_pas
   memcpy(new_mem, old_mem,size_bound);
   memcpy(new_mem+size_bound+size_paste,old_mem+size_bound,old_size-size_bound);
   free(old_mem);
+  return new_mem;
+}
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+void* mo_realloc_new(void* old_mem, int old_size, int new_size)
+{
+  if(old_size)
+  {
+    void* volatileBuffer = new char[old_size];
+    memcpy(volatileBuffer,old_mem,old_size);
+    delete[](char*)old_mem;
+    old_mem = new char[new_size];
+    memcpy(old_mem,volatileBuffer,old_size);
+    delete[](char*)volatileBuffer;
+  }
+  else
+    old_mem = new char[new_size];
+
+  return old_mem;
+}
+//--------------------------------------------------------------------------
+char* mo_realloc_bound_new(char* old_mem, int old_size, int size_bound, int size_paste)
+{
+  if(old_size==0) BL_FIX_BUG();
+
+  char* new_mem = new char[old_size+size_paste];
+  memcpy(new_mem, old_mem,size_bound);
+  memcpy(new_mem+size_bound+size_paste,old_mem+size_bound,old_size-size_bound);
+  delete[]old_mem;
   return new_mem;
 }
 //--------------------------------------------------------------------------

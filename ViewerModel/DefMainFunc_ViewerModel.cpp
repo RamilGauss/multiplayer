@@ -36,7 +36,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "..\GameLib\DeveloperTool_DLL.h"
 #include <stddef.h>
 #include "ClientDeveloperTool_ViewerModel.h"
-#include "ServerDeveloperTool_ViewerModel.h"
+//#include "ServerDeveloperTool_ViewerModel.h"
 
 
 DllExport IClientDeveloperTool* GetClientDeveloperTool()
@@ -46,7 +46,7 @@ DllExport IClientDeveloperTool* GetClientDeveloperTool()
 //-------------------------------------------------------------------
 DllExport IServerDeveloperTool* GetServerDeveloperTool()
 {
-  return new TServerDeveloperTool_ViewerModel;
+  return NULL;//new TServerDeveloperTool_ViewerModel;
 }
 //-------------------------------------------------------------------
 DllExport void FreeDeveloperTool(IDeveloperTool* p)

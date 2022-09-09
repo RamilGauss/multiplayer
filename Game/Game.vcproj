@@ -62,6 +62,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib d3dx10d.lib d3dx9d.lib d3d9.lib dxerr.lib dxguid.lib winmm.lib comctl32.lib Imm32.lib Version.lib Dsound.lib BigJack.lib GameLib.lib DXUT.lib DXUTOpt.lib GBaseLib.lib Share.lib Robert.lib DXGI.lib MyGUIEngine.lib"
+				OutputFile="$(OutDir)\Tornado.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\Lib;&quot;..\Lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
@@ -182,12 +183,6 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
 	</Files>

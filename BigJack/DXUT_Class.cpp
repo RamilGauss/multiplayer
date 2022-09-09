@@ -342,11 +342,6 @@ HWND TDXUT::GetHWND()
   return DXUTGetHWND();
 }
 //--------------------------------------------------------------------------------------
-//void* TDXUT::GetFuncEventGUI()
-//{
-  //return ::OnGUIEvent;
-//}
-//--------------------------------------------------------------------------------------
 void TDXUT::SetTitleWindow(const char* sTitle)
 {
   HWND hWnd = GetHWND();

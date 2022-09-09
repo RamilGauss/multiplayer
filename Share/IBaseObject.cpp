@@ -41,11 +41,12 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ManagerBaseObject.h"
 #include <map>
 #include "BL_Debug.h"
+#include "AutoCreateVar.h"
 
 using namespace nsStruct3D;
 using namespace std;
 
-static TManagerBaseObject mManagerObject;
+static TAutoCreateVarT<TManagerBaseObject> mManagerObject;
 
 IBaseObject::IBaseObject()
 {
@@ -56,7 +57,6 @@ IBaseObject::IBaseObject()
   mA = 0;
 
   SetMatrixIdentity(&mWorld);
-  //D3DXMatrixIdentity(&mWorld);
 }
 //------------------------------------------------------------------------------------------------
 IBaseObject::~IBaseObject()
@@ -153,7 +153,7 @@ void IBaseObject::SetupMask()
 void IBaseObject::SetID_Model(unsigned int id)
 {
   ID_model = id;
-  mManagerObject.AddObject(this);
+  mManagerObject->AddObject(this);
 }
 //------------------------------------------------------------------------------------------------
 int IBaseObject::GetCountPart(const char* name,vector<string>* pVec)

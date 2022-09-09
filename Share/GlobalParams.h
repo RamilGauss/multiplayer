@@ -37,30 +37,30 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef GlobalParamsH
 #define GlobalParamsH
 
-#define ServerLocalPort 4321
-
-#define VERSION_PROGRAMM       ((unsigned short)55) 
-#define VERSION_VIEWER_MODEL   ((unsigned short)33)
-#define VERSION_CONVERTER_MESH ((unsigned short)1000)
-//-------------------------------------------------------------------------------------------
-extern char strVersionClient[100];
-extern char strVersionServer[100];
-extern char strVersionViewerModel[100];
-extern char strVersionConverterMesh[100];
-//-------------------------------------------------------------------------------------------
-
-#define STR_VERSION_CLIENT         strVersionClient
-#define STR_VERSION_SERVER         strVersionServer
-#define STR_VERSION_VIEWER_MODEL   strVersionViewerModel
-#define STR_VERSION_CONVERTER_MESH strVersionConverterMesh
-
-#define NAME_GAME "TankS"
-
-
-#define DURATION_FIGHT_MINUTE 15 // длительность боя,минут
-#define DURATION_FIGHT_MS (DURATION_FIGHT_MINUTE*60*1000) // длительность боя, мс
-#define COUNT_COMMAND_IN_FIGHT 1// размер одной из команды в бою
-
+// игровые параметры //
+//#define ServerLocalPort 4321
+//
+//#define VERSION_PROGRAMM       ((unsigned short)55) 
+//#define VERSION_VIEWER_MODEL   ((unsigned short)33)
+//#define VERSION_CONVERTER_MESH ((unsigned short)1000)
+////-------------------------------------------------------------------------------------------
+//extern char strVersionClient[100];
+//extern char strVersionServer[100];
+//extern char strVersionViewerModel[100];
+//extern char strVersionConverterMesh[100];
+////-------------------------------------------------------------------------------------------
+//
+//#define STR_VERSION_CLIENT         strVersionClient
+//#define STR_VERSION_SERVER         strVersionServer
+//#define STR_VERSION_VIEWER_MODEL   strVersionViewerModel
+//#define STR_VERSION_CONVERTER_MESH strVersionConverterMesh
+//
+//#define NAME_GAME "TankS"
+//
+//#define DURATION_FIGHT_MINUTE 15 // длительность боя,минут
+//#define DURATION_FIGHT_MS (DURATION_FIGHT_MINUTE*60*1000) // длительность боя, мс
+//#define COUNT_COMMAND_IN_FIGHT 1// размер одной из команды в бою
+// \\ игровые параметры \\
 
 namespace nsCallBackType
 {
@@ -71,12 +71,25 @@ namespace nsCallBackType
 		eDisconnect = 2,
 	};
 }
-#define SERVER_NUMBER_OF_NETWORK 0 //  выбор подсети (в случае наличия нескольких сетевых адаптеров)
+#define SERVER_NUMBER_OF_NETWORK 0 // ??  выбор подсети (в случае наличия нескольких сетевых адаптеров)
 
+// версии
+#define VER_GAME_ENGINE           ((unsigned short)40)
+#define COUNT_GAME_ENGINE_MODULES ((unsigned short)2)
 
-#define PATH_LIST_MODELS "..\\model\\listModel.xml"
-#define PATH_LIST_MAP "..\\map\\listMap.xml"
+#define VER_GRAPHIC_ENGINE ((unsigned short)55)
+#define VER_PHYSIC_ENGINE  ((unsigned short)0)
+#define VER_NET_ENGINE     ((unsigned short)20)
 
+extern char strVerGameEngine[260];
+extern char strVerGraphicEngine[260];
+extern char strVerPhysicEngine[260];
+extern char strVerNETEngine[260];
+
+#define STR_VER_GAME_ENGINE    ((unsigned short)40)
+#define STR_VER_GRAPHIC_ENGINE ((unsigned short)55)
+#define STR_VER_PHYSIC_ENGINE  ((unsigned short)0)
+#define STR_VER_NET_ENGINE     ((unsigned short)20)
 
 /* описание структуры хранения моделей и карт
 //----------------------------------------------------

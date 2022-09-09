@@ -38,6 +38,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include <stdlib.h>
 #include <stdio.h>
 
+using namespace nsStruct3D;
+
 
 TBoundingBox::TBoundingBox()
 {
@@ -55,13 +57,13 @@ TBoundingBox::~TBoundingBox()
 
 }
 //-------------------------------------------------------------------------------------
-void TBoundingBox::SetBound(TPoint3& min,TPoint3& max)
+void TBoundingBox::SetBound(TVector3& min,TVector3& max)
 {
   mMin = min;
   mMax = max;
 }
 //-------------------------------------------------------------------------------------
-void TBoundingBox::AddBound(TPoint3& min,TPoint3& max)
+void TBoundingBox::AddBound(TVector3& min,TVector3& max)
 {
   if(min.x<mMin.x) mMin.x = min.x;
   if(min.y<mMin.y) mMin.y = min.y;
@@ -81,7 +83,7 @@ bool TBoundingBox::IsCorrect()
   return false;
 }
 //-------------------------------------------------------------------------------------
-bool TBoundingBox::Contains(TPoint3& point)
+bool TBoundingBox::Contains(TVector3& point)
 {
   if((mMin.x<point.x&&point.x<mMax.x)&&
      (mMin.y<point.y&&point.y<mMax.y)&&

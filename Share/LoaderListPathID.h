@@ -37,7 +37,6 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef LoaderListPathIDH
 #define LoaderListPathIDH
 
-#include "LoadFromHDD.h"
 #include "BL_ConfigFile.h"
 #include <map>
 #include <string>
@@ -65,9 +64,9 @@ public:
   TLoaderListPathID();
   ~TLoaderListPathID();
 
-  bool Load(char* sPath, std::map<unsigned int,std::string>* pMapID_model_path);
+  bool Load(char* sAbsPath, std::map<unsigned int,std::string>* pMapID_model_path);
   
-  bool LoadBehavior(char* sPath, std::map<unsigned int,unsigned int>* pMapID_model_ID_Behavior);
+  bool LoadBehavior(char* sAbsPath, std::map<unsigned int,unsigned int>* pMapID_model_ID_Behavior);
 
 protected:
 

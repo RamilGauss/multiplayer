@@ -63,13 +63,13 @@ class TShaderStack
     }
   };
   
-  std::vector<TData*> mVecorNameData;
+  std::vector<TData*> mVectorNameData;
 
 public:
   TShaderStack();
   ~TShaderStack();
 
-  int Count(){return mVecorNameData.size();}
+  int Count(){return mVectorNameData.size();}
   int Push(const char* nameValueIn, void* pDataIn, int sizeIn);
 
   int GetIndexByName(const char* name);

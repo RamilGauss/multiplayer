@@ -184,10 +184,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IMeshFile.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\LoaderModelDX.cpp"
 				>
 			</File>
@@ -220,11 +216,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MapSystemKey_Win.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MeshFileBj.cpp"
 				>
 			</File>
 			<File
+				RelativePath=".\MeshFileObj.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MeshLoader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MeshMakerDX.cpp"
 				>
 			</File>
 			<File
@@ -334,11 +342,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MapSystemKey.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MeshFileBj.h"
 				>
 			</File>
 			<File
+				RelativePath=".\MeshFileObj.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MeshLoader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MeshMakerDX.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MeshStruct.h"
 				>
 			</File>
 			<File
@@ -355,10 +379,6 @@
 			</File>
 			<File
 				RelativePath=".\StateManagerD3D9.h"
-				>
-			</File>
-			<File
-				RelativePath=".\StaticWin.h"
 				>
 			</File>
 		</Filter>

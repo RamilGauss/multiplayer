@@ -194,6 +194,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Container.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ControlCamera.cpp"
 				>
 			</File>
@@ -254,7 +258,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MapXML_Field.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Markup.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MarkUpContainer.cpp"
 				>
 			</File>
 			<File
@@ -283,6 +295,10 @@
 			</File>
 			<File
 				RelativePath=".\SrcEvent.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\StorePathResources.cpp"
 				>
 			</File>
 			<File
@@ -365,6 +381,10 @@
 			</File>
 			<File
 				RelativePath=".\Container.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ContextMachine.h"
 				>
 			</File>
 			<File
@@ -452,7 +472,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MapDual.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MapXML_Field.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Markup.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MarkUpContainer.h"
 				>
 			</File>
 			<File
@@ -484,7 +516,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\StateMachine.h"
+				>
+			</File>
+			<File
 				RelativePath=".\StatisticValue.h"
+				>
+			</File>
+			<File
+				RelativePath=".\StorePathResources.h"
 				>
 			</File>
 			<File

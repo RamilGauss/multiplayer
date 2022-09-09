@@ -33,56 +33,13 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#ifndef MapSystemKeyH
+#define MapSystemKeyH
 
-#include "IMeshFile.h"
-#include "BL_Debug.h"
-#include <atlconv.h>
-
-IMeshFile::IMeshFile()
+class TMapSystemKey
 {
+public:
+  int Get(int k);
+};
 
-}
-//-------------------------------------------------------------
-IMeshFile::~IMeshFile()
-{
-
-}
-//-------------------------------------------------------------
-ID3DXMesh* IMeshFile::Load(IDirect3DDevice9* pd3dDevice, const char* strFilename)
-{
-  // определить расширение файла
-  // obj или bj
-  const char* sFind = strstr(strFilename,".");
-  if(sFind==NULL) return NULL;
-  sFind++;
-
-  if(strcmp(sFind,"obj")==0)
-    return LoadFromObj(pd3dDevice, strFilename);
-  else if(strcmp(sFind,"bj")==0)
-    return LoadFromBj(pd3dDevice, strFilename);
-
-  return NULL;
-}
-//-------------------------------------------------------------
-ID3DXMesh* IMeshFile::LoadFromObj(IDirect3DDevice9* pd3dDevice, const char* strFilename)
-{
-  USES_CONVERSION;
-  if (mMeshFromObj.Create(pd3dDevice,A2W(strFilename))!= S_OK) 
-    return NULL;
-  
-  ID3DXMesh* pMesh = mMeshFromObj.GetMesh();
-  mMeshFromObj.ZeroMesh();// отвязаться
-
-  return pMesh;
-}
-//-------------------------------------------------------------
-ID3DXMesh* IMeshFile::LoadFromBj(IDirect3DDevice9* pd3dDevice, const char* strFilename)
-{
-  return mMeshFromBj.Load(pd3dDevice, strFilename);
-}
-//-------------------------------------------------------------
-bool IMeshFile::SaveAsBj(const char* strFilename,ID3DXMesh* pMesh)
-{
-  return mMeshFromBj.Save(strFilename,pMesh);
-}
-//-------------------------------------------------------------
+#endif

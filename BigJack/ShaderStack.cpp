@@ -53,43 +53,43 @@ int TShaderStack::Push(const char* nameValueIn, void* pDataIn, int sizeIn)
   TData* data = new TData;
   data->name = nameValueIn;
   data->Set((char*)pDataIn, sizeIn);
-  mVecorNameData.push_back(data);
-  return mVecorNameData.size()-1;
+  mVectorNameData.push_back(data);
+  return mVectorNameData.size()-1;
 }
 //-----------------------------------------------------------------------------------------------------
 string TShaderStack::GetName(int index)
 {
-  BL_ASSERT(index<int(mVecorNameData.size()));
-  return mVecorNameData.at(index)->name;
+  BL_ASSERT(index<int(mVectorNameData.size()));
+  return mVectorNameData.at(index)->name;
 }
 //-----------------------------------------------------------------------------------------------------
 void* TShaderStack::GetData(int index, int& size)
 {
-  BL_ASSERT(index<int(mVecorNameData.size()));
-  size = mVecorNameData.at(index)->size;
-  return mVecorNameData.at(index)->data;
+  BL_ASSERT(index<int(mVectorNameData.size()));
+  size = mVectorNameData.at(index)->size;
+  return mVectorNameData.at(index)->data;
 }
 //-----------------------------------------------------------------------------------------------------
 void TShaderStack::Done()
 {
-  int cnt = mVecorNameData.size();
+  int cnt = mVectorNameData.size();
   for(int i = 0 ; i < cnt ; i++)
-    delete mVecorNameData.at(i);
+    delete mVectorNameData.at(i);
 
-  mVecorNameData.clear();
+  mVectorNameData.clear();
 }
 //-----------------------------------------------------------------------------------------------------
 void TShaderStack::SetData(int index, void* pDataIn, int sizeIn)
 {
-  mVecorNameData.at(index)->Set((char*)pDataIn, sizeIn);
+  mVectorNameData.at(index)->Set((char*)pDataIn, sizeIn);
 }
 //-----------------------------------------------------------------------------------------------------
 int TShaderStack::GetIndexByName(const char* name)
 {
-  int cnt = mVecorNameData.size();
+  int cnt = mVectorNameData.size();
   for(int i = 0 ; i < cnt ; i++ )
   {
-    if(mVecorNameData.at(i)->name.compare(name)==0)
+    if(mVectorNameData.at(i)->name.compare(name)==0)
       return i;
   }
   BL_FIX_BUG();

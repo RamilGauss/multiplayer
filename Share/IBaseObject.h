@@ -70,6 +70,8 @@ public:
   std::vector<unsigned char>* GetState(){return &mState;}
   const nsStruct3D::TMatrix16* GetWorld()const {return &mWorld;}
 
+  virtual const nsStruct3D::TMatrix16* GetMatrixForCamera(){return GetWorld();}
+
   void SetVelocity(float v){mV=v;}// м/с - хрень
   float GetVelocity(){return mV;}
 

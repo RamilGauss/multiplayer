@@ -45,27 +45,17 @@ protected:
   char* pData;
   int size;
 public:
-  TContainer(){pData=NULL;size=0;};
-  ~TContainer(){Done();};
-  void Done()
-  {
-    delete[]pData;
-    pData = NULL;
-    size  = 0;
-  }
+  TContainer();
+  virtual ~TContainer();
 
-  void SetData(char* p, int s)
-  {
-    Done();
-    size  = s;
-    pData = new char[size];
-    memcpy(pData,p,size);
-  }
-  char* GetData(int &s)
-  {
-    s = size;
-    return pData;
-  }
+  void Done();
+  void SetData(char* p, int s);
+  char* GetData(int &s);
+
+  void* GetPtr()const;
+  int GetSize()const;
+
+  void Zero();
 };
 
 

@@ -188,11 +188,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MakerManagerStateMachine.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MakerManagerTime.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\ManagerObjectCommon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerStateMachine.cpp"
 				>
 			</File>
 			<File
@@ -242,6 +250,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IManagerStateMachine.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IManagerTime.h"
 				>
 			</File>
@@ -258,11 +270,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MakerManagerStateMachine.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MakerManagerTime.h"
 				>
 			</File>
 			<File
 				RelativePath=".\ManagerObjectCommon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerStateMachine.h"
 				>
 			</File>
 			<File

@@ -41,14 +41,8 @@ you may contact in writing [ramil2085@gmail.com].
   #include <Winsock2.h>
   #include <winsock.h>
 #endif
-//#include "BL_ConfigFile.h"
-//#include "BL_AppFile.h"
 #include "NetSystem.h"
-//#include "ErrorReg.h"
 #include <stdio.h>
-//#include "glib.h"
-
-//#include "CommunicationDevice_p.h"
 
 #ifndef WIN32
 #include <sys/types.h>

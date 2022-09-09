@@ -52,7 +52,7 @@ void TLogger::InitLogger(TSaveOnHDD* saver, const char* sName)
 {
   if(saver->IsOpen()) return;
   char nameLogFile[260];
-  sprintf(nameLogFile,".\\%s%s.log",sName,sPrefix);
+  sprintf(nameLogFile,".\\%s%s.log",sName,sPrefix.data());
   saver->ReOpen(nameLogFile);
 }
 //-----------------------------------------------------------------------
@@ -60,6 +60,10 @@ void TLogger::Register(const char* nameLogger)
 {
   TSaveOnHDD* pSoHDD = new TSaveOnHDD;
   mMapNamePtr.insert(TMapStrPtr::value_type(nameLogger,pSoHDD));
+  if(sPrefix.length())
+  {
+    InitLogger(pSoHDD,nameLogger);
+  }
 }
 //-----------------------------------------------------------------------
 void TLogger::Init(char* prefix)

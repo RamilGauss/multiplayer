@@ -39,21 +39,29 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Camera.h"
 #include "BL_Debug.h"
 #include <math.h>
+#include "HiTimer.h"
 
 using namespace nsStruct3D;
+
+const float defFOV      = float(M_PI) / 4.0f;
+const float defAspect   = 1.0f;
+const float defNearPlan = 1.0f;
+const float defFarPlan  = 1000.0f;
+
+const float defDotProductMin = 0.000001f;
 
 TCamera::TCamera()
 {
   InitVector();
   mPosition = TVector3(0.0f,0.0f,0.0f);
 
-  flgUseOrient = true;
-  mNormal2Earth      = mUp;
+  flgUseOrient  = true;
+  mNormal2Earth = mUp;
 
   mRotateRight = mRotateLookAt = mRotateUp = 0.0f;
   SetMatrixIdentity(&mView);
 
-  SetProjParams( float(M_PI) / 4.0f, 1.0f, 1.0f, 1000.0f);
+  SetProjParams( defFOV, defAspect, defNearPlan, defFarPlan);
 }
 //----------------------------------------------------------------------------------------
 TCamera::~TCamera()
@@ -61,43 +69,43 @@ TCamera::~TCamera()
 
 }
 //----------------------------------------------------------------------------------------
-void TCamera::SetView(nsStruct3D::TMatrix16* view)
-{
-  mChangedView = false; // сбросить все что делали до этого
-  MATRIX16_EQUAL_M_P(mView,view);
-}
+//void TCamera::SetView(TMatrix16* view)
+//{
+//  mChangedView = false; // сбросить все что делали до этого
+//  MATRIX16_EQUAL_M_P(mView,view);
+//}
 //----------------------------------------------------------------------------------------
-void TCamera::SetProj(nsStruct3D::TMatrix16* proj)
+void TCamera::SetProj(TMatrix16* proj)
 {
   MATRIX16_EQUAL_M_P(mProj,proj);
 }
 //----------------------------------------------------------------------------------------
 // выдать результат манипуляций
-const nsStruct3D::TMatrix16* TCamera::GetView()
+const TMatrix16* TCamera::GetView()
 {
-  UpdateView();
+  //UpdateView()
   return &mView;
 }
 //----------------------------------------------------------------------------------------
-const nsStruct3D::TMatrix16* TCamera::GetProj()
+const TMatrix16* TCamera::GetProj()
 {
   return &mProj;
 }
 //----------------------------------------------------------------------------------------
-const nsStruct3D::TVector3* TCamera::GetEyePt()
+const TVector3* TCamera::GetEyePt()
 {
-  UpdateView();
+  //UpdateView();
   return &mPosition;
 }
 //----------------------------------------------------------------------------------------
 // положение
-void TCamera::SetPosition(nsStruct3D::TVector3* pPos)
+void TCamera::SetPosition(TVector3* pPos)
 {
   mPosition = *pPos;
   mChangedView = true;
 }
 //----------------------------------------------------------------------------------------
-void TCamera::MoveInDirection(float dist, nsStruct3D::TVector3* pDir)
+void TCamera::MoveInDirection(float dist, TVector3* pDir)
 {
   mPosition += (*pDir)*dist;
   mChangedView = true;
@@ -124,20 +132,61 @@ void TCamera::MoveUp(float dist)
 // вращать 
 void TCamera::RotateDown(float angle)
 {
-  mRotateRight += angle;
+  if(flgUseOrient)
+  {
+    angle *= 2;
+    float a;
+    TQuaternion axis;
+    SetQuaternionRotationAxis(&axis,&mRight,angle);
+    //-----------------------------------------
+    TQuaternion rot = TQuaternion(mLookAt.x,mLookAt.y,mLookAt.z,0);
+    SetQuaternionMultiply(&rot,&rot,&axis);
+    SetQuaternionToAxisAngle(&rot,&mLookAt,&a);
+    //-----------------------------------------
+    rot = TQuaternion(mUp.x,mUp.y,mUp.z,0);
+    SetQuaternionMultiply(&rot,&rot,&axis);
+    SetQuaternionToAxisAngle(&rot,&mUp,&a);
+  }
+  else
+    mRotateRight += angle;
   mChangedView = true;
 }
 //----------------------------------------------------------------------------------------
 void TCamera::RotateRight(float angle)
 {
-  mRotateUp += angle;
+  if(flgUseOrient)
+  {
+    angle *= 2;
+    float a;
+    TQuaternion axis;
+    SetQuaternionRotationAxis(&axis,&mNormal2Earth,angle);
+    //-----------------------------------------
+    TQuaternion rot = TQuaternion(mLookAt.x,mLookAt.y,mLookAt.z,0);
+    SetQuaternionMultiply(&rot,&rot,&axis);
+    SetQuaternionToAxisAngle(&rot,&mLookAt,&a);
+    //-----------------------------------------
+    rot = TQuaternion(mUp.x,mUp.y,mUp.z,0);
+    SetQuaternionMultiply(&rot,&rot,&axis);
+    SetQuaternionToAxisAngle(&rot,&mUp,&a);
+    //-----------------------------------------
+    rot = TQuaternion(mRight.x,mRight.y,mRight.z,0);
+    SetQuaternionMultiply(&rot,&rot,&axis);
+    SetQuaternionToAxisAngle(&rot,&mRight,&a);
+  }
+  else
+    mRotateUp += angle;
   mChangedView = true;
 }
 //----------------------------------------------------------------------------------------
 void TCamera::Roll(float angle)
 {
-  mRotateLookAt += angle;
-  mChangedView = true;
+  if(flgUseOrient)
+  {/*пропуск*/}
+  else
+  {
+    mRotateLookAt += angle;
+    mChangedView = true;
+  }
 }
 //----------------------------------------------------------------------------------------
 void TCamera::UpdateView()
@@ -170,7 +219,7 @@ void TCamera::UpdateView()
     SetVec3Cross(&mLookAt,&mRight,&mUp);
 
     // проверяет перпендикулярность векторов
-    if(fabs(SetVec3Dot(&mUp,&mRight))>0.01f)
+    if(fabs(SetVec3Dot(&mUp,&mRight))>defDotProductMin)
     {
       // если они не перпендикулярны
       SetVec3Cross(&mUp,&mLookAt,&mRight);
@@ -181,9 +230,9 @@ void TCamera::UpdateView()
     SetVec3Normalize(&mUp,    &mUp);
     SetVec3Normalize(&mLookAt,&mLookAt);
 
-    // привести в соответствии с вектором нормали к Земле.
-    if(flgUseOrient)
-      NormalByEarth();
+    //// привести в соответствии с вектором нормали к Земле.
+    //if(flgUseOrient)
+      //NormalByEarth();
 
     // вычисляет нижний ряд матрицы камеры
     float fView41, fView42, fView43;
@@ -214,8 +263,10 @@ void TCamera::SetProjParams( float fFOV, float fAspect, float fNearPlane, float 
 //----------------------------------------------------------------------------------------
 void TCamera::SetOrient(TVector3* up, bool use)
 {
-  mNormal2Earth      = *up;
-  flgUseOrient = use;
+  mNormal2Earth = *up;
+  flgUseOrient  = use;
+  if(flgUseOrient)
+    NormalByEarth();// скорректировать Roll
 }
 //----------------------------------------------------------------------------------------
 void TCamera::ClearRotate()
@@ -226,6 +277,9 @@ void TCamera::ClearRotate()
 //----------------------------------------------------------------------------------------
 void TCamera::SetPositionLookAt(TVector3* pPosLookAt)
 {
+  if(flgUseOrient)
+    NormalByEarth();// скорректировать Roll
+
   ClearRotate();// вернуть ориентацию
   mLookAt = mPosition - *pPosLookAt;
   if(mLookAt==TVector3(0,0,0))
@@ -242,6 +296,9 @@ void TCamera::SetPositionLookAt(TVector3* pPosLookAt)
 
   SetVec3Normalize(&mRight,&mRight);
   SetVec3Normalize(&mUp,&mUp);
+
+  if(flgUseOrient)
+    NormalByEarth();// скорректировать Roll
 }
 //----------------------------------------------------------------------------------------
 void TCamera::InitVector()
@@ -258,20 +315,20 @@ void TCamera::NormalByEarth()
   // mRight должен быть ортогонален к mNormal2Earth
   // если нет, то рассчитать угол расхождения и подкорректировать mRight и mUp
   float dotRN = SetVec3Dot(&mRight,&mNormal2Earth);
-  if(fabs(dotRN)<0.001f) return;
+  if(fabs(dotRN) < defDotProductMin) return;
   // неортогональны
-  //  плоскость для right
+  //  плоскость, нормальная к lookat
   TPlane planeRoll;
   SetPlaneFromPointNormal(&planeRoll,&mPosition,&mLookAt);
-  // плоскость normal2earth
+  // плоскость, нормальная к normal2earth
   TPlane planeN2E;
   SetPlaneFromPointNormal(&planeN2E,&mPosition,&mNormal2Earth);
 
   TLine lineRoll_N2E;
   lineRoll_N2E.FindAndSetIntersect(&planeRoll,&planeN2E);
-  // найти 2 точки для 2 векторов, отстоящих от mPosition
+  // найти 2 вектора для данного уравнения прямой в пространстве (в 2 стороны)
   TVector3 v1,v2;
-  lineRoll_N2E.FindVector(&v1,&v2,true);
+  lineRoll_N2E.FindVector(&v1,&v2,true);// длины векторов будут нормализованы
 
   SetVec3Cross(&mUp,&mLookAt,&v1);
   float dotUpN2E = SetVec3Dot(&mUp,&mNormal2Earth);
@@ -282,9 +339,22 @@ void TCamera::NormalByEarth()
   }
   else
     mRight = v1;
-  // проверить каждую точку на скалярное произведение mUp - оно должно быть больше нуля
 
   SetVec3Normalize(&mRight,&mRight);
   SetVec3Normalize(&mUp,&mUp);
+}
+//----------------------------------------------------------------------------------------
+void TCamera::SetDir(TVector3* right, TVector3* up, TVector3* lookat)
+{
+  //Gauss
+  mLookAt = *lookat;
+  mRight  = *right;
+  mUp     = *up;
+  mChangedView = true;
+}
+//----------------------------------------------------------------------------------------
+void TCamera::UpdateForRender()
+{
+  UpdateView();  
 }
 //----------------------------------------------------------------------------------------

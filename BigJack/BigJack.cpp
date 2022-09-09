@@ -51,6 +51,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "MakerDirectX_Realize.h"
 #include "ICamera.h"
 #include <xstring>
+#include "StorePathResources.h"
+#include "MapXML_Field.h"
 
 
 #define LOG_DX
@@ -66,6 +68,8 @@ using namespace nsEvent;
 
 TBigJack::TBigJack(ICamera* pCamera):IGraphicEngine(pCamera)
 {
+  mICamera->UpdateForRender();
+
 #ifdef WIN32
   TMakerDirectX_Realize makerDXUT;
   mDXUT = makerDXUT.New(this);
@@ -129,6 +133,7 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
     SetNeedResizeGUI(false);
   }
   //-----------------------------------------------------------------------
+  mICamera->UpdateForRender();
   HRESULT hr;
   // Clear the render target and the zbuffer 
   V( pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB( 0, 141, 153, 191 ), 1.0f, 0 ) );
@@ -184,19 +189,14 @@ void TBigJack::AddObject(IBaseObjectGE* pObject)
   }
 }
 //--------------------------------------------------------------------------------------------------------
-void TBigJack::SetViewParams(nsStruct3D::TVector3* pvEyePt3, nsStruct3D::TVector3* pvLookatPt3)
-{
-  //mCamera.SetViewParams(pvEyePt, pvLookatPt);
-}
-//--------------------------------------------------------------------------------------------------------
 void TBigJack::Clear()
 {
   mListAllObject.clear();
 }
 //--------------------------------------------------------------------------------------------------------
 void TBigJack::SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
-                       nsStruct3D::TVector3* coord3,     // где
-                       nsStruct3D::TVector3* orient3,    // ориентация эффекта
+                       TVector3* coord3,     // где
+                       TVector3* orient3,    // ориентация эффекта
                        guint32 time_past/* прошло времени, мс*/)
 {
 /*
@@ -363,7 +363,6 @@ LRESULT TBigJack::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, b
 //--------------------------------------------------------------------------------------
 void TBigJack::OnLostDevice( void* pUserContext )
 {
-  //mDialogResourceManager.OnD3D9LostDevice();
   mManagerModelDX.LostDevice();
   mManagerResourceDX.Lost();
   mViewerFPS.Lost();
@@ -373,7 +372,6 @@ void TBigJack::OnLostDevice( void* pUserContext )
 //--------------------------------------------------------------------------------------
 void TBigJack::OnDestroyDevice( void* pUserContext )
 {
-  //mDialogResourceManager.OnD3D9DestroyDevice();
   mManagerModelDX.DestroyModel();
   mManagerResourceDX.Destroy();
   mViewerFPS.Destroy();
@@ -532,10 +530,12 @@ void TBigJack::OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUser
 {
   // конвертируем в стандартный вид для клавиатуры
   TKeyEvent keyEvent;
-  keyEvent.key      = nChar;
+  keyEvent.key      = mMapSysytemKeys.Get(nChar);
   keyEvent.modifier = bAltDown ? eAlt : eKeyEmpty;
   keyEvent.pressed  = bKeyDown;
   AddEvent(&keyEvent,sizeof(TKeyEvent));
+
+  //GetLogger()->Get("GE")->WriteF("%d,%d\n",nChar,keyEvent.key);
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::OnMouseEvent( int state, int nMouseWheelDelta, 
@@ -611,15 +611,20 @@ bool TBigJack::InitGUI()
   mGUI->AddWindow(&descWindow);
 #else
 #endif
-
-  //### Gauss
-  // позже перенести в загрузку ресурсов из xml
-  mGUI->AddResourceLocation("/Demos/Demo_Themes");
-  mGUI->AddResourceLocation("/Common/Demos");
-  mGUI->AddResourceLocation("/Common/Themes");
-  bool res = MyGUI::ResourceManager::getInstance().load("MyGUI_BlackBlueTheme.xml");// загрузка скина
-  //### Gauss
-
+  bool res = false;
+  TMapXML_Field* pMap = GetStorePathResources();
+  int cntGUI = pMap->GetCount("GUI");
+  for(int i = 0 ; i < cntGUI ; i++ )
+  {
+    mGUI->AddResourceLocation(pMap->GetSecond("GUI",i));
+  }
+  int cntSkin = pMap->GetCount("GUI_skin");
+  for(int i = 0 ; i < cntSkin ; i++ )
+  {
+    res = 
+      MyGUI::ResourceManager::getInstance().load(pMap->GetSecond("GUI_skin",i));// загрузка скина
+    BL_ASSERT(res);
+  }
   return res;
 }
 //--------------------------------------------------------------------------------------

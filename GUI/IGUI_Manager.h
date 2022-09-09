@@ -38,13 +38,12 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include <string>
 #include <map>
+#include "MapDual.h"
 
 class IGUI_ManagerForm
 {
-  typedef std::map<std::string, void*> TMapNamePtr;
-  TMapNamePtr mMapNameForm;
-  typedef std::map<void*,std::string> TMapPtrName;
-  TMapPtrName mMapFormName;
+
+  TMapDual<std::string, void*> mMapNameForm;
 
 public:
 
@@ -57,7 +56,7 @@ public:
 
   // поиск
   void* GetFormByName(std::string& name);
-  const char* GetNameForm(void* pForm);// если не найдет вернет NULL
+  std::string GetNameForm(void* pForm);// если не найдет вернет NULL
 
   // удаление
   bool RemoveFormByName(std::string name);

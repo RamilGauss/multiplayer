@@ -32,15 +32,18 @@ If you have questions concerning this license or the applicable additional terms
 you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
-
-
 #ifndef MEMORY_OPERATIONH
 #define MEMORY_OPERATIONH
 
 
-
+// через malloc и free
 extern void* mo_realloc(void* old_mem, int old_size, int new_size);
 
 extern char* mo_realloc_bound(char* old_mem, int old_size, int size_bound, int size_paste);
+
+// через new и delete
+extern void* mo_realloc_new(void* old_mem, int old_size, int new_size);
+
+extern char* mo_realloc_bound_new(char* old_mem, int old_size, int size_bound, int size_paste);
 
 #endif

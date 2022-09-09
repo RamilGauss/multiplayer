@@ -32,12 +32,14 @@ If you have questions concerning this license or the applicable additional terms
 you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
-
+#ifdef WIN32
 #include <windows.h>
+#include <atlconv.h>
+#endif 
+
 #include "ClientGame.h"
 #include <string>
 #include <map>
-#include <atlconv.h>
 
 using namespace std;
 
@@ -67,6 +69,8 @@ using namespace std;
 // P.S.
 // первый и второй параметр являются обязательными, третий - необязательный.
 //-----------------------------------------
+#define tUndef -1
+
 #define tCOFF 0
 #define tCON  1
 #define tSON  2
@@ -90,36 +94,43 @@ TTypeGame typeGame[]=
   {"-ss",  tSS},
 };
 
-map<string,int> mapTypeGame;
-int typeGameKey = tCON;
+typedef map<string,int> TMapStrInt;
+typedef TMapStrInt::iterator TMapIter;
+typedef vector<string> TVectorStr;
+TMapStrInt mapTypeGame;
+int typeGameKey = tUndef;
 
 void init();
 
+#ifdef WIN32
+bool GetArgvArgcWin(TVectorStr& vec_argv);
 INT WINAPI wWinMain(HINSTANCE,HINSTANCE,LPWSTR,int )
+#else
+bool GetArgvArgcConsole(int argc, char** argv, TVectorStr& vec_argv)
+int main(int argc, char** argv)
+#endif
 {
   init();
   //-----------------------------------------------------------------
-  LPWSTR *szArglist;
-  int nArgs;
+  TVectorStr vec_argv;
+  if(
+#ifdef WIN32
+  GetArgvArgcWin(vec_argv)
+#else
+  GetArgvArgcConsole(argc, argv, vec_argv)
+#endif
+  ==false) return 0;
 
-  szArglist = CommandLineToArgvW(GetCommandLineW(), &nArgs);
-  if( NULL == szArglist )
+  if(vec_argv.size()<2)
     return 0;
-  if(nArgs<2)
-  {
-    LocalFree(szArglist);
-    return 0;
-  }
   //-----------------------------------------------------------------  
-  USES_CONVERSION;
-  map<string,int>::iterator fit = mapTypeGame.find(string(W2A(szArglist[1])));
+  TMapIter fit = mapTypeGame.find(vec_argv.at(1));
   if(fit!=mapTypeGame.end())
     typeGameKey = fit->second;
   //-----------------------------------------------------------------  
-  string sPathDLL = "..\\DeveloperToolDLL\\";
-  sPathDLL += W2A(szArglist[2]);
-  // Free memory allocated for CommandLineToArgvW arguments.
-  LocalFree(szArglist);
+  string argDevTool;
+  if(vec_argv.size()>=4)
+    argDevTool = vec_argv.at(3);
   //-----------------------------------------------------------------  
   switch(typeGameKey)
   {
@@ -128,7 +139,7 @@ INT WINAPI wWinMain(HINSTANCE,HINSTANCE,LPWSTR,int )
     case tCON:
     {
       TClientGame game;
-      game.Work(sPathDLL.data());
+      game.Work(vec_argv.at(2).data(), argDevTool.data());
       break;
     }
     case tSON:
@@ -139,6 +150,7 @@ INT WINAPI wWinMain(HINSTANCE,HINSTANCE,LPWSTR,int )
       break;
     case tSS:
       break;
+    default:;
   }
 
   return 0;
@@ -148,6 +160,34 @@ void init()
 {
   int cnt = sizeof(typeGame)/sizeof(TTypeGame);
   for(int i = 0 ; i < cnt ; i++ )
-    mapTypeGame.insert(map<string,int>::value_type(typeGame[i].name,typeGame[i].t));
+    mapTypeGame.insert(TMapStrInt::value_type(typeGame[i].name,typeGame[i].t));
 }
+//-------------------------------------------------------------------------------
+#ifdef WIN32
+bool GetArgvArgcWin(TVectorStr& vec_argv)
+{
+  bool res = false;
+  LPWSTR *szArglist;
+  int nArgs;
+
+  szArglist = CommandLineToArgvW(GetCommandLineW(), &nArgs);
+  if( szArglist != NULL )
+  {
+    USES_CONVERSION;
+    for(int i = 0 ; i < nArgs ; i++)
+      vec_argv.push_back(string(W2A(szArglist[i])));
+    res = true;
+  }
+
+  LocalFree(szArglist);
+  return res;
+}
+//-------------------------------------------------------------------------------
+#else
+bool GetArgvArgcConsole(int argc, char** argv, TVectorStr& vec_argv)
+{
+  for(int i = 0 ; i < argv ; i++)
+    vec_argv.push_back(string(argv[i]));
+}
+#endif
 //-------------------------------------------------------------------------------

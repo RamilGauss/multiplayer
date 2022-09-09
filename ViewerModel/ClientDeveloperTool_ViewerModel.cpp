@@ -43,19 +43,25 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Logger.h"
 #include "HiTimer.h"
 #include "../GameLib/NameSrcEventID.h"
+#include "../GameLib/IManagerStateMachine.h"
 #include "IControlCamera.h"
 #include <string.h>
+#include "IXML.h"
 
 using namespace std;
 using namespace nsStruct3D;
 using namespace nsEvent;
 
+using namespace nsKey;
+
 #define LOG_TIME_LOAD_EDITOR_MODEL
 
-#define DELTA_MOVE 0.4f
-#define DELTA_ROTATE 0.01f
-#define ASPECT_MOUSE_X 0.003f
-#define ASPECT_MOUSE_Y 0.003f
+#define DELTA_MOVE 0.4f //0.4f
+#define DELTA_ROTATE 0.03f
+#define ASPECT_MOUSE_X 0.002f
+#define ASPECT_MOUSE_Y 0.002f
+
+#define UP 1000000
 
 TClientDeveloperTool_ViewerModel::TClientDeveloperTool_ViewerModel()
 {
@@ -66,6 +72,8 @@ TClientDeveloperTool_ViewerModel::TClientDeveloperTool_ViewerModel()
   mWaitForm        = NULL;
 
   mMakerObjectCommon = new TMakerObjectCommon;
+  
+  mIndexCurObj = 0;
 }
 //------------------------------------------------------------------------------------
 TClientDeveloperTool_ViewerModel::~TClientDeveloperTool_ViewerModel()
@@ -89,15 +97,15 @@ bool TClientDeveloperTool_ViewerModel::MouseEvent(TMouseEvent* pEvent)
 
       break;
     case nsEvent::eWheel:
-
+      mComponent.mControlCamera->AddDistObj(float(pEvent->delta_wheel)/100.0f);
       break;
     case nsEvent::eMove:
       if(flgDragCamera)
       {
         float dRight = float(pEvent->x - mOldX)*ASPECT_MOUSE_X;
         float dDown  = float(pEvent->y - mOldY)*ASPECT_MOUSE_Y;
-        mComponent.mControlCamera->GetCamera()->RotateRight(dRight);
-        mComponent.mControlCamera->GetCamera()->RotateDown(dDown);
+        mComponent.mControlCamera->RotateRight(dRight);
+        mComponent.mControlCamera->RotateDown(dDown);
         
         mOldX = pEvent->x;
         mOldY = pEvent->y;
@@ -108,63 +116,115 @@ bool TClientDeveloperTool_ViewerModel::MouseEvent(TMouseEvent* pEvent)
 //------------------------------------------------------------------------------------
 bool TClientDeveloperTool_ViewerModel::KeyEvent(TKeyEvent* pEvent)
 {
-  switch(pEvent->key)
+  unsigned int v;
+  bool res = mComponent.mMStateMachine->GetValue(mIDkey,pEvent->key,v);
+  v |= (pEvent->pressed?0:UP);
+  if(res)
+  switch(v)
   {
     // клавиатура
-    case 87://W
-      mComponent.mControlCamera->GetCamera()->MoveForward(DELTA_MOVE);
+    case e_W://W
+      //mComponent.mControlCamera->MoveForward(DELTA_MOVE);
+      mComponent.mControlCamera->SetSpeedForward(DELTA_MOVE);
       break;
-    case 83://S
-      mComponent.mControlCamera->GetCamera()->MoveForward(-DELTA_MOVE);
+    case e_W|UP://W
+      //mComponent.mControlCamera->MoveForward(DELTA_MOVE);
+      mComponent.mControlCamera->SetSpeedForward(0);
       break;
-    case 65://A
-      mComponent.mControlCamera->GetCamera()->MoveRight(-DELTA_MOVE);
+    case e_S://S
+      //mComponent.mControlCamera->MoveForward(-DELTA_MOVE);
+      mComponent.mControlCamera->SetSpeedForward(-DELTA_MOVE);
       break;
-    case 68://D
-      mComponent.mControlCamera->GetCamera()->MoveRight(DELTA_MOVE);
+    case e_S|UP://S
+      //mComponent.mControlCamera->MoveForward(-DELTA_MOVE);
+      mComponent.mControlCamera->SetSpeedForward(0);
       break;
-    case 81://Q
-      mComponent.mControlCamera->GetCamera()->MoveUp(DELTA_MOVE);
+    case e_A://A
+      //mComponent.mControlCamera->MoveRight(-DELTA_MOVE);
+      mComponent.mControlCamera->SetSpeedRight(-DELTA_MOVE);
       break;
-    case 69://E
-      mComponent.mControlCamera->GetCamera()->MoveUp(-DELTA_MOVE);
+    case e_A|UP://A
+      //mComponent.mControlCamera->MoveRight(-DELTA_MOVE);
+      mComponent.mControlCamera->SetSpeedRight(0);
+      break;
+    case e_D://D
+      //mComponent.mControlCamera->MoveRight(DELTA_MOVE);
+      mComponent.mControlCamera->SetSpeedRight(DELTA_MOVE);
+      break;
+    case e_D|UP://D
+      //mComponent.mControlCamera->MoveRight(DELTA_MOVE);
+      mComponent.mControlCamera->SetSpeedRight(0);
+      break;
+    case e_Q://Q
+      //mComponent.mControlCamera->MoveUp(DELTA_MOVE);
+      mComponent.mControlCamera->SetSpeedUp(DELTA_MOVE);
+      break;
+    case e_Q|UP://Q
+      //mComponent.mControlCamera->MoveUp(DELTA_MOVE);
+      mComponent.mControlCamera->SetSpeedUp(0);
+      break;
+    case e_E://E
+      //mComponent.mControlCamera->MoveUp(-DELTA_MOVE);
+      mComponent.mControlCamera->SetSpeedUp(-DELTA_MOVE);
+      break;
+    case e_E|UP://E
+      //mComponent.mControlCamera->MoveUp(-DELTA_MOVE);
+      mComponent.mControlCamera->SetSpeedUp(0);
       break;
     // мышь
-    case 100:// влево 4
-      mComponent.mControlCamera->GetCamera()->RotateRight(-DELTA_ROTATE);
+    case e_Numpad4:// влево 4
+      mComponent.mControlCamera->RotateRight(-DELTA_ROTATE);
       break;
-    case 102:// вправо 6
-      mComponent.mControlCamera->GetCamera()->RotateRight(DELTA_ROTATE);
+    case e_Numpad6:// вправо 6
+      mComponent.mControlCamera->RotateRight(DELTA_ROTATE);
       break;
-    case 104:// вверх 8
-      mComponent.mControlCamera->GetCamera()->RotateDown(-DELTA_ROTATE);
+    case e_Numpad8:// вверх 8
+      mComponent.mControlCamera->RotateDown(-DELTA_ROTATE);
       break;
-    case 98:// вниз 2
-      mComponent.mControlCamera->GetCamera()->RotateDown(DELTA_ROTATE);
+    case e_Numpad2:// вниз 2
+      mComponent.mControlCamera->RotateDown(DELTA_ROTATE);
       break;
-    case 103:// вращаться влево 7
-      mComponent.mControlCamera->GetCamera()->Roll(DELTA_ROTATE);
+    case e_Numpad7:// вращаться влево 7
+      mComponent.mControlCamera->Roll(DELTA_ROTATE);
       break;
-    case 105:// вращаться вправо 9
-      mComponent.mControlCamera->GetCamera()->Roll(-DELTA_ROTATE);
+    case e_Numpad9:// вращаться вправо 9
+      mComponent.mControlCamera->Roll(-DELTA_ROTATE);
       break;
-    case 67:// сбросить ориентацию камеры C
-      mComponent.mControlCamera->GetCamera()->ClearRotate();
+    case e_C:// сбросить ориентацию камеры C
+      mComponent.mControlCamera->ClearRotate();
       break;
-    case 86:// сбросить ориентацию камеры C
+    case e_V:// сбросить ориентацию камеры V
     {
       TVector3 v;
       v.x = 0.0f;
       v.y = 0.0f;
       v.z = 0.0f;
-      mComponent.mControlCamera->GetCamera()->SetPositionLookAt(&v);
+      mComponent.mControlCamera->SetPositionLookAt(&v);
+      break;
+    }
+    case e_B: // B 
+    {
+      IBaseObject* pBO = mComponent.mMOC->Get(mIndexCurObj);
+      mComponent.mControlCamera->Link(pBO,IControlCamera::eCoord);
+      mIndexCurObj++;
+      mIndexCurObj %= mComponent.mMOC->GetCountObject();
+      break;
+    }
+    case e_N: 
+    {
+      mComponent.mControlCamera->Unlink();
+      break;
+    }
+    case e_O: 
+    {
+
       break;
     }
   }
   return true;
 }
 //--------------------------------------------------------------------
-void TClientDeveloperTool_ViewerModel::Calc()
+void TClientDeveloperTool_ViewerModel::PrepareForRender()
 {
 
 }
@@ -179,12 +239,12 @@ string TClientDeveloperTool_ViewerModel::GetTitleWindow()
   return "Просмоторщик моделей";
 }
 //------------------------------------------------------------------------------------
-void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent)
+void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent, const char* arg )
 {
   InitLog();
   mComponent = *pComponent; 
 
-  int cnt[3] = {3,3,3};
+  int cnt[3] = {1,2,5};
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
   guint32 start = ht_GetMSCount();
 #endif 
@@ -199,15 +259,18 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent)
   mGameRoomPrepare = new TGameRoomPrepare;
   mWaitForm        = new TWaitForm;
   
-  mComponent.mGUI->Add(std::string("mClientMain"),mClientMain);
-  mComponent.mGUI->Add(std::string("mGameRoomPrepare"),mGameRoomPrepare);
-  mComponent.mGUI->Add(std::string("mWaitForm"),mWaitForm);
+  mComponent.mGUI->Add(string("mClientMain"),mClientMain);
+  mComponent.mGUI->Add(string("mGameRoomPrepare"),mGameRoomPrepare);
+  mComponent.mGUI->Add(string("mWaitForm"),mWaitForm);
   // показать форму
-  //mClientMain->Show();
+  mClientMain->Show();
   //mGameRoomPrepare->Show();
   //mWaitForm->Show();
   // подстроиться
   mComponent.mGUI->Resize();
+
+  bool resLoadMSM = mComponent.mMStateMachine->Load("../game_param/ViewerModel.xml", mIDkey);
+  BL_ASSERT(resLoadMSM);
 }
 //------------------------------------------------------------------------------------
 void TClientDeveloperTool_ViewerModel::CreateObjects(int cntK,int cntJ,int cntI)
@@ -234,7 +297,7 @@ void TClientDeveloperTool_ViewerModel::CreateObjects(int cntK,int cntJ,int cntI)
         pBOC->SetWorld(&w);
         if((i==cntI-1)&&(j==cntJ-1)&&(k==cntK-1))
           pBOC->SetAlphaTransparency(0.5f);
-        mComponent.mGraphicEngine->AddObject((IBaseObjectGE*)pBOC);
+        mComponent.mGraphicEngine->AddObject(pBOC);
       }
     }
   }
@@ -254,5 +317,10 @@ void TClientDeveloperTool_ViewerModel::InitLog()
 {
   if(mFuncGetLogger)
     mFuncGetLogger()->Init("ViewerModel");
+}
+//---------------------------------------------------------------------------------------------
+string TClientDeveloperTool_ViewerModel::GetPathXMLFile()
+{
+  return "resources.xml";
 }
 //---------------------------------------------------------------------------------------------

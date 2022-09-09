@@ -61,7 +61,7 @@ public:
   // навигация
   virtual void ResetPos();
   virtual int  GetCountSection(const char* name = NULL);
-  virtual std::string GetNameSection(int num);
+  virtual std::string GetNameSection(int index);
   virtual bool EnterSection(const char* name, int num);
   virtual bool LeaveSection();
   // изменение кол-ва
@@ -74,9 +74,15 @@ public:
 
   virtual bool WriteSectionAttr(const char* name, int num, const char* nameAttr, std::string buffer);
   virtual bool WriteSection(const char* name, int num, std::string buffer);
+  
+  virtual bool WriteSectionAttr(int index, const char* nameAttr, std::string buffer);
+  virtual bool WriteSection(int index, std::string buffer);
   // чтение
   virtual std::string ReadSectionAttr(const char* name, int num, const char* nameAttr );
   virtual std::string ReadSection(const char* name, int num);
+  
+  virtual std::string ReadSectionAttr(int index, const char* nameAttr );
+  virtual std::string ReadSection(int index);
 
   virtual bool Save(const char* sPath = NULL);
 };

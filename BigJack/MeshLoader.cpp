@@ -619,7 +619,7 @@ HRESULT CMeshLoader::LoadGeometryFromOBJ_Fast( const WCHAR* strFileName )
   if( !InFile )
     return DXTRACE_ERR( L"wifstream::open", E_FAIL );
 
-  for(; ; )
+  for(;;)
   {
     InFile >> strCommand;
     if( !InFile )

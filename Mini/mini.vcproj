@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="TestProject"
-	ProjectGUID="{DF4005CE-5AC6-4B13-BB09-779850A9DEEC}"
-	RootNamespace="TestProject"
+	Name="mini"
+	ProjectGUID="{DE236E69-816C-4929-B62A-3F5A793EB2DC}"
+	RootNamespace="mini"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -41,7 +41,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;.\;..\DXUT\Core;..\DXUT\Optional;..\DXUT;..\DirectX;..\QBaseLib;..\Melissa;..\BigJack;..\Robert;..\TanksLib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,9 +60,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib d3dx10d.lib d3dx9d.lib d3d9.lib dxerr.lib dxguid.lib winmm.lib comctl32.lib Imm32.lib Version.lib Dsound.lib QBaseLib.lib BigJack.lib TanksLib.lib DXUT.lib DXUTOpt.lib Share.lib GBaseLib.lib Robert.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\Lib;..\Debug"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -95,7 +92,8 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="0"
+			ManagedExtensions="0"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -115,10 +113,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="3"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -183,6 +181,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\Share\ContextMachine.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"

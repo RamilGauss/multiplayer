@@ -44,7 +44,6 @@ you may contact in writing [ramil2085@gmail.com].
 #include <map>
 
 class TShaderStack;
-//class IDirect3DDevice9;
 
 class IModelGE : public TObject
 {
@@ -62,17 +61,13 @@ public:
     с ориентацией и положением частей
     в мировых координатах
   */
-  virtual void Draw(std::vector<unsigned char>* state, //                           (От ObjectDX)
-                    std::vector<unsigned char>* mask,  //                           (От ObjectDX)
-                    std::vector<nsStruct3D::TMatrix16/*D3DXMATRIXA16*/*>* matrix,//кол-во совпадает с cSubset (От ObjectDX)
-                    nsStruct3D::TMatrix16/*D3DXMATRIXA16*/* mWorld,    // где и как расположен объект         (От ObjectDX)
+  virtual void Draw(std::vector<unsigned char>* state,     //                           (От ObjectDX)
+                    std::vector<unsigned char>* mask,      //                           (От ObjectDX)
+                    std::vector<nsStruct3D::TMatrix16*>* matrix,//кол-во совпадает с cSubset (От ObjectDX)
+                    nsStruct3D::TMatrix16* mWorld,    // где и как расположен объект         (От ObjectDX)
                     float alphaTransparency,  // прозрачность                        (От ObjectDX)
                     nsStruct3D::TMatrix16* pView) = 0; // расположение и ориентация камеры    (от ManagerDirectX)
 
-  //virtual bool Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath) = 0;
-  //virtual void Destroy() = 0;
-  //virtual void LostDevice() = 0;
-  //virtual void ResetDevice() = 0;
   virtual void SortPartByAlphabetic() = 0;
 
   virtual unsigned int GetIndexVisualGroupByName(char* sName, int num) = 0;

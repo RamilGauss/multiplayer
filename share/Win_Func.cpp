@@ -39,9 +39,9 @@ you may contact in writing [ramil2085@gmail.com].
 #include <windows.h>
 
 
-void WinMessageBox(char* sError)
-{
-  MessageBox(NULL,sError,STR_VERSION_CLIENT,0);
-}
+//void WinMessageBox(char* sError)
+//{
+  //MessageBox(NULL,sError,STR_VERSION_CLIENT,0);
+//}
 
 

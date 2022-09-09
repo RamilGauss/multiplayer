@@ -53,21 +53,26 @@ class TClientDeveloperTool_ViewerModel : public IClientDeveloperTool
   int mOldX;
   int mOldY;
 
+  unsigned int mIDkey;
+
+  int mIndexCurObj;
 
 public:
   TClientDeveloperTool_ViewerModel();
   virtual ~TClientDeveloperTool_ViewerModel();
 
-  virtual void Init(TComponentClient* pComponent);
+  virtual void Init(TComponentClient* pComponent, const char* arg = NULL);
 
   virtual std::string GetTitleWindow();
-  bool MouseEvent(nsEvent::TMouseEvent* pEvent);
-  bool KeyEvent(nsEvent::TKeyEvent* pEvent);
+  virtual bool MouseEvent(nsEvent::TMouseEvent* pEvent);
+  virtual bool KeyEvent(nsEvent::TKeyEvent* pEvent);
 
-  virtual void Calc();
+  virtual void PrepareForRender();
   virtual IMakerObjectCommon* GetMakerObjectCommon();
 
   virtual void Done();
+
+  virtual std::string GetPathXMLFile();
 
 protected:
   void CreateObjects(int cntK,int cntJ,int cntI);

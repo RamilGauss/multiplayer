@@ -205,7 +205,7 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
   ILoaderModelGE* pLoadModel;
   TMakerLoaderModelGE makerLoaderModelGE;
   pLoadModel = makerLoaderModelGE.New(m_pd3dDevice);
-  if(pLoadModel->Load(strFilenameData)==false)
+  if(pLoadModel->Load((wchar_t*)strFilenameData)==false)
   {
     USES_CONVERSION;
     GetLogger()->Get("GE")->WriteF_time("Не удалось загрузить модель: %s.\n",W2A(strFilenameData));
@@ -222,7 +222,8 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
     AddEffectDX(pDef);
   }
 
-  delete pLoadModel;
+  makerLoaderModelGE.Delete(pLoadModel);
+
   return true;
 }
 //----------------------------------------------------------------------------------------------------

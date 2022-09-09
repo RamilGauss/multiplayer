@@ -57,17 +57,19 @@ public:
   TDispTextDX();
   ~TDispTextDX();
 
+  // движок
   HRESULT CreateDevice(IDirect3DDevice9* pd3dDevice);
   HRESULT Reset();
   HRESULT Lost();
   HRESULT Destroy();
+  void Render();
 
+  // непосредственное использование
   void Show();
   void Hide();
 
   void SetPos(int x, int y);
   void SetText(std::wstring& str);
-  void Render();
 protected:
   HRESULT SetupFont();
 };

@@ -52,6 +52,9 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Struct3D.h"
 #include "ShaderStack.h"
 #include "IGraphicEngine.h"
+#include "StateMachine.h"
+#include "MapSystemKey.h"
+
 
 class IBaseObjectGE;
 class IDirectX_Realize;
@@ -89,6 +92,10 @@ protected:
   std::list<IBaseObjectGE*> mListTransparencyObject;// прозрачные объекты, временный список, только на этапе создани€ списка на отображение
 
   bool flgNeedResizeGUI;
+
+  // дл€ независимости от платформы, мэппинг клавиатурных событий
+  TMapSystemKey mMapSysytemKeys;
+
 public:
   //----------------------------------------------------------------
   //                              INTERFACE
@@ -111,8 +118,6 @@ public:
   //------------------------------------------------------------------------
   virtual void AddObject(IBaseObjectGE* pObject);
   virtual void Clear();
-  // камера
-  virtual void SetViewParams(nsStruct3D::TVector3* pvEyePt3, nsStruct3D::TVector3* pvLookatPt3);// расположение камеры
 
   // 21 декабр€ 2012 года реализую:
   // клиентские эффекты движка, не вли€ют на физические параметры объектов

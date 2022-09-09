@@ -298,6 +298,57 @@ TPlane* SetPlaneTransform( TPlane* pOut,
   return pOut;
 }
 //-------------------------------------------------------------------------
+TQuaternion * SetQuaternionMultiply(TQuaternion *pOut,
+                                    const TQuaternion *_pQ1,
+                                    const TQuaternion *_pQ2)
+{
+#ifdef WIN32
+  D3DXQUATERNION* InOut = (D3DXQUATERNION*)pOut;
+  const D3DXQUATERNION* pQ1 = (const D3DXQUATERNION*)_pQ1;
+  const D3DXQUATERNION* pQ2 = (const D3DXQUATERNION*)_pQ2;
+
+  D3DXQuaternionMultiply(InOut,pQ1,pQ2);
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+TQuaternion * SetQuaternionIdentity(TQuaternion *pOut)
+{
+#ifdef WIN32
+  D3DXQUATERNION* InOut = (D3DXQUATERNION*)pOut;
+  D3DXQuaternionIdentity(InOut);
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+TQuaternion* SetQuaternionRotationAxis(TQuaternion* pOut,
+                                       const TVector3 *_pV,
+                                       float Angle)
+{
+#ifdef WIN32
+  D3DXQUATERNION* InOut = (D3DXQUATERNION*)pOut;
+  const D3DXVECTOR3* pV = (const D3DXVECTOR3*)_pV;
+  D3DXQuaternionRotationAxis(InOut, pV, Angle);
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+void SetQuaternionToAxisAngle(const TQuaternion *pQ,
+                              TVector3 *pAxis,
+                              float *pAngle)
+{
+#ifdef WIN32
+  const D3DXQUATERNION* InOut = (const D3DXQUATERNION*)pQ;
+  D3DXVECTOR3* pV = (D3DXVECTOR3*)pAxis;
+  
+  D3DXQuaternionToAxisAngle(InOut, pV, pAngle);
+#else
+#endif
+}
+//-------------------------------------------------------------------------
 TMatrix16::TMatrix16( float _11, float _12, float _13, float _14,
                       float _21, float _22, float _23, float _24,
                       float _31, float _32, float _33, float _34,
@@ -418,7 +469,118 @@ TMatrix16 TMatrix16::operator * ( const TMatrix16& v) const
   return res;
 }
 //-------------------------------------------------------------------------
-// assignment operators
+TVector2::operator float* ()
+{
+  return (float*)this;
+}
+//-------------------------------------------------------------------------
+TVector2::operator const float* () const
+{
+  return (const float*)this;
+}
+//-------------------------------------------------------------------------
+TVector2& TVector2::operator += ( const TVector2& v)
+{
+  x += v.x;
+  y += v.y;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TVector2& TVector2::operator -= ( const TVector2& v)
+{
+  x -= v.x;
+  y -= v.y;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TVector2& TVector2::operator *= ( float v)
+{
+  x *= v;
+  y *= v;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TVector2& TVector2::operator /= ( float v)
+{
+  x /= v;
+  y /= v;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TVector2 TVector2::operator + () const
+{
+  return *this;
+}
+//-------------------------------------------------------------------------
+TVector2 TVector2::operator - () const
+{
+  return *this;
+}
+//-------------------------------------------------------------------------
+TVector2 TVector2::operator + ( const TVector2& v) const
+{
+  TVector2 res;
+  res.x = x + v.x;
+  res.y = y + v.y;
+  return res;
+}
+//-------------------------------------------------------------------------
+TVector2 TVector2::operator - ( const TVector2& v) const
+{
+  TVector2 res;
+  res.x = x - v.x;
+  res.y = y - v.y;
+  return res;
+}
+//-------------------------------------------------------------------------
+TVector2 TVector2::operator * ( float v) const
+{
+  TVector2 res;
+  res.x = x * v;
+  res.y = y * v;
+  return res;
+}
+//-------------------------------------------------------------------------
+TVector2 TVector2::operator / ( float v) const
+{
+  TVector2 res;
+  res.x = x / v;
+  res.y = y / v;
+  return res;
+}
+//-------------------------------------------------------------------------
+bool TVector2::operator == ( const TVector2& v) const
+{
+  return ((v.x==x)&&(v.y==y));
+}
+//-------------------------------------------------------------------------
+bool TVector2::operator != ( const TVector2& v) const
+{
+  return ((v.x!=x)||(v.y!=y));
+}
+//-------------------------------------------------------------------------
+bool TVector2::operator > ( const TVector2& v) const
+{
+  if(x>v.x) return true;// גûסרטי
+  else if(x<v.x) return false;
+  //
+  if(y>v.y) 
+    return true;// םטחרטי
+
+  return false;
+}
+//-------------------------------------------------------------------------
+bool TVector2::operator < ( const TVector2& v) const
+{
+  if(x<v.x) return true;// גûסרטי
+  else if(x>v.x) return false;
+  //
+  if(y<v.y) 
+    return true;// םטחרטי
+
+  return false;
+}
+//-------------------------------------------------------------------------
 TVector3& TVector3::operator += ( const TVector3& pV)
 {
   x += pV.x;
@@ -507,6 +669,32 @@ bool TVector3::operator == ( const TVector3& pV) const
 bool TVector3::operator != ( const TVector3& pV) const
 {
   return ((pV.x!=x)||(pV.y!=y)||(pV.z!=z));
+}
+//-------------------------------------------------------------------------
+bool TVector3::operator > ( const TVector3& v) const
+{
+  if(x>v.x) return true; // גûסרטי נאחנÿה
+  else if(x<v.x) return false;
+  //---------------------------------
+  if(y>v.y) return true;
+  else if(y<v.y) return false;
+  //---------------------------------
+  if(z>v.z)// םטחרטי נאחנÿה
+    return true;
+  return false;
+}
+//-------------------------------------------------------------------------
+bool TVector3::operator < ( const TVector3& v) const
+{
+  if(x<v.x) return true; // גûסרטי נאחנÿה
+  else if(x>v.x) return false;
+  //---------------------------------
+  if(y<v.y) return true;
+  else if(y>v.y) return false;
+  //---------------------------------
+  if(z<v.z)// םטחרטי נאחנÿה
+    return true;
+  return false;
 }
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
@@ -618,7 +806,7 @@ bool TLine::FindAndSetIntersect(TPlane* pP1,TPlane* pP2)
     return false;
   }
   //  קונוח ױ
-  if(pP1->c*pP1->b!=pP2->c*pP2->b)
+  if(pP1->c*pP2->b!=pP2->c*pP1->b)
   {
     float div = pP1->c*pP2->b - pP1->b*pP2->c;// c1*b2-b1*c2
     a = (pP1->a*pP2->c - pP1->c*pP2->a)/div;// a1*c2-c1*a2
@@ -627,7 +815,7 @@ bool TLine::FindAndSetIntersect(TPlane* pP1,TPlane* pP2)
     d = (pP1->b*pP2->d - pP1->d*pP2->b)/div;// b1*d2-b2*d1
     SetType(eX);
   }// קונוח Z
-  else if(pP1->a*pP1->b!=pP2->a*pP2->b)
+  else if(pP1->a*pP2->b!=pP2->a*pP1->b)
   {
     float div = pP1->b*pP2->a - pP1->a*pP2->b;// b1*a2-a1*b2 
     a = (pP1->c*pP2->b - pP1->b*pP2->c)/div;// c1*b2-b1*c2 
@@ -656,27 +844,40 @@ bool TLine::FindVector(TVector3* pOut1, TVector3* pOut2, bool do_normal)
   if(mType==eUndef)
     return false;
 
+  TVector3 betweenPoint;
   switch(mType)
   {
     case eX:
+      betweenPoint.x = 0.0f;
+      Calc(betweenPoint.x,betweenPoint.y,betweenPoint.z);
+
       pOut1->x = 1.0f;
       Calc(pOut1->x,pOut1->y,pOut1->z);
       pOut2->x = -1.0f;
       Calc(pOut2->x,pOut2->y,pOut2->z);
       break;
     case eY:
+      betweenPoint.y = 0.0f;
+      Calc(betweenPoint.y,betweenPoint.x,betweenPoint.z);
+
       pOut1->y = 1.0f;
       Calc(pOut1->y,pOut1->x,pOut1->z);
       pOut2->y = -1.0f;
       Calc(pOut2->y,pOut2->x,pOut2->z);
       break;
     case eZ:
+      betweenPoint.z = 0.0f;
+      Calc(betweenPoint.z,betweenPoint.x,betweenPoint.y);
+
       pOut1->z = 1.0f;
       Calc(pOut1->z,pOut1->x,pOut1->y);
       pOut2->z = -1.0f;
       Calc(pOut2->z,pOut2->x,pOut2->y);
       break;
   }
+
+  *pOut1 -= betweenPoint;
+  *pOut2 -= betweenPoint;
 
   if(do_normal)
   {
@@ -690,5 +891,128 @@ void TLine::Calc(float arg, float& res1, float& res2)
 {
   res1 = a*arg + b;
   res2 = c*arg + d;
+}
+//-------------------------------------------------------------------------
+TQuaternion::TQuaternion( const float * pF)
+{
+  x = pF[0];
+  y = pF[1];
+  z = pF[2];
+  w = pF[3];
+}
+//-------------------------------------------------------------------------
+TQuaternion::TQuaternion( float _x, float _y, float _z, float _w )
+{
+  x = _x;
+  y = _y;
+  z = _z;
+  w = _w;
+}
+//-------------------------------------------------------------------------
+TQuaternion::operator float* ()
+{
+  return (float*)this;
+}
+//-------------------------------------------------------------------------
+TQuaternion::operator const float* () const
+{
+  return (const float*)this;
+}
+//-------------------------------------------------------------------------
+TQuaternion& TQuaternion::operator += ( const TQuaternion& q)
+{
+  *this = *this + q;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TQuaternion& TQuaternion::operator -= ( const TQuaternion& q)
+{
+  *this = *this - q;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TQuaternion& TQuaternion::operator *= ( const TQuaternion& q)
+{
+  *this = *this * q;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TQuaternion& TQuaternion::operator *= ( float v)
+{
+  *this = *this * v;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TQuaternion& TQuaternion::operator /= ( float v)
+{
+  *this = *this / v;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TQuaternion  TQuaternion::operator + () const
+{
+  return *this;
+}
+//-------------------------------------------------------------------------
+TQuaternion TQuaternion::operator - () const
+{
+  return *this;
+}
+//-------------------------------------------------------------------------
+TQuaternion TQuaternion::operator + ( const TQuaternion& q) const
+{
+  TQuaternion res;
+  res.x = x + q.x;
+  res.y = y + q.y;
+  res.z = z + q.z;
+  res.w = w + q.w;
+  return res;
+}
+//-------------------------------------------------------------------------
+TQuaternion TQuaternion::operator - ( const TQuaternion& q) const
+{
+  TQuaternion res;
+  res.x = x - q.x;
+  res.y = y - q.y;
+  res.z = z - q.z;
+  res.w = w - q.w;
+  return res;
+}
+//-------------------------------------------------------------------------
+TQuaternion TQuaternion::operator * ( const TQuaternion& q) const
+{
+  TQuaternion res;
+  SetQuaternionMultiply(&res,this,&q);
+  return res;
+}
+//-------------------------------------------------------------------------
+TQuaternion TQuaternion::operator * ( float v) const
+{
+  TQuaternion res;
+  res.x = x * v;
+  res.y = y * v;
+  res.z = z * v;
+  res.w = w * v;
+  return res;
+}
+//-------------------------------------------------------------------------
+TQuaternion TQuaternion::operator / ( float v) const
+{
+  TQuaternion res;
+  res.x = x / v;
+  res.y = y / v;
+  res.z = z / v;
+  res.w = w / v;
+  return res;
+}
+//-------------------------------------------------------------------------
+bool TQuaternion::operator == ( const TQuaternion& q) const
+{
+  return ((q.x==x)&&(q.y==y)&&(q.z==z)&&(q.w==w));
+}
+//-------------------------------------------------------------------------
+bool TQuaternion::operator != ( const TQuaternion& q) const
+{
+  return ((q.x!=x)||(q.y!=y)||(q.z!=z)||(q.w!=w));
 }
 //-------------------------------------------------------------------------

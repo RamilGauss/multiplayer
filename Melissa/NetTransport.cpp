@@ -33,6 +33,13 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+/*
+  04.02.2013: 
+    Gauss: Add:     queue for Write.
+           Fix bug: delete desc_packet from arrWaitSend and arrWaitCheck when disconnect.
+           Add:     delete desc_packet when recv packet's check.
+*/
+
 
 #include "NetTransport.h"
 #include "common_defs.h"
@@ -40,8 +47,6 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BL_Debug.h"
 #include "GlobalParams.h"
 #include "NetSystem.h"
-#include <Winsock2.h>
-#include <limits.h>
 
 
 #define DEBUG
@@ -103,31 +108,33 @@ bool TNetTransport::Open(unsigned short port, int numNetWork)
   return true;
 }
 //----------------------------------------------------------------------------------
-void TNetTransport::Write(InfoData* data, bool check)
+void TNetTransport::Write(InfoData* data, bool check, bool add_in_queue )
 {
 	InfoConnect* pFound = GetInfoConnect(data->ip_dst,data->port_dst);
 	data->ip_src   = mUDP.portSetting().m_LocalHost;
 	data->port_src = mUDP.portSetting().m_LocalPort;
   // check - добавлять ли в список пакетов, ожидающих подтверждения
-  TDefPacket* pDefPacket = new TDefPacket;
-  pDefPacket->SetData(data);
+  TDescPacket* pDescPacket = new TDescPacket;
+  pDescPacket->SetData(data);
 	
   if(check)
   {
-		pDefPacket->SetType('P');
+		pDescPacket->SetType('P');
+    pDescPacket->SetIsQueue(add_in_queue);
   	//-------------------------------------------------
 		lockSendRcv();
 		// есть ли по данному IP:port в ожидании квитанции?
-		if(FindInArrWaitCheck(pDefPacket))
-			mArrWaitSend.Add(pDefPacket);
+		if(add_in_queue && // нужно поместить в очередь
+       FindInArrWaitCheckQ(pDescPacket))
+			mArrWaitSend.Add(pDescPacket);
 		else
 		{
 			pFound->cn_out_p++;
-			pDefPacket->SetCnOut(pFound->cn_out_p);
-			pDefPacket->SetCnIn(pFound->cn_in_p/*вообще по фигу но для отладки*/);
+			pDescPacket->SetCnOut(pFound->cn_out_p);
+			pDescPacket->SetCnIn(pFound->cn_in_p/*вообще по фигу, но для отладки*/);
 
-			mArrWaitCheck.Add(pDefPacket);
-			Send(pDefPacket);
+  	  mArrWaitCheck.Add(pDescPacket);
+			Send(pDescPacket);
 		}
 
 		unlockSendRcv();
@@ -136,13 +143,13 @@ void TNetTransport::Write(InfoData* data, bool check)
   }
 
 	pFound->cn_out_s++;
-	pDefPacket->SetCnOut(pFound->cn_out_s);
-	pDefPacket->SetCnIn(pFound->cn_in_s/*вообще по фигу но для отладки*/);
+	pDescPacket->SetCnOut(pFound->cn_out_s);
+	pDescPacket->SetCnIn(pFound->cn_in_s/*вообще по фигу но для отладки*/);
 
-	pDefPacket->SetType('S');
-  Send(pDefPacket);
+	pDescPacket->SetType('S');
+  Send(pDescPacket);
 
-	delete pDefPacket;
+	delete pDescPacket;
 }
 //----------------------------------------------------------------------------------
 void* ThreadTransport(void*p)
@@ -235,10 +242,11 @@ void TNetTransport::AnalizPacket(unsigned int ip,unsigned short port,int size)
 //----------------------------------------------------------------------------------
 void TNetTransport::FindAndCheck(TPrefixTransport* prefix,unsigned int ip,unsigned short port)
 {
-	TDefPacket oForSearchDefPacket;
-	TDefPacket *pForSearchDefPacket = &oForSearchDefPacket;
+  // ищем в массиве пакетов, ожидающих подтверждение
+	TDescPacket oForSearchDefPacket;
+	TDescPacket *pForSearchDefPacket = &oForSearchDefPacket;
 	InfoData* infoConnect = new InfoData;
-	infoConnect->ip_dst = ip;
+	infoConnect->ip_dst   = ip;
 	infoConnect->port_dst = port;
 	infoConnect->size = 0;
 	pForSearchDefPacket->SetData(infoConnect);
@@ -250,29 +258,37 @@ void TNetTransport::FindAndCheck(TPrefixTransport* prefix,unsigned int ip,unsign
     return;
   }
 	//-------------------------------------------------------------------------------------
-	TDefPacket* pFoundDefPacket = (TDefPacket*)mArrWaitCheck.Get(index);
+  int cnt = mArrWaitCheck.Count();
+  for(int i = index ; i < mArrWaitCheck.Count() ; i++)
+  {
+	  TDescPacket* pFoundDefPacket = (TDescPacket*)mArrWaitCheck.Get(i);
+    if(pFoundDefPacket->GetCnOut()==prefix->cn_out)
+    {
+      if(pFoundDefPacket->GetIsQueue())
+      {
+        int indexWaitSend = mArrWaitSend.FastSearch(&pFoundDefPacket,NULL,SortFreshDefPacket);
+        mArrWaitCheck.Delete(i);
+        if(indexWaitSend!=-1)
+        {
+          TDescPacket* pDefPacketWaitSend = (TDescPacket*)mArrWaitSend.Unlink(indexWaitSend);
 
-	if(pFoundDefPacket->GetCnOut()==prefix->cn_out)
-	{
-		int indexWaitSend = mArrWaitSend.FastSearch(&pFoundDefPacket,NULL,SortFreshDefPacket);
-		mArrWaitCheck.Delete(index);
-		if(indexWaitSend!=-1)
-		{
-			TDefPacket* pDefPacketWaitSend = (TDefPacket*)mArrWaitSend.Unlink(indexWaitSend);
+          InfoConnect* pFound = GetInfoConnect(pDefPacketWaitSend->GetIP_dst(),pDefPacketWaitSend->GetPort_dst());
 
-			InfoConnect* pFound = GetInfoConnect(pDefPacketWaitSend->GetIP_dst(),pDefPacketWaitSend->GetPort_dst());
+          pFound->cn_out_p++;
+          pDefPacketWaitSend->SetCnOut(pFound->cn_out_p);
+          pDefPacketWaitSend->SetCnIn(pFound->cn_in_p/*вообще по фигу, но для отладки*/);
 
-			pFound->cn_out_p++;
-			pDefPacketWaitSend->SetCnOut(pFound->cn_out_p);
-			pDefPacketWaitSend->SetCnIn(pFound->cn_in_p/*вообще по фигу, но для отладки*/);
+          mArrWaitCheck.Add(pDefPacketWaitSend);
+          Send(pDefPacketWaitSend);
+        }
+      }
+      else
+        mArrWaitCheck.Delete(i);
+      return;
+    }
+  }
 
-			mArrWaitCheck.Add(pDefPacketWaitSend);
-			Send(pDefPacketWaitSend);
-		}
-		return;
-	}
-
-	mLogEvent.WriteF("FindAndCheck() pDefPacket->GetCnOut()=%u,prefix->cn_out=%u\n",pFoundDefPacket->GetCnOut(),prefix->cn_out);
+	mLogEvent.WriteF("FindAndCheck() prefix->cn_out=%u\n",prefix->cn_out);
 
 	BL_FIX_BUG();
 }
@@ -289,15 +305,14 @@ void TNetTransport::SendUnchecked()
   guint32 now_ms = ht_GetMSCount();
 	for(int i = 0 ; i < mArrWaitCheck.Count() ; i++)
 	{
-		TDefPacket* pDefPacket = (TDefPacket*)mArrWaitCheck.Get(i);
+		TDescPacket* pDefPacket = (TDescPacket*)mArrWaitCheck.Get(i);
 		if(pDefPacket)
 		{
 			if(pDefPacket->GetTime()+eTimeLivePacket<now_ms) 
 			if(Send(pDefPacket)==false)
 			{
-				Disconnect(pDefPacket);
-				mArrWaitCheck.Delete(i);
-				i--;
+        Disconnect(pDefPacket);
+        i--;
 			}
 		}
 		else BL_FIX_BUG();
@@ -339,7 +354,7 @@ void TNetTransport::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int ty
   }
 }
 //----------------------------------------------------------------------------------
-bool TNetTransport::Send(TDefPacket* pDefPacket)
+bool TNetTransport::Send(TDescPacket* pDefPacket)
 {
   unsigned char cntTry = pDefPacket->GetCntTry();
   if((unsigned char)(cntTry+1)>eCntTry)
@@ -355,16 +370,39 @@ bool TNetTransport::Send(TDefPacket* pDefPacket)
   return Write(pData,size,ip, port);
 }
 //----------------------------------------------------------------------------------
-void TNetTransport::Disconnect(TDefPacket* pDefPacket)
+void TNetTransport::Disconnect(TDescPacket* pDefPacket)
 {
-  int size;
-  unsigned int ip;
-  unsigned short port;
-  void* pData = pDefPacket->GetData(size,ip, port);
   TIP_Port dis;
-  dis.ip   = ip;
-  dis.port = port;
+  dis.ip   = pDefPacket->GetIP_dst();
+  dis.port = pDefPacket->GetPort_dst();
   notifyDisconnect(&dis);
+  // Gauss 04.02.2013
+  // удалить пакеты, которые стоят в очереди на отправку и получение квитанции
+  // ищем в массиве пакетов, ожидающих подтверждение
+  // совпадение по IP и port
+  SearchAndDelete(&mArrWaitCheck,pDefPacket);
+  SearchAndDelete(&mArrWaitSend, pDefPacket);
+}
+//----------------------------------------------------------------------------------
+void TNetTransport::SearchAndDelete(TArrayObject* pArr, TDescPacket* pDefPacket)
+{
+  int index = pArr->FastSearch(&pDefPacket,NULL,SortFreshDefPacket);
+  if(index==-1)// не нашли
+  {
+    BL_FIX_BUG();
+    return;
+  }
+  //----------------------------------------------
+  int cnt = pArr->Count();// перебор всех значений, для которых ip и port
+  for(int i = index ; i < cnt ; i++ )
+  {
+    TDescPacket* pDesc = (TDescPacket*)pArr->Get(i);
+    if((pDesc->GetIP_dst()  !=pDefPacket->GetIP_dst()  )||
+       (pDesc->GetPort_dst()!=pDefPacket->GetPort_dst()))
+      return;// прекратить поиск
+    pArr->Delete(i);
+    i--;
+  }
 }
 //----------------------------------------------------------------------------------
 void TNetTransport::NotifyRcvPacket(int size)
@@ -530,8 +568,8 @@ int TNetTransport::SortFreshInfoConnect(const void* p1, const void* p2)
 //----------------------------------------------------------------------------------
 int TNetTransport::SortFreshDefPacket(const void* p1, const void* p2)
 {
-  const TDefPacket *s1 = *( const TDefPacket **)p1;
-  const TDefPacket *s2 = *( const TDefPacket **)p2;
+  const TDescPacket *s1 = *( const TDescPacket **)p1;
+  const TDescPacket *s2 = *( const TDescPacket **)p2;
 
   if(s1->GetIP_dst()>s2->GetIP_dst())
     return -1;
@@ -544,7 +582,7 @@ int TNetTransport::SortFreshDefPacket(const void* p1, const void* p2)
         if(s1->GetPort_dst()==s2->GetPort_dst())
           return 0;
     }
-    return 1;
+  return 1;
 }
 //----------------------------------------------------------------------------------
 TNetTransport::InfoConnect* TNetTransport::GetInfoConnect(unsigned int ip,unsigned short port)
@@ -650,12 +688,28 @@ void TNetTransport::InitLog(char* pPathLog)
 	}
 }
 //----------------------------------------------------------------------------------
-bool TNetTransport::FindInArrWaitCheck(TDefPacket* pDefPacket)
+bool TNetTransport::FindInArrWaitCheckQ(TDescPacket* pDefPacket)
 {
-	if(mArrWaitCheck.FastSearch(&pDefPacket,NULL,SortFreshDefPacket)!=-1)
-		return true;
+	//if(mArrWaitCheck.FastSearch(&pDefPacket,NULL,SortFreshDefPacket)!=-1)
+	//	return true;
 
-	return false;
+	//return false;
+  
+  int index = mArrWaitCheck.FastSearch(&pDefPacket,NULL,SortFreshDefPacket);
+  if(index==-1)// не нашли
+    return false;
+  //----------------------------------------------
+  int cnt = mArrWaitCheck.Count();// перебор всех значений, для которых ip и port
+  for(int i = index ; i < cnt ; i++ )
+  {
+    TDescPacket* pDesc = (TDescPacket*)mArrWaitCheck.Get(i);
+    if((pDesc->GetIP_dst()  !=pDefPacket->GetIP_dst()  )||
+       (pDesc->GetPort_dst()!=pDefPacket->GetPort_dst()))
+      return false;// прекратить поиск
+    if(pDesc->GetIsQueue())
+      return true;
+  }
+  return false;
 }
 //----------------------------------------------------------------------------------
 void TNetTransport::Lock(void* pLocker)

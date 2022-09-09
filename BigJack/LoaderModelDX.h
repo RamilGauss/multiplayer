@@ -39,14 +39,16 @@ you may contact in writing [ramil2085@gmail.com].
 //#pragma once
 
 #include "ILoaderModelGE.h"
+#include "MeshMakerDX.h"
 
 class TLoaderModelDX : public ILoaderModelGE
 {
 protected:
   IDirect3DDevice9* m_pd3dDevice;
+  TMeshMakerDX mMeshFile;
 
 public:
-  TLoaderModelDX(/*IDirect3DDevice9*/void* _m_pd3dDevice);
+  TLoaderModelDX(void/*IDirect3DDevice9*/* _m_pd3dDevice);
   virtual ~TLoaderModelDX();
 
 protected:

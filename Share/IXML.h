@@ -63,7 +63,7 @@ public:
   // навигация
   virtual void ResetPos() = 0;
   virtual int  GetCountSection(const char* name = NULL) = 0;
-  virtual std::string GetNameSection(int num) = 0;
+  virtual std::string GetNameSection(int index) = 0;
   virtual bool EnterSection(const char* name, int num) = 0;
   virtual bool LeaveSection() = 0;
   // изменение кол-ва
@@ -79,10 +79,15 @@ public:
 
   virtual bool WriteSectionAttr(const char* name, int num, const char* nameAttr, std::string buffer) = 0;
   virtual bool WriteSection(const char* name, int num, std::string buffer) = 0;
+
+  virtual bool WriteSectionAttr(int index, const char* nameAttr, std::string buffer) = 0;
+  virtual bool WriteSection(int index, std::string buffer) = 0;
   // чтение
   virtual std::string ReadSectionAttr(const char* name, int num, const char* nameAttr) = 0;
   virtual std::string ReadSection(const char* name, int num) = 0;
 
+  virtual std::string ReadSectionAttr(int index, const char* nameAttr) = 0;
+  virtual std::string ReadSection(int index) = 0;
   // сбросить содержимое изменений в файл
   virtual bool Save(const char* sPath = NULL) = 0;
 
@@ -92,6 +97,12 @@ public:
   bool ReadUint(const char* name, int num, unsigned int & v);
   bool ReadFloat3(const char* name, int num, float * v3);// разделитель ";"
   bool ReadFloat4(const char* name, int num, float * v4);
+
+  bool ReadFloat(int index, float & v);
+  bool ReadInt(int index, int & v);
+  bool ReadUint(int index, unsigned int & v);
+  bool ReadFloat3(int index, float * v3);// разделитель ";"
+  bool ReadFloat4(int index, float * v4);
 
 };
 

@@ -33,33 +33,26 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
 #ifndef IMeshFileH
 #define IMeshFileH
 
-#include "DXUT.h"
-#include "MeshLoader.h"
-#include "MeshFileBj.h"
+#include "MeshStruct.h"
 
 class IMeshFile
 {
 
-  CMeshLoader mMeshFromObj;
-  TMeshFileBj mMeshFromBj;
-
 public:
   
-  IMeshFile();
-  virtual ~IMeshFile();
+  IMeshFile(){};
+  virtual ~IMeshFile(){};
 
-  virtual ID3DXMesh* Load(IDirect3DDevice9* pd3dDevice, const char* strFilename);
+  virtual bool Load(const char* strFilename, 
+     nsMeshStruct::VERTEX*&      ppVertex, unsigned int& cntV,
+                  unsigned int*& ppIndex,  unsigned int& cntI) = 0;
 
-  virtual bool SaveAsBj(const char* strFilename,ID3DXMesh* pMesh);
-protected:
-
-  ID3DXMesh* LoadFromObj(IDirect3DDevice9* pd3dDevice, const char* strFilename);
-  ID3DXMesh* LoadFromBj(IDirect3DDevice9* pd3dDevice, const char* strFilename);
-
+  virtual bool Save(const char* strFilename, 
+     nsMeshStruct::VERTEX*       ppVertex, unsigned int cntV,
+                    unsigned int* ppIndex, unsigned int cntI) = 0;
 
 };
 

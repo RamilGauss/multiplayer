@@ -38,6 +38,7 @@ you may contact in writing [ramil2085@gmail.com].
 #define BoundingBoxH
 
 #include "TypeDef.h"
+#include "Struct3D.h"
 
 
 #if defined( WIN32 )
@@ -47,35 +48,24 @@ you may contact in writing [ramil2085@gmail.com].
 
 class SHARE_EI TBoundingBox
 {
-
-public:
-
-  struct SHARE_EI TPoint3
-  {
-    float x;
-    float y;
-    float z;
-  };
-
 protected:
-  TPoint3 mMin;
-  TPoint3 mMax;
+  nsStruct3D::TVector3 mMin;
+  nsStruct3D::TVector3 mMax;
 
 public:
-
 
   TBoundingBox();
   ~TBoundingBox();
 
-  void SetBound(TPoint3& min,TPoint3& max);
-  void AddBound(TPoint3& min,TPoint3& max);
+  void SetBound(nsStruct3D::TVector3& min,nsStruct3D::TVector3& max);
+  void AddBound(nsStruct3D::TVector3& min,nsStruct3D::TVector3& max);
 
-  TPoint3& Min(){return mMin;};
-  TPoint3& Max(){return mMax;};
+  nsStruct3D::TVector3& Min(){return mMin;};
+  nsStruct3D::TVector3& Max(){return mMax;};
 
   bool IsCorrect();
 
-  bool Contains(TPoint3& point);
+  bool Contains(nsStruct3D::TVector3& point);
   bool Collision(TBoundingBox& bb);
   float VolumeCollision(TBoundingBox& bb);// у.е. в кубе
 };

@@ -44,6 +44,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "LoaderListPathID.h"
 #include <atlconv.h>
 #include "file_operation.h"
+#include "StorePathResources.h"
+#include "MapXML_Field.h"
 
 using namespace std;
 
@@ -92,8 +94,8 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
 //--------------------------------------------------------------------------------------
 void TManagerModelDX::DestroyModel()
 {
-  std::map<unsigned int, TModelDX*>::iterator bit = mMapLoadedModel.begin();
-  std::map<unsigned int, TModelDX*>::iterator eit = mMapLoadedModel.end();
+  TMapUintPtr::iterator bit = mMapLoadedModel.begin();
+  TMapUintPtr::iterator eit = mMapLoadedModel.end();
   while(bit!=eit)
   {
     TModelDX* pModel = (*bit).second;
@@ -107,8 +109,8 @@ void TManagerModelDX::DestroyModel()
 //--------------------------------------------------------------------------------------
 void TManagerModelDX::LostDevice()
 {
-  std::map<unsigned int, TModelDX*>::iterator bit = mMapLoadedModel.begin();
-  std::map<unsigned int, TModelDX*>::iterator eit = mMapLoadedModel.end();
+  TMapUintPtr::iterator bit = mMapLoadedModel.begin();
+  TMapUintPtr::iterator eit = mMapLoadedModel.end();
   while(bit!=eit)
   {
     TModelDX* pModel = (*bit).second;
@@ -120,8 +122,8 @@ void TManagerModelDX::LostDevice()
 //--------------------------------------------------------------------------------------
 void TManagerModelDX::ResetDevice()
 {
-  std::map<unsigned int, TModelDX*>::iterator bit = mMapLoadedModel.begin();
-  std::map<unsigned int, TModelDX*>::iterator eit = mMapLoadedModel.end();
+  TMapUintPtr::iterator bit = mMapLoadedModel.begin();
+  TMapUintPtr::iterator eit = mMapLoadedModel.end();
   while(bit!=eit)
   {
     TModelDX* pModel = (*bit).second;
@@ -135,7 +137,7 @@ bool TManagerModelDX::LoadListPath()
 {
   TLoaderListPathID loader;
   char sAbsPath[300];
-  FindAbsPath(PATH_LIST_MODELS,sAbsPath,sizeof(sAbsPath));
+  FindAbsPath((char*)GetStorePathResources()->GetSecond("model"),sAbsPath,sizeof(sAbsPath));
   if(loader.Load(sAbsPath,&mMapPathModel)==false)
   {
     GetLogger()->Get("GE")->WriteF_time("Ќе удалось загрузить список моделей.\n");
@@ -168,8 +170,8 @@ TModelDX* TManagerModelDX::Find(unsigned int id)
 //--------------------------------------------------------------------------------------
 void TManagerModelDX::PrepareForDX()
 {
-  std::map<unsigned int, std::string>::iterator bit = mMapPathModel.begin();
-  std::map<unsigned int, std::string>::iterator eit = mMapPathModel.end();
+  TMapUintStr::iterator bit = mMapPathModel.begin();
+  TMapUintStr::iterator eit = mMapPathModel.end();
   while(bit!=eit)
   {
     (*bit).second += "DX\\main.ini";

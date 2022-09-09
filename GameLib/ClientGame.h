@@ -47,46 +47,29 @@ you may contact in writing [ramil2085@gmail.com].
 
 */
 
-class IControlCamera;
-class IGUI;
-class TNET_LevelClientServer;
-class IPhysicEngine;
-class IGraphicEngine; // отрисовка сцены
-class IManagerObjectCommon;
-class IManagerTime;
-
 class TClientGame : public IGame, public TDstEvent
 {
 protected:
   volatile bool flgNeedStop;
   volatile bool flgActive;
 
-  //IReplay*              mReplay;        // HDD
-  //ISoundEngine*         mSound;         // Sound 
-  //IManagerStateMachine*   mManagerStateMachine;// менеджер состо€ний дл€ MapHotKey
-
-  IControlCamera*         mControlCamera; // дл€ контрол€ камеры
-  IGUI*                   mGUI;           // GUI, MyGUI! - не €вл€етс€ источником событий
-  TNET_LevelClientServer* mNET;           // Melissa
-  IPhysicEngine*          mPhysicEngine;  // Robert
-  IGraphicEngine*         mGraphicEngine; // BigJack отрисовка сцены
-  IManagerObjectCommon*   mMOC;           // GameLib
-  IManagerTime*           mMTime;         // GameLib
+  IClientDeveloperTool::TComponentClient mCClient;
 
 public:
   TClientGame();
   virtual ~TClientGame();
 
-  void Work(const char* sNameDLL);// начало работы
+  virtual void Work(const char* sNameDLL, const char* arg = NULL);// начало работы
   
 protected:
-  bool Init(const char* sNameDLL);
+  bool Init(const char* sNameDLL, const char* arg = NULL);
+
   void Done();
 
   bool HandleGraphicEngineEvent();
   bool HandleExternalEvent();
   void CollectEvent();
-  void Calc();
+  void PrepareForRender();
   void Render();
 
   bool HandleEvent(nsEvent::TEvent* pEvent);

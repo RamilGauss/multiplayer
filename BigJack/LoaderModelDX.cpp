@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "LoaderModelDX.h"
 
 
-TLoaderModelDX::TLoaderModelDX( /*IDirect3DDevice9*/void* _m_pd3dDevice)
+TLoaderModelDX::TLoaderModelDX( void/*IDirect3DDevice9*/* _m_pd3dDevice)
 {
   m_pd3dDevice = (IDirect3DDevice9*)_m_pd3dDevice;
 }

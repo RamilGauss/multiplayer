@@ -62,8 +62,8 @@ public:
   {
     //IReplay*              mReplay;        // HDD
     //ISoundEngine*         mSound;         // Sound 
-    IControlCamera*         mControlCamera;        // Camera
-    IManagerStateMachine*   mMStateMachine; // конечный автомат, для HotKeys
+    IControlCamera*         mControlCamera; // Camera
+    IManagerStateMachine*   mMStateMachine; // конечный автомат, для HotKeys, Net (обработка пакетов)
     IGUI*                   mGUI;           // GUI, MyGUI!
     TNET_LevelClientServer* mNET;           // Melissa
     IPhysicEngine*          mPhysicEngine;  // Robert
@@ -95,11 +95,11 @@ public:
   IClientDeveloperTool();
   virtual ~IClientDeveloperTool();
 
-  virtual void Init(TComponentClient* pComponent) = 0;
+  virtual void Init(TComponentClient* pComponent, const char* arg = NULL) = 0;
 
   virtual std::string GetTitleWindow() = 0;
 
-  virtual void Calc() = 0;
+  virtual void PrepareForRender() = 0;
   virtual IMakerObjectCommon* GetMakerObjectCommon() = 0;
 
   virtual bool Event(nsEvent::TEvent* pEvent){return true;};// если необходимо прервать работу движка - вернуть false
@@ -111,7 +111,6 @@ public:
 
   // доступ к компонентам
   TComponentClient* GetComponent(){return &mComponent;}
-
 
   static IClientDeveloperTool* GetSingleton();
 };

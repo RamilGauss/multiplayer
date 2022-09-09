@@ -47,6 +47,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BL_Debug.h"
 #include "HiTimer.h"
 
+using namespace std;
 
 TSaveOnHDD::TSaveOnHDD(char* path)
 {
@@ -66,7 +67,7 @@ TSaveOnHDD::~TSaveOnHDD()
   ClearBuffer();
 }
 //---------------------------------------------------------------
-bool TSaveOnHDD::ReOpen(char* path)
+bool TSaveOnHDD::ReOpen(char* path, bool append )
 {
 	Close();
 
@@ -75,7 +76,8 @@ bool TSaveOnHDD::ReOpen(char* path)
 
 	if(sPath[0] == '\0') return false;
 
-	pFile = fopen(sPath,"wb");
+  const char* sMode = (append)?"ba":"wb";
+  pFile = fopen(sPath,sMode);
 	if(pFile!=NULL) 
   {
     FlushBuffer();
@@ -186,7 +188,7 @@ void TSaveOnHDD::FlushBuffer()
   int cnt = mVectorBuffer.size();
   for(int i = 0 ; i < cnt ; i++)
   {
-    std::vector<unsigned char> v = mVectorBuffer.at(i);
+    TVectorUchar v = mVectorBuffer.at(i);
     Write(&v.at(0),v.size());
     v.clear();
   }
@@ -200,7 +202,7 @@ void TSaveOnHDD::ClearBuffer()
 //---------------------------------------------------------------
 void TSaveOnHDD::FlushInBuffer(char* buffer, int size)
 {
-  std::vector<unsigned char> v;
+  TVectorUchar v;
   v.reserve(size);
   for(int i = 0; i < size ; i++)
     v.push_back((unsigned char)buffer[i]);

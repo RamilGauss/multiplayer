@@ -107,7 +107,6 @@ protected:
   LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing, void* pUserContext );
   void OnLostDevice( void* pUserContext );
   void OnDestroyDevice( void* pUserContext );
-  //void OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
   void OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext );
   void OnMouseEvent( UINT state, bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext );
 

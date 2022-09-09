@@ -76,7 +76,7 @@ public:
     {
         return m_strMediaDir;
     }
-    void ZeroMesh()
+    void UnlinkMesh()
     {
       m_pMesh = NULL;
     }

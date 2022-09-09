@@ -37,6 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #define IDeveloperToolH
 
 #include "classTools.h"
+#include <string>
 
 class IDeveloperTool
 {
@@ -48,6 +49,7 @@ public:
 
   virtual void Done(){};
 
+  virtual std::string GetPathXMLFile() = 0;
 
 };
 

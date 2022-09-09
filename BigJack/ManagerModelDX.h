@@ -84,8 +84,11 @@ void OnDestroyDevice();
 
 protected:
 
-  std::map<unsigned int, std::string> mMapPathModel;
-  std::map<unsigned int, TModelDX*>   mMapLoadedModel;
+  typedef std::map<unsigned int, std::string> TMapUintStr;
+  typedef std::map<unsigned int, TModelDX*>   TMapUintPtr;
+
+  TMapUintStr mMapPathModel;
+  TMapUintPtr mMapLoadedModel;
 
   void Done();
 

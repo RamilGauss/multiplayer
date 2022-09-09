@@ -70,13 +70,14 @@ public:
   TCamera();
   virtual ~TCamera();
 
+  virtual void UpdateForRender();
   // выдать результат манипул€ций
   virtual const nsStruct3D::TMatrix16* GetView();
   virtual const nsStruct3D::TMatrix16* GetProj();
   virtual const nsStruct3D::TVector3*  GetEyePt();
 
   // базова€ настройка
-  virtual void SetView(nsStruct3D::TMatrix16* view);
+  //virtual void SetView(nsStruct3D::TMatrix16* view);
   virtual void SetProj(nsStruct3D::TMatrix16* proj);
 
   virtual void SetProjParams( float fFOV, float fAspect, float fNearPlane, float fFarPlane );
@@ -97,6 +98,7 @@ public:
   virtual void RotateRight(float angle);
   virtual void Roll(float angle);
 
+  virtual void SetDir(nsStruct3D::TVector3* right, nsStruct3D::TVector3* up, nsStruct3D::TVector3* lookat);
 protected:
   void UpdateView();
 

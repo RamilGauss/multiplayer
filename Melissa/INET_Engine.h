@@ -74,15 +74,14 @@ public:
 
   virtual bool Open(unsigned short port,int numNetWork=0) = 0;
 
-	virtual void Write(InfoData* data, bool check = true) = 0;
+	virtual void Write(InfoData* data, bool check = true, bool add_in_queque = true) = 0;
+
 	// чтение - зарегистрируйся
   virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
   virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
 
 	virtual void Start() = 0;// для активной работы
 	virtual void Stop()  = 0;
-
-  virtual void Work()  = 0;// для пассивной работы
 
   // синхронная функция
   virtual bool Synchro(unsigned int ip, unsigned short port) = 0; // вызов только для клиента

@@ -41,16 +41,14 @@ you may contact in writing [ramil2085@gmail.com].
 #include "file_operation.h"
 #include "BL_Debug.h"
 #include "IBaseObjectCommon.h"
+#include "MapXML_Field.h"
+#include "StorePathResources.h"
 
 using namespace std;
 
 IMakerObjectCommon::IMakerObjectCommon()
 {
-  TLoaderListPathID loader;
-  char sAbsPath[300];
-  FindAbsPath(PATH_LIST_MODELS,sAbsPath,sizeof(sAbsPath));
-  if(loader.LoadBehavior(sAbsPath,&mMapID)==false)
-    BL_FIX_BUG();
+  flgNeedInit = true;
 }
 //------------------------------------------------------------------------
 IMakerObjectCommon::~IMakerObjectCommon()
@@ -60,6 +58,8 @@ IMakerObjectCommon::~IMakerObjectCommon()
 //------------------------------------------------------------------------
 IBaseObjectCommon* IMakerObjectCommon::New(unsigned int id_model)
 {
+  if(flgNeedInit) Init();
+
   unsigned int id_behavior = GetID_ModelByID_Behavior(id_model);
   IBaseObjectCommon* pObject = NewByID_Behavior(id_behavior);
   pObject->SetID_Model(id_model);
@@ -68,12 +68,23 @@ IBaseObjectCommon* IMakerObjectCommon::New(unsigned int id_model)
 //------------------------------------------------------------------------
 unsigned int IMakerObjectCommon::GetID_ModelByID_Behavior(unsigned int id_model)
 {
-  map<unsigned int,unsigned int>::iterator fit = mMapID.find(id_model);
+  TMapUintUint::iterator fit = mMapID.find(id_model);
   if(fit == mMapID.end())
   {
     BL_FIX_BUG();
     return 0;
   }
   return fit->second;
+}
+//------------------------------------------------------------------------
+void IMakerObjectCommon::Init()
+{
+  TLoaderListPathID loader;
+  char sAbsPath[300];
+  FindAbsPath((char*)GetStorePathResources()->GetSecond("model"),sAbsPath,sizeof(sAbsPath));
+  if(loader.LoadBehavior(sAbsPath,&mMapID)==false)
+    BL_FIX_BUG();
+
+  flgNeedInit = false;
 }
 //------------------------------------------------------------------------

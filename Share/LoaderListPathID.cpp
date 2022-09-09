@@ -41,7 +41,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 using namespace std;
 
-const char* Section_ID    = "id";
+const char* Section_ID          = "id";
 const char* Section_path        = "path";
 const char* Section_ID_behavior = "id_behavior";
 
@@ -57,11 +57,11 @@ TLoaderListPathID::~TLoaderListPathID()
   delete mXML;
 }
 //--------------------------------------------------------------------------------------
-bool TLoaderListPathID::Load(char* sPath, map<unsigned int,string>* pMap)
+bool TLoaderListPathID::Load(char* sAbsPath, map<unsigned int,string>* pMap)
 {
   bool res = true;
-  CHECK_RET(mXML->Load(sPath))
-  if(!FindCurrentPath(sPath))
+  CHECK_RET(mXML->Load(sAbsPath))
+  if(!FindCurrentPath(sAbsPath))
     res = false;
   else
   {
@@ -118,7 +118,7 @@ bool TLoaderListPathID::FindCurrentPath(char* sPath)
   int len = strlen(sPath);
   for(int i = len-1 ; i > 0 ; i--)
   {
-    if(sPath[i]=='\\')
+    if((sPath[i]=='\\')||(sPath[i]=='/'))
     {
       strncpy(sCurrentPath,sPath,i+1);
       sCurrentPath[i+1] = '\0';
@@ -128,11 +128,11 @@ bool TLoaderListPathID::FindCurrentPath(char* sPath)
   return false;
 }
 //--------------------------------------------------------------------------------------
-bool TLoaderListPathID::LoadBehavior(char* sPath, std::map<unsigned int,unsigned int>* pMapID_model_ID_Behavior)
+bool TLoaderListPathID::LoadBehavior(char* sAbsPath, std::map<unsigned int,unsigned int>* pMapID_model_ID_Behavior)
 {
   bool res = true;
-  CHECK_RET(mXML->Load(sPath))
-  if(!FindCurrentPath(sPath))
+  CHECK_RET(mXML->Load(sAbsPath))
+  if(!FindCurrentPath(sAbsPath))
     res = false;
   else
   {
