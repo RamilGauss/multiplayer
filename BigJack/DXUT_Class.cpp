@@ -230,13 +230,11 @@ TDXUT::~TDXUT()
   pDXUT_Realize = NULL;
 }
 //--------------------------------------------------------------------------------------
-HRESULT TDXUT::Init(HWND hwnd )
+HRESULT TDXUT::Init()
 {
   HRESULT hr;
   flgWasLostEvent    = false;
   flgWasDestroyEvent = false;
-
-  //DXUTSetCallDefWindowProc(false);// что бы не было конечной обработки событий, DXUT не закончит обработку
 
   DXUTSetCallbackMsgProc( ::MsgProc );
   //----------------------------------------------------
@@ -257,15 +255,7 @@ HRESULT TDXUT::Init(HWND hwnd )
   if(FAILED(DXUTInit( true, true ))) return false; // Parse the command line and show msgboxes
   DXUTSetHotkeyHandling( true, false, false );  // handle the defaul hotkeys
   
-  if(hwnd==NULL)
-    V_RETURN(DXUTCreateWindow( L"TDXUT" ))
-  else
-  {
-    // установить реакции
-    // на "нашу" функцию
-    //LONG_PTR res = SetWindowLongPtr(hwnd,GWLP_WNDPROC,(LONG_PTR)DXUTStaticWndProc_Changed);
-    V_RETURN(DXUTSetWindow( hwnd, hwnd, hwnd, false ))
-  }
+  V_RETURN(DXUTCreateWindow( L"TDXUT" ))
   DXUTCreateDevice( true, 1024, 768 );
   return S_OK;
 }
@@ -311,5 +301,10 @@ bool TDXUT::IsFullScreen()
 void TDXUT::ToggleFullScreen()
 {
   DXUTToggleFullScreen();
+}
+//--------------------------------------------------------------------------------------
+HWND TDXUT::GetHWND()
+{
+  return DXUTGetHWND();
 }
 //--------------------------------------------------------------------------------------

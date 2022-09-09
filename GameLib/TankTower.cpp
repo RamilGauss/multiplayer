@@ -51,6 +51,21 @@ TTankTower::TTankTower()
   mIndexTrackL = 0;
   mIndexTime = 0;
   mIndexVelocity = 0;
+
+  //------------------------------------------------
+  // свойства по-умолчанию, временно, пока нет БД
+  mProperty.mID_tank = 0;
+
+  mTower = 0; // номер, 0 - базовая (сток)
+  mGun = 0;
+
+  mProperty.mSpeedRotateTower  = 0.2f;
+  mProperty.mSpeedReductionGun = 0.1f;
+
+  mProperty.mVMaxGunUgol = 15.0f/180.0f*M_PI;  // вверх, рад
+  mProperty.mVMinGunUgol = -5.0f/180.0f*M_PI;  // вниз, рад
+  mProperty.mHMaxGunUgol = 0.0f;  // по часовой стрелке, рад
+  mProperty.mHMinGunUgol = 0.0f;  // против часовой стрелке, рад
 }
 //------------------------------------------------------------------------
 TTankTower::~TTankTower()
@@ -101,22 +116,29 @@ void TTankTower::SetHuman(char* pData, int size)
   
 }
 //------------------------------------------------------------------------
-void TTankTower::SetupShaderStackModelDX()
+void TTankTower::SetupShaderStackModelGE()
 {
   float time_ms = (float)ht_GetMSCount(); 
   time_ms /= 1000.0f;
 
-  mModel->SetShaderStackMask(&mShaderStackMask);// настроить маску
+  SetShaderStackMask(&mShaderStackMask);// настроить маску
   // настроить сам шейдерный стек
-  TShaderStack* pSS = mModel->GetShaderStack(mIndexTrackL);
-  pSS->SetData(mIndexTime,    &time_ms,sizeof(time_ms));// что R что L - тот же самый шейдер
-  pSS->SetData(mIndexVelocity,&mV,     sizeof(mV));
-  pSS = mModel->GetShaderStack(mIndexTrackR);
-  pSS->SetData(mIndexTime,    &time_ms,sizeof(time_ms));// что R что L - тот же самый шейдер
-  pSS->SetData(mIndexVelocity,&mV,     sizeof(mV));
+  SetupShaderStack(mIndexTrackL,mIndexTime,    &time_ms,sizeof(time_ms));
+  SetupShaderStack(mIndexTrackL,mIndexVelocity,&mV,     sizeof(mV));
+  SetupShaderStack(mIndexTrackR,mIndexTime,    &time_ms,sizeof(time_ms));
+  SetupShaderStack(mIndexTrackR,mIndexVelocity,&mV,     sizeof(mV));
+
+  //mModel->SetShaderStackMask(&mShaderStackMask);// настроить маску
+  //// настроить сам шейдерный стек
+  //TShaderStack* pSS = mModel->GetShaderStack(mIndexTrackL);
+  //pSS->SetData(mIndexTime,    &time_ms,sizeof(time_ms));// что R что L - тот же самый шейдер
+  //pSS->SetData(mIndexVelocity,&mV,     sizeof(mV));
+  //pSS = mModel->GetShaderStack(mIndexTrackR);
+  //pSS->SetData(mIndexTime,    &time_ms,sizeof(time_ms));// что R что L - тот же самый шейдер
+  //pSS->SetData(mIndexVelocity,&mV,     sizeof(mV));
 }
 //------------------------------------------------------------------------------------------------
-void TTankTower::EventSetModelDX()
+void TTankTower::EventSetModelGE()
 {
   int cnt = mVectorNamePart.size();
   for(int i = 0 ; i < cnt ; i++)
@@ -127,9 +149,11 @@ void TTankTower::EventSetModelDX()
       mIndexTrackL = i;
   }
   //-----------------------------------------------------
-  TShaderStack* pSS = mModel->GetShaderStack(mIndexTrackR);
-  mIndexTime        = pSS->GetIndexByName(ParamTime);
-  mIndexVelocity    = pSS->GetIndexByName(ParamaVelocity);
+  mIndexTime        = GetShaderStackIndexByName(mIndexTrackR,ParamTime);
+  mIndexVelocity    = GetShaderStackIndexByName(mIndexTrackR,ParamaVelocity);
+  //TShaderStack* pSS = mModel->GetShaderStack(mIndexTrackR);
+  //mIndexTime        = pSS->GetIndexByName(ParamTime);
+  //mIndexVelocity    = pSS->GetIndexByName(ParamaVelocity);
 
   cnt  = mVectorNamePart.size();
   for( int i = 0 ; i < cnt ; i++)

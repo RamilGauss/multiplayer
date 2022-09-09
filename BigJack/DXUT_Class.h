@@ -58,12 +58,14 @@ public:
   virtual bool IsFullScreen();
   virtual void ToggleFullScreen();
 
-  virtual HRESULT Init(HWND hwnd = NULL);
+  virtual HRESULT Init();
   virtual void Work();
   virtual int Done();
 
   virtual std::string GetError();
   virtual float GetFPS();
+
+  virtual HWND GetHWND();
 
 protected:
 

@@ -37,38 +37,18 @@ you may contact in writing [ramil2085@gmail.com].
 #include <string>
 #include <algorithm>
 #include "HiTimer.h"
+#include "Struct3D.h"
 
 using namespace std;
+using namespace nsStruct3D;
 
-const int max_fib = 2000;
-int arr_fib[max_fib];
-
-int fib(int i)
-{
-  if(i==0) return 0;
-  if(i==1) return 1;
-
-  return fib(i-1)+fib(i-2);
-}
-//----------------------------------------------------------
-int fib_opt(int i)
-{
-  if(i==0) return 0;
-  if(i==1) return 1;
-
-  if(arr_fib[i]!=0) return arr_fib[i];
-
-  arr_fib[i] = fib_opt(i-1)+fib_opt(i-2);
-  return arr_fib[i];
-}
-//----------------------------------------------------------
 int main(int argc, char *argv[])
 {
-  guint32 start = ht_GetMSCount();
-
-  int res = fib(32);
-
-  start = ht_GetMSCount()-start;
+  TVector4_4 a,b;
+  VectorIdentity(&a);
+  VectorIdentity(&b);
+  a._11 = 10;
+  b *= a;
 
   return 0;
 }

@@ -59,7 +59,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 
 
-class IBaseObjectDX;
+class IBaseObjectGE;
 
 // BigJack - графический движок
 class TBigJack : public IGraphicEngine
@@ -84,13 +84,13 @@ protected:
 
 
   // все объекты
-  std::list<IBaseObjectDX*> mListAllObject;// движок не освобождает память из-под этих объектов
+  std::list<IBaseObjectGE*> mListAllObject;// движок не освобождает память из-под этих объектов
   // список на отрисовку
-  std::list<IBaseObjectDX*> mListReadyRender;// временный список
+  std::list<IBaseObjectGE*> mListReadyRender;// временный список
 
-  std::list<IBaseObjectDX*> mListAnimateObject;// только анимированные. создаются движком(эффект движка), движок сам должен освободить память
+  std::list<IBaseObjectGE*> mListAnimateObject;// только анимированные. создаются движком(эффект движка), движок сам должен освободить память
 
-  std::list<IBaseObjectDX*> mListTransparencyObject;// прозрачные объекты, временный список, только на этапе создания списка на отображение
+  std::list<IBaseObjectGE*> mListTransparencyObject;// прозрачные объекты, временный список, только на этапе создания списка на отображение
 
   CModelViewerCamera mCamera;                // A model viewing camera
 
@@ -108,8 +108,9 @@ public:
   //virtual void NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
   //virtual void NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext);
   //------------------------------------------------------------------------
-  virtual void Init(HWND hwnd = NULL);
+  virtual void Init();
   virtual void Work(guint32 time_ms);
+  virtual bool HandleInternalEvent();
   virtual void Done();
 
   virtual bool IsFullScreen();
@@ -118,27 +119,27 @@ public:
   virtual void  GetResolutionFrame(int& h, int& w );// формат X8R8G8B8
   virtual void  SetResolutionFrame(int  h, int  w );// формат X8R8G8B8
   //------------------------------------------------------------------------
-  virtual void AddObject(IBaseObjectDX* pObject);
+  virtual void AddObject(IBaseObjectGE* pObject);
   virtual void Clear();
   // камера
-  virtual void SetViewParams(D3DXVECTOR3* pvEyePt, D3DXVECTOR3* pvLookatPt);// расположение камеры
-  
+  virtual void SetViewParams(nsStruct3D::TVector3* pvEyePt3, nsStruct3D::TVector3* pvLookatPt3);// расположение камеры
+
   // 21 декабря 2012 года реализую:
   // клиентские эффекты движка, не влияют на физические параметры объектов
   virtual void SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
-                 D3DVECTOR& coord,     // где
-                 D3DVECTOR& orient,    // ориентация эффекта
-                 guint32 time_past/* прошло времени, мс*/ = 0);
+    nsStruct3D::TVector3* coord3,     // где
+    nsStruct3D::TVector3* orient3,    // ориентация эффекта
+    guint32 time_past/* прошло времени, мс*/ = 0);
   virtual void SetViewFPS(bool val);
   // источники освещения
   // ###
   // ввод освещение накладывает условия на шейдер. он обязан содержать интерфейс
   virtual int GetCountLight(){return 1;}
-  virtual const D3DVECTOR* GetCoordLight(int index){return NULL;}
-  virtual const D3DVECTOR* GetCoordAtLight(int index){return NULL;}
+  virtual const float* GetCoordLight(int index){return NULL;}
+  virtual const float* GetCoordAtLight(int index){return NULL;}
   virtual unsigned int GetColorLight(int index){return 0;}
-  virtual void SetCoordLight(int index,D3DVECTOR* m){}
-  virtual void SetCoordAtLight(int index,D3DVECTOR* m){}
+  virtual void SetCoordLight(int index,nsStruct3D::TVector3* m3){}
+  virtual void SetCoordAtLight(int index,nsStruct3D::TVector3* m3){}
   virtual void SetColorLight(int index, unsigned int color){}
   virtual void AddLight(){}
   virtual void RemoveLight(int index){}

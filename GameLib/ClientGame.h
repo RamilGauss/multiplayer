@@ -40,6 +40,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ManagerObjectCommon.h"
 #include "IPhysicEngine.h"
 #include "INET_Engine.h"
+#include "IClientDeveloperTool.h"
+#include "IManagerTime.h"
 
 
 /*
@@ -63,17 +65,17 @@ protected:
 
 
 
-  //IAI*               mAI;
-  //IReplay*           mReplay;
-  //ISoundEngine*      mSound;
-  INET_Engine*         mNET;
-  IPhysicEngine*       mPhysicEngine;
-  IGraphicEngine*      mGraphicEngine; // отрисовка сцены
-  TManagerGUI          mMGUI;
-  TManagerKeyMouse     mMKM;
-  TManagerObjectCommon mMOC;
-  TManagerTime         mMTime;
+  //IAI*                mAI;
+  //IReplay*            mReplay;
+  //ISoundEngine*       mSound;
+  INET_Engine*          mNET;
+  IPhysicEngine*        mPhysicEngine;
+  IGraphicEngine*       mGraphicEngine; // отрисовка сцены
+  IManagerObjectCommon* mMOC;
+  IManagerTime*         mMTime;
 
+  // обработка событий
+  IClientDeveloperTool* mDeveloperTool;
 
 public:
   TClientGame();
@@ -89,13 +91,7 @@ protected:
   void Init(const char* sNameDLL);
   void Done();
 
-
-  typedef enum{ eNoWindowEvent,
-        eQuit,
-      } tResHandleWindowEvent;
-
-
-  tResHandleWindowEvent HandleWindowEvent();
+  bool HandleGraphicEngineEvent();
   void HandleExternalEvent();
   void Calc();
   void Render();

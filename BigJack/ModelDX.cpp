@@ -67,14 +67,17 @@ TModelDX::~TModelDX()
 //----------------------------------------------------------------------------------------------------
 void TModelDX::Draw(vector<unsigned char>* state, // какое состояние нарисовать (От ObjectDX)
                     vector<unsigned char>* mask,  // какую из частей нарисовать (От ObjectDX)
-                    vector<D3DXMATRIXA16*>* matrix,// ориентация составных частей внутри объекта, кол-во совпадает с cSubset (От ObjectDX)
-                    D3DXMATRIXA16* mWorld,// где и как расположен объект         (От ObjectDX)
+                    vector<TVector4_4*>* matrix,// ориентация составных частей внутри объекта, кол-во совпадает с cSubset (От ObjectDX)
+                    TVector4_4* pWorld,// где и как расположен объект         (От ObjectDX)
                     float alphaTransparency,
                     D3DXMATRIXA16* mView)/*для определения дистанции*/ // расположение и ориентация камеры    (от ManagerDirectX)                   
 {
+  D3DXMATRIXA16 mWorld;// только из набора видимых
+  SET_MATRIX16_P_M(pWorld,mWorld)
+
   //1 Выбрать по ЛОДу mesh
   // расчет расстояния
-  float dist = GetDist(mWorld,mView);
+  float dist = GetDist(&mWorld,mView);
   //2 Настроить pEffect на координаты и ориентацию - передать в pEffect матрицу
   // если mArrMatrixSubset==NULL, то координаты и ориентация частей модели неизменны
   //3 Выбрать по состоянию subSet
@@ -104,7 +107,10 @@ void TModelDX::Draw(vector<unsigned char>* state, // какое состояние нарисовать 
         else
           pEffect = pCurLOD->damage[i];
       }
-      D3DXMATRIXA16 m = *(matrix->operator [](iView));// только из набора видимых
+      D3DXMATRIXA16 m;// только из набора видимых
+      TVector4_4* pV = matrix->operator [](iView);// только из набора видимых
+      SET_MATRIX16_P_M(pV,m)
+
       D3DXMATRIXA16 mWorld_pro = m * (*mWorld);
       //-------------------------------------------------
       pEffect->GetAlphaTransparency(alphaTransparency);

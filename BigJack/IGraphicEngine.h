@@ -37,75 +37,54 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef IGraphicEngineH
 #define IGraphicEngineH
 
-#include "DXUT.h"
+//#include "DXUT.h"
 #include "glibconfig.h"
-#include "MakerDirectX_Realize.h"
+#include "Struct3D.h"
+//#include "MakerDirectX_Realize.h"
 
-class IBaseObjectDX;
+class IBaseObjectGE;
 
 class IGraphicEngine
 {
 protected:
-
   guint32 mTime_ms;// врем€ дл€ рендера, используетс€ дл€ анимации
-  //IDirectX_Realize* mDXUT;
 
 public:
-  //typedef void (*TCallBackMsg)( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-  //typedef void (*TCallBackFrameMove)( double fTime, float fElapsedTime, void* pUserContext );
 
-  IGraphicEngine()
-  {  
-    //TMakerDirectX_Realize makerDX;
-    //mDXUT = makerDX.New(this);
-  }
-  virtual ~IGraphicEngine()
-  { 
-    //delete mDXUT;
-    //mDXUT = NULL;
-  }
-
-  //enum{eTypeMsg     = 0,
-    //eTypeFrameMove,
-  //};
+  IGraphicEngine(){}
+  virtual ~IGraphicEngine(){}
 
   virtual bool IsFullScreen() = 0;
   virtual void ToggleFullScreen() = 0;
-  //virtual void* GetWndProc(){return mDXUT->GetWndProc();}
-  // на получение событий WinApi окна и DirectX
-  //virtual void Register(void*   pFunc, int type) = 0;
-  //virtual void Unregister(void* pFunc, int type) = 0;
-  // в частности событи€ мыши и клавиатуры
-  //virtual void NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
-  //virtual void NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext) = 0;
   //------------------------------------------------------------------------
-  virtual void Init(HWND hwnd = NULL) = 0;
+  virtual void Init() = 0;
   virtual void Work(guint32 time_ms) = 0;
+  virtual bool HandleInternalEvent() = 0;// true - success, false - exit
   virtual void Done() = 0;
-  virtual void  GetResolutionFrame(int& h, int& w ) = 0;// формат X8R8G8B8
-  virtual void  SetResolutionFrame(int  h, int  w ) = 0;// формат X8R8G8B8
+  virtual void GetResolutionFrame(int& h, int& w ) = 0;// формат X8R8G8B8
+  virtual void SetResolutionFrame(int  h, int  w ) = 0;// формат X8R8G8B8
   //------------------------------------------------------------------------
-  virtual void AddObject(IBaseObjectDX* pObject) = 0;
+  virtual void AddObject(IBaseObjectGE* pObject) = 0;
   virtual void Clear() = 0;
   // камера
-  virtual void SetViewParams(D3DXVECTOR3* pvEyePt, D3DXVECTOR3* pvLookatPt) = 0;// расположение камеры
+  virtual void SetViewParams(nsStruct3D::TVector3* pvEyePt3, nsStruct3D::TVector3* pvLookatPt3) = 0;// расположение камеры
 
   // 21 декабр€ 2012 года реализую:
   // клиентские эффекты движка, не вли€ют на физические параметры объектов
   virtual void SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
-    D3DVECTOR& coord,     // где
-    D3DVECTOR& orient,    // ориентаци€ эффекта
+    nsStruct3D::TVector3* coord3,     // где
+    nsStruct3D::TVector3* orient3,    // ориентаци€ эффекта
     guint32 time_past/* прошло времени, мс*/ = 0) = 0;
   virtual void SetViewFPS(bool val) = 0;
   // источники освещени€
   // ###
   // ввод освещени€ накладывает услови€ на шейдер. он об€зан содержать интерфейс
   virtual int GetCountLight() = 0;
-  virtual const D3DVECTOR* GetCoordLight(int index) = 0;
-  virtual const D3DVECTOR* GetCoordAtLight(int index) = 0;
+  virtual const float* GetCoordLight(int index) = 0;
+  virtual const float* GetCoordAtLight(int index) = 0;
   virtual unsigned int GetColorLight(int index) = 0;
-  virtual void SetCoordLight(int index,D3DVECTOR* m) = 0;
-  virtual void SetCoordAtLight(int index,D3DVECTOR* m) = 0;
+  virtual void SetCoordLight(int index,nsStruct3D::TVector3* m3) = 0;
+  virtual void SetCoordAtLight(int index,nsStruct3D::TVector3* m3) = 0;
   virtual void SetColorLight(int index, unsigned int color) = 0;
   virtual void AddLight() = 0;
   virtual void RemoveLight(int index) = 0;
@@ -113,23 +92,6 @@ public:
   //----------------------------------------------------------------
   //                             ~INTERFACE
   //----------------------------------------------------------------
-/*
-public:
-  //friend class IDirectX_Realize;
-  //----------------------------------------------------------------
-  // ƒл€ внутренних событий движка.
-  //----------------------------------------------------------------
-
-  virtual bool IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat, D3DFORMAT BackBufferFormat, bool bWindowed,void* pUserContext ) = 0;
-  virtual bool ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext ) = 0;
-  virtual HRESULT OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext ) = 0;
-  virtual HRESULT OnResetDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext ) = 0;
-  virtual void OnFrameMove( double fTime, float fElapsedTime, void* pUserContext ) = 0;
-  virtual void OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext ) = 0;
-  virtual LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,void* pUserContext ) = 0;
-  virtual void OnLostDevice( void* pUserContext ) = 0;
-  virtual void OnDestroyDevice( void* pUserContext ) = 0;
-*/
 };
 
 

@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "GlobalParamsTank.h"
 #include "file_operation.h"
 #include "LoaderListPathID.h"
-#include "BaseObject.h"
+#include "IBaseObject.h"
 #include "BL_Debug.h"
 
 using namespace std;

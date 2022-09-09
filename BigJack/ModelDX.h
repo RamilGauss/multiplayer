@@ -83,8 +83,8 @@ public:
   */
   void TModelDX::Draw(std::vector<unsigned char>* state, //                           (От ObjectDX)
                       std::vector<unsigned char>* mask,  //                           (От ObjectDX)
-                      std::vector<D3DXMATRIXA16*>* matrix,//кол-во совпадает с cSubset (От ObjectDX)
-                      D3DXMATRIXA16* mWorld,    // где и как расположен объект         (От ObjectDX)
+                      std::vector<nsStruct3D::TVector4_4/*D3DXMATRIXA16*/*>* matrix,//кол-во совпадает с cSubset (От ObjectDX)
+                      nsStruct3D::TVector4_4/*D3DXMATRIXA16*/* mWorld,    // где и как расположен объект         (От ObjectDX)
                       float alphaTransparency,  // прозрачность                        (От ObjectDX)
                       D3DXMATRIXA16* mView); // расположение и ориентация камеры    (от ManagerDirectX)
 

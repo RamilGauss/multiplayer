@@ -171,7 +171,7 @@ void TManagerObjectCommon::AddFromLoaderObjectInMDX()
   int cnt = mVectorObject.size();
   for(int i = 0 ; i < cnt ; i++ )
   {
-    mMDX_Scene->AddObject((IBaseObjectDX*)mVectorObject[i]);
+    mMDX_Scene->AddObject((IBaseObjectGE*)mVectorObject[i]);
   }
 }
 //--------------------------------------------------------------------

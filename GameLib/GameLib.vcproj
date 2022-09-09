@@ -179,6 +179,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IActor.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\IControlEventWinApi.cpp"
 				>
 			</File>
@@ -204,10 +208,6 @@
 			</File>
 			<File
 				RelativePath=".\ManagerTime.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Tank.cpp"
 				>
 			</File>
 			<File
@@ -253,11 +253,31 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Game.h"
+				RelativePath=".\IActor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IClientDeveloperTool.h"
 				>
 			</File>
 			<File
 				RelativePath=".\IControlEventWinApi.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IDeveloperTool.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IGame.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IManagerObjectCommon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IManagerTime.h"
 				>
 			</File>
 			<File
@@ -286,10 +306,6 @@
 			</File>
 			<File
 				RelativePath=".\namespace_ID_BEHAVIOR.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Tank.h"
 				>
 			</File>
 			<File

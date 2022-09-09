@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BaseObjectPrediction.h"
 
 
-class IBaseObjectCommon : public IBaseObjectDX, public IBaseObjectPrediction
+class IBaseObjectCommon : public IBaseObjectGE, public IBaseObjectPrediction
 {
 
 public:

@@ -52,6 +52,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DXUTOpt", "DXUT\Optional\DXUTOpt_2008.vcproj", "{9F64786D-4F8F-43BF-ADA0-133ABAE1E52D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProject", "TestProject\TestProject.vcproj", "{DF4005CE-5AC6-4B13-BB09-779850A9DEEC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF0D719A-E5DE-4F17-9741-FCBDD15B3FE0} = {DF0D719A-E5DE-4F17-9741-FCBDD15B3FE0}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EditorModel", "EditorModel\EditorModel.vcproj", "{DA5DE3BC-5DC6-4233-93E8-7F40A836F05C}"
 	ProjectSection(ProjectDependencies) = postProject

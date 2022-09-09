@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BigJack.h"
 #include "HiTimer.h"
 #include "Logger.h"
-#include "BaseObjectDX.h"
+#include "IBaseObjectGE.h"
 #include "BL_Debug.h"
 #include "SDKmisc.h"
 #include <DXGI.h>
@@ -99,8 +99,8 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
     D3DXMATRIXA16 mView = *mCamera.GetViewMatrix();
     SetCommonShaderStack();// передать общие параметры в шейдер
 
-    std::list<IBaseObjectDX*>::iterator it = mListReadyRender.begin();
-    std::list<IBaseObjectDX*>::iterator eit = mListReadyRender.end();
+    std::list<IBaseObjectGE*>::iterator it = mListReadyRender.begin();
+    std::list<IBaseObjectGE*>::iterator eit = mListReadyRender.end();
     while(it!=eit)
     {
       (*it)->Draw(&mView);
@@ -117,7 +117,7 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
   }
 }
 //--------------------------------------------------------------------------------------------------------
-void TBigJack::AddObject(IBaseObjectDX* pObject)
+void TBigJack::AddObject(IBaseObjectGE* pObject)
 {
   TModelDX* pModel = mManagerModelDX.Find(pObject->GetID_Model());
   if(pModel)
@@ -135,9 +135,9 @@ void TBigJack::AddObject(IBaseObjectDX* pObject)
   }
 }
 //--------------------------------------------------------------------------------------------------------
-void TBigJack::SetViewParams(D3DXVECTOR3* pvEyePt, D3DXVECTOR3* pvLookatPt)// расположение камеры
+void SetViewParams(nsStruct3D::TVector3* pvEyePt3, nsStruct3D::TVector3* pvLookatPt3)
 {
-  mCamera.SetViewParams(pvEyePt, pvLookatPt);
+  //mCamera.SetViewParams(pvEyePt, pvLookatPt);
 }
 //--------------------------------------------------------------------------------------------------------
 void TBigJack::Clear()
@@ -146,12 +146,12 @@ void TBigJack::Clear()
 }
 //--------------------------------------------------------------------------------------------------------
 void TBigJack::SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
-               D3DVECTOR& coord,     // где
-               D3DVECTOR& orient,    // ориентация эффекта
-               guint32 time_past/*// прошло времени, мс*/)
+                       nsStruct3D::TVector3* coord3,     // где
+                       nsStruct3D::TVector3* orient3,    // ориентация эффекта
+                       guint32 time_past/* прошло времени, мс*/)
 {
 /*
-  IBaseObjectDX* pObjectDX = MakerEffect.New(id_effect);
+  IBaseObjectGE* pObjectDX = MakerEffect.New(id_effect);
   pObjectDX->SetTimeCreation(mTime_ms - time_past);
   pObjectDX->SetCoord(coord);
   pObjectDX->SetOrient(orient);
@@ -326,9 +326,9 @@ void TBigJack::OnDestroyDevice( void* pUserContext )
   mViewerFPS.Destroy();
 }
 //--------------------------------------------------------------------------------------
-void TBigJack::Init(HWND hwnd)
+void TBigJack::Init()
 {
-  HRESULT hr = mDXUT.Init(hwnd);
+  HRESULT hr = mDXUT.Init();
   if(hr!=S_OK)
   {
     GlobalLoggerDX.WriteF_time("Init fail. hr=0x%X\n",hr);
@@ -394,15 +394,15 @@ void TBigJack::Work(guint32 time_ms)
 //--------------------------------------------------------------------------------------
 void TBigJack::Animate()
 {
-  list<IBaseObjectDX*>::iterator bit = mListAnimateObject.begin();
-  list<IBaseObjectDX*>::iterator eit = mListAnimateObject.end();
+  list<IBaseObjectGE*>::iterator bit = mListAnimateObject.begin();
+  list<IBaseObjectGE*>::iterator eit = mListAnimateObject.end();
   while(bit!=eit)
   {
     if((*bit)->Animate(mTime_ms)==false)
     {
       // уничтожить эффект
       delete (*bit);
-      list<IBaseObjectDX*>::iterator nit = bit;
+      list<IBaseObjectGE*>::iterator nit = bit;
       nit++;
       mListAnimateObject.erase(bit);
       bit = nit;
@@ -447,11 +447,11 @@ void TBigJack::MakeVectorOnRender()
   mListReadyRender.clear();
   mListTransparencyObject.clear();
   //--------------------------------------------------------------
-  list<IBaseObjectDX*>::iterator bit = mListAllObject.begin();
-  list<IBaseObjectDX*>::iterator eit = mListAllObject.end();
+  list<IBaseObjectGE*>::iterator bit = mListAllObject.begin();
+  list<IBaseObjectGE*>::iterator eit = mListAllObject.end();
   while(bit!=eit)
   {
-    IBaseObjectDX* pObject = *(bit);
+    IBaseObjectGE* pObject = *(bit);
     if(pObject->GetAlphaTransparency()==1.0f)
       mListReadyRender.push_back(pObject);
     else
@@ -552,5 +552,32 @@ bool TBigJack::IsFullScreen()
 void TBigJack::ToggleFullScreen()
 {
   return mDXUT.ToggleFullScreen();
+}
+//--------------------------------------------------------------------------------------
+bool TBigJack::HandleInternalEvent()
+{
+  HWND hWnd = mDXUT.GetHWND();
+
+  bool bGotMsg;
+  MSG msg;
+  msg.message = WM_NULL;
+  PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
+
+  while( WM_QUIT != msg.message )
+  {
+    bGotMsg = ( PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) != 0 );
+
+    if( bGotMsg )
+    {
+      if(0 == TranslateAccelerator( hWnd, NULL, &msg ) )
+      {
+        TranslateMessage( &msg );
+        DispatchMessage( &msg );
+      }
+    }
+    else
+      return true;
+  }
+  return false;
 }
 //--------------------------------------------------------------------------------------

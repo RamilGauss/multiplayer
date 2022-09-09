@@ -64,7 +64,8 @@ void TClientGame::Work(const char* sNameDLL)// начало работы
   while(flgNeedStop==false)
   {
     // обработать события окна
-    HandleWindowEvent(GetHandleWindow());
+    if(HandleGraphicEngineEvent()==false)
+      break;
 
     // обработать события
     HandleExternalEvent();
@@ -99,36 +100,6 @@ void TClientGame::Done()
   mGraphicEngine = NULL;
 }
 //------------------------------------------------------------------------
-TClientGame::tResHandleWindowEvent TClientGame::HandleWindowEvent()
-{
-  HWND hWnd = mGraphicEngine->GetHWND();
-
-  // Now we're ready to receive and process Windows messages.
-  bool bGotMsg;
-  MSG msg;
-  msg.message = WM_NULL;
-  PeekMessage( &msg, NULL, 0U, 0U, PM_NOREMOVE );
-
-  while( WM_QUIT != msg.message )
-  {
-    // Use PeekMessage() so we can use idle time to render the scene. 
-    bGotMsg = ( PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) != 0 );
-
-    if( bGotMsg )
-    {
-      // Translate and dispatch the message
-      if(0 == TranslateAccelerator( hWnd, hAccel, &msg ) )
-      {
-        TranslateMessage( &msg );
-        DispatchMessage( &msg );
-      }
-    }
-    else
-      return eNoWindowEvent;
-  }
-  return eQuit;
-}
-//------------------------------------------------------------------------
 void TClientGame::HandleExternalEvent()
 {
 
@@ -136,7 +107,7 @@ void TClientGame::HandleExternalEvent()
 //------------------------------------------------------------------------
 void TClientGame::Calc()
 {
-
+  mDeveloperTool->Calc();
 }
 //------------------------------------------------------------------------
 void TClientGame::Render()
@@ -149,11 +120,10 @@ void TClientGame::SetEvent(const char* sFrom, unsigned int key, void* pData, int
 
 }
 //------------------------------------------------------------------------
-HWND TClientGame::GetHandleWindow()
+bool TClientGame::HandleGraphicEngineEvent()
 {
-  return mGraphicEngine->GetHWND();
+  return mGraphicEngine->HandleInternalEvent();
 }
 //------------------------------------------------------------------------
-
 
 

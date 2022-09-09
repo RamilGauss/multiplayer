@@ -35,7 +35,12 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "TreeJoint.h"
 #include "BL_Debug.h"
+#include "Struct3D.h"
+//#include <d3dx10math.h>
+
+
 using namespace std;
+using namespace nsStruct3D;
 
 TTreeJoint::TTreeJoint()
 {
@@ -121,7 +126,7 @@ void TTreeJoint::Setup(TLoadedJoint* pLoadedTree,TNumUseMap* mapUse)
   ProductAllMatrix();
 }
 //-------------------------------------------------------------------------
-void TTreeJoint::ChangeMatrix(std::string& name, D3DXMATRIXA16* matrix, bool def)
+void TTreeJoint::ChangeMatrix(std::string& name, TVector4_4/*D3DXMATRIXA16*/* matrix, bool def)
 {
   int cnt = GetCountPart();
   for(int i = 0 ; i < cnt ; i++ )
@@ -131,7 +136,7 @@ void TTreeJoint::ChangeMatrix(std::string& name, D3DXMATRIXA16* matrix, bool def
     {
       if(def)
         pNode->SetMatrixDef();
-      pNode->matrix = (*matrix)*pNode->matrix;
+      pNode->matrix = pNode->matrix * (*matrix);
       break;
     }
   }
@@ -139,13 +144,13 @@ void TTreeJoint::ChangeMatrix(std::string& name, D3DXMATRIXA16* matrix, bool def
 }
 //-------------------------------------------------------------------------
 // заполнить матрицей
-void TTreeJoint::GetMatrix(std::vector<D3DXMATRIXA16*>* matrix)
+void TTreeJoint::GetMatrix(std::vector<TVector4_4/*D3DXMATRIXA16*/*>* matrix)
 {
   int cnt = GetCountPart();
   for(int i = 0 ; i < cnt ; i++ )
   {
     TNodeJoint* pNode = mVectorNode.at(i);
-    D3DXMATRIXA16* pM = matrix->operator [](i);
+    TVector4_4/*D3DXMATRIXA16*/* pM = matrix->operator [](i);
     *pM = pNode->matrix_pro;// умноженная по иерархии
   }
 }

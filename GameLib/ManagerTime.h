@@ -34,12 +34,13 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 #include "glibconfig.h"
+#include "IManagerTime.h"
 
 
 #ifndef ManagerTimeH
 #define ManagerTimeH
 
-class TManagerTime
+class TManagerTime : public IManagerTime
 {
 protected:
   
@@ -49,12 +50,12 @@ public:
   virtual ~TManagerTime();
 
   // управление игровым временем
-  void SetTimeSpeed(float relative = 1.0f);// отношение реального к игровому
-  void SetTimeToBegin();
-  void SetTimeToEnd();
-  int  GetCountTimeStamp();
-  void SetTimeStamp(int stamp);
-  guint32 GetTime();
+  virtual void SetTimeSpeed(float relative = 1.0f);// отношение реального к игровому
+  virtual void SetTimeToBegin();
+  virtual void SetTimeToEnd();
+  virtual int  GetCountTimeStamp();
+  virtual void SetTimeStamp(int stamp);
+  virtual guint32 GetTime();
 
 };
 
