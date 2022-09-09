@@ -15,13 +15,13 @@
     <place>
       <bind>
         <type>0</type>
-        <policy>0</policy>
-        <value>100</value>
+        <policy>1</policy>
+        <value>50</value>
       </bind>
       <bind>
         <type>0</type>
-        <policy>0</policy>
-        <value>100</value>
+        <policy>1</policy>
+        <value>50</value>
       </bind>
     </place>
   </node>
@@ -70,4 +70,24 @@
       </bind>
     </place>
   </node>  
+  <node>
+    <class>EditBox</class>
+    <name>ebPassword</name>
+    <geometry>
+      <w>140</w>
+      <h>40</h>
+    </geometry>
+    <place>
+      <bind>
+        <type>0</type>
+        <policy>0</policy>
+        <value>300</value>
+      </bind>
+      <bind>
+        <type>0</type>
+        <policy>0</policy>
+        <value>400</value>
+      </bind>
+    </place>
+  </node>   
 </root>

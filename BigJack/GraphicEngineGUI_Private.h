@@ -45,7 +45,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "IListBox.h"
 #include "IRadioButton.h"
 #include <map>
-#include <string>
+#include <string> 
 #include <vector>
 #include "MakerGUI.h"
 
