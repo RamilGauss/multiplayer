@@ -34,7 +34,9 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 #include "ShaderStack.h"
+#include "BL_Debug.h"
 
+using namespace std;
 
 TShaderStack::TShaderStack()
 {
@@ -43,6 +45,54 @@ TShaderStack::TShaderStack()
 //-----------------------------------------------------------------------------------------------------
 TShaderStack::~TShaderStack()
 {
+  Done();
+}
+//-----------------------------------------------------------------------------------------------------
+int TShaderStack::Push(const char* nameValueIn, void* pDataIn, int sizeIn)
+{
+  TData* data = new TData;
+  data->name = nameValueIn;
+  data->Set((char*)pDataIn, sizeIn);
+  mVecorNameData.push_back(data);
+  return mVecorNameData.size()-1;
+}
+//-----------------------------------------------------------------------------------------------------
+string TShaderStack::GetName(int index)
+{
+  BL_ASSERT(index<int(mVecorNameData.size()));
+  return mVecorNameData.at(index)->name;
+}
+//-----------------------------------------------------------------------------------------------------
+void* TShaderStack::GetData(int index, int& size)
+{
+  BL_ASSERT(index<int(mVecorNameData.size()));
+  size = mVecorNameData.at(index)->size;
+  return mVecorNameData.at(index)->data;
+}
+//-----------------------------------------------------------------------------------------------------
+void TShaderStack::Done()
+{
+  int cnt = mVecorNameData.size();
+  for(int i = 0 ; i < cnt ; i++)
+    delete mVecorNameData.at(i);
 
+  mVecorNameData.clear();
+}
+//-----------------------------------------------------------------------------------------------------
+void TShaderStack::SetData(int index, void* pDataIn, int sizeIn)
+{
+  mVecorNameData.at(index)->Set((char*)pDataIn, sizeIn);
+}
+//-----------------------------------------------------------------------------------------------------
+int TShaderStack::GetIndexByName(const char* name)
+{
+  int cnt = mVecorNameData.size();
+  for(int i = 0 ; i < cnt ; i++ )
+  {
+    if(mVecorNameData.at(i)->name.compare(name)==0)
+      return i;
+  }
+  BL_FIX_BUG();
+  return -1;
 }
 //-----------------------------------------------------------------------------------------------------

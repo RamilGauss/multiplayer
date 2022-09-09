@@ -37,16 +37,49 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef ShaderStackH
 #define ShaderStackH
 
+#include <string>
+#include <vector>
+
 class TShaderStack
 {
 
+  struct TData
+  {
+    std::string name;
+    char* data;
+    int size;
+    TData(){data=NULL;size=0;}
+    ~TData(){Done();}
+    void Done(){delete[]data;data=NULL;size=0;}
+    void Set(char* p,int s)
+    {
+      if(s!=size)
+      {
+        Done();
+        size=s;
+        data=new char[s];
+      }
+      memcpy(data,p,size);
+    }
+  };
+  
+  std::vector<TData*> mVecorNameData;
 
 public:
   TShaderStack();
   ~TShaderStack();
 
+  int Count(){return mVecorNameData.size();}
+  int Push(const char* nameValueIn, void* pDataIn, int sizeIn);
 
+  int GetIndexByName(const char* name);
 
+  void SetData(int index, void* pDataIn, int sizeIn);
+
+  std::string GetName(int index);
+  void* GetData(int index, int& size);
+
+  void Done();
 
 };
 

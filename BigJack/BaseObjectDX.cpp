@@ -48,6 +48,7 @@ TBaseObjectDX::TBaseObjectDX(int typeDX)
   mTimeCreation = 0;
   mModel = NULL;
   pLoadedTree = NULL;
+  mAlphaTransparency = 1.0f;
 
   mTypeDX = typeDX;// по-умолчанию не чисто анимированный
 }
@@ -57,17 +58,19 @@ TBaseObjectDX::~TBaseObjectDX()
   Done();
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj,const D3DXVECTOR3* mCamera)
+void TBaseObjectDX::Draw(D3DXMATRIXA16* mView)
 {          
   if(flgShow==false) return;
+
+  // назначить шейдерный стек
+  SetupShaderStackModelDX();
 
   mModel->Draw(&mState,             //                       (От ObjectDX)
                &mMask,
                &mVectorMatrix,//кол-во совпадает с cSubset       (От ObjectDX)
                &mWorld,// где и как расположен объект        (От ObjectDX)
-               mView, // расположение и ориентация камеры    (от ManagerDirectX)
-               mProj,
-               mCamera);
+               mAlphaTransparency,
+               mView );// расположение и ориентация камеры    (от ManagerDirectX)
 }
 //------------------------------------------------------------------------------------------------
 void TBaseObjectDX::SetModel(TModelDX* pModel)
@@ -77,6 +80,8 @@ void TBaseObjectDX::SetModel(TModelDX* pModel)
   SetupVectorNamePart();
   SetupVectorOrderPart();
   SetupDefaultMapUse();
+
+  EventSetModelDX();
 }
 //------------------------------------------------------------------------------------------------
 TModelDX* TBaseObjectDX::GetModel()

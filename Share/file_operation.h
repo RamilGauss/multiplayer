@@ -37,6 +37,13 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef FILE_OPERATIONH
 #define FILE_OPERATIONH
 
+#include <string>
+
+
 extern bool FindAbsPath(char* sRelativePath, char* sAbsPath,int lenAbs);
+
+extern void UpPath(char* path);
+
+extern bool GetCurrentPath(std::string &sPath);
 
 #endif

@@ -114,7 +114,7 @@ void TManagerObjectCommonClient::Work()
       mLastTimeFreshData = ht_GetMSCount();
     }
 
-    mMDX_Scene.Work(time_ms);
+    mMDX_Scene->Work(time_ms);
   }
 }
 //--------------------------------------------------------------------

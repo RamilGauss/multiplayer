@@ -68,7 +68,6 @@ public:
     D3DXVECTOR3 vSpecular;
 
     int   nShininess;
-    float fAlpha;
 
     bool bSpecular;
 
@@ -84,8 +83,6 @@ public:
       vSpecular = D3DXVECTOR3(0,0,0);
 
       nShininess = 0;
-      fAlpha     = 0.0f;
-
       bSpecular  = false;
 
       mTypeLOD   = 0;
@@ -128,7 +125,7 @@ protected:
 protected:
 
   char pStrPathShader[MAX_PATH];
-
+  char pStrPathTexture[MAX_PATH];
   char pStrFilenameData[MAX_PATH];
   char pStrPathPrimitive[MAX_PATH];
   char pStrFilenameDataMain[MAX_PATH];

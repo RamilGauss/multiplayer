@@ -1,0 +1,104 @@
+<root>
+	<automat>
+		<comment>Graphic engine</comment>
+		<default_state>0</default_state>
+		<state>
+			<comment>Camera free</comment>		
+			<set>
+				<desc>
+					<value>key_release</value>
+					<param>v</param>
+				</desc>
+				<key>0</key>
+			</set>
+			<event>
+				<desc>
+					<value>mouse_move</value>
+				</desc>
+				<key>2</key>
+				<comment>Camera rotate2XY</comment>
+			</event>
+			<event>
+				<desc>
+					<value>key_press</value>
+					<param>w</param>
+				</desc>
+				<key>3</key>
+				<comment>Camera forward</comment>
+			</event>
+			<event>
+				<desc>
+					<value>key_repeat</value>
+					<param>w</param>
+				</desc>
+				<key>3</key>
+				<comment>Camera forward</comment>
+			</event>
+			<event>
+				<desc>
+					<value>key_press</value>
+					<param>s</param>
+				</desc>
+				<key>4</key>
+				<comment>Camera backward</comment>
+			</event>
+			<event>
+				<desc>
+					<value>key_repeat</value>
+					<param>s</param>
+				</desc>
+				<key>4</key>
+				<comment>Camera backward</comment>
+			</event>
+			<event>
+				<desc>
+					<value>key_press</value>
+					<param>a</param>
+				</desc>
+				<key>5</key>
+				<comment>Camera left</comment>
+			</event>
+			<event>
+				<desc>
+					<value>key_repeat</value>
+					<param>a</param>
+				</desc>
+				<key>5</key>
+				<comment>Camera left</comment>
+			</event>
+			<event>
+				<desc>
+					<value>key_press</value>
+					<param>d</param>
+				</desc>
+				<key>6</key>
+				<comment>Camera right</comment>
+			</event>
+			<event>
+				<desc>
+					<value>key_repeat</value>
+					<param>d</param>
+				</desc>
+				<key>6</key>
+				<comment>Camera right</comment>
+			</event>
+		</state>			
+		<state>
+			<comment>Camera bind object coord</comment>				
+			<set>
+				<desc>
+					<value>key_release</value>
+					<param>v</param>
+				</desc>
+				<key>1</key>
+			</set>
+			<event>
+				<desc>
+					<value>mouse_move</value>
+				</desc>
+				<key>2</key>
+				<comment>Camera rotate2XY</comment>
+			</event>
+		</state>
+	</automat>		
+</root>

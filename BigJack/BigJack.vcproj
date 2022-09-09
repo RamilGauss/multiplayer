@@ -155,11 +155,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BigJack.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DXUT_Class.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\EffectDX.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ExecShaderStack.cpp"
 				>
 			</File>
 			<File
@@ -175,7 +183,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ManagerDirectX.cpp"
+				RelativePath=".\MakerGraphicEngine.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerEffect.cpp"
 				>
 			</File>
 			<File
@@ -188,6 +200,10 @@
 			</File>
 			<File
 				RelativePath=".\ManagerShader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerTexture.cpp"
 				>
 			</File>
 			<File
@@ -210,6 +226,10 @@
 				RelativePath=".\ShaderStack.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\ViewerFPS.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -218,6 +238,10 @@
 			>
 			<File
 				RelativePath=".\BaseObjectDX.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BigJack.h"
 				>
 			</File>
 			<File
@@ -233,7 +257,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ExecShaderStack.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IDirectX_Realize.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IGraphicEngine.h"
 				>
 			</File>
 			<File
@@ -249,15 +281,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MakerGraphicEngine.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MakerLoaderModelDX.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ManagerDirectX.h"
+				RelativePath=".\ManagerEffect.h"
 				>
 			</File>
 			<File
 				RelativePath=".\ManagerModelDX.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerResource.h"
 				>
 			</File>
 			<File
@@ -266,6 +306,10 @@
 			</File>
 			<File
 				RelativePath=".\ManagerShader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerTexture.h"
 				>
 			</File>
 			<File
@@ -290,6 +334,10 @@
 			</File>
 			<File
 				RelativePath=".\SoundDX.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ViewerFPS.h"
 				>
 			</File>
 		</Filter>

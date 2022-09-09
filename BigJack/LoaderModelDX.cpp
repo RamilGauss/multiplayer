@@ -41,6 +41,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "MakerXML.h"
 
 const char* sPathShader = "\\shader";
+const char* sPathTexture = "\\texture";
 const char* sPathMainFileConfig = "\\main.xml";
 
 const char* SectionLOD = "lod";
@@ -55,7 +56,6 @@ const char* SectionAmbient    = "vAmbient";
 const char* SectionDiffuse    = "vDiffuse";
 const char* SectionSpecular   = "vSpecular";
 const char* SectionShininess  = "nShininess";
-const char* SectionAlpha      = "fAlpha";
 const char* SectionbSpecular  = "bSpecular";
 const char* SectionTypeLOD    = "mTypeLOD";
 const char* SectionflgNormal  = "mflgNormal";
@@ -94,6 +94,14 @@ bool TLoaderModelDX::Load(LPCWSTR strFilenameData)
   UpPath(&pStrFilenameData[0]);
   strcpy(pStrFilenameDataMain,pStrFilenameData);
   strcat(pStrFilenameDataMain,sPathMainFileConfig);
+
+  strcpy(pStrPathTexture,W2A(strFilenameData));
+  UpPath(&pStrPathTexture[0]);
+  UpPath(&pStrPathTexture[0]);
+  UpPath(&pStrPathTexture[0]);
+  UpPath(&pStrPathTexture[0]);
+  strcat(pStrPathTexture,sPathTexture);
+
   if(LoadMainFile()==false) 
   {
     GlobalLoggerDX.WriteF_time("Ќе удалось загрузить ресурсы дл€ модели.\n");
@@ -150,7 +158,7 @@ bool TLoaderModelDX::LoadPart(int i)
   if(str.length())
   {
     USES_CONVERSION;
-    mVectorGroup[i]->strTexture = A2W(pStrFilenameData);
+    mVectorGroup[i]->strTexture = A2W(pStrPathTexture);
     mVectorGroup[i]->strTexture += L"\\";
     mVectorGroup[i]->strTexture += A2W(str.data());
   }
@@ -176,11 +184,8 @@ bool TLoaderModelDX::LoadPart(int i)
     return false;
   //------------------------------------------------------------
   int val;
-  float fval;
   if(mXML->ReadInt(SectionShininess,0,val)==false) return false;
   mVectorGroup[i]->nShininess = val;
-  if(mXML->ReadFloat(SectionAlpha,0,fval)==false) return false;
-  mVectorGroup[i]->fAlpha     = fval;
   if(mXML->ReadInt(SectionbSpecular,0,val)==false) return false;
   mVectorGroup[i]->bSpecular  = bool(val);
   if(mXML->ReadInt(SectionTypeLOD,0,val)==false) return false;

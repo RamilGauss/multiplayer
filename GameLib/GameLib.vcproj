@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="TanksLib"
-	ProjectGUID="{187CFE85-D0F7-4E23-9216-24CFDB66EB60}"
+	Name="GameLib"
+	ProjectGUID="{C2F9A0C7-F615-4159-96C2-1D8E44499317}"
 	RootNamespace="TankInterpretatorPrediction"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\BigJack;..\Robert;.\;..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;..\DXUT\Optional;..\DXUT\Core"
+				AdditionalIncludeDirectories="..\BigJack;..\Robert;.\;..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;..\DXUT\Optional;..\DXUT\Core;..\QBaseLib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -155,6 +155,30 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Camera.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ControlCamera.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ControlEventWinApiGE.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ControlEventWinApiGUI.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ControlEventWinApiNET.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IControlEventWinApi.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\InterpretatorPredictionTank.cpp"
 				>
 			</File>
@@ -164,6 +188,10 @@
 			</File>
 			<File
 				RelativePath=".\MakerObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerEventWinApi.cpp"
 				>
 			</File>
 			<File
@@ -189,6 +217,34 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Camera.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ControlCamera.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ControlEventWinApiGE.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ControlEventWinApiGUI.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ControlEventWinApiNET.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EventWinApi.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IControlEventWinApi.h"
+				>
+			</File>
+			<File
 				RelativePath=".\InterpretatorPredictionTank.h"
 				>
 			</File>
@@ -198,6 +254,10 @@
 			</File>
 			<File
 				RelativePath=".\MakerObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerEventWinApi.h"
 				>
 			</File>
 			<File

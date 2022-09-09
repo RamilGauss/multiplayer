@@ -67,6 +67,8 @@ public:
   virtual bool RemoveSection(const char* name, int num) = 0;
 
   // изменение содержимого
+  virtual bool AddXMLDeclaration(const char* strDecl) = 0;
+
   virtual bool WriteSectionAttr(const char* name, int num, const char* nameAttr, std::string buffer) = 0;
   virtual bool WriteSection(const char* name, int num, std::string buffer) = 0;
   // чтение

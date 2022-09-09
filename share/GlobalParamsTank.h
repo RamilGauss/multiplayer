@@ -39,8 +39,8 @@ you may contact in writing [ramil2085@gmail.com].
 
 #define ServerLocalPort 4321
 
-#define VERSION_PROGRAMM ((unsigned short)50) 
-#define VERSION_EDITOR   ((unsigned short)18)
+#define VERSION_PROGRAMM ((unsigned short)55) 
+#define VERSION_EDITOR   ((unsigned short)23)
 #define VERSION_CONVERTER_MESH   ((unsigned short)1000)
 //-------------------------------------------------------------------------------------------
 extern char strVersionClient[100];

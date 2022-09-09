@@ -38,6 +38,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "qwindowdefs_win.h"
 #include <wtypes.h>
 
+#define USE_QT_WIN_API 0
+
 typedef LRESULT (*DeclQtWndProc)(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 static DeclQtWndProc QtWndProc = NULL;
@@ -58,7 +60,9 @@ bool TFilterWinApi::WinApiEvent(void* phWnd, void* puMsg, void* pwParam, void* p
     //case WM_PAINT:
       //break;
     default:
-      //result = QtWndProc(hWnd,uMsg,wParam,lParam);
+#if USE_QT_WIN_API
+      result = QtWndProc(hWnd,uMsg,wParam,lParam);
+#endif
       ;
   }
 

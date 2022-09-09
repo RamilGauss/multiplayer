@@ -44,6 +44,7 @@ TSaveOnHDD GlobalLoggerForm; // GameForm
 char* sNick;
 void InitLogger(TSaveOnHDD& saver, char* sName)
 {
+  if(saver.IsOpen()) return;
   char nameLogFile[260];
   sprintf(nameLogFile,".\\%s%s.log",sName,sNick);
   saver.ReOpen(nameLogFile);

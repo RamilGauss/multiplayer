@@ -49,6 +49,7 @@ using namespace std;
 
 TManagerModelDX::TManagerModelDX()
 {
+  mManagerResourceDX = NULL;
   mD3dDevice = NULL;
   LoadListPath();
 }
@@ -66,7 +67,7 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
   TModelDX* pModel = NULL;
   if(sPath.length())
   {
-    pModel = new TModelDX();
+    pModel = new TModelDX(mManagerResourceDX);
     pModel->SetID(id);
     USES_CONVERSION;
     if(pModel->Init(mD3dDevice,A2W(sPath.data()))==false)

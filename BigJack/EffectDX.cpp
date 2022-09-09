@@ -55,8 +55,9 @@ TEffectDX::TEffectDX()
   hTexture = NULL;
   hTime = NULL;
   hWorld = NULL;
-  hWorldViewProjection = NULL;
-}
+  hProjection = NULL;
+  hView = NULL;
+} 
 //-----------------------------------------------------------
 TEffectDX::~TEffectDX()
 {
@@ -65,7 +66,6 @@ TEffectDX::~TEffectDX()
 //-----------------------------------------------------------
 void TEffectDX::Init()
 {
-  HRESULT hr;
   // Cache the effect handles
   hAmbient = p->GetParameterBySemantic( 0, "Ambient" );
   hDiffuse = p->GetParameterBySemantic( 0, "Diffuse" );
@@ -78,33 +78,20 @@ void TEffectDX::Init()
   hTexture = p->GetParameterBySemantic( 0, "Texture" );
   hTime = p->GetParameterBySemantic( 0, "Time" );
   hWorld = p->GetParameterBySemantic( 0, "World" );
-  hWorldViewProjection = p->GetParameterBySemantic( 0, "WorldViewProjection" );
+  hView = p->GetParameterBySemantic( 0, "View" );
+  hProjection = p->GetParameterBySemantic( 0, "Proj" );
 
-  V( p->SetValue(     hAmbient,       mMaterial.vAmbient, sizeof( D3DXVECTOR3 ) ) );
-  V( p->SetValue(     hDiffuse,       mMaterial.vDiffuse, sizeof( D3DXVECTOR3 ) ) );
-  V( p->SetValue(     hSpecular,      mMaterial.vSpecular, sizeof( D3DXVECTOR3 ) ) );
-  V( p->SetFloat(     hOpacity,       mMaterial.fAlpha ) );
-  V( p->SetInt(       hSpecularPower, mMaterial.nShininess ) );
+  //V( p->SetValue(     hAmbient,       mMaterial.vAmbient, sizeof( D3DXVECTOR3 ) ) );
+  //V( p->SetValue(     hDiffuse,       mMaterial.vDiffuse, sizeof( D3DXVECTOR3 ) ) );
+  //V( p->SetValue(     hSpecular,      mMaterial.vSpecular, sizeof( D3DXVECTOR3 ) ) );
+  //V( p->SetFloat(     hOpacity,       mMaterial.fAlpha ) );
+  //V( p->SetInt(       hSpecularPower, mMaterial.nShininess ) );
 }
 //-----------------------------------------------------------
 HRESULT TEffectDX::SetMatrixWorld(D3DXMATRIXA16* matrix)
 {
   HRESULT hr;
   V_RETURN(p->SetMatrix(hWorld,matrix));
-  return S_OK;
-}
-//-----------------------------------------------------------
-HRESULT TEffectDX::SetMatrixWorldViewProjection(D3DXMATRIXA16* matrix)
-{
-  HRESULT hr;
-  V_RETURN(p->SetMatrix(hWorldViewProjection,matrix));
-  return S_OK;
-}
-//-----------------------------------------------------------
-HRESULT TEffectDX::SetCameraPosition(const D3DXVECTOR3* camera_pos)
-{
-  HRESULT hr;
-  V_RETURN(p->SetValue(hCameraPosition,camera_pos, sizeof( D3DXVECTOR3 )));
   return S_OK;
 }
 //-----------------------------------------------------------
@@ -148,24 +135,33 @@ void TEffectDX::Destroy()
 //-----------------------------------------------------------
 void TEffectDX::LostDevice()
 {
-  HRESULT hr;
-  V(p->OnLostDevice());
+  //HRESULT hr;
+  //### V(p->OnLostDevice());
 }
 //-----------------------------------------------------------
 void TEffectDX::ResetDevice()
 {
   HRESULT hr;
-  V(p->OnResetDevice());
+  //### V(p->OnResetDevice());
 
   // загрузка техники исполнения в шейдере
   mMaterial.hTechnique = p->GetTechniqueByName( mMaterial.strTechnique.data() );
   V( p->SetTechnique( mMaterial.hTechnique ) );
 }
 //-----------------------------------------------------------
-HRESULT TEffectDX::SetTexture()
+void TEffectDX::SetInnerShaderParam()
 {
   HRESULT hr;
-  V_RETURN( p->SetTexture( hTexture, mMaterial.pTexture ) );
-  return S_OK;
+  V( p->SetValue(     hAmbient,       mMaterial.vAmbient, sizeof( D3DXVECTOR3 ) ) );
+  V( p->SetValue(     hDiffuse,       mMaterial.vDiffuse, sizeof( D3DXVECTOR3 ) ) );
+  V( p->SetValue(     hSpecular,      mMaterial.vSpecular, sizeof( D3DXVECTOR3 ) ) );
+  V( p->SetFloat(     hOpacity,       mMaterial.fAlpha ) );
+  V( p->SetInt(       hSpecularPower, mMaterial.nShininess ) );
+  V( p->SetTexture(   hTexture,       mMaterial.pTexture ) );
+}
+//-----------------------------------------------------------
+void TEffectDX::GetAlphaTransparency(float alphaTransparency)
+{
+  mMaterial.fAlpha = alphaTransparency;
 }
 //-----------------------------------------------------------

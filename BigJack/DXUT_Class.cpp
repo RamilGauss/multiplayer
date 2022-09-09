@@ -34,7 +34,7 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 #include "DXUT_Class.h"
-#include "ManagerDirectX.h"
+#include "BigJack.h"
 
 using namespace std;
 
@@ -219,7 +219,7 @@ void TDXUT::OnDestroyDevice( void* pUserContext )
   flgWasDestroyEvent = true;
 }
 //--------------------------------------------------------------------------------------
-TDXUT::TDXUT( TManagerDirectX * _pMDX )
+TDXUT::TDXUT( TBigJack * _pMDX )
 : IDirectX_Realize(_pMDX)
 {
   pDXUT_Realize = this;
@@ -290,5 +290,10 @@ std::string TDXUT::GetError()
 {
   //DXUTGetErr
   return string();
+}
+//--------------------------------------------------------------------------------------
+float TDXUT::GetFPS()
+{
+  return DXUTGetFPS();
 }
 //--------------------------------------------------------------------------------------

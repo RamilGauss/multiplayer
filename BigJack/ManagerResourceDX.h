@@ -36,20 +36,36 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef ManagerResourceDXH
 #define ManagerResourceDXH
 
+#include "ManagerEffect.h"
+#include "ManagerTexture.h"
+
 
 class TManagerResourceDX
 {
 
-  //TManagerEffect mManagerEffect;
-  //TManagerTexture mManagerTexture;
+  TManagerEffect  mManagerEffect;// хранение и загрузка шейдеров
+  TManagerTexture mManagerTexture;
 
 public:
   TManagerResourceDX();
   ~TManagerResourceDX();
 
+  enum{eTypeShader  = 0, 
+       eTypeTexture = 1,
+  };
+  void Setup(IDirect3DDevice9* pd3dDevice);
+  // настроить шейдеры движка
 
+  bool Set(int type, void* bufferIn);
 
+  void* Load(const wchar_t* sPath);
 
+  void Reset();
+  void Lost();
+  void Destroy();
+
+protected:
+  int FindExt(const wchar_t* sPath);
 };
 
 

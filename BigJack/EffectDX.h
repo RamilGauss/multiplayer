@@ -61,7 +61,8 @@ class TEffectDX
   D3DXHANDLE  hTexture;
   D3DXHANDLE  hTime;
   D3DXHANDLE  hWorld;
-  D3DXHANDLE  hWorldViewProjection;
+  D3DXHANDLE  hProjection;
+  D3DXHANDLE  hView;
   //----------------------------------------------------------------------------------------
 
 public:
@@ -105,18 +106,16 @@ public:
 #pragma pack(pop)
   TEffectDX();
   ~TEffectDX();
-
-  D3DXMATRIXA16* GetBlendMatrixByName(char* sNamePart);
+  
+  void SetInnerShaderParam();
+  void GetAlphaTransparency(float alphaTransparency);
 
   void Init();
   void Destroy();
   void LostDevice();
   void ResetDevice();
 
-  HRESULT SetTexture();
   HRESULT SetMatrixWorld(D3DXMATRIXA16* matrix);
-  HRESULT SetMatrixWorldViewProjection(D3DXMATRIXA16* matrix);
-  HRESULT SetCameraPosition(const D3DXVECTOR3* camera_pos);
   HRESULT Begin(UINT* cPasses , DWORD flag);
   HRESULT BeginPass(UINT iPass);
   HRESULT EndPass();

@@ -33,32 +33,38 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef TankTowerH
-#define TankTowerH
 
-#include "Tank.h"
+#ifndef ViewerFPSH
+#define ViewerFPSH
 
+#include "DXUT.h"
 
-class TTankTower : public TTank
+class TViewerFPS
 {
+  IDirect3DDevice9* mpd3dDevice;
+  ID3DXFont*        pFont;
+  ID3DXSprite*      pTextSprite;
+
+  bool bShow;
+
 public:
-  TTankTower();
-  virtual ~TTankTower();
+  
+  TViewerFPS();
+  ~TViewerFPS();
 
-  virtual bool GetMirror(char ** pData,int &size);
-  virtual void SetMirror(char *pData,int size);
+  HRESULT CreateDevice(IDirect3DDevice9* pd3dDevice);
+  HRESULT Reset();
+  HRESULT Lost();
+  HRESULT Destroy();
 
-  virtual void SetHuman(char* pData, int size);
+  void Show();
+  void Hide();
 
-  virtual bool Animate(guint32 time_ms);
+  void SetPos();
 
+  void Render(float FPS);
 protected:
-  // debug only
-  void RotateTurret(float ugol);
-  void RotateVerticalGun(float ugol);
-
-
+  HRESULT SetupFont();
 };
-
 
 #endif

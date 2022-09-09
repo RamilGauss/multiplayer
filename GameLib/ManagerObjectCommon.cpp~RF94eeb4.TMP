@@ -33,6 +33,7 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "IGraphicEngine.h"
 #include "ManagerObjectCommon.h"
 #include <stddef.h>
 #include "Logger.h"
@@ -40,6 +41,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "namespace_ID_BEHAVIOR.h"
 #include "HiTimer.h"
 #include "BaseObjectCommon.h"
+#include "MakerGraphicEngine.h"
+#include "MakerCamera.h"
 
 
 TManagerObjectCommon* pMOC = NULL;
@@ -77,16 +80,25 @@ TManagerObjectCommon::TManagerObjectCommon()
   mLastTimeFreshData       = 0;
 
   pMOC = this;
-  mMDX_Scene.Register(CallBackMsg,TManagerDirectX::eTypeMsg);
-  mMDX_Scene.Register(CallBackFrameMove,TManagerDirectX::eTypeFrameMove);
+  TMakerGraphicEngine makerScene;
+  mMDX_Scene = makerScene.New();
+  TMakerCamera makerCamera;
+  mCamera = makerCamera.new();
+  mMDX_Scene->Register(CallBackMsg,IGraphicEngine::eTypeMsg);
+  mMDX_Scene->Register(CallBackFrameMove,IGraphicEngine::eTypeFrameMove);
 }
 //--------------------------------------------------------------------
 TManagerObjectCommon::~TManagerObjectCommon()
 {
   pMOC = this;
-  mMDX_Scene.Unregister(CallBackMsg,TManagerDirectX::eTypeMsg);
-  mMDX_Scene.Unregister(CallBackFrameMove,TManagerDirectX::eTypeFrameMove);
+  mMDX_Scene->Unregister(CallBackMsg,IGraphicEngine::eTypeMsg);
+  mMDX_Scene->Unregister(CallBackFrameMove,IGraphicEngine::eTypeFrameMove);
   Done();
+
+  delete mMDX_Scene;
+  mMDX_Scene = NULL;
+  delete mCamera;
+  mCamera = NULL;
 }
 //--------------------------------------------------------------------
 void* Thread(void* p)
@@ -146,7 +158,7 @@ bool TManagerObjectCommon::IsLoadMap(unsigned char* procent)
 void TManagerObjectCommon::AddObject(TBaseObjectCommon* pObject)
 {
   mVectorObject.push_back(pObject);
-  mMDX_Scene.AddObject(pObject);
+  mMDX_Scene->AddObject(pObject);
   mPrediction.AddObject(pObject);
 }
 //--------------------------------------------------------------------
@@ -165,7 +177,7 @@ void TManagerObjectCommon::AddFromLoaderObjectInMDX()
   int cnt = mVectorObject.size();
   for(int i = 0 ; i < cnt ; i++ )
   {
-    mMDX_Scene.AddObject((TBaseObjectDX*)mVectorObject[i]);
+    mMDX_Scene->AddObject((TBaseObjectDX*)mVectorObject[i]);
   }
 }
 //--------------------------------------------------------------------
@@ -180,7 +192,7 @@ void TManagerObjectCommon::AddFromLoaderObjectInPrediction()
 //--------------------------------------------------------------------
 void TManagerObjectCommon::Done()
 {
-  mMDX_Scene.Done();// отцепиться от WinApi и DirectX
+  mMDX_Scene->Done();// отцепиться от WinApi и DirectX
   ClearSceneVectorObject();
   ClearProgressBarVectorObject();
 }
@@ -188,7 +200,7 @@ void TManagerObjectCommon::Done()
 void TManagerObjectCommon::ClearSceneVectorObject()
 {
   mPrediction.Clear();
-  mMDX_Scene.Clear();
+  mMDX_Scene->Clear();
   int cnt = mVectorObject.size();
   for(int i = 0 ; i < cnt ; i++ )
   {
@@ -210,7 +222,7 @@ void TManagerObjectCommon::Fresh()
 void TManagerObjectCommon::SetCameraDelta(int x, int y)
 {
 
-  //mMDX_Scene.SetViewParams();
+  //mMDX_Scene->SetViewParams();
 }
 //--------------------------------------------------------------------
 TBaseObjectCommon* TManagerObjectCommon::Get(int index)
@@ -229,7 +241,7 @@ void TManagerObjectCommon::SetEffect(unsigned int id_effect, // номер эффекта
                D3DVECTOR& orient,    // ориентация эффекта
                guint32 time_past ) // прошло времени, мс
 {
-  mMDX_Scene.SetEffect(id_effect,coord,orient,time_past);
+  mMDX_Scene->SetEffect(id_effect,coord,orient,time_past);
 }
 //--------------------------------------------------------------
 void TManagerObjectCommon::EndLoadMap()
@@ -247,7 +259,7 @@ void TManagerObjectCommon::StopLoadMap()// синхронно, придется подождать маленьк
 //--------------------------------------------------------------  
 void TManagerObjectCommon::Init(HWND hwnd)
 {
-  mMDX_Scene.Init(hwnd);
+  mMDX_Scene->Init(hwnd);
 }
 //--------------------------------------------------------------  
 //void TGameForm::keyPressEvent( QKeyEvent * event )

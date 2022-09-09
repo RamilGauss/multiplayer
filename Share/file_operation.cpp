@@ -34,13 +34,39 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 #include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
+#include <string>
+#include <windows.h>
 
+using namespace std;
 
+//--------------------------------------------------------------------------------
 bool FindAbsPath(char* sRelativePath, char* sAbsPath, int lenAbs)
 {
   char* p = _fullpath( sAbsPath, sRelativePath, lenAbs);
 
   return p!=NULL;
 }
+//--------------------------------------------------------------------------------
+void UpPath(char* path)
+{
+  int cnt = strlen(path);
+  for(int i = cnt-1 ; i > 0 ; i--)
+    if((path[i]=='\\')|| 
+       (path[i]=='\\'))
+    {
+      path[i]='\0';
+      return;
+    }
+}
+//--------------------------------------------------------------------------------
+bool GetCurrentPath(string &sPath)
+{
+  char s[400];
+  DWORD ret = GetCurrentDirectory(sizeof(s)-1,s);
+  if(ret==0) return false;
 
+  sPath = s;
+  return true;
+}
+//--------------------------------------------------------------------------------

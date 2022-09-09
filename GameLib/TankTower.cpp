@@ -35,19 +35,22 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "TankTower.h"
 #include "HiTimer.h"
+#include "BL_Debug.h"
 
 using namespace std;
 
+const char* NameTrackR = "TrackR";
+const char* NameTrackL = "TrackL";
+
+const char* ParamTime = "Time";
+const char* ParamaVelocity = "Velocity";
 
 TTankTower::TTankTower()
 {
-  //mVectorOrderPart.push_back("Hull");
-  //mVectorOrderPart.push_back("Turret");
-  //mVectorOrderPart.push_back("Gun");
-  //mVectorOrderPart.push_back("ChassisR");
-  //mVectorOrderPart.push_back("ChassisL");
-  //mVectorOrderPart.push_back("TrackR");
-  //mVectorOrderPart.push_back("TrackL");
+  mIndexTrackR = 0;
+  mIndexTrackL = 0;
+  mIndexTime = 0;
+  mIndexVelocity = 0;
 }
 //------------------------------------------------------------------------
 TTankTower::~TTankTower()
@@ -98,3 +101,40 @@ void TTankTower::SetHuman(char* pData, int size)
   
 }
 //------------------------------------------------------------------------
+void TTankTower::SetupShaderStackModelDX()
+{
+  float time_ms = (float)ht_GetMSCount(); 
+  time_ms /= 1000.0f;
+
+  mModel->SetShaderStackMask(&mShaderStackMask);// настроить маску
+  // настроить сам шейдерный стек
+  TShaderStack* pSS = mModel->GetShaderStack(mIndexTrackL);
+  pSS->SetData(mIndexTime,    &time_ms,sizeof(time_ms));// что R что L - тот же самый шейдер
+  pSS->SetData(mIndexVelocity,&mV,     sizeof(mV));
+  pSS = mModel->GetShaderStack(mIndexTrackR);
+  pSS->SetData(mIndexTime,    &time_ms,sizeof(time_ms));// что R что L - тот же самый шейдер
+  pSS->SetData(mIndexVelocity,&mV,     sizeof(mV));
+}
+//------------------------------------------------------------------------------------------------
+void TTankTower::EventSetModelDX()
+{
+  int cnt = mVectorNamePart.size();
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    if(mVectorNamePart.at(i).name.compare(NameTrackR)==0)
+      mIndexTrackR = i;
+    if(mVectorNamePart.at(i).name.compare(NameTrackL)==0)
+      mIndexTrackL = i;
+  }
+  //-----------------------------------------------------
+  TShaderStack* pSS = mModel->GetShaderStack(mIndexTrackR);
+  mIndexTime        = pSS->GetIndexByName(ParamTime);
+  mIndexVelocity    = pSS->GetIndexByName(ParamaVelocity);
+
+  cnt  = mVectorNamePart.size();
+  for( int i = 0 ; i < cnt ; i++)
+    mShaderStackMask.push_back(0);
+  mShaderStackMask.at(mIndexTrackR) = 1;
+  mShaderStackMask.at(mIndexTrackL) = 1;
+}
+//------------------------------------------------------------------------------------------------

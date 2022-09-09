@@ -39,21 +39,23 @@ you may contact in writing [ramil2085@gmail.com].
 #include "DXUT.h"
 #include <string>
 
-class TManagerDirectX;
+class TBigJack;
 
 class IDirectX_Realize
 {
 protected:
 
-  TManagerDirectX * pMDX;
+  TBigJack * pMDX;
 
 public:
-  IDirectX_Realize(TManagerDirectX* _pMDX){pMDX = _pMDX;}
+  IDirectX_Realize(TBigJack* _pMDX){pMDX = _pMDX;}
   virtual ~IDirectX_Realize(){};
 
   virtual HRESULT Init(HWND hwnd = NULL ) = 0;
   virtual void Work() = 0;
   virtual int Done()  = 0;
+
+  virtual float GetFPS() = 0;
 
 protected:
 };

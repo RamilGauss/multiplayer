@@ -39,11 +39,11 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "CallBackRegistrator.h"
 #include "UdpDevice.h"
-#include "List.h"
 #include "glib/gthread.h"
 #include "TransportProtocolPacket.h"
 #include "hArray.h"
 #include "GCS.h"
+#include "BL_Debug.h"
 
 // Melissa - транспорт
 class TTransportProtocol
@@ -69,7 +69,7 @@ class TTransportProtocol
 	bool flgActive;
 	bool flgNeedStop;
 
-	enum{eSizeBuffer     = 8096,
+	enum{eSizeBuffer     = 65535,
        eCntTry         = 15,
        eTimeLivePacket = 60,// мс
 			 eTimeout        = 60,// мс
@@ -103,6 +103,8 @@ public:
 
 	void write(InfoData* data, bool check = true);
 	// чтение - зарегистрируйся
+  void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type);
+  void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type);
 
 	void start();
 	void stop();
@@ -114,10 +116,6 @@ public:
   bool synchro(unsigned int ip, unsigned short port); // вызов только для клиента
 protected:
   bool SendSynchro(unsigned int ip, unsigned short port, int cntTry);
-
-public:
-  void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type);
-  void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type);
 
 protected:
   void notifyRcvPacket(void * data,int size){mCallBackRecvPacket.Notify(data,size);};
@@ -233,9 +231,9 @@ protected:
   };
 
   // пакеты, ожидающие квитанцию
-	/*TList<TDefPacket>*/ TArrayObject mArrWaitCheck;
+	TArrayObject mArrWaitCheck;
   // пакеты, ожидающие отправку
-  /*TList<TDefPacket>*/ TArrayObject mArrWaitSend;
+  TArrayObject mArrWaitSend;
 	
 	void* FindInList();
 

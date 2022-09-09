@@ -47,22 +47,29 @@ you may contact in writing [ramil2085@gmail.com].
 #include <d3d9types.h>
 #include <vector>
 #include <map>
+#include "ShaderStack.h"
+#include "ExecShaderStack.h"
 
-class TManagerModelDX;
+class TManagerResourceDX;
 
 class TModelDX : public TObject
 {
 protected:
+
+  TManagerResourceDX* mManagerResourceDX;
 
   IDirect3DDevice9* m_pd3dDevice;    // Direct3D Device object associated with this mesh
 
   // задаст ManagerModelDX
   unsigned int mID; // уникальный для моделей
 
+  std::vector<TShaderStack*> mVectorShaderStack;
+  std::vector<int>           mVectorShaderStackMask;
+  TExecShaderStack           mExecSS;
 
 public:
   
-  TModelDX();
+  TModelDX(TManagerResourceDX* managerResourceDX);
   ~TModelDX();
   unsigned int GetID(){return mID;}
   void SetID(unsigned int id){mID=id;}
@@ -77,10 +84,10 @@ public:
   void TModelDX::Draw(std::vector<unsigned char>* state, //                           (От ObjectDX)
                       std::vector<unsigned char>* mask,  //                           (От ObjectDX)
                       std::vector<D3DXMATRIXA16*>* matrix,//кол-во совпадает с cSubset (От ObjectDX)
-                      D3DXMATRIXA16* mWorld,// где и как расположен объект         (От ObjectDX)
-                      D3DXMATRIXA16* mView, // расположение и ориентация камеры    (от ManagerDirectX)
-                      D3DXMATRIXA16* mProj, // проецирование на плоскость экрана  (от ManagerDirectX)
-                      const D3DXVECTOR3* mCamera);
+                      D3DXMATRIXA16* mWorld,    // где и как расположен объект         (От ObjectDX)
+                      float alphaTransparency,  // прозрачность                        (От ObjectDX)
+                      D3DXMATRIXA16* mView); // расположение и ориентация камеры    (от ManagerDirectX)
+
   bool Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath);
   void Destroy();
   void LostDevice();
@@ -91,13 +98,17 @@ public:
   const char* GetNameByIndex(int index);
   int GetNumUseByIndex(int index);
 
-protected:
+  
+  void SetShaderStackMask(std::vector<int>* pVectorMask);// по этой маске настраиваются шейдеры эффектов
+  TShaderStack* GetShaderStack(int index);// взять стек для настройки
 
+protected:
+  void Done();
   //---------------------------------------------------------
   void SetupVectorLOD();
   bool AddEffectDX(ILoaderModelDX::TDefGroup* pDefGroup);
   float GetDist(D3DXMATRIXA16* mWorld, D3DXMATRIXA16* mView);
-  void Draw(TEffectDX* pEffect,D3DXMATRIXA16& mWorldViewProjection,const D3DXVECTOR3* mCamera);
+  void Draw(TEffectDX* pEffect);
 
   virtual bool Load(LPCWSTR strFilenameData);
   //---------------------------------------------------------
@@ -125,15 +136,13 @@ protected:
 
 
   // для оптимизации загрузки, чтобы исключить повторную загрузку текстур
-  std::map<std::wstring, IDirect3DTexture9*> mMapPathTexture;
-  void LoadTexture(TEffectDX::Material* pMaterial);
-  void ReleaseTexture();
-  
-  std::map<std::wstring, ID3DXEffect*> mMapPathEffect;
+  void LoadTexture(TEffectDX* pEffectDX);
   void LoadEffect(TEffectDX* pEffectDX);
-  void ReleaseEffect();
 
 
+  void SetupShaderStack();
+  void SetShaderStack(TEffectDX* pEffect,int index);
+  void AddShaderStack(ID3DXEffect* p);
 };
 //-----------------------------------------------------------------
 

@@ -37,13 +37,12 @@ you may contact in writing [ramil2085@gmail.com].
 #include <cmath>
 
 #include "DXUT.h"
-#include "ManagerDirectX.h"
+#include "BigJack.h"
 #include "HiTimer.h"
 #include "Logger.h"
 #include "BaseObjectDX.h"
 #include "BL_Debug.h"
 #include "SDKmisc.h"
-
 
 
 #define LOG_DX
@@ -54,57 +53,63 @@ using namespace nsStruct3D;
 
 #pragma warning(disable: 4355)
 
-TManagerDirectX::TManagerDirectX(): mDXUT(this)
+TBigJack::TBigJack(): mDXUT(this)
 {
   mTime_ms = 0;
+
+  mManagerModelDX.SetManagerResourceDX(&mManagerResourceDX);
+
+  mIndexView           = 
+    mMainShaderStack.Push("View",(void*)mCamera.GetViewMatrix(),     sizeof(D3DXMATRIXA16));
+  mIndexProj           = 
+    mMainShaderStack.Push("Proj",(void*)mCamera.GetProjMatrix(),     sizeof(D3DXMATRIXA16));
+  mIndexCameraPosition = 
+    mMainShaderStack.Push("CameraPosition",(void*)mCamera.GetEyePt(),sizeof(D3DXMATRIXA16));
 }
 //--------------------------------------------------------------------------------------------------------
-TManagerDirectX::~TManagerDirectX()
+TBigJack::~TBigJack()
 {
   int size = mSetCallbackMsg.size();
   BL_ASSERT(size==0);
   mSetCallbackMsg.clear();
 }
 //--------------------------------------------------------------------------------------------------------
-void TManagerDirectX::Optimize()
+void TBigJack::Optimize()
 {
-  mListReadyRender = mListAllObject;
-
   // собственно сам процесс оптимизации (подсказка: процесс оптимизации заключается в выкидывании лишних
   // не рисуемых и не задействованных объектов, используются BB моделей объектов)
   /*...*/
 
 }
 //--------------------------------------------------------------------------------------------------------
-void TManagerDirectX::Render(IDirect3DDevice9* pd3dDevice)
+void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
 {
   HRESULT hr;
-  D3DXMATRIXA16 mView;
-  D3DXMATRIXA16 mProj;
-
   // Clear the render target and the zbuffer 
   V( pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB( 0, 141, 153, 191 ), 1.0f, 0 ) );
 
   // Render the scene
   if( SUCCEEDED( pd3dDevice->BeginScene() ) )
   {
-    mProj = *mCamera.GetProjMatrix();
-    mView = *mCamera.GetViewMatrix();
+    D3DXMATRIXA16 mView = *mCamera.GetViewMatrix();
+    SetCommonShaderStack();// передать общие параметры в шейдер
 
     std::list<TBaseObjectDX*>::iterator it = mListReadyRender.begin();
     std::list<TBaseObjectDX*>::iterator eit = mListReadyRender.end();
     while(it!=eit)
     {
-      (*it)->Draw(&mView,&mProj,mCamera.GetEyePt());
+      (*it)->Draw(&mView);
       it++;
     }
+
+    mViewerFPS.Render(mDXUT.GetFPS());
     V( pd3dDevice->EndScene() );
   }
 }
 //--------------------------------------------------------------------------------------------------------
-void TManagerDirectX::AddObject(TBaseObjectDX* pObject)
+void TBigJack::AddObject(TBaseObjectDX* pObject)
 {
-  TModelDX* pModel = mManagerModel.Find(pObject->GetID_Model());
+  TModelDX* pModel = mManagerModelDX.Find(pObject->GetID_Model());
   if(pModel)
   {
     if(pObject->GetModel()==NULL)
@@ -120,17 +125,17 @@ void TManagerDirectX::AddObject(TBaseObjectDX* pObject)
   }
 }
 //--------------------------------------------------------------------------------------------------------
-void TManagerDirectX::SetViewParams(D3DXVECTOR3* pvEyePt, D3DXVECTOR3* pvLookatPt)// расположение камеры
+void TBigJack::SetViewParams(D3DXVECTOR3* pvEyePt, D3DXVECTOR3* pvLookatPt)// расположение камеры
 {
   mCamera.SetViewParams(pvEyePt, pvLookatPt);
 }
 //--------------------------------------------------------------------------------------------------------
-void TManagerDirectX::Clear()
+void TBigJack::Clear()
 {
   mListAllObject.clear();
 }
 //--------------------------------------------------------------------------------------------------------
-void TManagerDirectX::SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
+void TBigJack::SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
                D3DVECTOR& coord,     // где
                D3DVECTOR& orient,    // ориентация эффекта
                guint32 time_past/*// прошло времени, мс*/)
@@ -144,7 +149,7 @@ void TManagerDirectX::SetEffect(unsigned short id_effect/*уникальный эффект, см.
 */
 }
 //--------------------------------------------------------------------------------------------------------
-void TManagerDirectX::NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext)
+void TBigJack::NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext)
 {
   set<TCallBackFrameMove>::iterator bit = mSetCallbackFrameMove.begin();
   set<TCallBackFrameMove>::iterator eit = mSetCallbackFrameMove.end();
@@ -156,7 +161,7 @@ void TManagerDirectX::NotifyFrameMove(double fTime, float fElapsedTime, void* pU
   }
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+void TBigJack::NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   set<TCallBackMsg>::iterator bit = mSetCallbackMsg.begin();
   set<TCallBackMsg>::iterator eit = mSetCallbackMsg.end();
@@ -168,7 +173,7 @@ void TManagerDirectX::NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   }
 }
 //--------------------------------------------------------------------------------------
-bool TManagerDirectX::IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat,
+bool TBigJack::IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat,
                                D3DFORMAT BackBufferFormat, bool bWindowed, void* pUserContext )
 {
   // No fallback defined by this app, so reject any device that 
@@ -186,7 +191,7 @@ bool TManagerDirectX::IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterForm
   return true;
 }
 //--------------------------------------------------------------------------------------
-bool TManagerDirectX::ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext )
+bool TBigJack::ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext )
 {
   assert( DXUT_D3D9_DEVICE == pDeviceSettings->ver );
 
@@ -227,10 +232,12 @@ bool TManagerDirectX::ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings,
   return true;
 }
 //--------------------------------------------------------------------------------------
-HRESULT TManagerDirectX::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
+HRESULT TBigJack::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
                               void* pUserContext )
 {
-  mManagerModel.Setup(pd3dDevice);
+  mManagerModelDX.Setup(pd3dDevice);
+  mManagerResourceDX.Setup(pd3dDevice);
+  mViewerFPS.CreateDevice(pd3dDevice);
   // Setup the camera's view parameters
   D3DXVECTOR3 vecEye( 0.0f, -10.0f, 0.0001f );
   D3DXVECTOR3 vecAt ( 0.0f, 0.0f, 0.0f );
@@ -241,17 +248,23 @@ HRESULT TManagerDirectX::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3D
   D3DXMATRIX matrix;
   D3DXMATRIX newView;
   D3DXMatrixIdentity(&matrix);
-  D3DXMatrixRotationZ(&matrix,M_PI);
-  //newView = (*mView)*matrix;
+  D3DXMatrixRotationZ(&matrix, float(M_PI));
   mCamera.SetViewMatrix(&newView);
-  //mCamera.SetEnableYAxisMovement(false);
   return S_OK;
 }
 //--------------------------------------------------------------------------------------
-HRESULT TManagerDirectX::OnResetDevice( IDirect3DDevice9* pd3dDevice,
+HRESULT TBigJack::OnResetDevice( IDirect3DDevice9* pd3dDevice,
                              const D3DSURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
 {
-  mManagerModel.ResetDevice();
+  // для прозрачности текстур
+  pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
+  pd3dDevice->SetRenderState( D3DRS_SRCBLEND,  D3DBLEND_SRCALPHA );
+  pd3dDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
+  pd3dDevice->SetRenderState( D3DRS_LIGHTING,  true);
+  //---------------------------------------------------------------
+  mManagerModelDX.ResetDevice();
+  mManagerResourceDX.Reset();
+  mViewerFPS.Reset();
   // Setup the camera's projection parameters
   float fAspectRatio = pBackBufferSurfaceDesc->Width / ( FLOAT )pBackBufferSurfaceDesc->Height;
   mCamera.SetProjParams( D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f );
@@ -260,7 +273,7 @@ HRESULT TManagerDirectX::OnResetDevice( IDirect3DDevice9* pd3dDevice,
   return S_OK;
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
+void TBigJack::OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
 {
   // Update the camera's position based on user input 
   mCamera.FrameMove( fElapsedTime );
@@ -268,14 +281,15 @@ void TManagerDirectX::OnFrameMove( double fTime, float fElapsedTime, void* pUser
   NotifyFrameMove(fTime, fElapsedTime, pUserContext);
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
+void TBigJack::OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
 {
   Animate();
+  MakeVectorOnRender();// создать список на оптимизацию, прозрачные объекты идут самыми последними
   Optimize();
   Render(pd3dDevice);
 }
 //--------------------------------------------------------------------------------------
-LRESULT TManagerDirectX::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,
+LRESULT TBigJack::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,
                        void* pUserContext )
 {
   mCamera.HandleMessages( hWnd, uMsg, wParam, lParam );
@@ -284,17 +298,21 @@ LRESULT TManagerDirectX::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
   return 0;
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::OnLostDevice( void* pUserContext )
+void TBigJack::OnLostDevice( void* pUserContext )
 {
-  mManagerModel.LostDevice();
+  mManagerModelDX.LostDevice();
+  mManagerResourceDX.Lost();
+  mViewerFPS.Lost();
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::OnDestroyDevice( void* pUserContext )
+void TBigJack::OnDestroyDevice( void* pUserContext )
 {
-  mManagerModel.DestroyModel();
+  mManagerModelDX.DestroyModel();
+  mManagerResourceDX.Destroy();
+  mViewerFPS.Destroy();
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::Init(HWND hwnd )
+void TBigJack::Init(HWND hwnd )
 {
   HRESULT hr = mDXUT.Init(hwnd);
   if(hr!=S_OK)
@@ -303,21 +321,21 @@ void TManagerDirectX::Init(HWND hwnd )
   }
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::Done()
+void TBigJack::Done()
 {
   mDXUT.Done();
   
-  mManagerModel.DestroyModel();
+  mManagerModelDX.DestroyModel();
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::Work(guint32 time_ms)
+void TBigJack::Work(guint32 time_ms)
 {
   mTime_ms = time_ms;
   mDXUT.Work();
 }
 //--------------------------------------------------------------------------------------
 // на получение событий WinApi окна и DirectX
-void TManagerDirectX::Register(void* pFunc, int type)
+void TBigJack::Register(void* pFunc, int type)
 {
   switch(type)
   {
@@ -331,7 +349,7 @@ void TManagerDirectX::Register(void* pFunc, int type)
   }
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::Unregister(void* pFunc, int type)
+void TBigJack::Unregister(void* pFunc, int type)
 {
   switch(type)
   {
@@ -345,7 +363,7 @@ void TManagerDirectX::Unregister(void* pFunc, int type)
   }
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::UnregisterSet(std::set<void*>* setCallback, void* pFunc)
+void TBigJack::UnregisterSet(std::set<void*>* setCallback, void* pFunc)
 {
   set<void*>::iterator fit = setCallback->find(pFunc);
   set<void*>::iterator eit = setCallback->end();
@@ -355,12 +373,12 @@ void TManagerDirectX::UnregisterSet(std::set<void*>* setCallback, void* pFunc)
     BL_FIX_BUG();
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::RegisterSet(std::set<void*>* setCallback, void* pFunc)
+void TBigJack::RegisterSet(std::set<void*>* setCallback, void* pFunc)
 {
   setCallback->insert(pFunc);
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::Animate()
+void TBigJack::Animate()
 {
   list<TBaseObjectDX*>::iterator bit = mListAnimateObject.begin();
   list<TBaseObjectDX*>::iterator eit = mListAnimateObject.end();
@@ -387,5 +405,48 @@ void TManagerDirectX::Animate()
     BL_ASSERT(res);
     bit++;
   }
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::SetCommonShaderStack()
+{
+  //guint32 start = ht_GetUSCount();
+
+  mMainShaderStack.SetData(mIndexView,          (void*)mCamera.GetViewMatrix(), sizeof(D3DXMATRIXA16));
+  mMainShaderStack.SetData(mIndexProj,          (void*)mCamera.GetProjMatrix(), sizeof(D3DXMATRIXA16));
+  mMainShaderStack.SetData(mIndexCameraPosition,(void*)mCamera.GetEyePt(),      sizeof(D3DXMATRIXA16));
+
+  mManagerResourceDX.Set(TManagerResourceDX::eTypeShader,&mMainShaderStack);
+
+  //start = ht_GetUSCount() - start;
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::SetViewFPS(bool val)
+{
+  if(val)
+    mViewerFPS.Show();
+  else
+    mViewerFPS.Hide();
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::MakeVectorOnRender()
+{
+  mListReadyRender.clear();
+  mListTransparencyObject.clear();
+  //--------------------------------------------------------------
+  list<TBaseObjectDX*>::iterator bit = mListAllObject.begin();
+  list<TBaseObjectDX*>::iterator eit = mListAllObject.end();
+  while(bit!=eit)
+  {
+    TBaseObjectDX* pObject = *(bit);
+    if(pObject->GetAlphaTransparency()==1.0f)
+      mListReadyRender.push_back(pObject);
+    else
+      mListTransparencyObject.push_back(pObject);
+
+    bit++;
+  }
+  mListReadyRender.insert(mListReadyRender.end(),
+                          mListTransparencyObject.begin(),
+                          mListTransparencyObject.end());
 }
 //--------------------------------------------------------------------------------------

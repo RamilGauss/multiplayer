@@ -40,17 +40,17 @@ using namespace std;
 
 bool IXML::AddChildSection(const char* childName, int num, const char* name)
 {
-  if(EnterSection(childName, num)==false) return false;
-    if(AddSection(name)==false) return false;
-  if(LeaveSection()==false) return false;
+  CHECK_RET(EnterSection(childName, num));
+    CHECK_RET(AddSection(name));
+  CHECK_RET(LeaveSection());
   return true;
 }
 //------------------------------------------------------------------
 bool IXML::RemoveChildSection(const char* childName, int numChild, const char* name, int num)
 {
-  if(EnterSection(childName, numChild)==false) return false;
-    if(RemoveSection(name,num)==false) return false;
-  if(LeaveSection()==false) return false;
+  CHECK_RET(EnterSection(childName, numChild));
+    CHECK_RET(RemoveSection(name,num));
+  CHECK_RET(LeaveSection());
   return true;
 }
 //------------------------------------------------------------------

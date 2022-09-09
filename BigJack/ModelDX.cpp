@@ -43,37 +43,34 @@ you may contact in writing [ramil2085@gmail.com].
 #include <stdlib.h>
 #include <d3dx10math.h>
 #include "SortByAlphabetic.h"
+#include "ManagerResourceDX.h"
+#include "HiTimer.h"
 
 using namespace nsStruct3D;
 using namespace std;
 
-TModelDX::TModelDX()
+const char* NameBeginOutputParam = "BeginOutputParam";// в будущем перенести в файл настроек
+const char* NameEndOutputParam   = "EndOutputParam";
+
+TModelDX::TModelDX(TManagerResourceDX* managerResourceDX)
 {
+  mManagerResourceDX = managerResourceDX;
+
   mID = -1;
   m_pd3dDevice = NULL;
 }
 //----------------------------------------------------------------------------------------------------
 TModelDX::~TModelDX()
 {
-  mVectorLOD.clear();
-  int cnt = mVectorAllEffect.size();
-  for(int i = 0 ; i < cnt ; i++ )
-  {
-    delete mVectorAllEffect[i];
-  }
-  mVectorAllEffect.clear();
-
-  BL_ASSERT(mMapPathTexture.size()==0);
-  BL_ASSERT(mMapPathEffect.size() ==0);
+  Done();
 }
 //----------------------------------------------------------------------------------------------------
 void TModelDX::Draw(vector<unsigned char>* state, // какое состояние нарисовать (От ObjectDX)
                     vector<unsigned char>* mask,  // какую из частей нарисовать (От ObjectDX)
                     vector<D3DXMATRIXA16*>* matrix,// ориентация составных частей внутри объекта, кол-во совпадает с cSubset (От ObjectDX)
                     D3DXMATRIXA16* mWorld,// где и как расположен объект         (От ObjectDX)
-                    D3DXMATRIXA16* mView, // расположение и ориентация камеры    (от ManagerDirectX)
-                    D3DXMATRIXA16* mProj,
-                    const D3DXVECTOR3* mCamera) // проецирование на плоскость экрана  (от ManagerDirectX)
+                    float alphaTransparency,
+                    D3DXMATRIXA16* mView)/*для определения дистанции*/ // расположение и ориентация камеры    (от ManagerDirectX)                   
 {
   //1 Выбрать по ЛОДу mesh
   // расчет расстояния
@@ -107,27 +104,25 @@ void TModelDX::Draw(vector<unsigned char>* state, // какое состояние нарисовать 
         else
           pEffect = pCurLOD->damage[i];
       }
-      D3DXMATRIXA16 mWorldViewProjection;
       D3DXMATRIXA16 m = *(matrix->operator [](iView));// только из набора видимых
-      mWorldViewProjection = m * (*mWorld) * (*mView) * (*mProj);
       D3DXMATRIXA16 mWorld_pro = m * (*mWorld);
-
+      //-------------------------------------------------
+      pEffect->GetAlphaTransparency(alphaTransparency);
+      pEffect->SetInnerShaderParam();
       pEffect->SetMatrixWorld(&mWorld_pro);
-      Draw(pEffect,mWorldViewProjection,mCamera);
+      SetShaderStack(pEffect,i);// все части, включаю дубликаты
+      Draw(pEffect);
       iView++;
     }
   }
 }
 //---------------------------------------------------------------------------------------------------
-void TModelDX::Draw( TEffectDX* pEffect,D3DXMATRIXA16& mWorldViewProjection,const  D3DXVECTOR3* mCamera)
+void TModelDX::Draw( TEffectDX* pEffect)
 {
   ID3DXMesh* pCurMesh = pEffect->pMesh;
 
   HRESULT hr;
   UINT iPass, cPasses;
-  pEffect->SetMatrixWorldViewProjection(&mWorldViewProjection);
-  pEffect->SetCameraPosition(mCamera);
-  pEffect->SetTexture();
 
   V( pEffect->Begin( &cPasses, 0 ) );
   for( iPass = 0; iPass < cPasses; iPass++ )
@@ -142,13 +137,14 @@ void TModelDX::Draw( TEffectDX* pEffect,D3DXMATRIXA16& mWorldViewProjection,cons
 //----------------------------------------------------------------------------------------------------
 bool TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strAbsPath/*путь к файлам модели*/)
 {
+  Done();
   m_pd3dDevice = pd3dDevice;
   // загрузка данных примитивов, текстур и индексов.
-  GlobalLoggerDX.WriteF_time("Загрузка Mesh, id=%u\n",mID);
+  GlobalLoggerDX.WriteF_time("Загрузка Mesh, ID=%u\n",mID);
   if(Load(strAbsPath)==false) 
     return false;
 
-  GlobalLoggerDX.WriteF_time("Конец загрузки Mesh, id=%u\n",mID);
+  GlobalLoggerDX.WriteF_time("Конец загрузки Mesh, ID=%u\n",mID);
 
   int cnt = mVectorAllEffect.size();
   // структурировать данные
@@ -159,6 +155,8 @@ bool TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strAbsPath/*путь к фай
     pEffectDX->Init();
   }
   SetupVectorLOD();
+
+  SetupShaderStack();
   return true;
 }
 //----------------------------------------------------------------------------------------------------
@@ -177,9 +175,6 @@ void TModelDX::Destroy()
   int cnt = GetCntEffect();
   for(int i = 0 ; i < cnt ; i++)
     mVectorAllEffect[i]->Destroy();
-
-  ReleaseTexture();
-  ReleaseEffect();
 }
 //----------------------------------------------------------------------------------------------------
 void TModelDX::LostDevice()
@@ -203,7 +198,7 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
   if(pLoadModel->Load(strFilenameData)==false)
   {
     USES_CONVERSION;
-    GlobalLoggerDX.WriteF_time("Не удалось загрузить модель с HDD: %s.\n",W2A(strFilenameData));
+    GlobalLoggerDX.WriteF_time("Не удалось загрузить модель: %s.\n",W2A(strFilenameData));
     delete pLoadModel;
     return false;
   }
@@ -243,11 +238,10 @@ bool TModelDX::AddEffectDX(ILoaderModelDX::TDefGroup * pDefGroup)
   pMaterial->vSpecular  = pDefGroup->vSpecular;
 
   pMaterial->nShininess = pDefGroup->nShininess;
-  pMaterial->fAlpha     = pDefGroup->fAlpha;
 
   pMaterial->bSpecular  = pDefGroup->bSpecular;
 
-  LoadTexture(pMaterial);
+  LoadTexture(pEffect);
 
   pEffect->pMesh = pDefGroup->pMesh;
 
@@ -325,72 +319,20 @@ void TModelDX::SetupVectorLOD()
   }
 }
 //----------------------------------------------------------------------------------------------------
-void TModelDX::LoadTexture(TEffectDX::Material* pMaterial)
+void TModelDX::LoadTexture(TEffectDX* pEffectDX)
 {
-  HRESULT hr;
-  map<wstring,IDirect3DTexture9*>::iterator fit = mMapPathTexture.find(pMaterial->strTexture);
-  map<wstring,IDirect3DTexture9*>::iterator eit = mMapPathTexture.end();
-  if(fit==eit)// не нашли
-  {
-    V( D3DXCreateTextureFromFile( m_pd3dDevice, pMaterial->strTexture.data(),
-      &( pMaterial->pTexture ) ) );
-    
-    map<wstring,IDirect3DTexture9*>::value_type val(pMaterial->strTexture,pMaterial->pTexture);
-    mMapPathTexture.insert(val);
-  }
-  else// дубликат
-  {
-    pMaterial->pTexture = fit->second;
-  }
-}
-//----------------------------------------------------------------------------------------------------
-void TModelDX::ReleaseTexture()
-{
-  map<wstring,IDirect3DTexture9*>::iterator bit = mMapPathTexture.begin();
-  map<wstring,IDirect3DTexture9*>::iterator eit = mMapPathTexture.end();
-  while(bit!=eit)
-  {
-    IDirect3DTexture9* pTexture = bit->second;
-    SAFE_RELEASE(pTexture);
-    bit++;
-  }
-  mMapPathTexture.clear();
-}
-//----------------------------------------------------------------------------------------------------
-void TModelDX::ReleaseEffect()
-{
-  map<wstring,ID3DXEffect*>::iterator bit = mMapPathEffect.begin();
-  map<wstring,ID3DXEffect*>::iterator eit = mMapPathEffect.end();
-  while(bit!=eit)
-  {
-    ID3DXEffect* pEffect = bit->second;
-    SAFE_RELEASE(pEffect);
-    bit++;
-  }
-  mMapPathEffect.clear();
+  TEffectDX::Material* pMaterial = &(pEffectDX->mMaterial);
+  pMaterial->pTexture = (IDirect3DTexture9*)mManagerResourceDX->Load(pMaterial->strTexture.data());
 }
 //----------------------------------------------------------------------------------------------------
 void TModelDX::LoadEffect(TEffectDX* pEffectDX)
 {
-  HRESULT hr;
-  map<wstring,ID3DXEffect*>::iterator fit = mMapPathEffect.find(pEffectDX->mMaterial.strShader);
-  map<wstring,ID3DXEffect*>::iterator eit = mMapPathEffect.end();
-  if(fit==eit)// не нашли
-  {
-    // компилировать Shader
-    ID3DXEffect* pEffect;
-    DWORD dwShaderFlags = D3DXFX_NOT_CLONEABLE;
-    V( D3DXCreateEffectFromFile( m_pd3dDevice, pEffectDX->mMaterial.strShader.data(), 
-      NULL, NULL, dwShaderFlags, NULL, &pEffect, NULL ) );
-    pEffectDX->p = pEffect;
-    
-    map<wstring,ID3DXEffect*>::value_type val(pEffectDX->mMaterial.strShader,pEffect);
-    mMapPathEffect.insert(val);
-  }
-  else// дубликат
-  {
-    pEffectDX->p = fit->second;
-  }
+  //guint32 start = ht_GetMSCount();
+
+  pEffectDX->p = (ID3DXEffect*)mManagerResourceDX->Load(pEffectDX->mMaterial.strShader.data());
+
+  //start = ht_GetMSCount() - start;
+  //GlobalLoggerDX.WriteF_time("Загрузка эффекта t=%u\n",start);
 }
 //----------------------------------------------------------------------------------------------------
 void TModelDX::SortPartByAlphabetic()
@@ -434,6 +376,94 @@ void TModelDX::SortPartByAlphabetic()
       pNewEffect.push_back(pEffectDX);
     }
     *pVecEffect = pNewEffect;
+  }
+}
+//----------------------------------------------------------------------------------------------------
+void TModelDX::SetShaderStackMask(std::vector<int>* pVectorMask)// по этой маске настраиваются шейдеры эффектов
+{
+  mVectorShaderStackMask = *pVectorMask;
+}
+//----------------------------------------------------------------------------------------------------
+TShaderStack* TModelDX::GetShaderStack(int index)// взять стек для настройки
+{
+  return mVectorShaderStack[index];
+}
+//----------------------------------------------------------------------------------------------------
+void TModelDX::Done()
+{
+  mVectorLOD.clear();
+  int cnt = mVectorAllEffect.size();
+  for(int i = 0 ; i < cnt ; i++ )
+    delete mVectorAllEffect[i];
+
+  mVectorAllEffect.clear();
+
+  cnt = mVectorShaderStack.size();
+  for(int i = 0 ; i < cnt ; i++ )
+  {
+    delete mVectorShaderStack.at(i);
+  }
+  mVectorShaderStack.clear();
+
+  mVectorShaderStackMask.clear();
+}
+//----------------------------------------------------------------------------------------------------
+void TModelDX::SetShaderStack(TEffectDX* pEffect,int index)
+{
+  if(mVectorShaderStackMask[index]==1)
+  {
+    TShaderStack* pSS = mVectorShaderStack[index];
+    mExecSS.Set(pEffect->p,pSS);
+  }
+}
+//----------------------------------------------------------------------------------------------------
+void TModelDX::SetupShaderStack()
+{
+  vector<TEffectDX*>* pPart = mVectorLOD.at(0).GetNonZeroVector();
+  int cnt = pPart->size();
+  for(int i = 0 ; i < cnt ; i++ )
+  {
+    TEffectDX* pEffectDX = pPart->at(i);
+    if(pEffectDX->mflgNormal)
+      AddShaderStack(pEffectDX->p);
+  }
+}
+//----------------------------------------------------------------------------------------------------
+void TModelDX::AddShaderStack(ID3DXEffect* p)
+{
+  char pData[200];// для ускорения загрузки фальшивых данных
+  TShaderStack* pSS = new TShaderStack;
+  mVectorShaderStack.push_back(pSS);
+  mVectorShaderStackMask.push_back(0);
+  //----------------------------------------
+  HRESULT hr;
+  D3DXEFFECT_DESC pDesc;
+  V( p->GetDesc(&pDesc) );
+
+  bool flgBeginParam = false;
+  int cnt = pDesc.Parameters;
+  // поиск начала output param
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    D3DXPARAMETER_DESC pDescParam;
+    D3DXHANDLE handle = p->GetParameter( 0, i );
+    V( p->GetParameterDesc( handle, &pDescParam ) );
+    if(pDescParam.Semantic)
+    if(strcmp(pDescParam.Semantic,NameBeginOutputParam)==0)
+      flgBeginParam = true;
+    else 
+    {
+      if(strcmp(pDescParam.Semantic,NameEndOutputParam)==0)
+        flgBeginParam = false;
+      else
+      {
+        if(flgBeginParam)
+        {
+          int size = pDescParam.Bytes;
+          pSS->Push(pDescParam.Semantic,pData,size);
+        }
+      }
+    }
   }
 }
 //----------------------------------------------------------------------------------------------------

@@ -34,11 +34,13 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#ifndef ManagerDirectXH
-#define ManagerDirectXH
+#ifndef BigJackH
+#define BigJackH
 
 
 #include "DXUT.h"
+#include "IGraphicEngine.h"
+
 #include "DXUTcamera.h"
 #include "DXUTsettingsdlg.h"
 #include "SDKmisc.h"
@@ -46,25 +48,37 @@ you may contact in writing [ramil2085@gmail.com].
 #include "MeshLoader.h"
 #pragma warning(default: 4995)
 #include <list>
+#include <set>
 #include "Struct3D.h"
 #include "ManagerModelDX.h"
-#include <set>
 #include "DXUT_Class.h"
 #include "glibconfig.h"
+#include "ManagerResourceDX.h"
+#include "ShaderStack.h"
+#include "ViewerFPS.h"
+
 
 
 class TBaseObjectDX;
 
 // BigJack - графический движок
-class TManagerDirectX
+class TBigJack : public IGraphicEngine
 {
 protected:
 
-  guint32 mTime_ms;// время для рендера, используется для анимации
-
   TDXUT mDXUT;
 
-  TManagerModelDX mManagerModel;
+  TManagerResourceDX mManagerResourceDX;
+  TManagerModelDX mManagerModelDX;
+
+  TShaderStack mMainShaderStack;
+
+  TViewerFPS mViewerFPS;
+
+  int mIndexView;
+  int mIndexProj;
+  int mIndexCameraPosition;
+
 
   // все объекты
   std::list<TBaseObjectDX*> mListAllObject;// движок не освобождает память из-под этих объектов
@@ -73,56 +87,52 @@ protected:
 
   std::list<TBaseObjectDX*> mListAnimateObject;// только анимированные. создаются движком(эффект движка), движок сам должен освободить память
 
+  std::list<TBaseObjectDX*> mListTransparencyObject;// прозрачные объекты, временный список, только на этапе создания списка на отображение
+
   CModelViewerCamera mCamera;                // A model viewing camera
 
 public:
   //----------------------------------------------------------------
   //                              INTERFACE
   //----------------------------------------------------------------
-  typedef void (*TCallBackMsg)( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-  typedef void (*TCallBackFrameMove)( double fTime, float fElapsedTime, void* pUserContext );
-
-  TManagerDirectX();
-  ~TManagerDirectX();
-
-  enum{eTypeMsg     = 0,
-       eTypeFrameMove,
-  };
+  TBigJack();
+  virtual ~TBigJack();
 
   // на получение событий WinApi окна и DirectX
-  void Register(void*   pFunc, int type);
-  void Unregister(void* pFunc, int type);
+  virtual void Register(void*   pFunc, int type);
+  virtual void Unregister(void* pFunc, int type);
   // в частности события мыши и клавиатуры
-  void NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-  void NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext);
+  virtual void NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+  virtual void NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext);
   //------------------------------------------------------------------------
-  void Init(HWND hwnd = NULL);
-  void Work(guint32 time_ms);
-  void Done();
+  virtual void Init(HWND hwnd = NULL);
+  virtual void Work(guint32 time_ms);
+  virtual void Done();
   //------------------------------------------------------------------------
-  void AddObject(TBaseObjectDX* pObject);
-  void Clear();
+  virtual void AddObject(TBaseObjectDX* pObject);
+  virtual void Clear();
   // камера
-  void SetViewParams(D3DXVECTOR3* pvEyePt, D3DXVECTOR3* pvLookatPt);// расположение камеры
+  virtual void SetViewParams(D3DXVECTOR3* pvEyePt, D3DXVECTOR3* pvLookatPt);// расположение камеры
   
   // 21 декабря 2012 года реализую:
   // клиентские эффекты движка, не влияют на физические параметры объектов
-  void SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
+  virtual void SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
                  D3DVECTOR& coord,     // где
                  D3DVECTOR& orient,    // ориентация эффекта
                  guint32 time_past/* прошло времени, мс*/ = 0);
+  virtual void SetViewFPS(bool val);
   // источники освещения
   // ###
   // ввод освещение накладывает условия на шейдер. он обязан содержать интерфейс
-  int GetCountLight(){return 1;}
-  const D3DVECTOR* GetCoordLight(int index){return NULL;}
-  const D3DVECTOR* GetCoordAtLight(int index){return NULL;}
-  unsigned int GetColorLight(int index){return 0;}
-  void SetCoordLight(int index,D3DVECTOR* m){}
-  void SetCoordAtLight(int index,D3DVECTOR* m){}
-  void SetColorLight(int index, unsigned int color){}
-  void AddLight(){}
-  void RemoveLight(int index){}
+  virtual int GetCountLight(){return 1;}
+  virtual const D3DVECTOR* GetCoordLight(int index){return NULL;}
+  virtual const D3DVECTOR* GetCoordAtLight(int index){return NULL;}
+  virtual unsigned int GetColorLight(int index){return 0;}
+  virtual void SetCoordLight(int index,D3DVECTOR* m){}
+  virtual void SetCoordAtLight(int index,D3DVECTOR* m){}
+  virtual void SetColorLight(int index, unsigned int color){}
+  virtual void AddLight(){}
+  virtual void RemoveLight(int index){}
   // ###
   //----------------------------------------------------------------
   //                             ~INTERFACE
@@ -150,10 +160,14 @@ protected:
   void UnregisterSet(std::set<void*>* setCallback, void* pFunc);
 
 protected:
-
+  
+  void MakeVectorOnRender();
   void Optimize();
   void Render(IDirect3DDevice9* pd3dDevice);
   void Animate();// для анимации и подготовки стека шейдера
+
+
+  void SetCommonShaderStack();
 
 };
 

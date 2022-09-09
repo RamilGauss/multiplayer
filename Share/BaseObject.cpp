@@ -52,6 +52,9 @@ TBaseObject::TBaseObject()
   mPtrInherits = NULL;
   ID_model = 0;
   ID_map = 0;
+  mV = 0;
+  mA = 0;
+
   D3DXMatrixIdentity(&mWorld);
 }
 //------------------------------------------------------------------------------------------------
@@ -177,5 +180,20 @@ void TBaseObject::SetupDefaultMapUse()
     mMapUse.insert(val);
   }
   SetMapUse();
+}
+//------------------------------------------------------------------------------------------------
+void TBaseObject::RegisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc)
+{
+  mCallBackEvent.Register(pFunc);
+}
+//------------------------------------------------------------------------------------------------
+void TBaseObject::UnregisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc)
+{
+  mCallBackEvent.Unregister(pFunc);
+}
+//------------------------------------------------------------------------------------------------
+void TBaseObject::Notify(int event)
+{
+  mCallBackEvent.Notify(&event,sizeof(event));
 }
 //------------------------------------------------------------------------------------------------

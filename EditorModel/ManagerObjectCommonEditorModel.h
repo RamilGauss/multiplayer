@@ -36,7 +36,7 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef ManagerObjectCommonEditorModelH
 #define ManagerObjectCommonEditorModelH
 
-
+//#include "DXUT.h"
 #include "ManagerObjectCommon.h"
 
 class TManagerObjectCommonEditorModel : public TManagerObjectCommon
@@ -58,6 +58,9 @@ protected:
   virtual float GetTimeWork();
 
   void LoadModel();
+
+
+  void CreateObject(int cntK,int cntJ,int cntI);
 
 
 };

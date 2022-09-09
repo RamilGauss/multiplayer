@@ -50,7 +50,7 @@ class TDXUT : public IDirectX_Realize
   bool flgWasDestroyEvent;
 
 public:
-  TDXUT(TManagerDirectX * pMDX );
+  TDXUT(TBigJack * pMDX );
   virtual ~TDXUT();
 
   virtual HRESULT Init(HWND hwnd = NULL);
@@ -58,6 +58,8 @@ public:
   virtual int Done();
 
   virtual std::string GetError();
+  virtual float GetFPS();
+
 protected:
 
   friend bool CALLBACK IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat, D3DFORMAT BackBufferFormat, bool bWindowed,

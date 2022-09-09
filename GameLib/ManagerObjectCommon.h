@@ -36,15 +36,21 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef ManagerObjectCommonH
 #define ManagerObjectCommonH
 
+#include "IGraphicEngine.h"
+#include "Camera.h"
 #include "LoaderObjectCommon.h"
-#include "ManagerDirectX.h"
 #include "InterpretatorPredictionTank.h"
 #include "ApplicationProtocolPacketAnswer.h"
 #include "glib/gthread.h"
 #include <vector>
 #include "ProgressBar.h"
 #include "CallBackRegistrator.h"
-#include "../QBaseLib/FilterWinApi.h"
+#include "FilterWinApi.h"
+#include "ControlCamera.h"
+#include "ManagerEventWinApi.h"
+#include "ControlEventWinApiGE.h"
+#include "ControlEventWinApiNET.h"
+#include "ControlEventWinApiGUI.h"
 
 class TBaseObjectCommon;
 
@@ -74,7 +80,8 @@ protected:
   TLoaderObjectCommon mLoaderObject;
 
   TInterpretatorPredictionTank mPrediction;// физика
-  TManagerDirectX mMDX_Scene; // отрисовка сцены
+  IGraphicEngine* mMDX_Scene; // отрисовка сцены
+  TControlCamera mControlCamera;
   
   // прогресс загрузки карты/данных
   TProgressBar mProgressBar;
@@ -135,11 +142,20 @@ protected:
 
   virtual float GetTimeWork() = 0;
 
+  void HandleOnMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
   // примочка дл€ транцсл€ции событий в Qt
   void SetWinApiEvent(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+
+  //----------------------------------------------------
+  // фильтры на обработку событий WinApi
   TFilterWinApi mFilter;
+  TManagerEventWinApi       mManagerEventWinApi;
+  
+  TControlEventWinApiGE  mControlEventGE;
+  TControlEventWinApiNET mControlEventNET;
+  TControlEventWinApiGUI mControlEventGUI;
 };
 
 #endif

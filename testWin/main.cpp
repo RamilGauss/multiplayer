@@ -37,25 +37,57 @@ you may contact in writing [ramil2085@gmail.com].
 #include <vector>
 #include "MakerXML.h"
 #include "SortByAlphabetic.h"
+#include "ShaderStack.h"
+#include "ManagerResourceDX.h"
+#include "..\GameLib\EventWinApi.h"
+#include <map>
 
 using namespace std;
 
 
 INT WINAPI wWinMain( HINSTANCE, HINSTANCE, LPWSTR, int )
 {
-  TMakerXML m;
-  IXML* pXML = m.New();
-  pXML->Load("d:\\joint.xml");
+  //TMakerXML m;
+  //IXML* pXML = m.New();
+  //pXML->Load("d:\\joint.xml");
 
-  float v4[4];
-  bool res;
-  string content;
-  int cntSection = pXML->GetCountSection();
-  res = pXML->EnterSection("root",0);// <-
-    res = pXML->EnterSection("world",0);
-      res = pXML->ReadFloat4("row",0,&v4[0]);
-    pXML->LeaveSection();
-  res = pXML->LeaveSection();// ->
-  pXML->Save();
+  //float v4[4];
+  //bool res;
+  //string content;
+  //int cntSection = pXML->GetCountSection();
+  //res = pXML->EnterSection("root",0);// <-
+  //  res = pXML->EnterSection("world",0);
+  //    res = pXML->ReadFloat4("row",0,&v4[0]);
+  //  pXML->LeaveSection();
+  //res = pXML->LeaveSection();// ->
+  //pXML->Save();
+
+  //int size;
+  //TShaderStack ss;
+  //double d = 1234;
+  //void* pD = (void*)&d;
+  //ss.Push("double",pD,sizeof(double));
+  //double* pDouble = (double*)ss.GetData(0,size);
+  //string str = ss.GetName(0);
+  //ss.Done();
+
+  //TManagerResourceDX m;
+  //m.Load(L"d:\\MyProjects\\multiPlayer\\shader\\shader.fx");
+
+  //char ss[11][256];
+  //strcpy(ss[0],"Hahaha");
+  //char** pp = (char**)ss;
+  //char* p = pp[0];
+  //string str = string(&p[0]);
+
+  map<TEventWinApi,int,CompareEventWinApi> mMapKey;
+
+  //TEventWinApi(0,0,0);
+  mMapKey.insert(map<TEventWinApi,int,CompareEventWinApi>::value_type(TEventWinApi(0,0,0),0));
+  mMapKey.insert(map<TEventWinApi,int,CompareEventWinApi>::value_type(TEventWinApi(0,0,1),0));
+  mMapKey.insert(map<TEventWinApi,int,CompareEventWinApi>::value_type(TEventWinApi(0,1,0),0));
+  mMapKey.insert(map<TEventWinApi,int,CompareEventWinApi>::value_type(TEventWinApi(1,1,0),0));
+  mMapKey.insert(map<TEventWinApi,int,CompareEventWinApi>::value_type(TEventWinApi(0,0,0),0));
+
   return 0;
 }

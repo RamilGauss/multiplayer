@@ -50,6 +50,7 @@ class TBaseObjectDX : virtual public TBaseObject
 protected:
 
   bool flgShow;// показан ли объект на сцене
+  float mAlphaTransparency;// прозрачность всего объекта, нельзя задать прозрачность части модели
   
 public:
   TBaseObjectDX(int typeDX = eDirtyAnimate);
@@ -58,16 +59,16 @@ public:
   void SetModel(TModelDX* pModel);
   TModelDX* GetModel();
 
-  void Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj,const D3DXVECTOR3* mCamera);
+  void Draw(D3DXMATRIXA16* mView);
 
   void SetShow(bool show){flgShow=show;}
 
   // вернет true - объект жив, false - закончил жить
   // должно быть задано время начало жизни, см. TBaseObject::mTimeCreation - хрень хрень
   // только для полностью анимированных объектов!!!
-  // данная функция подготавливает стек шейдера для данного момента времени
+  // данная функция подготавливает данные для стека шейдера для данного момента времени
+  // окончательная реализация стека должна быть в методе SetupShaderStackModelDX
   virtual bool Animate(guint32 time_ms/*dirty animate ignore this parameter*/) = 0;//{return true;};
-
 
   enum{eDirtyAnimate = 0,
        ePureAnimate  = 1,// см. mTypeDX
@@ -75,23 +76,27 @@ public:
   int GetTypeDX(){return mTypeDX;}
   void SetTimeCreation(guint32 t){mTimeCreation=t;};
 
+  float GetAlphaTransparency(){return mAlphaTransparency;}
+  void  SetAlphaTransparency(float val){mAlphaTransparency = val;}
+
 protected:
-
-  void Done();
-
   TModelDX* mModel;// внешний вид 
 
   int mTypeDX;
 
   // время создания, необходимо для расчета анимации
   guint32 mTimeCreation;// мс
+protected:
+
+  void Done();
 
   // такие же функции должны быть и в Prediction
   void SetupVectorNamePart();
   void SetupVectorOrderPart();
   
-  //--------------------------------------
-  //std::vector<unsigned char> mMaskDX;
+private:
+  virtual void SetupShaderStackModelDX(){};// для более тонкой настройки шейдера
+  virtual void EventSetModelDX(){};
 };
 //-----------------------------------------------------------------
 

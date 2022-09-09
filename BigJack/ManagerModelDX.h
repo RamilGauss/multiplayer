@@ -40,7 +40,9 @@ you may contact in writing [ramil2085@gmail.com].
 #include "hArray.h"
 #include "Define_DX.h"
 #include <map>
+
 class TModelDX;
+class TManagerResourceDX;
 
 class TManagerModelDX
 {
@@ -48,9 +50,13 @@ class TManagerModelDX
 protected:
   IDirect3DDevice9* mD3dDevice;
 
+  TManagerResourceDX* mManagerResourceDX;// отдать модели для получения ресурсов
+
 public:
   TManagerModelDX();
   ~TManagerModelDX();
+
+  void SetManagerResourceDX(TManagerResourceDX* managerResourceDX){mManagerResourceDX=managerResourceDX;}
 
   bool LoadListPath();
 

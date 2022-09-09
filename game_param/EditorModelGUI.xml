@@ -1,0 +1,12 @@
+<root>
+	<node>
+		<msg>0</msg>
+		<key>0</key>
+		<comment>Camera forward</comment>
+	</node>
+	<node>
+		<msg>1</msg>
+		<key>1</key>
+		<comment>Camera forward</comment>
+	</node>
+</root>

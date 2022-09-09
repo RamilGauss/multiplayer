@@ -259,25 +259,8 @@ std::string TXML_Markup::ReadSectionAttr(const char* name, int num, const char* 
   return content;
 }
 //------------------------------------------------------------------
-//bool TXML_Markup::AddAttr(const char* nameElem, int numElem, const char* nameAttr)
-//{
-//  mMarkup.SavePos();
-//  bool res = false;
-//  int cntElem = 0;
-//  while(mMarkup.FindElem())
-//  { 
-//    string sName = mMarkup.GetTagName();
-//    if(strcmp(nameElem,sName.data())==0)
-//    {
-//      if(numElem==cntElem)
-//      {
-//        res = mMarkup.AddAttrib(nameAttr);
-//        break;
-//      }
-//      cntElem++;
-//    }
-//  }
-//  mMarkup.RestorePos();
-//  return res;
-//}
-////------------------------------------------------------------------
+bool TXML_Markup::AddXMLDeclaration( const char* strDecl )
+{
+  return mMarkup.AddNode(CMarkup::MNT_PROCESSING_INSTRUCTION, strDecl);
+}
+//------------------------------------------------------------------

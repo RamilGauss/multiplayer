@@ -44,26 +44,36 @@ you may contact in writing [ramil2085@gmail.com].
 #include <d3dx10math.h>
 #include <vector>
 #include "TreeJoint.h"
-//#include "ManagerBaseObject.h"
+#include "CallBackRegistrator.h"
 
 
 class TBaseObject : public TObject
 {
+protected:
+  TCallBackRegistrator mCallBackEvent;
   // свойства, характерные для физики и графики
   // ориентация, координаты, состояние
 public:
+  enum{
+    eWorld = 0, // значение мировой матрицы
+    eState,
+    eMapUse,
+  };
+
   TBaseObject();
   virtual ~TBaseObject();
 
-  void SetWorld(D3DXMATRIXA16& world){mWorld=world;}
+  void SetWorld(D3DXMATRIXA16& world){mWorld=world;Notify(eWorld);}
   void SetID_Model(unsigned int id);
   void SetID_Map(unsigned int id){ID_map = id;}
 
   unsigned int GetID_Model(){return ID_model;}
   unsigned int GetID_Map(){return ID_map;}
   std::vector<unsigned char>* GetState(){return &mState;}
-  D3DXMATRIXA16 GetWorld(){return mWorld;}
+  const D3DXMATRIXA16* GetWorld()const {return &mWorld;}
 
+  void SetVelocity(float v){mV=v;}// м/с - хрень
+  float GetVelocity(){return mV;}
 
   void SetTree(TTreeJoint::TLoadedJoint* pTree);
   void SetMapUse(std::map<std::string,int>* mapUse = NULL);// использовать при смене используемых частей и при (собственно) начальном задании
@@ -73,7 +83,15 @@ public:
   
   void* GetPtrInherits(){return mPtrInherits;}
 
+  // регистрация на получение событий объекта
+  void RegisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc);
+  void UnregisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc);
+
 protected:
+  
+  float mV;// скорость, м/с
+  float mA;// ускорение, м/с^2
+
   TTreeJoint::TLoadedJoint* pLoadedTree;
   TTreeJoint mTree;
 
@@ -105,8 +123,6 @@ protected:
 
   void SetupDefaultMapUse();
 
-  //virtual std::vector<std::string>* GetOrderPart(){return &mVectorOrderPart;};
-
   // маска отрисовки частей модели
   // например, нарисовать Пушку1, а не Пушку0 и т.д.
   // 1 0 0 1 1 1 1
@@ -115,6 +131,9 @@ protected:
   void* mPtrInherits;// назначить в TBaseObjectCommon (решение проблемы виртуального наследования)
 
   int GetCountPart(const char* name, std::vector<std::string>* pVec);
+
+protected:
+  void Notify(int event);
 };
 
 
