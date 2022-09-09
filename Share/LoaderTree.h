@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
@@ -39,7 +39,6 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "TreeJoint.h"
 #include "BL_ConfigFile.h"
-#include <d3dx10math.h>
 #include "IXML.h"
 #include "TypeDef.h"
 
@@ -57,11 +56,8 @@ public:
   TTreeJoint::TLoadedJoint* TakeTree();
 
 protected:
-  bool LoadMatrix4x4(const char* name,int num, nsStruct3D::TMatrix16/*D3DXMATRIXA16*/* pM);
+  bool LoadMatrix4x4(const char* name,int num, nsStruct3D::TMatrix16* pM);
   bool LoadJoint(int i);
-  //bool LoadVector4(TBL_ConfigFile* fileIni,char* strNumPart,char* key,D3DXVECTOR4& vector4);
-  //float FindFloat_Semicolon(char** buffer,bool* ok);
-  //char* FindSemicolon(char* buffer);
 
 };
 

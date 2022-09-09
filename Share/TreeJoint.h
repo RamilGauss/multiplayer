@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
@@ -73,7 +73,6 @@ public:
   struct TChild
   {
     std::string   name;
-    //D3DXMATRIXA16 matrix;
     nsStruct3D::TMatrix16 matrix;
   };
   struct TPart
@@ -103,7 +102,7 @@ public:
   };
   struct TLoadedJoint
   {
-    //D3DXMATRIXA16 world;// матрица root, относительно него все строится
+    // матрица root, относительно него все строится
     nsStruct3D::TMatrix16 world;
     std::string root;   // название корня
     std::vector<TPart*> vectorPart;// части для соединения, одна из этих частей всегда root (по имени)

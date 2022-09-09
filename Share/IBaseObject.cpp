@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 #define _USE_MATH_DEFINES
@@ -103,8 +103,6 @@ void IBaseObject::SetDefaultMatrix()
   int cnt = mTree.GetCountPart();
   for(int i = 0 ; i < cnt ; i++) 
   {
-    //D3DXMATRIXA16* mIdentity = new D3DXMATRIXA16;
-    //D3DXMatrixIdentity((D3DXMATRIX*)mIdentity);
     TMatrix16* pIdentity = new TMatrix16;
     SetMatrixIdentity(pIdentity);
 

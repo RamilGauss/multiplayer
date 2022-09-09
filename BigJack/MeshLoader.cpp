@@ -678,13 +678,11 @@ HRESULT CMeshLoader::LoadGeometryFromOBJ_Fast( const WCHAR* strFileName )
           if( '/' == InFile.peek() )
           {
             InFile.ignore();
-
             // Optional vertex normal
             InFile >> iNormal;
             vertex.normal = Normals[ iNormal - 1 ];
           }
         }
-
         // If a duplicate vertex doesn't exist, add this vertex to the Vertices
         // list. Store the index in the Indices array. The Vertices and Indices
         // lists will eventually become the Vertex Buffer and Index Buffer for

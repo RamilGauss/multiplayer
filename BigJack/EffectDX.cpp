@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
@@ -123,22 +123,17 @@ void TEffectDX::Destroy()
   // модель освободит ресурсы
   mMaterial.pTexture = NULL;
   p = NULL;
-  //SAFE_RELEASE(p);
 
   SAFE_RELEASE(pMesh);
 }
 //-----------------------------------------------------------
 void TEffectDX::LostDevice()
 {
-  //HRESULT hr;
-  //### V(p->OnLostDevice());
 }
 //-----------------------------------------------------------
 void TEffectDX::ResetDevice()
 {
   HRESULT hr;
-  //### V(p->OnResetDevice());
-
   // загрузка техники исполнения в шейдере
   mMaterial.hTechnique = p->GetTechniqueByName( mMaterial.strTechnique.data() );
   V( p->SetTechnique( mMaterial.hTechnique ) );

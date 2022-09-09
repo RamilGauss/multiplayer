@@ -29,22 +29,20 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 #include "LoaderTree.h"
-#include "glib/gmem.h"
 #include "MakerXML.h"
 
 namespace TreeSection
 {
-
-const char* SectionMatrix = "matrix";
-const char* SectionRow    = "row";
-const char* SectionJoint  = "joint";
-const char* SectionName   = "name";
-const char* SectionNumUse = "numUse";
-const char* SectionChild  = "child";
+  const char* SectionMatrix = "matrix";
+  const char* SectionRow    = "row";
+  const char* SectionJoint  = "joint";
+  const char* SectionName   = "name";
+  const char* SectionNumUse = "numUse";
+  const char* SectionChild  = "child";
 }
 
 using namespace std;
@@ -127,7 +125,7 @@ bool TLoaderTree::LoadJoint(int i)
   pPart->numUse = numUse;
   // загрузить детей
   int cntChild = mXML->GetCountSection(SectionChild);
-  if(cntChild==0) return false;
+  // 05.03.2013 if(cntChild==0) return false;
   for(int j = 0 ; j < cntChild; j++)
   {
     CHECK_RET(mXML->EnterSection(SectionChild,j))

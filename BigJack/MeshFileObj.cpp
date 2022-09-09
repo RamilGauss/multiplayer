@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
@@ -117,14 +117,17 @@ bool TMeshFileObj::Load(const char* strFilename,
     }
     else if( 0 == wcscmp( strCommand, L"f" ) )
     {
+      const unsigned char cntVertex = 4;
       // Face
       unsigned int iPosition, iTexCoord, iNormal;
-      VERTEX vertex;
-
-      for( unsigned int iFace = 0; iFace < 3; iFace++ )
+      VERTEX vertex[cntVertex];// копить точки
+      // 05.03.2013 - Gauss добавил конвертацию из 4 точек в 3 точки
+      unsigned char iFace = 0;
+      while(InFile.peek()!='\n')
       {
+        BL_ASSERT(iFace<cntVertex);
         InFile >> iPosition;
-        vertex.position = mapPositions[ iPosition - 1 ];
+        vertex[iFace].position = mapPositions[ iPosition - 1 ];
         if( '/' == InFile.peek() )
         {
           InFile.ignore();
@@ -132,22 +135,38 @@ bool TMeshFileObj::Load(const char* strFilename,
           {
             // Optional texture coordinate
             InFile >> iTexCoord;
-            vertex.texcoord = mapTexCoords[ iTexCoord - 1 ];
+            vertex[iFace].texcoord = mapTexCoords[ iTexCoord - 1 ];
           }
           if( '/' == InFile.peek() )
           {
             InFile.ignore();
             // Optional vertex normal
             InFile >> iNormal;
-            vertex.normal = mapNormals[ iNormal - 1 ];
+            vertex[iFace].normal = mapNormals[ iNormal - 1 ];
           }
         }
         // проверить на дублирование вершин в массиве
-        TMapVU_It fit = mapVertex.find(vertex);
+        TMapVU_It fit = mapVertex.find(vertex[iFace]);
         if(fit==mapVertex.end())
-          mapVertex.insert(TMapVU_v(vertex,mapVertex.size()));
+          mapVertex.insert(TMapVU_v(vertex[iFace],mapVertex.size()));
 
-        listVertex.push_back(vertex);
+        iFace++;
+      }
+      // (0,1,2,3)->(0,1,3)+(1,2,3)
+      if(iFace>3)
+      {
+        listVertex.push_back(vertex[0]);
+        listVertex.push_back(vertex[1]);
+        listVertex.push_back(vertex[3]);
+        listVertex.push_back(vertex[1]);
+        listVertex.push_back(vertex[2]);
+        listVertex.push_back(vertex[3]);
+      }
+      else
+      {
+        listVertex.push_back(vertex[0]);
+        listVertex.push_back(vertex[1]);
+        listVertex.push_back(vertex[2]);
       }
     }
     else if( 0 == wcscmp( strCommand, L"mtllib" ) )

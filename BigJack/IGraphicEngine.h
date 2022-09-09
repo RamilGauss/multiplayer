@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
@@ -86,18 +86,15 @@ public:
     guint32 time_past/* прошло времени, мс*/ = 0) = 0;
   virtual void SetViewFPS(bool val) = 0;
   // источники освещения
-  // ###
   // ввод освещения накладывает условия на шейдер. он обязан содержать интерфейс
-  virtual int GetCountLight() = 0;
-  virtual const float* GetCoordLight(int index) = 0;
-  virtual const float* GetCoordAtLight(int index) = 0;
-  virtual unsigned int GetColorLight(int index) = 0;
-  virtual void SetCoordLight(int index,nsStruct3D::TVector3* m3) = 0;
-  virtual void SetCoordAtLight(int index,nsStruct3D::TVector3* m3) = 0;
-  virtual void SetColorLight(int index, unsigned int color) = 0;
-  virtual void AddLight() = 0;
-  virtual void RemoveLight(int index) = 0;
-  // ###
+	virtual void AddLight() = 0;
+	virtual void RemoveLight(int index) = 0;
+	virtual int GetCountLight() = 0;
+
+	virtual const nsStruct3D::TVector3* GetLightPosition(int index) = 0;	
+	virtual void SetLightPosition(int index,nsStruct3D::TVector3* m3) = 0;
+	virtual const nsStruct3D::TVector3* GetLightColor(int index) = 0;
+	virtual void SetLightColor(int index, nsStruct3D::TVector3* color) = 0;
   //---------------------------------------------------------------------------------
 
 protected:

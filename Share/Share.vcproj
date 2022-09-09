@@ -306,6 +306,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SphericalDecart.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SrcEvent.cpp"
 				>
 			</File>
@@ -509,6 +513,10 @@
 			</File>
 			<File
 				RelativePath=".\SortByAlphabetic.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SphericalDecart.h"
 				>
 			</File>
 			<File

@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
@@ -37,6 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "namespace_ID_BEHAVIOR.h"
 #include "TankTower.h"
+#include "Building.h"
 #include "LoaderListPathID.h"
 #include "GlobalParams.h"
 #include "file_operation.h"
@@ -59,6 +60,9 @@ IBaseObjectCommon* TMakerObjectCommon::NewByID_Behavior(unsigned int id_behavior
   IBaseObjectCommon* pObject = NULL;
   switch(id_behavior)
   {
+    case ID_BUILDING:
+      pObject = new TBuilding();
+      break;
     case ID_TANK_TOWER:
       pObject = new TTankTower();
       break;

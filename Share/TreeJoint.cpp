@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
@@ -126,7 +126,7 @@ void TTreeJoint::Setup(TLoadedJoint* pLoadedTree,TNumUseMap* mapUse)
   ProductAllMatrix();
 }
 //-------------------------------------------------------------------------
-void TTreeJoint::ChangeMatrix(std::string& name, TMatrix16* matrix, bool def)
+void TTreeJoint::ChangeMatrix(string& name, TMatrix16* matrix, bool def)
 {
   int cnt = GetCountPart();
   for(int i = 0 ; i < cnt ; i++ )
@@ -144,7 +144,7 @@ void TTreeJoint::ChangeMatrix(std::string& name, TMatrix16* matrix, bool def)
 }
 //-------------------------------------------------------------------------
 // заполнить матрицей
-void TTreeJoint::GetMatrix(std::vector<TMatrix16*>* matrix)
+void TTreeJoint::GetMatrix(vector<TMatrix16*>* matrix)
 {
   int cnt = GetCountPart();
   for(int i = 0 ; i < cnt ; i++ )

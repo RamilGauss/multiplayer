@@ -8,7 +8,7 @@
   <map>../map/listMap.xml</map>
   <texture>../texture</texture>
   <GUI>/Demos/Demo_Themes</GUI>
-  <GUI>/Common/Demos</GUI>
+  <GUI>../../form</GUI>  
   <GUI>/Common/Themes</GUI>
   <GUI_skin>MyGUI_BlackBlueTheme.xml</GUI_skin>
 </Paths>

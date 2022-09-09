@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
@@ -56,8 +56,8 @@ using namespace nsKey;
 
 #define LOG_TIME_LOAD_EDITOR_MODEL
 
-#define DELTA_MOVE 0.4f //0.4f
-#define DELTA_ROTATE 0.03f
+#define DELTA_MOVE 0.2f //0.4f
+#define DELTA_ROTATE 0.01f
 #define ASPECT_MOUSE_X 0.002f
 #define ASPECT_MOUSE_Y 0.002f
 
@@ -244,7 +244,7 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent, const 
   InitLog();
   mComponent = *pComponent; 
 
-  int cnt[3] = {1,2,5};
+  int cnt[3] = {1,1,1};
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
   guint32 start = ht_GetMSCount();
 #endif 

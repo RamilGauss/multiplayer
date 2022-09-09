@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="Window" skin="Canvas" position="760 585 255 390" align="Right VCenter" layer="Main" name="_Main">
+        <Property key="MaxSize" value="330 240"/>
+        <Property key="Movable" value="true"/>
+        <Property key="MinSize" value="280 240"/>
+        <Property key="Caption" value="Colour picker"/>
+        <Widget type="EditBox" skin="EditBox" position="10 165 60 30" align="Right Top" name="ebPitch"/>
+        <Widget type="EditBox" skin="EditBox" position="10 200 60 30" align="Right Top" name="ebYaw"/>
+        <Widget type="TextBox" skin="TextBox" position="75 170 60 25" align="HStretch Top" name="lIP">
+            <Property key="TextAlign" value="Left VCenter"/>
+            <Property key="TextShadowColour" value="0.725146 0.258678 0.258678"/>
+            <Property key="Caption" value="Тангаж"/>
+        </Widget>
+        <Widget type="TextBox" skin="TextBox" position="70 200 95 30" align="Left Top" name="lLogin">
+            <Property key="Caption" value="Рыскание"/>
+            <Property key="TextAlign" value="Left VCenter"/>
+        </Widget>
+        <Widget type="TextBox" skin="TextBox" position="75 235 90 30" name="lPort">
+            <Property key="Caption" value="Расстояние"/>
+            <Property key="TextAlign" value="Left VCenter"/>
+        </Widget>
+        <Widget type="EditBox" skin="EditBox" position="10 235 60 30" align="Right Top" name="ebDist"/>
+        <Widget type="EditBox" skin="EditBox" position="5 275 240 110">
+            <Property key="Caption" value="Управление камерой:\nW-вперед, S-назад, A-влево,D-вправо,\nQ-вниз,E-вверх,\nB-привязка к объекту(вкл/выкл), ЛКМ-камера, ПКМ-освещение"/>
+            <Property key="TextAlign" value="Left Top"/>
+            <Property key="WordWrap" value="true"/>
+            <Property key="ReadOnly" value="true"/>
+        </Widget>
+        <Widget type="EditBox" skin="EditBox" position="10 10 190 25">
+            <Property key="Caption" value="Управление освещением:"/>
+        </Widget>
+        <Widget type="Widget" skin="PanelSkin" position="15 45 107 107">
+            <Widget type="Widget" skin="WhiteSkin" position="2 2 101 101" name="widget_ColourView"/>
+        </Widget>
+        <Widget type="EditBox" skin="EditBox" position="190 110 56 26" name="edit_Blue">
+            <Property key="CursorPosition" value="0"/>
+            <Property key="Caption" value="256"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="MaxTextLength" value="3"/>
+        </Widget>
+        <Widget type="TextBox" skin="TextBox" position="130 110 48 26">
+            <Property key="TextAlign" value="Right VCenter"/>
+            <Property key="Caption" value="Blue"/>
+        </Widget>
+        <Widget type="TextBox" skin="TextBox" position="130 80 48 26">
+            <Property key="TextAlign" value="Right VCenter"/>
+            <Property key="Caption" value="Green"/>
+        </Widget>
+        <Widget type="EditBox" skin="EditBox" position="190 80 56 26" name="edit_Green">
+            <Property key="TextAlign" value="Center"/>
+            <Property key="Caption" value="256"/>
+            <Property key="MaxTextLength" value="3"/>
+        </Widget>
+        <Widget type="TextBox" skin="TextBox" position="125 50 48 24">
+            <Property key="Caption" value="Red"/>
+            <Property key="TextAlign" value="Right VCenter"/>
+        </Widget>
+        <Widget type="EditBox" skin="EditBox" position="190 50 56 26" name="edit_Red">
+            <Property key="Caption" value="256"/>
+            <Property key="TextAlign" value="Center"/>
+            <Property key="MaxTextLength" value="3"/>
+        </Widget>
+    </Widget>
+</MyGUI>

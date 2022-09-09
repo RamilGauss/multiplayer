@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 #define _USE_MATH_DEFINES
@@ -58,8 +58,6 @@ you may contact in writing [ramil2085@gmail.com].
 #define LOG_DX
 //#define LOG_DX_STREAM
 
-#define USE_ICAMERA
-
 using namespace std;
 using namespace nsStruct3D;
 using namespace nsEvent;
@@ -68,6 +66,9 @@ using namespace nsEvent;
 
 TBigJack::TBigJack(ICamera* pCamera):IGraphicEngine(pCamera)
 {
+	mLightColor    = TVector3(1,0,0);// белый
+	mLightPosition = TVector3(0,0,5);
+
   mICamera->UpdateForRender();
 
 #ifdef WIN32
@@ -82,25 +83,18 @@ TBigJack::TBigJack(ICamera* pCamera):IGraphicEngine(pCamera)
 
 #ifdef WIN32
   mManagerModelDX.SetManagerResourceDX(&mManagerResourceDX);
-#ifndef USE_ICAMERA
-  mCamera.SetEnablePositionMovement(true);
-  mCamera.SetEnableYAxisMovement(false);
 
-  mIndexView           = 
-    mMainShaderStack.Push("View",(void*)mCamera.GetViewMatrix(),     sizeof(D3DXMATRIX));
-  mIndexProj           = 
-    mMainShaderStack.Push("Proj",(void*)mCamera.GetProjMatrix(),     sizeof(D3DXMATRIX));
-  mIndexCameraPosition = 
-    mMainShaderStack.Push("CameraPosition",(void*)mCamera.GetEyePt(),sizeof(D3DXVECTOR3));
-#else
-  mIndexView           = 
+	mShHandleView           = 
     mMainShaderStack.Push("View",(void*)mICamera->GetView(),     sizeof(TMatrix16));
-  mIndexProj           = 
+  mShHandleProj           = 
     mMainShaderStack.Push("Proj",(void*)mICamera->GetProj(),     sizeof(TMatrix16));
-  mIndexCameraPosition = 
+  mShHandleCameraPosition = 
     mMainShaderStack.Push("CameraPosition",(void*)mICamera->GetEyePt(),sizeof(TVector3));
-#endif
 
+	mShHandleLightPosition = 
+		mMainShaderStack.Push("LightPosition",(void*)&mLightPosition,sizeof(TVector3));
+	mShHandleLightColor = 
+  	mMainShaderStack.Push("LightColor",(void*)&mLightColor,sizeof(TVector3));
 #else
 #endif
 }
@@ -142,17 +136,12 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
   if( SUCCEEDED( pd3dDevice->BeginScene() ) )
   {
     TMatrix16 mView;
-#ifndef USE_ICAMERA
-    D3DXMATRIXA16* mDXView = (D3DXMATRIXA16*)mCamera.GetViewMatrix();// только для совместимости с DirectX (временно)
-    MATRIX16_EQUAL_M_P(mView,mDXView)
-#else
     mView = *mICamera->GetView();// только для совместимости с DirectX (временно)
-#endif
 
     SetCommonShaderStack();// передать общие параметры в шейдер
 
-    std::list<IBaseObjectGE*>::iterator it = mListReadyRender.begin();
-    std::list<IBaseObjectGE*>::iterator eit = mListReadyRender.end();
+    TListPtr::iterator it = mListReadyRender.begin();
+    TListPtr::iterator eit = mListReadyRender.end();
     while(it!=eit)
     {
       (*it)->Draw(&mView);
@@ -270,27 +259,11 @@ bool TBigJack::ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* 
 HRESULT TBigJack::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
                               void* pUserContext )
 {
-  //HRESULT hr;
-  //V_RETURN(mDialogResourceManager.OnD3D9CreateDevice( pd3dDevice ))
-
   mManagerModelDX.Setup(pd3dDevice);
   mManagerResourceDX.Setup(pd3dDevice);
   mViewerFPS.CreateDevice(pd3dDevice);
-#ifndef USE_ICAMERA
-  // Setup the camera's view parameters
-  D3DXVECTOR3 vecEye( 0.0f, -10.0f, 0.0001f );
-  D3DXVECTOR3 vecAt ( 0.0f, 0.0f, 0.0f );
 
-  mCamera.SetViewParams( &vecEye, &vecAt );
-  // повернуть на 180 градусов
-  const D3DXMATRIX* mView = mCamera.GetViewMatrix();
-  D3DXMATRIX matrix;
-  D3DXMATRIX newView;
-  D3DXMatrixIdentity(&matrix);
-  D3DXMatrixRotationZ(&matrix, float(M_PI));
-  mCamera.SetViewMatrix(&newView);
-#else
-  TVector3 eye(0,0,0);
+	TVector3 eye(0,0,0);
   float angleDown  = 0;//float(M_PI_2);
   float angleRight = 0;
   float angleRoll  = 0;//M_PI_2;
@@ -299,17 +272,13 @@ HRESULT TBigJack::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE
   mICamera->RotateRight(angleRight);
   mICamera->Roll(angleRoll);
   mICamera->MoveForward(-30.0f);
-  //mICamera->MoveUp(30.0f);
-#endif
+
   return S_OK;
 }
 //--------------------------------------------------------------------------------------
 HRESULT TBigJack::OnResetDevice( IDirect3DDevice9* pd3dDevice,
                              const D3DSURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
 {
-  //HRESULT hr;
-  //V_RETURN( mDialogResourceManager.OnD3D9ResetDevice() );
-
   // для прозрачности текстур
   pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
   pd3dDevice->SetRenderState( D3DRS_SRCBLEND,  D3DBLEND_SRCALPHA );
@@ -322,12 +291,7 @@ HRESULT TBigJack::OnResetDevice( IDirect3DDevice9* pd3dDevice,
   // Setup the camera's projection parameters
   float fAspectRatio = pBackBufferSurfaceDesc->Width / ( FLOAT )pBackBufferSurfaceDesc->Height;
 
-#ifndef USE_ICAMERA
-  mCamera.SetProjParams( D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f );
-  mCamera.SetWindow( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
-#else
   mICamera->SetProjParams(D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f);
-#endif
 
   SetNeedResizeGUI(true);
   return S_OK;
@@ -335,10 +299,6 @@ HRESULT TBigJack::OnResetDevice( IDirect3DDevice9* pd3dDevice,
 //--------------------------------------------------------------------------------------
 void TBigJack::OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
 {
-#ifndef USE_ICAMERA
-  // Update the camera's position based on user input 
-  mCamera.FrameMove( fElapsedTime );
-#endif
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
@@ -349,16 +309,9 @@ void TBigJack::OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float 
   Render(pd3dDevice);
 }
 //--------------------------------------------------------------------------------------
-LRESULT TBigJack::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,
-                       void* pUserContext )
+LRESULT TBigJack::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing, void* pUserContext )
 {
-  //*pbNoFurtherProcessing = mDialogResourceManager.MsgProc( hWnd, uMsg, wParam, lParam );
-  //if( *pbNoFurtherProcessing )
-    //return 0;
-#ifndef USE_ICAMERA
-  mCamera.HandleMessages( hWnd, uMsg, wParam, lParam );
-#endif
-  return 0;
+	return 0;
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::OnLostDevice( void* pUserContext )
@@ -405,15 +358,15 @@ void TBigJack::Work(guint32 time_ms)
 //--------------------------------------------------------------------------------------
 void TBigJack::Animate()
 {
-  list<IBaseObjectGE*>::iterator bit = mListAnimateObject.begin();
-  list<IBaseObjectGE*>::iterator eit = mListAnimateObject.end();
+  TListPtr::iterator bit = mListAnimateObject.begin();
+  TListPtr::iterator eit = mListAnimateObject.end();
   while(bit!=eit)
   {
     if((*bit)->Animate(mTime_ms)==false)
     {
       // уничтожить эффект
       delete (*bit);
-      list<IBaseObjectGE*>::iterator nit = bit;
+      TListPtr::iterator nit = bit;
       nit++;
       mListAnimateObject.erase(bit);
       bit = nit;
@@ -434,17 +387,14 @@ void TBigJack::Animate()
 //--------------------------------------------------------------------------------------
 void TBigJack::SetCommonShaderStack()
 {
-#ifndef USE_ICAMERA
-  mMainShaderStack.SetData(mIndexView,          (void*)mCamera.GetViewMatrix(), sizeof(D3DXMATRIX));
-  mMainShaderStack.SetData(mIndexProj,          (void*)mCamera.GetProjMatrix(), sizeof(D3DXMATRIX));
-  mMainShaderStack.SetData(mIndexCameraPosition,(void*)mCamera.GetEyePt(),      sizeof(D3DXVECTOR3));
-#else
-  mMainShaderStack.SetData(mIndexView,          (void*)mICamera->GetView(), sizeof(TMatrix16));
-  mMainShaderStack.SetData(mIndexProj,          (void*)mICamera->GetProj(), sizeof(TMatrix16));
-  mMainShaderStack.SetData(mIndexCameraPosition,(void*)mICamera->GetEyePt(),sizeof(TVector3));
-#endif
+  mMainShaderStack.SetData(mShHandleView,          (void*)mICamera->GetView(), sizeof(TMatrix16));
+  mMainShaderStack.SetData(mShHandleProj,          (void*)mICamera->GetProj(), sizeof(TMatrix16));
+  mMainShaderStack.SetData(mShHandleCameraPosition,(void*)mICamera->GetEyePt(),sizeof(TVector3));
 
-  mManagerResourceDX.Set(TManagerResourceDX::eTypeShader,&mMainShaderStack);
+	//mMainShaderStack.SetData(mShHandleLightColor,   (void*)&mLightColor,   sizeof(unsigned int));
+	mMainShaderStack.SetData(mShHandleLightPosition,(void*)&mLightPosition,sizeof(TVector3));
+
+	mManagerResourceDX.Set(TManagerResourceDX::eTypeShader,&mMainShaderStack);
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::SetViewFPS(bool val)
@@ -460,8 +410,8 @@ void TBigJack::MakeVectorOnRender()
   mListReadyRender.clear();
   mListTransparencyObject.clear();
   //--------------------------------------------------------------
-  list<IBaseObjectGE*>::iterator bit = mListAllObject.begin();
-  list<IBaseObjectGE*>::iterator eit = mListAllObject.end();
+  TListPtr::iterator bit = mListAllObject.begin();
+  TListPtr::iterator eit = mListAllObject.end();
   while(bit!=eit)
   {
     IBaseObjectGE* pObject = *(bit);
@@ -645,5 +595,41 @@ void TBigJack::DispFPS()
   swprintf_s(sFPS,L"FPS:%0.2f",FPS);
   mViewerFPS.SetText(wstring(sFPS));
   mViewerFPS.Render();
+}
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
+int TBigJack::GetCountLight()
+{
+	return eCountLight;//###
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::AddLight()
+{
+	// рано
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::RemoveLight(int index)
+{
+	// рано
+}
+//--------------------------------------------------------------------------------------
+const TVector3* TBigJack::GetLightPosition(int index)
+{
+	return &mLightPosition;
+}
+//--------------------------------------------------------------------------------------
+const TVector3* TBigJack::GetLightColor(int index)
+{
+	return &mLightColor;
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::SetLightColor(int index, TVector3* color)
+{
+	mLightColor = *color;
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::SetLightPosition(int index, TVector3* m3)
+{	
+	mLightPosition = *m3;
 }
 //--------------------------------------------------------------------------------------

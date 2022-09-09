@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html dir="ltr" class="client-js" lang="ru"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>HLSL — Википедия</title>
+<meta charset="UTF-8">
+<meta name="generator" content="MediaWiki 1.21wmf10">
+<link rel="alternate" type="application/x-wiki" title="Править" href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit">
+<link rel="edit" title="Править" href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit">
+<link rel="apple-touch-icon" href="http://ru.wikipedia.org/apple-touch-icon.png">
+<link rel="shortcut icon" href="http://bits.wikimedia.org/favicon/wikipedia.ico">
+<link rel="search" type="application/opensearchdescription+xml" href="http://ru.wikipedia.org/w/opensearch_desc.php" title="Википедия (ru)">
+<link rel="EditURI" type="application/rsd+xml" href="http://ru.wikipedia.org/w/api.php?action=rsd">
+<link rel="copyright" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<link rel="alternate" type="application/atom+xml" title="Википедия&nbsp;— Atom-лента" href="http://ru.wikipedia.org/w/index.php?title=%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%A1%D0%B2%D0%B5%D0%B6%D0%B8%D0%B5_%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B8&amp;feed=atom">
+<link rel="stylesheet" href="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/load_002.css">
+<style>.referencetooltip{position:absolute;list-style:none;list-style-image:none;opacity:0;font-size:10px;margin:0;z-index:5;padding:0}.referencetooltip li{border:#080086 2px solid;max-width:260px;padding:10px 8px 13px 8px;margin:0px;background-color:#F7F7F7;box-shadow:2px 4px 2px rgba(0,0,0,0.3);-moz-box-shadow:2px 4px 2px rgba(0,0,0,0.3);-webkit-box-shadow:2px 4px 2px rgba(0,0,0,0.3)}.referencetooltip li+li{margin-left:7px;margin-top:-2px;border:0;padding:0;height:3px;width:0px;background-color:transparent;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none;border-top:12px #080086 solid;border-right:7px transparent solid;border-left:7px transparent solid}.referencetooltip>li+li::after{content:'';border-top:8px #F7F7F7 solid;border-right:5px transparent solid;border-left:5px transparent solid;margin-top:-12px;margin-left:-5px;z-index:1;height:0px;width:0px;display:block}.client-js .referencetooltip li ul li{border:none;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none;height:auto;width:auto;margin:auto;padding:0;position:static}.RTflipped{padding-top:13px}.referencetooltip.RTflipped li+li{position:absolute;top:2px;border-top:0;border-bottom:12px #080086 solid}.referencetooltip.RTflipped li+li::after{border-top:0;border-bottom:8px #F7F7F7 solid;position:absolute;margin-top:7px}.RTsettings{float:right;height:16px;width:16px;cursor:pointer;background-image:url(//upload.wikimedia.org/wikipedia/commons/e/ed/Cog.png);margin-top:-9px;margin-right:-7px;-webkit-transition:opacity 0.15s;-moz-transition:opacity 0.15s;-o-transition:opacity 0.15s;-ms-transition:opacity 0.15s;transition:opacity 0.15s;opacity:0.6;filter:alpha(opacity=60)}.RTsettings:hover{opacity:1;filter:alpha(opacity=100)}
+/* cache key: ruwiki:resourceloader:filter:minify-css:7:db6ffcbefdb3032cb193f21dd51fa6b2 */.mw-collapsible-toggle{float:right} li .mw-collapsible-toggle{float:none} .mw-collapsible-toggle-li{list-style:none}
+/* cache key: ruwiki:resourceloader:filter:minify-css:7:4250852ed2349a0d4d0fc6509a3e7d4c */.suggestions{overflow:hidden;position:absolute;top:0;left:0;width:0;border:none;z-index:1099;padding:0;margin:-1px -1px 0 0} html > body .suggestions{margin:-1px 0 0 0}.suggestions-special{position:relative;background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0;margin-top:-2px;display:none;padding:0.25em 0.25em;line-height:1.25em}.suggestions-results{background-color:white;cursor:pointer;border:solid 1px #aaaaaa;padding:0;margin:0}.suggestions-result{color:black;margin:0;line-height:1.5em;padding:0.01em 0.25em;text-align:left}.suggestions-result-current{background-color:#4C59A6;color:white}.suggestions-special .special-label{color:gray;text-align:left}.suggestions-special .special-query{color:black;font-style:italic;text-align:left}.suggestions-special .special-hover{background-color:silver}.suggestions-result-current .special-label,.suggestions-result-current .special-query{color:white}.autoellipsis-matched,.highlight{font-weight:bold}
+/* cache key: ruwiki:resourceloader:filter:minify-css:7:9780324491b653a3780e2d029bdc140c */.suggestions a.mw-searchSuggest-link,.suggestions a.mw-searchSuggest-link:hover,.suggestions a.mw-searchSuggest-link:active,.suggestions a.mw-searchSuggest-link:focus{text-decoration:none;color:black}.suggestions-result-current a.mw-searchSuggest-link,.suggestions-result-current a.mw-searchSuggest-link:hover,.suggestions-result-current a.mw-searchSuggest-link:active,.suggestions-result-current a.mw-searchSuggest-link:focus{color:white}
+/* cache key: ruwiki:resourceloader:filter:minify-css:7:52b1797f70c7e4094dfa4191101944e8 */#container{position:relative;min-height:100%}#container,video{width:100%;height:100%}#playerContainer{overflow:hidden;position:relative;height:100%;background:#000}#videoHolder{position:relative;overflow:hidden}.fullscreen #playerContainer{position:absolute !important;width:100% !important;height:100%! important;z-index:9999;min-height:100%;top:0;left:0;margin:0}.mwEmbedPlayer{width:100%;height:100%;overflow:hidden;position:absolute;top:0;left:0}.modal_editor{ left:10px;top:10px;right:10px;bottom:10px;position:fixed;z-index:100}.displayHTML a:visited{color:white}.loadingSpinner{width:32px;height:32px;display:block;padding:0px;background-image:url(//bits.wikimedia.org/static-1.21wmf10/extensions/MwEmbedSupport/MwEmbedModules/MwEmbedSupport/skins/common/images/loading_ani.gif?2013-02-18T16:56:40Z)}.mw-imported-resource{border:thin solid black}.kaltura-icon{background-image:url(//bits.wikimedia.org/static-1.21wmf10/extensions/MwEmbedSupport/MwEmbedModules/MwEmbedSupport/skins/common/images/kaltura_logo_sm_transparent.png?2013-02-18T16:56:40Z) !important;background-repeat:no-repeat;display:block;height:12px;width:12px;margin-top:2px !important;margin-left:3px !important}.mw-fullscreen-overlay{background:rgb(0,0,0) none repeat scroll 0% 0%;position:fixed;top:0pt;left:0pt;width:100%;height:100%;-moz-background-clip:border;-moz-background-origin:padding;-moz-background-inline-policy:continuous} .play-btn-large{width:70px;height:53px;background :url(//bits.wikimedia.org/static-1.21wmf10/extensions/MwEmbedSupport/MwEmbedModules/MwEmbedSupport/skins/common/images/player_big_play_button.png?2013-02-18T16:56:40Z);position :absolute;cursor :pointer;border :none !important;z-index :1}.play-btn-large:hover{background :url(//bits.wikimedia.org/static-1.21wmf10/extensions/MwEmbedSupport/MwEmbedModules/MwEmbedSupport/skins/common/images/player_big_play_button_hover.png?2013-02-18T16:56:40Z)}.carouselContainer{position :absolute;width :100%;z-index :2}.carouselVideoTitle{position :absolute;top :0px;left :0px;width :100%;background :rgba(0,0,0,0.8);color :white;font-size :small;font-weight :bold;z-index :2}.carouselVideoTitleText{display :block;padding :10px 10px 10px 20px}.carouselTitleDuration{position :absolute;top :0px;right :0px;padding :2px;background-color :#5A5A5A;color :#D9D9D9;font-size :smaller;z-index :2}.carouselImgTitle{position :absolute;width :100%;text-align :center;color :white;font-size :small;background :rgba(0,0,0,0.4)}.carouselImgDuration{position :absolute;top :2px;left :2px;background :rgba( 0,0,0,0.7 );color :white;padding :1px 6px;font-size :small}.carouselPrevButton,.carouselNextButton{display :block;position :absolute;bottom:23px}.carouselPrevButton{left :5px}.carouselNextButton{right:6px}.alert-container{-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;background-image:linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-o-linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-moz-linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-webkit-linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-ms-linear-gradient(bottom,rgb(215,215,215) 4%,rgb(230,230,230) 55%,rgb(255,255,255) 100%);background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0.04,rgb(215,215,215)),color-stop(0.55,rgb(230,230,230)),color-stop(1,rgb(255,255,255)));margin:auto;position:absolute;top:0;left:0;right:0;bottom:0;max-width:80%;max-height:30%}.alert-title{background-color :#E6E6E6;padding :5px;border-bottom :1px solid #D1D1D1;font-weight :normal !important;font-size:14px !important;-webkit-border-top-left-radius:3px;-moz-border-radius-topleft:3px;border-top-left-radius:3px;-webkit-border-top-right-radius:3px;-moz-border-radius-topright:3px;border-top-right-radius:3px }.alert-message{padding :5px;font-weight :normal !important;text-align:center;font-size:14px !important}.alert-buttons-container{text-align:center;padding-bottom:5px}.alert-button{background-color:#474747;color:white;-webkit-border-radius:.5em;-moz-border-radius:.5em;border-radius:.5em;padding:2px 10px;background-image:linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-o-linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-moz-linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-webkit-linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-ms-linear-gradient(bottom,rgb(25,25,25) 4%,rgb(47,47,47) 55%,rgb(71,71,71) 68%);background-image:-webkit-gradient( linear,left bottom,left top,color-stop(0.04,rgb(25,25,25)),color-stop(0.55,rgb(47,47,47)),color-stop(0.68,rgb(71,71,71)) )}.alert-text{color :black !important}
+/* cache key: ruwiki:resourceloader:filter:minify-css:7:df6c3e3db70feb9055e31d07c49a1952 */#mw-panel.collapsible-nav .portal{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIwAAAABCAMAAAA7MLYKAAAAS1BMVEXb29vy8vLv7+/c3NzZ2dni4uLr6+vt7e3s7Ozw8PDn5+fj4+Ph4eHd3d3f39/o6Ojl5eXp6enx8fHa2trg4ODq6urk5OTz8/PY2NjolWftAAAAO0lEQVR4XrXAhwGAMAgEQB5I71X3n9QpPHqAGZidt2e02G8yedciQkv1/YPqIpFSdzbp9tjGsd4xhwl8yuMKHhkJhm8AAAAASUVORK5CYII=) left top no-repeat;background:url(//bits.wikimedia.org/static-1.21wmf10/extensions/Vector/modules/images/portal-break.png?2013-02-18T16:58:20Z) left top no-repeat!ie;padding:0.25em 0 !important;margin:-11px 9px 10px 11px}#mw-panel.collapsible-nav .portal h3,#mw-panel.collapsible-nav .portal h5{color:#4D4D4D;font-weight:normal;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAD1BMVEX////d3d2ampqxsbF5eXmCtCYvAAAAAXRSTlMAQObYZgAAADBJREFUeF6dzNEJACAMA1HdINQJCp1Ebv+ZlLYLaD4f4cbnDNi6MAO8KCHJ+7X02j3mzgMQe93HcQAAAABJRU5ErkJggg==) left center no-repeat;background:url(//bits.wikimedia.org/static-1.21wmf10/extensions/Vector/modules/images/open.png?2013-02-18T16:58:20Z) left center no-repeat!ie;padding:4px 0 3px 1.5em;margin-bottom:0}#mw-panel.collapsible-nav .portal h3:hover,#mw-panel.collapsible-nav .portal h5:hover{cursor:pointer;text-decoration:none}#mw-panel.collapsible-nav .portal h3 a,#mw-panel.collapsible-nav .portal h5 a{color:#4D4D4D;text-decoration:none}#mw-panel.collapsible-nav .portal .body{background:none !important;padding-top:0;display:none}#mw-panel.collapsible-nav .portal .body ul li{padding:0.25em 0} #mw-panel.collapsible-nav .portal.first h3,#mw-panel.collapsible-nav .portal.first h5{display:none}#mw-panel.collapsible-nav .portal.first{background-image:none;margin-top:0} #mw-panel.collapsible-nav .portal.persistent .body{display:block}#mw-panel.collapsible-nav .portal.persistent h3,#mw-panel.collapsible-nav .portal.persistent h5{background:none !important;padding-left:0.7em;cursor:default}#mw-panel.collapsible-nav .portal.persistent .body{margin-left:0.5em} #mw-panel.collapsible-nav .portal.collapsed h3,#mw-panel.collapsible-nav .portal.collapsed h5{color:#0645AD;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAgMAAABinRfyAAAADFBMVEX///95eXnd3d2dnZ3aAo3QAAAAAXRSTlMAQObYZgAAADFJREFUeF5dyzEKACAMA0CXolNe2Id09Kl5igZahWY4AiGjZwmIuS9GEcJfY63Ix88Bol4EYP1O7JMAAAAASUVORK5CYII=) left center no-repeat;background:url(//bits.wikimedia.org/static-1.21wmf10/extensions/Vector/modules/images/closed-ltr.png?2013-02-18T16:58:20Z) left center no-repeat!ie;margin-bottom:0}#mw-panel.collapsible-nav .portal.collapsed h3 a,#mw-panel.collapsible-nav .portal.collapsed h5 a{color:#0645AD}#mw-panel.collapsible-nav .portal.collapsed h3:hover,#mw-panel.collapsible-nav .portal.collapsed h5:hover{text-decoration:underline}
+/* cache key: ruwiki:resourceloader:filter:minify-css:7:b101dfab0660a6ad5b2894b7bf0f3079 */.ui-helper-hidden{display:none}.ui-helper-hidden-accessible{position:absolute;left:-99999999px}.ui-helper-reset{margin:0;padding:0;border:0;outline:0;line-height:1.3;text-decoration:none;font-size:100%;list-style:none}.ui-helper-clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}.ui-helper-clearfix{display:inline-block} * html .ui-helper-clearfix{height:1%}.ui-helper-clearfix{display:block} .ui-helper-zfix{width:100%;height:100%;top:0;left:0;position:absolute;opacity:0;filter:Alpha(Opacity=0)} .ui-state-disabled{cursor:default !important}  .ui-icon{display:block;text-indent:-99999px;overflow:hidden;background-repeat:no-repeat}  .ui-widget-overlay{position:absolute;top:0;left:0;width:100%;height:100%}  .ui-widget{font-family:sans-serif;font-size:0.8em}.ui-widget .ui-widget{font-size:1em}.ui-widget input,.ui-widget select,.ui-widget textarea,.ui-widget button{font-family:sans-serif;font-size:1em}.ui-widget-content{border:1px solid #cccccc;background:#f2f5f7 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAABkCAYAAABHLFpgAAAAKElEQVQYV2P6+ev3fyYGIBiGxH8w6/9/GAsshuD+Byv5D2dhKh6eBAAABBSmkTpaYQAAAABJRU5ErkJggg==) 50% top repeat-x;background:#f2f5f7 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-bg_highlight-hard_100_f2f5f7_1x100.png?2013-02-18T16:53:20Z) 50% top repeat-x!ie;color:#362b36}.ui-widget-content a{color:#362b36}.ui-widget-header{border-bottom:1px solid #bbbbbb;line-height:1em;background:#ffffff url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAABkCAYAAABHLFpgAAAAF0lEQVQYV2P49+/ff4ZhQPwHglGCKAIAdlSOCIOoOV0AAAAASUVORK5CYII=) 50% 50% repeat-x;background:#ffffff url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-bg_highlight-soft_100_ffffff_1x100.png?2013-02-18T16:53:20Z) 50% 50% repeat-x!ie;color:#222222;font-weight:bold}.ui-widget-header a{color:#222222} .ui-state-default,.ui-widget-content .ui-state-default,.ui-widget-header .ui-state-default{border:1px solid #aed0ea;background:#d7ebf9 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAABkCAYAAABHLFpgAAAAL0lEQVQY02N69eXPfyYGIBhexH+G/0DiP5gFJP79RxAwiX9giX//kZUgdDAMXwIA/14cgwH0gmgAAAAASUVORK5CYII=) 50% 50% repeat-x;background:#d7ebf9 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-bg_highlight-hard_80_d7ebf9_1x100.png?2013-02-18T16:53:20Z) 50% 50% repeat-x!ie;font-weight:normal;color:#2779aa}.ui-state-default a,.ui-state-default a:link,.ui-state-default a:visited{color:#2779aa;text-decoration:none}.ui-state-hover,.ui-widget-content .ui-state-hover,.ui-widget-header .ui-state-hover,.ui-state-focus,.ui-widget-content .ui-state-focus,.ui-widget-header .ui-state-focus{border:1px solid #74b2e2;background:#e4f1fb url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAABkCAYAAABHLFpgAAAAMUlEQVQYV2P68vPvfyYGIBhCxP//cBacYAAKInGRlIBYaBJQHWAWXBuqoVBZmNhwIgBlYh6Ywkr41gAAAABJRU5ErkJggg==) 50% 50% repeat-x;background:#e4f1fb url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-bg_highlight-soft_100_e4f1fb_1x100.png?2013-02-18T16:53:20Z) 50% 50% repeat-x!ie;font-weight:normal;color:#0070a3}.ui-state-hover a,.ui-state-hover a:hover{color:#0070a3;text-decoration:none}.ui-state-active,.ui-widget-content .ui-state-active,.ui-widget-header .ui-state-active{border:1px solid #cccccc;background:#f0f0f0 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAABkCAYAAABHLFpgAAAAIElEQVQYV2P68OHDfyYGIBiuBCMjIzILGxdNDI017AgARXMEsCkUdugAAAAASUVORK5CYII=) 50% 50% repeat-x;url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-bg_inset-hard_100_f0f0f0_1x100.png?2013-02-18T16:53:20Z) 50% 50% repeat-x!ie;font-weight:normal;color:#000000}.ui-state-active a,.ui-state-active a:link,.ui-state-active a:visited{color:#000000;text-decoration:none}.ui-widget :active{outline:none} .ui-state-highlight,.ui-widget-content .ui-state-highlight,.ui-widget-header .ui-state-highlight{border:1px solid #f9dd34;background:#ffef8f url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAABkCAYAAAEwK2r2AAAAX0lEQVQYV2P+/3HBf+aGyoAGTMK3gbm+3B1IVLgCuRUe2AlsBtRX+oG0eYEMcAOpcyNeLx4CbKgP3GRPEAtssjse95HkcOoQUO/7obrZG+rwBrjrGyo8oa6vJ88L5BEAeRC4pmqV01IAAAAASUVORK5CYII=) 50% top repeat-x;url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-bg_highlight-soft_25_ffef8f_1x100.png?2013-02-18T16:53:20Z) 50% top repeat-x!ie;color:#363636}.ui-state-highlight a,.ui-widget-content .ui-state-highlight a,.ui-widget-header .ui-state-highlight a{color:#363636}.ui-state-error,.ui-widget-content .ui-state-error,.ui-widget-header .ui-state-error{border:1px solid #cd0a0a;background:#cd0a0a url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAABkAQMAAADOquA5AAAAA1BMVEXNCgokNzldAAAAD0lEQVQoFWNgGAWjgPoAAAJYAAEDeXiTAAAAAElFTkSuQmCC) 50% 50% repeat-x;url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-bg_flat_15_cd0a0a_40x100.png?2013-02-18T16:53:20Z) 50% 50% repeat-x!ie;color:#ffffff}.ui-state-error a,.ui-widget-content .ui-state-error a,.ui-widget-header .ui-state-error a{color:#ffffff}.ui-state-error-text,.ui-widget-content .ui-state-error-text,.ui-widget-header .ui-state-error-text{color:#ffffff}.ui-priority-primary,.ui-widget-content .ui-priority-primary,.ui-widget-header .ui-priority-primary{font-weight:bold}.ui-priority-secondary,.ui-widget-content .ui-priority-secondary,.ui-widget-header .ui-priority-secondary{opacity:.7;filter:Alpha(Opacity=70);font-weight:normal}.ui-state-disabled,.ui-widget-content .ui-state-disabled,.ui-widget-header .ui-state-disabled{opacity:.35;filter:Alpha(Opacity=35);background-image:none}  .ui-icon{width:16px;height:16px}.ui-icon,.ui-widget-content .ui-icon,.ui-widget-header .ui-icon{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAADwCAMAAADYSUr5AAAA7VBMVEV0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psx0psyPQTyXAAAATnRSTlMAGBAyBAhQv4OZLiJUcEBmYBoSzQwgPBZCSEoeWiYwUiyFNIeBw2rJz8c4RBy9uXyrtaWNqa2zKP2fJO8KBgKPo2KVoa9s351GPm5+kWho0kj9AAAM6klEQVR4XuybAYrjMAxFrRzw3f84C2F2g+ex34Q0NKV6sCzNl2xLVpy47own0DRNUV8ePw/PAHU5xChSUJMx9cYKBGAy0ATBL7VA6kGBOpD/ZAz1vgoEQHPkBHgGrdrdHdhYLrfg8ccQgl5ABe/QuoFSj/cC5QBdAblCPMOxAsIAVAFvwUNUfCIYFCzSC6U14DueAr6FdmOqX4Sapmmapmm+4k2wHvUi5t0OVAiIHZSv/H1A+EKoUBO34gEoATaYzScD5avcHBU3j2riBjz+POIgF1AhXzGfBtj/3Y0r+KDSiMvmDrhSPmUeKuBNFHd+H+A7xGtAPwW+gqZpmqZpGq55A1xqn/cGMIB4weJJONe/E4o+WI8esX0GNpndsZY60ACkrvvP8SBZutQQgbvjl4jEWEFywGLuP26XcQKCzE6OILnHAThAdmYDZnN21P+JFOUShlV+HTHZ3QM418OJ8KzaAHQh60Ng/1zQoUPLvpRVxkV4qH9+TDZN0zRN01z/WSpcHkDcL2aNnRHIasG5AYQOZBUjyAOYj5WoScpQaQONj/chbjCX/ctdAUjLAwCYDxahJi1WEFRMQKm7dZnFDECMH4m6YncOkSlFjFBB3g47wfgKYz0ApKoBjVD+0uVvGTUwQoBKgBK0ToAGIHsZrGWI++dhd98CoYuRboGCOnMLuMbdP2ERwwEIT5kk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);background-image:url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-icons_72a7cf_256x240.png?2013-02-18T16:53:20Z)!ie}.ui-state-default .ui-icon{background-image:url(data:image/png;base64,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);background-image:url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-icons_3d80b3_256x240.png?2013-02-18T16:53:20Z)!ie}.ui-state-hover .ui-icon,.ui-state-focus .ui-icon{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAADwCAMAAADYSUr5AAAA7VBMVEUkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwkluwOSETqAAAATnRSTlMAGBAyBAhQv4OZLiJUcEBmYBoSzQwgPBZCSEoeWiYwUiyFNIeBw2rJz8c4RBy9uXyrtaWNqa2zKP2fJO8KBgKPo2KVoa9s351GPm5+kWho0kj9AAAM6klEQVR4XuybAYrjMAxFrRzw3f84C2F2g+ex34Q0NKV6sCzNl2xLVpy47own0DRNUV8ePw/PAHU5xChSUJMx9cYKBGAy0ATBL7VA6kGBOpD/ZAz1vgoEQHPkBHgGrdrdHdhYLrfg8ccQgl5ABe/QuoFSj/cC5QBdAblCPMOxAsIAVAFvwUNUfCIYFCzSC6U14DueAr6FdmOqX4Sapmmapmm+4k2wHvUi5t0OVAiIHZSv/H1A+EKoUBO34gEoATaYzScD5avcHBU3j2riBjz+POIgF1AhXzGfBtj/3Y0r+KDSiMvmDrhSPmUeKuBNFHd+H+A7xGtAPwW+gqZpmqZpGq55A1xqn/cGMIB4weJJONe/E4o+WI8esX0GNpndsZY60ACkrvvP8SBZutQQgbvjl4jEWEFywGLuP26XcQKCzE6OILnHAThAdmYDZnN21P+JFOUShlV+HTHZ3QM418OJ8KzaAHQh60Ng/1zQoUPLvpRVxkV4qH9+TDZN0zRN01z/WSpcHkDcL2aNnRHIasG5AYQOZBUjyAOYj5WoScpQaQONj/chbjCX/ctdAUjLAwCYDxahJi1WEFRMQKm7dZnFDECMH4m6YncOkSlFjFBB3g47wfgKYz0ApKoBjVD+0uVvGTUwQoBKgBK0ToAGIHsZrGWI++dhd98CoYuRboGCOnMLuMbdP2ERwwEIT5kkLYJpjsIiKNCyJP8hqDxHWR6GeA+PRK4Aw86Hvog0TdM0TcO4kyI/mLEHMF7Iujlk/joKfAUqxj9ljdNTRjqvxgGD9NfBTunKFMusswoWSAZMTsxGoIQk8+swZcAh7tKkg/x9Pk6YMYbhly9yvysBBQ6KSd+RGo+vo86wNYowGvPCFJQj8HYXPOPr82Z7aPT2dwKsA7c9Cqjh3RmUlsj8C4RgAMrPKiFYfzHkv2ihzuxecfz6JDFmqN9zHkvTNE3TbIwPxptP7+f8Ea7FT42H4GC9HRjb8jSQbZx826unVsC//daRno1jkvmROKZ/Fw/75Z8csMNzosc5mPSNbTDbHx783APM7vzvOLp4VgL4S0jQUd5KgP53Rc1ygW6Bp1eA7XemBLkC9HuFufyp8SlrgKbXzmyDTWuA7HX/P/spkJb8+QEBhKTOWsHHvQesYbtwDPHR5Pibpmma5k87Z6PctnFF4cPdAIxBCwRFsbalmLVTKXVtN02atAnj1q4Up3Hq5nv/x6kEE7jYHS0kJSyjH3yUhnOwEIhz5vJiYS/pAbwuzUfZKR9pS+TAOFcPHwOgJNyDPos+Hva1SvtXAYUsAR8ffgJMFOlIGPfXyJhgltgpy5yaNhCCQJDElORktvLUVIFf8LEODhifjVnICrKMIkv+X2FDeEKRMGB63is2GyjL0n0gCmQcBGAJiOwMrAKCAECzU9Qm3FQAiQDIsuCAGdnurqcbwHw+F0oCglikA5gEAeJOoaYJZNQEYn7DwPfOSFUAOfYkiaYHNBoRnvEeAHsWwO5i8rsggAcPHgjTNUltG+IAzP/DbgBAEMDIEUVUgxp4cEayAmY5EvmsDUAevCwABzgID2cHzAoePeq+BebKskzzVuPrx5UDMP/39x+mAxhFG8RoNJqNRqiBxWKR7gHMZjnks24AUjcAD3gLgAOAgwPWelcFFNqN7EBPAIoDUBTAJzLJtLoPlKkAQi0xqUENPH78GLJkBfhZns+8BfBBpwN4/AFUMypYFMWSYhQE4GUB/L5+dP1mcQBZFABBBUzNfzoAC/xJTVRyWZaqAD+r8SQ0OZATvCeLor0KFKwpEhVgAVy+B0D4eubfAsCHrxfNA/g4PQ+49GXQzmcKMvBMFPvlsk2vsvyjDXEAlkCpzeF9VeP1i4HJZr84qZ8Jpe4MAwMDAwNPn6oXB05pQAL14/GN+BSATxuZA9177Ck1TKPbs8mF2vgDqEtZqoc92FNIVVUmHN5bAuMMOCxybKIzhek9eldtesD8IywBmJ4BPffzRVFcQUsgtQ5KHDjK1g5TTTFHOoKjyD9QLcw/WALEq8OJtfiMz9hBhleON4MIkobRH/VMf5IZohAqAq1Q72V7pqUKqip1ggBT01OIK045laMNEA/gSQbgakzr+cGLl/sHuVo8ubwuG8Cf+ZzPGXcNAkWkn3R1pqyI576tdtS48wN/2kjrAxqzU1E51dzz1Ph7qQAkkDDNDn/hKV3/eF06AH2hL/XXrNF63FaAaQU6rICKYK5fAhJQnh/4V9R8pYbFIrp3AO9B6g8gqIBPJqeP8/0L4vtxh3PO9Bd8zdf8rdEj2h5g2pu2cfNfnTJJBOAIK0Ln3Tv1dHmyXAugTAXgWRP5j14vCsA0B18+GD/4+zdrPWPN5EJt/mXYW8B0LI+OTFdUjnFfAIpAck5CCcD821UQPu0GIKV6AvBExsVa5j9xA++6/vXi26k0/fZFG8BOhev5exQxJW6iBLuZ/3AekPhn71jDSMbFujL/8WWwxXUdlvcl6X6poILSFLp59E+EEnOg34qBgYGBgRysb5cAj9UD6P9JAVCoB0C/GMdK0gqnlkOwBB6S5999xzd2OuzI0HKf58/ZXybWW+SsySMdb8hTa1ULxnn+KkgAfk0AFYUKKkuPlVbxbHzRav5xxj8bKVY5hao2Ic67O0UNtt2Gg/tXhPeedkccCm62GEsrXrGxAIAK87sC6t+wACyA16+l16/NSC7KCiqlAgiWjCCPF1gA2qH7MRbAT6dgAfBydkr3BVes8mQANKTsxuMF4XtqBYF/d97ce9JIvQHG5l9kNbQ6/HsywHYQzkGuhQWgOgCZ4WK5LIrCdL5ipZzYUSqAhAQpMd1eRf493R7wNZNTeNOZ1wZ/z15/ALvALuw22h0COQvH+efvefly9nLJodbwipU03lwAcQX8C4Cj0L8ZLFY1i1ZHBYNze3t7QQDBe35xysHpD2E+q2QPWC5ns1nQBF/l+Zhi8z3A/K8sATyUToaWAK1/sdrhEEsASbvW9uQJA3jyZP0TBkCyB+R+uVyyJHkZ3PxV4EhHQCtLhaym069MUYrSWQLYk23RRJx/GWTRkOgB5GewRGlgo/OAI0lHONWAVwRA0DFeOTloR4+fj0QQQHfJSubxHp/pqvOA68PuycmujGrHSXJycc+JV05uhoGBgYE8l7H/PcD3+7o7vIW3rfiBNT/orvAI4NFa7ANIAFYDc+Yy9G+gVESpTTEHYL7NAnCuLYEfLYAf+7/7KqSkTNwL2YaUZu4lmWMAtloAUlsCGKRngg5i/1D2L9w0zbvsnenEUtCtdgDn4G2QfhjAlGnsf2zezX9q6W7lKjD9TtI704L5bxhAyZoyEUBb3wY8c50x858IwAUlQyYpw9xGAXjm8zleW8IMpwOIAfMPmP8NVMC2m2AJ4ByNhxML4CSugPQBbHwDPcDkNoib3guTL5JNEM7rfxu7Ckhoa8ypsaI7buSxenqAFIzeqi8Y/OkNwJuf9BuC7gwDAwMDAwMlsdwmjMveT0hsnnv3Yv/EcpuARRAEYPG47g7l2EnlmDC/aaunH3ZK396WUCrUxFKU2hZgEUQBWDztOZdQ2wt3CAKw8TgA06EybZLtBgDTZAAwloC1lMZAtEMQQDAukXSclohbWwGY7pPc2h5g9PeAW3sVoOZ6XAWGecDAwMDAwACV7jDuP+L9gVMLcOjukH/G4n2JWS7KN1Aogvj7D66srykr/ivei1WQypg4AeJnf2V9LXE8k96XemYlAKuFxjgZwoxke9npT7t8m71mPbtpQp2RUevriOewFod4rSkqWDh2EgHMzhjNRqz1iNHobAPNODNOdXecGfX4ta0AqakA6wsrQvuN5JsP4K+srydjKkkVYzWAchZ5GMDtbYIFPDt81m37IFGWhPbRbaV4C7wtdBcZGBgYGLDPB/TrxCKqK2o73lZ0muTnA/p1vIzu6tqOtw19Mfu07F+k44WUV9Xx8bag+4k/H9Bq6OpjgY7X+gRAAJy0mlgrMd4cP3o9xZre8bmkribWgGp9CeLF0TSYlo6PJeCS+4PUr5H6xiUiHT8jdfXPP/9sukZawmUDaJNIaI6l48iQ6NlfsaHe/c3xZc9HQJ9e1v43GEAlVYkAUs9pQ1fXIHGFCliq9g+bewtUVe8J9WvD9EUBAhdUSI9mqSWXCsCamtJNzZrgSbJJEWslxhNNUrEmPd6otIal6V62fRmLj7cF3cu2JzLx8baj+9n+VNaOtxXdz8DAwMDAwAA1bFzfGMjO4AJ9uwOgPwAyuhrUH4DQzQoAyIh1OiAk0afRUAFDD2C4CtxZBgYGBgYGBkbopoBQL3j81f2PdFMYafSrAxiR8H/7K8D8xvpmVgCj5pEIgIbQLwr17e0BviH0P4r9M7oLFWD+Sfi//RWQ9n9XrgIJ/3duHmD+b2QP2BiM7PeaMzDwP8nmcxwZc6CLAAAAAElFTkSuQmCC);background-image:url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-icons_2694e8_256x240.png?2013-02-18T16:53:20Z)!ie}.ui-state-active .ui-icon{background-image:url(data:image/png;base64,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);background-image:url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-icons_666666_256x240.png?2013-02-18T16:53:20Z)!ie}.ui-state-highlight .ui-icon{background-image:url(data:image/png;base64,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);background-image:url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-icons_2e83ff_256x240.png?2013-02-18T16:53:20Z)!ie}.ui-state-error .ui-icon,.ui-state-error-text .ui-icon{background-image:url(data:image/png;base64,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);background-image:url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-icons_ffffff_256x240.png?2013-02-18T16:53:20Z)!ie} .ui-icon-carat-1-n{background-position:0 0}.ui-icon-carat-1-ne{background-position:-16px 0}.ui-icon-carat-1-e{background-position:-32px 0}.ui-icon-carat-1-se{background-position:-48px 0}.ui-icon-carat-1-s{background-position:-64px 0}.ui-icon-carat-1-sw{background-position:-80px 0}.ui-icon-carat-1-w{background-position:-96px 0}.ui-icon-carat-1-nw{background-position:-112px 0}.ui-icon-carat-2-n-s{background-position:-128px 0}.ui-icon-carat-2-e-w{background-position:-144px 0}.ui-icon-triangle-1-n{background-position:0 -16px}.ui-icon-triangle-1-ne{background-position:-16px -16px}.ui-icon-triangle-1-e{background-position:-32px -16px}.ui-icon-triangle-1-se{background-position:-48px -16px}.ui-icon-triangle-1-s{background-position:-64px -16px}.ui-icon-triangle-1-sw{background-position:-80px -16px}.ui-icon-triangle-1-w{background-position:-96px -16px}.ui-icon-triangle-1-nw{background-position:-112px -16px}.ui-icon-triangle-2-n-s{background-position:-128px -16px}.ui-icon-triangle-2-e-w{background-position:-144px -16px}.ui-icon-arrow-1-n{background-position:0 -32px}.ui-icon-arrow-1-ne{background-position:-16px -32px}.ui-icon-arrow-1-e{background-position:-32px -32px}.ui-icon-arrow-1-se{background-position:-48px -32px}.ui-icon-arrow-1-s{background-position:-64px -32px}.ui-icon-arrow-1-sw{background-position:-80px -32px}.ui-icon-arrow-1-w{background-position:-96px -32px}.ui-icon-arrow-1-nw{background-position:-112px -32px}.ui-icon-arrow-2-n-s{background-position:-128px -32px}.ui-icon-arrow-2-ne-sw{background-position:-144px -32px}.ui-icon-arrow-2-e-w{background-position:-160px -32px}.ui-icon-arrow-2-se-nw{background-position:-176px -32px}.ui-icon-arrowstop-1-n{background-position:-192px -32px}.ui-icon-arrowstop-1-e{background-position:-208px -32px}.ui-icon-arrowstop-1-s{background-position:-224px -32px}.ui-icon-arrowstop-1-w{background-position:-240px -32px}.ui-icon-arrowthick-1-n{background-position:0 -48px}.ui-icon-arrowthick-1-ne{background-position:-16px -48px}.ui-icon-arrowthick-1-e{background-position:-32px -48px}.ui-icon-arrowthick-1-se{background-position:-48px -48px}.ui-icon-arrowthick-1-s{background-position:-64px -48px}.ui-icon-arrowthick-1-sw{background-position:-80px -48px}.ui-icon-arrowthick-1-w{background-position:-96px -48px}.ui-icon-arrowthick-1-nw{background-position:-112px -48px}.ui-icon-arrowthick-2-n-s{background-position:-128px -48px}.ui-icon-arrowthick-2-ne-sw{background-position:-144px -48px}.ui-icon-arrowthick-2-e-w{background-position:-160px -48px}.ui-icon-arrowthick-2-se-nw{background-position:-176px -48px}.ui-icon-arrowthickstop-1-n{background-position:-192px -48px}.ui-icon-arrowthickstop-1-e{background-position:-208px -48px}.ui-icon-arrowthickstop-1-s{background-position:-224px -48px}.ui-icon-arrowthickstop-1-w{background-position:-240px -48px}.ui-icon-arrowreturnthick-1-w{background-position:0 -64px}.ui-icon-arrowreturnthick-1-n{background-position:-16px -64px}.ui-icon-arrowreturnthick-1-e{background-position:-32px -64px}.ui-icon-arrowreturnthick-1-s{background-position:-48px -64px}.ui-icon-arrowreturn-1-w{background-position:-64px -64px}.ui-icon-arrowreturn-1-n{background-position:-80px -64px}.ui-icon-arrowreturn-1-e{background-position:-96px -64px}.ui-icon-arrowreturn-1-s{background-position:-112px -64px}.ui-icon-arrowrefresh-1-w{background-position:-128px -64px}.ui-icon-arrowrefresh-1-n{background-position:-144px -64px}.ui-icon-arrowrefresh-1-e{background-position:-160px -64px}.ui-icon-arrowrefresh-1-s{background-position:-176px -64px}.ui-icon-arrow-4{background-position:0 -80px}.ui-icon-arrow-4-diag{background-position:-16px -80px}.ui-icon-extlink{background-position:-32px -80px}.ui-icon-newwin{background-position:-48px -80px}.ui-icon-refresh{background-position:-64px -80px}.ui-icon-shuffle{background-position:-80px -80px}.ui-icon-transfer-e-w{background-position:-96px -80px}.ui-icon-transferthick-e-w{background-position:-112px -80px}.ui-icon-folder-collapsed{background-position:0 -96px}.ui-icon-folder-open{background-position:-16px -96px}.ui-icon-document{background-position:-32px -96px}.ui-icon-document-b{background-position:-48px -96px}.ui-icon-note{background-position:-64px -96px}.ui-icon-mail-closed{background-position:-80px -96px}.ui-icon-mail-open{background-position:-96px -96px}.ui-icon-suitcase{background-position:-112px -96px}.ui-icon-comment{background-position:-128px -96px}.ui-icon-person{background-position:-144px -96px}.ui-icon-print{background-position:-160px -96px}.ui-icon-trash{background-position:-176px -96px}.ui-icon-locked{background-position:-192px -96px}.ui-icon-unlocked{background-position:-208px -96px}.ui-icon-bookmark{background-position:-224px -96px}.ui-icon-tag{background-position:-240px -96px}.ui-icon-home{background-position:0 -112px}.ui-icon-flag{background-position:-16px -112px}.ui-icon-calendar{background-position:-32px -112px}.ui-icon-cart{background-position:-48px -112px}.ui-icon-pencil{background-position:-64px -112px}.ui-icon-clock{background-position:-80px -112px}.ui-icon-disk{background-position:-96px -112px}.ui-icon-calculator{background-position:-112px -112px}.ui-icon-zoomin{background-position:-128px -112px}.ui-icon-zoomout{background-position:-144px -112px}.ui-icon-search{background-position:-160px -112px}.ui-icon-wrench{background-position:-176px -112px}.ui-icon-gear{background-position:-192px -112px}.ui-icon-heart{background-position:-208px -112px}.ui-icon-star{background-position:-224px -112px}.ui-icon-link{background-position:-240px -112px}.ui-icon-cancel{background-position:0 -128px}.ui-icon-plus{background-position:-16px -128px}.ui-icon-plusthick{background-position:-32px -128px}.ui-icon-minus{background-position:-48px -128px}.ui-icon-minusthick{background-position:-64px -128px}.ui-icon-close{background-position:-80px -128px}.ui-icon-closethick{background-position:-96px -128px}.ui-icon-key{background-position:-112px -128px}.ui-icon-lightbulb{background-position:-128px -128px}.ui-icon-scissors{background-position:-144px -128px}.ui-icon-clipboard{background-position:-160px -128px}.ui-icon-copy{background-position:-176px -128px}.ui-icon-contact{background-position:-192px -128px}.ui-icon-image{background-position:-208px -128px}.ui-icon-video{background-position:-224px -128px}.ui-icon-script{background-position:-240px -128px}.ui-icon-alert{background-position:0 -144px}.ui-icon-info{background-position:-16px -144px}.ui-icon-notice{background-position:-32px -144px}.ui-icon-help{background-position:-48px -144px}.ui-icon-check{background-position:-64px -144px}.ui-icon-bullet{background-position:-80px -144px}.ui-icon-radio-off{background-position:-96px -144px}.ui-icon-radio-on{background-position:-112px -144px}.ui-icon-pin-w{background-position:-128px -144px}.ui-icon-pin-s{background-position:-144px -144px}.ui-icon-play{background-position:0 -160px}.ui-icon-pause{background-position:-16px -160px}.ui-icon-seek-next{background-position:-32px -160px}.ui-icon-seek-prev{background-position:-48px -160px}.ui-icon-seek-end{background-position:-64px -160px}.ui-icon-seek-start{background-position:-80px -160px} .ui-icon-seek-first{background-position:-80px -160px}.ui-icon-stop{background-position:-96px -160px}.ui-icon-eject{background-position:-112px -160px}.ui-icon-volume-off{background-position:-128px -160px}.ui-icon-volume-on{background-position:-144px -160px}.ui-icon-power{background-position:0 -176px}.ui-icon-signal-diag{background-position:-16px -176px}.ui-icon-signal{background-position:-32px -176px}.ui-icon-battery-0{background-position:-48px -176px}.ui-icon-battery-1{background-position:-64px -176px}.ui-icon-battery-2{background-position:-80px -176px}.ui-icon-battery-3{background-position:-96px -176px}.ui-icon-circle-plus{background-position:0 -192px}.ui-icon-circle-minus{background-position:-16px -192px}.ui-icon-circle-close{background-position:-32px -192px}.ui-icon-circle-triangle-e{background-position:-48px -192px}.ui-icon-circle-triangle-s{background-position:-64px -192px}.ui-icon-circle-triangle-w{background-position:-80px -192px}.ui-icon-circle-triangle-n{background-position:-96px -192px}.ui-icon-circle-arrow-e{background-position:-112px -192px}.ui-icon-circle-arrow-s{background-position:-128px -192px}.ui-icon-circle-arrow-w{background-position:-144px -192px}.ui-icon-circle-arrow-n{background-position:-160px -192px}.ui-icon-circle-zoomin{background-position:-176px -192px}.ui-icon-circle-zoomout{background-position:-192px -192px}.ui-icon-circle-check{background-position:-208px -192px}.ui-icon-circlesmall-plus{background-position:0 -208px}.ui-icon-circlesmall-minus{background-position:-16px -208px}.ui-icon-circlesmall-close{background-position:-32px -208px}.ui-icon-squaresmall-plus{background-position:-48px -208px}.ui-icon-squaresmall-minus{background-position:-64px -208px}.ui-icon-squaresmall-close{background-position:-80px -208px}.ui-icon-grip-dotted-vertical{background-position:0 -224px}.ui-icon-grip-dotted-horizontal{background-position:-16px -224px}.ui-icon-grip-solid-vertical{background-position:-32px -224px}.ui-icon-grip-solid-horizontal{background-position:-48px -224px}.ui-icon-gripsmall-diagonal-se{background-position:-64px -224px}.ui-icon-grip-diagonal-se{background-position:-80px -224px}  .ui-corner-tl{-moz-border-radius-topleft:0;-webkit-border-top-left-radius:0}.ui-corner-tr{-moz-border-radius-topright:0;-webkit-border-top-right-radius:0}.ui-corner-bl{-moz-border-radius-bottomleft:0;-webkit-border-bottom-left-radius:0}.ui-corner-br{-moz-border-radius-bottomright:0;-webkit-border-bottom-right-radius:0}.ui-corner-top{-moz-border-radius-topleft:0;-webkit-border-top-left-radius:0;-moz-border-radius-topright:0;-webkit-border-top-right-radius:0}.ui-corner-bottom{-moz-border-radius-bottomleft:0;-webkit-border-bottom-left-radius:0;-moz-border-radius-bottomright:0;-webkit-border-bottom-right-radius:0}.ui-corner-right{-moz-border-radius-topright:0;-webkit-border-top-right-radius:0;-moz-border-radius-bottomright:0;-webkit-border-bottom-right-radius:0}.ui-corner-left{-moz-border-radius-topleft:0;-webkit-border-top-left-radius:0;-moz-border-radius-bottomleft:0;-webkit-border-bottom-left-radius:0}.ui-corner-all{-moz-border-radius:0;-webkit-border-radius:0} .ui-widget-overlay{background:#000000;opacity:.75;filter:Alpha(Opacity=75)}.ui-widget-shadow{margin:-7px 0 0 -7px;padding:7px;background:#000000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAABkAQMAAADOquA5AAAAA1BMVEUAAACnej3aAAAAD0lEQVQoFWNgGAWjgPoAAAJYAAEDeXiTAAAAAElFTkSuQmCC) 50% 50% repeat-x;background:#000000 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-bg_flat_70_000000_40x100.png?2013-02-18T16:53:20Z) 50% 50% repeat-x!ie;opacity:.20;filter:Alpha(Opacity=20);-moz-border-radius:8px;-webkit-border-radius:8px;border-radius:8px}
+/* cache key: ruwiki:resourceloader:filter:minify-css:7:60731a0315705bb38acd6e01626a13e7 */.ui-resizable{position:relative}.ui-resizable-handle{position:absolute;font-size:0.1px;z-index:99999;display:block}.ui-resizable-disabled .ui-resizable-handle,.ui-resizable-autohide .ui-resizable-handle{display:none}.ui-resizable-n{cursor:n-resize;height:7px;width:100%;top:-5px;left:0}.ui-resizable-s{cursor:s-resize;height:7px;width:100%;bottom:-5px;left:0} .ui-resizable-e{cursor:e-resize;width:7px;right:-5px;top:0;height:100%} .ui-resizable-w{cursor:w-resize;width:7px;left:-5px;top:0;height:100%} .ui-resizable-se{cursor:se-resize;width:12px;height:12px;right:1px;bottom:1px} .ui-resizable-sw{cursor:sw-resize;width:9px;height:9px;left:-5px;bottom:-5px} .ui-resizable-nw{cursor:nw-resize;width:9px;height:9px;left:-5px;top:-5px} .ui-resizable-ne{cursor:ne-resize;width:9px;height:9px;right:-5px;top:-5px}
+/* cache key: ruwiki:resourceloader:filter:minify-css:7:6edb0b5932c338be8f0957237aa57681 */.ui-button{display:inline-block;position:relative;padding:0;margin-right:.1em;text-decoration:none !important;cursor:pointer;text-align:center;zoom:1;overflow:visible} .ui-button-icon-only{width:2.2em} button.ui-button-icon-only{width:2.4em} .ui-button-icons-only{width:3.4em}button.ui-button-icons-only{width:3.7em} .ui-button .ui-button-text{display:block;line-height:1.4}.ui-button-text-only .ui-button-text{padding:0.3em 1em 0.25em 1em}.ui-button-icon-only .ui-button-text,.ui-button-icons-only .ui-button-text{padding:0.3em;text-indent:-9999999px}.ui-button-text-icon-primary .ui-button-text,.ui-button-text-icons .ui-button-text{padding:0.3em 1em 0.25em 2.1em}.ui-button-text-icon-secondary .ui-button-text,.ui-button-text-icons .ui-button-text{padding:0.3em 2.1em 0.25em 1em}.ui-button-text-icons .ui-button-text{padding-left:2.1em;padding-right:2.1em} input.ui-button{padding:0.3em 1em} .ui-button-icon-only .ui-icon,.ui-button-text-icon-primary .ui-icon,.ui-button-text-icon-secondary .ui-icon,.ui-button-text-icons .ui-icon,.ui-button-text-icon .ui-icon,.ui-button-icons-only .ui-icon{position:absolute;top:50%;margin-top:-9px}.ui-button-icon-only .ui-icon{left:50%;margin-left:-8px}.ui-button-text-icon-primary .ui-button-icon-primary,.ui-button-text-icon .ui-button-icon-primary,.ui-button-text-icons .ui-button-icon-primary,.ui-button-icons-only .ui-button-icon-primary{left:0.5em}.ui-button-text-icon-secondary .ui-button-icon-secondary,.ui-button-text-icon .ui-button-icon-secondary,.ui-button-text-icons .ui-button-icon-secondary,.ui-button-icons-only .ui-button-icon-secondary{right:0.5em} .ui-buttonset{margin-right:7px}.ui-buttonset .ui-button{margin-left:0;margin-right:-.3em} button.ui-button::-moz-focus-inner{border:0;padding:0} body .ui-button{margin:0.5em 0 0.5em 0.4em;border:1px solid #a6a6a6 !important;background:#f2f2f2 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWBAMAAADz6OuZAAAALVBMVEXh4eHR0dHr6+vb29vo6Ojl5eXV1dXv7+/w8PDt7e3d3d3X19fx8fHy8vLPz88WlQFaAAAAJklEQVQIHWO6wMTA9AGIDwBJBaYJQCzAtIFpAZDVAKQ3MIHkoRAA6kAJDVgW4y4AAAAASUVORK5CYII=) repeat-x scroll 50% 100% !important;background:#f2f2f2 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-off.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie;cursor:pointer;font-size:1em;line-height:1.4em;width:auto;overflow:visible}  .ui-button.ui-corner-all,.ui-button.ui-corner-top,.ui-button.ui-corner-left,.ui-button.ui-corner-tl{-moz-border-radius-topleft:4px;-webkit-border-top-left-radius:4px;border-top-left-radius:4px}.ui-button.ui-corner-all,.ui-button.ui-corner-top,.ui-button.ui-corner-right,.ui-button.ui-corner-tr{-moz-border-radius-topright:4px;-webkit-border-top-right-radius:4px;border-top-right-radius:4px}.ui-button.ui-corner-all,.ui-button.ui-corner-bottom,.ui-button.ui-corner-left,.ui-button.ui-corner-bl{-moz-border-radius-bottomleft:4px;-webkit-border-bottom-left-radius:4px;border-bottom-left-radius:4px}.ui-button.ui-corner-all,.ui-button.ui-corner-bottom,.ui-button.ui-corner-right,.ui-button.ui-corner-br{-moz-border-radius-bottomright:4px;-webkit-border-bottom-right-radius:4px;border-bottom-right-radius:4px}body .ui-button:hover{border-color:#6e7273;background:#e1e1e1 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWBAMAAADz6OuZAAAALVBMVEXR0dHe3t7Y2NjIyMjV1dXf39/CwsLc3NzGxsbNzc3a2trh4eHg4ODMzMzAwMAj4qyZAAAAKUlEQVQIHWPawMTAJADEE5gOMCUwGTA1MCkAWROYHIC8AKYHQD4DDAIAsAAHDYu3YWAAAAAASUVORK5CYII=) repeat-x scroll 50% 100% !important;background:#e1e1e1 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-over.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button:active,body .ui-button:focus{border-color:#707271;background:#bfbfbf url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAgBAMAAAAhyw8pAAAAGFBMVEXc3NzGxsba2tre3t7V1dXQ0NDMzMzAwMAJtu+DAAAAJUlEQVQIW2MIYABBBwYFBgYGAzBkALJB0AEIAxgSwFAADAswIQDmgAjBBvE06AAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#bfbfbf url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-down.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.disabled{color:#7f7f7f;border-color:#cccccc;background:#f2f2f2 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWAQMAAAA7CGTpAAAAA1BMVEXy8vJkA4prAAAADElEQVQIHWNgIB4AAAAsAAHHpi09AAAAAElFTkSuQmCC) repeat-x scroll 50% 100% !important;background:#f2f2f2 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-disabled.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie} body button.ui-button::-moz-focus-inner{border:0} body .ui-button-large{padding:5px} .ui-button-green .ui-icon,.ui-button-blue .ui-icon,.ui-button-red .ui-icon,.ui-button-orange .ui-icon{background-image:url(data:image/png;base64,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) !important;background-image:url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/ui-icons_ffffff_256x240.png?2013-02-18T16:53:20Z) !important!ie} body .ui-button.ui-button-green{color:white !important;border-color:#97af7e !important;background:#3cb677 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAMAAAA2GAaYAAAAQlBMVEUpflI7tXYxl2MujVwqgFQ1omk2pWwoeU8vkF4sh1gwlGA5rnI7s3Uzm2U3qG4oe1A0n2c4q3AtilovfVUrg1Y6sXPiEyGEAAAAKElEQVR4XgXAhQ2AMAAAsM4Ft/9fJYLVZ3HZVcVpE01dchteGYfm+QEULwDomj1/qwAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#3cb677 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-green.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-green:hover{border-color:#778e61 !important;background:#339b65 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAMAAAA2GAaYAAAAQlBMVEUkbUcpflIja0Yxl2IoakgxlGEymGQsh1goe1Awkl8tilkqgFQrhFYvj14neE4lb0klc0siZ0MiaUQymmQmdU0ujFwT8ddqAAAAKElEQVR4XgXAhQ2AMAAAsM4Ft/9fJR5VUgybz9SsFkG3e50ORLdL/gET1wDo6WccxwAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#339b65 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-green-hover.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-green.ui-button-large{background:#3cb677 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAsCAMAAACT+SJTAAAAhFBMVEUpflI7tXYxl2MujVwznGYrglUqgFQ1omk2pWw2p20wkl8oeU8shVc0oGgpfVExlmIvkF4sh1g5sHMwlGA8tnc5rnI7s3Uzm2U3qm83qG4ui1soe1AymWQneE4qf1Mvj100n2c6snQ1pGstiFkoelA4q3Atilo4rXEvfVUrg1Y7tHY6sXMmHHEHAAAAQElEQVR4XgXAgxHDAAAAwI/t2ub+++UsBH5Wrv5GS29PG1uF3E2mcRFbOwh1JqXeWWTn5W5Q+0qkTmjtPVSOPjOmhAOzqcaxkwAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#3cb677 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-green-large.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-green.ui-button-large:hover{background:#339b65 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAsCAMAAACT+SJTAAAAhFBMVEUkbUcoek8kbEcpflIpfFEja0Yxl2Ioakgxl2MxlGExlmIymGQsh1goe1Awkl8hZkIjakUndk0tilkqgFQlb0grhFYvj14ujl0rglUmdEwzm2UsiFkiaEQymWQneE4lb0klcUovkV4lc0siZ0MiaUQymmQtjFsqgFMwk2AmdU0rhVcujFzu4mGUAAAAQElEQVR4XgXAgxHDAAAAwI/t2ub+++XsPB1VcqlS4aN1tbL29zLaq/0sbUzeIrFG4GTwtXVzcbZAKNF7OLjrZDOnXAOzVTrJJQAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#339b65 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-green-hover-large.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-green.disabled{filter:alpha(opacity=50);-moz-opacity:0.50;-khtml-opacity:0.50;opacity:0.50} body .ui-button.ui-button-blue{color:white !important;border-color:#628acb !important;background:#3365ba url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAMAAAA2GAaYAAAAQlBMVEUuXKkmS4ozZbkkSIQtW6YiRHwrV58hQ3owYLAxY7UnTY0jRoEqVZsyZLcvXq0oT5EqU5gxYbMsWaMlSocjRX8pUZU8hDFrAAAAKElEQVR4XgXAhQ2AMAAAsM4Ft/9fJaLNcOl2ZLdqdfocpuCRLF5F+wETiQDocXjMfwAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#3365ba url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-blue.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-blue:hover{border-color:#5375ad !important;background:#2b569e url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAMAAAA2GAaYAAAAQlBMVEUkSIQlSocqVJokR4EfPXArVZwnTpAjRX8fP3MoUJMhQngiQ3sePG4gQHUeO2wmTY0qU5gcOWglTIspUpYdOmorVp0vaG5sAAAAKElEQVR4XgXAhQ2AMAAAsM4Ft/9fJT5FdHoM1eEWkDSLadNlq93r+gETbQDoYR8TFAAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#2b569e url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-blue-hover.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-blue.ui-button-large{background:#3365ba url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAsCAMAAACT+SJTAAAAhFBMVEUuXKksWKEmS4ouXKgqVJovX64wYbEyY7YzZbkkSIQyZbgtW6YkR4MnTpAiRHwrV58lS4khQ3owYLAxY7UnTY0jRoEoUJMqVZsyZLctWqQiQ3svXq0kSYYoT5ExYrQqU5gjRoAxYbMsWaMpUpYmTIwlSocjRX8zZborVp0pUZUiRH0vXauCMiDmAAAAQElEQVR4XgXAgxHDAAAAwI/t2ub+++W85UobmcnJVWqU2PsjUtm6CXQ+1mJnd18rR42Fh1Dv6aBQW7p4+WntDDOZVAOzgFhMmgAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#3365ba url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-blue-large.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-blue.ui-button-large:hover{background:#2b569e url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAsCAMAAACT+SJTAAAAflBMVEUfPG8kSIQfPnIlSocqVJokR4MkR4EfPXAiRH0rVZwoT5InTpAlS4koUZQjRX8fP3MoUJMhQngiQ3sePG0qU5kePG4rVJsgQHUlSYYmTYwrVp4eO2wpU5cnTo8gQXcmTY0qU5gfQHUjRoAcOWglTIspUpYhQnsdOWkdOmorVp3M0v8uAAAAQUlEQVR4Xg3BgxVDQQAAsHybta39F+y92PsFlbXU0tXRS2dUa5xc7Dy1EluRTO6uV5q9Tc42bgaxAisLB9/g4/EHoJ4Dr9t5q84AAAAASUVORK5CYII=) repeat-x scroll 50% 100% !important;background:#2b569e url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-blue-hover-large.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-blue.disabled{filter:alpha(opacity=50);-moz-opacity:0.50;-khtml-opacity:0.50;opacity:0.50} body .ui-button.ui-button-red{color:white !important;border-color:#af977e !important;background:#cb0000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAMAAAA2GAaYAAAAQlBMVEWUAACeAACIAADIAACQAACKAACaAADDAAC8AACxAACFAADFAADAAACuAACXAACqAACmAAC5AACiAACNAADKAAC1AAB6LXXpAAAAKElEQVR4XgXAhQ2AMAAAsM4Ft/9fJV7Joll1l8+wOZxuQbUjexTR/AEV+QDoUwTrkQAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#cb0000 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-red.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-red:hover{border-color:#8e7761 !important;background:#ad0000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAMAAAA2GAaYAAAAQlBMVEWdAACUAACaAACDAAB0AACjAACNAAB4AAB7AACgAACKAABxAACsAACXAACqAACAAACoAAB+AACmAACRAAB1AACGAAAFpPfGAAAAKElEQVR4XgXAhQ2AMAAAsM4Ft/9fJVa7060YiDbBo5o+yeHSNa9s+QET9wDo7y8jggAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#ad0000 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-red-hover.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-red.ui-button-large{background:#cb0000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAMAAAA2GAaYAAAAQlBMVEWUAACeAACIAADIAACQAACKAACaAADDAAC8AACxAACFAADFAADAAACuAACXAACqAACmAAC5AACiAACNAADKAAC1AAB6LXXpAAAAKElEQVR4XgXAhQ2AMAAAsM4Ft/9fJV7Joll1l8+wOZxuQbUjexTR/AEV+QDoUwTrkQAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#cb0000 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-red.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-red.ui-button-large:hover{background:#ad0000 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAMAAAA2GAaYAAAAQlBMVEWdAACUAACaAACDAAB0AACjAACNAAB4AAB7AACgAACKAABxAACsAACXAACqAACAAACoAAB+AACmAACRAAB1AACGAAAFpPfGAAAAKElEQVR4XgXAhQ2AMAAAsM4Ft/9fJVa7060YiDbBo5o+yeHSNa9s+QET9wDo7y8jggAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#ad0000 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-red-hover.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-red.disabled{filter:alpha(opacity=50);-moz-opacity:0.50;-khtml-opacity:0.50;opacity:0.50} body .ui-button.ui-button-orange{color:white !important;border-color:#f3a863 !important;background:#f07f14 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAMAAAA2GAaYAAAAQlBMVEXhdxOmWA61YA+pWg6iWxbQbhHsfRTddRLUcBLCZxCgVQ3vfhSiVg3ZcxLHaRDpexOxXg+tXA7leRO+ZBDMbBG6Yg+ZlQMbAAAAKElEQVR4XgXAhQ2AMAAAsM4Ft/9fJRbV4Uaz6YrXbnh8otMlCVZT/gEUsQDogjg6swAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#f07f14 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-orange.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-orange:hover{border-color:#ce9055 !important;background:#cc6c11 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAWCAMAAAA2GAaYAAAAQlBMVEWXUA2ISAueUw2NSwyxXg6lWA68ZA+TTgyQTQy5Yg+pWQ6KSQu0Xw/LaxGiVQ6uXA6/ZRDGaRDDZxCaUg2KTRPJahH2OJVtAAAAKElEQVR4XgXAhQ2AMAAAsM4Ft/9fJTafy+1UDavsMBW76EHTJYvg/QEWxQDo2m2cEgAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#cc6c11 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-orange-hover.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-orange.ui-button-large{background:#f07f14 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAsCAMAAACT+SJTAAAAhFBMVEWnWA7hdxOmWA63YQ+1YA+pWg7AZhCiWxbQbhGeVA3sfRTtfhTbdBLddRLUcBLFaBDCZxCgVQ3SbxHjeBPvfhSvXQ+kVw6iVg3ZcxLHaRCrWw7pexPfdhK8YxCxXg+tXA7leRPqfBO+ZBDMbBG6Yg+zXw/wfxShVQ3nehPJahHXchLObRGV62MnAAAAQElEQVR4XgXAgxHDAAAAwI/t2ub+++W8LFRKV3sfF5PAQaO28dMa5f7uvrY6vdTN0UMk9nSydLaTILSy9jYoZDOtXgOzmKJnqAAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#f07f14 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-orange-large.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-orange.ui-button-large:hover{background:#cc6c11 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAsCAMAAACT+SJTAAAAhFBMVEWJSAuXUA2ISAueUw2cUw2NSwyxXg6lWA6+ZA+8ZA+TTgzFaBCQTQySTQy5Yg+zXg6pWQ63YQ+KSQurWg60Xw/HahCOSwzLaxGiVQ6uXA66Yw+/ZRDKaxHBZhDGaRCoWQ6YUQ2GRwvMbBHDZxCgVA6VTw2jVw6vXQ6MSgyaUg2KTRPJahHiODFfAAAAQElEQVR4XgXAgxHDAAAAwI/t2ub+++XcrB38LZ1U7o72coWd1mChk3rbmvTOMi8bD5HY10XgqdSorSQ+RoSufjOr8AOzYAWVRAAAAABJRU5ErkJggg==) repeat-x scroll 50% 100% !important;background:#cc6c11 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/button-orange-hover-large.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie}body .ui-button.ui-button-orange.disabled{filter:alpha(opacity=50);-moz-opacity:0.50;-khtml-opacity:0.50;opacity:0.50}
+/* cache key: ruwiki:resourceloader:filter:minify-css:7:4b5dcfeb8c5f02ee72e9a3c552167397 */.ui-dialog{position:absolute;padding:0;width:300px}.ui-dialog .ui-dialog-titlebar{padding:.75em;position:relative}.ui-dialog .ui-dialog-title{float:left;margin:0}.ui-dialog .ui-dialog-titlebar-close{position:absolute;right:.75em;top:50%;width:19px;margin:-10px 0 0 0;padding:1px;height:18px}.ui-dialog .ui-dialog-titlebar-close span{display:block;margin:1px}.ui-dialog .ui-dialog-titlebar-close:hover,.ui-dialog .ui-dialog-titlebar-close:focus{padding:0}.ui-dialog .ui-dialog-content{border:0;padding:.5em 1em;background:none;overflow:auto;zoom:1}.ui-dialog .ui-dialog-buttonpane{text-align:left;border-width:1px 0 0 0;background-image:none;margin:.5em 0 0 0;padding:.3em 1em .5em .4em}.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset{float:right}.ui-dialog .ui-resizable-se{width:14px;height:14px;right:3px;bottom:3px}.ui-draggable .ui-dialog-titlebar{cursor:move} body .ui-dialog .ui-dialog-titlebar-close:hover{text-decoration:none}body .ui-dialog .ui-dialog-content .status-invalid input{border:2px solid red;padding:2px 1px}body .ui-dialog .ui-dialog-titlebar{padding:0.9em 1.4em 0.6em !important}body .ui-dialog .ui-widget-header{background:#f0f0f0 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAkCAMAAAB/qqA+AAAASFBMVEXn5+fZ2dns7Ozc3Nzj4+Pg4ODq6url5eXk5OTh4eHe3t7o6Oju7u7r6+vb29vi4uLv7+/f39/p6enm5ubw8PDt7e3d3d3a2tpM98B4AAAAL0lEQVR4Xg3BhRHAMACAQOJ1l/03Dfc8OrToVWRV5dIM3GoMZHaNFE5NfEps+hU6RiYB51j6ttcAAAAASUVORK5CYII=) repeat-x scroll 50% 100% !important;background:#f0f0f0 url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/titlebar-fade.png?2013-02-18T16:53:20Z) repeat-x scroll 50% 100% !important!ie} body .ui-dialog .ui-icon-closethick{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIBAMAAAA2IaO4AAAAElBMVEUAAAAAAAD///8AAAAAAAAAAAAtTix5AAAABXRSTlMNTQC/s2KwEqEAAAAjSURBVAgdYwhhUnBlEDVgDmRgDDYVYFAQDWSCEGAuWAKkBABiBwTrflTh/wAAAABJRU5ErkJggg==) no-repeat 50% 50% !important;background:url(//bits.wikimedia.org/static-1.21wmf10/resources/jquery.ui/themes/vector/images/close.png?2013-02-18T16:53:20Z) no-repeat 50% 50% !important!ie}body .ui-dialog .ui-dialog-buttonpane{margin-top:0 !important;padding:0.3em 1.4em 0.5em 1.4em !important}
+/* cache key: ruwiki:resourceloader:filter:minify-css:7:311cd3114a1740f2a2e8894bb7140c1d */.PopUpMediaTransform a .play-btn-large{position :absolute;top:50%;left :50%;width:70px;height:53px;margin-left:-35px;margin-top:-25px;background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAAA1CAMAAADLRm3ZAAABnlBMVEUAAAAAAAAAAABaWlp4eHh7e3t/f393d3eDg4N0dHRtbW2FhYVra2uJiYmNjY1nZ2eRkZFkZGSUlJRiYmKYmJhgYGCcnJxeXl5cXFyfn58AAACioqKlpaWsrKwAAACpqakAAAAAAAAAAAAAAABEREQFBQUHBwdMTEwAAAAYGBgAAAAAAAABAQEXFxcAAAAAAAAAAABxcXGoqKh3d3eampp8fHyIiIgUFBQcHBw0NDSFhYV+fn5FRUUmJiaNjY11dXWPj4+Hh4c9PT14eHifn59nZ2eBgYFISEiBgYFubm5vb28ODg4lJSVra2tiYmJoaGgEBAQmJiZmZmaLi4saGhpiYmKYmJhZWVlgYGBfX19vb29DQ0MGBgZcXFyBgYFKSkoPDw9ZWVlzc3NQUFBXV1eKiopUVFQdHR1VVVUQEBBYWFglJSVTU1NXV1cKCgosLCySkpJRUVFISEgyMjJPT08dHR2GhoY4ODhNTU09PT0MDAwuLi57e3sTExNJSUkgICBOTk4hISEbGxtTU1MoKChBQUEsLCxXV1cAAABycnIdNM6eAAAAinRSTlOzj6jO1dbX1NfU09nS2drR29Hc0N3Q3c/O3gDf3+Ce4EgIGW7HtbXKnLouq7S5cHIq1ODQ3NTXuLq/1tXEvNjT2NjC093N18bW0dC2vNHM0LW90Ne5z9rLzsrTxbXN1Me3zdDKzdfLu8y3zb3Lyba/2svFwcq618PKxLa/1LjJu8q8u8y+xsDKrdJqj5XQAAABYklEQVR4Xu3XVVNCQRjH4VdQEbvFVRAOIRl2d3d3d3d317d2GEaGOOfM1oUXPB/gN7NX/30BIYPeGMPAqDcgBMhrBUZWLwJBAcwcAriBAzfogAMdKIADBUUmmqm64JAxl2m1k/XMmZkin+YaxsxYqd9iA1OmsfDPajVDZqMgoL1jhzpTmR+k/OCQMlObG+L4dJgq050d5rKVJlOXGaHijjxzny6i94k005YqatBFlmlKEdfy1UeS+UmS0tllwc/0JEhT9WNnBuJlqCy4maE4OSO4mdFYOeO4mQm1jCnAzUyXSJqdm8fOLCRKWVomWIaVZHFrLqJlWE8Ts7lFuAzbGZF294iXYT8rnPLICcSZk5xQyjMzzTKc5wXTXFnoluFaE+TmlnYZipUBpgcA5syjjWU1Tf7I8wvbhr/6Im/vTmDLgO3D9Gn+R5+2aIbXzeABDjwgOIDZtwDIzvwsnR1xujV/AS6zSfMs2bS9AAAAAElFTkSuQmCC);background-image:url(//bits.wikimedia.org/static-1.21wmf10/extensions/TimedMediaHandler/resources/player_big_play_button.png?2013-02-18T16:58:20Z)!ie}.PopUpMediaTransform a .play-btn-large :hover{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAAA1CAMAAADLRm3ZAAABtlBMVEUAAAAAAAAAAAC5ubm1tbWwsLC+vr6Li4vExMSrq6umpqbIyMjOzs6ioqLT09OdnZ3Y2NiZmZnc3NyWlpbh4eGSkpLn5+eQkJCNjY0AAADr6+vv7+/z8/P39/cAAAD9/f0AAAAAAAAAAAAAAAB2dnYAAAAoKCj5+flra2sMDAwAAAAAAAAAAAAAAAAAAAACAgLW1tbPz88wMDCHh4fExMS8vLxKSkpubm6vr6+qqqo0NDQQEBDCwsK1tbUmJiaysrLT09PLy8uIiIgXFxetra2+vr7r6+tycnIbGxvMzMyTk5O1tbU8PDyjo6PR0dG0tLQLCwufn58HBwc9PT2bm5shISEqKiqXl5cICAiJiYmTk5Pj4+OoqKhpaWkKCgqOjo5TU1OXl5cYGBiKioo9PT18fHwlJSWGhoYuLi6CgoIvLy+Dg4Ofn5+oqKg7OzuAgIDk5OSLi4tHR0fIyMh9fX3Z2dlycnJPT08JCQl7e3vJyclhYWFZWVl4eHhhYWEUFBS6urpqamofHx9ycnK2trZzc3N6eno1NTUsLCyKioqAgIBBQUFmZmZHR0cICAjBwcEAAACIiIg+YVJpAAAAknRSTlOzj6jt6+ru4O/p5/Hy5vPl9eT24/ji+eHgAPr7/P2e/hlICG7YLr7+07accipwq7Tw777X6erGzuLjv7fs4rzn8PDYuObr+dK57tjqwuTu6rbjtcPiur3htdvg8+jRtt7H3Lndwdi83b7bwNze5cPb9t/G7drz0Mq22e7MzdjPuOrUu9fo1NnCwN/cxdLItu6t3VahkKcAAAFlSURBVHhe7dfFcgJBFIbRGyLEXegIDBAITtzd3d3d3d3d88ZJigqFzExNyyILzgN8Vb36+wJCGrXWj4JWrUEIkMUElEwWBJwMqNk4sAIDVlACA0qQAQMygowv05fNIDNYplKNFFBnmjN+ZU5SZtrTHHJnqTKVqX8KFykyWSlO9auNxJmmZBebOSWEmZ1EN3v73USZ0ngPxyckmbpYL3n5+JnLaB5FxbiZ20heU+V4mYpwflXVNTiZ2jAhHw1G6Zm1YGEtrZIzbUEiOjqlZrr8xfRIzfQGiOmXmhkIFDEEUjPDIYJGx8YlZyZChdxNYyzDTAS/uXmsZViI4rO0jLkMKzHevtaxl2EjztPWth2wM7sJ7uQHhyTLcJTkSnFqJFuGM4WL8wvSZUiXO11dA1BnbvQ0q2lwRO4f6Db88ekn8vxiB7oM6F8Nb+//6NPmy7C6GczAgBk4G1D75ADpqJ+l1CFGt+Y3XGRJEJqP8KwAAAAASUVORK5CYII=);background-image:url(//bits.wikimedia.org/static-1.21wmf10/extensions/TimedMediaHandler/resources/player_big_play_button_hover.png?2013-02-18T16:58:20Z)!ie}.PopUpMediaTransform{position :relative;display:inline-block}li.gallerybox div.thumb div.PopUpMediaTransform{margin:0 auto}
+/* cache key: ruwiki:resourceloader:filter:minify-css:7:2769df0e55369f3d7d4e8a3e39e097b5 */</style><meta name="ResourceLoaderDynamicStyles" content="">
+<link rel="stylesheet" href="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/load.css">
+<noscript><link rel="stylesheet" href="//bits.wikimedia.org/ru.wikipedia.org/load.php?debug=false&amp;lang=ru&amp;modules=noscript&amp;only=styles&amp;skin=vector&amp;*" /></noscript>
+<style>a:lang(ar),a:lang(ckb),a:lang(fa),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}
+/* cache key: ruwiki:resourceloader:filter:minify-css:7:c884871e92fe0235e1543a88374827c4 */</style>
+
+<script src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/load_005.php"></script><script src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/load_003.php"></script><style title="spinjs"></style>
+<script>if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"HLSL","wgTitle":"HLSL","wgCurRevisionId":50662927,"wgArticleId":269723,"wgIsArticle":true,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Википедия:Нет источников с февраля 2010","Википедия:Статьи с утверждениями без источников более 14 дней","Википедия:Статьи без ссылок на источники","Википедия:Статьи к викификации","Википедия:Статьи без шаблонов-карточек","Программные интерфейсы Microsoft","Языки программирования"],"wgBreakFrames":false,"wgPageContentLanguage":"ru","wgSeparatorTransformTable":[",	."," 	,"],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"],"wgMonthNamesShort":["","янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"],"wgRelevantPageName":"HLSL","wgRestrictionEdit":[],"wgRestrictionMove":[],"wgVectorEnabledModules":{"collapsiblenav":true,"collapsibletabs":true,"editwarning":true,"expandablesearch":false,"footercleanup":false,"sectioneditlinks":false,"experiments":true},"wgWikiEditorEnabledModules":{"toolbar":true,"dialogs":true,"hidesig":true,"templateEditor":false,"templates":false,"preview":false,"previewDialog":false,"publish":false,"toc":false},"wgFlaggedRevsParams":{"tags":{"accuracy":{"levels":3,"quality":2,"pristine":4}}},"wgStableRevisionId":42756797,"wgCategoryTreePageCategoryOptions":"{\"mode\":0,\"hideprefix\":20,\"showcount\":true,\"namespaces\":false}","Geo":{"city":"","country":""},"wgNoticeProject":"wikipedia"});
+}</script><script>if(window.mw){
+mw.loader.implement("user.options",function(){mw.user.options.set({"ccmeonemails":0,"cols":80,"date":"default","diffonly":0,"disablemail":0,"disablesuggest":0,"editfont":"default","editondblclick":0,"editsection":1,"editsectiononrightclick":0,"enotifminoredits":0,"enotifrevealaddr":0,"enotifusertalkpages":1,"enotifwatchlistpages":0,"extendwatchlist":0,"externaldiff":0,"externaleditor":0,"fancysig":0,"forceeditsummary":0,"gender":"unknown","hideminor":0,"hidepatrolled":0,"imagesize":2,"justify":0,"math":0,"minordefault":0,"newpageshidepatrolled":0,"nocache":0,"noconvertlink":0,"norollbackdiff":0,"numberheadings":0,"previewonfirst":0,"previewontop":1,"quickbar":5,"rcdays":7,"rclimit":50,"rememberpassword":0,"rows":25,"searchlimit":20,"showhiddencats":false,"showjumplinks":1,"shownumberswatching":1,"showtoc":1,"showtoolbar":1,"skin":"vector","stubthreshold":0,"thumbsize":4,"underline":2,"uselivepreview":0,"usenewrc":0,"watchcreations":1,"watchdefault":0,"watchdeletion":0,"watchlistdays":3
+,"watchlisthideanons":0,"watchlisthidebots":0,"watchlisthideliu":0,"watchlisthideminor":0,"watchlisthideown":0,"watchlisthidepatrolled":0,"watchmoves":0,"wllimit":250,"flaggedrevssimpleui":1,"flaggedrevsstable":0,"flaggedrevseditdiffs":true,"flaggedrevsviewdiffs":false,"vector-simplesearch":1,"useeditwarning":1,"vector-collapsiblenav":1,"usebetatoolbar":1,"usebetatoolbar-cgd":1,"variant":"ru","language":"ru","searchNs0":true,"searchNs1":false,"searchNs2":false,"searchNs3":false,"searchNs4":false,"searchNs5":false,"searchNs6":false,"searchNs7":false,"searchNs8":false,"searchNs9":false,"searchNs10":false,"searchNs11":false,"searchNs12":false,"searchNs13":false,"searchNs14":false,"searchNs15":false,"searchNs100":false,"searchNs101":false,"searchNs102":false,"searchNs103":false,"searchNs104":false,"searchNs105":false,"searchNs106":false,"searchNs107":false,"gadget-BKL":1,"gadget-collapserefs":1,"gadget-directLinkToCommons":1,"gadget-referenceTooltips":1});;},{},{});mw.loader.implement(
+"user.tokens",function(){mw.user.tokens.set({"editToken":"+\\","patrolToken":false,"watchToken":false});;},{},{});
+/* cache key: ruwiki:resourceloader:filter:minify-js:7:67a935a7507ca48dda430f7281b64bea */
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax","ext.centralNotice.bannerController"]);
+}</script><script src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/load_008.php"></script>
+<style type="text/css">/*<![CDATA[*/
+.source-glsl {line-height: normal;}
+.source-glsl li, .source-glsl pre {
+	line-height: normal; border: 0px none white;
+}
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for glsl
+ * CSS class: source-glsl, CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.glsl.source-glsl .de1, .glsl.source-glsl .de2 {font: normal normal 1em/1.2em monospace; margin:0; padding:0; background:none; vertical-align:top;}
+.glsl.source-glsl  {font-family:monospace;}
+.glsl.source-glsl .imp {font-weight: bold; color: red;}
+.glsl.source-glsl li, .glsl.source-glsl .li1 {font-weight: normal; vertical-align:top;}
+.glsl.source-glsl .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.glsl.source-glsl .li2 {font-weight: bold; vertical-align:top;}
+.glsl.source-glsl .kw1 {color: #000000; font-weight: bold;}
+.glsl.source-glsl .kw2 {color: #333399; font-weight: bold;}
+.glsl.source-glsl .kw3 {color: #000066; font-weight: bold;}
+.glsl.source-glsl .kw4 {color: #333399; font-weight: bold;}
+.glsl.source-glsl .kw5 {color: #993333; font-weight: bold;}
+.glsl.source-glsl .kw6 {color: #551111;}
+.glsl.source-glsl .co1 {color: #666666; font-style: italic;}
+.glsl.source-glsl .co2 {color: #009900;}
+.glsl.source-glsl .coMULTI {color: #666666; font-style: italic;}
+.glsl.source-glsl .es0 {color: #000099; font-weight: bold;}
+.glsl.source-glsl .br0 {color: #000066;}
+.glsl.source-glsl .sy0 {color: #000066;}
+.glsl.source-glsl .st0 {color: #ff0000;}
+.glsl.source-glsl .nu0 {color: #0000ff;}
+.glsl.source-glsl .me1 {color: #006600;}
+.glsl.source-glsl .ln-xtra, .glsl.source-glsl li.ln-xtra, .glsl.source-glsl div.ln-xtra {background-color: #ffc;}
+.glsl.source-glsl span.xtra { display:block; }
+
+/*]]>*/
+</style><script src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/geoiplookup"></script><link rel="dns-prefetch" href="http://meta.wikimedia.org/"><!--[if lt IE 7]><style type="text/css">body{behavior:url("/w/static-1.21wmf10/skins/vector/csshover.min.htc")}</style><![endif]--><script src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/load_007.php" async=""></script><script src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/load_004.php" async=""></script><script src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/load_006.php" async=""></script><script src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/index_003.php" async=""></script><style>.IPA, .Unicode { font-family: "Arial Unicode MS", "Lucida Sans Unicode"; }</style><script type="text/javascript" src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/index.php"></script><style>#mw-fr-revisiontag {display:none}</style><script type="text/javascript" src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/index_002.php"></script><script type="text/javascript" src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/index_005.php"></script><style type="text/css">.iw-focus {font-weight: bold} .iw-babel {font-style: italic}</style></head>
+<body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-HLSL skin-vector action-view vector-animateLayout"><div class="cn-fundraising" id="centralNotice">
+
+<style type="text/css">
+  #centralNotice.collapsed #B13_022000_trnbld_VolunNobd_dr_yyYY{
+    display: none;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY {
+    background: transparent;
+    display: none;
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-facts {
+    background: #ffcc00 url(//upload.wikimedia.org/wikipedia/donate/c/c0/Information-icon.png) no-repeat 10px 8px;
+    # border-bottom: 1px solid #a7a7a7;
+    cursor: pointer;
+    padding: 10px 0;
+    position: relative;
+    width: 100%;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-facts p {
+    color: #000;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 16px;
+    margin: 0;
+    padding: 0 40px 0 40px;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-facts span {
+    background: #fff;
+    background: linear-gradient(to top, #ffffff 0%,#e4e4e4 100%);
+    background: -moz-linear-gradient(top, #ffffff 0%, #e4e4e4 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e4e4e4));
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: block;
+    font-weight: normal;
+    margin: 0;
+    padding: 3px 8px;
+    position: absolute;
+    right: 40px;
+    top: 6px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY span#B13_022000_trnbld_VolunNobd_dr_yyYY-tab {
+    background: #ffcc00;
+    background-position: 115px 10px;
+    border: 1px solid #a7a7a7;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    color: #000;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 10px;
+    font-weight: bold;
+    height: 25px;
+    line-height: 25px;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+    z-index: 100;
+    -moz-border-radius: 0 0 5px 5px;
+    -webkit-border-radius: 0 0 5px 5px;
+    padding: 0 4em 0 4em;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-tab-wrapper {
+    width: 100%;
+    text-align: center;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY span#B13_022000_trnbld_VolunNobd_dr_yyYY-tab.close {
+    background-position: 115px -40px;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY span#B13_022000_trnbld_VolunNobd_dr_yyYY-close {
+    background: url(//upload.wikimedia.org/wikipedia/donate/1/1e/Small-black-close.png) no-repeat center center;
+    cursor: pointer;
+    display: block;
+    height: 21px;
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    width: 21px;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing {
+    background: #fff;
+    border-bottom: 1px solid #a7a7a7;
+    display: none;
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    padding: 30px 0 10px 0;
+    position: relative;
+    width: 100%;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing:after {
+    clear: both;
+    content: '';
+    display: block;
+    height: 0;
+    visibility: hidden;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing span.landing-close {
+    color: #3f3f3f;
+    cursor: pointer;
+    font-size: 12px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-left {
+    float: left;
+    font-size: 15px;
+    line-height: 18px;
+    margin: 0 2%;
+    padding: 0;
+    width: 43%;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-left h3 {
+    border-bottom: 1px solid #000;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 22px;
+    margin: 0 0 10px 0;
+    padding: 0 0 10px 0;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-left img {
+    float: left;
+    margin: 0 20px 10px 0;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-right {
+    background: #ebf3f9;
+    border: 1px solid #adb8c1;
+    border-radius: 10px;
+    float: right;
+    font-size: 13px;
+    line-height: 18px;
+    margin: 0 2% 0 0;
+    padding: 0 1%;
+    text-align: left;
+    width: 48%;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-right h4 {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 22px;
+    margin: 0 0 15px 0;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-right p {
+    margin: 0 0 15px 0;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-right p span {
+    font-size: 10px;
+    line-height: 14px;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-right ul {
+    margin: 10px 0 0 0;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-right ul li {
+    display: inline-block;
+    font-size: 10px;
+    line-height: 14px;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-right form br:first-of-type {
+/*    display: none; */
+    margin-bottom: 10px;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-right form span {
+    white-space: nowrap;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-right form label {
+    font-weight: bold;
+    margin: 0 10px 0 3px;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing-right form button {
+    cursor: pointer;
+    margin: 10px 10px 0 0;
+  }
+  div#B13_022000_trnbld_VolunNobd_dr_yyYY div#B13_022000_trnbld_VolunNobd_dr_yyYY-landing p.copyright {
+    display: block;
+    float: left;
+    font-size: 10px;
+    line-height: 14px;
+    margin: 20px 2% 0 2%;
+    width: 96%;
+  }
+</style>
+
+<div style="" id="B13_022000_trnbld_VolunNobd_dr_yyYY">
+  <div id="B13_022000_trnbld_VolunNobd_dr_yyYY-facts">
+    <p><b>Дорогие читатели Википедии!</b> Мы — небольшая некоммерческая организация, которая поддерживает пятый по посещаемости в мире сайт. <b>У нас в штате только 150 сотрудников, но мы обслуживаем 450 миллионов пользователей и,</b>
+ как и любой другой крупный сайт, несём определённые издержки: серверы, 
+электроэнергия, арендные платежи, программное обеспечение, персонал. 
+Википедия — это нечто особенное. Она подобна библиотеке или 
+общественному парку. Она подобна храму для разума. Это место, куда мы 
+все можем приходить, чтобы размышлять и учиться. Чтобы сохранить свою 
+независимость, <b>мы не размещаем у себя рекламные объявления</b>. Википедия не получает денег ни от каких правительственных структур. Среднее пожертвование составляет около 1000 руб. <b>Если
+ каждый из читающих это объявление поделится суммой, равной цене одной 
+чашки кофе, кампания по сбору пожертвований завершится в течение часа.</b> Если Википедия полезна для вас, потратьте одну минуту, чтобы сохранить её доступность в сети ещё ​​на год. <b>Пожалуйста, помогите нам забыть о сборе пожертвований и вернуться к работе над Википедией. Спасибо.</b></p>
+  </div>
+  <div id="B13_022000_trnbld_VolunNobd_dr_yyYY-landing">
+    <div id="B13_022000_trnbld_VolunNobd_dr_yyYY-landing-left">
+     <p>Когда я только основал Википедию, я вполне мог бы сделать её 
+коммерческим сервисом с рекламными баннерами, но я решил сделать нечто 
+иное. Коммерция — это нормально. Реклама — не порок. Но место им не 
+здесь. Не в Википедии 
+
+<b>— основатель Википедии, Джимми Уэйлс</b>
+<br>
+<br>
+<br>
+<br>
+Мы стараемся сделать так, чтобы людям в каждой стране было проще делать 
+пожертвования. Пожалуйста, дайте нам знать, как мы можем упростить это 
+для вас. Отправьте свои предложения по адресу: <a href="mailto:problemsdonating@wikimedia.org">problemsdonating@wikimedia.org</a></p>
+    </div>
+    <div id="B13_022000_trnbld_VolunNobd_dr_yyYY-landing-right">
+      <h4>Пожалуйста, пожертвуйте сколько сможете, чтобы сбор средств завершился уже сегодня</h4>
+        <form id="B13_022000_trnbld_VolunNobd_dr_yyYY-form" method="post" name="paypalcontribution">
+        <input name="gateway" value="paypal" type="hidden">
+        <input name="payment_method" value="" type="hidden">
+        <input name="utm_source" value="B13_022000_trnbld_VolunNobd_dr_yyYY" type="hidden">
+        <input name="utm_medium" value="sitenotice" type="hidden">
+        <input name="utm_campaign" value="C13_wpdr_mlWW_FR" type="hidden">
+        <input name="language" value="ru" type="hidden">
+        <input name="referrer" value="" type="hidden">
+        <input name="country" value="RU" type="hidden">
+        <input name="returnto" value="" type="hidden">
+        <input name="currency_code" id="input_currency_code" value="RUB" type="hidden">
+        <span><input name="frequency" id="frequency_onetime" onclick="toggleMonthly(false);" value="onetime" checked="checked" type="radio"><label for="frequency_onetime">Один раз</label></span>
+        <span style="white-space: normal;"><input name="frequency" id="frequency_monthly" onclick="toggleMonthly(true);" value="monthly" type="radio"><label for="frequency_monthly">Ежемесячно*</label></span><br><br>
+        <span><input name="amount" id="input_amount_0" onclick="document.paypalcontribution.amountGiven.value=''" value="100" type="radio"><label for="input_amount_0">100 руб</label></span>
+        <span><input name="amount" id="input_amount_1" onclick="document.paypalcontribution.amountGiven.value=''" value="150" type="radio"><label for="input_amount_1">150 руб</label></span>
+        <span><input name="amount" id="input_amount_2" onclick="document.paypalcontribution.amountGiven.value=''" value="200" type="radio"><label for="input_amount_2">200 руб</label></span>
+        <span><input name="amount" id="input_amount_3" onclick="document.paypalcontribution.amountGiven.value=''" value="500" type="radio"><label for="input_amount_3">500 руб</label></span>
+        <span><input name="amount" id="input_amount_4" onclick="document.paypalcontribution.amountGiven.value=''" value="1000" type="radio"><label for="input_amount_4">1000 руб</label></span>
+        <span><input name="amount" id="input_amount_5" onclick="document.paypalcontribution.amountGiven.value=''" value="2000" type="radio"><label for="input_amount_5">2000 руб</label></span>
+        <span><input name="amount" id="input_amount_6" onclick="document.paypalcontribution.amountGiven.value=''" value="3000" type="radio"><label for="input_amount_6">3000 руб</label></span>
+        <span><input name="amount" id="input_amount_other" value="Other" type="radio"><label for="input_amount_other">Другие  руб</label><input placeholder="" name="amountGiven" size="4" autocomplete="off" onfocus="this.form.input_amount_other.checked=true;" type="text"></span>
+        <br>
+        
+        <button class="paymentmethod-yandex no-monthly" onclick="redirectPayment('ew', 'ew_yandex'); return false;" style="">Пожертвовать через Яндекс</button>
+        <button class="paymentmethod-cc" onclick="redirectPayment('cc'); return false;">Пожертвовать с помощью кредитной карты</button>
+        
+        
+        
+        
+        <button class="paymentmethod-webmoney no-monthly" onclick="redirectPayment('ew', 'ew_webmoney'); return false;" style="">Пожертвовать через WebMoney</button>
+        
+<input value="1" name="utm_key" type="hidden"></form>
+      <ul>
+        <li><a class="localize" target="_blank" href="https://wikimediafoundation.org/wiki/Special:LandingCheck?basic=true&amp;landing_page=Problems_donating&amp;country=RU&amp;language=ru&amp;uselang=ru">Возникла проблема с пожертвованием?</a> | </li>
+        <li><a class="localize" target="_blank" href="https://wikimediafoundation.org/wiki/Special:LandingCheck?basic=true&amp;landing_page=Ways_to_Give&amp;country=RU&amp;language=ru&amp;uselang=ru">Другие способы сделать пожертвование</a> | </li>
+        <li><a class="localize" target="_blank" href="https://wikimediafoundation.org/wiki/Special:LandingCheck?landing_page=FAQ&amp;basic=true&amp;country=RU&amp;language=ru&amp;uselang=ru">Часто задаваемые вопросы</a></li>
+      </ul>
+    </div>
+    <p class="copyright"><span>Делая пожертвование, вы делитесь своей 
+информацией с Фондом Викимедиа, а также с сервис-провайдерами в США и 
+других местах, которые придерживаются нашей политики конфиденциальности в
+ отношении дарителей. Фонд является некоммерческой, освобожденной от 
+налогов 501(с) (3) организацией, зарегистрированной в США с 
+регистрационным номером 20-0049703. <a href="http://wikimediafoundation.org/wiki/Donor_policy/en">Для получения дополнительной информации ознакомьтесь с нашей политикой в отношении дарителей.</a></span><br>
+    <span>*Ежемесячные платежи будут сниматься со счёта, пока вы не укажете нам прекратить их.</span></p>
+  </div>
+  <div id="B13_022000_trnbld_VolunNobd_dr_yyYY-tab-wrapper">
+    <span id="B13_022000_trnbld_VolunNobd_dr_yyYY-tab">Пожалуйста, помогите</span>
+  </div>
+
+  <span id="B13_022000_trnbld_VolunNobd_dr_yyYY-close">&nbsp;</span>
+</div>
+
+
+
+
+
+
+
+
+</div>
+		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<!-- content -->
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+			<div id="mw-js-message" style="display:none;"></div>
+						<!-- sitenotice -->
+			<div id="siteNotice"><!-- CentralNotice --><script>
+	mw.loader.using( 'ext.centralNotice.bannerController', function() { mw.centralNotice.initialize(); } );
+</script>
+<script type="text/javascript">
+/* <![CDATA[ */
+document.writeln("\x3cdiv id=\"localNotice\" lang=\"ru\" dir=\"ltr\"\x3e\x3c/div\x3e");
+/* ]]> */
+</script><div id="localNotice" dir="ltr" lang="ru"></div>
+</div>
+			<!-- /sitenotice -->
+						<!-- firstHeading -->
+			<h1 id="firstHeading" class="firstHeading" lang="ru"><span dir="auto">HLSL</span></h1>
+			<!-- /firstHeading -->
+			<!-- bodyContent -->
+			<div id="bodyContent"><span style="float: right;" class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=0" title="Править введение">править</a>]</span>
+								<!-- tagline -->
+				<div id="siteSub">Материал из Википедии — свободной энциклопедии</div>
+				<!-- /tagline -->
+								<!-- subtitle -->
+				<div id="contentSub"><div id="mw-fr-reviewnotice" class="flaggedrevs_preview plainlinks">Текущая версия страницы пока <a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0_%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/%D0%9F%D0%BE%D1%8F%D1%81%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B4%D0%BB%D1%8F_%D1%87%D0%B8%D1%82%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%B9" title="Википедия:Проверка статей/Пояснение для читателей">не проверялась</a> опытными участниками и может значительно отличаться от <a class="external text" href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;stable=1">версии</a>, проверенной 30 марта 2012; 
+проверки требуют <a class="external text" href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;oldid=42756797&amp;diff=cur&amp;diffonly=0">3 правки</a>.</div><div id="mw-fr-revisiontag" class="flaggedrevs_short plainlinks noprint"><div class="flaggedrevs_short_basic"><img class="flaggedrevs-icon" src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/1.png" alt="Текущая версия" title="Текущая версия"><img id="mw-fr-revisiontoggle" class="fr-toggle-arrow" src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/arrow-down.png" style="display: inline;" alt="показать/скрыть подробности"></div>
+<div id="mw-fr-revisiondetails-wrapper" style="position:relative;"><div id="mw-fr-revisiondetails" class="flaggedrevs_short_details" style="display:none">Текущая версия страницы пока <a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0_%D1%81%D1%82%D0%B0%D1%82%D0%B5%D0%B9/%D0%9F%D0%BE%D1%8F%D1%81%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B4%D0%BB%D1%8F_%D1%87%D0%B8%D1%82%D0%B0%D1%82%D0%B5%D0%BB%D0%B5%D0%B9" title="Википедия:Проверка статей/Пояснение для читателей">не проверялась</a> опытными участниками и может значительно отличаться от <a class="external text" href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;stable=1">версии</a>, проверенной 30 марта 2012; 
+проверки требуют <a class="external text" href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;oldid=42756797&amp;diff=cur&amp;diffonly=0">3 правки</a>.</div>
+</div>
+</div>
+</div>
+				<!-- /subtitle -->
+																<!-- jumpto -->
+				<div id="jump-to-nav" class="mw-jump">
+					Перейти к:					<a href="#mw-head">навигация</a>, 					<a href="#p-search">поиск</a>
+				</div>
+				<!-- /jumpto -->
+								<!-- bodycontent -->
+				<div id="mw-content-text" dir="ltr" class="mw-content-ltr" lang="ru"><p><b>HLSL</b> (<a href="http://ru.wikipedia.org/wiki/%D0%90%D0%BD%D0%B3%D0%BB%D0%B8%D0%B9%D1%81%D0%BA%D0%B8%D0%B9_%D1%8F%D0%B7%D1%8B%D0%BA" title="Английский язык">англ.</a>&nbsp;<i><span xml:lang="en" lang="en">High Level Shader Language</span></i>) — <a href="http://ru.wikipedia.org/wiki/%D0%A1%D0%B8_%28%D1%8F%D0%B7%D1%8B%D0%BA_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F%29" title="Си (язык программирования)">C</a>-подобный язык высокого уровня для программирования <a href="http://ru.wikipedia.org/wiki/%D0%A8%D0%B5%D0%B9%D0%B4%D0%B5%D1%80" title="Шейдер">шейдеров</a>.</p>
+<p>Был создан корпорацией <a href="http://ru.wikipedia.org/wiki/Microsoft" title="Microsoft">Microsoft</a> и включён в пакет <a href="http://ru.wikipedia.org/wiki/DirectX" title="DirectX">DirectX</a> 9.0</p>
+<table id="toc" class="toc">
+<tbody><tr>
+<td>
+<div id="toctitle">
+<h2>Содержание</h2>
+<span class="toctoggle">&nbsp;[<a href="#" class="internal" id="togglelink">убрать</a>]&nbsp;</span></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.A2.D0.B8.D0.BF.D1.8B_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85"><span class="tocnumber">1</span> <span class="toctext">Типы данных</span></a>
+<ul>
+<li class="toclevel-2 tocsection-2"><a href="#.D1.81.D0.BA.D0.B0.D0.BB.D1.8F.D1.80.D0.BD.D1.8B.D0.B5_.D1.82.D0.B8.D0.BF.D1.8B"><span class="tocnumber">1.1</span> <span class="toctext">скалярные типы</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#.D0.B2.D0.B5.D0.BA.D1.82.D0.BE.D1.80.D0.BD.D1.8B.D0.B5_.D1.82.D0.B8.D0.BF.D1.8B"><span class="tocnumber">1.2</span> <span class="toctext">векторные типы</span></a></li>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.BC.D0.B0.D1.82.D1.80.D0.B8.D1.86.D1.8B"><span class="tocnumber">1.3</span> <span class="toctext">матрицы</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.D1.81.D1.82.D1.80.D1.83.D0.BA.D1.82.D1.83.D1.80.D1.8B"><span class="tocnumber">1.4</span> <span class="toctext">структуры</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D1.8B"><span class="tocnumber">2</span> <span class="toctext">Операторы</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#.D0.92.D0.B5.D1.82.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="tocnumber">3</span> <span class="toctext">Ветвления</span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#.D0.A6.D0.B8.D0.BA.D0.BB.D1.8B"><span class="tocnumber">4</span> <span class="toctext">Циклы</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#.D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8"><span class="tocnumber">5</span> <span class="toctext">Функции</span></a>
+<ul>
+<li class="toclevel-2 tocsection-10"><a href="#.D0.BC.D0.B0.D1.82.D0.B5.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B5_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8"><span class="tocnumber">5.1</span> <span class="toctext">математические функции</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D0.B4.D0.BB.D1.8F_.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D1.8B_.D1.81_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D1.83.D1.80.D0.B0.D0.BC.D0.B8"><span class="tocnumber">5.2</span> <span class="toctext">функции для работы с текстурами</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-12"><a href="#.D0.92.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B8.D0.B5_.D0.B8_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B8.D0.B5_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D0.B5_.D0.B4.D0.BB.D1.8F_.D0.B2.D0.B5.D1.80.D1.88.D0.B8.D0.BD.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B8_.D0.BF.D0.B8.D0.BA.D1.81.D0.B5.D0.BB.D1.8C.D0.BD.D0.BE.D0.B3.D0.BE_.D1.88.D0.B5.D0.B9.D0.B4.D0.B5.D1.80.D0.BE.D0.B2"><span class="tocnumber">6</span> <span class="toctext">Входящие и исходящие данные для вершинного и пиксельного шейдеров</span></a></li>
+<li class="toclevel-1 tocsection-13"><a href="#.D0.9F.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D1.8B_.D0.B4.D0.BB.D1.8F_.D1.81.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D1.8F_.D1.88.D0.B5.D0.B9.D0.B4.D0.B5.D1.80.D0.BE.D0.B2"><span class="tocnumber">7</span> <span class="toctext">Программы для создания шейдеров</span></a></li>
+<li class="toclevel-1 tocsection-14"><a href="#.D0.9F.D1.80.D0.B8.D0.BC.D0.B5.D1.80.D1.8B_.5B.D0.B8.D1.81.D1.82.D0.BE.D1.87.D0.BD.D0.B8.D0.BA.C2.A0.D0.BD.D0.B5.C2.A0.D1.83.D0.BA.D0.B0.D0.B7.D0.B0.D0.BD.C2.A01112.C2.A0.D0.B4.D0.BD.D0.B5.D0.B9.5D"><span class="tocnumber">8</span> <span class="toctext">Примеры <span><sup>[<i>источник&nbsp;не&nbsp;указан&nbsp;1112&nbsp;дней</i>]</sup></span></span></a>
+<ul>
+<li class="toclevel-2 tocsection-15"><a href="#.D0.BF.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B9_.D1.88.D0.B5.D0.B9.D0.B4.D0.B5.D1.80_.C2.AB.D0.93.D0.BE.D0.BB.D0.BE.D0.B2.D0.BE.D0.BA.D1.80.D1.83.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5.C2.BB"><span class="tocnumber">8.1</span> <span class="toctext">простой шейдер «Головокружение»</span></a></li>
+<li class="toclevel-2 tocsection-16"><a href="#.D1.88.D0.B5.D0.B9.D0.B4.D0.B5.D1.80.2C_.D0.B8.D0.BC.D0.B8.D1.82.D0.B8.D1.80.D1.83.D1.8E.D1.89.D0.B8.D0.B9_.D1.8D.D0.BB.D0.B5.D0.BA.D1.82.D1.80.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B9_.D1.80.D0.B0.D0.B7.D1.80.D1.8F.D0.B4"><span class="tocnumber">8.2</span> <span class="toctext">шейдер, имитирующий электрический разряд</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#.D0.BF.D0.BB.D0.B0.D1.81.D1.82.D0.B8.D0.BB.D0.B8.D0.BD.D0.BE.D0.B2.D0.B0.D1.8F_.D0.BC.D0.BE.D0.B4.D0.B5.D0.BB.D1.8C"><span class="tocnumber">8.3</span> <span class="toctext">пластилиновая модель</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#.D0.B8.D0.BC.D0.B8.D1.82.D0.B0.D1.86.D0.B8.D1.8F_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D1.8F.D0.BD.D0.BD.D0.BE.D0.B9_.D0.BF.D0.BE.D0.B2.D0.B5.D1.80.D1.85.D0.BD.D0.BE.D1.81.D1.82.D0.B8"><span class="tocnumber">8.4</span> <span class="toctext">имитация деревянной поверхности</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-19"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">9</span> <span class="toctext">Ссылки</span></a></li>
+</ul>
+</td>
+</tr>
+</tbody></table>
+<h2><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=1" title="Редактировать раздел «Типы данных»">править</a>]</span> <span class="mw-headline" id=".D0.A2.D0.B8.D0.BF.D1.8B_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D1.85">Типы данных</span></h2>
+<p>HLSL поддерживает скалярные типы, векторные типы, матрицы и структуры.</p>
+<h3><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=2" title="Редактировать раздел «скалярные типы»">править</a>]</span> <span class="mw-headline" id=".D1.81.D0.BA.D0.B0.D0.BB.D1.8F.D1.80.D0.BD.D1.8B.D0.B5_.D1.82.D0.B8.D0.BF.D1.8B">скалярные типы</span></h3>
+<ul>
+<li>bool&nbsp;— булев тип</li>
+<li>int&nbsp;— 32 битовое знаковое целое</li>
+<li>half&nbsp;— 16 битовое число с плавающей точкой</li>
+<li>float&nbsp;— 32 битовое число с плавающей точкой</li>
+<li>double&nbsp;— 64 битовое число с плавающей точкой</li>
+</ul>
+<h3><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=3" title="Редактировать раздел «векторные типы»">править</a>]</span> <span class="mw-headline" id=".D0.B2.D0.B5.D0.BA.D1.82.D0.BE.D1.80.D0.BD.D1.8B.D0.B5_.D1.82.D0.B8.D0.BF.D1.8B">векторные типы</span></h3>
+<p>Пример: vector &lt;float, 4&gt; color;</p>
+<p>Пример: float4 newcolor;</p>
+<p>Пример: float oldcolor[4]</p>
+<p>Пример: newcolor = float4(oldcolor[0], oldcolor[1], oldcolor[2], oldcolor[3])</p>
+<h3><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=4" title="Редактировать раздел «матрицы»">править</a>]</span> <span class="mw-headline" id=".D0.BC.D0.B0.D1.82.D1.80.D0.B8.D1.86.D1.8B">матрицы</span></h3>
+<p>Пример: matrix &lt;float, 4&gt; view_matrix;</p>
+<p>Пример: float 4x4 view_matrix;</p>
+<h3><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=5" title="Редактировать раздел «структуры»">править</a>]</span> <span class="mw-headline" id=".D1.81.D1.82.D1.80.D1.83.D0.BA.D1.82.D1.83.D1.80.D1.8B">структуры</span></h3>
+<p>struct vs_input {</p>
+<dl>
+<dd>float4 pos:POSITION;</dd>
+<dd>float3 nor:NORMAL;</dd>
+<dd>float2 uv:TEXCOORD0;</dd>
+</dl>
+<p>}; struct ps_input {</p>
+<dl>
+<dd>float4 pos:POSITION;</dd>
+<dd>float3 nor:NORMAL;</dd>
+<dd>float2 uv:TEXCOORD0;</dd>
+<dd>float CustomVar;</dd>
+<dd>texture2D CustomTexture;</dd>
+<dd>//и так далее…&nbsp;:POSITION&nbsp;:NORMAL и т.д. это сентиматики, о них ниже.</dd>
+</dl>
+<p>};</p>
+<h2><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=6" title="Редактировать раздел «Операторы»">править</a>]</span> <span class="mw-headline" id=".D0.9E.D0.BF.D0.B5.D1.80.D0.B0.D1.82.D0.BE.D1.80.D1.8B">Операторы</span></h2>
+<table border="1">
+<tbody><tr>
+<th>Операции</th>
+<th>Операторы</th>
+</tr>
+<tr>
+<td>Арифметические</td>
+<td>-, +, *, /,&nbsp;%</td>
+</tr>
+<tr>
+<td>Инкремент, декремент</td>
+<td>++, --</td>
+</tr>
+<tr>
+<td>Логические</td>
+<td>\|,&nbsp;?:</td>
+</tr>
+<tr>
+<td>Унарные</td>
+<td>!, -, +</td>
+</tr>
+<tr>
+<td>Сравнения</td>
+<td>&lt;, &gt;, &lt;=, &gt;=, ==,&nbsp;!=</td>
+</tr>
+<tr>
+<td>Назначение</td>
+<td>=, -=, +=, *=, /=</td>
+</tr>
+<tr>
+<td>Приведение типов</td>
+<td>(тип)</td>
+</tr>
+<tr>
+<td>Запятая</td>
+<td>,</td>
+</tr>
+<tr>
+<td>Член структуры</td>
+<td>.</td>
+</tr>
+<tr>
+<td>Член массива</td>
+<td>[индекс]</td>
+</tr>
+</tbody></table>
+<h2><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=7" title="Редактировать раздел «Ветвления»">править</a>]</span> <span class="mw-headline" id=".D0.92.D0.B5.D1.82.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F">Ветвления</span></h2>
+<p><b>if</b> (выражение) &lt;оператор&gt; [<b>else</b> &lt;оператор&gt;]</p>
+<h2><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=8" title="Редактировать раздел «Циклы»">править</a>]</span> <span class="mw-headline" id=".D0.A6.D0.B8.D0.BA.D0.BB.D1.8B">Циклы</span></h2>
+<p>В HLSL различают 3 вида циклов:</p>
+<ul>
+<li><b>do</b> &lt;оператор&gt; <b>while</b> (&lt;выражение&gt;);</li>
+<li><b>while</b> (&lt;выражение&gt;) &lt;оператор&gt;;</li>
+<li><b>for</b> (&lt;выражение1&gt;; &lt;выражение2&gt;; &lt;выражение3&gt;) &lt;оператор&gt;</li>
+</ul>
+<h2><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=9" title="Редактировать раздел «Функции»">править</a>]</span> <span class="mw-headline" id=".D0.A4.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8">Функции</span></h2>
+<h3><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=10" title="Редактировать раздел «математические функции»">править</a>]</span> <span class="mw-headline" id=".D0.BC.D0.B0.D1.82.D0.B5.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B5_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8">математические функции</span></h3>
+<table border="1" width="width">
+<tbody><tr>
+<th width="250">abs(x)</th>
+<td>возвращает абсолютную величину каждого компонента x</td>
+</tr>
+<tr>
+<th>acos(x)</th>
+<td>возвращает арккосинус каждого компонента x. Каждый компонент должен быть в диапазоне [-1, 1]</td>
+</tr>
+<tr>
+<th>asin(x)</th>
+<td>возвращает арксинус каждого компонента x. Каждый компонент должен быть в диапазоне [-pi/2, pi/2]</td>
+</tr>
+<tr>
+<th>atan(x)</th>
+<td>возвращает арктангенс каждого компонента x. Каждый компонент должен быть в диапазоне [-pi/2, pi/2]</td>
+</tr>
+<tr>
+<th>ceil(x)</th>
+<td>возвращает наименьшее целое число, которое больше чем или равно x</td>
+</tr>
+<tr>
+<th>cos(x)</th>
+<td>возвращает косинус x</td>
+</tr>
+<tr>
+<th>cosh(x)</th>
+<td>возвращает гиперболический косинус x</td>
+</tr>
+<tr>
+<th>clamp(x,a,b)</th>
+<td>Если x &lt; a, то возвращает а, если x &gt; b, то возвращает b, иначе возвращает x.</td>
+</tr>
+<tr>
+<th>ddx(x)</th>
+<td>возвращает частную производную x относительно screen-space x-координаты</td>
+</tr>
+<tr>
+<th>ddy(x)</th>
+<td>возвращает частную производную x относительно screen-space y-координаты</td>
+</tr>
+<tr>
+<th>degrees(x)</th>
+<td>Конвертирование x с радианы в градусы</td>
+</tr>
+<tr>
+<th>distance(a, b)</th>
+<td>возвращает расстояние между двумя точками a и b</td>
+</tr>
+<tr>
+<th>dot(a, b)</th>
+<td>возвращает скалярное произведение двух векторов a и b</td>
+</tr>
+<tr>
+<th>floor(x)</th>
+<td>возвращает самое большое целое число, которое является меньше чем или равным x</td>
+</tr>
+<tr>
+<th>fwidth(x)</th>
+<td>возвращает abs(ddx(x))+abs(ddy(x))</td>
+</tr>
+<tr>
+<th>len(v)</th>
+<td>Векторная длина</td>
+</tr>
+<tr>
+<th>length(v)</th>
+<td>возвращает длину вектора v</td>
+</tr>
+<tr>
+<th>lerp(a, b, s)</th>
+<td>возвращает a + s (b&nbsp;— a)</td>
+</tr>
+<tr>
+<th>log(x)</th>
+<td>возвращает логарифм x</td>
+</tr>
+<tr>
+<th>log10(x)</th>
+<td>возвращает десятичный логарифм x</td>
+</tr>
+<tr>
+<th>mul(a, b)</th>
+<td>делает матричное умножение между a и b</td>
+</tr>
+<tr>
+<th>normalize(v)</th>
+<td>возвращает нормированный вектор v</td>
+</tr>
+<tr>
+<th>pow(x, y)</th>
+<td>возвращает x<sup>y</sup></td>
+</tr>
+<tr>
+<th>radians(x)</th>
+<td>конвертирует x из градусов в радианы</td>
+</tr>
+<tr>
+<th>reflect(i, n)</th>
+<td>возвращает вектор отражения</td>
+</tr>
+<tr>
+<th>refract(i, n, eta)</th>
+<td>возвращает вектор преломления.</td>
+</tr>
+<tr>
+<th>rsqrt(x)</th>
+<td>возвращает 1 / sqrt(x)</td>
+</tr>
+<tr>
+<th>saturate(x)</th>
+<td>Аналогично clamp(x,0,1)</td>
+</tr>
+<tr>
+<th>sin(x)</th>
+<td>возвращает синус x.</td>
+</tr>
+<tr>
+<th>sincos(x, out s, out c)</th>
+<td>возвращает синус и косинус x</td>
+</tr>
+<tr>
+<th>sinh(x)</th>
+<td>возвращает гиперболический синус x</td>
+</tr>
+<tr>
+<th>sqrt(x)</th>
+<td>возвращает квадратный корень каждого компонента</td>
+</tr>
+<tr>
+<th>step(a, x)</th>
+<td>возвращает 1 если x &gt;= a, иначе возвращает 0</td>
+</tr>
+<tr>
+<th>tan(x)</th>
+<td>возвращает тангенс x</td>
+</tr>
+<tr>
+<th>tanh(x)</th>
+<td>возвращает гиперболический тангенс x</td>
+</tr>
+</tbody></table>
+<h3><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=11" title="Редактировать раздел «функции для работы с текстурами»">править</a>]</span> <span class="mw-headline" id=".D1.84.D1.83.D0.BD.D0.BA.D1.86.D0.B8.D0.B8_.D0.B4.D0.BB.D1.8F_.D1.80.D0.B0.D0.B1.D0.BE.D1.82.D1.8B_.D1.81_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D1.83.D1.80.D0.B0.D0.BC.D0.B8">функции для работы с текстурами</span></h3>
+<table border="1" width="width">
+<tbody><tr>
+<th width="250">tex1D(s, t)</th>
+<td>Чтение из одномерной текстуры<br>
+s&nbsp;— sampler, t&nbsp;— скаляр.</td>
+</tr>
+<tr>
+<th>tex1D(s, t, ddx, ddy)</th>
+<td>Чтение из одномерной текстуры, с производными<br>
+s&nbsp;— sampler, t, ddx, и ddy&nbsp;— скаляры.</td>
+</tr>
+<tr>
+<th>tex1Dproj(s, t)</th>
+<td>Чтение из одномерной проективной текстуры<br>
+s&nbsp;— sampler, t&nbsp;— 4D вектор.<br>
+t делится на t.w перед выполнением функции.</td>
+</tr>
+<tr>
+<th>tex1Dbias(s, t)</th>
+<td>Чтение из одномерной текстуры со смещением, s&nbsp;— sampler, t&nbsp;— 4-х мерный вектор.<br>
+Мип-уровень смещается на t.w до того, как производится поиск.</td>
+</tr>
+<tr>
+<th>tex2D(s, t)</th>
+<td>Чтение из двухмерной текстуры<br>
+s&nbsp;— sampler, t&nbsp;— 2D вектор.</td>
+</tr>
+<tr>
+<th>tex2D(s, t, ddx, ddy)</th>
+<td>Чтение из двухмерной текстуры, с производными.<br>
+s&nbsp;— sampler, t&nbsp;— 2D текстурные координаты. ddx, ddy- 2D вектора.</td>
+</tr>
+<tr>
+<th>tex2Dproj(s, t)</th>
+<td>Чтение из двумерной проективной текстуры.<br>
+s&nbsp;— sampler, t&nbsp;— 4D вектор.<br>
+t делится на t.w перед выполнением функции.</td>
+</tr>
+<tr>
+<th>tex2Dbias(s, t)</th>
+<td>Чтение из двумерной текстуры со смещением.<br>
+s&nbsp;— sampler, t&nbsp;— 4-х мерный вектор.<br>
+Мип-уровень смещается на t.w до того, как производится поиск.</td>
+</tr>
+<tr>
+<th>tex3D(s, t)</th>
+<td>Чтение из трёхмерной текстуры.<br>
+s&nbsp;— sampler, t&nbsp;— 3D вектор.</td>
+</tr>
+<tr>
+<th>tex3D(s, t, ddx, ddy)</th>
+<td>Чтение из трёхмерной текстуры, с производными.<br>
+s&nbsp;— sampler, t&nbsp;— 2D текстурные координаты, ddx, ddy&nbsp;— 3D вектора.</td>
+</tr>
+<tr>
+<th>tex3Dproj(s, t)</th>
+<td>Чтение из трёхмерной проективной текстуры.<br>
+s&nbsp;— sampler, t&nbsp;— 4D вектор.<br>
+t делится на t.w перед выполнением функции.</td>
+</tr>
+<tr>
+<th>tex3Dbias(s, t)</th>
+<td>Чтение из трёхмерной текстуры со смещением.<br>
+s&nbsp;— sampler, t&nbsp;— 4-х мерный вектор.<br>
+Мип-уровень смещается на t.w до того, как производится поиск.</td>
+</tr>
+<tr>
+<th>texCUBE(s, t)</th>
+<td>Чтение из кубической текстуры.<br>
+s&nbsp;— sampler, t&nbsp;— 2D текстурные координаты.</td>
+</tr>
+<tr>
+<th>texCUBE(s, t, ddx, ddy)</th>
+<td>Чтение из кубической текстуры.<br>
+s&nbsp;— sampler, t&nbsp;— 3D текстурные координаты, ddx, ddy&nbsp;— 3D вектора.</td>
+</tr>
+<tr>
+<th>texCUBEproj(s, t)</th>
+<td>Чтение из кубической проективной текстуры.<br>
+s&nbsp;— sampler, t&nbsp;— 4D вектор.<br>
+t делиться на t.w перед выполнением функции.</td>
+</tr>
+<tr>
+<th>texCUBEbias(s, t)</th>
+<td>Чтение из кубической текстуры.<br>
+sampler, t&nbsp;— 4D вектор.<br>
+Мип-уровень смещается на t.w до того, как производится поиск.</td>
+</tr>
+</tbody></table>
+<h2><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=12" title="Редактировать раздел «Входящие и исходящие данные для вершинного и пиксельного шейдеров»">править</a>]</span> <span class="mw-headline" id=".D0.92.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B8.D0.B5_.D0.B8_.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D1.8F.D1.89.D0.B8.D0.B5_.D0.B4.D0.B0.D0.BD.D0.BD.D1.8B.D0.B5_.D0.B4.D0.BB.D1.8F_.D0.B2.D0.B5.D1.80.D1.88.D0.B8.D0.BD.D0.BD.D0.BE.D0.B3.D0.BE_.D0.B8_.D0.BF.D0.B8.D0.BA.D1.81.D0.B5.D0.BB.D1.8C.D0.BD.D0.BE.D0.B3.D0.BE_.D1.88.D0.B5.D0.B9.D0.B4.D0.B5.D1.80.D0.BE.D0.B2">Входящие и исходящие данные для вершинного и пиксельного шейдеров</span></h2>
+<p>Вершинные и фрагментные шейдеры имеют два типа входящих данных: <i>varying</i> и <i>uniform</i>.</p>
+<p><b>Uniform</b>&nbsp;— данные, которые постоянны для многократного 
+использования в шейдере. Объявление uniform данных в HLSL можно сделать 
+двумя способами:</p>
+<p>1)Объявить данные как extern переменную. Например:</p>
+<pre>float4 value;
+
+float4 main () : COLOR
+{
+  return value;
+}
+</pre>
+<p>2)Объявить данные через определитель uniform. Например:</p>
+<pre>float4 main (uniform float4 value) : COLOR
+{
+  return value;
+}
+</pre>
+<p>Uniform переменные задаются через таблицу констант. Таблица констант 
+содержит все регистры, которые постоянно используются в шейдере.</p>
+<p><b>Varying</b>&nbsp;— данные, которые являются уникальными для 
+каждого вызова шейдера. Например: позиция, нормаль и&nbsp;т.&nbsp;д. В 
+вершинном шейдере такая семантика описывает varying данные, которые 
+передаются из вершинного буфера, а во фрагментном шейдере&nbsp;— 
+интерполированные данные, полученные из вершинного шейдера.</p>
+<p>Основные входящие семантические типы:</p>
+<table border="1">
+<tbody><tr>
+<th>BINORMAL</th>
+<td>Бинормаль</td>
+</tr>
+<tr>
+<th>BLENDWEIGHT</th>
+<td>Весовой коэффициент</td>
+</tr>
+<tr>
+<th>BLENDINDICES</th>
+<td>Индекс весовой матрицы</td>
+</tr>
+<tr>
+<th>COLOR</th>
+<td>Цвет</td>
+</tr>
+<tr>
+<th>NORMAL</th>
+<td>Нормаль</td>
+</tr>
+<tr>
+<th>POSITION</th>
+<td>Позиция</td>
+</tr>
+<tr>
+<th>PSIZE</th>
+<td>Размер точки</td>
+</tr>
+<tr>
+<th>TANGENT</th>
+<td>Тангент</td>
+</tr>
+<tr>
+<th>TESSFACTOR</th>
+<td>Фактор <a href="http://ru.wikipedia.org/wiki/%D0%A2%D0%B5%D1%81%D1%81%D0%B5%D0%BB%D1%8F%D1%86%D0%B8%D1%8F" title="Тесселяция" class="mw-redirect">тесселяции</a></td>
+</tr>
+<tr>
+<th>TEXCOORD</th>
+<td>Текстурные координаты</td>
+</tr>
+</tbody></table>
+<p>Использование varying данных во фрагментном шейдере определяет состояние одного фрагмента. Основные входящие семантические типы:</p>
+<table border="1">
+<tbody><tr>
+<th>COLOR</th>
+<td>Цвет</td>
+</tr>
+<tr>
+<th>TEXCOORD</th>
+<td>Текстурные координаты</td>
+</tr>
+</tbody></table>
+<p>Исходящие данные для вершинного шейдера:</p>
+<table border="1">
+<tbody><tr>
+<th>POSITION</th>
+<td>Позиция</td>
+</tr>
+<tr>
+<th>PSIZE</th>
+<td>Размер точки</td>
+</tr>
+<tr>
+<th>FOG</th>
+<td>Коэффициент «туманности» для вершины</td>
+</tr>
+<tr>
+<th>COLOR</th>
+<td>Цвет</td>
+</tr>
+<tr>
+<th>TEXCOORD</th>
+<td>Текстурные координаты</td>
+</tr>
+</tbody></table>
+<p>Исходящие данные для фрагментного шейдера:</p>
+<table border="1">
+<tbody><tr>
+<th>COLOR</th>
+<td>Цвет</td>
+</tr>
+<tr>
+<th>DEPTH</th>
+<td>Значение глубины</td>
+</tr>
+</tbody></table>
+<h2><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=13" title="Редактировать раздел «Программы для создания шейдеров»">править</a>]</span> <span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D1.8B_.D0.B4.D0.BB.D1.8F_.D1.81.D0.BE.D0.B7.D0.B4.D0.B0.D0.BD.D0.B8.D1.8F_.D1.88.D0.B5.D0.B9.D0.B4.D0.B5.D1.80.D0.BE.D0.B2">Программы для создания шейдеров</span></h2>
+<p>Для облегчения написания шейдеров существует ряд программ, позволяющих составлять шейдеры и тут же просматривать результат</p>
+<ul>
+<li><a href="http://ru.wikipedia.org/w/index.php?title=RenderMonkey&amp;action=edit&amp;redlink=1" class="new" title="RenderMonkey (страница отсутствует)">RenderMonkey</a> от <a href="http://ru.wikipedia.org/wiki/ATI" title="ATI" class="mw-redirect">ATI</a> (ATI 3D Application Research Group)</li>
+<li><a href="http://ru.wikipedia.org/w/index.php?title=ShaderWorks&amp;action=edit&amp;redlink=1" class="new" title="ShaderWorks (страница отсутствует)">ShaderWorks</a> от <a href="http://ru.wikipedia.org/w/index.php?title=Mad_Software_Inc&amp;action=edit&amp;redlink=1" class="new" title="Mad Software Inc (страница отсутствует)">Mad Software Inc</a></li>
+<li><a href="http://ru.wikipedia.org/w/index.php?title=FXComposer&amp;action=edit&amp;redlink=1" class="new" title="FXComposer (страница отсутствует)">FXComposer</a> от <a href="http://ru.wikipedia.org/wiki/Nvidia" title="Nvidia">Nvidia</a></li>
+<li><a rel="nofollow" class="external text" href="http://sol-online.org/index.php?content=info&amp;project=shaderconfig">Shader Config</a></li>
+</ul>
+<p>Также пиксельные шейдеры используются визуализаторами, например,</p>
+<ul>
+<li><a href="http://ru.wikipedia.org/wiki/Milkdrop" title="Milkdrop" class="mw-redirect">Milkdrop</a> от <a href="http://ru.wikipedia.org/wiki/Nullsoft" title="Nullsoft">Nullsoft</a>&nbsp;— Этот плагин позволяет создавать шейдеры, зависящие от музыки.</li>
+</ul>
+<h2><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=14" title="Редактировать раздел «Примеры [источник&nbsp;не&nbsp;указан&nbsp;1112&nbsp;дней]»">править</a>]</span> <span class="mw-headline" id=".D0.9F.D1.80.D0.B8.D0.BC.D0.B5.D1.80.D1.8B_.5B.D0.B8.D1.81.D1.82.D0.BE.D1.87.D0.BD.D0.B8.D0.BA.C2.A0.D0.BD.D0.B5.C2.A0.D1.83.D0.BA.D0.B0.D0.B7.D0.B0.D0.BD.C2.A01112.C2.A0.D0.B4.D0.BD.D0.B5.D0.B9.5D">Примеры <span class="noprint"><sup><a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%A1%D1%81%D1%8B%D0%BB%D0%BA%D0%B8_%D0%BD%D0%B0_%D0%B8%D1%81%D1%82%D0%BE%D1%87%D0%BD%D0%B8%D0%BA%D0%B8" title="Википедия:Ссылки на источники">[<i>источник&nbsp;не&nbsp;указан&nbsp;1112&nbsp;дней</i>]</a></sup></span></span></h2>
+<h3><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=15" title="Редактировать раздел «простой шейдер «Головокружение»»">править</a>]</span> <span class="mw-headline" id=".D0.BF.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B9_.D1.88.D0.B5.D0.B9.D0.B4.D0.B5.D1.80_.C2.AB.D0.93.D0.BE.D0.BB.D0.BE.D0.B2.D0.BE.D0.BA.D1.80.D1.83.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5.C2.BB">простой шейдер «Головокружение»</span></h3>
+<div class="thumb tright">
+<div class="thumbinner" style="width:222px;"><a href="http://ru.wikipedia.org/wiki/%D0%A4%D0%B0%D0%B9%D0%BB:HLSL_dizzy_effect.png" class="image"><img alt="HLSL dizzy effect.png" src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/220px-HLSL_dizzy_effect.png" class="thumbimage" srcset="//upload.wikimedia.org/wikipedia/ru/5/54/HLSL_dizzy_effect.png 1.5x, //upload.wikimedia.org/wikipedia/ru/5/54/HLSL_dizzy_effect.png 2x" height="220" width="220"></a>
+<div class="thumbcaption">
+<div class="magnify"><a href="http://ru.wikipedia.org/wiki/%D0%A4%D0%B0%D0%B9%D0%BB:HLSL_dizzy_effect.png" class="internal" title="Увеличить"><img src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/magnify-clip.png" alt="" height="11" width="15"></a></div>
+</div>
+</div>
+</div>
+<div dir="ltr" class="mw-geshi mw-code mw-content-ltr">
+<div class="glsl source-glsl">
+<pre class="de1">float4x4 view_proj_matrix<span class="sy0">:</span> register<span class="br0">(</span>c0<span class="br0">)</span><span class="sy0">;</span>
+ 
+<span class="kw3">struct</span> VS_OUTPUT 
+<span class="br0">{</span>
+   float4 Pos<span class="sy0">:</span> POSITION<span class="sy0">;</span>
+   float2 texCoord<span class="sy0">:</span> TEXCOORD0<span class="sy0">;</span>
+<span class="br0">}</span><span class="sy0">;</span>
+ 
+VS_OUTPUT VS_Dizzy<span class="br0">(</span>float4 Pos<span class="sy0">:</span> POSITION<span class="br0">)</span>
+<span class="br0">{</span>
+   VS_OUTPUT Out<span class="sy0">;</span>
+ 
+   Pos<span class="sy0">.</span><span class="me1">xy</span> <span class="sy0">=</span> <span class="kw5">sign</span><span class="br0">(</span>Pos<span class="sy0">.</span><span class="me1">xy</span><span class="br0">)</span><span class="sy0">;</span>
+ 
+   Out<span class="sy0">.</span><span class="me1">Pos</span> <span class="sy0">=</span> float4<span class="br0">(</span>Pos<span class="sy0">.</span><span class="me1">xy</span><span class="sy0">,</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="nu0">1</span><span class="br0">)</span><span class="sy0">;</span>
+   Out<span class="sy0">.</span><span class="me1">texCoord</span> <span class="sy0">=</span> Pos<span class="sy0">.</span><span class="me1">xy</span><span class="sy0">;</span>
+ 
+   <span class="kw1">return</span> Out<span class="sy0">;</span>
+<span class="br0">}</span>
+ 
+<span class="kw3">float</span> time_0_X<span class="sy0">:</span> register<span class="br0">(</span>c0<span class="br0">)</span><span class="sy0">;</span>
+<span class="kw3">float</span> rings<span class="sy0">:</span> register<span class="br0">(</span>c1<span class="br0">)</span><span class="sy0">;</span>
+<span class="kw3">float</span> speed<span class="sy0">:</span> register<span class="br0">(</span>c2<span class="br0">)</span><span class="sy0">;</span>
+<span class="kw3">float</span> exponent<span class="sy0">:</span> register<span class="br0">(</span>c3<span class="br0">)</span><span class="sy0">;</span>
+ 
+float4 PS_Dizzy<span class="br0">(</span>float2 texCoord<span class="sy0">:</span> TEXCOORD0<span class="br0">)</span> <span class="sy0">:</span> COLOR 
+<span class="br0">{</span>
+   <span class="kw3">float</span> ang <span class="sy0">=</span> atan2<span class="br0">(</span>texCoord<span class="sy0">.</span><span class="me1">x</span><span class="sy0">,</span> texCoord<span class="sy0">.</span><span class="me1">y</span><span class="br0">)</span><span class="sy0">;</span>
+   <span class="kw3">float</span> rad <span class="sy0">=</span> <span class="kw5">pow</span><span class="br0">(</span><span class="kw5">dot</span><span class="br0">(</span>texCoord<span class="sy0">,</span> texCoord<span class="br0">)</span><span class="sy0">,</span> exponent<span class="br0">)</span><span class="sy0">;</span>
+ 
+   <span class="kw1">return</span> <span class="nu0">0.5</span> <span class="sy0">*</span> <span class="br0">(</span><span class="nu0">1</span> <span class="sy0">+</span> <span class="kw5">sin</span><span class="br0">(</span>ang <span class="sy0">+</span> rings <span class="sy0">*</span> rad <span class="sy0">+</span> speed <span class="sy0">*</span> time_0_X<span class="br0">)</span><span class="br0">)</span><span class="sy0">;</span>
+<span class="br0">}</span>
+</pre></div>
+</div>
+<h3><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=16" title="Редактировать раздел «шейдер, имитирующий электрический разряд»">править</a>]</span> <span class="mw-headline" id=".D1.88.D0.B5.D0.B9.D0.B4.D0.B5.D1.80.2C_.D0.B8.D0.BC.D0.B8.D1.82.D0.B8.D1.80.D1.83.D1.8E.D1.89.D0.B8.D0.B9_.D1.8D.D0.BB.D0.B5.D0.BA.D1.82.D1.80.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B9_.D1.80.D0.B0.D0.B7.D1.80.D1.8F.D0.B4">шейдер, имитирующий электрический разряд</span></h3>
+<div class="thumb tright">
+<div class="thumbinner" style="width:222px;"><a href="http://ru.wikipedia.org/wiki/%D0%A4%D0%B0%D0%B9%D0%BB:HLSL_electricity_effect.jpg" class="image"><img alt="HLSL electricity effect.jpg" src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/220px-HLSL_electricity_effect.jpg" class="thumbimage" srcset="//upload.wikimedia.org/wikipedia/ru/thumb/0/0b/HLSL_electricity_effect.jpg/330px-HLSL_electricity_effect.jpg 1.5x, //upload.wikimedia.org/wikipedia/ru/0/0b/HLSL_electricity_effect.jpg 2x" height="203" width="220"></a>
+<div class="thumbcaption">
+<div class="magnify"><a href="http://ru.wikipedia.org/wiki/%D0%A4%D0%B0%D0%B9%D0%BB:HLSL_electricity_effect.jpg" class="internal" title="Увеличить"><img src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/magnify-clip.png" alt="" height="11" width="15"></a></div>
+</div>
+</div>
+</div>
+<div dir="ltr" class="mw-geshi mw-code mw-content-ltr">
+<div class="glsl source-glsl">
+<pre class="de1"><span class="kw3">struct</span> VS_OUTPUT 
+<span class="br0">{</span>
+   float4 Pos<span class="sy0">:</span> POSITION<span class="sy0">;</span>
+   float2 texCoord<span class="sy0">:</span> TEXCOORD<span class="sy0">;</span>
+<span class="br0">}</span><span class="sy0">;</span>
+ 
+VS_OUTPUT VS_Electricity<span class="br0">(</span>float4 Pos<span class="sy0">:</span> POSITION<span class="br0">)</span>
+<span class="br0">{</span>
+   VS_OUTPUT Out<span class="sy0">;</span>
+ 
+   <span class="co1">// Clean up inaccuracies</span>
+   Pos<span class="sy0">.</span><span class="me1">xy</span> <span class="sy0">=</span> <span class="kw5">sign</span><span class="br0">(</span>Pos<span class="sy0">.</span><span class="me1">xy</span><span class="br0">)</span><span class="sy0">;</span>
+ 
+   Out<span class="sy0">.</span><span class="me1">Pos</span> <span class="sy0">=</span> float4<span class="br0">(</span>Pos<span class="sy0">.</span><span class="me1">xy</span><span class="sy0">,</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="nu0">1</span><span class="br0">)</span><span class="sy0">;</span>
+   Out<span class="sy0">.</span><span class="me1">texCoord</span> <span class="sy0">=</span> Pos<span class="sy0">.</span><span class="me1">xy</span><span class="sy0">;</span>
+ 
+   <span class="kw1">return</span> Out<span class="sy0">;</span>
+<span class="br0">}</span>
+ 
+float4 color<span class="sy0">:</span> register<span class="br0">(</span>c1<span class="br0">)</span><span class="sy0">;</span>
+<span class="kw3">float</span> glowStrength<span class="sy0">:</span> register<span class="br0">(</span>c2<span class="br0">)</span><span class="sy0">;</span>
+<span class="kw3">float</span> height<span class="sy0">:</span> register<span class="br0">(</span>c3<span class="br0">)</span><span class="sy0">;</span>
+<span class="kw3">float</span> glowFallOff<span class="sy0">:</span> register<span class="br0">(</span>c4<span class="br0">)</span><span class="sy0">;</span>
+<span class="kw3">float</span> speed<span class="sy0">:</span> register<span class="br0">(</span>c5<span class="br0">)</span><span class="sy0">;</span>
+<span class="kw3">float</span> sampleDist<span class="sy0">:</span> register<span class="br0">(</span>c6<span class="br0">)</span><span class="sy0">;</span>
+<span class="kw3">float</span> ambientGlow<span class="sy0">:</span> register<span class="br0">(</span>c7<span class="br0">)</span><span class="sy0">;</span>
+<span class="kw3">float</span> ambientGlowHeightScale<span class="sy0">:</span> register<span class="br0">(</span>c8<span class="br0">)</span><span class="sy0">;</span>
+<span class="kw3">float</span> vertNoise<span class="sy0">:</span> register<span class="br0">(</span>c9<span class="br0">)</span><span class="sy0">;</span>
+<span class="kw3">float</span> time_0_X<span class="sy0">:</span> register<span class="br0">(</span>c0<span class="br0">)</span><span class="sy0">;</span>
+sampler Noise<span class="sy0">:</span> register<span class="br0">(</span>s0<span class="br0">)</span><span class="sy0">;</span>
+ 
+float4 PS_Electricity<span class="br0">(</span>float2 texCoord<span class="sy0">:</span> TEXCOORD<span class="br0">)</span> <span class="sy0">:</span> COLOR 
+<span class="br0">{</span>
+   float2 t <span class="sy0">=</span> float2<span class="br0">(</span>speed <span class="sy0">*</span> time_0_X <span class="sy0">*</span> <span class="nu0">0.5871</span> <span class="sy0">-</span> vertNoise <span class="sy0">*</span> <span class="kw5">abs</span><span class="br0">(</span>texCoord<span class="sy0">.</span><span class="me1">y</span><span class="br0">)</span><span class="sy0">,</span> speed <span class="sy0">*</span> time_0_X<span class="br0">)</span><span class="sy0">;</span>
+ 
+   <span class="co1">// Sample at three positions for some horizontal blur</span>
+   <span class="co1">// The shader should blur fine by itself in vertical direction</span>
+   <span class="kw3">float</span> xs0 <span class="sy0">=</span> texCoord<span class="sy0">.</span><span class="me1">x</span> <span class="sy0">-</span> sampleDist<span class="sy0">;</span>
+   <span class="kw3">float</span> xs1 <span class="sy0">=</span> texCoord<span class="sy0">.</span><span class="me1">x</span><span class="sy0">;</span>
+   <span class="kw3">float</span> xs2 <span class="sy0">=</span> texCoord<span class="sy0">.</span><span class="me1">x</span> <span class="sy0">+</span> sampleDist<span class="sy0">;</span>
+ 
+   <span class="co1">// Noise for the three samples</span>
+   <span class="kw3">float</span> noise0 <span class="sy0">=</span> tex3D<span class="br0">(</span>Noise<span class="sy0">,</span> float3<span class="br0">(</span>xs0<span class="sy0">,</span> t<span class="br0">)</span><span class="br0">)</span><span class="sy0">;</span>
+   <span class="kw3">float</span> <span class="kw5">noise1</span> <span class="sy0">=</span> tex3D<span class="br0">(</span>Noise<span class="sy0">,</span> float3<span class="br0">(</span>xs1<span class="sy0">,</span> t<span class="br0">)</span><span class="br0">)</span><span class="sy0">;</span>
+   <span class="kw3">float</span> <span class="kw5">noise2</span> <span class="sy0">=</span> tex3D<span class="br0">(</span>Noise<span class="sy0">,</span> float3<span class="br0">(</span>xs2<span class="sy0">,</span> t<span class="br0">)</span><span class="br0">)</span><span class="sy0">;</span>
+ 
+   <span class="co1">// The position of the flash</span>
+   <span class="kw3">float</span> mid0 <span class="sy0">=</span> height <span class="sy0">*</span> <span class="br0">(</span>noise0 <span class="sy0">*</span> <span class="nu0">2</span> <span class="sy0">-</span> <span class="nu0">1</span><span class="br0">)</span> <span class="sy0">*</span> <span class="br0">(</span><span class="nu0">1</span> <span class="sy0">-</span> xs0 <span class="sy0">*</span> xs0<span class="br0">)</span><span class="sy0">;</span>
+   <span class="kw3">float</span> mid1 <span class="sy0">=</span> height <span class="sy0">*</span> <span class="br0">(</span><span class="kw5">noise1</span> <span class="sy0">*</span> <span class="nu0">2</span> <span class="sy0">-</span> <span class="nu0">1</span><span class="br0">)</span> <span class="sy0">*</span> <span class="br0">(</span><span class="nu0">1</span> <span class="sy0">-</span> xs1 <span class="sy0">*</span> xs1<span class="br0">)</span><span class="sy0">;</span>
+   <span class="kw3">float</span> mid2 <span class="sy0">=</span> height <span class="sy0">*</span> <span class="br0">(</span><span class="kw5">noise2</span> <span class="sy0">*</span> <span class="nu0">2</span> <span class="sy0">-</span> <span class="nu0">1</span><span class="br0">)</span> <span class="sy0">*</span> <span class="br0">(</span><span class="nu0">1</span> <span class="sy0">-</span> xs2 <span class="sy0">*</span> xs2<span class="br0">)</span><span class="sy0">;</span>
+ 
+   <span class="co1">// Distance to flash</span>
+   <span class="kw3">float</span> dist0 <span class="sy0">=</span> <span class="kw5">abs</span><span class="br0">(</span>texCoord<span class="sy0">.</span><span class="me1">y</span> <span class="sy0">-</span> mid0<span class="br0">)</span><span class="sy0">;</span>
+   <span class="kw3">float</span> dist1 <span class="sy0">=</span> <span class="kw5">abs</span><span class="br0">(</span>texCoord<span class="sy0">.</span><span class="me1">y</span> <span class="sy0">-</span> mid1<span class="br0">)</span><span class="sy0">;</span>
+   <span class="kw3">float</span> dist2 <span class="sy0">=</span> <span class="kw5">abs</span><span class="br0">(</span>texCoord<span class="sy0">.</span><span class="me1">y</span> <span class="sy0">-</span> mid2<span class="br0">)</span><span class="sy0">;</span>
+ 
+   <span class="co1">// Glow according to distance to flash</span>
+   <span class="kw3">float</span> glow <span class="sy0">=</span> <span class="nu0">1.0</span> <span class="sy0">-</span> <span class="kw5">pow</span><span class="br0">(</span><span class="nu0">0.25</span> <span class="sy0">*</span> <span class="br0">(</span>dist0 <span class="sy0">+</span> <span class="nu0">2</span> <span class="sy0">*</span> dist1 <span class="sy0">+</span> dist2<span class="br0">)</span><span class="sy0">,</span> glowFallOff<span class="br0">)</span><span class="sy0">;</span>
+ 
+   <span class="co1">// Add some ambient glow to get some power in the air feeling</span>
+   <span class="kw3">float</span> ambGlow <span class="sy0">=</span> ambientGlow <span class="sy0">*</span> <span class="br0">(</span><span class="nu0">1</span> <span class="sy0">-</span> xs1 <span class="sy0">*</span> xs1<span class="br0">)</span> <span class="sy0">*</span> <span class="br0">(</span><span class="nu0">1</span> <span class="sy0">-</span> <span class="kw5">abs</span><span class="br0">(</span>ambientGlowHeightScale <span class="sy0">*</span> texCoord<span class="sy0">.</span><span class="me1">y</span><span class="br0">)</span><span class="br0">)</span><span class="sy0">;</span>
+ 
+   <span class="kw1">return</span> <span class="br0">(</span>glowStrength <span class="sy0">*</span> glow <span class="sy0">*</span> glow <span class="sy0">+</span> ambGlow<span class="br0">)</span> <span class="sy0">*</span> color<span class="sy0">;</span>
+<span class="br0">}</span>
+</pre></div>
+</div>
+<h3><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=17" title="Редактировать раздел «пластилиновая модель»">править</a>]</span> <span class="mw-headline" id=".D0.BF.D0.BB.D0.B0.D1.81.D1.82.D0.B8.D0.BB.D0.B8.D0.BD.D0.BE.D0.B2.D0.B0.D1.8F_.D0.BC.D0.BE.D0.B4.D0.B5.D0.BB.D1.8C">пластилиновая модель</span></h3>
+<div class="thumb tright">
+<div class="thumbinner" style="width:222px;"><a href="http://ru.wikipedia.org/wiki/%D0%A4%D0%B0%D0%B9%D0%BB:HLSL_plastic_example.jpg" class="image"><img alt="HLSL plastic example.jpg" src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/220px-HLSL_plastic_example.jpg" class="thumbimage" srcset="//upload.wikimedia.org/wikipedia/ru/thumb/8/81/HLSL_plastic_example.jpg/330px-HLSL_plastic_example.jpg 1.5x, //upload.wikimedia.org/wikipedia/ru/8/81/HLSL_plastic_example.jpg 2x" height="203" width="220"></a>
+<div class="thumbcaption">
+<div class="magnify"><a href="http://ru.wikipedia.org/wiki/%D0%A4%D0%B0%D0%B9%D0%BB:HLSL_plastic_example.jpg" class="internal" title="Увеличить"><img src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/magnify-clip.png" alt="" height="11" width="15"></a></div>
+</div>
+</div>
+</div>
+<div dir="ltr" class="mw-geshi mw-code mw-content-ltr">
+<div class="glsl source-glsl">
+<pre class="de1">float4x4 view_proj_matrix<span class="sy0">:</span> register<span class="br0">(</span>c0<span class="br0">)</span><span class="sy0">;</span>
+ 
+float4 view_position<span class="sy0">:</span> register<span class="br0">(</span>c4<span class="br0">)</span><span class="sy0">;</span>
+ 
+<span class="kw3">struct</span> VS_OUTPUT 
+<span class="br0">{</span>
+        float4 Pos<span class="sy0">:</span> POSITION<span class="sy0">;</span>
+        float3 normal<span class="sy0">:</span> TEXCOORD0<span class="sy0">;</span>
+        float3 viewVec<span class="sy0">:</span> TEXCOORD1<span class="sy0">;</span>
+<span class="br0">}</span><span class="sy0">;</span>
+ 
+VS_OUTPUT VS_Plastic<span class="br0">(</span>float4 Pos<span class="sy0">:</span> POSITION<span class="sy0">,</span> float3 normal<span class="sy0">:</span> NORMAL<span class="br0">)</span>
+<span class="br0">{</span>
+        VS_OUTPUT Out<span class="sy0">;</span>
+ 
+        Out<span class="sy0">.</span><span class="me1">Pos</span> <span class="sy0">=</span> mul<span class="br0">(</span>view_proj_matrix<span class="sy0">,</span> Pos<span class="br0">)</span><span class="sy0">;</span>
+ 
+        Out<span class="sy0">.</span><span class="me1">normal</span> <span class="sy0">=</span> normal<span class="sy0">;</span>
+        Out<span class="sy0">.</span><span class="me1">viewVec</span> <span class="sy0">=</span> view_position <span class="sy0">-</span> Pos<span class="sy0">;</span>
+ 
+        <span class="kw1">return</span> Out<span class="sy0">;</span>
+<span class="br0">}</span>
+ 
+float4 color<span class="sy0">:</span> register<span class="br0">(</span>c0<span class="br0">)</span><span class="sy0">;</span>
+ 
+float4 PS_Plastic<span class="br0">(</span>float3 normal<span class="sy0">:</span> TEXCOORD0<span class="sy0">,</span> float3 viewVec<span class="sy0">:</span> TEXCOORD1<span class="br0">)</span> <span class="sy0">:</span> COLOR 
+<span class="br0">{</span>
+        <span class="kw3">float</span> v <span class="sy0">=</span> <span class="nu0">0.5</span> <span class="sy0">*</span> <span class="br0">(</span><span class="nu0">1</span> <span class="sy0">+</span> <span class="kw5">dot</span><span class="br0">(</span><span class="kw5">normalize</span><span class="br0">(</span>viewVec<span class="br0">)</span><span class="sy0">,</span> normal<span class="br0">)</span><span class="br0">)</span><span class="sy0">;</span>
+ 
+        <span class="kw1">return</span> v <span class="sy0">*</span> color<span class="sy0">;</span>
+<span class="br0">}</span>
+</pre></div>
+</div>
+<h3><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=18" title="Редактировать раздел «имитация деревянной поверхности»">править</a>]</span> <span class="mw-headline" id=".D0.B8.D0.BC.D0.B8.D1.82.D0.B0.D1.86.D0.B8.D1.8F_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D1.8F.D0.BD.D0.BD.D0.BE.D0.B9_.D0.BF.D0.BE.D0.B2.D0.B5.D1.80.D1.85.D0.BD.D0.BE.D1.81.D1.82.D0.B8">имитация деревянной поверхности</span></h3>
+<div class="thumb tright">
+<div class="thumbinner" style="width:222px;"><a href="http://ru.wikipedia.org/wiki/%D0%A4%D0%B0%D0%B9%D0%BB:HLSL_wood_example.jpg" class="image"><img alt="HLSL wood example.jpg" src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/220px-HLSL_wood_example.jpg" class="thumbimage" srcset="//upload.wikimedia.org/wikipedia/ru/thumb/f/fa/HLSL_wood_example.jpg/330px-HLSL_wood_example.jpg 1.5x, //upload.wikimedia.org/wikipedia/ru/f/fa/HLSL_wood_example.jpg 2x" height="203" width="220"></a>
+<div class="thumbcaption">
+<div class="magnify"><a href="http://ru.wikipedia.org/wiki/%D0%A4%D0%B0%D0%B9%D0%BB:HLSL_wood_example.jpg" class="internal" title="Увеличить"><img src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/magnify-clip.png" alt="" height="11" width="15"></a></div>
+</div>
+</div>
+</div>
+<div dir="ltr" class="mw-geshi mw-code mw-content-ltr">
+<div class="glsl source-glsl">
+<pre class="de1"><span class="kw3">float</span> trunk_wobble_frequency<span class="sy0">;</span>
+ 
+float4x4 view_matrix<span class="sy0">;</span>
+float4x4 view_proj_matrix<span class="sy0">;</span>
+ 
+float4x4 texture_matrix0<span class="sy0">;</span>
+float4x4 texture_matrix1<span class="sy0">;</span>
+float4x4 texture_matrix2<span class="sy0">;</span>
+ 
+<span class="kw3">struct</span> VS_OUTPUT
+<span class="br0">{</span>
+        float4 Pos <span class="sy0">:</span> POSITION<span class="sy0">;</span>
+        float3 TCoord0 <span class="sy0">:</span> TEXCOORD0<span class="sy0">;</span>
+        float3 TCoord1 <span class="sy0">:</span> TEXCOORD1<span class="sy0">;</span>
+        float3 TCoord2 <span class="sy0">:</span> TEXCOORD2<span class="sy0">;</span>
+        float3 TCoord3 <span class="sy0">:</span> TEXCOORD3<span class="sy0">;</span>
+        float3 TCoord4 <span class="sy0">:</span> TEXCOORD4<span class="sy0">;</span>
+        float3 TCoord6 <span class="sy0">:</span> TEXCOORD6<span class="sy0">;</span>
+        float3 TCoord7 <span class="sy0">:</span> TEXCOORD7<span class="sy0">;</span>
+<span class="br0">}</span><span class="sy0">;</span>
+ 
+VS_OUTPUT VS_Wood <span class="br0">(</span>float4 vPosition<span class="sy0">:</span> POSITION<span class="sy0">,</span> float3 vNormal<span class="sy0">:</span> NORMAL<span class="br0">)</span>
+<span class="br0">{</span>
+        VS_OUTPUT Out <span class="sy0">=</span> <span class="br0">(</span>VS_OUTPUT<span class="br0">)</span> <span class="nu0">0</span><span class="sy0">;</span>
+        float4 TransformedPshade<span class="sy0">;</span>
+ 
+        <span class="co1">// Transform position to clip space</span>
+        Out<span class="sy0">.</span><span class="me1">Pos</span> <span class="sy0">=</span> mul <span class="br0">(</span>view_proj_matrix<span class="sy0">,</span> vPosition<span class="br0">)</span><span class="sy0">;</span>
+ 
+        <span class="co1">// Transform Pshade (using texture matrices) and output to pixel shader</span>
+        TransformedPshade <span class="sy0">=</span> mul <span class="br0">(</span>texture_matrix0<span class="sy0">,</span> vPosition<span class="br0">)</span><span class="sy0">;</span>
+        Out<span class="sy0">.</span><span class="me1">TCoord0</span> <span class="sy0">=</span> TransformedPshade<span class="sy0">;</span>
+        Out<span class="sy0">.</span><span class="me1">TCoord1</span> <span class="sy0">=</span> mul <span class="br0">(</span>texture_matrix1<span class="sy0">,</span> vPosition<span class="br0">)</span><span class="sy0">;</span>
+        Out<span class="sy0">.</span><span class="me1">TCoord2</span> <span class="sy0">=</span> mul <span class="br0">(</span>texture_matrix2<span class="sy0">,</span> vPosition<span class="br0">)</span><span class="sy0">;</span>
+ 
+        <span class="co1">// Create two coordinates for sampling noise volume to get wobble</span>
+        Out<span class="sy0">.</span><span class="me1">TCoord3</span> <span class="sy0">=</span> float3<span class="br0">(</span>trunk_wobble_frequency <span class="sy0">*</span> TransformedPshade<span class="sy0">.</span><span class="me1">z</span><span class="sy0">,</span> 0<span class="sy0">.</span>0f<span class="sy0">,</span> 0<span class="sy0">.</span>0f<span class="br0">)</span><span class="sy0">;</span>
+        Out<span class="sy0">.</span><span class="me1">TCoord4</span> <span class="sy0">=</span> float3<span class="br0">(</span>trunk_wobble_frequency <span class="sy0">*</span> TransformedPshade<span class="sy0">.</span><span class="me1">z</span> <span class="sy0">+</span> 0<span class="sy0">.</span>5f<span class="sy0">,</span> 0<span class="sy0">.</span>0f<span class="sy0">,</span> 0<span class="sy0">.</span>0f<span class="br0">)</span><span class="sy0">;</span>
+ 
+        <span class="co1">// Transform position and normal to eye space</span>
+        Out<span class="sy0">.</span><span class="me1">TCoord6</span> <span class="sy0">=</span> mul <span class="br0">(</span>view_matrix<span class="sy0">,</span> vPosition<span class="br0">)</span><span class="sy0">;</span>
+        Out<span class="sy0">.</span><span class="me1">TCoord7</span> <span class="sy0">=</span> mul <span class="br0">(</span>view_matrix<span class="sy0">,</span> vNormal<span class="br0">)</span><span class="sy0">;</span>
+ 
+        <span class="kw1">return</span> Out<span class="sy0">;</span>
+<span class="br0">}</span>
+ 
+float4 light_pos<span class="sy0">;</span>
+float4 eye_pos<span class="sy0">;</span>
+float4 light_wood_color<span class="sy0">;</span>
+float4 dark_wood_color<span class="sy0">;</span>
+ 
+<span class="kw3">float</span> noise_amplitude<span class="sy0">;</span>
+<span class="kw3">float</span> trunk_wobble_amplitude<span class="sy0">;</span>
+<span class="kw3">float</span> ring_freq<span class="sy0">;</span>
+ 
+sampler noise_volume<span class="sy0">;</span>
+sampler pulse_train<span class="sy0">;</span>
+sampler variable_specular<span class="sy0">;</span>
+ 
+float4 PS_Wood <span class="br0">(</span>float3 Pshade0 <span class="sy0">:</span> TEXCOORD0<span class="sy0">,</span>
+                                float3 Pshade1 <span class="sy0">:</span> TEXCOORD1<span class="sy0">,</span>
+                                float3 Pshade2 <span class="sy0">:</span> TEXCOORD2<span class="sy0">,</span>
+                                float3 zWobble0 <span class="sy0">:</span> TEXCOORD3<span class="sy0">,</span>
+                                float3 zWobble1 <span class="sy0">:</span> TEXCOORD4<span class="sy0">,</span>
+                                float3 Peye <span class="sy0">:</span> TEXCOORD6<span class="sy0">,</span>
+                                float3 Neye <span class="sy0">:</span> TEXCOORD7<span class="br0">)</span> <span class="sy0">:</span> COLOR
+<span class="br0">{</span>
+        float3 coloredNoise<span class="sy0">;</span>
+        float3 wobble<span class="sy0">;</span>
+ 
+        <span class="co1">// Construct colored noise from three samples</span>
+        coloredNoise<span class="sy0">.</span><span class="me1">x</span> <span class="sy0">=</span> tex3D <span class="br0">(</span>noise_volume<span class="sy0">,</span> Pshade0<span class="br0">)</span><span class="sy0">;</span>
+        coloredNoise<span class="sy0">.</span><span class="me1">y</span> <span class="sy0">=</span> tex3D <span class="br0">(</span>noise_volume<span class="sy0">,</span> Pshade1<span class="br0">)</span><span class="sy0">;</span>
+        coloredNoise<span class="sy0">.</span><span class="me1">z</span> <span class="sy0">=</span> tex3D <span class="br0">(</span>noise_volume<span class="sy0">,</span> Pshade2<span class="br0">)</span><span class="sy0">;</span>
+ 
+        wobble<span class="sy0">.</span><span class="me1">x</span> <span class="sy0">=</span> tex3D <span class="br0">(</span>noise_volume<span class="sy0">,</span> zWobble0<span class="br0">)</span><span class="sy0">;</span>
+        wobble<span class="sy0">.</span><span class="me1">y</span> <span class="sy0">=</span> tex3D <span class="br0">(</span>noise_volume<span class="sy0">,</span> zWobble1<span class="br0">)</span><span class="sy0">;</span>
+        wobble<span class="sy0">.</span><span class="me1">z</span> <span class="sy0">=</span> 0<span class="sy0">.</span>5f<span class="sy0">;</span>
+ 
+        <span class="co1">// Make signed</span>
+        coloredNoise <span class="sy0">=</span> coloredNoise <span class="sy0">*</span> 2<span class="sy0">.</span>0f <span class="sy0">-</span> 1<span class="sy0">.</span>0f<span class="sy0">;</span>
+        wobble <span class="sy0">=</span> wobble <span class="sy0">*</span> 2<span class="sy0">.</span>0f <span class="sy0">-</span> 1<span class="sy0">.</span>0f<span class="sy0">;</span>
+ 
+        <span class="co1">// Scale noise and add to Pshade</span>
+        float3 noisyWobblyPshade <span class="sy0">=</span> Pshade0 <span class="sy0">+</span> coloredNoise <span class="sy0">*</span> noise_amplitude <span class="sy0">+</span> wobble <span class="sy0">*</span> trunk_wobble_amplitude<span class="sy0">;</span>
+ 
+        <span class="kw3">float</span> scaledDistFromZAxis <span class="sy0">=</span> <span class="kw5">sqrt</span><span class="br0">(</span><span class="kw5">dot</span><span class="br0">(</span>noisyWobblyPshade<span class="sy0">.</span><span class="me1">xy</span><span class="sy0">,</span> noisyWobblyPshade<span class="sy0">.</span><span class="me1">xy</span><span class="br0">)</span><span class="br0">)</span> <span class="sy0">*</span> ring_freq<span class="sy0">;</span>
+ 
+        <span class="co1">// Lookup blend factor from pulse train</span>
+        float4 blendFactor <span class="sy0">=</span> tex1D <span class="br0">(</span>pulse_train<span class="sy0">,</span> scaledDistFromZAxis<span class="br0">)</span><span class="sy0">;</span>
+ 
+        <span class="co1">// Blend wood colors together</span>
+        float4 albedo <span class="sy0">=</span> lerp <span class="br0">(</span>dark_wood_color<span class="sy0">,</span> light_wood_color<span class="sy0">,</span> blendFactor<span class="sy0">.</span><span class="me1">x</span><span class="br0">)</span><span class="sy0">;</span>
+ 
+        <span class="co1">// Compute normalized vector from vertex to light in eye space (Leye)</span>
+        float3 Leye <span class="sy0">=</span> <span class="br0">(</span>light_pos <span class="sy0">-</span> Peye<span class="br0">)</span> <span class="sy0">/</span> <span class="kw5">length</span><span class="br0">(</span>light_pos <span class="sy0">-</span> Peye<span class="br0">)</span><span class="sy0">;</span>
+ 
+        <span class="co1">// Normalize interpolated normal</span>
+        Neye <span class="sy0">=</span> Neye <span class="sy0">/</span> <span class="kw5">length</span><span class="br0">(</span>Neye<span class="br0">)</span><span class="sy0">;</span>
+ 
+        <span class="co1">// Compute Veye</span>
+        float3 Veye <span class="sy0">=</span> <span class="sy0">-</span><span class="br0">(</span>Peye <span class="sy0">/</span> <span class="kw5">length</span><span class="br0">(</span>Peye<span class="br0">)</span><span class="br0">)</span><span class="sy0">;</span>
+ 
+        <span class="co1">// Compute half-angle</span>
+        float3 Heye <span class="sy0">=</span> <span class="br0">(</span>Leye <span class="sy0">+</span> Veye<span class="br0">)</span> <span class="sy0">/</span> <span class="kw5">length</span><span class="br0">(</span>Leye <span class="sy0">+</span> Veye<span class="br0">)</span><span class="sy0">;</span>
+ 
+        <span class="co1">// Compute N.H</span>
+        <span class="kw3">float</span> NdotH <span class="sy0">=</span> <span class="kw5">clamp</span><span class="br0">(</span><span class="kw5">dot</span><span class="br0">(</span>Neye<span class="sy0">,</span> Heye<span class="br0">)</span><span class="sy0">,</span> 0<span class="sy0">.</span>0f<span class="sy0">,</span> 1<span class="sy0">.</span>0f<span class="br0">)</span><span class="sy0">;</span>
+ 
+        <span class="co1">// Scale and bias specular exponent from pulse train into decent range</span>
+        <span class="kw3">float</span> k <span class="sy0">=</span> blendFactor<span class="sy0">.</span><span class="me1">z</span><span class="sy0">;</span>
+ 
+        <span class="co1">// Evaluate (N.H)^k via dependent read</span>
+        <span class="kw3">float</span> specular <span class="sy0">=</span> tex2D <span class="br0">(</span>variable_s
+</pre></div>
+</div>
+<h2><span class="editsection">[<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit&amp;section=19" title="Редактировать раздел «Ссылки»">править</a>]</span> <span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8">Ссылки</span></h2>
+<ul>
+<li><a rel="nofollow" class="external text" href="http://www.thalion.kiev.ua/idx.php/147/810/article/">Программирование шейдеров на HLSL (Thalion Group)</a>&nbsp;<span class="ref-info" title="на русском языке" style="font-size:85%; cursor:help; color:#888;">(рус.)</span></li>
+</ul>
+<p><br></p>
+<table class="metadata plainlinks ambox ambox-style">
+<tbody><tr>
+<td class="ambox-image">
+<div>
+<div class="noresize"><a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9A%D0%B0%D0%BA_%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C_%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8" title="Улучшение статьи"><img alt="Wiki letter w.svg" src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/40px-Wiki_letter_w.png" srcset="//upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Wiki_letter_w.svg/60px-Wiki_letter_w.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Wiki_letter_w.svg/80px-Wiki_letter_w.svg.png 2x" height="40" width="40"></a></div>
+</div>
+</td>
+<td class="ambox-text"><b>Для улучшения этой статьи желательно<sup style="line-height:0;font-weight:bold"><a href="http://ru.wikipedia.org/wiki/%D0%A8%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD:Rq/%D0%9F%D0%BE%D1%8F%D1%81%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F" title="Шаблон:Rq/Пояснения">?</a></sup>:</b>
+<div class="ambox-text-small">
+<ul>
+<li>Найти и оформить в виде <a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%A1%D0%BD%D0%BE%D1%81%D0%BA%D0%B8" title="Википедия:Сноски">сносок</a> ссылки на <a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%90%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D1%82%D0%B5%D1%82%D0%BD%D1%8B%D0%B5_%D0%B8%D1%81%D1%82%D0%BE%D1%87%D0%BD%D0%B8%D0%BA%D0%B8" title="Википедия:Авторитетные источники">авторитетные источники</a>, <a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9F%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D1%8F%D0%B5%D0%BC%D0%BE%D1%81%D1%82%D1%8C" title="Википедия:Проверяемость">подтверждающие написанное</a>.</li>
+<li><a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%92%D0%B8%D0%BA%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F" title="Википедия:Викификация">Викифицировать</a> статью.</li>
+<li>Проставить <a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%A8%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD%D1%8B/%D0%9A%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D0%B8" title="Википедия:Шаблоны/Карточки">шаблон-карточку</a>, который существует для предмета статьи. Пример использования шаблона есть в статьях на похожую тематику.</li>
+</ul>
+</div>
+</td>
+<td class="widthhack"></td>
+</tr>
+</tbody></table>
+
+
+<!-- 
+NewPP limit report
+Preprocessor visited node count: 726/1000000
+Preprocessor generated node count: 2646/1500000
+Post-expand include size: 13761/2048000 bytes
+Template argument size: 3067/2048000 bytes
+Highest expansion depth: 15/40
+Expensive parser function count: 3/500
+-->
+
+<!-- Saved in parser cache with key ruwiki:pcache:idhash:269723-0!*!0!!ru!4!* and timestamp 20130303084156 -->
+</div>				<!-- /bodycontent -->
+								<!-- printfooter -->
+				<div class="printfooter">
+				Источник — «<a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;oldid=50662927">http://ru.wikipedia.org/w/index.php?title=HLSL&amp;oldid=50662927</a>»				</div>
+				<!-- /printfooter -->
+												<!-- catlinks -->
+				<div id="catlinks" class="catlinks"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="http://ru.wikipedia.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D0%B8" title="Служебная:Категории">Категории</a>: <ul><li><a href="http://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F:%D0%9F%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%BD%D1%8B%D0%B5_%D0%B8%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B_Microsoft" title="Категория:Программные интерфейсы Microsoft">Программные интерфейсы Microsoft</a></li><li><a href="http://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F:%D0%AF%D0%B7%D1%8B%D0%BA%D0%B8_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F" title="Категория:Языки программирования">Языки программирования</a></li></ul></div><div id="mw-hidden-catlinks" class="mw-hidden-catlinks mw-hidden-cats-hidden">Скрытые категории: <ul><li><a href="http://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F:%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9D%D0%B5%D1%82_%D0%B8%D1%81%D1%82%D0%BE%D1%87%D0%BD%D0%B8%D0%BA%D0%BE%D0%B2_%D1%81_%D1%84%D0%B5%D0%B2%D1%80%D0%B0%D0%BB%D1%8F_2010" title="Категория:Википедия:Нет источников с февраля 2010">Википедия:Нет источников с февраля 2010</a></li><li><a href="http://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F:%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8_%D1%81_%D1%83%D1%82%D0%B2%D0%B5%D1%80%D0%B6%D0%B4%D0%B5%D0%BD%D0%B8%D1%8F%D0%BC%D0%B8_%D0%B1%D0%B5%D0%B7_%D0%B8%D1%81%D1%82%D0%BE%D1%87%D0%BD%D0%B8%D0%BA%D0%BE%D0%B2_%D0%B1%D0%BE%D0%BB%D0%B5%D0%B5_14_%D0%B4%D0%BD%D0%B5%D0%B9" title="Категория:Википедия:Статьи с утверждениями без источников более 14 дней">Википедия:Статьи с утверждениями без источников более 14 дней</a></li><li><a href="http://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F:%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8_%D0%B1%D0%B5%D0%B7_%D1%81%D1%81%D1%8B%D0%BB%D0%BE%D0%BA_%D0%BD%D0%B0_%D0%B8%D1%81%D1%82%D0%BE%D1%87%D0%BD%D0%B8%D0%BA%D0%B8" title="Категория:Википедия:Статьи без ссылок на источники">Википедия:Статьи без ссылок на источники</a></li><li><a href="http://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F:%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8_%D0%BA_%D0%B2%D0%B8%D0%BA%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D0%B8" title="Категория:Википедия:Статьи к викификации">Википедия:Статьи к викификации</a></li><li><a href="http://ru.wikipedia.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F:%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8_%D0%B1%D0%B5%D0%B7_%D1%88%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD%D0%BE%D0%B2-%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%B5%D0%BA" title="Категория:Википедия:Статьи без шаблонов-карточек">Википедия:Статьи без шаблонов-карточек</a></li></ul></div></div>				<!-- /catlinks -->
+												<div class="visualClear"></div>
+				<!-- debughtml -->
+								<!-- /debughtml -->
+			</div>
+			<!-- /bodyContent -->
+		</div>
+		<!-- /content -->
+		<div id="mw-navigation">
+			<h2>Навигация</h2>
+			<!-- header -->
+			<div id="mw-head">
+				
+<!-- 0 -->
+<div id="p-personal" role="navigation" class="">
+	<h3>Персональные инструменты</h3>
+	<ul>
+<li id="pt-createaccount"><a href="http://ru.wikipedia.org/w/index.php?title=%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%92%D1%85%D0%BE%D0%B4&amp;returnto=HLSL&amp;type=signup">Создать учётную запись</a></li><li id="pt-login"><a href="http://ru.wikipedia.org/w/index.php?title=%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%92%D1%85%D0%BE%D0%B4&amp;returnto=HLSL" title="Здесь можно зарегистрироваться в системе, но это необязательно. [alt-shift-o]" accesskey="o">Представиться системе</a></li>	</ul>
+</div>
+
+<!-- /0 -->
+				<div id="left-navigation">
+					
+<!-- 0 -->
+<div id="p-namespaces" role="navigation" class="vectorTabs">
+	<h3>Пространства имён</h3>
+	<ul>
+					<li id="ca-nstab-main" class="selected"><span><a href="http://ru.wikipedia.org/wiki/HLSL" title="Просмотр основной страницы [alt-shift-c]" accesskey="c">Статья</a></span></li>
+					<li id="ca-talk"><span><a href="http://ru.wikipedia.org/wiki/%D0%9E%D0%B1%D1%81%D1%83%D0%B6%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5:HLSL" title="Обсуждение основной страницы [alt-shift-t]" accesskey="t">Обсуждение</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet">
+	<h3 id="mw-vector-current-variant">
+		</h3>
+	<h3><span>Варианты</span><a href="#"></a></h3>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+				</div>
+				<div id="right-navigation">
+					
+<!-- 0 -->
+<div id="p-views" role="navigation" class="vectorTabs">
+	<h3>Просмотры</h3>
+	<ul>
+					<li id="ca-view" class="collapsible"><span><a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;stable=1">Читать</a></span></li>
+					<li id="ca-current" class="collapsible collapsible selected"><span><a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;stable=0&amp;redirect=no" title="Показать текущую версию этой страницы [alt-shift-v]" accesskey="v">Текущая версия</a></span></li>
+					<li id="ca-edit"><span><a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=edit" title="Эту статью можно изменять. Перед сохранением изменений, пожалуйста, нажмите кнопку предварительного просмотра для визуальной проверки результата [alt-shift-e]" accesskey="e">Правка</a></span></li>
+					<li id="ca-history" class="collapsible"><span><a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=history" title="Журнал изменений страницы [alt-shift-h]" accesskey="h">История</a></span></li>
+			</ul>
+</div>
+
+<!-- /0 -->
+
+<!-- 1 -->
+<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet">
+	<h3><span>Действия</span><a href="#"></a></h3>
+	<div class="menu">
+		<ul>
+					</ul>
+	</div>
+</div>
+
+<!-- /1 -->
+
+<!-- 2 -->
+<div id="p-search" role="search">
+	<h3><label for="searchInput">Поиск</label></h3>
+	<form action="/w/index.php" id="searchform">
+				<div id="simpleSearch">
+						<input tabindex="1" placeholder="Поиск" autocomplete="off" name="search" title="Искать в Википедии [alt-shift-f]" accesskey="f" id="searchInput">						<button type="submit" name="button" title="Найти страницы, содержащие указанный текст" id="searchButton"><img src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/search-ltr.png" alt="Найти" height="13" width="12"></button>								<input name="title" value="Служебная:Поиск" type="hidden">
+		</div>
+	</form>
+</div>
+
+<!-- /2 -->
+				</div>
+			</div>
+			<!-- /header -->
+			<!-- panel -->
+			<div class="collapsible-nav" id="mw-panel">
+				<!-- logo -->
+					<div id="p-logo" role="banner"><a style="background-image: url(//upload.wikimedia.org/wikipedia/commons/f/f6/Wikipedia-logo-v2-ru.png);" href="http://ru.wikipedia.org/wiki/%D0%97%D0%B0%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0" title="Перейти на заглавную страницу"></a></div>
+				<!-- /logo -->
+				
+<!-- navigation -->
+<div class="portal first persistent" role="navigation" id="p-navigation">
+	<h3>Навигация</h3>
+	<div class="body">
+		<ul>
+			<li id="n-mainpage"><a href="http://ru.wikipedia.org/wiki/%D0%97%D0%B0%D0%B3%D0%BB%D0%B0%D0%B2%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0" title="Перейти на заглавную страницу [alt-shift-z]" accesskey="z">Заглавная страница</a></li>
+			<li id="n-browse"><a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9F%D0%BE%D0%B8%D1%81%D0%BA_%D0%BF%D0%BE_%D0%BA%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F%D0%BC" title="Поиск по категориям">Рубрикация</a></li>
+			<li id="n-index"><a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%90%D0%BB%D1%84%D0%B0%D0%B2%D0%B8%D1%82%D0%BD%D1%8B%D0%B9_%D1%83%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C" title="Поиск по двум первым буквам">Указатель А — Я</a></li>
+			<li id="n-featured"><a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%98%D0%B7%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5_%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8" title="Статьи, считающиеся лучшими статьями проекта">Избранные статьи</a></li>
+			<li id="n-randompage"><a href="http://ru.wikipedia.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%A1%D0%BB%D1%83%D1%87%D0%B0%D0%B9%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0" title="Посмотреть случайно выбранную страницу [alt-shift-x]" accesskey="x">Случайная статья</a></li>
+			<li id="n-currentevents"><a href="http://ru.wikipedia.org/wiki/%D0%9F%D0%BE%D1%80%D1%82%D0%B0%D0%BB:%D0%A2%D0%B5%D0%BA%D1%83%D1%89%D0%B8%D0%B5_%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F" title="Статьи о текущих событиях в мире">Текущие события</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /navigation -->
+
+<!-- SEARCH -->
+
+<!-- /SEARCH -->
+
+<!-- participation -->
+<div class="portal expanded" role="navigation" id="p-participation">
+	<h3 tabindex="2"><a href="#">Участие</a></h3>
+	<div style="display: block;" class="body">
+		<ul>
+			<li id="n-bug_in_article"><a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%A1%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D1%8F_%D0%BE%D0%B1_%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D0%B0%D1%85" title="Сообщить об ошибке в этой статье">Сообщить об ошибке</a></li>
+			<li id="n-portal"><a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9F%D0%BE%D1%80%D1%82%D0%B0%D0%BB_%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D1%81%D1%82%D0%B2%D0%B0" title="О проекте, о том, чем здесь можно заниматься, а также — где что находится">Портал сообщества</a></li>
+			<li id="n-forum"><a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%A4%D0%BE%D1%80%D1%83%D0%BC" title="Форум участников Википедии">Форум</a></li>
+			<li id="n-recentchanges"><a href="http://ru.wikipedia.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%A1%D0%B2%D0%B5%D0%B6%D0%B8%D0%B5_%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B8" title="Список последних изменений [alt-shift-r]" accesskey="r">Свежие правки</a></li>
+			<li id="n-newpages"><a href="http://ru.wikipedia.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%9D%D0%BE%D0%B2%D1%8B%D0%B5_%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D1%8B" title="Список недавно созданных страниц">Новые страницы</a></li>
+			<li id="n-help"><a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%A1%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B0" title="Место, где можно получить справку">Справка</a></li>
+			<li id="n-sitesupport"><a href="http://donate.wikimedia.org/wiki/Special:FundraiserRedirector?utm_source=donate&amp;utm_medium=sidebar&amp;utm_campaign=C13_ru.wikipedia.org&amp;uselang=ru" title="Поддержите нас">Пожертвования</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /participation -->
+
+<!-- coll-print_export -->
+<div class="portal collapsed" role="navigation" id="p-coll-print_export">
+	<h3 tabindex="3"><a href="#">Печать/экспорт</a></h3>
+	<div class="body">
+		<ul id="collectionPortletList"><li id="coll-create_a_book"><a href="http://ru.wikipedia.org/w/index.php?title=%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%9A%D0%BE%D0%BB%D0%BB%D0%B5%D0%BA%D1%86%D0%B8%D1%8F_%D0%BA%D0%BD%D0%B8%D0%B3&amp;bookcmd=book_creator&amp;referer=HLSL" title="Создать книгу или коллекцию статей" rel="nofollow">Создать книгу</a></li><li id="coll-download-as-rl"><a href="http://ru.wikipedia.org/w/index.php?title=%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%9A%D0%BE%D0%BB%D0%BB%D0%B5%D0%BA%D1%86%D0%B8%D1%8F_%D0%BA%D0%BD%D0%B8%D0%B3&amp;bookcmd=render_article&amp;arttitle=HLSL&amp;oldid=50662927&amp;writer=rl" title="Скачать PDF-версию этой вики-страницы" rel="nofollow">Скачать как PDF</a></li><li id="t-print"><a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;printable=yes" title="Версия этой страницы для печати [alt-shift-p]" accesskey="p">Версия для печати</a></li></ul>	</div>
+</div>
+
+<!-- /coll-print_export -->
+
+<!-- TOOLBOX -->
+<div class="portal collapsed" role="navigation" id="p-tb">
+	<h3 tabindex="4"><a href="#">Инструменты</a></h3>
+	<div class="body">
+		<ul>
+			<li id="t-whatlinkshere"><a href="http://ru.wikipedia.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%A1%D1%81%D1%8B%D0%BB%D0%BA%D0%B8_%D1%81%D1%8E%D0%B4%D0%B0/HLSL" title="Список всех страниц, ссылающихся на данную [alt-shift-j]" accesskey="j">Ссылки сюда</a></li>
+			<li id="t-recentchangeslinked"><a href="http://ru.wikipedia.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%A1%D0%B2%D1%8F%D0%B7%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5_%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B8/HLSL" title="Последние изменения в страницах, на которые ссылается эта страница [alt-shift-k]" accesskey="k">Связанные правки</a></li>
+			<li id="t-specialpages"><a href="http://ru.wikipedia.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%A1%D0%BF%D0%B5%D1%86%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D1%8B" title="Список служебных страниц [alt-shift-q]" accesskey="q">Спецстраницы</a></li>
+			<li id="t-permalink"><a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;oldid=50662927" title="Постоянная ссылка на эту версию страницы">Постоянная ссылка</a></li>
+			<li id="t-info"><a href="http://ru.wikipedia.org/w/index.php?title=HLSL&amp;action=info">Сведения о странице</a></li>
+<li id="t-cite"><a href="http://ru.wikipedia.org/w/index.php?title=%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%A6%D0%B8%D1%82%D0%B0%D1%82%D0%B0&amp;page=HLSL&amp;id=50662927" title="Информация о том, как цитировать эту страницу">Цитировать страницу</a></li>		</ul>
+	</div>
+</div>
+
+<!-- /TOOLBOX -->
+
+<!-- LANGUAGES -->
+<div class="portal expanded" role="navigation" id="p-lang">
+	<h3 tabindex="5"><a href="#">На других языках</a></h3>
+	<div style="display: block;" class="body">
+		<ul>
+			<li class="interwiki-ar"><a href="http://ar.wikipedia.org/wiki/%D9%84%D8%BA%D8%A9_%D8%A7%D9%84%D8%AA%D8%B8%D9%84%D9%8A%D9%84_%D8%B9%D8%A7%D9%84%D9%8A%D8%A9_%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%88%D9%89" title="لغة التظليل عالية المستوى" hreflang="ar" lang="ar">العربية</a></li>
+			<li class="interwiki-cs"><a href="http://cs.wikipedia.org/wiki/High_Level_Shader_Language" title="High Level Shader Language" hreflang="cs" lang="cs">Česky</a></li>
+			<li class="interwiki-de"><a href="http://de.wikipedia.org/wiki/High_Level_Shading_Language" title="High Level Shading Language" hreflang="de" lang="de">Deutsch</a></li>
+			<li class="interwiki-en"><a href="http://en.wikipedia.org/wiki/High_Level_Shader_Language" title="High Level Shader Language" hreflang="en" lang="en">English</a></li>
+			<li class="interwiki-es"><a href="http://es.wikipedia.org/wiki/High_Level_Shader_Language" title="High Level Shader Language" hreflang="es" lang="es">Español</a></li>
+			<li class="interwiki-fr"><a href="http://fr.wikipedia.org/wiki/High_Level_Shader_Language" title="High Level Shader Language" hreflang="fr" lang="fr">Français</a></li>
+			<li class="interwiki-it"><a href="http://it.wikipedia.org/wiki/High_Level_Shader_Language" title="High Level Shader Language" hreflang="it" lang="it">Italiano</a></li>
+			<li class="interwiki-ja"><a href="http://ja.wikipedia.org/wiki/High_Level_Shader_Language" title="High Level Shader Language" hreflang="ja" lang="ja">日本語</a></li>
+			<li class="interwiki-ko"><a href="http://ko.wikipedia.org/wiki/%EA%B3%A0%EA%B8%89_%EC%85%B0%EC%9D%B4%EB%8D%94_%EC%96%B8%EC%96%B4" title="고급 셰이더 언어" hreflang="ko" lang="ko">한국어</a></li>
+			<li class="interwiki-nl"><a href="http://nl.wikipedia.org/wiki/High_Level_Shader_Language" title="High Level Shader Language" hreflang="nl" lang="nl">Nederlands</a></li>
+			<li class="interwiki-zh"><a href="http://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E7%9D%80%E8%89%B2%E5%99%A8%E8%AF%AD%E8%A8%80" title="高级着色器语言" hreflang="zh" lang="zh">中文</a></li>
+		</ul>
+	</div>
+</div>
+
+<!-- /LANGUAGES -->
+			</div>
+			<!-- /panel -->
+		</div>
+		<!-- footer -->
+		<div id="footer" role="contentinfo">
+							<ul id="footer-info">
+											<li id="footer-info-lastmod"> Последнее изменение этой страницы: 00:10, 14 декабря 2012.</li>
+											<li id="footer-info-copyright">Текст доступен по <a rel="license" href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%A2%D0%B5%D0%BA%D1%81%D1%82_%D0%BB%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D0%B8_Creative_Commons_Attribution-ShareAlike_3.0_Unported">лицензии Creative Commons Attribution-ShareAlike</a><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/" style="display:none;"></a>; в отдельных случаях могут действовать дополнительные условия.
+<span class="noprint">Подробнее см. <a href="http://wikimediafoundation.org/wiki/Terms_of_Use/ru">Условия использования</a>.</span><br>
+Wikipedia® — зарегистрированный товарный знак некоммерческой организации <a href="http://wikimediafoundation.org/wiki/%D0%9F%D1%80%D0%B8%D1%91%D0%BC%D0%BD%D0%B0%D1%8F">Wikimedia Foundation, Inc.</a><br></li><li class="noprint"><a class="internal" href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9A%D0%BE%D0%BD%D1%82%D0%B0%D0%BA%D1%82%D1%8B">Свяжитесь с нами</a></li>
+									</ul>
+							<ul id="footer-places">
+											<li id="footer-places-privacy"><a href="http://wikimediafoundation.org/wiki/%D0%9F%D0%BE%D0%BB%D0%B8%D1%82%D0%B8%D0%BA%D0%B0_%D0%BA%D0%BE%D0%BD%D1%84%D0%B8%D0%B4%D0%B5%D0%BD%D1%86%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D0%BE%D1%81%D1%82%D0%B8" title="wikimedia:Политика конфиденциальности">Политика конфиденциальности</a></li>
+											<li id="footer-places-about"><a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9E%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5" title="Википедия:Описание">Описание Википедии</a></li>
+											<li id="footer-places-disclaimer"><a href="http://ru.wikipedia.org/wiki/%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F:%D0%9E%D1%82%D0%BA%D0%B0%D0%B7_%D0%BE%D1%82_%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D0%B8" title="Википедия:Отказ от ответственности">Отказ от ответственности</a></li>
+											<li id="footer-places-mobileview"><a href="http://ru.m.wikipedia.org/wiki/HLSL" class="noprint stopMobileRedirectToggle">Мобильная версия</a></li>
+									</ul>
+										<ul id="footer-icons" class="noprint">
+					<li id="footer-copyrightico">
+						<a href="http://wikimediafoundation.org/"><img src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/wikimedia-button.png" alt="Wikimedia Foundation" height="31" width="88"></a>
+					</li>
+					<li id="footer-poweredbyico">
+						<a href="http://www.mediawiki.org/"><img src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" height="31" width="88"></a>
+					</li>
+				</ul>
+						<div style="clear:both"></div>
+		</div>
+		<!-- /footer -->
+		<script>if(window.mw){
+mw.loader.state({"site":"loading","user":"ready","user.groups":"ready"});
+}</script>
+<script src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/load.php"></script>
+<script>if(window.mw){
+mw.loader.load(["mobile.desktop","mediawiki.user","mediawiki.page.ready","mediawiki.searchSuggest","mediawiki.hidpi","ext.gadget.collapserefs","ext.gadget.directLinkToCommons","ext.gadget.referenceTooltips","mw.MwEmbedSupport.style","ext.vector.collapsibleNav","ext.vector.collapsibleTabs","ext.vector.editWarning","mw.PopUpMediaTransform","ext.flaggedRevs.advanced"], null, true);
+}</script>
+<script src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/index_004.php"></script>
+<script src="HLSL%20%E2%80%94%20%D0%92%D0%B8%D0%BA%D0%B8%D0%BF%D0%B5%D0%B4%D0%B8%D1%8F_files/load_002.php"></script>
+<!-- Served by mw1036 in 0.519 secs. -->
+	
+
+<div class="suggestions" style="display: none; font-size: 13px;"><div class="suggestions-results"></div><div class="suggestions-special"></div></div></body></html>

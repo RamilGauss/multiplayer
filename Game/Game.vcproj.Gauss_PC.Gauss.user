@@ -11,7 +11,7 @@
 			<DebugSettings
 				Command="$(TargetPath)"
 				WorkingDirectory=""
-				CommandArguments="-con ..\DeveloperToolDLL\ViewerModel.dll"
+				CommandArguments="-con ..\DeveloperToolDLL\TestTask.dll"
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"

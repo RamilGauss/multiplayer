@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
@@ -56,8 +56,8 @@ void* TManagerEffect::Load(const wchar_t* sPath)
 {
   void* p = NULL;
   HRESULT hr;
-  map<wstring,ID3DXEffect*>::iterator fit = mMapPathResource.find(wstring(sPath));
-  map<wstring,ID3DXEffect*>::iterator eit = mMapPathResource.end();
+  TMapWStrPtr::iterator fit = mMapPathResource.find(wstring(sPath));
+  TMapWStrPtr::iterator eit = mMapPathResource.end();
   if(fit==eit)// не нашли
   {
     // компилировать Shader
@@ -78,7 +78,7 @@ void* TManagerEffect::Load(const wchar_t* sPath)
 
     p = pEffect;
 
-    map<wstring,ID3DXEffect*>::value_type val(wstring(sPath),pEffect);
+    TMapWStrPtr::value_type val(wstring(sPath),pEffect);
     mMapPathResource.insert(val);
   }
   else// дубликат
@@ -93,8 +93,8 @@ void* TManagerEffect::Load(const wchar_t* sPath)
 void TManagerEffect::Reset()
 {
   HRESULT hr;
-  map<wstring,ID3DXEffect*>::iterator bit = mMapPathResource.begin();
-  map<wstring,ID3DXEffect*>::iterator eit = mMapPathResource.end();
+  TMapWStrPtr::iterator bit = mMapPathResource.begin();
+  TMapWStrPtr::iterator eit = mMapPathResource.end();
   while(bit!=eit)
   {
     ID3DXEffect* p = bit->second;
@@ -106,8 +106,8 @@ void TManagerEffect::Reset()
 void TManagerEffect::Lost()
 {
   HRESULT hr;
-  map<wstring,ID3DXEffect*>::iterator bit = mMapPathResource.begin();
-  map<wstring,ID3DXEffect*>::iterator eit = mMapPathResource.end();
+  TMapWStrPtr::iterator bit = mMapPathResource.begin();
+  TMapWStrPtr::iterator eit = mMapPathResource.end();
   while(bit!=eit)
   {
     ID3DXEffect* p = bit->second;
@@ -118,8 +118,8 @@ void TManagerEffect::Lost()
 //----------------------------------------------------------------------------
 void TManagerEffect::Destroy()
 {
-  map<wstring,ID3DXEffect*>::iterator bit = mMapPathResource.begin();
-  map<wstring,ID3DXEffect*>::iterator eit = mMapPathResource.end();
+  TMapWStrPtr::iterator bit = mMapPathResource.begin();
+  TMapWStrPtr::iterator eit = mMapPathResource.end();
   while(bit!=eit)
   {
     ID3DXEffect* pEffect = bit->second;
@@ -132,8 +132,8 @@ void TManagerEffect::Destroy()
 bool TManagerEffect::Set(char* bufferIn)
 {
   TShaderStack* pSS = (TShaderStack*)bufferIn;
-  map<wstring, ID3DXEffect*>::iterator bit = mMapPathResource.begin();
-  map<wstring, ID3DXEffect*>::iterator eit = mMapPathResource.end();
+  TMapWStrPtr::iterator bit = mMapPathResource.begin();
+  TMapWStrPtr::iterator eit = mMapPathResource.end();
   while(bit!=eit)
   {
     ID3DXEffect* pEffect = bit->second;

@@ -1,0 +1,1131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru"><head>
+<title>XnaDev.ru - XNA новости уроки статьи (xna.ru) - Статьи: Использование Vertex Textures в XNA</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
+<meta name="verify-v1" content="MKuWtvCbTohXJg7+kqQiNf/H6fjwhQv/Xkska+arLFA="><meta name="description" content="XnaDev.ru - это основной русскоязычный ресурс, посвященный разработке игр на платформе XNA.
+Цель данного проекта - объединить в единое сообщество русскоязычных XNA разработчиков.">
+<meta name="keywords" content="XNA,Windows,Phone,сообщество,русских, разработчиков,разработка,игр, платформа,3D,движок,уроки">
+<link rel="stylesheet" href="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/styles.css" type="text/css" media="screen">
+<link rel="alternate" type="application/rss+xml" title="XNA - Новости" href="http://www.xnadev.ru/rss/rss_n.php"><link rel="alternate" type="application/rss+xml" title="XNA - Статьи" href="http://www.xnadev.ru/rss/rss_a.php"><link rel="alternate" type="application/rss+xml" title="XNA - Форумы" href="http://www.xnadev.ru/rss/rss_f.php"><link rel="alternate" type="application/rss+xml" title="XNA - Галереи" href="http://www.xnadev.ru/rss/rss_p.php"><link rel="alternate" type="application/rss+xml" title="XNA - Файлы" href="http://www.xnadev.ru/rss/rss_d.php"><link rel="shortcut icon" href="http://www.xnadev.ru/images/favicon.ico" type="image/x-icon">
+<script type="text/javascript" src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/jscript.js"></script>
+<script type="text/javascript" src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/jquery.js"></script>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="full-header">
+<a href="http://www.xnadev.ru/" target="_self"><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/php-fusion-logo.png" style="margin:5px" align="left" border="0"></a>
+</td>
+</tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="sub-header-left"></td>
+<td class="sub-header"><ul>
+<li class="first-link white"> <span class="bullet">·</span> <a href="http://www.xnadev.ru/index.php"><span>Главная</span></a></li>
+<li class="white"> <span class="bullet">·</span> <a href="http://www.xnadev.ru/articles.php"><span>Статьи</span></a></li>
+<li class="white"> <span class="bullet">·</span> <a href="http://www.xnadev.ru/forum/index.php"><span>Форум</span></a></li>
+<li class="white"> <span class="bullet">·</span> <a href="http://www.xnadev.ru/photogallery.php"><span>Фотогалерея</span></a></li>
+<li class="white"> <span class="bullet">·</span> <a href="http://www.xnadev.ru/weblinks.php"><span>Каталог ссылок</span></a></li>
+<li class="white"> <span class="bullet">·</span> <a href="http://www.xnadev.ru/wiki"><span>XNA Wiki</span></a></li>
+<li class="white"> <span class="bullet">·</span> <a href="http://www.xnadev.ru/search.php"><span>Поиск</span></a></li>
+</ul>
+</td>
+<td class="sub-header" align="right">06.03.2013 21:29:15</td>
+<td class="sub-header-right"></td>
+</tr>
+</tbody></table>
+<table class="side-both" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="side-border-left" valign="top"><table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="scapmain-left"></td>
+<td class="scapmain">Навигация</td>
+<td class="scapmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="side-body">
+<span class="bullet">·</span> <a href="http://www.xnadev.ru/faq.php" class="side">XNA FAQ</a><br>
+<span class="bullet">·</span> <a href="http://www.xnadev.ru/viewpage.php?page_id=1" class="side">С чего начать</a><br>
+<span class="bullet">·</span> <a href="http://xnadev.ru/viewpage.php?page_id=4" class="side">Конкурсы</a><br>
+<span class="bullet">·</span> <a href="http://www.xnadev.ru/contact.php" class="side">Обратная связь</a><br>
+<span class="bullet">·</span> <a href="http://www.xnadev.ru/blog.php" class="side">XNA Блоги</a><br>
+</td>
+</tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="scapmain-left"></td>
+<td class="scapmain">Сейчас на сайте</td>
+<td class="scapmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="side-body">
+<span class="bullet">·</span> Гостей: 2<br><br>
+<span class="bullet">·</span> Пользователей: 0<br>
+<br>
+<span class="bullet">·</span> Всего пользователей: 3,125<br>
+<span class="bullet">·</span> Новый пользователь: <a href="http://www.xnadev.ru/profile.php?lookup=3583" class="side">fuel01</a>
+</td>
+</tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="scapmain-left"></td>
+<td class="scapmain">Последние фото</td>
+<td class="scapmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="side-body">
+<center><a href="http://www.xnadev.ru/photogallery.php?photo_id=72" title="Рождество Must Be">
+<img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/screenshot_12182012_030238_t1.png" title="Рождество Must Be" alt="Рождество Must Be" border="0" width="140"></a><br>
+<b><a href="http://www.xnadev.ru/photogallery.php?photo_id=72">Рождество Must Be</a></b>
+<br>Альбом: 
+<a href="http://www.xnadev.ru/photogallery.php?album_id=2" class="gallery" title="Альбом: XNA Games">
+XNA Games</a><br><br></center>
+<center><a href="http://www.xnadev.ru/photogallery.php?photo_id=71" title="mp3 wav player для игры tactics">
+<img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/tactics2012_10_06_00-13_003_t1.jpg" title="mp3 wav player для игры tactics" alt="mp3 wav player для игры tactics" border="0" width="140"></a><br>
+<b><a href="http://www.xnadev.ru/photogallery.php?photo_id=71">mp3 wav player для и...</a></b>
+<br>Альбом: 
+<a href="http://www.xnadev.ru/photogallery.php?album_id=3" class="gallery" title="Альбом: XNA Engine">
+XNA Engine</a><br><br></center>
+<center><a href="http://www.xnadev.ru/photogallery.php?photo_id=70" title="Сырная мышь">
+<img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/creenshot1_t1.png" title="Сырная мышь" alt="Сырная мышь" border="0" width="140"></a><br>
+<b><a href="http://www.xnadev.ru/photogallery.php?photo_id=70">Сырная мышь</a></b>
+<br>Альбом: 
+<a href="http://www.xnadev.ru/photogallery.php?album_id=2" class="gallery" title="Альбом: XNA Games">
+XNA Games</a><br><br></center>
+</td>
+</tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="scapmain-left"></td>
+<td class="scapmain">Блоги</td>
+<td class="scapmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="side-body">
+<div style="float:left; margin-right:3px; margin-bottom:3px;"><a href="http://www.xnadev.ru/blog.php?page=bloguser&amp;id=8" title="Chort"><img style="border:0;" src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/avatar8.gif" alt="Chort" height="25" width="25"></a>
+		  </div>
+		  	» <a href="http://www.xnadev.ru/blog.php?page=blog_id&amp;id=78" title="Curve Class">Curve Class</a><br style="clear:both;"><div style="float:left; margin-right:3px; margin-bottom:3px;"><a href="http://www.xnadev.ru/blog.php?page=bloguser&amp;id=1223" title="dampirik"><img style="border:0;" src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/x_72a1623d1223.jpg" alt="dampirik" height="25" width="25"></a>
+		  </div>
+		  	» <a href="http://www.xnadev.ru/blog.php?page=blog_id&amp;id=77" title="Реклама, статистика и продвижения приложений применительно к WP7. Часть 2.">Реклама, статисти...</a><br style="clear:both;"><div style="float:left; margin-right:3px; margin-bottom:3px;"><a href="http://www.xnadev.ru/blog.php?page=bloguser&amp;id=1223" title="dampirik"><img style="border:0;" src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/x_72a1623d1223.jpg" alt="dampirik" height="25" width="25"></a>
+		  </div>
+		  	» <a href="http://www.xnadev.ru/blog.php?page=blog_id&amp;id=76" title="Увеличение скорости загрузки и уменьшение размера изображений на примере .Xna Framework.">Увеличение скорос...</a><br style="clear:both;"><div style="float:left; margin-right:3px; margin-bottom:3px;"><a href="http://www.xnadev.ru/blog.php?page=bloguser&amp;id=1223" title="dampirik"><img style="border:0;" src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/x_72a1623d1223.jpg" alt="dampirik" height="25" width="25"></a>
+		  </div>
+		  	» <a href="http://www.xnadev.ru/blog.php?page=blog_id&amp;id=75" title="Реклама, статистика и продвижения приложений применительно к WP7">Реклама, статисти...</a><br style="clear:both;"><div style="float:left; margin-right:3px; margin-bottom:3px;"><a href="http://www.xnadev.ru/blog.php?page=bloguser&amp;id=5" title="general"><img style="border:0;" src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/av78x1005.jpg" alt="general" height="25" width="25"></a>
+		  </div>
+		  	» <a href="http://www.xnadev.ru/blog.php?page=blog_id&amp;id=74" title="Распаковка DxtCompressed текстур">Распаковка DxtCom...</a><br style="clear:both;"><div style="float:left; margin-right:3px; margin-bottom:3px;"><a href="http://www.xnadev.ru/blog.php?page=bloguser&amp;id=5" title="general"><img style="border:0;" src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/av78x1005.jpg" alt="general" height="25" width="25"></a>
+		  </div>
+		  	» <a href="http://www.xnadev.ru/blog.php?page=blog_id&amp;id=73" title="Как работать с XNA Game Studio в Visual Studio 2012?">Как работать с XN...</a><br style="clear:both;"><div style="float:left; margin-right:3px; margin-bottom:3px;"><a href="http://www.xnadev.ru/blog.php?page=bloguser&amp;id=3054" title="Vova"><img style="border:0;" src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/noavatar.gif" alt="Vova" height="25" width="25"></a>
+		  </div>
+		  	» <a href="http://www.xnadev.ru/blog.php?page=blog_id&amp;id=72" title="3драствуйте!">3драствуйте!</a><br style="clear:both;"><div style="float:left; margin-right:3px; margin-bottom:3px;"><a href="http://www.xnadev.ru/blog.php?page=bloguser&amp;id=992" title="andreas"><img style="border:0;" src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/TrueFalse992.png" alt="andreas" height="25" width="25"></a>
+		  </div>
+		  	» <a href="http://www.xnadev.ru/blog.php?page=blog_id&amp;id=71" title="Kinect и XNA: первая кровь">Kinect и XNA: пер...</a><br style="clear:both;"><div style="float:left; margin-right:3px; margin-bottom:3px;"><a href="http://www.xnadev.ru/blog.php?page=bloguser&amp;id=5" title="general"><img style="border:0;" src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/av78x1005.jpg" alt="general" height="25" width="25"></a>
+		  </div>
+		  	» <a href="http://www.xnadev.ru/blog.php?page=blog_id&amp;id=70" title="&quot;GB&amp;W Lite&quot; [wp7][game][release]">"GB&amp;W Lite" [wp7]...</a><br style="clear:both;"><div style="float:left; margin-right:3px; margin-bottom:3px;"><a href="http://www.xnadev.ru/blog.php?page=bloguser&amp;id=992" title="andreas"><img style="border:0;" src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/TrueFalse992.png" alt="andreas" height="25" width="25"></a>
+		  </div>
+		  	» <a href="http://www.xnadev.ru/blog.php?page=blog_id&amp;id=69" title="Kinect и XNA: установка SDK BETA">Kinect и XNA: уст...</a><br style="clear:both;"></td>
+</tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="scapmain-left"></td>
+<td class="scapmain">Поддержка</td>
+<td class="scapmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="side-body">
+<a href="http://www.microsoft.com/" alt="microsoft.com" title="microsoft.com"><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/ms2.jpg" title="microsoft.com" alt="microsoft.com" style="border: 0;"></a><br><a href="http://www.1gb.ru/" alt="1gb.ru" title="www.1gb.ru"><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/1gb_logo_v2.gif" title="1gb.ru" alt="1gb.ru - Дом для вашего сайта" style="border: 0;"></a></td>
+</tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="scapmain-left"></td>
+<td class="scapmain">Статистика посещений:</td>
+<td class="scapmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="side-body">
+<!--LiveInternet counter--><script type="text/javascript"><!--
+document.write("<a href='http://www.liveinternet.ru/click' "+"target=_blank><center><img src='http://counter.yadro.ru/hit?t27.2;r"+escape(document.referrer)+((typeof(screen)=="undefined")?"":";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+";"+Math.random()+"' alt='' title='LiveInternet: показано количество просмотров и"+" посетителей' border=0 width=88 height=120 ><\/center><\/a>")
+//--></script><a href="http://www.liveinternet.ru/click" target="_blank"><center><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/hit.gif" alt="" title="LiveInternet: показано количество просмотров и посетителей" border="0" height="120" width="88"></center></a><!--/LiveInternet--><br><center><!-- counter.1gb.ru --><script language="javascript" type="text/javascript">cgb_js="1.0"; cgb_r=""+Math.random()+"&r="+escape(document.referrer)+"&pg="+escape(window.location.href);document.cookie="rqbct=1; path=/"; cgb_r+="&c="+(document.cookie?"Y":"N");</script><script language="javascript1.1" type="text/javascript">cgb_js="1.1";cgb_r+="&j="+(navigator.javaEnabled()?"Y":"N")</script><script language="javascript1.2" type="text/javascript">cgb_js="1.2"; cgb_r+="&wh="+screen.width+'x'+screen.height+"&px="+(((navigator.appName.substring(0,3)=="Mic"))?screen.colorDepth:screen.pixelDepth)</script><script language="javascript1.3" type="text/javascript">cgb_js="1.3"</script><script language="javascript" type="text/javascript">cgb_r+="&js="+cgb_js; document.write("<a href='http://www.1gb.ru?cnt=27090'>"+"<img src='http://counter.1gb.ru/cnt.aspx?"+"u=27090&"+cgb_r+"&' border=0 width=88 height=31 "+"alt='1Gb.ru counter'><\/a>")</script><a href="http://www.1gb.ru/?cnt=27090"><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/cnt.gif" alt="1Gb.ru counter" border="0" height="31" width="88"></a><noscript><a href='http://www.1gb.ru?cnt=27090'><img src="http://counter.1gb.ru/cnt.aspx?u=27090" border=0 width="88" height="31" alt="1Gb.ru counter"></a></noscript><!-- /counter.1gb.ru --></center></td>
+</tr>
+</tbody></table>
+</td><td class="main-bg" valign="top"><a id="content" name="content"></a>
+<!--pre_article--><table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="capmain-left"></td>
+<td class="capmain">Использование Vertex Textures в XNA</td>
+<td class="capmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="main-body middle-border"><p><span style="font-weight: bold;"><span style="font-weight: normal;"><span style="white-space: pre;"></span>Урок, рассматривающий основы работы с Vertex Textures Fetch в XNA. <span style="white-space: pre;"></span>Фактически это не один урок, а целых четыре, материала очень много, но интересно. Одним из плюсов является то, что автор (<a href="http://catalinzima.spaces.live.com/" target="_blank">Catalin Zima</a>)
+ постарался расписать каждую строку кода, почему сделано именно так и 
+что для чего надо, таким образом набрать исходный код можно и не 
+прибегая к прилагающимся к уроку исходникам. Кто все же решит 
+досконально пройти весь урок и набрать весь исходный код сам, небольшой 
+совет – сохраняйте состояния проектов (делайте копии, используйте SVN и 
+т.п.) перед каждой из частей и конце их, ибо замечены несколько 
+прецедентов «отката» состояния проекта на предыдущее состояние. В тексте
+ переведены все комментарии к исходным кодам как C#, так и HLSL, 
+прилагаемые исходники взяты с англоязычного ресурса и там все 
+комментарии на английском.</span><br></span></p>
+<p><span style="font-weight: bold;"><br></span></p>
+<p><strong>Вступление</strong></p>
+<p><span style="white-space:pre"></span>Данная статья описывает четыре 
+метода использования Вершинных Текстур (Vertex Textures) в XNA играх. 
+Начнем мы с краткого описания вершинных текстур, что это такое и как ими
+ пользоваться, затем реализуем четыре эффекта с их использованием, от 
+простейшего до довольно сложных реализаций. В статье будет детально 
+расписан каждый шаг написания программ и объяснено, почему выбрана 
+именно эта реализация и какие техники могут быть применены для решения 
+подобных задач. Некоторые части будут содержать дополнения с 
+разъяснениями как использовать те или иные подходы реализации в других 
+подобных задачах, даже если они не связаны с Vertex Texture Fetching 
+(далее по тексту просто VTF).</p>
+<p><br><strong>Вершинные Текстуры</strong></p>
+<p><br><span style="white-space:pre"></span>С момента появления 
+программируемых графических процессоров в их архитектуру было изначально
+ заложено, что вершинный и пиксельный шейдеры имеют различные 
+характеристики. В шейдерной модели 3.0 были сделаны первые шаги для 
+объединения их функциональности. DirectX 10 сделал последний шаг и 
+объединил набор инструкций между всеми типами шейдеров: пиксельными 
+(Pixel), вершинными (Vertex) и новыми геометрическими (Geometry) 
+шейдерами. Основной темой данной статьи будет Vertex Texture Fetch 
+(VTF), одна из фичей третьей шейдерной модели (Shader Model 3.0), 
+которая в свою очередь послужила началом этой унификации.<br><span style="white-space:pre"></span>VTF
+ позволяет нам читать информацию из текстуры в вершинный шейдер, почти 
+так же, как это делает пиксельный шейдер. Чтобы использовать 
+функциональность VTF Вам потребуется XBOX 360 (у которого 
+унифицированная шейдерная архитектура) или графическая карта NVIDIA 
+серии GeForce 6 или выше. Для владельцев видеоадаптеров от ATI, для 
+достижения подобного результата применима технология R2VB – отрисовка в 
+вершинный буфер (Render To Vertex Buffer), но я не знаю, как 
+использовать данную технологию в XNA. (Вот тут можно прочитать <a href="http://catalinzima.spaces.live.com/blog/cns%213D9ECAE1F2DC56EF%21272.entry" target="_blank">как сэмулировать VTF программно</a>, для пользователей адаптеров ATI).<br><span style="white-space:pre"></span>Ассемблерная
+ функция графического процессора для чтения текстуры в вершинный шейдер –
+ «texldl», в HLSL, который и будет использоваться, ее аналогом является –
+ «tex2Dlod». Параметры вызова - tex2Dlod( s, t ), где «s» - 2D 
+текстурный самплер и «t» - четырехмерный вектор (float4). При чтении 
+текстуры mipmap уровень указывается вручную, путем задания четвертого 
+компонента вектора (t.w). В большинстве случаев используется 0 уровень 
+(текстура будет считана, как есть), так что вызов будет выглядеть 
+примерно следующим образом - tex2Dlod(textureSampler, 
+float4(uv.xy,0,0)).<br><span style="white-space:pre"></span>Поведение вершинной текстуры аналогично текстурам в пиксельных шейдерах, за исключением:</p>
+<ul>
+<li><a href="http://www.gamedev.ru/terms/BilinearFiltering" target="_blank">Билинейная</a> (Bilinear) и <a href="http://www.gamedev.ru/terms/TrilinearFiltering" target="_blank">трилинейная</a>
+ (Trilinear) фильтрация не поддерживается на аппаратном уровне. Далее 
+будет рассмотрено, как реализовать билинейную фильтрацию в вершинном 
+шейдере.</li>
+<li><a href="http://www.gamedev.ru/terms/AnisotropicFiltering" target="_blank">Анизотропная</a> (Anisotropic) фильтрация не поддерживается на аппаратном уровне.</li>
+<li>Автоматический расчет mipmap уровня не производится и если необходимо, расчет нужно реализовывать самим.</li>
+</ul>
+<p>&nbsp;</p>
+<p><span style="font-style: italic;">Необходимые ресурсы и код</span></p>
+<p><span style="white-space:pre"></span>Прежде чем мы начнем, скачайте архив <a href="http://www.xnadev.ru/_content/articles/wtf/Resources.zip" target="_blank">Resources.zip</a>, который содержит:</p>
+<ul>
+<li>Две карты высот, .dds в формате R32F (каждый пиксель записан в 32 битный float и содержит информацию о высоте).</li>
+<li>Примечание: видеокарты NVIDIA поколения 6 и 7 для VTF поддерживают 
+только R32F и A32R32G32B32F форматы. Возможно GeForce 8 и XBOX 360 могут
+ для VTF использовать и другие форматы, но у меня нет возможности 
+проверить это.</li>
+<li>Несколько текстур взятых с <a href="http://www.turbosquid.com/" target="_blank">turbosquid.com</a> и прочих уроков и примеров.</li>
+<li>Camera.cs является компонентом (GameComponent), который реализует игровую камеру, взят из примера <a href="http://creators.xna.com/Headlines/developmentaspx/archive/2007/01/01/Skinned-Model-Sample.aspx" target="_blank">Skinned Model Sample</a>.</li>
+<li>Используйте триггеры на контроллере или клавиши Z и X клавиатуры для зума камеры.</li>
+<li>Правый стик или клавиши WASD для перемещения камеры.</li>
+<li>Grid.cs класс для отрисовки сетки в плоскостях XZ.</li>
+<li>DudeModel.zip будет использован в четвертой части.</li>
+</ul>
+<p>&nbsp;</p>
+<p><span style="white-space:pre"></span>Эти ресурсы будут использованы в данном уроке, и исходный код будет содержать ссылки на эти файлы.<br><span style="white-space:pre"></span>Grid.cs</p>
+<p><br><span style="white-space:pre"></span>Данный класс реализует 
+геометрию сетки и будет использован в Heightmap Rendering, Terrain 
+Morphing и Steps in Snow. Свойство CellSize отвечает, на сколько 
+большими будут ячейки сетки, а свойство Dimension контролирует 
+размерность сетки (сколько строк, столбцов). Каждая вершина содержит 
+информацию о позиции, нормали и соответствующей текстурной координате. 
+Таким образом, каждая вершина ссылается (мапится) на пиксель в текстуре и
+ это будет использовано в вершинном шейдере для манипуляции вершинами. 
+Механизм ассоциации между вершиной и пикселем текстуры, является 
+ключевым при использовании VTF. Изначально высота для всех вершин 
+установлена в 0, так что мы имеем идеально гладкую поверхность, в этом 
+можно убедиться, посмотрев в функцию GenerateStructures (строка 46, кода
+ Grid.cs).</p>
+<p>&nbsp;</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_csharp">
+<div class="csharp" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">vert.<span style="color: #0000FF;">Position</span> <span style="color: #008000;">=</span> <a href="http://www.google.com/search?q=new+msdn.microsoft.com"><span style="color: #008000;">new</span></a> Vector3<span style="color: #000000;">(</span><span style="color: #000000;">(</span>i <span style="color: #008000;">-</span> dimension <span style="color: #008000;">/</span> 2.0f<span style="color: #000000;">)</span> <span style="color: #008000;">*</span> cellSize, </span>
+<span style="vertical-align:top"> <span style="color: #FF0000;">0</span>, <span style="color: #000000;">(</span>j <span style="color: #008000;">-</span> dimension <span style="color: #008000;">/</span> 2.0f<span style="color: #000000;">)</span> <span style="color: #008000;">*</span> cellSize<span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"> </span></pre>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<br>
+<p>&nbsp;</p>
+<p><span style="white-space:pre"></span><span style="font-weight: bold;">I. Отрисовка ландшафта, используя карту высот</span></p>
+<p><span style="white-space:pre"></span>Начнем мы с простого примера - 
+отрисовки ландшафта, используя карту высот. Карта высот (heightmap) это 
+изображение (оттенки серого), содержащее информацию о высотах. Чем 
+темнее оттенок пикселя, тем ниже данный участок поверхности, 
+соответственно, чем светлее, тем выше. Так как мы используем текстуру, 
+которая содержит данные с плавающей точкой, то 0,0 – минимальная высота,
+ а 1,0 – означает максимальную высоту. На самом деле построить ландшафт 
+по карте высот можно и без использования вершинных текстур, просто 
+прочитав карту высот на этапе загрузки и на основе ее данных построить 
+буфер вершин. А так как эта операция производится только один раз (в 
+момент загрузки), а не каждый кадр (в вершинном шейдере) использование 
+вершинных текстур для решения подобных задач, в плане производительности
+ приложения, несколько нелогично. Как бы то ни было, это является 
+простейшей и относительно легкой в реализации демонстрацией 
+использования VTF.<br>Начнем с создания нового проекта (Windows или 
+Xbox360) и добавим в проект файлы Camera.cs и Grid.cs. Затем идем в 
+основной класс созданного проекта (Game1.cs) и добавляем пространство 
+имен VTFTutorial в объявления using.</p>
+<p>&nbsp;</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_csharp">
+<div class="csharp" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top"><span style="color: #0600FF;">using</span> <span style="color: #008080;">VTFTutorial</span><span style="color: #008000;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<p><span style="white-space:pre"></span>Теперь добавляем две новые 
+переменные в класс Game1: одну для камеры и одну для сетки. 
+Инициализируем их и указываем параметры в конструкторе класса. Камера 
+должна быть добавлена в список компонентов, т.к. является игровым 
+компонентом и за изменения состояний камеры и ее обновление теперь будет
+ отвечать компонентная модель XNA. Так же мы должна задать параметры 
+сетки CellSize и Dimension, 4 и 256 соответственно. Вы можете 
+проиграться с параметром CellSize и повыставлять ему различные 
+параметры, просто ради спортивного интереса «А что будет?». О том, что 
+произойдет если выставить другие параметры свойству Dimension, мы 
+поговорим четь позже. Теперь в методе LoadGraphicsContent добавьте вызов
+ grid.LoadGraphicsContent().</p>
+<p>&nbsp;</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_csharp">
+<div class="csharp" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">Camera camera<span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">Grid grid<span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top"><span style="color: #0600FF;">public</span> Game1<span style="color: #000000;">(</span><span style="color: #000000;">)</span></span>
+<span style="vertical-align:top"><span style="color: #000000;">{</span></span>
+<span style="vertical-align:top">	graphics <span style="color: #008000;">=</span> <a href="http://www.google.com/search?q=new+msdn.microsoft.com"><span style="color: #008000;">new</span></a> GraphicsDeviceManager<span style="color: #000000;">(</span><span style="color: #0600FF;">this</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">        content <span style="color: #008000;">=</span> <a href="http://www.google.com/search?q=new+msdn.microsoft.com"><span style="color: #008000;">new</span></a> ContentManager<span style="color: #000000;">(</span>Services<span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        camera <span style="color: #008000;">=</span> <a href="http://www.google.com/search?q=new+msdn.microsoft.com"><span style="color: #008000;">new</span></a> Camera<span style="color: #000000;">(</span><span style="color: #0600FF;">this</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">        <span style="color: #0600FF;">this</span>.<span style="color: #0000FF;">Components</span>.<span style="color: #0000FF;">Add</span><span style="color: #000000;">(</span>camera<span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        grid <span style="color: #008000;">=</span> <a href="http://www.google.com/search?q=new+msdn.microsoft.com"><span style="color: #008000;">new</span></a> Grid<span style="color: #000000;">(</span><span style="color: #0600FF;">this</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">        grid.<span style="color: #0000FF;">Dimension</span> <span style="color: #008000;">=</span> <span style="color: #FF0000;">256</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">        grid.<span style="color: #0000FF;">CellSize</span> <span style="color: #008000;">=</span> <span style="color: #FF0000;">4</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"><span style="color: #000000;">}</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top"><span style="color: #0600FF;">protected</span> <span style="color: #0600FF;">override</span> <span style="color: #0600FF;">void</span> LoadGraphicsContent<span style="color: #000000;">(</span><span style="color: #FF0000;">bool</span> loadAllContent<span style="color: #000000;">)</span></span>
+<span style="vertical-align:top"><span style="color: #000000;">{</span></span>
+<span style="vertical-align:top">	<span style="color: #0600FF;">if</span> <span style="color: #000000;">(</span>loadAllContent<span style="color: #000000;">)</span></span>
+<span style="vertical-align:top">        <span style="color: #000000;">{</span></span>
+<span style="vertical-align:top">	<span style="color: #000000;">}</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        grid.<span style="color: #0000FF;">LoadGraphicsContent</span><span style="color: #000000;">(</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"><span style="color: #000000;">}</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>Итак, у нас есть геометрия, 
+теперь нам необходимо создать файл эффекта (шейдера) который нам создаст
+ и отресует ландшафт. Добавьте в проект новую папку с именем «Shaders», 
+затем в эту папку добавьте новый текстовой файл (Add -&gt; New Item...) с
+ именем «VTFDisplacement.fx». Откройте его и приступим к написанию кода 
+шейдера на языке HLSL (High Level Shading Language).</p>
+<p><span style="white-space:pre"></span>Нам необходимы 3 параметра 
+матрицы, для матриц мира (world), вида (view) и проекции (projection). 
+Затем мы должны будем добавить карту высот с именем displacementMap 
+(карта смещения, так как именно в ней содержится информация о смещении 
+вершин относительно плоскости XZ) и самплер дня нее. Самплер будет 
+использоваться для чтения данных высоты из карты высот в вершинном 
+шейдере. Для всех фильтров с самплере используется значение Point, т.к. 
+линейный (Linear) и анизотропный (Anisotropic) не поддерживается для 
+вершинных текстур. Даже если прописать другое значение для фильтров, 
+никаких сообщений об ошибках выедено не будет, но использоваться все 
+равно будет значение Point.</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_hlsl">
+<div class="hlsl" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top"><span style="color: #000066; font-weight: bold;">float4x4</span> world<span style="color: #000066;">;</span> <span style="color: #666666; font-style: italic;">// матрица мира</span></span>
+<span style="vertical-align:top"><span style="color: #000066; font-weight: bold;">float4x4</span> view<span style="color: #000066;">;</span> <span style="color: #666666; font-style: italic;">// матрица вида</span></span>
+<span style="vertical-align:top"><span style="color: #000066; font-weight: bold;">float4x4</span> proj<span style="color: #000066;">;</span> <span style="color: #666666; font-style: italic;">// матрица проекции</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top"><span style="color: #666666; font-style: italic;">// максимальная высота для ландшафта</span></span>
+<span style="vertical-align:top"><span style="color: #000066; font-weight: bold;">float</span> maxHeight <span style="color: #000066;">=</span> <span style="color: #0000ff;">128</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top"><span style="color: #666666; font-style: italic;">//текстура карты высот</span></span>
+<span style="vertical-align:top">texture displacementMap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top"><span style="color: #666666; font-style: italic;">// самплер для чтения карты высот</span></span>
+<span style="vertical-align:top">sampler displacementSampler <span style="color: #000066;">=</span> sampler_state     </span>
+<span style="vertical-align:top">    <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">            Texture   <span style="color: #000066;">=</span> <span style="color: #000066;">&lt;</span>displacementMap<span style="color: #000066;">&gt;;</span></span>
+<span style="vertical-align:top">            MipFilter <span style="color: #000066;">=</span> Point<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">            MinFilter <span style="color: #000066;">=</span> Point<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">            MagFilter <span style="color: #000066;">=</span> Point<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">            AddressU  <span style="color: #000066;">=</span> Clamp<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">            AddressV  <span style="color: #000066;">=</span> Clamp<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">}</span><span style="color: #000066;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"><span style="white-space:pre"></span></span>Далее
+ создадим две структуры, одна будет описывать данные, поступающие на 
+вход вершинному шейдеру, вторая данные на выходе из него. На вход мы 
+будем подавать местоположение вершины (position) и ее текстурные 
+координаты (uv), на выходе мы будем получать трансформированные вершины в
+ пространстве, а так же будем передавать в пиксельный шейдер еще один 
+«комплект» координат вершины в переменной worldPos для «раскрашивания» 
+основываясь на данных высоты вершин. Текстурные координаты будем просто 
+«туннелировать» через вершинный шейдер в пиксельный, оставляя без 
+изменений.</p>
+<p>&nbsp;</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_hlsl">
+<div class="hlsl" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">    <span style="color: #000066; font-weight: bold;">struct</span> VS_INPUT </span>
+<span style="vertical-align:top">    <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">        <span style="color: #000066; font-weight: bold;">float4</span> position <span style="color: #000066;">:</span> <span style="color: #551111;">POSITION</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        <span style="color: #000066; font-weight: bold;">float4</span> uv       <span style="color: #000066;">:</span> <span style="color: #551111;">TEXCOORD0</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">}</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">    <span style="color: #000066; font-weight: bold;">struct</span> VS_OUTPUT</span>
+<span style="vertical-align:top">    <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">        <span style="color: #000066; font-weight: bold;">float4</span> position  <span style="color: #000066;">:</span> <span style="color: #551111;">POSITION</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        <span style="color: #000066; font-weight: bold;">float4</span> uv        <span style="color: #000066;">:</span> <span style="color: #551111;">TEXCOORD0</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        <span style="color: #000066; font-weight: bold;">float4</span> worldPos  <span style="color: #000066;">:</span> <span style="color: #551111;">TEXCOORD1</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">}</span><span style="color: #000066;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="white-space:pre"></span>Код вершинного шейдера выглядит следующим образом:</p>
+<p>&nbsp;</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_hlsl">
+<div class="hlsl" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">    VS_OUTPUT Transform<span style="color: #000066;">(</span>VS_INPUT In<span style="color: #000066;">)</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">// инициализация выходной структуры</span></span>
+<span style="vertical-align:top">        VS_OUTPUT Out <span style="color: #000066;">=</span> <span style="color: #000066;">(</span>VS_OUTPUT<span style="color: #000066;">)</span><span style="color: #0000ff;">0</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">//расчет матрицы произведения View * Projection</span></span>
+<span style="vertical-align:top">        <span style="color: #000066; font-weight: bold;">float4x4</span> viewProj <span style="color: #000066;">=</span> mul<span style="color: #000066;">(</span>view<span style="color: #000066;">,</span> proj<span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">//финальный расчет матриц для вывода на экран World * View * Projection</span></span>
+<span style="vertical-align:top">        <span style="color: #000066; font-weight: bold;">float4x4</span> worldViewProj<span style="color: #000066;">=</span> mul<span style="color: #000066;">(</span>world<span style="color: #000066;">,</span> viewProj<span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">// Данная инструкция читает карту высот</span></span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">// в соответствии с текстурными координатами вершины</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">// Примечание: мы передаем как параметр 0 уровень mipmap в tex2Dlod,</span></span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">// т.к. хотим чтобы изображение использовалось 1 к 1</span></span>
+<span style="vertical-align:top">        <span style="color: #000066; font-weight: bold;">float</span> height <span style="color: #000066;">=</span> tex2Dlod <span style="color: #000066;">(</span> displacementSampler<span style="color: #000066;">,</span></span>
+<span style="vertical-align:top">                                  <span style="color: #000066; font-weight: bold;">float4</span><span style="color: #000066;">(</span>In<span style="color: #000066;">.</span><span style="color: #006600;">uv</span><span style="color: #000066;">.</span><span style="color: #006600;">xy</span> <span style="color: #000066;">,</span> <span style="color: #0000ff;">0</span> <span style="color: #000066;">,</span> <span style="color: #0000ff;">0</span> <span style="color: #000066;">)</span> <span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">// После считывания данных высоты с текстуры</span></span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">// мы присваиваем это значение в y координаты вершины</span></span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">// и т.к. значение height лежит в диапазоне от 0 до 1,</span></span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">// то перемножаем с переменной maxHeight, которая в</span></span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">// свою очередь отвечает за максимальный подъем ландшафта</span></span>
+<span style="vertical-align:top">        In<span style="color: #000066;">.</span><span style="color: #006600;">position</span><span style="color: #000066;">.</span><span style="color: #006600;">y</span> <span style="color: #000066;">=</span> height <span style="color: #000066;">*</span> maxHeight<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">//Передаем в пиксельный шейдер координаты вершины в мировом пространстве</span></span>
+<span style="vertical-align:top">        Out<span style="color: #000066;">.</span><span style="color: #006600;">worldPos</span> <span style="color: #000066;">=</span> mul<span style="color: #000066;">(</span>In<span style="color: #000066;">.</span><span style="color: #006600;">position</span><span style="color: #000066;">,</span> world<span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">//Расчитываем финальное местоположение вершины уже для вывода на экран</span></span>
+<span style="vertical-align:top">        Out<span style="color: #000066;">.</span><span style="color: #006600;">position</span> <span style="color: #000066;">=</span> mul<span style="color: #000066;">(</span> In<span style="color: #000066;">.</span><span style="color: #006600;">position</span><span style="color: #000066;">,</span> worldViewProj<span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">//Текстурные координаты передаем без изменений</span></span>
+<span style="vertical-align:top">        Out<span style="color: #000066;">.</span><span style="color: #006600;">uv</span> <span style="color: #000066;">=</span> In<span style="color: #000066;">.</span><span style="color: #006600;">uv</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        <span style="color: #000000; font-weight: bold;">return</span> Out<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">}</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>Функция tex2Dlod читает данные 
+высот из текстуры, использую текстурные координаты которые создаются в 
+классе Grid.cs. Перед тем как координаты вершины будут перемножены со 
+всеми матрицами для вывода на экран, мы подменим данные координаты Y, на
+ этом этапе вершины будут выстроены по высоте в соответствии с данными 
+карты высот и только потом произойдет преобразование вершин в экранные 
+координаты. Все эти действия выполняет графический процессор.</p>
+<p><span style="white-space:pre"></span>Настало время позаботиться о 
+пиксельном шейдере. Мы просто отрисовываем ландшафт раскрашивая в 
+оттенки серого, более светлые тона наверху, темные внизу. Техника 
+(technique) шейдера имеет всего один проход (pass), содержащий два наших
+ шейдера. В параметрах компиляции указываем vs_3_0 и ps_3_0, т.к. VTF 
+является функциональностью Shader Model 3.0.</p>
+<p>&nbsp;</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_hlsl">
+<div class="hlsl" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">    <span style="color: #000066; font-weight: bold;">float4</span> PixelShader<span style="color: #000066;">(</span><span style="color: #333399; font-weight: bold;">in</span> <span style="color: #000066; font-weight: bold;">float4</span> worldPos <span style="color: #000066;">:</span> <span style="color: #551111;">TEXCOORD1</span><span style="color: #000066;">)</span> <span style="color: #000066;">:</span> <span style="color: #551111;">COLOR</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">        <span style="color: #000000; font-weight: bold;">return</span> worldPos<span style="color: #000066;">.</span><span style="color: #006600;">y</span> <span style="color: #000066;">/</span> maxHeight<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">}</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">    <span style="color: #333399; font-weight: bold;">technique</span> GridDraw</span>
+<span style="vertical-align:top">    <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">        <span style="color: #333399; font-weight: bold;">pass</span> P0</span>
+<span style="vertical-align:top">        <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">            vertexShader <span style="color: #000066;">=</span> compile vs_3_0 Transform<span style="color: #000066;">(</span><span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">            pixelShader  <span style="color: #000066;">=</span> compile ps_3_0 PixelShader<span style="color: #000066;">(</span><span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        <span style="color: #000066;">}</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">}</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>После того как мы закончили с 
+шейдером, давайте вернемся в класс Game. Создайте в проекте еще одну 
+папку с именем Textures и добавьте в нее файл height1.dds из архива 
+resources, установите для фала контент процессор Texture(mipmapped). 
+Далее нам необходимо добавить в класс поля для шейдера (эффекта) и 
+текстуры.</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_csharp">
+<div class="csharp" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">    Effect gridEffect<span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">    Texture2D displacementTexture<span style="color: #008000;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>В методе LoadGraphicsContent загружаем эффект и текстуру.</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_csharp">
+<div class="csharp" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">gridEffect <span style="color: #008000;">=</span> content.<span style="color: #0000FF;">Load</span><span style="color: #008000;">&lt;</span>Effect<span style="color: #008000;">&gt;</span><span style="color: #000000;">(</span><span style="color: #666666;">"Shaders<span style="color: #008080; font-weight: bold;">\</span>VTFDisplacement"</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">displacementTexture <span style="color: #008000;">=</span> content.<span style="color: #0000FF;">Load</span><span style="color: #008000;">&lt;</span>Texture2D<span style="color: #008000;">&gt;</span><span style="color: #000000;">(</span><span style="color: #666666;">"Textures<span style="color: #008080; font-weight: bold;">\</span>height1"</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>В метод Draw добавляем код, 
+устанавливающий параметры эффекта и код отрисовки сетки. Мы помещаем наш
+ ландшафт в центр виртуального мира, поэтому матрицу мира (world) 
+оставляем единичной (Identity), матрицы вида (view) и проекции 
+(projection) получаем из компонента камеры.</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_csharp">
+<div class="csharp" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top"><span style="color: #0600FF;">protected</span> <span style="color: #0600FF;">override</span> <span style="color: #0600FF;">void</span> Draw<span style="color: #000000;">(</span>GameTime gameTime<span style="color: #000000;">)</span></span>
+<span style="vertical-align:top">        <span style="color: #000000;">{</span></span>
+<span style="vertical-align:top">            graphics.<span style="color: #0000FF;">GraphicsDevice</span>.<span style="color: #0000FF;">Clear</span><span style="color: #000000;">(</span>Color.<span style="color: #0000FF;">CornflowerBlue</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            graphics.<span style="color: #0000FF;">GraphicsDevice</span>.<span style="color: #0000FF;">RenderState</span>.<span style="color: #0000FF;">CullMode</span> <span style="color: #008000;">=</span> CullMode.<span style="color: #0000FF;">None</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            gridEffect.<span style="color: #0000FF;">Parameters</span><span style="color: #000000;">[</span><span style="color: #666666;">"world"</span><span style="color: #000000;">]</span>.<span style="color: #0000FF;">SetValue</span><span style="color: #000000;">(</span>Matrix.<span style="color: #0000FF;">Identity</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            gridEffect.<span style="color: #0000FF;">Parameters</span><span style="color: #000000;">[</span><span style="color: #666666;">"view"</span><span style="color: #000000;">]</span>.<span style="color: #0000FF;">SetValue</span><span style="color: #000000;">(</span>camera.<span style="color: #0000FF;">View</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            gridEffect.<span style="color: #0000FF;">Parameters</span><span style="color: #000000;">[</span><span style="color: #666666;">"proj"</span><span style="color: #000000;">]</span>.<span style="color: #0000FF;">SetValue</span><span style="color: #000000;">(</span>camera.<span style="color: #0000FF;">Projection</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            gridEffect.<span style="color: #0000FF;">Parameters</span><span style="color: #000000;">[</span><span style="color: #666666;">"maxHeight"</span><span style="color: #000000;">]</span>.<span style="color: #0000FF;">SetValue</span><span style="color: #000000;">(</span><span style="color: #FF0000;">128</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            gridEffect.<span style="color: #0000FF;">Parameters</span><span style="color: #000000;">[</span><span style="color: #666666;">"displacementMap"</span><span style="color: #000000;">]</span>.<span style="color: #0000FF;">SetValue</span><span style="color: #000000;">(</span>displacementTexture<span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">            gridEffect.<span style="color: #0000FF;">Begin</span><span style="color: #000000;">(</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            <span style="color: #0600FF;">foreach</span> <span style="color: #000000;">(</span>EffectPass pass <span style="color: #0600FF;">in</span> gridEffect.<span style="color: #0000FF;">CurrentTechnique</span>.<span style="color: #0000FF;">Passes</span><span style="color: #000000;">)</span></span>
+<span style="vertical-align:top">            <span style="color: #000000;">{</span></span>
+<span style="vertical-align:top">                pass.<span style="color: #0000FF;">Begin</span><span style="color: #000000;">(</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">                grid.<span style="color: #0000FF;">Draw</span><span style="color: #000000;">(</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">                pass.<span style="color: #0000FF;">End</span><span style="color: #000000;">(</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            <span style="color: #000000;">}</span></span>
+<span style="vertical-align:top">            gridEffect.<span style="color: #0000FF;">End</span><span style="color: #000000;">(</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">            <span style="color: #0600FF;">base</span>.<span style="color: #0000FF;">Draw</span><span style="color: #000000;">(</span>gameTime<span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">        <span style="color: #000000;">}</span></span></pre>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<p><span style="white-space:pre"></span>На данном этапе наше приложение удачно скомпилируется и запустится, и вы увидите, что-то наподобие этого:</p>
+<p><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/simpleTerrain.PNG" border="0" height="450" width="600"></p>
+<p><span style="white-space:pre"></span>Пока что все выглядит 
+замечательно, но давайте посмотрим что произойдет, если мы увеличим 
+размер ландшафта, установите значения свойств grid.CellSize = 8, 
+grid.Dimension = 512 и значение переменной maxHeight передаваемое в 
+шейдер = 512. Получаем что-то подобное этому:</p>
+<p><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/largeTerrain.PNG" border="0"></p>
+<p><span style="white-space:pre"></span>Смотрим и ужасаемся, откуда у 
+нас такая «замечательная» лестница? Карта высот у нас имеет размер 256 
+на 256 пикселей, так что пока размерность сетки была 256, то каждый 
+пиксель текстуры проецировался на одну вершину в сетке, и было все 
+замечательно. Но после того как мы увеличили размер сетки, один пиксель 
+стал проецироваться на 2 вершины, которые на самом деле должны иметь 
+разную высоту, но получилось так, что они находятся на одной высоте. 
+Если бы у нас была билинейная фильтрация, то графический процессор 
+автоматически бы рассчитал среднее значение на основе данных 4 соседних 
+пикселей, и поверхность была бы более сглаженной. Но так как вершинные 
+текстуры не поддерживают фильтрации, то нам придется самим реализовывать
+ билинейную фильтрацию в шейдере. Итак, давайте откроем файл 
+VTFDisplacement.fx и добавим следующий код.</p>
+<p>&nbsp;</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_csharp">
+<div class="csharp" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">    <span style="color: #008080; font-style: italic;">//Следующие два параметра по большому счету</span></span>
+<span style="vertical-align:top">    <span style="color: #008080; font-style: italic;">//должны задаваться из приложения</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">    <span style="color: #008080; font-style: italic;">//Размер текстуры</span></span>
+<span style="vertical-align:top">    <span style="color: #FF0000;">float</span> textureSize <span style="color: #008000;">=</span> 256.0f<span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">    <span style="color: #008080; font-style: italic;">//Размер одного текселя</span></span>
+<span style="vertical-align:top">    <span style="color: #FF0000;">float</span> texelSize <span style="color: #008000;">=</span>  1.0f <span style="color: #008000;">/</span> 256.0f<span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">    <span style="color: #008080; font-style: italic;">//Функция билинейной интерполяции</span></span>
+<span style="vertical-align:top">    float4 tex2Dlod_bilinear<span style="color: #000000;">(</span> sampler texSam, float4 uv <span style="color: #000000;">)</span></span>
+<span style="vertical-align:top">    <span style="color: #000000;">{</span></span>
+<span style="vertical-align:top">        float4 height00 <span style="color: #008000;">=</span> tex2Dlod<span style="color: #000000;">(</span>texSam, uv<span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        float4 height10 <span style="color: #008000;">=</span> tex2Dlod<span style="color: #000000;">(</span>texSam, uv <span style="color: #008000;">+</span> float4<span style="color: #000000;">(</span>texelSize, <span style="color: #FF0000;">0</span>, <span style="color: #FF0000;">0</span>, <span style="color: #FF0000;">0</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        float4 height01 <span style="color: #008000;">=</span> tex2Dlod<span style="color: #000000;">(</span>texSam, uv <span style="color: #008000;">+</span> float4<span style="color: #000000;">(</span><span style="color: #FF0000;">0</span>, texelSize, <span style="color: #FF0000;">0</span>, <span style="color: #FF0000;">0</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        float4 height11 <span style="color: #008000;">=</span> tex2Dlod<span style="color: #000000;">(</span>texSam, uv <span style="color: #008000;">+</span> float4<span style="color: #000000;">(</span>texelSize, texelSize, <span style="color: #FF0000;">0</span>, <span style="color: #FF0000;">0</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">        float2 f <span style="color: #008000;">=</span> frac<span style="color: #000000;">(</span> uv.<span style="color: #0000FF;">xy</span> <span style="color: #008000;">*</span> textureSize <span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">        float4 tA <span style="color: #008000;">=</span> lerp<span style="color: #000000;">(</span> height00, height10, f.<span style="color: #0000FF;">x</span> <span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">        float4 tB <span style="color: #008000;">=</span> lerp<span style="color: #000000;">(</span> height01, height11, f.<span style="color: #0000FF;">x</span> <span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">        <span style="color: #0600FF;">return</span> lerp<span style="color: #000000;">(</span> tA, tB, f.<span style="color: #0000FF;">y</span> <span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">    <span style="color: #000000;">}</span></span></pre>
+</div>
+</div>
+</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span style="white-space:pre"></span>Данный код реализует билинейную 
+фильтрацию, берется 4 пограничных пикселя от текущих текстурных 
+координат и между ними производится интерполяция, таким образом, 
+находится среднее значение высоты вершины.</p>
+<p><span style="white-space:pre"></span>Для иcпользования билинейной фильтрации в вершинном шейдере замените</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_hlsl">
+<div class="hlsl" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top"><span style="color: #000066; font-weight: bold;">float</span> height <span style="color: #000066;">=</span> tex2Dlod <span style="color: #000066;">(</span> displacementSampler<span style="color: #000066;">,</span> <span style="color: #000066; font-weight: bold;">float4</span><span style="color: #000066;">(</span>In<span style="color: #000066;">.</span><span style="color: #006600;">uv</span><span style="color: #000066;">.</span><span style="color: #006600;">xy</span><span style="color: #000066;">,</span> <span style="color: #0000ff;">0</span><span style="color: #000066;">,</span> <span style="color: #0000ff;">0</span> <span style="color: #000066;">)</span><span style="color: #000066;">)</span><span style="color: #000066;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p>на:</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_hlsl">
+<div class="hlsl" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top"><span style="color: #000066; font-weight: bold;">float</span> height <span style="color: #000066;">=</span> tex2Dlod_bilinear<span style="color: #000066;">(</span>displacementSampler<span style="color: #000066;">,</span> <span style="color: #000066; font-weight: bold;">float4</span><span style="color: #000066;">(</span>In<span style="color: #000066;">.</span><span style="color: #006600;">uv</span><span style="color: #000066;">.</span><span style="color: #006600;">xy</span><span style="color: #000066;">,</span> <span style="color: #0000ff;">0</span><span style="color: #000066;">,</span> <span style="color: #0000ff;">0</span><span style="color: #000066;">)</span><span style="color: #000066;">)</span><span style="color: #000066;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>Теперь поверхность ландшафта стала более гладкой:</p>
+<p><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/bilinear.PNG" border="0" height="450" width="600"></p>
+<p><span style="white-space:pre"><span style="white-space: pre;"></span></span><span style="font-style: italic;">Бонуc: Текстурирование</span></p>
+<p><span style="white-space:pre"></span>Давайте наложим на наш ландшафт 
+пару текстур. Наилучшим способом затекстурить поверхность, является 
+смешать несколько текстур (например: песок, траву, скалы и снег) в 
+пиксельном шейдере основываясь на весах вершин, которые рассчитываются 
+из данных высот вершин. У Riemer`s есть отличный урок, как реализовать 
+это, но в его реализации веса для смешивания текстур рассчитываются на 
+CPU, на этапе загрузки карты высот, мы же будем это делать на GPU. 
+Представленный далее код написан по материалам уроков Riemer`s.</p>
+<p><span style="white-space:pre"></span>Для начала в папку проекта 
+Textures добавьте файлы sand.dds, grass.dds, rock.dds и snow.dds 
+(примечание: для уменьшения размера скачиваемого архива эти файлы 
+представлены в низком разрешении, наличие этих файлов в высоком 
+разрешении заметно улучшит картинку в визуальном плане). Затем откройте 
+файл шейдера и добавьте четыре параметра для текстур и самплеры.</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_hlsl">
+<div class="hlsl" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">    texture sandMap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    sampler sandSampler <span style="color: #000066;">=</span> sampler_state</span>
+<span style="vertical-align:top">    <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">        Texture   <span style="color: #000066;">=</span> <span style="color: #000066;">&lt;</span>sandMap<span style="color: #000066;">&gt;;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        MipFilter <span style="color: #000066;">=</span> Linear<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        MinFilter <span style="color: #000066;">=</span> Linear<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        MagFilter <span style="color: #000066;">=</span> Linear<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        AddressU  <span style="color: #000066;">=</span> Wrap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        AddressV  <span style="color: #000066;">=</span> Wrap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">}</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">    texture grassMap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    sampler grassSampler <span style="color: #000066;">=</span> sampler_state</span>
+<span style="vertical-align:top">    <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">        Texture   <span style="color: #000066;">=</span> <span style="color: #000066;">&lt;</span>grassMap<span style="color: #000066;">&gt;;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        MipFilter <span style="color: #000066;">=</span> Linear<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        MinFilter <span style="color: #000066;">=</span> Linear<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        MagFilter <span style="color: #000066;">=</span> Linear<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        AddressU  <span style="color: #000066;">=</span> Wrap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        AddressV  <span style="color: #000066;">=</span> Wrap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">}</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">    texture rockMap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    sampler rockSampler <span style="color: #000066;">=</span> sampler_state</span>
+<span style="vertical-align:top">    <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">        Texture   <span style="color: #000066;">=</span> <span style="color: #000066;">&lt;</span>rockMap<span style="color: #000066;">&gt;;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        MipFilter <span style="color: #000066;">=</span> Linear<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        MinFilter <span style="color: #000066;">=</span> Linear<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        MagFilter <span style="color: #000066;">=</span> Linear<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        AddressU  <span style="color: #000066;">=</span> Wrap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        AddressV  <span style="color: #000066;">=</span> Wrap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">}</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">    texture snowMap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    sampler snowSampler <span style="color: #000066;">=</span> sampler_state</span>
+<span style="vertical-align:top">    <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">        Texture   <span style="color: #000066;">=</span> <span style="color: #000066;">&lt;</span>snowMap<span style="color: #000066;">&gt;;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        MipFilter <span style="color: #000066;">=</span> Linear<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        MinFilter <span style="color: #000066;">=</span> Linear<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        MagFilter <span style="color: #000066;">=</span> Linear<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        AddressU  <span style="color: #000066;">=</span> Wrap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        AddressV  <span style="color: #000066;">=</span> Wrap<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">}</span><span style="color: #000066;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>Теперь надо добавить параметр в 
+выходную структуру вершинного шейдера. Для каждой вершины на выходе мы 
+будем задавать 4 значения веса для каждой из текстур (песок, трава, 
+скала, снег). Итак, для вершин с малым значением высоты мы будем 
+накладывать только текстуру песка, так что вес для песка будет равен 1, 
+пока все остальные веса будет равны 0. По мере увеличения высоты мы 
+должны будем сделать переход от песка к траве, так что вес песка будет 
+уменьшаться, а все травы увеличиваться. Так как каждое значение веса 
+лежит в промежутке от 0,0 до 1,0, мы можем запаковать все значения в 4 
+переменные типа float, а его в один float4 параметр. Новая выходная 
+структура для вершинного шейдера будет выглядеть примерно следующим 
+образом:</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_hlsl">
+<div class="hlsl" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">    <span style="color: #000066; font-weight: bold;">struct</span> VS_OUTPUT</span>
+<span style="vertical-align:top">    <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">        <span style="color: #000066; font-weight: bold;">float4</span> position       <span style="color: #000066;">:</span> <span style="color: #551111;">POSITION</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        <span style="color: #000066; font-weight: bold;">float4</span> uv             <span style="color: #000066;">:</span> <span style="color: #551111;">TEXCOORD0</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">        <span style="color: #000066; font-weight: bold;">float4</span> worldPos       <span style="color: #000066;">:</span> <span style="color: #551111;">TEXCOORD1</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">        <span style="color: #666666; font-style: italic;">// вес, использующийся для мультитекстурирования</span></span>
+<span style="vertical-align:top">        <span style="color: #000066; font-weight: bold;">float4</span> textureWeights <span style="color: #000066;">:</span> <span style="color: #551111;">TEXCOORD2</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">}</span><span style="color: #000066;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>В конец вершинного шейдера (до возвращения параметра return Out;) добавьте следующий код:</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_hlsl">
+<div class="hlsl" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">    <span style="color: #000066; font-weight: bold;">float4</span> TexWeights <span style="color: #000066;">=</span> <span style="color: #0000ff;">0</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    TexWeights<span style="color: #000066;">.</span><span style="color: #006600;">x</span> <span style="color: #000066;">=</span> saturate<span style="color: #000066;">(</span> 1<span style="color: #000066;">.</span>0f <span style="color: #000066;">-</span> <span style="color: #993333; font-weight: bold;">abs</span><span style="color: #000066;">(</span>height <span style="color: #000066;">-</span> <span style="color: #0000ff;">0.0</span><span style="color: #000066;">)</span> <span style="color: #000066;">/</span> 0<span style="color: #000066;">.</span>20f<span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    TexWeights<span style="color: #000066;">.</span><span style="color: #006600;">y</span> <span style="color: #000066;">=</span> saturate<span style="color: #000066;">(</span> 1<span style="color: #000066;">.</span>0f <span style="color: #000066;">-</span> <span style="color: #993333; font-weight: bold;">abs</span><span style="color: #000066;">(</span>height <span style="color: #000066;">-</span> <span style="color: #0000ff;">0.3</span><span style="color: #000066;">)</span> <span style="color: #000066;">/</span> 0<span style="color: #000066;">.</span>25f<span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    TexWeights<span style="color: #000066;">.</span><span style="color: #006600;">z</span> <span style="color: #000066;">=</span> saturate<span style="color: #000066;">(</span> 1<span style="color: #000066;">.</span>0f <span style="color: #000066;">-</span> <span style="color: #993333; font-weight: bold;">abs</span><span style="color: #000066;">(</span>height <span style="color: #000066;">-</span> <span style="color: #0000ff;">0.6</span><span style="color: #000066;">)</span> <span style="color: #000066;">/</span> 0<span style="color: #000066;">.</span>25f<span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    TexWeights<span style="color: #000066;">.</span><span style="color: #006600;">w</span> <span style="color: #000066;">=</span> saturate<span style="color: #000066;">(</span> 1<span style="color: #000066;">.</span>0f <span style="color: #000066;">-</span> <span style="color: #993333; font-weight: bold;">abs</span><span style="color: #000066;">(</span>height <span style="color: #000066;">-</span> <span style="color: #0000ff;">0.9</span><span style="color: #000066;">)</span> <span style="color: #000066;">/</span> 0<span style="color: #000066;">.</span>25f<span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">    <span style="color: #000066; font-weight: bold;">float</span> totalWeight <span style="color: #000066;">=</span> TexWeights<span style="color: #000066;">.</span><span style="color: #006600;">x</span> <span style="color: #000066;">+</span></span>
+<span style="vertical-align:top">                        TexWeights<span style="color: #000066;">.</span><span style="color: #006600;">y</span> <span style="color: #000066;">+</span></span>
+<span style="vertical-align:top">                        TexWeights<span style="color: #000066;">.</span><span style="color: #006600;">z</span> <span style="color: #000066;">+</span></span>
+<span style="vertical-align:top">                        TexWeights<span style="color: #000066;">.</span><span style="color: #006600;">w</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">    TexWeights <span style="color: #000066;">/=</span> totalWeight<span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">    Out<span style="color: #000066;">.</span><span style="color: #006600;">textureWeights</span> <span style="color: #000066;">=</span> TexWeights<span style="color: #000066;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>Каждый компонент вектора 
+textureWeights содержит в себе вес для каждой из текстур, X – песок, Y –
+ трава, Z – скала и W – снег. Для каждой из текстур задано значение на 
+которой она начинает проявлять себя, затем достигает максимальной 
+«видимости» и затухает, переходя в следующую текстуру. Последние 
+инструкции нормализуют значения, чтобы сумма всех весов имела значение 
+1, иначе мы получим темные или светлые участки в местах перехода 
+текстур.</p>
+<p><span style="white-space:pre"></span>Когда мы производим выборку в 
+пиксельном шейдере, то текстурные координаты мы будем перемножать на 
+специально подобранное значение (в нашем случае 8), это делается для 
+повтора текстуры на все участки ландшафта. Если выбрать данное значение 
+слишком маленьким, то уровень «натяжки» текстуры на ландшафт будет 
+слишком большим и при близком рассмотрении будет заметна пикселизация. 
+Если задать слишком большое значение, то повторение текстуры будет 
+бросаться в глаза при просмотре с дальнего расстояния. Но вы свободны в 
+выборе данного значения, можете посмотреть, к чему приведет его 
+изменение. Техника называемая «detail texturing» может помочь в решении 
+данной проблемы, она заключается в комбинировании с более 
+детализированными текстурами при приближении к поверхности, но в данном 
+уроке она рассматриваться не будет.<br><span style="white-space:pre"></span>И в завершении в пиксельном шейдере, мы считываем цвет со всех 4 текстур и на основе весов смешиваем их.</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_hlsl">
+<div class="hlsl" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">    <span style="color: #000066; font-weight: bold;">float4</span> PixelShader<span style="color: #000066;">(</span><span style="color: #333399; font-weight: bold;">in</span> <span style="color: #000066; font-weight: bold;">float4</span> uv      <span style="color: #000066;">:</span> <span style="color: #551111;">TEXCOORD0</span><span style="color: #000066;">,</span></span>
+<span style="vertical-align:top">                       <span style="color: #333399; font-weight: bold;">in</span> <span style="color: #000066; font-weight: bold;">float4</span> weights <span style="color: #000066;">:</span> <span style="color: #551111;">TEXCOORD2</span><span style="color: #000066;">)</span> <span style="color: #000066;">:</span> <span style="color: #551111;">COLOR</span></span>
+<span style="vertical-align:top">    <span style="color: #000066;">{</span></span>
+<span style="vertical-align:top">         <span style="color: #000066; font-weight: bold;">float4</span> sand  <span style="color: #000066;">=</span> <span style="color: #993333; font-weight: bold;">tex2D</span><span style="color: #000066;">(</span>sandSampler<span style="color: #000066;">,</span>  uv <span style="color: #000066;">*</span> <span style="color: #0000ff;">8</span> <span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">         <span style="color: #000066; font-weight: bold;">float4</span> grass <span style="color: #000066;">=</span> <span style="color: #993333; font-weight: bold;">tex2D</span><span style="color: #000066;">(</span>grassSampler<span style="color: #000066;">,</span> uv <span style="color: #000066;">*</span> <span style="color: #0000ff;">8</span> <span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">         <span style="color: #000066; font-weight: bold;">float4</span> rock  <span style="color: #000066;">=</span> <span style="color: #993333; font-weight: bold;">tex2D</span><span style="color: #000066;">(</span>rockSampler<span style="color: #000066;">,</span>  uv <span style="color: #000066;">*</span> <span style="color: #0000ff;">8</span> <span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top">         <span style="color: #000066; font-weight: bold;">float4</span> snow  <span style="color: #000066;">=</span> <span style="color: #993333; font-weight: bold;">tex2D</span><span style="color: #000066;">(</span>snowSampler<span style="color: #000066;">,</span>  uv <span style="color: #000066;">*</span> <span style="color: #0000ff;">8</span> <span style="color: #000066;">)</span><span style="color: #000066;">;</span></span>
+<span style="vertical-align:top"> </span>
+<span style="vertical-align:top">         <span style="color: #000000; font-weight: bold;">return</span> sand  <span style="color: #000066;">*</span> weights<span style="color: #000066;">.</span><span style="color: #006600;">x</span> <span style="color: #000066;">+</span></span>
+<span style="vertical-align:top">                grass <span style="color: #000066;">*</span> weights<span style="color: #000066;">.</span><span style="color: #006600;">y</span> <span style="color: #000066;">+</span></span>
+<span style="vertical-align:top">                rock  <span style="color: #000066;">*</span> weights<span style="color: #000066;">.</span><span style="color: #006600;">z</span> <span style="color: #000066;">+</span></span>
+<span style="vertical-align:top">                snow  <span style="color: #000066;">*</span> weights<span style="color: #000066;">.</span><span style="color: #006600;">w</span><span style="color: #000066;">;</span> </span>
+<span style="vertical-align:top">    <span style="color: #000066;">}</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>В коде приложения объявляем поля для текстур:</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_csharp">
+<div class="csharp" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">        Texture2D sandTexture<span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">        Texture2D grassTexture<span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">        Texture2D rockTexture<span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">        Texture2D snowTexture<span style="color: #008000;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>В методе LoadGraphicsContent загружаем их:</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_csharp">
+<div class="csharp" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">            sandTexture <span style="color: #008000;">=</span> content.<span style="color: #0000FF;">Load</span><span style="color: #008000;">&lt;</span>Texture2D<span style="color: #008000;">&gt;</span><span style="color: #000000;">(</span><span style="color: #666666;">"Textures<span style="color: #008080; font-weight: bold;">\</span>sand"</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            grassTexture <span style="color: #008000;">=</span> content.<span style="color: #0000FF;">Load</span><span style="color: #008000;">&lt;</span>Texture2D<span style="color: #008000;">&gt;</span><span style="color: #000000;">(</span><span style="color: #666666;">"Textures<span style="color: #008080; font-weight: bold;">\</span>grass"</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            rockTexture <span style="color: #008000;">=</span> content.<span style="color: #0000FF;">Load</span><span style="color: #008000;">&lt;</span>Texture2D<span style="color: #008000;">&gt;</span><span style="color: #000000;">(</span><span style="color: #666666;">"Textures<span style="color: #008080; font-weight: bold;">\</span>rock"</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            snowTexture <span style="color: #008000;">=</span> content.<span style="color: #0000FF;">Load</span><span style="color: #008000;">&lt;</span>Texture2D<span style="color: #008000;">&gt;</span><span style="color: #000000;">(</span><span style="color: #666666;">"Textures<span style="color: #008080; font-weight: bold;">\</span>snow"</span><span style="color: #000000;">)</span><span style="color: #008000;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>А в методе Draw передаем в шейдер в виде параметров:</p>
+<div class="rj_insertcode">
+<div class="rj_insertcode_csharp">
+<div class="csharp" style="background: #f8f8f8; width: 100%; border-collapse: collapse; border: #054b6e 1px solid;">
+<pre style="margin:0; background:none; vertical-align:top; padding: 0px 4px; font-size: 12px;"><span style="vertical-align:top">            gridEffect.<span style="color: #0000FF;">Parameters</span><span style="color: #000000;">[</span><span style="color: #666666;">"sandMap"</span><span style="color: #000000;">]</span>.<span style="color: #0000FF;">SetValue</span><span style="color: #000000;">(</span>sandTexture<span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            gridEffect.<span style="color: #0000FF;">Parameters</span><span style="color: #000000;">[</span><span style="color: #666666;">"grassMap"</span><span style="color: #000000;">]</span>.<span style="color: #0000FF;">SetValue</span><span style="color: #000000;">(</span>grassTexture<span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            gridEffect.<span style="color: #0000FF;">Parameters</span><span style="color: #000000;">[</span><span style="color: #666666;">"rockMap"</span><span style="color: #000000;">]</span>.<span style="color: #0000FF;">SetValue</span><span style="color: #000000;">(</span>rockTexture<span style="color: #000000;">)</span><span style="color: #008000;">;</span></span>
+<span style="vertical-align:top">            gridEffect.<span style="color: #0000FF;">Parameters</span><span style="color: #000000;">[</span><span style="color: #666666;">"snowMap"</span><span style="color: #000000;">]</span>.<span style="color: #0000FF;">SetValue</span><span style="color: #000000;">(</span>snowTexture<span style="color: #000000;">)</span><span style="color: #008000;">;</span></span></pre>
+</div>
+</div>
+</div>
+<p><span style="white-space:pre"></span>В итоге поверхность должна выглядеть примерно следующим образом:</p>
+<p><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/textured.PNG" border="0"></p>
+<p><span style="white-space:pre"></span>Итак, в первом уроке мы 
+рассмотрели, как использовать вершинные текстуры для построения 
+ландшафта, используя карту высот и наложить на него текстуры при помощи 
+мультитекстурирования, причем вся обработка велась на графическом 
+процессоре. Также мы рассмотрели, как реализовать билинейную фильтрацию в
+ вершинном шейдере. Прошу не обращать внимания на то, что мы все это 
+сделали на GPU и пересчитывали каждый кадр, вместо того чтобы сделать 
+все расчета один раз на CPU в момент загрузки, в следующей части мы 
+рассмотрим, как реализовать морфинг (morph) ландшафта и как добавлять на
+ него деформации. По большому счету всю эту функциональность можно 
+реализовать и на CPU, но мы все сделали на GPU, оставив ресурсы 
+центрального процессора для других задач, например: реализация логики 
+геймплея, физики, AI и т.п.</p>
+<p><span style="white-space:pre"></span>Полный код этой главы можно скачать тут: <a href="http://www.xnadev.ru/_Content/Tutorials/VTF/Chapter1.zip" target="_blank">Chapter1.rar</a></p>
+<p></p></td>
+</tr>
+<tr>
+<td class="news-footer" align="center">
+<!--article_poster--><span class="bullet">·</span> Опубликовал <a href="http://www.xnadev.ru/profile.php?lookup=2">SolarWind</a>
+ 28.02.2009 02:42:50 ·
+<!--article_opts--><a href="http://www.xnadev.ru/articles.php?article_id=29#comments">6 Комментариев</a> ·
+13622 Прочтений ·
+<a href="http://www.xnadev.ru/print.php?type=A&amp;item_id=29"><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/printer.gif" alt="Печать" style="vertical-align:middle;border:0;"></a>
+</td>
+</tr>
+</tbody></table>
+<!--sub_article--><div style="margin-top:5px;" align="center">
+<div class="pagenav">
+Страница  1 из 5: <span><strong>1</strong></span><a href="http://www.xnadev.ru/articles.php?article_id=29&amp;rowstart=1">2</a><a href="http://www.xnadev.ru/articles.php?article_id=29&amp;rowstart=2">3</a><a href="http://www.xnadev.ru/articles.php?article_id=29&amp;rowstart=3">4</a>...<a href="http://www.xnadev.ru/articles.php?article_id=29&amp;rowstart=4">5</a>
+</div>
+
+</div>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="capmain-left"></td>
+<td class="capmain">Комментарии</td>
+<td class="capmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="main-body">
+<a id="comments" name="comments"></a><div class="tbl2">
+<a href="http://www.xnadev.ru/articles.php?article_id=29#c247" id="c247" name="c247">#1</a> | <span class="comment-name"><a href="http://www.xnadev.ru/profile.php?lookup=5">general</a></span>
+<span class="small"> 10.05.2009 01:36:13</span>
+</div>
+<div class="tbl1 comment_message"><!--comment_message-->Перевел все примеры(1-4) к статье.<br>
+Чуть поморочился только с 4м примером, анимацией, обновил библиотеки.<br>
+добавил в хранилище файлов <a href="http://xnadev.ru/downloads.php?page_id=24" target="_blank" title="http://xnadev.ru/downloads.php?page_id=24">скачать</a></div>
+<div class="tbl2">
+<a href="http://www.xnadev.ru/articles.php?article_id=29#c862" id="c862" name="c862">#2</a> | <span class="comment-name"><a href="http://www.xnadev.ru/profile.php?lookup=213">master_alexander</a></span>
+<span class="small"> 18.12.2009 17:48:43</span>
+</div>
+<div class="tbl1 comment_message"><!--comment_message-->Error	1	
+'Microsoft.Xna.Framework.Graphics.GraphicsDevice' does not contain a 
+definition for 'ResolveRenderTarget' and no extension method 
+'ResolveRenderTarget' accepting a first argument of type 
+'Microsoft.Xna.Framework.Graphics.GraphicsDevice' could be found (are 
+you missing a using directive or an assembly reference?)	<br>
+<br>
+Помогите, в чем проблема?<img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/frown.gif" alt="Frown" style="vertical-align:middle;"></div>
+<div class="tbl2">
+<a href="http://www.xnadev.ru/articles.php?article_id=29#c1316" id="c1316" name="c1316">#3</a> | <span class="comment-name"><a href="http://www.xnadev.ru/profile.php?lookup=2083">Dimon4ik</a></span>
+<span class="small"> 18.01.2011 16:12:36</span>
+</div>
+<div class="tbl1 comment_message"><!--comment_message-->Для XNA 3<br>
+<br>
+vb = new VertexBuffer(device, (dimension + 1) * (dimension + 1) * 
+VertexPositionNormalTexture.SizeInBytes, BufferUsage.WriteOnly);<br>
+            ib = new IndexBuffer(device, 6 * dimension * dimension * 
+sizeof(int), BufferUsage.WriteOnly, IndexElementSize.ThirtyTwoBits);</div>
+<div class="tbl2">
+<a href="http://www.xnadev.ru/articles.php?article_id=29#c1672" id="c1672" name="c1672">#4</a> | <span class="comment-name"><a href="http://www.xnadev.ru/profile.php?lookup=2911">TreinDSM</a></span>
+<span class="small"> 23.01.2012 17:55:25</span>
+</div>
+<div class="tbl1 comment_message"><!--comment_message-->Для XNA 4<br>
+<br>
+vb = new VertexBuffer(device, typeof(VertexPositionNormalTexture), vertices.Length, BufferUsage.WriteOnly);<br>
+            <br>
+ib = new IndexBuffer(device, IndexElementSize.ThirtyTwoBits, 6 * dimension * dimension * sizeof(int),BufferUsage.WriteOnly);</div>
+<div class="tbl2">
+<a href="http://www.xnadev.ru/articles.php?article_id=29#c1673" id="c1673" name="c1673">#5</a> | <span class="comment-name"><a href="http://www.xnadev.ru/profile.php?lookup=2911">TreinDSM</a></span>
+<span class="small"> 23.01.2012 20:19:50</span>
+</div>
+<div class="tbl1 comment_message"><!--comment_message-->А метод Draw в классе Game1 будет выглядеть так:<br>
+protected override void Draw(GameTime gameTime)<br>
+{<br>
+    graphics.GraphicsDevice.Clear(Color.CornflowerBlue);<br>
+    GraphicsDevice.RasterizerState = RasterizerState.CullNone; <br>
+<br>
+    gridEffect.Parameters["world"].SetValue(Matrix.Identity);<br>
+    gridEffect.Parameters["view"].SetValue(camera.View);<br>
+    gridEffect.Parameters["proj"].SetValue(camera.Projection);<br>
+    gridEffect.Parameters["maxHeight"].SetValue(128);<br>
+    gridEffect.Parameters["displacementMap"].SetValue(displacementTexture);<br>
+<br>
+    gridEffect.Parameters["sandMap"].SetValue(sandTexture);<br>
+    gridEffect.Parameters["grassMap"].SetValue(grassTexture);<br>
+    gridEffect.Parameters["rockMap"].SetValue(rockTexture);<br>
+    gridEffect.Parameters["snowMap"].SetValue(snowTexture);<br>
+;<br>
+    foreach (EffectPass pass in gridEffect.CurrentTechnique.Passes)<br>
+    {<br>
+        pass.Apply();<br>
+        grid.Draw();<br>
+    }<br>
+<br>
+    base.Draw(gameTime);<br>
+}</div>
+<div class="tbl2">
+<a href="http://www.xnadev.ru/articles.php?article_id=29#c1674" id="c1674" name="c1674">#6</a> | <span class="comment-name"><a href="http://www.xnadev.ru/profile.php?lookup=2911">TreinDSM</a></span>
+<span class="small"> 23.01.2012 20:24:19</span>
+</div>
+<div class="tbl1 comment_message"><!--comment_message-->Единственное, на вызове pass.Apply() кидает ошибку. Ругается на не поддерживаемый формат Color. В чем может быть беда?</div>
+</td>
+</tr><tr>
+<td style="height:5px;background-color:#f6a504;"></td>
+</tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="capmain-left"></td>
+<td class="capmain">Добавить комментарий</td>
+<td class="capmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="main-body">
+Пожалуйста, залогиньтесь для добавления комментария.
+</td>
+</tr><tr>
+<td style="height:5px;background-color:#f6a504;"></td>
+</tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="capmain-left"></td>
+<td class="capmain">Рейтинги</td>
+<td class="capmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="main-body">
+<div style="text-align:center">Рейтинг доступен только для пользователей.<br><br>Пожалуйста, залогиньтесь или зарегистрируйтесь для голосования.</div>
+<hr><div style="text-align:center">Нет данных для оценки.</div>
+</td>
+</tr><tr>
+<td style="height:5px;background-color:#f6a504;"></td>
+</tr>
+</tbody></table>
+</td><td class="side-border-right" valign="top"><table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="scapmain-left"></td>
+<td class="scapmain">Авторизация</td>
+<td class="scapmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="side-body">
+<div style="text-align:center">
+<form name="loginform" method="post" action="articles.php">
+Логин<br>
+<input name="user_name" class="textbox" style="width:100px" type="text"><br>
+Пароль<br>
+<input name="user_pass" class="textbox" style="width:100px" type="password"><br>
+<input name="remember_me" value="y" title="Запомнить меня" style="vertical-align:middle;" type="checkbox">
+<input name="login" value="Войти" class="button" type="submit"><br>
+</form>
+<br>
+Вы не зарегистрированы?<br><a href="http://www.xnadev.ru/register.php" class="side">Нажмите здесь</a> для регистрации.<br><br>
+Забыли пароль? <br>Запросите новый <a href="http://www.xnadev.ru/lostpassword.php" class="side">здесь</a>.
+</div>
+</td>
+</tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="scapmain-left"></td>
+<td class="scapmain">Мини-чат</td>
+<td class="scapmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="side-body">
+<div style="text-align:center">Вы должны авторизироваться, чтобы добавить сообщение.</div><br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=3322" class="side">gugenot</a>
+</div>
+<div class="shoutboxdate">06.03.2013</div><div class="shoutbox">да тут 
+полно ссылок. смотри каталог, а оттуда пойдёшь на примеры Microsoft. 
+Хотя месяц назад некоторые эту технологию уже похоронили... <img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/aaa.gif" alt="Aaaaaaaa!" style="vertical-align:middle;"></div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=3583" class="side">fuel01</a>
+</div>
+<div class="shoutboxdate">06.03.2013</div><div class="shoutbox">Доброе время!! Хочу запустить какую-нибудь игру в Visual, разобраться как это работает, подскажите игрулю!!</div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=23" class="side">beaver</a>
+</div>
+<div class="shoutboxdate">05.03.2013</div><div class="shoutbox">Камрады! Кто лабает на MVC4, стукните в личку.</div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=3569" class="side">Tahoma</a>
+</div>
+<div class="shoutboxdate">04.03.2013</div><div class="shoutbox">http://xnadev.ru/f<br>orum/viewthread.ph<br>p?thread_id=1026&amp;hi<br>ghlight=UseKerning<br>&amp;pid=11229#post_112<br>29 - эт тут</div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=1223" class="side">dampirik</a>
+</div>
+<div class="shoutboxdate">04.03.2013</div><div class="shoutbox">У меня оно интернет использует – заставили политику конфиденциальности<br> написать.</div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=7" class="side">IIporpammep</a>
+</div>
+<div class="shoutboxdate">04.03.2013</div><div class="shoutbox">Эх долго(( главное, пройти с первой попытки, а то конец конкурса уже скоро, а мне еще много нужно доделать)</div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=1223" class="side">dampirik</a>
+</div>
+<div class="shoutboxdate">04.03.2013</div><div class="shoutbox">26.02.2013 отправил на сертификацию. 
+ 26.02.2013 прошло сертификацию. 
+ 01.03.2013 появилось в маркете</div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=7" class="side">IIporpammep</a>
+</div>
+<div class="shoutboxdate">03.03.2013</div><div class="shoutbox">А сколько срок проверки win8 приложения?</div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=1223" class="side">dampirik</a>
+</div>
+<div class="shoutboxdate">02.03.2013</div><div class="shoutbox">Спасибо=)</div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=269" class="side">wirwl</a>
+</div>
+<div class="shoutboxdate">02.03.2013</div><div class="shoutbox">дамприк, лайкнул твоё приложение.</div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=1223" class="side">dampirik</a>
+</div>
+<div class="shoutboxdate">02.03.2013</div><div class="shoutbox">XNA 
+есть, версия стабильная и она продолжает работать. На WP7 используется. 
+На WP8/Win8 есть моногейм – которые практически не чем не отличается. 
+Чего панику поднимать то? <img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/figa2.gif" alt="Фига" style="vertical-align:middle;"></div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=3322" class="side">gugenot</a>
+</div>
+<div class="shoutboxdate">02.03.2013</div><div class="shoutbox">Так ну что там со смертью XNA? Какие новости? <img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/boks.gif" alt="Бокс!" style="vertical-align:middle;"></div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=1223" class="side">dampirik</a>
+</div>
+<div class="shoutboxdate">02.03.2013</div><div class="shoutbox"><span style="color:#0000cc">Ребята, нужна помощь! Всем у кого стоит Win8 скачайте пожалуйста приложение и лайкайте:</span>
+  <a href="http://apps.microsoft.com/windows/app/3b6388a5-f9bb-4289-a350-236269d61d4a" target="_blank" title="http://apps.microsoft.com/windows/app/3b6388a5-f9bb-4289-a350-236269d61d4a">http://apps.micro.<br>..6269d61d4a</a></div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=494" class="side">VAB</a>
+</div>
+<div class="shoutboxdate">23.02.2013</div><div class="shoutbox">С праздником  <img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/smile.gif" alt="Smile" style="vertical-align:middle;"></div>
+<br>
+<div class="shoutboxname"><a href="http://www.xnadev.ru/profile.php?lookup=1223" class="side">dampirik</a>
+</div>
+<div class="shoutboxdate">23.02.2013</div><div class="shoutbox">С праздникам товарищи:-D</div>
+<br>
+<div style="text-align:center">
+<a href="http://www.xnadev.ru/infusions/shoutbox_panel/shoutbox_archive.php" class="side">Архив чата</a>
+</div>
+</td>
+</tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="scapmain-left"></td>
+<td class="scapmain">RSS каналы сайта</td>
+<td class="scapmain-right"></td>
+</tr>
+</tbody></table>
+<table class="spacer" cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="side-body">
+<table align="center" cellpadding="0" cellspacing="1" width="100%"><tbody><tr><td>
+</td></tr><tr><td class="tbl2" align="center"><a href="http://www.xnadev.ru/rss/rss_n.php" target="_blank"><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/rssnews.gif" alt="XNA - Новости"></a></td></tr><tr><td class="tbl2" align="center"><a href="http://www.xnadev.ru/rss/rss_a.php" target="_blank"><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/rssarticles.gif" alt="XNA - Статьи"></a></td></tr><tr><td class="tbl2" align="center"><a href="http://www.xnadev.ru/rss/rss_f.php" target="_blank"><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/rssforums.gif" alt="XNA - Форум"></a></td></tr><tr><td class="tbl2" align="center"><a href="http://www.xnadev.ru/rss/rss_p.php" target="_blank"><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/rssphoto.gif" alt="XNA - Галерея"></a></td></tr><tr><td class="tbl2" align="center"><a href="http://www.xnadev.ru/rss/rss_d.php" target="_blank"><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/rssdownloads.gif" alt="XNA - Файлы"></a></td></tr></tbody></table></td>
+</tr>
+</tbody></table>
+
+
+</td></tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="sub-header-left"></td>
+<td class="sub-header" align="left">Время загрузки: 0,08 секунд</td>
+<td class="sub-header" align="right"><!--counter-->6,589,250 уникальных посетителей</td>
+<td class="sub-header-right"></td>
+</tr>
+</tbody></table>
+<table cellpadding="0" cellspacing="0" width="100%">
+<tbody><tr>
+<td class="main-footer" align="center"><center>Copyright © www.xnadev.ru 2009-2012</center><br><br>
+<a href="http://toplist.gm-rus.ru/"><img src="XnaDev.ru%20-%20XNA%20%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8%20%D1%83%D1%80%D0%BE%D0%BA%D0%B8%20%D1%81%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%28xna.ru%29%20-%20%D0%A1%D1%82%D0%B0%D1%82%D1%8C%D0%B8%20%20%D0%98%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20Vertex%20Textures%20%D0%B2%20XNA_files/button" alt="Рейтинг сайтов о создании игр" border="0"></a><br>
+Powered by <a href="http://www.php-fusion.co.uk/">PHP-Fusion</a> copyright © 2002 - 2013 by Nick Jones.<br>
+Released as free software without warranties under <a href="http://www.fsf.org/licensing/licenses/agpl-3.0.html">GNU Affero GPL</a> v3.
+</td>
+</tr>
+</tbody></table>
+
+
+</body></html>

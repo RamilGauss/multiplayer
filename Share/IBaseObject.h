@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
@@ -72,7 +72,7 @@ public:
 
   virtual const nsStruct3D::TMatrix16* GetMatrixForCamera(){return GetWorld();}
 
-  void SetVelocity(float v){mV=v;}// м/с - хрень
+  void SetVelocity(float v){mV=v;}// м/с - скал€р скорости
   float GetVelocity(){return mV;}
 
   void SetTree(TTreeJoint::TLoadedJoint* pTree);

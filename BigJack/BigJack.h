@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
@@ -39,7 +39,6 @@ you may contact in writing [ramil2085@gmail.com].
 
 #ifdef WIN32
   #include "DXUT.h"
-  #include "DXUTcamera.h"
   #include "DispTextDX.h"
   #include "ManagerModelDX.h"
   #include "ManagerResourceDX.h"
@@ -71,15 +70,17 @@ protected:
 
   TDispTextDX mViewerFPS;
 
-  CModelViewerCamera mCamera;                       // A model viewing camera
 #else
 #endif
 
   TShaderStack mMainShaderStack;
 
-  int mIndexView;
-  int mIndexProj;
-  int mIndexCameraPosition;
+  int mShHandleView;
+  int mShHandleProj;
+  int mShHandleCameraPosition;
+	// для освещения
+	int mShHandleLightPosition;
+	int mShHandleLightColor;
 
   typedef std::list<IBaseObjectGE*> TListPtr;
   // все объекты
@@ -126,18 +127,15 @@ public:
     guint32 time_past/* прошло времени, мс*/ = 0);
   virtual void SetViewFPS(bool val);
   // источники освещения
-  // ###
   // ввод освещение накладывает условия на шейдер. он обязан содержать интерфейс
-  virtual int GetCountLight(){return 1;}
-  virtual const float* GetCoordLight(int index){return NULL;}
-  virtual const float* GetCoordAtLight(int index){return NULL;}
-  virtual unsigned int GetColorLight(int index){return 0;}
-  virtual void SetCoordLight(int index,nsStruct3D::TVector3* m3){}
-  virtual void SetCoordAtLight(int index,nsStruct3D::TVector3* m3){}
-  virtual void SetColorLight(int index, unsigned int color){}
-  virtual void AddLight(){}
-  virtual void RemoveLight(int index){}
-  // ###
+	virtual void AddLight();
+	virtual void RemoveLight(int index);
+	virtual int GetCountLight();
+
+	virtual const nsStruct3D::TVector3* GetLightPosition(int index);	
+	virtual void SetLightPosition(int index,nsStruct3D::TVector3* m3);
+	virtual const nsStruct3D::TVector3* GetLightColor(int index);
+	virtual void SetLightColor(int index, nsStruct3D::TVector3* color);
   //----------------------------------------------------------------
   //                             ~INTERFACE
   //----------------------------------------------------------------
@@ -187,6 +185,12 @@ protected:
   void SetNeedResizeGUI(bool val){flgNeedResizeGUI=val;}
 
   void DispFPS();
+
+protected:
+	// освещенеи
+	enum{eCountLight=1,};
+	nsStruct3D::TVector3 mLightColor;
+	nsStruct3D::TVector3 mLightPosition;
 };
 
 #endif

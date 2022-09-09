@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 #define _USE_MATH_DEFINES
@@ -120,21 +120,6 @@ void TTankTower::RotateVerticalGun(float ugol)
 
   mTree.ChangeMatrix(string("Gun"),&matrix);
   mTree.GetMatrix(&mVectorMatrix);
-
-
-  //###
-  //TMatrix16 a,b,c,d;
-  //SetMatrixIdentity(&a);
-  //SetMatrixIdentity(&b);
-  //SetMatrixIdentity(&c);
-  //SetMatrixIdentity(&d);
-  //a._41 = 1.0f;a._42 = 2.0f;a._43 = 3.0f;
-  //SetMatrixRotateX(&a,1.0f);
-  //SetMatrixRotateY(&b,1.0f);
-  //SetMatrixRotateZ(&c,1.0f);
-  //TMatrix16 abc = a*b*c;
-  //SetMatrixRotationYawPitchRoll(&d,1.0f,1.0f,1.0f);
-  //int adasda = 0;
 }
 //------------------------------------------------------------------------
 void TTankTower::SetHuman(char* pData, int size)
@@ -157,15 +142,6 @@ void TTankTower::SetupShaderStackModelGE()
   mV *= -1; //###
   SetupShaderStack(mIndexTrackR,mIndexTime,    &time_ms,sizeof(time_ms));
   SetupShaderStack(mIndexTrackR,mIndexVelocity,&mV,     sizeof(mV));
-
-  //mModel->SetShaderStackMask(&mShaderStackMask);// настроить маску
-  //// настроить сам шейдерный стек
-  //TShaderStack* pSS = mModel->GetShaderStack(mIndexTrackL);
-  //pSS->SetData(mIndexTime,    &time_ms,sizeof(time_ms));// что R что L - тот же самый шейдер
-  //pSS->SetData(mIndexVelocity,&mV,     sizeof(mV));
-  //pSS = mModel->GetShaderStack(mIndexTrackR);
-  //pSS->SetData(mIndexTime,    &time_ms,sizeof(time_ms));// что R что L - тот же самый шейдер
-  //pSS->SetData(mIndexVelocity,&mV,     sizeof(mV));
 }
 //------------------------------------------------------------------------------------------------
 void TTankTower::EventSetModelGE()
@@ -181,9 +157,6 @@ void TTankTower::EventSetModelGE()
   //-----------------------------------------------------
   mIndexTime        = GetShaderStackIndexByName(mIndexTrackR,ParamTime);
   mIndexVelocity    = GetShaderStackIndexByName(mIndexTrackR,ParamaVelocity);
-  //TShaderStack* pSS = mModel->GetShaderStack(mIndexTrackR);
-  //mIndexTime        = pSS->GetIndexByName(ParamTime);
-  //mIndexVelocity    = pSS->GetIndexByName(ParamaVelocity);
 
   cnt  = mVectorNamePart.size();
   for( int i = 0 ; i < cnt ; i++)

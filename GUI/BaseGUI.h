@@ -29,7 +29,7 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
@@ -39,6 +39,9 @@ you may contact in writing [ramil2085@gmail.com].
 #include <MyGUI.h>
 #include "BaseLayout/BaseLayout.h"
 
+
+#define ASSIGN_WIDGET(name) \
+assignWidget(name,#name);
 
 class TBaseGUI :
 	public wraps::BaseLayout

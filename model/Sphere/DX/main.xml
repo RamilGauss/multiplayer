@@ -1,0 +1,19 @@
+<root>
+	<lod>1000</lod>
+	<part>
+		<strPathShader>shaderSphere.fx</strPathShader>
+		<paramShader>paramShader.xml</paramShader>
+		<strTechnique>TexturedSpecular</strTechnique>
+		<texture>Pool_Ball.png</texture>
+		<name>sphere</name>
+		<numUse>0</numUse>
+		<vAmbient>0.9;0.9;0.9</vAmbient>
+		<vDiffuse>0.5;0.5;0.5</vDiffuse>
+		<vSpecular>1;1;1</vSpecular>
+		<nShininess>1</nShininess>
+		<bSpecular>0</bSpecular>
+		<mTypeLOD>0</mTypeLOD>
+		<mflgNormal>1</mflgNormal>
+		<primitives>sphere.obj</primitives>
+	</part>
+</root>
