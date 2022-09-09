@@ -11,14 +11,15 @@
 
 #include "DXUTmisc.h"
 
-// Vertex format
-struct VERTEX
-{
-    D3DXVECTOR3 position;
-    D3DXVECTOR3 normal;
-    D3DXVECTOR2 texcoord;
-};
-
+namespace nsMeshLoader{
+  // Vertex format
+  struct VERTEX
+  {
+      D3DXVECTOR3 position;
+      D3DXVECTOR3 normal;
+      D3DXVECTOR2 texcoord;
+  };
+}
 
 // Used for a hashtable vertex cache when creating the mesh from a .obj file
 struct CacheEntry
@@ -88,14 +89,14 @@ private:
     HRESULT LoadMaterialsFromMTL( const WCHAR* strFileName );
     void    InitMaterial( Material* pMaterial );
 
-    DWORD   AddVertex( UINT hash, VERTEX* pVertex );
+    DWORD   AddVertex( UINT hash, nsMeshLoader::VERTEX* pVertex );
     void    DeleteCache();
 
     IDirect3DDevice9* m_pd3dDevice;    // Direct3D Device object associated with this mesh
     ID3DXMesh* m_pMesh;         // Encapsulated D3DX Mesh
 
     CGrowableArray <CacheEntry*> m_VertexCache;   // Hashtable cache for locating duplicate vertices
-    CGrowableArray <VERTEX> m_Vertices;      // Filled and copied to the vertex buffer
+    CGrowableArray <nsMeshLoader::VERTEX> m_Vertices;      // Filled and copied to the vertex buffer
     CGrowableArray <DWORD> m_Indices;       // Filled and copied to the index buffer
     CGrowableArray <DWORD> m_Attributes;    // Filled and copied to the attribute buffer
     CGrowableArray <Material*> m_Materials;     // Holds material properties per subset

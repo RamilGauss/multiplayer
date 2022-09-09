@@ -36,10 +36,13 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "EffectDX.h"
 #include "Define_DX.h"
+#include "ModelDX.h"
 
 
-TEffectDX::TEffectDX()
+TEffectDX::TEffectDX(TModelDX* pMaster)
 {
+  pMasterModel = pMaster;
+
   mArrJoint = NULL;
   mCntJoint = 0;
 
@@ -142,7 +145,9 @@ HRESULT TEffectDX::End()
 //-----------------------------------------------------------
 void TEffectDX::Destroy()
 {
-  SAFE_RELEASE(mMaterial.pTexture);
+  //SAFE_RELEASE(mMaterial.pTexture);
+  pMasterModel->TextureRelease(mMaterial.pTexture);
+
   SAFE_RELEASE(p);
   SAFE_RELEASE(pMesh);
 }

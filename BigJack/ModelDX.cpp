@@ -45,17 +45,10 @@ you may contact in writing [ramil2085@gmail.com].
 
 
 
-// Vertex declaration
-//D3DVERTEXELEMENT9 VERTEX_MODELDX_DECL[] =
-//{
-//  { 0,  0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_POSITION, 0},
-//  { 0, 12, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_NORMAL,   0},
-//  { 0, 24, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD, 0},
-//  D3DDECL_END()
-//};
 
 
 using namespace nsStruct3D;
+using namespace std;
 
 TModelDX::TModelDX()
 {
@@ -72,6 +65,8 @@ TModelDX::~TModelDX()
     delete mVectorAllEffect[i];
   }
   mVectorAllEffect.clear();
+
+  mSetPathTexture.clear();
 }
 //----------------------------------------------------------------------------------------------------
 void TModelDX::Draw(std::vector<unsigned char>* state, // какое состояние нарисовать (От ObjectDX)
@@ -146,8 +141,11 @@ bool TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strAbsPath/*путь к фай
 {
   m_pd3dDevice = pd3dDevice;
   // загрузка данных примитивов, текстур и индексов.
+  GlobalLoggerDX.WriteF_time("Загрузка Mesh, id=%u\n",mID);
   if(Load(strAbsPath)==false) 
     return false;
+
+  GlobalLoggerDX.WriteF_time("Конец загрузки Mesh, id=%u\n",mID);
 
   LPCWSTR strFilenameShader = NULL;
   HRESULT hr;
@@ -234,7 +232,6 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
 //----------------------------------------------------------------------------------------------------
 bool TModelDX::AddEffectDX(ILoaderModelDX::TDefGroup * pDefGroup)
 {
-  HRESULT hr;
   TEffectDX* pEffect = new TEffectDX;
 
   pEffect->mTypeLOD     = pDefGroup->mTypeLOD;
@@ -266,24 +263,9 @@ bool TModelDX::AddEffectDX(ILoaderModelDX::TDefGroup * pDefGroup)
 
   pMaterial->bSpecular  = pDefGroup->bSpecular;
 
-  V( D3DXCreateTextureFromFile( m_pd3dDevice, pMaterial->strTexture.data(),
-    &( pMaterial->pTexture ) ) );
+  LoadTexture(pMaterial);
 
   pEffect->pMesh = pDefGroup->pMesh;
-  // оптимизация структуры данных
-  int cntAdjacency = pEffect->pMesh->GetNumFaces() * 3;
-  DWORD* aAdjacency = new DWORD[cntAdjacency];
-  if( aAdjacency == NULL )
-  {
-    GlobalLoggerDX.WriteF_time("Нехватка памяти.SetupEffectDX().\n");
-    delete pEffect;
-    return false;
-  }
-
-  V( pEffect->pMesh->GenerateAdjacency( 1e-6f, aAdjacency ) );
-  V( pEffect->pMesh->OptimizeInplace( D3DXMESHOPT_ATTRSORT | D3DXMESHOPT_VERTEXCACHE, aAdjacency, NULL, NULL, NULL ) );
-
-  SAFE_DELETE_ARRAY( aAdjacency );
 
   mVectorAllEffect.push_back(pEffect);
   return true;
@@ -355,6 +337,23 @@ void TModelDX::SetupVectorLOD()
       mVectorLOD[pEffectDX->mTypeLOD].normal.push_back(pEffectDX);
     else
       mVectorLOD[pEffectDX->mTypeLOD].damage.push_back(pEffectDX);
+  }
+}
+//----------------------------------------------------------------------------------------------------
+void TModelDX::LoadTexture(TEffectDX::Material* pMaterial)
+{
+  HRESULT hr;
+  set<wstring>::iterator fit = mSetPathTexture.find(pMaterial->strTexture);
+  set<wstring>::iterator eit = mSetPathTexture.end();
+  if(fit==eit)// не нашли
+  {
+    V( D3DXCreateTextureFromFile( m_pd3dDevice, pMaterial->strTexture.data(),
+      &( pMaterial->pTexture ) ) );
+
+  }
+  else// дубликат
+  {
+
   }
 }
 //----------------------------------------------------------------------------------------------------

@@ -171,6 +171,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IMeshFile.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\LoaderModelDX.cpp"
 				>
 			</File>
@@ -184,6 +188,10 @@
 			</File>
 			<File
 				RelativePath=".\ManagerShader.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MeshFileBj.cpp"
 				>
 			</File>
 			<File
@@ -225,6 +233,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IMeshFile.h"
+				>
+			</File>
+			<File
 				RelativePath=".\LoaderModelDX.h"
 				>
 			</File>
@@ -242,6 +254,10 @@
 			</File>
 			<File
 				RelativePath=".\ManagerShader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MeshFileBj.h"
 				>
 			</File>
 			<File

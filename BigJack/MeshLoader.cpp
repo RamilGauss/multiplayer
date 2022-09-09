@@ -14,14 +14,15 @@
 using namespace std;
 #pragma warning(default: 4995)
 
+using namespace nsMeshLoader;
 
 // Vertex declaration
 D3DVERTEXELEMENT9 VERTEX_DECL[] =
 {
-    { 0,  0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_POSITION, 0},
-    { 0, 12, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_NORMAL,   0},
-    { 0, 24, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD, 0},
-    D3DDECL_END()
+  { 0,  0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_POSITION, 0},
+  { 0, 12, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_NORMAL,   0},
+  { 0, 24, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT,  D3DDECLUSAGE_TEXCOORD, 0},
+  D3DDECL_END()
 };
 
 
@@ -748,7 +749,7 @@ HRESULT CMeshLoader::LoadGeometryFromOBJ_Fast( const WCHAR* strFileName )
   // If an associated material file was found, read that in as well.
   if( strMaterialFilename[0] )
   {
-    V_RETURN( LoadMaterialsFromMTL( strMaterialFilename ) );
+    //V_RETURN( LoadMaterialsFromMTL( strMaterialFilename ) );
   }
 
   return S_OK;

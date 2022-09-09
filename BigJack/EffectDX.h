@@ -42,8 +42,11 @@ you may contact in writing [ramil2085@gmail.com].
 #include <d3dx9mesh.h>
 #include <vector>
 
+class TModelDX;
+
 class TEffectDX
 {
+  TModelDX* pMasterModel;
   //--------------------------------------------------------------------------------------
   // Effect parameter handles
   // Шейдер
@@ -105,7 +108,7 @@ public:
     D3DXVECTOR2 texcoord;
   };
 #pragma pack(pop)
-  TEffectDX();
+  TEffectDX(TModelDX* pMaster);
   ~TEffectDX();
 
   D3DXMATRIXA16* GetBlendMatrixByName(char* sNamePart);

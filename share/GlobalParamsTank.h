@@ -41,15 +41,18 @@ you may contact in writing [ramil2085@gmail.com].
 
 #define VERSION_PROGRAMM ((unsigned short)45) // unsigned short
 #define VERSION_EDITOR   ((unsigned short)10)
+#define VERSION_CONVERTER_MESH   ((unsigned short)1)
 //-------------------------------------------------------------------------------------------
 extern char strVersionClient[100];
 extern char strVersionServer[100];
 extern char strVersionEditor[100];
+extern char strVersionConverterMesh[100];
 //-------------------------------------------------------------------------------------------
 
 #define STR_VERSION_CLIENT strVersionClient
 #define STR_VERSION_SERVER strVersionServer
 #define STR_VERSION_EDITOR strVersionEditor
+#define STR_VERSION_CONVERTER_MESH strVersionConverterMesh
 
 
 #define DURATION_FIGHT_MINUTE 15 // длительность боя,минут

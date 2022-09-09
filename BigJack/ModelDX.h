@@ -46,6 +46,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ILoaderModelDX.h"
 #include <d3d9types.h>
 #include <vector>
+#include <set>
 
 class TManagerModelDX;
 
@@ -104,6 +105,7 @@ protected:
   void Draw(TEffectDX* pEffect,D3DXMATRIXA16& mWorldViewProjection,const D3DXVECTOR3* mCamera);
 
   virtual bool Load(LPCWSTR strFilenameData);
+  void LoadTexture(TEffectDX::Material* pMaterial);
   //---------------------------------------------------------
   
   struct TLOD
@@ -126,6 +128,10 @@ protected:
   // заполнить от загрузчика
   std::vector<TEffectDX*> mVectorAllEffect;// все состояния, ЛОДы, типы пушек, башен и т.д.
   float mLOD;// 2 состояния по ЛОДу, расстояние от камеры до центра координат
+
+
+  // для оптимизации загрузки, чтобы исключить повторную загрузки текстур
+  std::set<std::wstring> mSetPathTexture;
 };
 //-----------------------------------------------------------------
 

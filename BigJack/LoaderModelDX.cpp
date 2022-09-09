@@ -267,7 +267,7 @@ float TLoaderModelDX::FindFloat_Semicolon(char** buffer,bool* ok)
 //--------------------------------------------------------------------------------
 bool TLoaderModelDX::LoadMesh(TBL_ConfigFile* fileIni,char* strNumPart,TDefGroup *mArrDefGroup)
 {
-  HRESULT hr;
+  //HRESULT hr;
   char strPathPrimitives[MAX_PATH];
   char* str = fileIni->GetValue(strNumPart,"primitives");
   if(str)
@@ -279,12 +279,8 @@ bool TLoaderModelDX::LoadMesh(TBL_ConfigFile* fileIni,char* strNumPart,TDefGroup
   }
   else return false;
 
-  USES_CONVERSION;
-  V(mMeshLoader.Create(m_pd3dDevice,A2W(strPathPrimitives)));
-  mArrDefGroup->pMesh = mMeshLoader.GetMesh();
-  mMeshLoader.ZeroMesh();// отвязаться
-
-  return true;
+  mArrDefGroup->pMesh = mMeshFile.Load(m_pd3dDevice,strPathPrimitives);
+  return (mArrDefGroup->pMesh!=NULL);
 }
 //--------------------------------------------------------------------------------
 int TLoaderModelDX::FindInt_Semicolon(char** buffer,bool* ok)

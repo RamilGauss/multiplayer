@@ -67,6 +67,7 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
   if(sPath.length())
   {
     pModel = new TModelDX();
+    pModel->SetID(id);
     USES_CONVERSION;
     if(pModel->Init(mD3dDevice,A2W(sPath.data()))==false)
     {
@@ -75,7 +76,6 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
       return NULL;
     }
     pModel->ResetDevice();//### эксперимент
-    pModel->SetID(id);
     mMapLoadedModel[id] = pModel;
   }
   else
@@ -128,18 +128,6 @@ void TManagerModelDX::ResetDevice()
     bit++;
   }
 }
-//--------------------------------------------------------------------------------------
-//void TManagerModelDX::OnDestroyDevice()
-//{
-//  int cnt = mArrModel.Count();
-//  for(int i = 0 ; i < cnt ; i++)
-//  {
-//    TModelDX* pModel = (TModelDX*)mArrModel.Get(i);
-//    if(pModel)
-//      pModel->Destroy();
-//  }
-//  mArrModel.Clear();
-//}
 //--------------------------------------------------------------------------------------
 bool TManagerModelDX::LoadListPath()
 {

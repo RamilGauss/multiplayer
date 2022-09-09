@@ -43,10 +43,11 @@ you may contact in writing [ramil2085@gmail.com].
 #include "MeshLoader.h"
 
 // для экспериментов (для WoT)
+#include "IMeshFile.h"
 
 class TLoaderModelDX : public ILoaderModelDX
 {
-  CMeshLoader mMeshLoader;
+  IMeshFile mMeshFile;
 
 public:
   TLoaderModelDX(IDirect3DDevice9* _m_pd3dDevice);
