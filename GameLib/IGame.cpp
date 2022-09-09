@@ -80,38 +80,22 @@ bool IGame::LoadDLL(const char* sNameDLL)
     return false;
   }
 
-  mGetClientDeveloperTool = (GetClientDeveloperTool)GetProcAddress(hModule, StrGetClientDeveloperTool);
-  if(mGetClientDeveloperTool==NULL)
-  {
-    BL_FIX_BUG();
-    return false;
-  }
-  mGetServerDeveloperTool = (GetServerDeveloperTool)GetProcAddress(hModule, StrGetServerDeveloperTool);
-  if(mGetServerDeveloperTool==NULL)
-  {
-    BL_FIX_BUG();
-    return false;
-  }
   mFreeDeveloperTool = (FreeDeveloperTool)GetProcAddress(hModule, StrFreeDeveloperTool);
   if(mFreeDeveloperTool==NULL)
   {
     BL_FIX_BUG();
     return false;
   }
-  mClientDeveloperTool = mGetClientDeveloperTool();
-  if(mClientDeveloperTool==NULL)
-  {
-    BL_FIX_BUG();
-    return false;
-  }
-  mServerDeveloperTool = mGetServerDeveloperTool();
-  if(mServerDeveloperTool==NULL)
-  {
-    BL_FIX_BUG();
-    return false;
-  }
+  mGetClientDeveloperTool = (GetClientDeveloperTool)GetProcAddress(hModule, StrGetClientDeveloperTool);
+  mGetServerDeveloperTool = (GetServerDeveloperTool)GetProcAddress(hModule, StrGetServerDeveloperTool);
 
 #endif
+
+  if(mGetClientDeveloperTool)
+    mClientDeveloperTool = mGetClientDeveloperTool();
+  if(mGetServerDeveloperTool)
+    mServerDeveloperTool = mGetServerDeveloperTool();
+
   return true;
 }
 //----------------------------------------------------------------------

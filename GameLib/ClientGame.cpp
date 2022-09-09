@@ -106,6 +106,8 @@ bool TClientGame::Init(const char* sNameDLL)
 {
   // загрузка DLL
   CHECK_RET(LoadDLL(sNameDLL))
+  if(mGetClientDeveloperTool==NULL)
+    return false;
   // политика: нет DLL - нет движка.
 
   // создатель объектов
