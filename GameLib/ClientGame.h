@@ -47,6 +47,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 */
 
+class IGUI;
 class TNET_LevelClientServer;
 class IPhysicEngine;
 class IGraphicEngine; // отрисовка сцены
@@ -61,6 +62,7 @@ protected:
 
   //IReplay*              mReplay;        // HDD
   //ISoundEngine*         mSound;         // Sound 
+  IGUI*                   mGUI;           // GUI, MyGUI! - не является источником событий
   TNET_LevelClientServer* mNET;           // Melissa
   IPhysicEngine*          mPhysicEngine;  // Robert
   IGraphicEngine*         mGraphicEngine; // BigJack отрисовка сцены

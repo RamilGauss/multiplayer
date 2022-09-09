@@ -44,6 +44,9 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BL_Debug.h"
 #include "SDKmisc.h"
 #include <DXGI.h>
+#include "IGUI_Core.h"
+#include "..\GUI\GUI_DescWindow.h"
+#include "..\Common\Base\DirectX\BaseManager.h"
 
 
 #define LOG_DX
@@ -56,7 +59,10 @@ using namespace nsStruct3D;
 
 TBigJack::TBigJack()
 {
+#ifdef WIN32
   mDXUT = new TDXUT(this);
+#else
+#endif
 
   mTime_ms = 0;
 
@@ -73,7 +79,10 @@ TBigJack::TBigJack()
 TBigJack::~TBigJack()
 {
   Done();
+#ifdef WIN32
   delete mDXUT;
+#else
+#endif
 }
 //--------------------------------------------------------------------------------------------------------
 void TBigJack::Optimize()
@@ -286,7 +295,7 @@ HRESULT TBigJack::OnResetDevice( IDirect3DDevice9* pd3dDevice,
 
   mCamera.SetWindow( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
 
-  ResetGUI(pBackBufferSurfaceDesc->Width,pBackBufferSurfaceDesc->Height);
+  //ResetGUI(pBackBufferSurfaceDesc->Width,pBackBufferSurfaceDesc->Height);
 
   return S_OK;
 }
@@ -312,7 +321,7 @@ LRESULT TBigJack::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, b
   if( *pbNoFurtherProcessing )
     return 0;
 
-  MsgProcGUI((unsigned int)hWnd, (unsigned int)uMsg, (unsigned int)wParam, (unsigned int)lParam);
+  //MsgProcGUI((unsigned int)hWnd, (unsigned int)uMsg, (unsigned int)wParam, (unsigned int)lParam);
 
   mCamera.HandleMessages( hWnd, uMsg, wParam, lParam );
   return 0;
@@ -341,6 +350,9 @@ void TBigJack::Init()
   {
     GlobalLoggerGE.WriteF_time("Init fail. hr=0x%X\n",hr);
   }
+  SetIsCreateWindow(true);
+  if(mGUI)
+    InitGUI();
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::Done()
@@ -348,6 +360,7 @@ void TBigJack::Done()
   mDXUT->Done();
   
   mManagerModelDX.DestroyModel();
+  SetIsCreateWindow(false);
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::Work(guint32 time_ms)
@@ -517,20 +530,20 @@ bool TBigJack::HandleInternalEvent()
   return false;
 }
 //--------------------------------------------------------------------------------------
-void* TBigJack::GetFuncEventGUI()
-{
-  void* funcGUI = NULL;
-#ifdef WIN32
-  funcGUI = mDXUT->GetFuncEventGUI();
-#else
-#endif
-  return funcGUI;
-}
+//void* TBigJack::GetFuncEventGUI()
+//{
+//  void* funcGUI = NULL;
+//#ifdef WIN32
+//  funcGUI = mDXUT->GetFuncEventGUI();
+//#else
+//#endif
+//  return funcGUI;
+//}
 //--------------------------------------------------------------------------------------
-void TBigJack::OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext )
-{
-  GUIEvent(nEvent, nControlID, pUserContext);
-}
+//void TBigJack::OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext )
+//{
+//  GUIEvent(nEvent, nControlID, pUserContext);
+//}
 //--------------------------------------------------------------------------------------
 void TBigJack::OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
 {
@@ -603,22 +616,45 @@ void TBigJack::SetTitleWindow(const char* sTitle)
 #endif
 }
 //--------------------------------------------------------------------------------------
-void* TBigJack::GetObjectForInitGUI()
-{
-  return 
-#ifdef WIN32
-  &mDialogResourceManager;
-#else
-#endif
-}
+//void* TBigJack::GetObjectForInitGUI()
+//{
+//  return 
+//#ifdef WIN32
+//  &mDialogResourceManager;
+//#else
+//#endif
+//}
+////--------------------------------------------------------------------------------------
+//void TBigJack::ForceResizeEventGUI()
+//{
+//  int w,h;
+//#ifdef WIN32
+//  mDXUT->GetSizeWindow(w,h);
+//#else
+//#endif
+//  ResetGUI(w,h);
+//}
 //--------------------------------------------------------------------------------------
-void TBigJack::ForceResizeEventGUI()
+bool TBigJack::InitGUI()
 {
-  int w,h;
 #ifdef WIN32
-  mDXUT->GetSizeWindow(w,h);
+  TGUIDescWindow descWindow;
+  descWindow.hwnd       = mDXUT->GetHWND();
+  descWindow.pD3D       = mDXUT->GetD3D9Object();
+  descWindow.pD3DDevice = mDXUT->GetD3D9Device(); 
+  descWindow.pD3DPP     = mDXUT->GetDevicePresentParameters9();
+  descWindow.windowed   = !IsFullScreen();
+  mGUI->AddWindow(&descWindow);
 #else
 #endif
-  ResetGUI(w,h);
+
+  //### Gauss
+  mGUI->AddResourceLocation("/Demos/Demo_Themes");
+  mGUI->AddResourceLocation("/Common/Demos");
+  mGUI->AddResourceLocation("/Common/Themes");
+  bool res = MyGUI::ResourceManager::getInstance().load("MyGUI_BlackBlueTheme.xml");// загрузка скина
+  //### Gauss
+
+  return res;
 }
 //--------------------------------------------------------------------------------------

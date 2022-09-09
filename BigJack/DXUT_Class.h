@@ -69,7 +69,12 @@ public:
 
   virtual HWND GetHWND();
   
-  virtual void* GetFuncEventGUI();
+  virtual D3DPRESENT_PARAMETERS* GetDevicePresentParameters9();
+
+  virtual IDirect3D9*       GetD3D9Object();
+  virtual IDirect3DDevice9* GetD3D9Device();
+
+  //virtual void* GetFuncEventGUI();
   //void SetSrcGUI(TGraphicEngineGUI* pForm);
 
 protected:
@@ -78,7 +83,7 @@ protected:
   friend bool CALLBACK ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext );
   friend void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
   friend LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing, void* pUserContext );
-  friend void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
+  //friend void CALLBACK OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
   friend void CALLBACK OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext );
   friend void CALLBACK OnMouseEvent( UINT state, bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext );
 
@@ -98,7 +103,7 @@ protected:
   LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing, void* pUserContext );
   void OnLostDevice( void* pUserContext );
   void OnDestroyDevice( void* pUserContext );
-  void OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
+  //void OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
   void OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext );
   void OnMouseEvent( UINT state, bool bLeftButtonDown, bool bRightButtonDown, bool bMiddleButtonDown, bool bSideButton1Down, bool bSideButton2Down, int nMouseWheelDelta, int xPos, int yPos, void* pUserContext );
 

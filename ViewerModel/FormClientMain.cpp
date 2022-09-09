@@ -63,6 +63,6 @@ void TFormClientMain::Init()
   Load("..\\form\\FormClientMain.xml");
   Connect("bEnter", nsTypeGUI::eEventButtonClicked, 0);
   
-  IClientDeveloperTool::GetSingleton()->GetComponent()->mGraphicEngine->ForceResizeEventGUI();
+  //IClientDeveloperTool::GetSingleton()->GetComponent()->mGraphicEngine->ForceResizeEventGUI();
 }
 //-----------------------------------------------------------------------------------------

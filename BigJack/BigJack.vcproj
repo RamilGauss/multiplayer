@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="..\Lib\$(ConfigurationName)"
+			IntermediateDirectory="..\Temp\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			>
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\GBaseLib;&quot;..\glib-2.0&quot;;..\Share;..\DXUT\Core;..\DXUT\Optional;..\Robert"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;PROFILE;_WINDOWS;D3DXFX_LARGEADDRESS_HANDLE"
+				AdditionalIncludeDirectories=".\;..\GBaseLib;&quot;..\glib-2.0&quot;;..\Share;..\DXUT\Core;..\DXUT\Optional;..\Robert;..\GUI;..\MyGUIEngine\include;..\Common;..\MyGUIEngine\src;..\Common\Base;..\Common\Base\DirectX;..\Common\Input\Win32"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;PROFILE;_WINDOWS;D3DXFX_LARGEADDRESS_HANDLE;MYGUI_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\Lib\$(ProjectName).lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"

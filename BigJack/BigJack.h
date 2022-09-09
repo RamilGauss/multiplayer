@@ -115,7 +115,7 @@ public:
   virtual bool IsFullScreen();
   virtual void ToggleFullScreen();
   virtual void SetTitleWindow(const char* sTitle);
-  virtual void ForceResizeEventGUI();
+  //virtual void ForceResizeEventGUI();
 
   virtual void  GetResolutionFrame(int& h, int& w );// формат X8R8G8B8
   virtual void  SetResolutionFrame(int  h, int  w );// формат X8R8G8B8
@@ -162,7 +162,7 @@ protected:
   LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,void* pUserContext );
   void OnLostDevice( void* pUserContext );
   void OnDestroyDevice( void* pUserContext );
-  void OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
+  //void OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
   
   void OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext );
   void OnMouseEvent( int state, 
@@ -184,9 +184,10 @@ protected:
 
   void SetCommonShaderStack();
 
-  virtual void* GetFuncEventGUI();
+  //virtual void* GetFuncEventGUI();
   
-  virtual void* GetObjectForInitGUI();
+  //virtual void* GetObjectForInitGUI();
+  virtual bool InitGUI();
 
 };
 

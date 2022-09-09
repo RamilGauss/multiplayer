@@ -39,6 +39,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "../GameLib/IManagerObjectCommon.h"
 #include "../BigJack/IGraphicEngine.h"
 #include "../GameLib/IBaseObjectCommon.h"
+#include "../GUI/IGUI.h"
 
 using namespace std;
 using namespace nsStruct3D;
@@ -87,9 +88,16 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent)
   float v = start/float(cnt[0]*cnt[1]*cnt[2]);
   GlobalLoggerForm.WriteF_time("EditorModel: Время загрузки объектов t=%u мс,v=%f мс/об.\n",start,v);
 #endif
-  mComponent.mGraphicEngine->AddGUI(&mFormClientMain);
-  mFormClientMain.Init();
+  //mComponent.mGraphicEngine->AddGUI(&mFormClientMain);
+  //mFormClientMain.Init();
   //mComponent.mGraphicEngine->ForceResizeEventGUI();
+  
+  //mClientMain.
+  mComponent.mGUI->Add(std::string("mClientMain"),&mClientMain);
+  // показать форму
+  mClientMain.Show();
+  // подстроиться
+  mComponent.mGUI->Resize();
 }
 //------------------------------------------------------------------------------------
 void TClientDeveloperTool_ViewerModel::CreateObjects(int cntK,int cntJ,int cntI)

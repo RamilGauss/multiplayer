@@ -44,21 +44,29 @@ you may contact in writing [ramil2085@gmail.com].
 #include <list>
 
 class IBaseObjectGE;
+class IGUI_Core;
 
 class IGraphicEngine : public TSrcEvent
 {
+  bool flgCreateWindow;
+
 protected:
   guint32 mTime_ms;// время для рендера, используется для анимации
+  
+  IGUI_Core* mGUI;// NOT Thread Safe
+
 
 public:
 
-  IGraphicEngine(){}
-  virtual ~IGraphicEngine(){}
+  IGraphicEngine();
+  virtual ~IGraphicEngine();
+
+  void SetGUI(IGUI_Core* pGUI);
 
   virtual bool IsFullScreen() = 0;
   virtual void ToggleFullScreen() = 0;
   virtual void SetTitleWindow(const char* sTitle) = 0;
-  virtual void ForceResizeEventGUI() = 0;
+  //virtual void ForceResizeEventGUI() = 0;
   //------------------------------------------------------------------------
   virtual void Init() = 0;
   virtual void Work(guint32 time_ms) = 0;
@@ -131,29 +139,35 @@ public:
     int delta_wheel;
   };
   // работа с GUI
-  int GetCountGUI();
-  void AddGUI(TGraphicEngineGUI* pForm);
-  void ClearGUI();
+  //int GetCountGUI();
+  //void AddGUI(TGraphicEngineGUI* pForm);
+  //void ClearGUI();
   //----------------------------------------------------------------
   //                             ~INTERFACE
   //----------------------------------------------------------------
-protected:
-  typedef std::list<TGraphicEngineGUI*> TListGUI;
-  TListGUI mListGUI;
+//protected:
+  //typedef std::list<TGraphicEngineGUI*> TListGUI;
+  //TListGUI mListGUI;
 
-  void ResetGUI(int Width, int Height);
-  void RenderGUI();
-  void GUIEvent(unsigned int nEvent, int nControlID, void* pGUI);
-  virtual void* GetFuncEventGUI() = 0;
-#ifdef WIN32
-  bool MsgProcGUI(unsigned int hWnd, 
-                  unsigned int uMsg, 
-                  unsigned int wParam, 
-                  unsigned int lParam);
-#else
-#endif
+  //void ResetGUI(int Width, int Height);
+  //void RenderGUI();
+  //void GUIEvent(unsigned int nEvent, int nControlID, void* pGUI);
+  //virtual void* GetFuncEventGUI() = 0;
+//#ifdef WIN32
+//  bool MsgProcGUI(unsigned int hWnd, 
+//                  unsigned int uMsg, 
+//                  unsigned int wParam, 
+//                  unsigned int lParam);
+//#else
+//#endif
 protected:
-  virtual void* GetObjectForInitGUI() = 0;
+  //virtual void* GetObjectForInitGUI() = 0;
+
+  virtual bool InitGUI() = 0;
+
+  void SetIsCreateWindow(bool val){flgCreateWindow=val;}
+  bool IsCreateWindow(){return flgCreateWindow;}
+  void RenderGUI();
 
 };
 

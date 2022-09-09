@@ -53,6 +53,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "IXML.h"
 #include "common_defs.h"
 #include "MakerManagerTime.h"
+#include "..\GUI\MakerGUI.h"
+#include "IGUI.h"
 
 
 using namespace std;
@@ -128,6 +130,9 @@ bool TClientGame::Init(const char* sNameDLL)
   //------------------------------------------
   //TMakerNET_Engine makerNET;
   //mNET = makerNET.New();
+  //mNET->Init();// создали окно
+  //mNET->SetSelfName(STR_SRC_EVENT_GRAPHIC_ENGINE);
+  //mNET->SetDstObject(this);
   //------------------------------------------
   TMakerManagerObjectCommon makerMOC;
   mMOC = makerMOC.New();
@@ -138,8 +143,13 @@ bool TClientGame::Init(const char* sNameDLL)
   TMakerManagerTime makerMTime;
   mMTime = makerMTime.New();
   //------------------------------------------
+  TMakerGUI makerGUI;
+  mGUI = makerGUI.New();
+  mGraphicEngine->SetGUI(mGUI);
+  //------------------------------------------
   //------------------------------------------
   IClientDeveloperTool::TComponentClient components;
+  components.mGUI           = mGUI;
   components.mGraphicEngine = mGraphicEngine;
   components.mMTime         = mMTime;
   components.mMOC           = mMOC;
@@ -158,6 +168,8 @@ void TClientGame::Done()
   mMOC = NULL;
   delete mMTime;
   mMTime = NULL;
+  delete mGUI;
+  mGUI = NULL;
 }
 //------------------------------------------------------------------------
 bool TClientGame::HandleExternalEvent()

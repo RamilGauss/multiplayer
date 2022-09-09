@@ -40,6 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 class TBigJack;
 class TGraphicEngineGUI;
+//class D3DPRESENT_PARAMETERS;
 
 class IDirectX_Realize
 {
@@ -65,8 +66,11 @@ public:
 
   virtual HWND    GetHWND() = 0;
   
+  virtual D3DPRESENT_PARAMETERS* GetDevicePresentParameters9() = 0;
+  virtual IDirect3D9*       GetD3D9Object() = 0;
+  virtual IDirect3DDevice9* GetD3D9Device() = 0;
 
-  virtual void*   GetFuncEventGUI() = 0;
+  //virtual void*   GetFuncEventGUI() = 0;
   //virtual void    SetSrcGUI(TGraphicEngineGUI* pForm) = 0;
 
 protected:

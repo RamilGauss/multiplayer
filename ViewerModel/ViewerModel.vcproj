@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="..\DeveloperToolDLL"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="..\Temp\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../Share;../DeveloperToolShare;../BigJack;../Robert;../GBaseLib;&quot;..\glib-2.0&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;VIEWERMODEL_EXPORTS"
+				AdditionalIncludeDirectories="../Share;../DeveloperToolShare;../BigJack;../Robert;../GBaseLib;&quot;../glib-2.0&quot;;../GUI;../MyGUIEngine/include;../Common"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;VIEWERMODEL_EXPORTS;MYGUI_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib d3dx10d.lib d3dx9d.lib d3d9.lib dxerr.lib dxguid.lib winmm.lib comctl32.lib Imm32.lib Version.lib Dsound.lib BigJack.lib GameLib.lib DXUT.lib DXUTOpt.lib GBaseLib.lib Share.lib Robert.lib DXGI.lib"
+				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib DXGI.lib d3dx10d.lib d3dx9d.lib d3d9.lib dxerr.lib dxguid.lib winmm.lib comctl32.lib Imm32.lib Version.lib Dsound.lib BigJack.lib GameLib.lib DXUT.lib DXUTOpt.lib GBaseLib.lib Share.lib Robert.lib Common.lib MyGUIEngine.lib Platforms.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\Lib"
+				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				ResourceOnlyDLL="false"
@@ -204,10 +204,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\FormClientMain.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -216,10 +212,6 @@
 			>
 			<File
 				RelativePath=".\ClientDeveloperTool_ViewerModel.h"
-				>
-			</File>
-			<File
-				RelativePath=".\FormClientMain.h"
 				>
 			</File>
 			<File
@@ -359,10 +351,34 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
+		<Filter
+			Name="FromAkaDXUT"
 			>
-		</File>
+			<File
+				RelativePath=".\ClientMain.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ClientMain.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GameRoomPrepare.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\GameRoomPrepare.h"
+				>
+			</File>
+			<File
+				RelativePath=".\WaitForm.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\WaitForm.h"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

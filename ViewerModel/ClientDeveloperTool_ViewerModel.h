@@ -37,12 +37,16 @@ you may contact in writing [ramil2085@gmail.com].
 #define ClientDeveloperTool_ViewerModelH
 
 #include "../GameLib/IClientDeveloperTool.h"
-#include "FormClientMain.h"
+
+//#include "FormClientMain.h"
+
+#include "ClientMain.h"
 
 class TClientDeveloperTool_ViewerModel : public IClientDeveloperTool
 {
  
-  TFormClientMain mFormClientMain;
+  //TFormClientMain mFormClientMain;
+  TClientMain mClientMain;
 
 public:
   TClientDeveloperTool_ViewerModel();

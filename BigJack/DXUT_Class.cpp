@@ -65,17 +65,17 @@ void TDXUT::OnMouseEvent( UINT state, bool bLeftButtonDown, bool bRightButtonDow
     pGE->OnMouseEvent( state, nMouseWheelDelta, xPos, yPos, pUserContext );
 }
 //--------------------------------------------------------------------------------------
-void CALLBACK OnGUIEvent(UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext)
-{
-  if(pDXUT_Realize)
-    pDXUT_Realize->OnGUIEvent( nEvent, nControlID, pControl, pUserContext );
-}
+//void CALLBACK OnGUIEvent(UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext)
+//{
+//  if(pDXUT_Realize)
+//    pDXUT_Realize->OnGUIEvent( nEvent, nControlID, pControl, pUserContext );
+//}
 //--------------------------------------------------------------------------------------
-void TDXUT::OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext )
-{
-  if(pGE)
-    return pGE->OnGUIEvent( nEvent, nControlID, pControl, pUserContext );
-}
+//void TDXUT::OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext )
+//{
+//  if(pGE)
+//    return pGE->OnGUIEvent( nEvent, nControlID, pControl, pUserContext );
+//}
 //--------------------------------------------------------------------------------------
 // Called during device initialization, this code checks the device for some 
 // minimum set of capabilities, and rejects those that don't pass by returning false.
@@ -346,10 +346,10 @@ HWND TDXUT::GetHWND()
   return DXUTGetHWND();
 }
 //--------------------------------------------------------------------------------------
-void* TDXUT::GetFuncEventGUI()
-{
-  return ::OnGUIEvent;
-}
+//void* TDXUT::GetFuncEventGUI()
+//{
+  //return ::OnGUIEvent;
+//}
 //--------------------------------------------------------------------------------------
 void TDXUT::SetTitleWindow(const char* sTitle)
 {
@@ -361,5 +361,20 @@ void TDXUT::GetSizeWindow(int &w, int &h)
 {
   w = DXUTGetWindowWidth();
   h = DXUTGetWindowHeight();
+}
+//--------------------------------------------------------------------------------------
+D3DPRESENT_PARAMETERS* TDXUT::GetDevicePresentParameters9()
+{
+  return &(DXUTGetDeviceSettings().d3d9.pp);
+}
+//--------------------------------------------------------------------------------------
+IDirect3D9* TDXUT::GetD3D9Object()
+{
+  return DXUTGetD3D9Object(); // Does not addref unlike typical Get* APIs
+}
+//--------------------------------------------------------------------------------------
+IDirect3DDevice9* TDXUT::GetD3D9Device()
+{
+  return DXUTGetD3D9Device(); // Does not addref unlike typical Get* APIs
 }
 //--------------------------------------------------------------------------------------

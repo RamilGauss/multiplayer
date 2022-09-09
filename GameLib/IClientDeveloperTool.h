@@ -42,6 +42,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 class IMakerObjectCommon;
 
+class IGUI;
 class TNET_LevelClientServer;
 class IPhysicEngine;
 class IGraphicEngine; // отрисовка сцены
@@ -57,6 +58,7 @@ public:
   {
     //IReplay*              mReplay;        // HDD
     //ISoundEngine*         mSound;         // Sound 
+    IGUI*                   mGUI;           // GUI, MyGUI!
     TNET_LevelClientServer* mNET;           // Melissa
     IPhysicEngine*          mPhysicEngine;  // Robert
     IGraphicEngine*         mGraphicEngine; // BigJack отрисовка сцены
@@ -64,13 +66,14 @@ public:
     IManagerTime*           mMTime;         // GameLib
     TComponentClient()
     {
-      //mReplay;        // HDD
-      //mSound;         // Sound 
-      mNET = NULL;           // Melissa
-      mPhysicEngine = NULL;  // Robert
+      //mReplay = NULL;      // HDD
+      //mSound = NULL;       // Sound 
+      mGUI           = NULL; // MyGUI
+      mNET           = NULL; // Melissa
+      mPhysicEngine  = NULL; // Robert
       mGraphicEngine = NULL; // BigJack отрисовка сцены
-      mMOC = NULL;           // GameLib
-      mMTime = NULL;         // GameLib
+      mMOC           = NULL; // GameLib
+      mMTime         = NULL; // GameLib
     }
   };
 protected:
