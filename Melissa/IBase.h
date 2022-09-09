@@ -33,7 +33,22 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "MakerNET_Engine.h"
-#include "NetTransport.h"
+#ifndef MELISSA_IBASE_H
+#define MELISSA_IBASE_H
 
-MACRO_MAKER_CPP_USE_P(NET_Engine,TNetTransport,char* pPathLog,pPathLog)
+#include "SrcEvent.h"
+
+namespace nsMelissa
+{
+  class /*MELISSA_EI*/ IBase : public TSrcEvent
+  {
+  public:
+    IBase(){}
+    virtual ~IBase(){}
+
+    virtual void Work() = 0;
+
+  };
+}
+
+#endif

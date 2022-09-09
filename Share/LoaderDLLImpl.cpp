@@ -34,65 +34,63 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#ifndef INET_EngineH
-#define INET_EngineH
-
-#include "CallBackRegistrator.h"
-#include "UdpDevice.h"
-#include "glib/gthread.h"
-#include "TransportProtocolPacket.h"
-#include "hArray.h"
-#include "GCS.h"
+#include <stddef.h>
 #include "BL_Debug.h"
+#include "LoaderDLLImpl.h"
 
-// Melissa - транспорт
-class INET_Engine
-{
-public:
-
-	struct InfoData
-	{
-		unsigned int   ip_dst;     // dst ip
-		unsigned short port_dst;   // dst port
-		unsigned int   ip_src;     // dst ip
-		unsigned short port_src;   // dst port
-		void*          packet; // выделено malloc
-		int            size;
-    InfoData(){packet = NULL;}
-    ~InfoData(){}
-	};
-
-	enum{ePacket=0,
-       eStream=1,
-       eWaitSynchro=5,// сек
-  };
-
-
-	INET_Engine(char* pPathLog=NULL);
-	virtual ~INET_Engine();
-	virtual void InitLog(char* pPathLog) = 0;
-
-  virtual bool Open(unsigned short port,int numNetWork=0) = 0;
-
-	virtual void Write(InfoData* data, bool check = true, bool add_in_queque = true) = 0;
-
-	// чтение - зарегистрируйся
-  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
-  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
-
-	virtual void Start() = 0;// для активной работы
-	virtual void Stop()  = 0;
-
-  // синхронная функция
-  virtual bool Synchro(unsigned int ip, unsigned short port) = 0; // вызов только для клиента
-protected:
-  // передать объект 
-  virtual void Lock(void* pLocker) = 0;
-  virtual void Unlock(void* pLocker) = 0;
-
-  // сколько ждать в чтении
-	virtual int GetTimeout() = 0;
-};
-
+#ifdef WIN32
+  #pragma warning(disable:4800)
+#else
 
 #endif
+
+TLoaderDLLImp::TLoaderDLLImp()
+{
+#ifdef WIN32
+  hModule = NULL;
+#else
+#endif
+}
+//------------------------------------------------------------------
+TLoaderDLLImp::~TLoaderDLLImp()
+{
+  Done();
+}
+//------------------------------------------------------------------
+bool TLoaderDLLImp::Init(const char* sPath)
+{
+#ifdef WIN32
+  hModule = LoadLibraryA(sPath);
+  if(hModule==NULL)
+  {
+    BL_FIX_BUG();
+    return false;
+  }
+#else
+#endif
+  return true;
+}
+//------------------------------------------------------------------
+void* TLoaderDLLImp::Get(const char* nameFunc)
+{
+  void* ptrFunc = NULL;
+#ifdef WIN32
+  ptrFunc = GetProcAddress(hModule, nameFunc);
+  if(ptrFunc==NULL)
+    BL_FIX_BUG();
+#else
+#endif
+  return ptrFunc;
+}
+//------------------------------------------------------------------
+void TLoaderDLLImp::Done()
+{
+  bool res = false;
+#ifdef WIN32
+  res = (bool)FreeLibrary(hModule);
+#else
+#endif
+  BL_ASSERT(res);
+  hModule = NULL;
+}
+//------------------------------------------------------------------

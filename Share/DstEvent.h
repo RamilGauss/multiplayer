@@ -38,7 +38,6 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include <string>
 #include <vector>
-#include "Container.h"
 #include "TypeDef.h"
 #include "DescEvent.h"
 
@@ -54,7 +53,7 @@ public:
   TDstEvent();
   virtual ~TDstEvent();
 
-  void AddEventInQueue(/*const char**/int from, void* data, int size);
+  void AddEventInQueue(int from, void* data, int size);
 
 protected:
   // забрал объект - уничтожь с помощью delete

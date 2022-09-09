@@ -41,9 +41,6 @@ you may contact in writing [ramil2085@gmail.com].
 
 class IManagerTime
 {
-protected:
-  
-
 public:
   IManagerTime(){};
   virtual ~IManagerTime(){};

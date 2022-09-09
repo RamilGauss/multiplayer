@@ -38,9 +38,12 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "IClientDeveloperTool.h"
 #include "IServerDeveloperTool.h"
+#include "LoaderDLL.h"
 
 class IGame
 {
+  ILoaderDLL* mLoaderDLL;
+
   typedef IClientDeveloperTool* (*GetClientDeveloperTool)();
   typedef IServerDeveloperTool* (*GetServerDeveloperTool)();
   typedef void (*FreeDeveloperTool)(IDeveloperTool*);
@@ -62,8 +65,6 @@ public:
 
   bool LoadDLL(const char* sNameDLL);
 
-private:
-  void FreeLib();
   
 };
 

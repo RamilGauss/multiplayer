@@ -38,7 +38,7 @@ you may contact in writing [ramil2085@gmail.com].
 #define ManagerModelH
 
 #include "hArray.h"
-#include "Define_DX.h"
+#include "DXUT.h"
 #include <map>
 
 class TModelDX;

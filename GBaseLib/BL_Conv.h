@@ -49,6 +49,7 @@ you may contact in writing [ramil2085@gmail.com].
 // название задается по posix::iconv: CP1251, KOI8-R, UTF-8, ...
 // все строки, формируемые функциями библиотеки, выдаются в указанной кодировке если не указано иное
 GBASELIB_EI extern const char * bl_locale;
+//GBASELIB_EI const char * bl_locale();
 
 // Определить кодовую страницу GBaseLib
 GBASELIB_EI void bl_initLocale();

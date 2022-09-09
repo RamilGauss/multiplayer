@@ -41,13 +41,9 @@ class IClientDeveloperTool;
 class IServerDeveloperTool;
 
 #if defined(WIN32)
-
-#define DllExport  extern "C" __declspec( dllexport )
-
+  #define DllExport  extern "C" __declspec( dllexport )
 #else
-
-#define DllExport extern "C"
-
+  #define DllExport extern "C"
 #endif
 
 #define StrGetClientDeveloperTool "GetClientDeveloperTool"

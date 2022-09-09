@@ -36,18 +36,18 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef MarkUpContainerH
 #define MarkUpContainerH
 
-#include "Container.h"
 #include <map>
 #include <string>
 #include <vector>
 #include "TypeDef.h"
+#include "Container.h"
 
 /*
     √ибкий контейнер.
     јлгоритм работы:
   1. –азметка внутренней структуры.
   2. ¬ыборка нужной области пам€ти по имени.
-  3. ѕриведение пам€ти к нужному указателю.
+  3. ѕриведение указател€ на пам€ти к нужному указателю на объект, туда копируетс€.
   
   ѕример:
   -------------
@@ -71,6 +71,7 @@ public:
   {
     eConst,
     eVar,
+    eMarkUp,  // одно из полей €вл€етс€ данными, которые можно измен€ть с помощью TMarkUpContainer
   } eType;
   struct TDescConst
   {
@@ -81,14 +82,19 @@ public:
     int sizeCnt; // байт
     int sizeVar; // байт 
   };
+  struct TDescMarkUp
+  {
+    int sizeSize;// размер пол€ "размер", байт
+  };
   struct TCommonDesc
   {
     eType type;
     std::string name; 
     union
     {
-      TDescConst c;
-      TDescVar   v;
+      TDescConst  c;
+      TDescVar    v;
+      TDescMarkUp m;
     };
   };
   //--------------------------------------------------------------------------------------
@@ -125,9 +131,11 @@ protected:
     TCommonDesc c;
     int shift;// смещение до начала пам€ти, байт
     int cntVar; // действительно только если тип eVar
+    int sizeMarkUp;
     TDesc_Private()
     {
-      cntVar = 0;
+      cntVar     = 0;
+      sizeMarkUp = 0;
     }
   };
 
@@ -135,11 +143,19 @@ protected:
   TVectorDesc mVectorSection;
 
 private:
-  int GetCountBy(char* ptr, int sizeCnt);
+  int GetValueBy(char* ptr, int sizeCnt);
   void SetCountBy(char* ptr, int sizeCnt, int v);
+
+  // если ptr=NULL, то запрашиваетс€ размер пол€, 
+  // в котором еще не проинициализировано значение
   int GetSize(TDesc_Private& desc_p, char* ptr);
-  void ZeroVarField();
+  void ZeroTensileField();// обнулить пол€, отвечающие за размер и кол-во измен€ющих размер полей
+
+  int GetSizeByDesc(TDesc_Private& desc_p);
 };
+
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
 
 #endif
 

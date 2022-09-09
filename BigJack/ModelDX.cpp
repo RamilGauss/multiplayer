@@ -45,6 +45,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "SortByAlphabetic.h"
 #include "ManagerResourceDX.h"
 #include "HiTimer.h"
+#include <atlconv.h>
 
 using namespace nsStruct3D;
 using namespace std;

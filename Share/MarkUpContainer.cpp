@@ -33,19 +33,13 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+
 #include "MarkUpContainer.h"
 #include "memory_operation.h"
 
 using namespace std;
 
-#ifdef WIN32
-  #define AT(i) at(i)
-#else
-  // под Линуксом идет ругань на использование at()
-  #define AT(i) operator[](i)
-#endif
-
-
+//--------------------------------------------------------------------
 TMarkUpContainer::TMarkUpContainer()
 {
 
@@ -65,7 +59,7 @@ void TMarkUpContainer::SetMarkUp(vector<TCommonDesc>* pVecSize)
   for(int i = 0 ; i < cnt ; i++ )
   {
     TDesc_Private desc_p;
-    desc_p.c = pVecSize->AT(i);
+    desc_p.c = pVecSize->operator[](i);
     desc_p.shift = shift;
 
     mVectorSection.push_back(desc_p);
@@ -74,34 +68,41 @@ void TMarkUpContainer::SetMarkUp(vector<TCommonDesc>* pVecSize)
 
     shift += GetSize(desc_p, NULL);
   }
-  void* ptr = new char[shift];
-  mC.SetData((char*)ptr,shift);
+  mC.SetData(NULL,shift);
 
-  ZeroVarField();
+  ZeroTensileField();
 }
 //--------------------------------------------------------------------
 void* TMarkUpContainer::Get(const char* name, bool type_counter, int index)
 {
-  char* ptr = (char*)GetPtr();
-
   TMapStrInt::iterator fit = mMarkUp.find(name);
   if(fit==mMarkUp.end())
     return NULL;
-  
-  TDesc_Private& desc = mVectorSection.AT(fit->second);
-  ptr += desc.shift;
-  
-  if((desc.c.type ==eVar)&&
-     (type_counter==false))
-  {
-    // проверка
-    int cnt = GetCountBy(ptr,desc.c.v.sizeCnt);
-    if(index>=cnt) return NULL;// кричать
 
-    ptr += desc.c.v.sizeCnt;
-    ptr += index*desc.c.v.sizeVar;
+  char* ptr = (char*)GetPtr();
+
+  TDesc_Private& desc = mVectorSection.operator[](fit->second);
+  ptr += desc.shift;
+
+  switch(desc.c.type)
+  {
+    case eVar:
+      if(type_counter==false)
+      {
+        // проверка
+        int cnt = GetValueBy(ptr,desc.c.v.sizeCnt);
+        if(index>=cnt) return NULL;// кричать
+
+        ptr += desc.c.v.sizeCnt;
+        ptr += index*desc.c.v.sizeVar;
+      }
+      break;
+    case eMarkUp:
+      if(type_counter==false)
+        ptr += desc.c.m.sizeSize;
+      break;
+    default:;
   }
-  
   return ptr;
 }
 //--------------------------------------------------------------------
@@ -127,15 +128,22 @@ bool TMarkUpContainer::Set(void* p, int size)
   int cnt = mVectorSection.size();
   for( int i = 0 ; i < cnt ; i++)
   {
-    TDesc_Private& desc_p = mVectorSection.AT(i);// взять описание секции
-    
+    TDesc_Private& desc_p = mVectorSection.operator[](i);// взять описание секции
+
     int sizeSection = GetSize(desc_p, ptr);// рассчитать размер секции
 
-    if(desc_p.c.type==eVar)
+    switch(desc_p.c.type)
     {
-      desc_p.shift  = shift;
-      desc_p.cntVar = GetCountBy(ptr,desc_p.c.v.sizeCnt);
+      case eVar:
+        desc_p.cntVar = GetValueBy(ptr,desc_p.c.v.sizeCnt);
+        break;
+      case eMarkUp:
+        desc_p.sizeMarkUp = GetValueBy(ptr,desc_p.c.m.sizeSize);
+        break;
+      default:;
     }
+
+    desc_p.shift  = shift;
 
     shift += sizeSection; // 
     ptr   += sizeSection;
@@ -160,75 +168,102 @@ void TMarkUpContainer::Update()
   int cntSection = mVectorSection.size();
   for(int i = 0 ; i < cntSection ; i++ )
   {
-    TDesc_Private& desc_p = mVectorSection.AT(i);
-    
-    if(desc_p.c.type==eVar)
+    TDesc_Private& desc_p = mVectorSection.operator[](i);
+
+    switch(desc_p.c.type)
     {
-      char* ptr = (char*)GetPtr()+desc_p.shift;
-      int FreshCnt = GetCountBy(ptr,desc_p.c.v.sizeCnt);
-      if(desc_p.cntVar!=FreshCnt)
+      case eVar:
+      {
+        char* ptr = (char*)GetPtr() + desc_p.shift;
+        int freshCnt = GetValueBy(ptr,desc_p.c.v.sizeCnt);
+        if(desc_p.cntVar!=freshCnt)
         vecDisVar.push_back(i);
+      }
+        break;
+      case eMarkUp:
+      {
+        char* ptr = (char*)GetPtr() + desc_p.shift;
+        int freshSize = GetValueBy(ptr, desc_p.c.v.sizeCnt);
+        if(desc_p.sizeMarkUp!=freshSize)
+        vecDisVar.push_back(i);
+      }
+        break;
+      default:;
     }
   }
   //--------------------------------------------------------
   // разбираем каждое несоответствие
-  // считаем кол-во несоответствий по типу eVar
+  // считаем кол-во несоответствий по типу eVar и eMarkUp
   int cntDisVar = vecDisVar.size();
   for(int d = 0 ; d < cntDisVar ; d++ )
   {
-    int i = vecDisVar.AT(d);
+    int i = vecDisVar.operator[](d);
 
-    TDesc_Private& desc_p = mVectorSection.AT(i);
-   
-    char* ptr = (char*)GetPtr() + desc_p.shift; // указатель на начало секции (содержит в памяти кол-во следующих секций, кол-во которых  переменная)
-    int freshCnt = GetCountBy(ptr,desc_p.c.v.sizeCnt); // прочитать кол-во из памяти
+    TDesc_Private& desc_p = mVectorSection.operator[](i);
 
-    int d_cntVar  = desc_p.cntVar - freshCnt;     // разность по кол-ву
-    int d_sizeVar = desc_p.c.v.sizeVar * d_cntVar;// разность по размеру
-    int new_size  = GetSize() - d_sizeVar;        // новый размер
+    char* ptr = (char*)GetPtr() + desc_p.shift;          // указатель на начало секции (содержит в памяти кол-во следующих секций, кол-во которых переменная)
+    int freshValue = GetValueBy(ptr,desc_p.c.v.sizeCnt); // прочитать кол-во из памяти
+    //------------------------------------------------------------------------------
+    int d_size = 0;// разность по размеру
+    // расчет разницы в размере и изменение нового значения размера
+    switch(desc_p.c.type)
+    {
+      case eVar:
+        d_size = desc_p.c.v.sizeVar*(desc_p.cntVar - freshValue);
+        desc_p.cntVar = freshValue;
+        break;
+      case eMarkUp:
+        d_size = desc_p.sizeMarkUp - freshValue;
+        desc_p.sizeMarkUp = freshValue;
+        break;
+      default:;
+    }
+    //-----------------------------------------------------------------------------
+    int new_size  = GetSize() - d_size;        // новый размер
 
     void* newPtr = GetPtr();
-    if(desc_p.cntVar < freshCnt)
+    if(d_size < 0)
     {
-      int sizeBound = desc_p.shift + desc_p.c.v.sizeCnt + desc_p.c.v.sizeVar * desc_p.cntVar;
-      // выделить память заново
-      newPtr = mo_realloc_bound_new((char*)GetPtr(),GetSize(),sizeBound,-d_sizeVar);
+      int sizeBound = desc_p.shift + GetSizeByDesc(desc_p) + d_size;
+
+      // увеличение размера
+      newPtr = mo_realloc_bound_new((char*)GetPtr(), GetSize(), sizeBound, -d_size);
     }
-    else//if(desc_p.cntVar>freshCnt)
+    else
     {
-      int sizeBound = desc_p.shift + desc_p.c.v.sizeCnt + desc_p.c.v.sizeVar * freshCnt;
+      int sizeBound = desc_p.shift + GetSizeByDesc(desc_p);
       // уменьшение размера
       char* ptrBoundLow = (char*)GetPtr() + sizeBound;
-      int sizeMove      = GetSize() - sizeBound - d_sizeVar;
-      memmove(ptrBoundLow, ptrBoundLow+d_sizeVar, sizeMove);
+      int sizeMove      = GetSize() - sizeBound - d_size;
+      memmove(ptrBoundLow, ptrBoundLow + d_size, sizeMove);
     }
-    mC.Zero();
+    mC.Unlink();
     mC.SetData((char*)newPtr,new_size);
     delete[](char*)newPtr;
-    desc_p.cntVar=freshCnt;
+    
     // освежить сдвиги для дальних полей
     for(int j = i+1 ; j < cntSection ; j++ )
     {
-      mVectorSection.AT(j).shift -= d_sizeVar;    
+      mVectorSection.operator[](j).shift -= d_size;    
     }
   }
 }
 //--------------------------------------------------------------------
-int TMarkUpContainer::GetCountBy(char* ptr, int sizeCnt)
+int TMarkUpContainer::GetValueBy(char* ptr, int sizeCnt)
 {
   int res = 0;
   switch(sizeCnt)
   {
-    case 1:
+    case sizeof(char):
       res = *ptr;
       break;
-    case 2:
+    case sizeof(short):
       res = *((short*)ptr);
       break;
-    case 4:
+    case sizeof(int):
       res = *((int*)ptr);
       break;
-      default:/*кричать*/;
+    default:;
   }
   return res;
 }
@@ -246,7 +281,7 @@ void TMarkUpContainer::SetCountBy(char* ptr, int sizeCnt, int v)
     case 4:
       *(int*)ptr = v;
       break;
-    default:/*кричать*/;
+    default:;
   }
 }
 //--------------------------------------------------------------------
@@ -261,24 +296,54 @@ int TMarkUpContainer::GetSize(TDesc_Private& desc_p, char* ptr)
     case eVar:
       res  = desc_p.c.v.sizeCnt;
       if(ptr!=NULL)// по-умолчанию равно 0
-        res += desc_p.c.v.sizeVar*GetCountBy(ptr,desc_p.c.v.sizeCnt);
+        res += desc_p.c.v.sizeVar*GetValueBy(ptr,desc_p.c.v.sizeCnt);
       break;
+    case eMarkUp:
+      res = desc_p.c.m.sizeSize;
+      if(ptr!=NULL)// по-умолчанию равно 0
+        res += GetValueBy(ptr,desc_p.c.m.sizeSize);
+      break;
+    default:;
   }
 
   return res;
 }
 //--------------------------------------------------------------------
-void TMarkUpContainer::ZeroVarField()
+void TMarkUpContainer::ZeroTensileField()
 {
   char* ptr = (char*)GetPtr(); 
+  if(ptr==NULL) return;
+
   int cnt = mVectorSection.size();
   for(int i = 0 ; i < cnt ; i++ )
   {
-    TDesc_Private& desc_p = mVectorSection.AT(i);
-    if(desc_p.c.type==eVar)
+    TDesc_Private& desc_p = mVectorSection.operator[](i);
+    switch(desc_p.c.type)
     {
-      SetCountBy(ptr+desc_p.shift,desc_p.c.v.sizeCnt,0);
+      case eVar:
+        SetCountBy(ptr+desc_p.shift, desc_p.c.v.sizeCnt, 0);
+        break;
+      case eMarkUp:
+        SetCountBy(ptr+desc_p.shift, desc_p.c.m.sizeSize, 0);
+        break;
+      default:;
     }
   }
+}
+//--------------------------------------------------------------------
+int TMarkUpContainer::GetSizeByDesc(TDesc_Private& desc_p)
+{
+  int res = 0;
+  switch(desc_p.c.type)
+  {
+    case eVar:
+      res = desc_p.c.v.sizeCnt + desc_p.c.v.sizeVar * desc_p.cntVar;
+      break;
+    case eMarkUp:
+      res = desc_p.sizeMarkUp + desc_p.c.m.sizeSize;
+      break;
+    default:;
+  }
+  return res;
 }
 //--------------------------------------------------------------------

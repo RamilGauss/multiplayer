@@ -18,10 +18,10 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="..\Exe\$(ConfigurationName)"
+			IntermediateDirectory="..\Temp\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -41,6 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="&quot;..\glib-2.0&quot;;..\GBaseLib;..\Share"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -60,7 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib winmm.lib comctl32.lib Imm32.lib Version.lib GBaseLib.lib Share.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\Lib;&quot;..\Lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -172,7 +175,27 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\ApplStandIndication.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ComPort.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PacketApplLevel_SI.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PacketTransportLevel_SI.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\StandIndication.cpp"
 				>
 			</File>
 		</Filter>
@@ -182,15 +205,33 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\Share\ContextMachine.h"
+				RelativePath=".\ApplStandIndication.h"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
+			<File
+				RelativePath=".\ComPort.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PacketApplLevel_SI.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PacketTransportLevel_SI.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ShareMisc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\StandIndication.h"
+				>
+			</File>
+			<File
+				RelativePath=".\StandIndication_struct.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

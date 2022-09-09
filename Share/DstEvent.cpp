@@ -49,7 +49,7 @@ TDstEvent::~TDstEvent()
   delete pListEvent;
 }
 //------------------------------------------------------------
-void TDstEvent::AddEventInQueue(/*const char**/int from, void* data, int size)
+void TDstEvent::AddEventInQueue(int from, void* data, int size)
 {
   TEvent* pEvent = new TEvent;
   pEvent->from = from;

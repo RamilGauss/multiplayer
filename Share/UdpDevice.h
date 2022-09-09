@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "SaveOnHDD.h"
 
 // Класс, реализующий прием/отправку данных по протоколу UDP
-class UdpDevice
+class SHARE_EI UdpDevice
 {
   TSaveOnHDD mLog;
 
@@ -73,6 +73,12 @@ public:
   int read(void *buffer, unsigned long len, unsigned long timeout, unsigned int &ip, unsigned short &port);
   bool write( const void* buf, unsigned long size, unsigned int ip, unsigned short port);
   bool isOpen(void);
+
+  bool SetRecvBuffer(unsigned int size);
+  bool SetSendBuffer(unsigned int size);
+  
+  unsigned int GetMaxSizeBufferForSocket();// ???
+
 private:
 
   // Сокет для соединения:

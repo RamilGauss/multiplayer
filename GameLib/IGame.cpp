@@ -36,18 +36,16 @@ you may contact in writing [ramil2085@gmail.com].
 #include "IGame.h"
 #include <stddef.h>
 #include "DeveloperTool_DLL.h"
-
-#ifdef WIN32
-  #include <windows.h>
-  #include "BL_Debug.h"
-  HMODULE hModule = NULL;
-#else // MacOS ветка
-
-#endif
+#include "MakerLoaderDLL.h"
+#include "BL_Debug.h"
+#include "ShareMisc.h"
 
 
 IGame::IGame()
 {
+  TMakerLoaderDLL maker;
+  mLoaderDLL = maker.New();
+
   mGetClientDeveloperTool = NULL;
   mGetServerDeveloperTool = NULL;
   mFreeDeveloperTool      = NULL;
@@ -66,7 +64,8 @@ IGame::~IGame()
       mFreeDeveloperTool(mServerDeveloperTool);
   }
 
-  FreeLib();
+  TMakerLoaderDLL maker;
+  maker.Delete(mLoaderDLL);
 }
 //----------------------------------------------------------------------
 bool IGame::LoadDLL(const char* sNameDLL)
@@ -77,24 +76,17 @@ bool IGame::LoadDLL(const char* sNameDLL)
     BL_FIX_BUG();// пока так, потом нужно ввести логирование
     return true;
   }
-#ifdef WIN32
-  hModule = LoadLibraryA(sNameDLL);
-  if(hModule==NULL)
-  {
-    BL_FIX_BUG();
-    return false;
-  }
 
-  mFreeDeveloperTool = (FreeDeveloperTool)GetProcAddress(hModule, StrFreeDeveloperTool);
+  CHECK_RET(mLoaderDLL->Init(sNameDLL))
+ 
+  mFreeDeveloperTool = (FreeDeveloperTool)mLoaderDLL->Get(StrFreeDeveloperTool);//GetProcAddress(hModule, StrFreeDeveloperTool);
   if(mFreeDeveloperTool==NULL)
   {
     BL_FIX_BUG();
     return false;
   }
-  mGetClientDeveloperTool = (GetClientDeveloperTool)GetProcAddress(hModule, StrGetClientDeveloperTool);
-  mGetServerDeveloperTool = (GetServerDeveloperTool)GetProcAddress(hModule, StrGetServerDeveloperTool);
-
-#endif
+  mGetClientDeveloperTool = (GetClientDeveloperTool)mLoaderDLL->Get(StrGetClientDeveloperTool);//GetProcAddress(hModule, StrGetClientDeveloperTool);
+  mGetServerDeveloperTool = (GetServerDeveloperTool)mLoaderDLL->Get(StrGetServerDeveloperTool);//GetProcAddress(hModule, StrGetServerDeveloperTool);
 
   if(mGetClientDeveloperTool)
     mClientDeveloperTool = mGetClientDeveloperTool();
@@ -102,15 +94,5 @@ bool IGame::LoadDLL(const char* sNameDLL)
     mServerDeveloperTool = mGetServerDeveloperTool();
 
   return true;
-}
-//----------------------------------------------------------------------
-void IGame::FreeLib()
-{
-  bool res = false;
-#ifdef WIN32
-  res = (bool)FreeLibrary(hModule);
-#else
-#endif
-  BL_ASSERT(res);
 }
 //----------------------------------------------------------------------

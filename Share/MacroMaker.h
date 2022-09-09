@@ -50,8 +50,8 @@ public: \
 MACRO_MAKER_H_DECL(,Class,param_new_decl)
 //---------------------------------------------------------
 #ifdef WIN32
-  #define MACRO_MAKER_H_EXPORT(Class,param_new_decl) \
-  MACRO_MAKER_H_DECL(__declspec( dllexport ),Class,param_new_decl)
+  #define MACRO_MAKER_H_EXPORT(decl,Class,param_new_decl) \
+  MACRO_MAKER_H_DECL(decl,Class,param_new_decl)
 #else
   #define MACRO_MAKER_H_EXPORT(Class,param_new_decl) \
   MACRO_MAKER_H_DECL(,Class,param_new_decl)
@@ -72,13 +72,13 @@ void TMaker##Class::Delete(I##Class* ptr) \
 // готово для использования
 #define MACRO_MAKER_H_USE_P(Class,param_new_decl) \
   MACRO_MAKER_H(Class,param_new_decl)
-#define MACRO_MAKER_H_EXPORT_USE_P(Class,param_new_decl) \
-  MACRO_MAKER_H_EXPORT(Class,param_new_decl)
+#define MACRO_MAKER_H_EXPORT_USE_P(decl,Class,param_new_decl) \
+  MACRO_MAKER_H_EXPORT(decl,Class,param_new_decl)
 #define MACRO_MAKER_CPP_USE_P(Class,ReadyClass,param_new_decl,param_new_def) \
   MACRO_MAKER_CPP(Class,ReadyClass,param_new_decl,param_new_def)
 
 #define MACRO_MAKER_H_USE(Class) MACRO_MAKER_H(Class,)
-#define MACRO_MAKER_H_EXPORT_USE(Class) MACRO_MAKER_H_EXPORT(Class,)
+#define MACRO_MAKER_H_EXPORT_USE(decl,Class) MACRO_MAKER_H_EXPORT(decl,Class,)
 #define MACRO_MAKER_CPP_USE(Class,ReadyClass) MACRO_MAKER_CPP(Class,ReadyClass,,)
 
 

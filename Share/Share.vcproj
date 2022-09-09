@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\glib-2.0;..\GBaseLib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EXPORTS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EI=__declspec(dllexport);SHARE_EXPORTS"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
@@ -178,7 +178,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ApplicationProtocolPacketAnswer.cpp"
+				RelativePath=".\ArrContainer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BasePacketAppl.cpp"
 				>
 			</File>
 			<File
@@ -222,6 +226,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LoaderDLLImpl.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\LoaderListPathID.cpp"
 				>
 			</File>
@@ -243,6 +251,10 @@
 			</File>
 			<File
 				RelativePath=".\MakerControlCamera.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerLoaderDLL.cpp"
 				>
 			</File>
 			<File
@@ -310,15 +322,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TypeTank.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\UdpDevice.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Win_Func.cpp"
 				>
 			</File>
 			<File
@@ -332,31 +336,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\ApplicationProtocolDef.h"
+				RelativePath=".\ArrContainer.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ApplicationProtocolMainPacket.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ApplicationProtocolPacket.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ApplicationProtocolPacketAnswer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ApplicationProtocolPacketCmd.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ApplicationProtocolPacketRequest.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ApplicationProtocolPacketStream.h"
+				RelativePath=".\BasePacketAppl.h"
 				>
 			</File>
 			<File
@@ -432,6 +416,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LoaderDLL.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LoaderDLLImpl.h"
+				>
+			</File>
+			<File
 				RelativePath=".\LoaderListPathID.h"
 				>
 			</File>
@@ -457,6 +449,10 @@
 			</File>
 			<File
 				RelativePath=".\MakerControlCamera.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerLoaderDLL.h"
 				>
 			</File>
 			<File
@@ -508,6 +504,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ShareMisc.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SortByAlphabetic.h"
 				>
 			</File>
@@ -536,15 +536,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TypeTank.h"
-				>
-			</File>
-			<File
 				RelativePath=".\UdpDevice.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Win_Func.h"
 				>
 			</File>
 			<File

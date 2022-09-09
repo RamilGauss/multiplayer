@@ -20,8 +20,6 @@ CDXUTResourceCache& WINAPI DXUTGetGlobalResourceCache()
     static CDXUTResourceCache cache;
     return cache;
 }
-
-
 //--------------------------------------------------------------------------------------
 // Internal functions forward declarations
 //--------------------------------------------------------------------------------------
@@ -36,8 +34,6 @@ bool DXUTFindMediaSearchParentDirs( __out_ecount(cchSearch) WCHAR* strSearchPath
                                     __in WCHAR* strLeafName );
 
 INT_PTR CALLBACK DisplaySwitchToREFWarningProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam );
-
-
 //--------------------------------------------------------------------------------------
 // Shared code for samples to ask user if they want to use a REF device or quit
 //--------------------------------------------------------------------------------------
@@ -126,8 +122,6 @@ void WINAPI DXUTDisplaySwitchingToREFWarning( DXUTDeviceVersion ver )
         }
     }
 }
-
-
 //--------------------------------------------------------------------------------------
 // MsgProc for DXUTDisplaySwitchingToREFWarning() dialog box
 //--------------------------------------------------------------------------------------
@@ -169,8 +163,6 @@ INT_PTR CALLBACK DisplaySwitchToREFWarningProc( HWND hDlg, UINT message, WPARAM 
     }
     return FALSE;
 }
-
-
 //--------------------------------------------------------------------------------------
 // Returns pointer to static media search buffer
 //--------------------------------------------------------------------------------------
@@ -180,14 +172,11 @@ WCHAR* DXUTMediaSearchPath()
     return s_strMediaSearchPath;
 
 }
-
 //--------------------------------------------------------------------------------------
 LPCWSTR WINAPI DXUTGetMediaSearchPath()
 {
     return DXUTMediaSearchPath();
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT WINAPI DXUTSetMediaSearchPath( LPCWSTR strPath )
 {
@@ -209,8 +198,6 @@ HRESULT WINAPI DXUTSetMediaSearchPath( LPCWSTR strPath )
 
     return hr;
 }
-
-
 //--------------------------------------------------------------------------------------
 // Tries to find the location of a SDK media file
 //       cchDest is the size in WCHARs of strDestPath.  Be careful not to 
@@ -295,8 +282,6 @@ HRESULT WINAPI DXUTFindDXSDKMediaFileCch( WCHAR* strDestPath, int cchDest,
 
     return DXUTERR_MEDIANOTFOUND;
 }
-
-
 //--------------------------------------------------------------------------------------
 // Search a set of typical directories
 //--------------------------------------------------------------------------------------
@@ -370,9 +355,6 @@ bool DXUTFindMediaSearchTypicalDirs( WCHAR* strSearchPath, int cchSearch, LPCWST
 
     return false;
 }
-
-
-
 //--------------------------------------------------------------------------------------
 // Search parent directories starting at strStartAt, and appending strLeafName
 // at each parent directory.  It stops at the root directory.
@@ -404,12 +386,9 @@ bool DXUTFindMediaSearchParentDirs( WCHAR* strSearchPath, int cchSearch, WCHAR* 
 
     return false;
 }
-
-
 //--------------------------------------------------------------------------------------
 // CDXUTResourceCache
 //--------------------------------------------------------------------------------------
-
 //--------------------------------------------------------------------------------------
 CDXUTResourceCache::~CDXUTResourceCache()
 {
@@ -419,7 +398,6 @@ CDXUTResourceCache::~CDXUTResourceCache()
     m_EffectCache.RemoveAll();
     m_FontCache.RemoveAll();
 }
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateTextureFromFile( LPDIRECT3DDEVICE9 pDevice, LPCTSTR pSrcFile,
                                                    LPDIRECT3DTEXTURE9* ppTexture )
@@ -428,7 +406,6 @@ HRESULT CDXUTResourceCache::CreateTextureFromFile( LPDIRECT3DDEVICE9 pDevice, LP
                                     0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT,
                                     0, NULL, NULL, ppTexture );
 }
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateTextureFromFile( LPDIRECT3DDEVICE9 pDevice, LPCSTR pSrcFile,
                                                    LPDIRECT3DTEXTURE9* ppTexture )
@@ -439,7 +416,6 @@ HRESULT CDXUTResourceCache::CreateTextureFromFile( LPDIRECT3DDEVICE9 pDevice, LP
 
     return CreateTextureFromFile( pDevice, szSrcFile, ppTexture );
 }
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateTextureFromFile( ID3D10Device* pDevice, LPCTSTR pSrcFile,
                                                    ID3D10ShaderResourceView** ppOutputRV, bool bSRGB )
@@ -519,7 +495,6 @@ HRESULT CDXUTResourceCache::CreateTextureFromFileEx( LPDIRECT3DDEVICE9 pDevice, 
     m_TextureCache.Add( NewEntry );
     return S_OK;
 }
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateTextureFromFileEx( ID3D10Device* pDevice, LPCTSTR pSrcFile,
                                                      D3DX10_IMAGE_LOAD_INFO* pLoadInfo, ID3DX10ThreadPump* pPump,
@@ -663,7 +638,6 @@ HRESULT CDXUTResourceCache::CreateTextureFromFileEx( ID3D10Device* pDevice, LPCT
 
     return S_OK;
 }
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateTextureFromResource( LPDIRECT3DDEVICE9 pDevice, HMODULE hSrcModule,
                                                        LPCTSTR pSrcResource, LPDIRECT3DTEXTURE9* ppTexture )
@@ -672,8 +646,6 @@ HRESULT CDXUTResourceCache::CreateTextureFromResource( LPDIRECT3DDEVICE9 pDevice
                                         D3DX_DEFAULT, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT,
                                         D3DX_DEFAULT, 0, NULL, NULL, ppTexture );
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateTextureFromResourceEx( LPDIRECT3DDEVICE9 pDevice, HMODULE hSrcModule,
                                                          LPCTSTR pSrcResource, UINT Width, UINT Height, UINT MipLevels,
@@ -725,8 +697,6 @@ HRESULT CDXUTResourceCache::CreateTextureFromResourceEx( LPDIRECT3DDEVICE9 pDevi
     m_TextureCache.Add( NewEntry );
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateCubeTextureFromFile( LPDIRECT3DDEVICE9 pDevice, LPCTSTR pSrcFile,
                                                        LPDIRECT3DCUBETEXTURE9* ppCubeTexture )
@@ -735,8 +705,6 @@ HRESULT CDXUTResourceCache::CreateCubeTextureFromFile( LPDIRECT3DDEVICE9 pDevice
                                         D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT,
                                         0, NULL, NULL, ppCubeTexture );
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateCubeTextureFromFileEx( LPDIRECT3DDEVICE9 pDevice, LPCTSTR pSrcFile, UINT Size,
                                                          UINT MipLevels, DWORD Usage, D3DFORMAT Format, D3DPOOL Pool,
@@ -784,8 +752,6 @@ HRESULT CDXUTResourceCache::CreateCubeTextureFromFileEx( LPDIRECT3DDEVICE9 pDevi
     m_TextureCache.Add( NewEntry );
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateCubeTextureFromResource( LPDIRECT3DDEVICE9 pDevice, HMODULE hSrcModule,
                                                            LPCTSTR pSrcResource,
@@ -795,8 +761,6 @@ HRESULT CDXUTResourceCache::CreateCubeTextureFromResource( LPDIRECT3DDEVICE9 pDe
                                             0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT,
                                             0, NULL, NULL, ppCubeTexture );
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateCubeTextureFromResourceEx( LPDIRECT3DDEVICE9 pDevice, HMODULE hSrcModule,
                                                              LPCTSTR pSrcResource, UINT Size, UINT MipLevels,
@@ -847,8 +811,6 @@ HRESULT CDXUTResourceCache::CreateCubeTextureFromResourceEx( LPDIRECT3DDEVICE9 p
     m_TextureCache.Add( NewEntry );
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateVolumeTextureFromFile( LPDIRECT3DDEVICE9 pDevice, LPCTSTR pSrcFile,
                                                          LPDIRECT3DVOLUMETEXTURE9* ppVolumeTexture )
@@ -857,8 +819,6 @@ HRESULT CDXUTResourceCache::CreateVolumeTextureFromFile( LPDIRECT3DDEVICE9 pDevi
                                           0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT,
                                           0, NULL, NULL, ppVolumeTexture );
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateVolumeTextureFromFileEx( LPDIRECT3DDEVICE9 pDevice, LPCTSTR pSrcFile, UINT Width,
                                                            UINT Height, UINT Depth, UINT MipLevels, DWORD Usage,
@@ -911,8 +871,6 @@ HRESULT CDXUTResourceCache::CreateVolumeTextureFromFileEx( LPDIRECT3DDEVICE9 pDe
     m_TextureCache.Add( NewEntry );
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateVolumeTextureFromResource( LPDIRECT3DDEVICE9 pDevice, HMODULE hSrcModule,
                                                              LPCTSTR pSrcResource,
@@ -922,8 +880,6 @@ HRESULT CDXUTResourceCache::CreateVolumeTextureFromResource( LPDIRECT3DDEVICE9 p
                                               D3DX_DEFAULT, D3DX_DEFAULT, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED,
                                               D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, ppVolumeTexture );
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateVolumeTextureFromResourceEx( LPDIRECT3DDEVICE9 pDevice, HMODULE hSrcModule,
                                                                LPCTSTR pSrcResource, UINT Width, UINT Height,
@@ -981,8 +937,6 @@ HRESULT CDXUTResourceCache::CreateVolumeTextureFromResourceEx( LPDIRECT3DDEVICE9
     m_TextureCache.Add( NewEntry );
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateFont( LPDIRECT3DDEVICE9 pDevice, UINT Height, UINT Width, UINT Weight,
                                         UINT MipLevels, BOOL Italic, DWORD CharSet, DWORD OutputPrecision,
@@ -1003,8 +957,6 @@ HRESULT CDXUTResourceCache::CreateFont( LPDIRECT3DDEVICE9 pDevice, UINT Height, 
 
     return CreateFontIndirect( pDevice, &Desc, ppFont );
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateFontIndirect( LPDIRECT3DDEVICE9 pDevice, CONST D3DXFONT_DESC *pDesc, LPD3DXFONT *ppFont )
  {
@@ -1048,8 +1000,6 @@ HRESULT CDXUTResourceCache::CreateFontIndirect( LPDIRECT3DDEVICE9 pDevice, CONST
     m_FontCache.Add( NewEntry );
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateEffectFromFile( LPDIRECT3DDEVICE9 pDevice, LPCTSTR pSrcFile,
                                                   const D3DXMACRO* pDefines, LPD3DXINCLUDE pInclude, DWORD Flags,
@@ -1094,8 +1044,6 @@ HRESULT CDXUTResourceCache::CreateEffectFromFile( LPDIRECT3DDEVICE9 pDevice, LPC
     m_EffectCache.Add( NewEntry );
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::CreateEffectFromResource( LPDIRECT3DDEVICE9 pDevice, HMODULE hSrcModule,
                                                       LPCTSTR pSrcResource, const D3DXMACRO* pDefines,
@@ -1142,20 +1090,14 @@ HRESULT CDXUTResourceCache::CreateEffectFromResource( LPDIRECT3DDEVICE9 pDevice,
     m_EffectCache.Add( NewEntry );
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 // Device event callbacks
 //--------------------------------------------------------------------------------------
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::OnCreateDevice( IDirect3DDevice9* pd3dDevice )
 {
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::OnResetDevice( IDirect3DDevice9* pd3dDevice )
 {
@@ -1168,8 +1110,6 @@ HRESULT CDXUTResourceCache::OnResetDevice( IDirect3DDevice9* pd3dDevice )
 
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::OnLostDevice()
 {
@@ -1189,8 +1129,6 @@ HRESULT CDXUTResourceCache::OnLostDevice()
 
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTResourceCache::OnDestroyDevice()
 {
@@ -1214,8 +1152,6 @@ HRESULT CDXUTResourceCache::OnDestroyDevice()
 
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 // Desc: Returns a view matrix for rendering to a face of a cubemap.
 //--------------------------------------------------------------------------------------
@@ -1258,23 +1194,17 @@ D3DXMATRIX WINAPI DXUTGetCubeMapViewMatrix( DWORD dwFace )
     D3DXMatrixLookAtLH( &mView, &vEyePt, &vLookDir, &vUpDir );
     return mView;
 }
-
-
 //--------------------------------------------------------------------------------------
 CDXUTLineManager::CDXUTLineManager()
 {
     m_pd3dDevice = NULL;
     m_pD3DXLine = NULL;
 }
-
-
 //--------------------------------------------------------------------------------------
 CDXUTLineManager::~CDXUTLineManager()
 {
     OnDeletedDevice();
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTLineManager::OnCreatedDevice( IDirect3DDevice9* pd3dDevice )
 {
@@ -1287,8 +1217,6 @@ HRESULT CDXUTLineManager::OnCreatedDevice( IDirect3DDevice9* pd3dDevice )
 
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTLineManager::OnResetDevice()
 {
@@ -1297,8 +1225,6 @@ HRESULT CDXUTLineManager::OnResetDevice()
 
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTLineManager::OnRender()
 {
@@ -1353,8 +1279,6 @@ HRESULT CDXUTLineManager::OnRender()
 
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTLineManager::OnLostDevice()
 {
@@ -1363,8 +1287,6 @@ HRESULT CDXUTLineManager::OnLostDevice()
 
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTLineManager::OnDeletedDevice()
 {
@@ -1373,8 +1295,6 @@ HRESULT CDXUTLineManager::OnDeletedDevice()
 
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTLineManager::AddLine( int* pnLineID, D3DXVECTOR2* pVertexList, DWORD dwVertexListCount, D3DCOLOR Color,
                                    float fWidth, float fScaleRatio, bool bAntiAlias )
@@ -1411,8 +1331,6 @@ HRESULT CDXUTLineManager::AddLine( int* pnLineID, D3DXVECTOR2* pVertexList, DWOR
 
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTLineManager::AddRect( int* pnLineID, RECT rc, D3DCOLOR Color, float fWidth, float fScaleRatio,
                                    bool bAntiAlias )
@@ -1468,9 +1386,6 @@ HRESULT CDXUTLineManager::AddRect( int* pnLineID, RECT rc, D3DCOLOR Color, float
         return AddLine( pnLineID, vertexList, 5, Color, fWidth, fScaleRatio, bAntiAlias );
     }
 }
-
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTLineManager::RemoveLine( int nLineID )
 {
@@ -1487,8 +1402,6 @@ HRESULT CDXUTLineManager::RemoveLine( int nLineID )
 
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTLineManager::RemoveAllLines()
 {
@@ -1505,27 +1418,27 @@ HRESULT CDXUTLineManager::RemoveAllLines()
 
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 CDXUTTextHelper::CDXUTTextHelper( ID3DXFont* pFont9, ID3DXSprite* pSprite9, ID3DX10Font* pFont10,
                                   ID3DX10Sprite* pSprite10, int nLineHeight )
 {
     Init( pFont9, pSprite9, pFont10, pSprite10, nLineHeight );
 }
+//--------------------------------------------------------------------------------------
 CDXUTTextHelper::CDXUTTextHelper( ID3DXFont* pFont, ID3DXSprite* pSprite, int nLineHeight )
 {
     Init( pFont, pSprite, NULL, NULL, nLineHeight );
 }
+//--------------------------------------------------------------------------------------
 CDXUTTextHelper::CDXUTTextHelper( ID3DX10Font* pFont, ID3DX10Sprite* pSprite, int nLineHeight )
 {
     Init( NULL, NULL, pFont, pSprite, nLineHeight );
 }
+//--------------------------------------------------------------------------------------
 CDXUTTextHelper::~CDXUTTextHelper()
 {
     SAFE_RELEASE( m_pFontBlendState10 );
 }
-
 //--------------------------------------------------------------------------------------
 void CDXUTTextHelper::Init( ID3DXFont* pFont9, ID3DXSprite* pSprite9, ID3DX10Font* pFont10, ID3DX10Sprite* pSprite10,
                             int nLineHeight )
@@ -1565,8 +1478,6 @@ void CDXUTTextHelper::Init( ID3DXFont* pFont9, ID3DXSprite* pSprite9, ID3DX10Fon
         }
     }
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTTextHelper::DrawFormattedTextLine( const WCHAR* strMsg, ... )
 {
@@ -1580,8 +1491,6 @@ HRESULT CDXUTTextHelper::DrawFormattedTextLine( const WCHAR* strMsg, ... )
 
     return DrawTextLine( strBuffer );
 }
-
-
 //--------------------------------------------------------------------------------------
 HRESULT CDXUTTextHelper::DrawTextLine( const WCHAR* strMsg )
 {
@@ -1602,8 +1511,7 @@ HRESULT CDXUTTextHelper::DrawTextLine( const WCHAR* strMsg )
 
     return S_OK;
 }
-
-
+//--------------------------------------------------------------------------------------
 HRESULT CDXUTTextHelper::DrawFormattedTextLine( RECT& rc, DWORD dwFlags, const WCHAR* strMsg, ... )
 {
     WCHAR strBuffer[512];
@@ -1616,8 +1524,7 @@ HRESULT CDXUTTextHelper::DrawFormattedTextLine( RECT& rc, DWORD dwFlags, const W
 
     return DrawTextLine( rc, dwFlags, strBuffer );
 }
-
-
+//--------------------------------------------------------------------------------------
 HRESULT CDXUTTextHelper::DrawTextLine( RECT& rc, DWORD dwFlags, const WCHAR* strMsg )
 {
     if( NULL == m_pFont9 && NULL == m_pFont10 )
@@ -1635,8 +1542,6 @@ HRESULT CDXUTTextHelper::DrawTextLine( RECT& rc, DWORD dwFlags, const WCHAR* str
 
     return S_OK;
 }
-
-
 //--------------------------------------------------------------------------------------
 void CDXUTTextHelper::Begin()
 {
@@ -1662,9 +1567,8 @@ void CDXUTTextHelper::Begin()
             SAFE_RELEASE( pd3dDevice );
         }
     }
-
-
 }
+//--------------------------------------------------------------------------------------
 void CDXUTTextHelper::End()
 {
     if( m_pSprite9 )
@@ -1699,7 +1603,6 @@ void CDXUTTextHelper::End()
         SAFE_RELEASE( pd3dDevice );
     }
 }
-
 //--------------------------------------------------------------------------------------
 HRESULT DXUTSnapD3D9Screenshot( LPCTSTR szFileName )
 {
@@ -1716,10 +1619,9 @@ HRESULT DXUTSnapD3D9Screenshot( LPCTSTR szFileName )
 
     return hr;
 }
-
 //--------------------------------------------------------------------------------------
 HRESULT DXUTSnapD3D10Screenshot( LPCTSTR szFileName )
 {
     return E_FAIL;
 }
-
+//--------------------------------------------------------------------------------------

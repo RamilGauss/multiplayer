@@ -36,8 +36,10 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef MAKER_XMLH
 #define MAKER_XMLH
 
+#include "TypeDef.h"
+
 #include "MacroMaker.h"
 
-MACRO_MAKER_H_EXPORT_USE(XML);
+MACRO_MAKER_H_EXPORT_USE(SHARE_EI,XML);
 
 #endif

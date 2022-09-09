@@ -39,14 +39,10 @@ you may contact in writing [ramil2085@gmail.com].
 
 
 #include <stdio.h>
-#include <string.h>
-#include <wchar.h>
-#include <malloc.h>
-#include <atlconv.h>
-#include <list>
 #include <vector>
-#include <deque>
 #include "TypeDef.h"
+#include <list>
+#include "Container.h"
 
 class SHARE_EI TSaveOnHDD
 {
@@ -56,29 +52,12 @@ class SHARE_EI TSaveOnHDD
 	FILE* pFile;
 
   bool flgPrintf;
-  bool flgDebug;
+  bool flgEnable;
   bool flgBuffer;
 
-  struct TBuffer
-  {
-    char* p;
-    int size;
-    TBuffer()
-    {
-      p = NULL;
-      size = 0;
-    }
-    ~TBuffer()
-    {
-      delete[]p;p = NULL;
-      size = 0;
-    }
-  };
+  typedef std::list< TContainer* > TListContainer;
 
-  typedef std::vector< unsigned char > TVectorUchar;
-  typedef std::vector< TVectorUchar > TVectorVectorUchar;
-
-  TVectorVectorUchar mVectorBuffer;
+  TListContainer mListBuffer;
 
 public:
 
@@ -95,13 +74,13 @@ public:
 
 	virtual void Close();
 
-  void SetPrintf(bool val){flgPrintf=val;};
-  bool GetPrintf(){return flgPrintf;};
+  void SetPrintf(bool val){flgPrintf=val;};// все что записывается - дублируется в вывод на консоль
+  bool GetPrintf(){return flgPrintf;};     // но только для форматированной строки
 
-  void SetDebug(bool val){flgDebug=val;};
-  bool GetDebug(){return flgDebug;};
+  void SetEnable(bool val){flgEnable=val;};// отмена применения в Write, WriteF, WriteF_time
+  bool GetEnable(){return flgEnable;};
 
-  void SetBufferization(bool val){flgBuffer=val;};
+  void SetBufferization(bool val){flgBuffer=val;};// буферизация, без открытого файла все складируется в памяти
   bool GetBufferization(){return flgBuffer;};
 
 protected:

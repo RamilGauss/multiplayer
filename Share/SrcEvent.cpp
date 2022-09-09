@@ -62,7 +62,7 @@ void TSrcEvent::AddEvent( void* data, int size)
   pDstEvent->AddEventInQueue(sSelfID,data,size);
 }
 //------------------------------------------------------------
-void TSrcEvent::SetSelfName(/*const char**/int selfID)
+void TSrcEvent::SetSelfName(int selfID)
 {
   sSelfID = selfID;
 }

@@ -33,8 +33,9 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "BL_Debug.h"
 #include "StateManagerD3D9.h"
-#include "Define_DX.h"
+#include "DXUT.h"
 
 
 TStateManagerD3D9::TStateManagerD3D9()

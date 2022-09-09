@@ -33,9 +33,10 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "BL_Debug.h"
 
 #include "EffectDX.h"
-#include "Define_DX.h"
+#include "DXUT.h"
 #include "ModelDX.h"
 
 
@@ -80,12 +81,6 @@ void TEffectDX::Init()
   hWorld = p->GetParameterBySemantic( 0, "World" );
   hView = p->GetParameterBySemantic( 0, "View" );
   hProjection = p->GetParameterBySemantic( 0, "Proj" );
-
-  //V( p->SetValue(     hAmbient,       mMaterial.vAmbient, sizeof( D3DXVECTOR3 ) ) );
-  //V( p->SetValue(     hDiffuse,       mMaterial.vDiffuse, sizeof( D3DXVECTOR3 ) ) );
-  //V( p->SetValue(     hSpecular,      mMaterial.vSpecular, sizeof( D3DXVECTOR3 ) ) );
-  //V( p->SetFloat(     hOpacity,       mMaterial.fAlpha ) );
-  //V( p->SetInt(       hSpecularPower, mMaterial.nShininess ) );
 }
 //-----------------------------------------------------------
 HRESULT TEffectDX::SetMatrixWorld(D3DXMATRIXA16* matrix)

@@ -36,8 +36,6 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "SaveOnHDD.h"
 
-#include <stdio.h>
-#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdarg.h>
@@ -57,7 +55,7 @@ TSaveOnHDD::TSaveOnHDD(char* path)
 	ReOpen(path);
   
   flgPrintf = false;
-  flgDebug  = true;
+  flgEnable = true;
   flgBuffer = true;
 }
 //---------------------------------------------------------------
@@ -98,6 +96,8 @@ bool TSaveOnHDD::IsOpen()
 //---------------------------------------------------------------
 void TSaveOnHDD::Write(void* buffer, int size)
 {
+  if(flgEnable==false) return;
+
 	if(pFile)
   {
     fwrite(buffer, size,1,pFile);
@@ -119,7 +119,7 @@ void TSaveOnHDD::Close()
 //---------------------------------------------------------------
 void TSaveOnHDD::WriteF(const char* format, ... )
 {
-  if(flgDebug==false) return;
+  if(flgEnable==false) return;
 
 	va_list list;
 	va_start(list,format);
@@ -134,13 +134,14 @@ void TSaveOnHDD::WriteF(const char* format, ... )
     return;
   }
   // делаем то что хотели, будь то запись в файл или в консоль
-  printf("%s",s);   
+  if(flgPrintf)
+    printf("%s",s);   
   Write(s,strlen(s));
 }
 //---------------------------------------------------------------
 void TSaveOnHDD::WriteF_time(const char* format, ... )
 {
-  if(flgDebug==false) return;
+  if(flgEnable==false) return;
 
   Write_Time();
 
@@ -158,17 +159,24 @@ void TSaveOnHDD::WriteF_time(const char* format, ... )
   }
 
   // делаем то что хотели, будь то запись в файл или в консоль
-  printf("%s",s);   
+  if(flgPrintf)
+    printf("%s",s);   
   Write(s,strlen(s));
 }
 //---------------------------------------------------------------
 void TSaveOnHDD::Write_Time()
 {
+#ifdef WIN32
   struct _timeb timebuffer;
+  _ftime( &timebuffer );
+#else
+  struct timeb timebuffer;
+  ftime( &timebuffer );
+#endif
+
   time_t time1;
   unsigned short millitm1;
 
-  _ftime( &timebuffer );
   time1 = timebuffer.time;
   millitm1 = timebuffer.millitm;
 
@@ -185,28 +193,30 @@ void TSaveOnHDD::Write_Time()
 //---------------------------------------------------------------
 void TSaveOnHDD::FlushBuffer()
 {
-  int cnt = mVectorBuffer.size();
-  for(int i = 0 ; i < cnt ; i++)
+  int cnt = mListBuffer.size();
+  TListContainer::iterator bit = mListBuffer.begin();
+  TListContainer::iterator eit = mListBuffer.end();
+  while(bit!=eit)
   {
-    TVectorUchar v = mVectorBuffer.at(i);
-    Write(&v.at(0),v.size());
-    v.clear();
+    TContainer* v = *bit;
+    v->GetPtr();
+    Write(v->GetPtr(),v->GetSize());
+    delete v;
+    bit++;
   }
-  mVectorBuffer.clear();
+  mListBuffer.clear();
 }
 //---------------------------------------------------------------
 void TSaveOnHDD::ClearBuffer()
 {
-  mVectorBuffer.clear();
+  mListBuffer.clear();
 }
 //---------------------------------------------------------------
 void TSaveOnHDD::FlushInBuffer(char* buffer, int size)
 {
-  TVectorUchar v;
-  v.reserve(size);
-  for(int i = 0; i < size ; i++)
-    v.push_back((unsigned char)buffer[i]);
+  TContainer* v = new TContainer;
+  v->SetData(buffer,size);
 
-  mVectorBuffer.push_back(v);
+  mListBuffer.push_back(v);
 }
 //---------------------------------------------------------------

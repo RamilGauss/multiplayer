@@ -82,13 +82,16 @@ you may contact in writing [ramil2085@gmail.com].
 #if defined(TD_WINDOWS)
 
   #ifndef GBASELIB_EI
-    #define GBASELIB_EI __declspec( dllexport )
+    #define GBASELIB_EI __declspec( dllimport )
   #endif
   #ifndef SHARE_EI
-    #define SHARE_EI __declspec( dllexport )
+    #define SHARE_EI __declspec( dllimport )
   #endif
   #ifndef QBASELIB_EI
-    #define QBASELIB_EI __declspec( dllexport )
+    #define QBASELIB_EI __declspec( dllimport )
+  #endif
+  #ifndef MELISSA_EI
+    #define MELISSA_EI __declspec( dllimport )
   #endif
 
 #else //TD_WINDOWS
@@ -96,6 +99,7 @@ you may contact in writing [ramil2085@gmail.com].
   #define   GBASELIB_EI
   #define   SHARE_EI
   #define   QBASELIB_EI
+  #define   MELISSA_EI
 
 #endif //TD_WINDOWS
 

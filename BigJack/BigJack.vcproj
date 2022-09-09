@@ -262,10 +262,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Define_DX.h"
-				>
-			</File>
-			<File
 				RelativePath=".\DispTextDX.h"
 				>
 			</File>

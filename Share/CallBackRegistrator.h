@@ -55,7 +55,8 @@ public:
   void Unregister(TCallBackFunc pFunc);
 
 protected:
-  std::set<TCallBackFunc> mSetCallback;
+  typedef std::set<TCallBackFunc> TSetFunc;
+  TSetFunc mSetCallback;
 };
 
 

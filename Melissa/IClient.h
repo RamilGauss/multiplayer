@@ -33,13 +33,33 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#ifndef MELISSA_ICLIENT_H
+#define MELISSA_ICLIENT_H
 
-#ifndef Win_FuncH
-#define Win_FuncH
+#include "IBase.h"
 
+namespace nsMelissa
+{
+  class /*MELISSA_EI*/ IClient : public IBase
+  {
 
-//extern void WinMessageBox(char* sError);
+  public:
+    typedef enum 
+    {
+      eConnect, 
+      eDisconnect, 
+      eRecv,
+    }eTypeEvent;
 
+    IClient(){}
+    virtual ~IClient(){}
 
+    virtual bool Init(const char* sPathDLL, unsigned int numSubNet, unsigned short port) = 0;
+    // async
+    virtual void Connect(unsigned int ip, unsigned short port) = 0;
+    virtual void Disconnect() = 0;
+    virtual void Send(void* p, int size) = 0;
+  };
+}
 
 #endif

@@ -152,7 +152,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\MakerNET_Engine.cpp"
+				RelativePath=".\MakerNET_Transport.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MelissaMaker.cpp"
 				>
 			</File>
 			<File
@@ -166,11 +170,27 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\INET_Engine.h"
+				RelativePath=".\IBase.h"
 				>
 			</File>
 			<File
-				RelativePath=".\MakerNET_Engine.h"
+				RelativePath=".\IClient.h"
+				>
+			</File>
+			<File
+				RelativePath=".\INET_Transport.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IServer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerNET_Transport.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MelissaMaker.h"
 				>
 			</File>
 			<File

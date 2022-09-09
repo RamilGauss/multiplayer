@@ -51,9 +51,9 @@ you may contact in writing [ramil2085@gmail.com].
 bool SHARE_EI ns_Init();
 void SHARE_EI ns_Done();
 
-char* ns_getHostIP( const char* name, int numNetWork = 0 ); // получение ip-адреса по имени хоста
-char* ns_getSelfIP(int numNetWork=0);                   // получение ip-адреса
-char* ns_getSelfHost();                 // получение имени хоста
+SHARE_EI char* ns_getHostIP( const char* name, int numNetWork = 0 ); // получение ip-адреса по имени хоста
+SHARE_EI char* ns_getSelfIP(int numNetWork=0);                   // получение ip-адреса
+SHARE_EI char* ns_getSelfHost();                 // получение имени хоста
 
 //получение сетевой маски по ip-адресу
 char* ns_getNetMask( const char* ip_str );
@@ -62,10 +62,10 @@ char* ns_getNetMask( const char* ip_str );
 char* ns_getSelfNetMask();
 
 // функция-обертка для inet_addr()
-unsigned long ns_inet_addr( const char* addr );
+SHARE_EI unsigned long ns_inet_addr( const char* addr );
 
 // функция-обертка для inet_ntoa()
-char* ns_str_addr( unsigned long addr );
+SHARE_EI char* ns_str_addr( unsigned long addr );
 
 // преобразовать имя носта или строку с его ip-адресом в число
 // Результат: двоичный код адреса с сетевым расположением байт или INADDR_NONE (-1)

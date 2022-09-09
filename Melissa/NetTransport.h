@@ -44,21 +44,22 @@ you may contact in writing [ramil2085@gmail.com].
 #include "hArray.h"
 #include "GCS.h"
 #include "BL_Debug.h"
-#include "INET_Engine.h"
+#include "INET_Transport.h"
+#include <set>
 
 // Melissa - транспорт
 // Активный вариант транспорта
 // содержит поток для проверки получения пакетов по сети
 
-class TNetTransport : public INET_Engine
+class TNetTransport : public INET_Transport
 {
 protected:
   // для сервера, в клиенте такая ситуация маловероятна
   // при отправке известному клиенту
   // и при получении от неизвестного клиента (см. GetInfoConnect(...))
   GCS gcsArrFresh;
-  void lockArrFresh(){Lock(&gcsArrFresh);};
-  void unlockArrFresh(){Unlock(&gcsArrFresh);};
+  void lockArrConnect(){Lock(&gcsArrFresh);};
+  void unlockArrConnect(){Unlock(&gcsArrFresh);};
 
 	GCS gcsSendRcv;
 	void lockSendRcv(){Lock(&gcsSendRcv);};
@@ -77,8 +78,10 @@ protected:
 	enum{eSizeBuffer     = 65535,
        eCntTry         = 15,
        eTimeLivePacket = 60,// мс
-			 eTimeout        = 60,// мс
+			 eTimeout        = 60,// частота обновления движка, мс
        eWaitThread     = eCntTry*eTimeLivePacket,// мс
+       eSizeBufferForRecv = 30000000, // байт
+       eSizeBufferForSend = 30000000, // байт
 	};
 	char mBuffer[eSizeBuffer];
 	
@@ -106,8 +109,8 @@ protected:
   bool SendSynchro(unsigned int ip, unsigned short port, int cntTry);
 
   // передать объект 
-  virtual void Lock(void* pLocker);
-  virtual void Unlock(void* pLocker);
+  void Lock(void* pLocker);
+  void Unlock(void* pLocker);
 
 protected:
   void notifyRcvPacket(void * data,int size){mCallBackRecvPacket.Notify(data,size);};
@@ -122,7 +125,7 @@ protected:
   class TDescPacket  : public TObject
   {
   protected:
-    InfoData*        infoData;// new
+    InfoData mInfoData;
     //----------------------
     void* mReadyPacket;
     int   mSizePacket;
@@ -131,15 +134,15 @@ protected:
   public:  
     void SetData(InfoData* pInfoD )
     {
-      infoData = pInfoD;
-      free(mReadyPacket);
-      mSizePacket = infoData->size+sizeof(TPrefixTransport);
-      mReadyPacket = malloc(mSizePacket);
-      memcpy((char*)mReadyPacket+sizeof(TPrefixTransport),pInfoD->packet,infoData->size);
-      ((TPrefixTransport*)mReadyPacket)->ip_port_dst.ip   = infoData->ip_dst;
-      ((TPrefixTransport*)mReadyPacket)->ip_port_dst.port = infoData->port_dst;
-			((TPrefixTransport*)mReadyPacket)->ip_port_src.ip   = infoData->ip_src;
-			((TPrefixTransport*)mReadyPacket)->ip_port_src.port = infoData->port_src;
+      mInfoData = *pInfoD;
+      delete[]mReadyPacket;
+      mSizePacket = mInfoData.size+sizeof(TPrefixTransport);
+      mReadyPacket = new char[mSizePacket];
+      memcpy((char*)mReadyPacket+sizeof(TPrefixTransport),pInfoD->packet, mInfoData.size);
+      ((TPrefixTransport*)mReadyPacket)->ip_port_dst.ip   = mInfoData.ip_dst;
+      ((TPrefixTransport*)mReadyPacket)->ip_port_dst.port = mInfoData.port_dst;
+			((TPrefixTransport*)mReadyPacket)->ip_port_src.ip   = mInfoData.ip_src;
+			((TPrefixTransport*)mReadyPacket)->ip_port_src.port = mInfoData.port_src;
       ((TPrefixTransport*)mReadyPacket)->cntTry           = -1;
     }
     void SetType(unsigned char type)
@@ -202,27 +205,31 @@ protected:
     {
       if(mReadyPacket==NULL) BL_FIX_BUG();
       size = mSizePacket;
-      ip_dst   = infoData->ip_dst;
-      port_dst = infoData->port_dst;
+      ip_dst   = mInfoData.ip_dst;
+      port_dst = mInfoData.port_dst;
       return mReadyPacket;
     }
 
     unsigned int GetIP_dst() const
     {
       if(mReadyPacket==NULL) BL_FIX_BUG();
-      return infoData->ip_dst;
+      return mInfoData.ip_dst;
     }
 
     unsigned short GetPort_dst() const
     {
       if(mReadyPacket==NULL) BL_FIX_BUG();
-      return infoData->port_dst;
+      return mInfoData.port_dst;
     }
 
     void SetIsQueue(bool v){isQueue=v;}
     bool GetIsQueue()const{return isQueue;}
-    TDescPacket(){isQueue=true;infoData=NULL;mReadyPacket=NULL;mSizePacket=0;}
-    ~TDescPacket(){delete infoData;free(mReadyPacket);}
+    TDescPacket(){isQueue=true;/*infoData=NULL;*/mReadyPacket=NULL;mSizePacket=0;}
+    ~TDescPacket()
+    {
+      //delete infoData;
+      delete[]mReadyPacket;
+    }
   };
 
   // пакеты, ожидающие квитанцию
@@ -239,11 +246,12 @@ protected:
   void NotifyRcvStream(int size);
   void SendCheck(TPrefixTransport* prefix,unsigned int ip,unsigned short port);
 
-	virtual int GetTimeout();
+  // сколько ждать в чтении
+	int GetTimeout();// мс
 	void SendUnchecked();
 
   bool Send(TDescPacket* pDefPacket);
-  void Disconnect(TDescPacket* pDefPacket);
+  void Disconnect(TIP_Port* ip_port);//TDescPacket* pDefPacket);
 
 protected:
 	bool Write(void *p, int size, unsigned int ip, unsigned short port);
@@ -261,7 +269,7 @@ protected:
   {
     // информация по сокету
     public:
-      InfoConnect(){cn_in_s=0;cn_out_s=0;cn_in_p=0;cn_out_p=0;};
+      InfoConnect(){init();}
       unsigned int   ip;
       unsigned short port;
 			// для Stream
@@ -270,10 +278,21 @@ protected:
 			// для Packet
 			unsigned short cn_in_p;     // циклический номер для определения свежести при Rcv
 			unsigned short cn_out_p;    // циклический номер при Send
+
+      typedef std::set<unsigned short> TSetUshort;
+      TSetUshort setIndexWaitRecv;// для определения свежести пакетов
+      void init()
+      {
+        cn_in_s  = 0;
+        cn_out_s = 0;
+        cn_in_p  = 0;
+        cn_out_p = 0;
+        setIndexWaitRecv.clear();
+      }
   };
 
-  // информация по сокету. какой текущий номер пакета
-  TArrayObject mArrFresh;
+  // информация по сокету. какой текущий номер пакета идет на прием и на отправку
+  TArrayObject mArrConnect;
 
   bool IsPacketFresh();
   bool IsStreamFresh();
@@ -283,12 +302,18 @@ protected:
 	static int SortFreshInfoConnect(const void* p1, const void* p2);
   static int SortFreshDefPacket(const void* p1, const void* p2);
 
+  // если найдет объект - вернет указатель на него
+  // иначе создаст новый
 	InfoConnect* GetInfoConnect(unsigned int ip,unsigned short port);
 
 	bool FindInArrWaitCheckQ(TDescPacket* pDefPacket);
 
   // в массиве pArr найти и удалить ячейки, которые найдутся по pDefPacket
-  void SearchAndDelete(TArrayObject* pArr, TDescPacket* pDefPacket);
+  void SearchAndDelete(TArrayObject* pArr, TIP_Port* ip_port);//TDescPacket* pDefPacket);
+
+  void SearchAndDeleteConnect(TIP_Port* ip_port);//unsigned int ip,unsigned short port);
+
+  void SetupBufferForSocket();
 };
 
 

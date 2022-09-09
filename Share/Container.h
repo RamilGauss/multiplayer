@@ -39,6 +39,10 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "TypeDef.h"
 
+/*
+  Копирующий контейнер
+*/
+
 class SHARE_EI TContainer
 {
 protected:
@@ -48,14 +52,14 @@ public:
   TContainer();
   virtual ~TContainer();
 
-  void Done();
-  void SetData(char* p, int s);
-  char* GetData(int &s);
+  virtual void Done();
+  virtual void SetData(char* p, int s);
+  virtual char* GetData(int &s);
 
-  void* GetPtr()const;
-  int GetSize()const;
+  virtual void* GetPtr()const;
+  virtual int GetSize()const;
 
-  void Zero();
+  virtual void Unlink();
 };
 
 

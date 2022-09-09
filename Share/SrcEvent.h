@@ -43,7 +43,7 @@ class TDstEvent;
 
 class SHARE_EI TSrcEvent
 {
-  /*std::string*/ int sSelfID;
+  int sSelfID;
   TDstEvent* pDstEvent;
 
 public:
@@ -51,7 +51,7 @@ public:
   TSrcEvent();
   virtual ~TSrcEvent();
 
-  void SetSelfName(/*const char**/int selfID);
+  void SetSelfName(int selfID);
 
   void SetDstObject(TDstEvent* p);
 protected:

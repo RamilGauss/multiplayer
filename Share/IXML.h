@@ -39,10 +39,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <stddef.h>
 #include <string>
 #include "TypeDef.h"
-
-#define CHECK_RET(f) \
-          if(f==false) \
-          return false;
+#include "ShareMisc.h"
 
 struct SHARE_EI TAttrInfo
 {

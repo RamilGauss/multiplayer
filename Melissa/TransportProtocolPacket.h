@@ -40,9 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 // квитанции K о получении высылаются если пришел REQUEST, ANSWER, COMMAND
 
-// на STREAM квитанция не нужна (устаревшая информация может перекрыть свежую, а это хреново)
-// игрок увидит старые позиции объектов
-
+// на STREAM квитанция не нужна 
 
 #if defined( WIN32 )
 #pragma pack(push, 1)

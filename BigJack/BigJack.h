@@ -81,15 +81,15 @@ protected:
   int mIndexProj;
   int mIndexCameraPosition;
 
-
+  typedef std::list<IBaseObjectGE*> TListPtr;
   // все объекты
-  std::list<IBaseObjectGE*> mListAllObject;// движок не освобождает память из-под этих объектов
+  TListPtr mListAllObject;// движок не освобождает память из-под этих объектов
   // список на отрисовку
-  std::list<IBaseObjectGE*> mListReadyRender;// временный список
+  TListPtr mListReadyRender;// временный список
 
-  std::list<IBaseObjectGE*> mListAnimateObject;// только анимированные. создаются движком(эффект движка), движок сам должен освободить память
+  TListPtr mListAnimateObject;// только анимированные. создаются движком(эффект движка), движок сам должен освободить память
 
-  std::list<IBaseObjectGE*> mListTransparencyObject;// прозрачные объекты, временный список, только на этапе создания списка на отображение
+  TListPtr mListTransparencyObject;// прозрачные объекты, временный список, только на этапе создания списка на отображение
 
   bool flgNeedResizeGUI;
 
@@ -119,7 +119,6 @@ public:
   virtual void AddObject(IBaseObjectGE* pObject);
   virtual void Clear();
 
-  // 21 декабря 2012 года реализую:
   // клиентские эффекты движка, не влияют на физические параметры объектов
   virtual void SetEffect(unsigned short id_effect/*уникальный эффект, см. таблицу эффектов*/,
     nsStruct3D::TVector3* coord3,     // где

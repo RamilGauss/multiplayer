@@ -33,51 +33,63 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef DEFINE_DXH
-#define DEFINE_DXH
 
+#ifndef INET_TransportH
+#define INET_TransportH
+
+#include "CallBackRegistrator.h"
+#include "UdpDevice.h"
+#include "glib/gthread.h"
+#include "TransportProtocolPacket.h"
+#include "hArray.h"
+#include "GCS.h"
 #include "BL_Debug.h"
 
-// Direct3D9 includes
-#include <d3d9.h>
-#include <d3dx9.h>
+// Melissa - транспорт
+class INET_Transport
+{
+public:
+  //типы callback вызовов
+  enum{
+    eRcvPacket  = 0,		   
+    eRcvStream  = 1,
+    eDisconnect = 2,
+  };
 
-// Direct3D10 includes
-#include <d3dcommon.h>
-#include <dxgi.h>
-#include <d3d10_1.h>
-#include <d3d10.h>
-#include <d3dcompiler.h>
-#include <d3dx10.h>
+	struct InfoData
+	{
+		unsigned int   ip_dst;     
+		unsigned short port_dst;   
+		unsigned int   ip_src;     
+		unsigned short port_src;   
+		void*          packet;
+		int            size;
+    InfoData(){size=0;packet = NULL;}
+    ~InfoData(){}
+	};
 
-// HRESULT translation for Direct3D and other APIs 
-#include <dxerr.h>
+	enum{eWaitSynchro=5,// сек
+  };
 
 
-#if defined(DEBUG) || defined(_DEBUG)
-#ifndef V
-#define V(x)           { hr = (x); if( FAILED(hr) ) { BL_FIX_BUG(); } }
-#endif
-#ifndef V_RETURN
-#define V_RETURN(x)    { hr = (x); if( FAILED(hr) ) { BL_FIX_BUG(); return NULL;} }
-#endif
-#else
-#ifndef V
-#define V(x)           { hr = (x); }
-#endif
-#ifndef V_RETURN
-#define V_RETURN(x)    { hr = (x); if( FAILED(hr) ) { return hr; } }
-#endif
-#endif
+  INET_Transport(char* pPathLog=NULL){};
+  virtual ~INET_Transport(){};
+	virtual void InitLog(char* pPathLog) = 0;
 
-#ifndef SAFE_DELETE
-#define SAFE_DELETE(p)       { if (p) { delete (p);     (p)=NULL; } }
-#endif    
-#ifndef SAFE_DELETE_ARRAY
-#define SAFE_DELETE_ARRAY(p) { if (p) { delete[] (p);   (p)=NULL; } }
-#endif    
-#ifndef SAFE_RELEASE
-#define SAFE_RELEASE(p)      { if (p) { (p)->Release(); (p)=NULL; } }
-#endif
+  virtual bool Open(unsigned short port,int numNetWork=0) = 0;
+
+	virtual void Write(InfoData* data, bool check = true, bool add_in_queque = true) = 0;
+
+	// чтение - зарегистрируйся
+  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
+  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
+
+	virtual void Start() = 0;// для активной работы
+	virtual void Stop()  = 0;
+
+  // синхронная функция
+  virtual bool Synchro(unsigned int ip, unsigned short port) = 0; // вызов только для клиента
+};
+
 
 #endif

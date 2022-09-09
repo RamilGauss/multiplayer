@@ -33,15 +33,40 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "BasePacketAppl.h"
 
-#include "Win_Func.h"
-#include "GlobalParams.h"
-#include <windows.h>
+TBasePacketAppl::TBasePacketAppl()
+{
+
+}
+//---------------------------------------------------------------------
+TBasePacketAppl::~TBasePacketAppl()
+{
+
+}
+//---------------------------------------------------------------------
+bool TBasePacketAppl::Set(void* p, int size)
+{
+  return mC.Set(p,size);
+}
+//---------------------------------------------------------------------
+void* TBasePacketAppl::Get(int &size)
+{
+  size = mC.GetSize();
+  return mC.GetPtr();
+}
+//---------------------------------------------------------------------
 
 
-//void WinMessageBox(char* sError)
-//{
-  //MessageBox(NULL,sError,STR_VERSION_CLIENT,0);
-//}
+
+
+
+
+
+
+
+
+
+
 
 

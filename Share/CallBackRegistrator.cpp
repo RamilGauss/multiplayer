@@ -61,8 +61,8 @@ void TCallBackRegistrator::Register(TCallBackFunc pFunc)
 //--------------------------------------------------------------
 void TCallBackRegistrator::Unregister(TCallBackFunc pFunc)
 {
-  set<TCallBackFunc>::iterator fit = mSetCallback.find(pFunc);
-  set<TCallBackFunc>::iterator eit = mSetCallback.end();
+  TSetFunc::iterator fit = mSetCallback.find(pFunc);
+  TSetFunc::iterator eit = mSetCallback.end();
   if(fit!=eit)
     mSetCallback.erase(fit);
   else
@@ -71,8 +71,8 @@ void TCallBackRegistrator::Unregister(TCallBackFunc pFunc)
 //--------------------------------------------------------------
 void TCallBackRegistrator::Notify(void* data, int size)
 {
-  set<TCallBackFunc>::iterator bit = mSetCallback.begin();
-  set<TCallBackFunc>::iterator eit = mSetCallback.end();
+  TSetFunc::iterator bit = mSetCallback.begin();
+  TSetFunc::iterator eit = mSetCallback.end();
   while(bit!=eit)
 	{
 		TCallBackFunc pFunc = (*bit);

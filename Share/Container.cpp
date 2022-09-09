@@ -60,7 +60,8 @@ void TContainer::SetData(char* p, int s)
   Done();
   size  = s;
   pData = new char[size];
-  memcpy(pData,p,size);
+  if(p)
+    memcpy(pData,p,size);
 }
 //---------------------------------------------------------------
 char* TContainer::GetData(int &s)
@@ -79,7 +80,7 @@ int TContainer::GetSize()const
   return size;
 }
 //---------------------------------------------------------------
-void TContainer::Zero()
+void TContainer::Unlink()
 {
   pData = NULL;
   size = 0;

@@ -33,13 +33,36 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
-#ifndef MakerNET_EngineH
-#define MakerNET_EngineH
-
+#include "MelissaMaker.h"
 #include <stddef.h>
-#include "MacroMaker.h"
 
-MACRO_MAKER_H_USE_P(NET_Engine,char* pPathLog=NULL)
+using namespace nsMelissa;
 
-#endif
+IClient* GetClient()
+{
+  return NULL;
+}
+//-------------------------------------------------------------------------------
+IServer* GetServer(TypeServer type, const char* sPathDLL)
+{
+  switch(type)
+  {
+    case eSlave:
+      break;
+    case eSlaveMaster:
+      break;
+    case eMaster:
+      break;
+    case eMasterSuperServer:
+      break;
+    case eSuperServer:
+      break;
+  }
+  return NULL;
+}
+//-------------------------------------------------------------------------------
+void Free(IBase* p)
+{
+  delete p;
+}
+//-------------------------------------------------------------------------------

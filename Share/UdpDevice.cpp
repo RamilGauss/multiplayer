@@ -40,6 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
   #include <Winsock2.h>
   #include <winsock.h>
+  #include <mswsock.h>
 #endif
 #include "NetSystem.h"
 #include <stdio.h>
@@ -203,4 +204,43 @@ bool UdpDevice::write(const void* buf, unsigned long size, unsigned int ip, unsi
   return (res == (int)size);
 }
 //-----------------------------------------------------------------------------
+bool UdpDevice::SetRecvBuffer(unsigned int size)
+{
+  bool resSet = false;
+#ifdef WIN32
 
+  int res = setsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, (char*)&size, sizeof(int));
+  resSet = ( res != SOCKET_ERROR );
+
+#else
+#endif
+  return resSet;
+}
+//-----------------------------------------------------------------------------
+bool UdpDevice::SetSendBuffer(unsigned int size)
+{
+  bool resSet = false;
+#ifdef WIN32
+
+  int res = setsockopt(mSocket, SOL_SOCKET, SO_SNDBUF, (char*)&size, sizeof(int));
+  resSet = ( res != SOCKET_ERROR );
+
+#else
+#endif
+  return resSet;
+
+  return true;
+}
+//-----------------------------------------------------------------------------
+unsigned int UdpDevice::GetMaxSizeBufferForSocket()
+{
+  unsigned int size = 0;
+#ifdef WIN32
+  int retSize = sizeof(int);
+  int resGet = getsockopt(mSocket, SOL_SOCKET, SO_MAX_MSG_SIZE, (char*)&size, &retSize);
+  if( resGet != SOCKET_ERROR ) size = 0;
+#else
+#endif
+  return size;
+}
+//-----------------------------------------------------------------------------

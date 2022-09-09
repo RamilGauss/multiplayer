@@ -36,9 +36,9 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef NameSrcEventIDH
 #define NameSrcEventIDH
 
-#define ID_SRC_EVENT_GRAPHIC_ENGINE        0 //"STR_SRC_EVENT_GRAPHIC_ENGINE"
-#define ID_SRC_EVENT_PHYSIC_ENGINE         1 //"STR_SRC_EVENT_PHYSIC_ENGINE"
-#define ID_SRC_EVENT_MANAGER_OBJECT_COMMON 2 //"STR_SRC_EVENT_MANAGER_OBJECT_COMMON"
+#define ID_SRC_EVENT_GRAPHIC_ENGINE        0
+#define ID_SRC_EVENT_PHYSIC_ENGINE         1
+#define ID_SRC_EVENT_MANAGER_OBJECT_COMMON 2
 
 
 #endif
