@@ -42,6 +42,13 @@ you may contact in writing [ramil2085@gmail.com].
 class TClientTank;
 class TManagerObjectCommon;
 
+//class TBase_DXUT_Event : public QWidget, public IDXUT_Event
+//{
+//public:
+//  TBase_DXUT_Event(){};
+//  virtual ~TBase_DXUT_Event(){};
+//
+//};
 
 class TBaseGUI : public QWidget
 {

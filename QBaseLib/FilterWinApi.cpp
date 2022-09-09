@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 #define USE_QT_WIN_API 0
 
-typedef LRESULT (*DeclQtWndProc)(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+typedef LRESULT (CALLBACK *DeclQtWndProc)(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 static DeclQtWndProc QtWndProc = NULL;
 

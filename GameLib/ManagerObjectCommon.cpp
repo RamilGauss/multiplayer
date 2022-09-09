@@ -276,4 +276,13 @@ void TManagerObjectCommon::HandleOnMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
   mManagerEventWinApi.Notify(hWnd, uMsg, wParam, lParam);
 }
 //--------------------------------------------------------------------------------------------------------
-
+void* TManagerObjectCommon::GetWndProc_GraphicEngine()
+{
+  return mMDX_Scene->GetWndProc();
+}
+//--------------------------------------------------------------------------------------------------------  
+bool TManagerObjectCommon::IsFullScreen()
+{
+  return mMDX_Scene->IsFullScreen();
+}
+//--------------------------------------------------------------------------------------------------------  

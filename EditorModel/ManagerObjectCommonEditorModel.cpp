@@ -121,7 +121,7 @@ void TManagerObjectCommonEditorModel::LoadModel()
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
   start = ht_GetMSCount() - start;
   float v = start/float(cnt[0]*cnt[1]*cnt[2]);
-  GlobalLoggerForm.WriteF_time("EditorModel: Время загрузки объектов t=%u,v=%f\n",start,v);
+  GlobalLoggerForm.WriteF_time("EditorModel: Время загрузки объектов t=%u мс,v=%f мс/об.\n",start,v);
 #endif
 }
 //--------------------------------------------------------------------------------------------------------

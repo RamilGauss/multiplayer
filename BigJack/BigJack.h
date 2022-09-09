@@ -66,7 +66,8 @@ class TBigJack : public IGraphicEngine
 {
 protected:
 
-  TDXUT mDXUT;
+  //TDXUT mDXUT;
+  //IDirectX_Realize* mDXUT;
 
   TManagerResourceDX mManagerResourceDX;
   TManagerModelDX mManagerModelDX;
@@ -142,15 +143,15 @@ public:
   // Для внутренних событий движка.
   //----------------------------------------------------------------
 
-  bool IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat, D3DFORMAT BackBufferFormat, bool bWindowed,void* pUserContext );
-  bool ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext );
-  HRESULT OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
-  HRESULT OnResetDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
-  void OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
-  void OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext );
-  LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,void* pUserContext );
-  void OnLostDevice( void* pUserContext );
-  void OnDestroyDevice( void* pUserContext );
+  virtual bool IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat, D3DFORMAT BackBufferFormat, bool bWindowed,void* pUserContext );
+  virtual bool ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext );
+  virtual HRESULT OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
+  virtual HRESULT OnResetDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
+  virtual void OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
+  virtual void OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext );
+  virtual LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,void* pUserContext );
+  virtual void OnLostDevice( void* pUserContext );
+  virtual void OnDestroyDevice( void* pUserContext );
 
 protected:
   std::set<TCallBackMsg>       mSetCallbackMsg;

@@ -43,8 +43,12 @@ you may contact in writing [ramil2085@gmail.com].
 class TBaseGUI_DX : public TBaseGUI
 { 
     Q_OBJECT
+protected:
 
   QTimer mTimer;
+
+  //void* pGUIWndProc;
+  //void* pWndProcGraphicEngine;
 
 public: 
   TBaseGUI_DX( QWidget* pParent = NULL); 
@@ -54,11 +58,18 @@ public:
   virtual void showGUI();
   virtual void hideGUI();
 
+  // условно protected
+  void* WndProc( void* phWnd, void* puMsg, void* pwParam, void* plParam );
 
 protected: 
 
   virtual void SetupEvent();
+  //void resizeEvent( QResizeEvent * event );
+  //void paintEvent ( QPaintEvent * event );
 
+  virtual void RenderChild();
+
+  void SaveRender();
 
 protected slots:
   void sl_Rendering();

@@ -91,6 +91,9 @@ public:
   TManagerObjectCommon();
   virtual ~TManagerObjectCommon();
 
+  void* GetWndProc_GraphicEngine();
+  bool IsFullScreen();
+
   void Init(HWND hwnd = NULL);
   virtual void Work() = 0;
   void Done();

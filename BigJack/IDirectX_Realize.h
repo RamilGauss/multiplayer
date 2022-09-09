@@ -39,19 +39,22 @@ you may contact in writing [ramil2085@gmail.com].
 #include "DXUT.h"
 #include <string>
 
-class TBigJack;
+class IGraphicEngine;
 
 class IDirectX_Realize
 {
 protected:
 
-  TBigJack * pMDX;
+  IGraphicEngine * pMDX;
 
 public:
-  IDirectX_Realize(TBigJack* _pMDX){pMDX = _pMDX;}
+  IDirectX_Realize(IGraphicEngine* _pMDX){pMDX = _pMDX;}
   virtual ~IDirectX_Realize(){};
 
-  virtual HRESULT Init(HWND hwnd = NULL ) = 0;
+  virtual void* GetWndProc() = 0;
+  virtual bool IsFullScreen() = 0;
+
+  virtual HRESULT Init(HWND hwnd = NULL) = 0;
   virtual void Work() = 0;
   virtual int Done()  = 0;
 

@@ -39,6 +39,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "DXUT.h"
 #include "glibconfig.h"
+#include "MakerDirectX_Realize.h"
 
 class TBaseObjectDX;
 
@@ -46,18 +47,29 @@ class IGraphicEngine
 {
 protected:
   guint32 mTime_ms;// врем€ дл€ рендера, используетс€ дл€ анимации
+  IDirectX_Realize* mDXUT;
 
 public:
   typedef void (*TCallBackMsg)( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
   typedef void (*TCallBackFrameMove)( double fTime, float fElapsedTime, void* pUserContext );
 
-  IGraphicEngine(){}
-  virtual ~IGraphicEngine(){}
+  IGraphicEngine()
+  {  
+    TMakerDirectX_Realize makerDX;
+    mDXUT = makerDX.New(this);
+  }
+  virtual ~IGraphicEngine()
+  { 
+    delete mDXUT;
+    mDXUT = NULL;
+  }
 
   enum{eTypeMsg     = 0,
     eTypeFrameMove,
   };
 
+  virtual bool IsFullScreen(){return mDXUT->IsFullScreen();};
+  virtual void* GetWndProc(){return mDXUT->GetWndProc();}
   // на получение событий WinApi окна и DirectX
   virtual void Register(void*   pFunc, int type) = 0;
   virtual void Unregister(void* pFunc, int type) = 0;
@@ -98,6 +110,20 @@ public:
   //                             ~INTERFACE
   //----------------------------------------------------------------
 
+public:
+  //----------------------------------------------------------------
+  // ƒл€ внутренних событий движка.
+  //----------------------------------------------------------------
+
+  virtual bool IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat, D3DFORMAT BackBufferFormat, bool bWindowed,void* pUserContext ) = 0;
+  virtual bool ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext ) = 0;
+  virtual HRESULT OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext ) = 0;
+  virtual HRESULT OnResetDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext ) = 0;
+  virtual void OnFrameMove( double fTime, float fElapsedTime, void* pUserContext ) = 0;
+  virtual void OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext ) = 0;
+  virtual LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,void* pUserContext ) = 0;
+  virtual void OnLostDevice( void* pUserContext ) = 0;
+  virtual void OnDestroyDevice( void* pUserContext ) = 0;
 
 };
 

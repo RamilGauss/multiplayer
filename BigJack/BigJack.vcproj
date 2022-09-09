@@ -183,6 +183,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MakerDirectX_Realize.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MakerGraphicEngine.cpp"
 				>
 			</File>
@@ -278,6 +282,10 @@
 			</File>
 			<File
 				RelativePath=".\LoaderModelDX.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerDirectX_Realize.h"
 				>
 			</File>
 			<File

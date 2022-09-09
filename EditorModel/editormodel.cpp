@@ -44,6 +44,10 @@ you may contact in writing [ramil2085@gmail.com].
 #include <QBitmap>
 #include <QMouseEvent>
 
+#include <QPaintEvent>
+#include <QPainter>
+
+
 #define WIN32_LEAN_AND_MEAN 
 #include <d3d9.h> 
 #include <d3dx9.h> 
@@ -60,7 +64,17 @@ using namespace nsID_BEHAVIOR;
 TEditorModel::TEditorModel(QWidget *parent)
 : TBaseGUI_DX(parent)
 {
+  ui.setupUi(this);
   setWindowTitle(tr(STR_VERSION_EDITOR));
+
+
+  connect(ui.pushButton,SIGNAL(clicked()), this, SLOT(sl_PushButton()));
+
+
+  // эксперимент
+  // настроить прозрачность компонентов. в родителе нужно уметь управлять прозрачностью 
+  ui.pushButton->setAttribute(Qt::WA_TranslucentBackground);
+  //ui.pushButton->setAutoFillBackground(true);
 }
 //---------------------------------------------------------------------------------------------
 TEditorModel::~TEditorModel()
@@ -124,8 +138,28 @@ void TEditorModel::mousePressEvent ( QMouseEvent * event )
 //  //###
 //}
 //--------------------------------------------------------------------------------------------------------
-bool TEditorModel::event ( QEvent * event )  
+//bool TEditorModel::event( QEvent * event )  
+//{
+  //if(event->type()==QEvent::Resize) 
+  //{
+    //return true;
+  //}
+  //return false;
+//}
+//--------------------------------------------------------------------------------------------------------
+void TEditorModel::sl_PushButton()
 {
-  return false;
+  int a = 0;
+}
+//--------------------------------------------------------------------------------------------------------
+void TEditorModel::RenderChild()
+{
+  ui.pushButton->repaint();
+  //QPixmap pixmap(size());
+  //render( &pixmap, QPoint(), QRegion(), DrawChildren );
+
+  //QPainter painter(this);
+  //painter.drawPixmap(rect(),pixmap,rect());
+  //painter.end();
 }
 //--------------------------------------------------------------------------------------------------------

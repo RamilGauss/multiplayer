@@ -38,6 +38,7 @@ you may contact in writing [ramil2085@gmail.com].
 #define EDITORMODEL_H
 
 #include "ManagerGUIEditorModel.h"
+#include "ui_EditorModel.h"
 
 class TEditorModel : public TBaseGUI_DX
 {
@@ -52,8 +53,15 @@ public:
 protected:
 
   virtual void mousePressEvent ( QMouseEvent * event );
-  virtual bool event ( QEvent * event );
+  //virtual bool event ( QEvent * event );
 
+  virtual void RenderChild();
+
+protected slots:
+  void sl_PushButton();
+
+private:
+  Ui::FormEditorModel ui;
 };
 
 #endif // EDITORMODEL_H

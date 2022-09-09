@@ -339,7 +339,9 @@ bool      WINAPI DXUTWasKeyPressed( BYTE vKey );  // Like DXUTIsKeyDown() but re
 bool      WINAPI DXUTIsMouseButtonDown( BYTE vButton ); // Pass a virtual-key code: VK_LBUTTON, VK_RBUTTON, VK_MBUTTON, VK_XBUTTON1, VK_XBUTTON2
 HRESULT   WINAPI DXUTCreateState(); // Optional method to create DXUT's memory.  If its not called by the application it will be automatically called when needed
 void      WINAPI DXUTDestroyState(); // Optional method to destroy DXUT's memory.  If its not called by the application it will be automatically called after the application exits WinMain 
-
+// Gauss 1.11.2012
+void* WINAPI DXUTGetStaticWndProc();
+void  WINAPI DXUTSetCallDefWindowProc(bool v);
 //--------------------------------------------------------------------------------------
 // DXUT core layer includes
 //--------------------------------------------------------------------------------------

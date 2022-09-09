@@ -53,7 +53,7 @@ using namespace nsStruct3D;
 
 #pragma warning(disable: 4355)
 
-TBigJack::TBigJack(): mDXUT(this)
+TBigJack::TBigJack()//: mDXUT(this)
 {
   mTime_ms = 0;
 
@@ -102,7 +102,7 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
       it++;
     }
 
-    mViewerFPS.Render(mDXUT.GetFPS());
+    mViewerFPS.Render(mDXUT->GetFPS());
     V( pd3dDevice->EndScene() );
   }
 }
@@ -312,9 +312,9 @@ void TBigJack::OnDestroyDevice( void* pUserContext )
   mViewerFPS.Destroy();
 }
 //--------------------------------------------------------------------------------------
-void TBigJack::Init(HWND hwnd )
+void TBigJack::Init(HWND hwnd)
 {
-  HRESULT hr = mDXUT.Init(hwnd);
+  HRESULT hr = mDXUT->Init(hwnd);
   if(hr!=S_OK)
   {
     GlobalLoggerDX.WriteF_time("Init fail. hr=0x%X\n",hr);
@@ -323,7 +323,7 @@ void TBigJack::Init(HWND hwnd )
 //--------------------------------------------------------------------------------------
 void TBigJack::Done()
 {
-  mDXUT.Done();
+  mDXUT->Done();
   
   mManagerModelDX.DestroyModel();
 }
@@ -331,7 +331,7 @@ void TBigJack::Done()
 void TBigJack::Work(guint32 time_ms)
 {
   mTime_ms = time_ms;
-  mDXUT.Work();
+  mDXUT->Work();
 }
 //--------------------------------------------------------------------------------------
 // на получение событий WinApi окна и DirectX

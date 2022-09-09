@@ -219,7 +219,7 @@ void TDXUT::OnDestroyDevice( void* pUserContext )
   flgWasDestroyEvent = true;
 }
 //--------------------------------------------------------------------------------------
-TDXUT::TDXUT( TBigJack * _pMDX )
+TDXUT::TDXUT( IGraphicEngine * _pMDX )
 : IDirectX_Realize(_pMDX)
 {
   pDXUT_Realize = this;
@@ -235,6 +235,8 @@ HRESULT TDXUT::Init(HWND hwnd )
   HRESULT hr;
   flgWasLostEvent    = false;
   flgWasDestroyEvent = false;
+
+  //DXUTSetCallDefWindowProc(false);// что бы не было конечной обработки событий, DXUT не закончит обработку
 
   DXUTSetCallbackMsgProc( ::MsgProc );
   //----------------------------------------------------
@@ -261,7 +263,7 @@ HRESULT TDXUT::Init(HWND hwnd )
   {
     // установить реакции
     // на "нашу" функцию
-    LONG_PTR res = SetWindowLongPtr(hwnd,GWLP_WNDPROC,(LONG_PTR)DXUTStaticWndProc_Changed);
+    //LONG_PTR res = SetWindowLongPtr(hwnd,GWLP_WNDPROC,(LONG_PTR)DXUTStaticWndProc_Changed);
     V_RETURN(DXUTSetWindow( hwnd, hwnd, hwnd, false ))
   }
   DXUTCreateDevice( true, 1024, 768 );
@@ -288,12 +290,21 @@ int TDXUT::Done()
 //--------------------------------------------------------------------------------------
 std::string TDXUT::GetError()
 {
-  //DXUTGetErr
   return string();
 }
 //--------------------------------------------------------------------------------------
 float TDXUT::GetFPS()
 {
   return DXUTGetFPS();
+}
+//--------------------------------------------------------------------------------------
+void* TDXUT::GetWndProc()
+{
+  return DXUTGetStaticWndProc();
+}
+//--------------------------------------------------------------------------------------
+bool TDXUT::IsFullScreen()
+{
+  return !DXUTIsWindowed();
 }
 //--------------------------------------------------------------------------------------

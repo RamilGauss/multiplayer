@@ -6487,10 +6487,10 @@ void WINAPI DXUTSetIsInGammaCorrectMode( bool bGammaCorrect )
 LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
   // Consolidate the keyboard messages and pass them to the app's keyboard callback
-  if( uMsg == WM_KEYDOWN ||
-    uMsg == WM_SYSKEYDOWN ||
-    uMsg == WM_KEYUP ||
-    uMsg == WM_SYSKEYUP )
+  if( uMsg == WM_KEYDOWN    ||
+      uMsg == WM_SYSKEYDOWN ||
+      uMsg == WM_KEYUP      ||
+      uMsg == WM_SYSKEYUP )
   {
     bool bKeyDown = ( uMsg == WM_KEYDOWN || uMsg == WM_SYSKEYDOWN );
     DWORD dwMask = ( 1 << 29 );
@@ -6505,19 +6505,19 @@ LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam,
   }
 
   // Consolidate the mouse button messages and pass them to the app's mouse callback
-  if( uMsg == WM_LBUTTONDOWN ||
-    uMsg == WM_LBUTTONUP ||
-    uMsg == WM_LBUTTONDBLCLK ||
-    uMsg == WM_MBUTTONDOWN ||
-    uMsg == WM_MBUTTONUP ||
-    uMsg == WM_MBUTTONDBLCLK ||
-    uMsg == WM_RBUTTONDOWN ||
-    uMsg == WM_RBUTTONUP ||
-    uMsg == WM_RBUTTONDBLCLK ||
-    uMsg == WM_XBUTTONDOWN ||
-    uMsg == WM_XBUTTONUP ||
-    uMsg == WM_XBUTTONDBLCLK ||
-    uMsg == WM_MOUSEWHEEL ||
+  if( uMsg == WM_LBUTTONDOWN   ||
+      uMsg == WM_LBUTTONUP     ||
+      uMsg == WM_LBUTTONDBLCLK ||
+      uMsg == WM_MBUTTONDOWN   ||
+      uMsg == WM_MBUTTONUP     ||
+      uMsg == WM_MBUTTONDBLCLK ||
+      uMsg == WM_RBUTTONDOWN   ||
+      uMsg == WM_RBUTTONUP     ||
+      uMsg == WM_RBUTTONDBLCLK ||
+      uMsg == WM_XBUTTONDOWN   ||
+      uMsg == WM_XBUTTONUP     ||
+      uMsg == WM_XBUTTONDBLCLK ||
+      uMsg == WM_MOUSEWHEEL    ||
     ( GetDXUTState().GetNotifyOnMouseMove() && uMsg == WM_MOUSEMOVE ) )
   {
     int xPos = ( short )LOWORD( lParam );
@@ -6571,7 +6571,7 @@ LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam,
 
   switch( uMsg )
   {
-  case WM_PAINT:
+    case WM_PAINT:
     {
       // Handle paint messages when the app is paused
       if( DXUTIsRenderingPaused() &&
@@ -6902,7 +6902,7 @@ LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam,
     {
       switch( wParam )
       {
-      case VK_RETURN:
+        case VK_RETURN:
         {
           if( GetDXUTState().GetHandleAltEnter() && DXUTIsAppRenderingWithD3D9() )
           {
@@ -6922,7 +6922,7 @@ LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
     }
 
-  case WM_KEYDOWN:
+    case WM_KEYDOWN:
     {
       switch( wParam )
       {
@@ -6950,7 +6950,7 @@ LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
     }
 
-  case WM_CLOSE:
+    case WM_CLOSE:
     {
       HMENU hMenu;
       hMenu = GetMenu( hWnd );
@@ -6964,9 +6964,9 @@ LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam,
       return 0;
     }
 
-  case WM_DESTROY:
-    PostQuitMessage( 0 );
-    break;
+    case WM_DESTROY:
+      PostQuitMessage( 0 );
+      break;
   }
 
   // Don't allow the F10 key to act as a shortcut to the menu bar
@@ -6978,3 +6978,14 @@ LRESULT CALLBACK DXUTStaticWndProc_Changed( HWND hWnd, UINT uMsg, WPARAM wParam,
   else
     return DefWindowProc( hWnd, uMsg, wParam, lParam );
 }
+//----------------------------------------------------------------------------------------------------
+void* WINAPI DXUTGetStaticWndProc()
+{
+  return DXUTStaticWndProc_Changed;
+}
+//----------------------------------------------------------------------------------------------------
+void WINAPI DXUTSetCallDefWindowProc(bool v)
+{
+  GetDXUTState().SetCallDefWindowProc(v);
+}
+//----------------------------------------------------------------------------------------------------
