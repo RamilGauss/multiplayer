@@ -72,6 +72,8 @@ protected:
 
   //void ApplPacketA_In_Fight(char* pData, int size);
 
+  virtual float GetTimeWork();
+
 };
 
 #endif

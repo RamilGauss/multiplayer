@@ -39,9 +39,9 @@ you may contact in writing [ramil2085@gmail.com].
 
 #define ServerLocalPort 4321
 
-#define VERSION_PROGRAMM ((unsigned short)45) // unsigned short
-#define VERSION_EDITOR   ((unsigned short)10)
-#define VERSION_CONVERTER_MESH   ((unsigned short)1)
+#define VERSION_PROGRAMM ((unsigned short)48) // unsigned short
+#define VERSION_EDITOR   ((unsigned short)16)
+#define VERSION_CONVERTER_MESH   ((unsigned short)1000)
 //-------------------------------------------------------------------------------------------
 extern char strVersionClient[100];
 extern char strVersionServer[100];
@@ -70,9 +70,8 @@ namespace nsCallBackType
 	};
 }
 
-#define NAME_TITTLE "Клиент \"Tanks\""
 #define Q_MESSAGE(sError) \
-QMessageBox::warning( NULL, QObject::tr(NAME_TITTLE),sError );
+QMessageBox::warning( NULL, QObject::tr(STR_VERSION_CLIENT),sError );
 
 #define SERVER_NUMBER_OF_NETWORK 0 //  выбор подсети (в случае наличия нескольких сетевых адаптеров)
 
@@ -129,6 +128,21 @@ QMessageBox::warning( NULL, QObject::tr(NAME_TITTLE),sError );
  [MAIN]
     LOD= - дистанция от камеры до объекта
     CntGroup=4 - кол-во частей
+ [JOINT]
+    root=Hull - имя корня
+    node0 = Hull
+    cntJoint = 5
+    nameJoint0 = Turret
+    matrix0_0=1;0;0;0;
+    matrix0_1=0;1;0;0;
+    matrix0_2=0;0;1;0;
+    matrix0_3=0;0;0;1;
+    nameJoint(cntJoint) = ...
+    ...
+    node1 = Turret
+    ...
+    node(CntGroup-1)
+    ...
  [PART0]
     strPathShader=shader.fx - название шейдера
     strTechnique=TexturedSpecular - функция внутри шейдера
@@ -143,34 +157,6 @@ QMessageBox::warning( NULL, QObject::tr(NAME_TITTLE),sError );
     mTypeLOD=0   - детализация
     mflgNormal=1 - разрушен ли
     primitives=Hull.obj - набор вершин, индексов, нормалей
-
-    cntJoint=N
-    nameJoint0=Turret
-    matrix0_0=;;;;
-    matrix0_1=;;;;
-    matrix0_2=;;;;   
-    matrix0_3=;;;;
-    nameJoint1=TrackL
-    matrix1_0=;;;;
-    matrix1_1=;;;;
-    matrix1_2=;;;;   
-    matrix1_3=;;;;
-    nameJoint2=TrackR
-    matrix2_0=;;;;
-    matrix2_1=;;;;
-    matrix2_2=;;;;   
-    matrix2_3=;;;;
-    nameJoint1=ChassisL
-    matrix1_0=;;;;
-    matrix1_1=;;;;
-    matrix1_2=;;;;   
-    matrix1_3=;;;;
-    nameJoint2=ChassisR
-    matrix2_0=;;;;
-    matrix2_1=;;;;
-    matrix2_2=;;;;   
-    matrix2_3=;;;;
-
  [PART(N-1)]
  ...
  ---------

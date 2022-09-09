@@ -189,11 +189,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LoaderTree.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\LoadFromHDD.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Logger.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerBaseObject.cpp"
 				>
 			</File>
 			<File
@@ -214,6 +222,10 @@
 			</File>
 			<File
 				RelativePath=".\Testing.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\TreeJoint.cpp"
 				>
 			</File>
 			<File
@@ -311,11 +323,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LoaderTree.h"
+				>
+			</File>
+			<File
 				RelativePath=".\LoadFromHDD.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Logger.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerBaseObject.h"
 				>
 			</File>
 			<File
@@ -344,6 +364,10 @@
 			</File>
 			<File
 				RelativePath=".\Testing.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TreeJoint.h"
 				>
 			</File>
 			<File

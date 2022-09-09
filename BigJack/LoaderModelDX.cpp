@@ -44,12 +44,10 @@ using namespace nsStruct3D;
 TLoaderModelDX::TLoaderModelDX(  IDirect3DDevice9* _m_pd3dDevice):
 ILoaderModelDX(_m_pd3dDevice)
 {
-
 }
 //--------------------------------------------------------------------------------
 TLoaderModelDX::~TLoaderModelDX()
 {
-
 }
 //--------------------------------------------------------------------------------
 bool TLoaderModelDX::Load(LPCWSTR strFilenameData)
@@ -90,7 +88,10 @@ bool TLoaderModelDX::LoadMainFile()
   {
     mVectorGroup.push_back(new TDefGroup);
     if(LoadPart(&mFileIniMain,i)==false) 
+    {
+      mFileIniMain.Close();
       return false;
+    }
   }
   mFileIniMain.Close();
   return true;
@@ -159,36 +160,6 @@ bool TLoaderModelDX::LoadPart(TBL_ConfigFile* fileIni, int i)
   if(LoadMesh(fileIni,strNumPart,mVectorGroup[i])==false)
     return false;
 
-  // загрузить Joint
-  mVectorGroup[i]->mCntJoint = fileIni->GetInteger(strNumPart,"cntJoint",0);
-  if(mVectorGroup[i]->mCntJoint>0)
-    mVectorGroup[i]->pArrJoint = new TJointPart[mVectorGroup[i]->mCntJoint];
-  for(int j = 0 ; j < mVectorGroup[i]->mCntJoint ; j++)
-  {
-    char partJoint[30];
-    sprintf(partJoint,"nameJoint%d",j);
-    TJointPart* pJoint = &(mVectorGroup[i]->pArrJoint[j]);
-    str = fileIni->GetValue(strNumPart,partJoint);
-    if(str)
-    {
-      pJoint->namePart = str;
-      g_free(str);
-      str = NULL;
-    }
-    else return false;
-
-    for(int k = 0 ; k < 4 ; k++)
-    {
-      D3DXVECTOR4 vector4;
-      char strNumJointPart[20];
-      sprintf(strNumJointPart,"matrix%d_%d",j,k);
-
-      if(LoadVector4(fileIni,strNumPart,strNumJointPart,vector4)==false) 
-        return false;
-      for(int m = 0 ; m < 4 ; m++)
-        pJoint->matrix.m[k][m]=vector4[m];
-    }
-  }
   return true;
 }
 //--------------------------------------------------------------------------------

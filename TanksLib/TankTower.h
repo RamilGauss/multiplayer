@@ -45,9 +45,8 @@ public:
   TTankTower();
   virtual ~TTankTower();
 
-  bool GetMirror(char ** pData,int &size);
-  void SetMirror(char *pData,int size);
-
+  virtual bool GetMirror(char ** pData,int &size);
+  virtual void SetMirror(char *pData,int size);
 
 };
 

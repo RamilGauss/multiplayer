@@ -65,7 +65,7 @@ bool TLoaderListPathID::Load(char* sPath, map<unsigned int,string>* pMap)
     else
       for(int i = 0 ; i < cnt ; i++ )
       {
-        if(LoadPart(i,pMap)==false)
+        if(LoadPartPath(i,pMap)==false)
         {
           res = false;
           break;
@@ -77,12 +77,12 @@ bool TLoaderListPathID::Load(char* sPath, map<unsigned int,string>* pMap)
   return res;
 }
 //--------------------------------------------------------------------------------------
-bool TLoaderListPathID::LoadPart(int i, map<unsigned int,string>* pMap)
+bool TLoaderListPathID::LoadPartPath(int i, map<unsigned int,string>* pMap)
 {
   char strNumPart[20];
   sprintf(strNumPart,"PART%d",i);
 
-  unsigned int id = iniReader.GetInteger(strNumPart,"id",0);
+  unsigned int id = iniReader.GetInteger(strNumPart,"id_model",0);
   char* sPath = iniReader.GetValue(strNumPart,"path");
   if(sPath)
   {
@@ -90,7 +90,7 @@ bool TLoaderListPathID::LoadPart(int i, map<unsigned int,string>* pMap)
     strcpy(buffer,sCurrentPath);
     strcat(buffer,sPath);
     strcat(buffer,"\\");
-    pMap->insert(map<int,string>::value_type(id,string(buffer)));
+    pMap->insert(map<unsigned int,string>::value_type(id,string(buffer)));
     
     g_free(sPath);
     sPath = NULL;
@@ -116,3 +116,44 @@ bool TLoaderListPathID::FindCurrentPath(char* sPath)
   return false;
 }
 //--------------------------------------------------------------------------------------
+bool TLoaderListPathID::LoadBehavior(char* sPath, std::map<unsigned int,unsigned int>* pMapID_model_ID_Behavior)
+{
+  bool res = true;
+  iniReader.Open(sPath);
+  if(!FindCurrentPath(sPath))
+    res = false;
+  else
+  {
+    pMapID_model_ID_Behavior->clear();
+    // кол-во записей
+    int cnt = iniReader.GetInteger("MAIN","cnt",0);
+    if(cnt==0)
+      res = false;
+    else
+      for(int i = 0 ; i < cnt ; i++ )
+      {
+        if(LoadPartID_Behavior(i,pMapID_model_ID_Behavior)==false)
+        {
+          res = false;
+          break;
+        }
+      }
+  }
+
+  iniReader.Close();
+  return res;
+}
+//--------------------------------------------------------------------------------------
+bool TLoaderListPathID::LoadPartID_Behavior(int i, map<unsigned int,unsigned int>* pMap)
+{
+  char strNumPart[20];
+  sprintf(strNumPart,"PART%d",i);
+
+  unsigned int id_model = iniReader.GetInteger(strNumPart,"id_model",0);
+  unsigned int id_behavior = iniReader.GetInteger(strNumPart,"id_behavior",0);
+  pMap->insert(map<unsigned int,unsigned int>::value_type(id_model,id_behavior));
+
+  return true;
+}
+//--------------------------------------------------------------------------------------
+ 

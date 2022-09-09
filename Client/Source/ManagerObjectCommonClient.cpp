@@ -101,6 +101,7 @@ TManagerObjectCommonClient::~TManagerObjectCommonClient()
 //--------------------------------------------------------------------
 void TManagerObjectCommonClient::Work()
 {
+  float time_ms = GetTimeWork();
   guint32 iTime = ht_GetMSCount();
   if(IsLoadMap())
   {
@@ -114,7 +115,7 @@ void TManagerObjectCommonClient::Work()
       mLastTimeFreshData = ht_GetMSCount();
     }
 
-    mMDX_Scene.Work();
+    mMDX_Scene.Work(time_ms);
   }
 }
 //--------------------------------------------------------------------
@@ -148,5 +149,10 @@ void TManagerObjectCommonClient::Translate(unsigned short type, char*pData, int 
     }
     default:;
   }*/
+}
+//---------------------------------------------------------------------------------------------
+float TManagerObjectCommonClient::GetTimeWork()
+{
+  return float(ht_GetMSCount());
 }
 //---------------------------------------------------------------------------------------------

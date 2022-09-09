@@ -134,6 +134,8 @@ protected:
   virtual void OnMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
   virtual void OnFrameMove( double fTime, float fElapsedTime, void* pUserContext );
 
+
+  virtual float GetTimeWork() = 0;
 };
 
 #endif

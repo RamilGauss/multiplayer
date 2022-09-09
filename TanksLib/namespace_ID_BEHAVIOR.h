@@ -40,22 +40,22 @@ namespace nsID_BEHAVIOR
     ID_NULL = 0,// недействительное значение
     
     ID_TREE = 1,
-    ID_BUILDING,
-    ID_TERRAIN,
-    ID_BUSH,
+    ID_BUILDING=2,
+    ID_TERRAIN=3,
+    ID_BUSH=4,
     // bullet
-    ID_BULLET_EXPLOSION,
-    ID_BULLET_UNEXPLOSION,
+    ID_BULLET_EXPLOSION=5,
+    ID_BULLET_UNEXPLOSION=6,
     // tank
-    ID_TANK_TOWER,
+    ID_TANK_TOWER=7,
     
     // visible
-    ID_UFO,
-    ID_BIRD,
+    ID_UFO=8,
+    ID_BIRD=9,
     // invisible
-    ID_WALL,
+    ID_WALL=10,
 
-    ID_EXPLOSION,
+    ID_EXPLOSION=11,
   };
   
 

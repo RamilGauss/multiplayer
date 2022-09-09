@@ -66,7 +66,6 @@ protected:
 
   bool LoadMesh(TBL_ConfigFile* fileIni,char* strNumPart, TDefGroup *mArrDefGroup);
 
-
 protected:
   char* FindSemicolon(char* in_buffer);
   float FindFloat_Semicolon(char** buffer,bool* ok);

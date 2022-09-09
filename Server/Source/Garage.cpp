@@ -48,7 +48,7 @@ void TGarage::InitArrTank()
   int cnt = 1;// ReadFromBD(...);
   mCurTank = 0; // первый в массиве
 
-  TTank* pTank = (TTank*)mMakerBehaviorServer.New(ID_TANK_TOWER);
+  TTank* pTank = (TTank*)mMakerBehaviorServer.New(0/*KingTiger*/);
   pTank->SetTypeTank(nsTank_ID::eID_KingTiger);
   pTank->SetMasterClient(pMasterClient);
   mArrTanks.Add(pTank);

@@ -163,7 +163,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\MakerBehavior.cpp"
+				RelativePath=".\MakerObject.cpp"
 				>
 			</File>
 			<File
@@ -197,7 +197,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\MakerBehavior.h"
+				RelativePath=".\MakerObject.h"
 				>
 			</File>
 			<File

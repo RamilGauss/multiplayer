@@ -50,7 +50,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ManagerObjectCommonEditorModel.h"
 #include "Logger.h"
 #include "HiTimer.h"
-#include "MakerBehavior.h"
+#include "MakerObject.h"
 #include "namespace_ID_BEHAVIOR.h"
 #include "BaseObjectCommon.h"
 

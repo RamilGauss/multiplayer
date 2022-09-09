@@ -46,7 +46,6 @@ class TModelDX;
 
 class TEffectDX
 {
-  TModelDX* pMasterModel;
   //--------------------------------------------------------------------------------------
   // Effect parameter handles
   // Шейдер
@@ -64,11 +63,6 @@ class TEffectDX
   D3DXHANDLE  hWorld;
   D3DXHANDLE  hWorldViewProjection;
   //----------------------------------------------------------------------------------------
-  struct TJointPart
-  {
-    std::string namePart;
-    D3DXMATRIXA16 matrix;
-  };
 
 public:
 
@@ -108,7 +102,7 @@ public:
     D3DXVECTOR2 texcoord;
   };
 #pragma pack(pop)
-  TEffectDX(TModelDX* pMaster);
+  TEffectDX();
   ~TEffectDX();
 
   D3DXMATRIXA16* GetBlendMatrixByName(char* sNamePart);
@@ -118,6 +112,7 @@ public:
   void LostDevice();
   void ResetDevice();
 
+  HRESULT SetTexture();
   HRESULT SetMatrixWorld(D3DXMATRIXA16* matrix);
   HRESULT SetMatrixWorldViewProjection(D3DXMATRIXA16* matrix);
   HRESULT SetCameraPosition(const D3DXVECTOR3* camera_pos);
@@ -135,13 +130,6 @@ public:
   bool          mflgNormal;
 
   std::string   sName;
-
-
-  void CreateJoint(int cnt);
-  void AddJoint(int i, std::string s, D3DXMATRIXA16& matrix);
-protected:
-  TJointPart* mArrJoint;
-  int         mCntJoint;
 
 };
 

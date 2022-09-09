@@ -53,7 +53,7 @@ using namespace nsStruct3D;
 
 TManagerDirectX::TManagerDirectX(): mDXUT(this)
 {
-
+  mTime_ms = 0.0f;
 }
 //--------------------------------------------------------------------------------------------------------
 TManagerDirectX::~TManagerDirectX()
@@ -223,8 +223,29 @@ HRESULT TManagerDirectX::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3D
 {
   mManagerModel.Setup(pd3dDevice);
   // Setup the camera's view parameters
-  D3DXVECTOR3 vecEye( 0.0f, 0.0f, -5.0f );
-  D3DXVECTOR3 vecAt ( 0.0f, 0.0f, -0.0f );
+  D3DXVECTOR3 vecEye( 0.0f, -10.0f, 0.0001f );
+  D3DXVECTOR3 vecAt ( 0.0f, 0.0f, 0.0f );
+  //###
+  //// Setup the camera's view parameters
+  //D3DXVECTOR3 vecEye( 0.0f, 10.0f, 0.0001f );
+  //D3DXVECTOR3 vecAt ( 0.0f, 0.0f, 0.0f );
+  //D3DXVECTOR3 vUp( 0,1,0 );
+  ////D3DXMatrixLookAtLH( &mView, &vecEye, &vecAt, &vUp );
+  ////###
+  //D3DXVECTOR3 dvec = vecAt - vecEye;
+  //D3DXVECTOR3 zaxis; 
+  //D3DXVec3Normalize(&zaxis,&dvec);
+  //D3DXVECTOR3 xaxis; 
+  //D3DXVec3Cross( &xaxis, &vUp, &zaxis);
+  //D3DXVec3Normalize(&xaxis,&xaxis);
+
+  //D3DXVECTOR3 yaxis; 
+  //D3DXVec3Cross(&yaxis,&zaxis, &xaxis);// = cross(zaxis, xaxis);
+  //mView = D3DXMATRIXA16(xaxis.x,                       yaxis.x,                      zaxis.x,                      0.0f,
+  //  xaxis.y,                       yaxis.y,                      zaxis.y,                      0.0f,
+  //  xaxis.z,                       yaxis.z,                      zaxis.z,                      0.0f,
+  //  -D3DXVec3Dot(&xaxis, &vecEye), -D3DXVec3Dot(&yaxis,&vecEye), -D3DXVec3Dot(&zaxis,&vecEye), 1.0f);
+  ////###
 
   mCamera.SetViewParams( &vecEye, &vecAt );
   return S_OK;
@@ -259,7 +280,6 @@ void TManagerDirectX::OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime,
 LRESULT TManagerDirectX::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,
                        void* pUserContext )
 {
-  //g_Camera.HandleMessages( hWnd, uMsg, wParam, lParam );
   mCamera.HandleMessages( hWnd, uMsg, wParam, lParam );
 
   NotifyMsg(hWnd, uMsg, wParam, lParam);
@@ -288,8 +308,9 @@ void TManagerDirectX::Done()
   mManagerModel.DestroyModel();
 }
 //--------------------------------------------------------------------------------------
-void TManagerDirectX::Work()
+void TManagerDirectX::Work(float time_ms)
 {
+  mTime_ms = time_ms;
   mDXUT.Work();
 }
 //--------------------------------------------------------------------------------------

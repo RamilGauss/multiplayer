@@ -35,7 +35,6 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "LoaderObjectCommon.h"
 #include <stddef.h>
-#include "MakerBehavior.h"
 #include "LoaderListPathID.h"
 #include "file_operation.h"
 #include "GlobalParamsTank.h"

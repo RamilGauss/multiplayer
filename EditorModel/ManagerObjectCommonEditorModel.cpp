@@ -56,7 +56,8 @@ TManagerObjectCommonEditorModel::~TManagerObjectCommonEditorModel()
 //-------------------------------------------------------------------
 void TManagerObjectCommonEditorModel::Work()
 {
-  mMDX_Scene.Work();
+  float time_ms = GetTimeWork();
+  mMDX_Scene.Work(time_ms);
 }
 //--------------------------------------------------------------------
 void TManagerObjectCommonEditorModel::OnMsg( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
@@ -76,9 +77,13 @@ void TManagerObjectCommonEditorModel::LoadModel()
   else
     return;
 
-  TMakerBehavior maker;
-  TBaseObjectCommon* pObject = maker.New(ID_TANK_TOWER);
-  pObject->SetID_Model(0);
+  TMakerObject maker;
+  TBaseObjectCommon* pObject = maker.New(0);
   AddObject(pObject);
 }
 //--------------------------------------------------------------------------------------------------------
+float TManagerObjectCommonEditorModel::GetTimeWork()
+{
+  return 0.0f;
+}
+//---------------------------------------------------------------------------------------------

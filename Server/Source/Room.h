@@ -123,6 +123,8 @@ public:
 
 protected:
 
+  virtual float GetTimeWork(){return 0.0f;}
+
   void WriteTransportStream(TClient* pClient,TBasePacket *packet);
   void WriteTransportAnswer(TClient* pClient,TBasePacket *packet);
 
@@ -147,6 +149,7 @@ protected:
   void SendStateObject(TClient* pClient);
 
   void InitPositionTank();
+
 
 };
 

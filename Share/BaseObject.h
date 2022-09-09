@@ -43,22 +43,23 @@ you may contact in writing [ramil2085@gmail.com].
 #include <d3d9types.h>
 #include <d3dx10math.h>
 #include <vector>
+#include "TreeJoint.h"
+//#include "ManagerBaseObject.h"
 
 
 class TBaseObject : public TObject
 {
   // свойства, характерные для физики и графики
   // ориентация, координаты, состояние
-
+protected:
+  //static TManagerBaseObject mManagerObject;
 public:
   TBaseObject();
   virtual ~TBaseObject();
 
-  virtual void SetCoord(nsStruct3D::TCoord3& coord);
-  virtual void SetOrient(nsStruct3D::TOrient3& orient);
   virtual void SetWorld(D3DXMATRIXA16& world){mWorld=world;}
   virtual void SetState(std::vector<unsigned char>* state);
-  virtual void SetID_Model(unsigned int id){ID_model=id;}
+  virtual void SetID_Model(unsigned int id);
   virtual void SetID_Map(unsigned int id){ID_map = id;}
 
   virtual unsigned int GetID_Model(){return ID_model;}
@@ -66,16 +67,43 @@ public:
   virtual std::vector<unsigned char>* GetState(){return &mState;}
   virtual D3DXMATRIXA16 GetWorld(){return mWorld;}
 
-protected:
-  void SetOneMatrix(D3DXMATRIXA16& matrix);
+  void SetTree(TTreeJoint::TLoadedJoint* pTree);
 
 protected:
+  D3DXMATRIXA16* SetOneMatrix(D3DXMATRIXA16* matrix);
+
+protected:
+  TTreeJoint::TLoadedJoint* pLoadedTree;
+  TTreeJoint mTree;
+
   unsigned int ID_map;// идентификатор на карте
   unsigned int ID_model;// идентификатор модели
 
   std::vector<unsigned char> mState;
 
   D3DXMATRIXA16 mWorld; // здесь вся инфа по ориентации и координатам объекта
+
+
+  std::vector<unsigned char> mMask;
+  std::vector<std::string> mVectorOrderPart;
+
+  // настроить матрицу расположения и ориентации локальных видимых частей
+  void SetDefaultMatrix();//### эксперимент
+  virtual void SetupState();
+  virtual void SetupMask();
+
+  virtual std::vector<std::string>* GetOrderPart(){return &mVectorOrderPart;};
+
+  // маска отрисовки частей модели
+  // например, нарисовать Пушку1, а не Пушку0 и т.д.
+  // 1 0 0 1 1 1 1
+
+
+  std::vector<D3DXMATRIXA16*> mVectorMatrix;
+
+
+  // время создания, необходимо для расчета анимации и расчета физики
+  float mTimeCreation;// мс
 
 };
 

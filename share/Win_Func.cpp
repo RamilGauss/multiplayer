@@ -41,7 +41,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 void WinMessageBox(char* sError)
 {
-  MessageBox(NULL,sError,NAME_TITTLE,0);
+  MessageBox(NULL,sError,STR_VERSION_CLIENT,0);
 }
 
 

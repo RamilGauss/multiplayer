@@ -36,7 +36,7 @@ you may contact in writing [ramil2085@gmail.com].
 #define LoaderObjectCommonH
 
 
-#include "MakerBehavior.h"
+#include "MakerObject.h"
 #include <map>
 #include <vector>
 
@@ -46,7 +46,7 @@ class TLoaderObjectCommon
 {
 protected:
 
-  TMakerBehavior mMakerObject;// создает объект заданного типа
+  TMakerObject mMakerObject;// создает объект заданного типа
 
   std::map<unsigned int,std::string> mMapID;
 

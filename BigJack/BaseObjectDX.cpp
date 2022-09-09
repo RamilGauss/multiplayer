@@ -32,7 +32,9 @@ If you have questions concerning this license or the applicable additional terms
 you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
+#define _USE_MATH_DEFINES
 
+#include <cmath>
 
 #include "BaseObjectDX.h"
 #include <d3d9.h>
@@ -41,14 +43,10 @@ using namespace nsStruct3D;
 
 TBaseObjectDX::TBaseObjectDX()
 {
-  SetOneMatrix(mWorld);
-  
-  mArrMatrix = NULL;
-  mCntMatrix = 0;
-
   flgShow = true;// показан ли объект на сцене
 
   mModel = NULL;
+  pLoadedTree = NULL;
 }
 //------------------------------------------------------------------------------------------------
 TBaseObjectDX::~TBaseObjectDX()
@@ -60,11 +58,9 @@ void TBaseObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj,const D3DXVEC
 {          
   if(flgShow==false) return;
 
-  SetupArrMatrix();
-
   mModel->Draw(&mState,             //                       (От ObjectDX)
                &mMask,
-               mArrMatrix,//кол-во совпадает с cSubset       (От ObjectDX)
+               &mVectorMatrix,//кол-во совпадает с cSubset       (От ObjectDX)
                &mWorld,// где и как расположен объект        (От ObjectDX)
                mView, // расположение и ориентация камеры    (от ManagerDirectX)
                mProj,
@@ -74,11 +70,6 @@ void TBaseObjectDX::Draw(D3DXMATRIXA16* mView,D3DXMATRIXA16* mProj,const D3DXVEC
 void TBaseObjectDX::SetModel(TModelDX* pModel)
 {
   mModel = pModel;
-  mCntMatrix = mModel->GetCntEffect();
-  mArrMatrix = new D3DXMATRIXA16[mCntMatrix];
-  SetupArrMatrix();
-  SetupState();
-  SetupMask();
 }
 //------------------------------------------------------------------------------------------------
 TModelDX* TBaseObjectDX::GetModel()
@@ -88,32 +79,5 @@ TModelDX* TBaseObjectDX::GetModel()
 //------------------------------------------------------------------------------------------------
 void TBaseObjectDX::Done()
 {
-  delete[] mArrMatrix;
-  mArrMatrix = NULL;
-  mCntMatrix = 0;
-}
-//------------------------------------------------------------------------------------------------
-void TBaseObjectDX::SetupArrMatrix()
-{
-  for(int i = 0 ; i < mCntMatrix ; i++ )
-  {
-    SetOneMatrix(mArrMatrix[i]);// по-умолчанию
-  }
-}
-//------------------------------------------------------------------------------------------------
-void TBaseObjectDX::SetupState()
-{
-  for(int i = 0 ; i < mCntMatrix ; i++ )
-  {
-    mState.push_back(1);// по-умолчанию
-  }
-}
-//------------------------------------------------------------------------------------------------
-void TBaseObjectDX::SetupMask()
-{
-  for(int i = 0 ; i < mCntMatrix ; i++ )
-  {
-    mMask.push_back(1);
-  }
 }
 //------------------------------------------------------------------------------------------------

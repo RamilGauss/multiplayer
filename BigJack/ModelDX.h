@@ -46,7 +46,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ILoaderModelDX.h"
 #include <d3d9types.h>
 #include <vector>
-#include <set>
+#include <map>
 
 class TManagerModelDX;
 
@@ -59,8 +59,6 @@ protected:
   // задаст ManagerModelDX
   unsigned int mID; // уникальный для моделей
 
-
-  // должно храниться в модели
 
 public:
   
@@ -78,7 +76,7 @@ public:
   */
   void TModelDX::Draw(std::vector<unsigned char>* state, //                           (От ObjectDX)
                       std::vector<unsigned char>* mask,  //                           (От ObjectDX)
-                      D3DXMATRIXA16* matrix,//кол-во совпадает с cSubset (От ObjectDX)
+                      std::vector<D3DXMATRIXA16*>* matrix,//кол-во совпадает с cSubset (От ObjectDX)
                       D3DXMATRIXA16* mWorld,// где и как расположен объект         (От ObjectDX)
                       D3DXMATRIXA16* mView, // расположение и ориентация камеры    (от ManagerDirectX)
                       D3DXMATRIXA16* mProj, // проецирование на плоскость экрана  (от ManagerDirectX)
@@ -88,13 +86,7 @@ public:
   void LostDevice();
   void ResetDevice();
 
-  // выдать номер визуальной части
-  // для которой совпадает имя num-ный раз
-  // если не будет найдено вернет 0 и генерирует BL_FIX_BUG()
-  unsigned int GetIndexVisualGroupByName(char* sName, int num/*например,10 с таким же именем*/);
-
-  // как присоединить к blendBone part
-  D3DXMATRIXA16* GetMatrixByName(char* sNameBlendBone/*к чем*/, int num, char* sNamePart/*что*/);
+  unsigned int GetIndexVisualGroupByName(char* sName, int num);
 
 protected:
 
@@ -105,7 +97,6 @@ protected:
   void Draw(TEffectDX* pEffect,D3DXMATRIXA16& mWorldViewProjection,const D3DXVECTOR3* mCamera);
 
   virtual bool Load(LPCWSTR strFilenameData);
-  void LoadTexture(TEffectDX::Material* pMaterial);
   //---------------------------------------------------------
   
   struct TLOD
@@ -131,7 +122,15 @@ protected:
 
 
   // для оптимизации загрузки, чтобы исключить повторную загрузки текстур
-  std::set<std::wstring> mSetPathTexture;
+  std::map<std::wstring, IDirect3DTexture9*> mMapPathTexture;
+  void LoadTexture(TEffectDX::Material* pMaterial);
+  void ReleaseTexture();
+  
+  std::map<std::wstring, ID3DXEffect*> mMapPathEffect;
+  void LoadEffect(TEffectDX* pEffectDX);
+  void ReleaseEffect();
+
+
 };
 //-----------------------------------------------------------------
 

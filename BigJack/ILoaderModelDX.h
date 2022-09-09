@@ -44,24 +44,17 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BL_ConfigFile.h"
 #include <d3d9.h>
 #include <vector>
+#include "TreeJoint.h"
 
 class ILoaderModelDX
 {
 protected:
   IDirect3DDevice9* m_pd3dDevice;
+  //-----------------------------------------------
 public:
-  struct TJointPart
-  {
-    std::string namePart;
-    D3DXMATRIXA16 matrix;
-  };
-
+  //-----------------------------------------------
   struct TDefGroup
   {
-    TJointPart* pArrJoint;
-    int mCntJoint;
-    //--------------------------
-
     std::string  strPathShader;// относительный путь
     std::string  strTechnique;
     std::wstring strTexture;
@@ -83,9 +76,6 @@ public:
 
     TDefGroup()
     {
-      pArrJoint = NULL;
-      mCntJoint = 0;
-
       pMesh            = NULL;
 
       vAmbient  = D3DXVECTOR3(0,0,0);
@@ -102,8 +92,6 @@ public:
     }
     ~TDefGroup()
     {
-      delete[] pArrJoint;
-      pArrJoint = NULL;
     }
   };
 
@@ -111,6 +99,7 @@ protected:
   float mLOD;
   
   std::vector<TDefGroup*> mVectorGroup;
+  //----------------------------------------
 
 public:
   enum{

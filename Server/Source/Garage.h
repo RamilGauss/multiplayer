@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #define GarageH
 
 #include "hArray.h"
-#include "MakerBehavior.h"
+#include "MakerObject.h"
 
 
 class TClient;
@@ -48,7 +48,7 @@ class TGarage
   int mCurTank;// текущий танк, NULL - если нет танков
   TClient* pMasterClient;
 
-  TMakerBehavior mMakerBehaviorServer;
+  TMakerObject mMakerBehaviorServer;
 
 public:
   TArrayObject mArrTanks; // пока без БД тут будут всего два танка СТ и ТТ

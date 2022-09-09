@@ -39,6 +39,8 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "ModelDX.h"
 #include "BaseObjectPrediction.h"
+#include <vector>
+#include "TreeJoint.h"
 
 class TManagerObjectDX;
 
@@ -48,7 +50,6 @@ protected:
 
   bool flgShow;// показан ли объект на сцене
   
-
 public:
   TBaseObjectDX();
   virtual ~TBaseObjectDX();
@@ -60,24 +61,16 @@ public:
 
   void SetShow(bool show){flgShow=show;}
 
+  // вернет true - объект жив, false - закончил жить
+  // должно быть задано время начало жизни, см. TBaseObject::mTimeCreation
+  virtual bool Animate(float time_ms){return true;};
+
 protected:
 
   void Done();
 
   TModelDX* mModel;// внешний вид 
   
-  D3DXMATRIXA16* mArrMatrix;// кол-во см. в mModel
-  int mCntMatrix;
-  std::vector<unsigned char> mMask;
-
-  // настроить матрицу расположения и ориентации локальных видимых частей
-  virtual void SetupArrMatrix();
-  virtual void SetupState();
-  virtual void SetupMask();
-
-  // маска отрисовки частей модели
-  // например, нарисовать Пушку1, а не Пушку0 и т.д.
-  // 1 0 0 1 1 1 1
 };
 //-----------------------------------------------------------------
 

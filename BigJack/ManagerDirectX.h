@@ -54,12 +54,12 @@ you may contact in writing [ramil2085@gmail.com].
 
 class TBaseObjectDX;
 
-//struct IDirect3DDevice9;
-
 // BigJack - графический движок
 class TManagerDirectX
 {
 protected:
+
+  float mTime_ms;// время для рендера, используется для анимации
 
   TDXUT mDXUT;
 
@@ -71,10 +71,6 @@ protected:
   std::list<TBaseObjectDX*> mListReadyRender;
 
   CModelViewerCamera mCamera;                // A model viewing camera
-
-  D3DXHANDLE         hmWorldViewProjection;
-  D3DXHANDLE         hmWorld;
-  D3DXHANDLE         hfTime;
 
 public:
   //----------------------------------------------------------------
@@ -98,7 +94,7 @@ public:
   void NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext);
   //------------------------------------------------------------------------
   void Init(HWND hwnd = NULL);
-  void Work();
+  void Work(float time_ms);
   void Done();
   //------------------------------------------------------------------------
   void AddObject(TBaseObjectDX* pObject);
@@ -136,10 +132,6 @@ protected:
 
   void RegisterSet  (std::set<void*>* setCallback, void* pFunc);
   void UnregisterSet(std::set<void*>* setCallback, void* pFunc);
-protected:
-  D3DXHANDLE* getWorldViewProjection(){return &hmWorldViewProjection;}
-  D3DXHANDLE* getWorld(){return &hmWorld;}
-  D3DXHANDLE* getTime(){return &hfTime;}
 
 protected:
 

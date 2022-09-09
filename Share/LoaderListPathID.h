@@ -61,11 +61,14 @@ public:
   TLoaderListPathID();
   ~TLoaderListPathID();
 
-  bool Load(char* sPath, std::map<unsigned int,std::string>* pMap);
+  bool Load(char* sPath, std::map<unsigned int,std::string>* pMapID_model_path);
+  
+  bool LoadBehavior(char* sPath, std::map<unsigned int,unsigned int>* pMapID_model_ID_Behavior);
 
 protected:
 
-  bool LoadPart(int i, std::map<unsigned int,std::string>* pMap);
+  bool LoadPartPath(int i, std::map<unsigned int,std::string>* pMap);
+  bool LoadPartID_Behavior(int i, std::map<unsigned int,unsigned int>* pMap);
   bool FindCurrentPath(char* sPath);
 };
 #endif

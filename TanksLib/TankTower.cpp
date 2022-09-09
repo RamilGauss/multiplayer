@@ -38,14 +38,19 @@ you may contact in writing [ramil2085@gmail.com].
 
 TTankTower::TTankTower()
 {
-
+  mVectorOrderPart.push_back("Hull");
+  mVectorOrderPart.push_back("Turret");
+  mVectorOrderPart.push_back("Gun");
+  mVectorOrderPart.push_back("ChassisR");
+  mVectorOrderPart.push_back("ChassisL");
+  mVectorOrderPart.push_back("TrackR");
+  mVectorOrderPart.push_back("TrackL");
 }
 //------------------------------------------------------------------------
 TTankTower::~TTankTower()
 {
 
 }
-//------------------------------------------------------------------------
 //------------------------------------------------------------------------
 bool TTankTower::GetMirror(char ** pData,int &size)
 {
@@ -58,3 +63,4 @@ void TTankTower::SetMirror(char *pData,int size)
 
 }
 //------------------------------------------------------------------------
+

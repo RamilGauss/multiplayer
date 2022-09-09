@@ -39,13 +39,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ModelDX.h"
 
 
-TEffectDX::TEffectDX(TModelDX* pMaster)
+TEffectDX::TEffectDX()
 {
-  pMasterModel = pMaster;
-
-  mArrJoint = NULL;
-  mCntJoint = 0;
-
   p = NULL;
   pMesh = NULL;
 
@@ -65,8 +60,7 @@ TEffectDX::TEffectDX(TModelDX* pMaster)
 //-----------------------------------------------------------
 TEffectDX::~TEffectDX()
 {
-  delete[] mArrJoint;
-  mCntJoint = 0;
+  
 }
 //-----------------------------------------------------------
 void TEffectDX::Init()
@@ -89,7 +83,6 @@ void TEffectDX::Init()
   V( p->SetValue(     hAmbient,       mMaterial.vAmbient, sizeof( D3DXVECTOR3 ) ) );
   V( p->SetValue(     hDiffuse,       mMaterial.vDiffuse, sizeof( D3DXVECTOR3 ) ) );
   V( p->SetValue(     hSpecular,      mMaterial.vSpecular, sizeof( D3DXVECTOR3 ) ) );
-  V( p->SetTexture(   hTexture,       mMaterial.pTexture ) );
   V( p->SetFloat(     hOpacity,       mMaterial.fAlpha ) );
   V( p->SetInt(       hSpecularPower, mMaterial.nShininess ) );
 }
@@ -145,10 +138,11 @@ HRESULT TEffectDX::End()
 //-----------------------------------------------------------
 void TEffectDX::Destroy()
 {
-  //SAFE_RELEASE(mMaterial.pTexture);
-  pMasterModel->TextureRelease(mMaterial.pTexture);
+  // модель освободит ресурсы
+  mMaterial.pTexture = NULL;
+  p = NULL;
+  //SAFE_RELEASE(p);
 
-  SAFE_RELEASE(p);
   SAFE_RELEASE(pMesh);
 }
 //-----------------------------------------------------------
@@ -168,23 +162,10 @@ void TEffectDX::ResetDevice()
   V( p->SetTechnique( mMaterial.hTechnique ) );
 }
 //-----------------------------------------------------------
-D3DXMATRIXA16* TEffectDX::GetBlendMatrixByName(char* sNamePart)
+HRESULT TEffectDX::SetTexture()
 {
-
-  return NULL;
-}
-//-----------------------------------------------------------
-void TEffectDX::CreateJoint(int cnt)
-{
-  delete []mArrJoint;
-  mArrJoint = new TJointPart[cnt];
-  mCntJoint = cnt;
-}
-//-----------------------------------------------------------
-void TEffectDX::AddJoint(int i, std::string s, D3DXMATRIXA16& matrix)
-{
-  BL_ASSERT(i<mCntJoint);
-  mArrJoint[i].namePart = s;
-  mArrJoint[i].matrix   = matrix;
+  HRESULT hr;
+  V_RETURN( p->SetTexture( hTexture, mMaterial.pTexture ) );
+  return S_OK;
 }
 //-----------------------------------------------------------
