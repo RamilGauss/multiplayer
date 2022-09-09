@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013, 2013, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -193,6 +193,8 @@ public:
 
   bool operator > ( const TVector3& ) const;
   bool operator < ( const TVector3& ) const;
+
+  float lenght();
 };
 //-----------------------------------------------------------------
 class SHARE_EI TVector4
@@ -270,7 +272,7 @@ public:
   bool operator != ( const TMatrix16& ) const;
 };
 //----------------------------------------------------------------------------------------
-class TPlane
+class SHARE_EI TPlane
 {
 public:
   TPlane() {}
@@ -301,7 +303,7 @@ public:
   float a, b, c, d;
 };
 //----------------------------------------------------------------------------------------
-class TLine
+class SHARE_EI TLine
 {
   enum{
       eX,// a = ky, b = by, c = kz, d = bz
@@ -325,7 +327,7 @@ protected:
   void SetType(int v){mType=v;}
   void Calc(float arg, float& res1, float& res2);
 };
-class TQuaternion
+class SHARE_EI TQuaternion
 {
 
 public:
@@ -368,8 +370,13 @@ public:
 //----------------------------------------------------------------------------------------
 SHARE_EI extern void CopyMatrix16(float* pSrc, float* pDst);
 
+SHARE_EI extern float CalcDist(const nsStruct3D::TMatrix16* m1,const nsStruct3D::TMatrix16* m2);
+
 SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixIdentity(nsStruct3D::TMatrix16* pV);
 SHARE_EI extern nsStruct3D::TMatrix9* SetMatrixIdentity(nsStruct3D::TMatrix9* pV);
+
+SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixTranslation(nsStruct3D::TMatrix16 *pOut, 
+                                                            float x, float y, float z );
 
 SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixRotateX(nsStruct3D::TMatrix16* pV, float ugol);
 SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixRotateY(nsStruct3D::TMatrix16* pV, float ugol);

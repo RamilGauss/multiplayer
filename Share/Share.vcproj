@@ -96,10 +96,10 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="..\Exe\$(ConfigurationName)"
+			IntermediateDirectory="..\Temp\$(ConfigurationName)\$(ProjectName)"
 			ConfigurationType="2"
-			CharacterSet="1"
+			CharacterSet="0"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -121,7 +121,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SHARE_EXPORTS"
+				AdditionalIncludeDirectories="..\glib-2.0;..\GBaseLib"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EI=__declspec(dllexport);SHARE_EXPORTS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -139,11 +140,14 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="shlwapi.lib d3dx10.lib d3dx9.lib d3d9.lib ws2_32.lib dxerr.lib glib-2.0.lib gthread-2.0.lib GBaseLib.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				ImportLibrary="..\Lib\$(ConfigurationName)\$(TargetName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -151,6 +155,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				AdditionalManifestFiles="..\Exe\Release.manifest"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -226,7 +231,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LoaderDLLImpl.cpp"
+				RelativePath=".\LoaderDLL.cpp"
 				>
 			</File>
 			<File
@@ -412,6 +417,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ILoaderDLL.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IXML.h"
 				>
 			</File>
@@ -421,10 +430,6 @@
 			</File>
 			<File
 				RelativePath=".\LoaderDLL.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LoaderDLLImpl.h"
 				>
 			</File>
 			<File

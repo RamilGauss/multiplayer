@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -80,6 +80,12 @@ public:
 
   virtual IDirect3D9*       GetD3D9Object();
   virtual IDirect3DDevice9* GetD3D9Device();
+
+	virtual void GetCubeMapViewMatrix( DWORD dwFace, nsStruct3D::TMatrix16& m);
+
+	virtual DXUTDeviceSettings GetDeviceSettings();
+
+  virtual const D3DSURFACE_DESC* GetD3D9BackBufferSurfaceDesc();
 
 protected:
 

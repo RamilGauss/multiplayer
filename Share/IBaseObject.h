@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -114,7 +114,7 @@ protected:
   // этот вектор используется для заполнения маски частей
   //size = sizeAllJoint
   std::vector<std::string> mVectorOrderPart;// порядок названий частей, без повторений, cnt=cntJoint
-  std::map<std::string, int>  mMapUse;// cnt=cntAllPartModel
+  std::map<std::string, int>  mMapUse;// 
 
   // настроить матрицу расположения и ориентации локальных видимых частей
   void SetDefaultMatrix();//### эксперимент

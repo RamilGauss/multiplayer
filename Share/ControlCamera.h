@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -77,14 +77,14 @@ public:
   virtual void SetSpeedUp(float v);
   //---------------------------------------------------
   // интерфейс камеры
-  virtual void UpdateForRender();
+  virtual void Update();
   // выдать результат манипуляций
   virtual const nsStruct3D::TMatrix16* GetView();
   virtual const nsStruct3D::TMatrix16* GetProj();
   virtual const nsStruct3D::TVector3*  GetEyePt();
 
   // базовая настройка
-  //virtual void SetView(nsStruct3D::TMatrix16* view);
+  virtual void SetView(nsStruct3D::TMatrix16* view);
   virtual void SetProj(nsStruct3D::TMatrix16* proj);
   virtual void SetProjParams( float fFOV, float fAspect, float fNearPlane, float fFarPlane );
   virtual void SetOrient(nsStruct3D::TVector3* up, bool use = true);

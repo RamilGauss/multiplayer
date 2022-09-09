@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -68,7 +68,7 @@ bool TManagerResourceDX::Set(int type, void* bufferIn)
 void* TManagerResourceDX::Load(const wchar_t* sPath)
 {
   void* pResult = NULL;
-  int code_ext = FindExt(sPath);
+  int code_ext = DefType(sPath);
   switch(code_ext)
   {
     case eTypeShader:
@@ -100,10 +100,10 @@ void TManagerResourceDX::Destroy()
   mManagerTexture.Destroy();
 }
 //--------------------------------------------------------------------
-int TManagerResourceDX::FindExt(const wchar_t* sPath)
+TManagerResourceDX::TypeResource TManagerResourceDX::DefType(const wchar_t* sPath)
 {
   wstring ws = sPath;
-  int off = ws.find(L".");
+  int off = ws.rfind(L".");
   int size = ws.size();
   if(size>off+1)
   {
@@ -122,7 +122,7 @@ int TManagerResourceDX::FindExt(const wchar_t* sPath)
   USES_CONVERSION;
   
   GetLogger()->Get("GE")->WriteF_time("Загрузчик ресурсов. Неопределенное расширение. %s\n",W2A(sPath));
-  return -1;
+  return eUndef;
 }
 //--------------------------------------------------------------------
 void TManagerResourceDX::Setup(IDirect3DDevice9* pd3dDevice)

@@ -62,6 +62,10 @@ void Lighting( float2 vTexCoord: TEXCOORD0,
 
 	vColorOut   *= tex2D( MeshTextureSampler, vTexCoord );  
 	vColorOut.a *= g_fMaterialAlpha;
+  
+  //###
+  //vColorOut = 0;
+  //vColorOut.a = 1;
 }
 //--------------------------------------------------------------------------------------
 // Techniques

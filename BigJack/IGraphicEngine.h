@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -58,6 +58,9 @@ protected:
   ICamera* mICamera;                                // кросс платформенная камера
 
 public:
+	enum{
+        eEnvMapSizeCubemap   = 312,// размер для буфера под CubeMap
+        };
 
   IGraphicEngine(ICamera* pCamera);
   virtual ~IGraphicEngine();
@@ -87,15 +90,17 @@ public:
   virtual void SetViewFPS(bool val) = 0;
   // источники освещения
   // ввод освещения накладывает условия на шейдер. он обязан содержать интерфейс
-	virtual void AddLight() = 0;
-	virtual void RemoveLight(int index) = 0;
-	virtual int GetCountLight() = 0;
+  virtual void SetLightEnable(int index, bool v) = 0;
+  virtual bool GetLightEnable(int index) = 0;
+  virtual int  GetCountAllLight() = 0;
 
 	virtual const nsStruct3D::TVector3* GetLightPosition(int index) = 0;	
 	virtual void SetLightPosition(int index,nsStruct3D::TVector3* m3) = 0;
 	virtual const nsStruct3D::TVector3* GetLightColor(int index) = 0;
 	virtual void SetLightColor(int index, nsStruct3D::TVector3* color) = 0;
-  //---------------------------------------------------------------------------------
+
+	virtual bool GetPostEffectMirror() = 0;
+	virtual void SetPostEffectMirror(bool v) = 0;
 
 protected:
 

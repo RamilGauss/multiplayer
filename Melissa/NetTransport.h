@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -203,7 +203,7 @@ protected:
 
     void* GetData(int & size, unsigned int& ip_dst, unsigned short& port_dst)
     {
-      if(mReadyPacket==NULL) BL_FIX_BUG();
+      BL_ASSERT(mReadyPacket==NULL);
       size = mSizePacket;
       ip_dst   = mInfoData.ip_dst;
       port_dst = mInfoData.port_dst;
@@ -212,13 +212,13 @@ protected:
 
     unsigned int GetIP_dst() const
     {
-      if(mReadyPacket==NULL) BL_FIX_BUG();
+      BL_ASSERT(mReadyPacket==NULL);
       return mInfoData.ip_dst;
     }
 
     unsigned short GetPort_dst() const
     {
-      if(mReadyPacket==NULL) BL_FIX_BUG();
+      BL_ASSERT(mReadyPacket==NULL);
       return mInfoData.port_dst;
     }
 

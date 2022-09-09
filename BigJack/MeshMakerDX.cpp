@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -62,16 +62,22 @@ TMeshMakerDX::~TMeshMakerDX()
 //-------------------------------------------------------------
 ID3DXMesh* TMeshMakerDX::Load(IDirect3DDevice9* pd3dDevice, const char* strFilename)
 {
-  // определить расширение файла
+	const char* sFind = strstr(strFilename,".");
+	if(sFind==NULL) return NULL;
+	sFind++;
+	// определить расширение файла
   // obj или bj
-  const char* sFind = strstr(strFilename,".");
-  if(sFind==NULL) return NULL;
-  sFind++;
+	while(1)
+	{
+		if(strcmp(sFind,"obj")==0)
+			return LoadFrom(pd3dDevice, strFilename,&mMeshFromObj);
+		else if(strcmp(sFind,"bj")==0)
+			return LoadFrom(pd3dDevice, strFilename,&mMeshFromBj);
 
-  if(strcmp(sFind,"obj")==0)
-    return LoadFrom(pd3dDevice, strFilename,&mMeshFromObj);
-  else if(strcmp(sFind,"bj")==0)
-    return LoadFrom(pd3dDevice, strFilename,&mMeshFromBj);
+		sFind = strstr(sFind,".");
+		if(sFind==NULL) return NULL;
+		sFind++;
+	}
 
   return NULL;
 }

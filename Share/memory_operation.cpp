@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -57,7 +57,7 @@ void* mo_realloc(void* old_mem, int old_size, int new_size)
 //--------------------------------------------------------------------------
 char* mo_realloc_bound(char* old_mem, int old_size, int size_bound, int size_paste)
 {
-  if(old_size==0) BL_FIX_BUG();
+  BL_ASSERT(old_size==0);
 
   char* new_mem = (char*)malloc(old_size+size_paste);
   memcpy(new_mem, old_mem,size_bound);
@@ -86,7 +86,7 @@ void* mo_realloc_new(void* old_mem, int old_size, int new_size)
 //--------------------------------------------------------------------------
 char* mo_realloc_bound_new(char* old_mem, int old_size, int size_bound, int size_paste)
 {
-  if(old_size==0) BL_FIX_BUG();
+  BL_ASSERT(old_size==0);
 
   char* new_mem = new char[old_size+size_paste];
   memcpy(new_mem, old_mem,size_bound);

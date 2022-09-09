@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -38,12 +38,14 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define BigJackH
 
 #ifdef WIN32
+//-------------------------------
+// WIN32
   #include "DXUT.h"
   #include "DispTextDX.h"
   #include "ManagerModelDX.h"
   #include "ManagerResourceDX.h"
-#else
-#endif
+  #include "EffectDX.h"
+//end WIN32
 
 #include <list>
 #include <set>
@@ -53,6 +55,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "IGraphicEngine.h"
 #include "StateMachine.h"
 #include "MapSystemKey.h"
+#include <map>
 
 
 class IBaseObjectGE;
@@ -63,17 +66,32 @@ class TBigJack : public IGraphicEngine
 {
 protected:
 
-#ifdef WIN32
+  // Depth-stencil buffer для рендера Cube map
+	IDirect3DSurface9* mSurfaceDepthStencilCube;       // для рендера Cube map
+
   IDirectX_Realize* mDXUT;
   TManagerResourceDX mManagerResourceDX;
   TManagerModelDX mManagerModelDX;
 
   TDispTextDX mViewerFPS;
 
-#else
-#endif
+	struct TDescTexturePostEffect
+	{
+		IDirect3DTexture9* pSrc;
+		IDirect3DTexture9* pDst;
 
-  TShaderStack mMainShaderStack;
+		TDescTexturePostEffect()
+		{
+			pSrc = NULL;
+			pDst = NULL;
+		}
+	};
+
+  typedef std::vector<IDirect3DTexture9*> TVectorPtr;
+  typedef std::map<IBaseObjectGE*, TDescTexturePostEffect> TMapPtrDescTPE;
+
+
+	TShaderStack mMainShaderStack;
 
   int mShHandleView;
   int mShHandleProj;
@@ -96,6 +114,37 @@ protected:
 
   // для независимости от платформы, мэппинг клавиатурных событий
   TMapSystemKey mMapSysytemKeys;
+
+  ICamera* pCameraInnerNeed;
+
+  //------------------------------------
+  // PostEffect
+  TMapPtrDescTPE mMapObjTexturePostEffect;
+
+//-------------------------------------------------------
+	IDirect3DVertexDeclaration9* mVertDeclPP;
+
+	IDirect3DTexture9* mTextureMainRender;
+	IDirect3DTexture9* mTextureSecondRender;
+
+	typedef std::list<TEffectDX*> TListPtrEffect;
+	TListPtrEffect mListPtrEffect;
+  // подготовка
+  TEffectDX mEffectPreGlow_black;
+  TEffectDX mEffectPreGlow_white;
+	// post
+	TEffectDX mEffectEdgeDetect;
+	TEffectDX mEffectDownFilter4x;
+	TEffectDX mEffectUpFilter4x;
+	TEffectDX mEffectBloomH;
+	TEffectDX mEffectBloomV;
+	TEffectDX mEffectCombine4x;
+	// создание и вывод
+	TEffectDX mEffectBlend;
+	TEffectDX mEffectScene;
+
+	bool flgViewPostEffectInMirror;
+//-------------------------------------------------------
 
 public:
   //----------------------------------------------------------------
@@ -128,14 +177,17 @@ public:
   virtual void SetViewFPS(bool val);
   // источники освещения
   // ввод освещение накладывает условия на шейдер. он обязан содержать интерфейс
-	virtual void AddLight();
-	virtual void RemoveLight(int index);
-	virtual int GetCountLight();
+	virtual void SetLightEnable(int index, bool v);
+	virtual bool GetLightEnable(int index);
+	virtual int  GetCountAllLight();
 
 	virtual const nsStruct3D::TVector3* GetLightPosition(int index);	
 	virtual void SetLightPosition(int index,nsStruct3D::TVector3* m3);
 	virtual const nsStruct3D::TVector3* GetLightColor(int index);
 	virtual void SetLightColor(int index, nsStruct3D::TVector3* color);
+
+	virtual bool GetPostEffectMirror();
+	virtual void SetPostEffectMirror(bool v);
   //----------------------------------------------------------------
   //                             ~INTERFACE
   //----------------------------------------------------------------
@@ -171,8 +223,37 @@ protected:
   void Render(IDirect3DDevice9* pd3dDevice);
   void Animate();// для анимации и подготовки стека шейдера
 
+	void RenderCubeMap(IDirect3DDevice9* pd3dDevice);// для реализации технологии CubeMap
 
-  void SetCommonShaderStack();
+  // указать объект, для которого делаем текстуру
+  // добавится текстура, потом когда будет готова сцена надо блендить все текстуры на экран
+  
+  // для данной точки обзора
+  void RenderBlendTexturePostEffect(const nsStruct3D::TMatrix16* pView, 
+                                    const nsStruct3D::TMatrix16* pProj,
+                                    const nsStruct3D::TVector3* pPosCamera);
+  void RenderSrcTextureForPostEffect(IBaseObjectGE* pObj, 
+                                     const nsStruct3D::TMatrix16* view, 
+                                     const nsStruct3D::TMatrix16* pProj,
+                                     const nsStruct3D::TVector3* pPosCamera);
+	void RenderGlow(IBaseObjectGE* pObject);// подготовить устройство для отрисовки с помощью шейдера
+	void RenderByEffect(ID3DXEffect* g_pEffect);
+  void BlendTextureFromPostEffect(IDirect3DTexture9* pTextureScreen, bool UsePostEffectTexture);
+
+	void SetParamShaderForCubeMap();
+	void SetParamShaderForMainRender();
+
+
+  void LostEventForSurfacePestEffect();
+  void ResetEventForSurfacePestEffect();
+  void InitEffectForGlow();
+	void DestroyEffectForGlow();
+	void ResetShader(ID3DXEffect* m_pEffect, DWORD dwWidth, DWORD dwHeight);
+
+  void PrepareForPostEffect(IBaseObjectGE* pObject);
+  void RenderObject(IBaseObjectGE* pObject, const nsStruct3D::TMatrix16* view);
+
+	void SetCommonShaderStack(const nsStruct3D::TMatrix16* pView, const nsStruct3D::TMatrix16* pProj, const nsStruct3D::TVector3* pCameraPos);
 
   virtual bool InitGUI();
 
@@ -180,17 +261,47 @@ protected:
   void RestoreRenderState();
 
 
-  // подстрйока под глюк DXUT 21.12.2012 Gauss
+  // подстройка под глюк DXUT 21.12.2012 Gauss
   bool IsNeedResizeGUI(){return flgNeedResizeGUI;}
   void SetNeedResizeGUI(bool val){flgNeedResizeGUI=val;}
 
   void DispFPS();
 
+
+  void GetMatrixForCubeMap(int nFace, nsStruct3D::TMatrix16& view);
+
+  void InitLightArr();
+
+  void HandleGUI();
+
+	void ZBufferOn();
+	void ZBufferOff();
+
 protected:
-	// освещенеи
-	enum{eCountLight=1,};
-	nsStruct3D::TVector3 mLightColor;
-	nsStruct3D::TVector3 mLightPosition;
+	void SaveTexture(const char* name,IDirect3DTexture9* pTexture);
+	void SaveSurface(const char* name, IDirect3DSurface9* pSurfaсe);
+protected:
+	// освещение
+	enum{eCountLight=4,};
+  struct TLight
+  {
+    nsStruct3D::TVector3 color;
+    nsStruct3D::TVector3 position;
+    bool active;
+    TLight()
+    {
+      active   = false;
+      color    = nsStruct3D::TVector3(1.0f,1.0f,1.0f);
+      position = nsStruct3D::TVector3(0.0f,0.0f,2.4f);
+    }
+  };
+  TLight mArrLight[eCountLight];
+
+  // формируется перед отправкой в шейдер
+  nsStruct3D::TVector3 mArrLightColor[eCountLight];
+  nsStruct3D::TVector3 mArrLightPosition[eCountLight];
+
 };
 
+#endif
 #endif

@@ -287,6 +287,9 @@ D3DXMATRIX WINAPI DXUTGetCubeMapViewMatrix( DWORD dwFace );
 HRESULT DXUTSnapD3D9Screenshot( LPCTSTR szFileName );
 HRESULT DXUTSnapD3D10Screenshot( LPCTSTR szFileName );
 
+HRESULT DXUTSnapD3D9Screenshot_Surface( LPCTSTR szFileName, IDirect3DSurface9* pSurf );
+HRESULT DXUTSnapD3D9Screenshot_Texture( LPCTSTR szFileName, IDirect3DTexture9* pText );
+
 //--------------------------------------------------------------------------------------
 // Simple helper stack class
 //--------------------------------------------------------------------------------------

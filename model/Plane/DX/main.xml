@@ -1,10 +1,10 @@
 <root>
 	<lod>1000</lod>
 	<part>
-		<strPathShader>shader.fx</strPathShader>
+		<strPathShader>shaderPlane.fx</strPathShader>
 		<paramShader>paramShader.xml</paramShader>
 		<strTechnique>TexturedSpecular</strTechnique>
-		<texture>159.jpg</texture>
+		<texture>pool_table.jpg</texture>
 		<name>plane</name>
 		<numUse>0</numUse>
 		<vAmbient>0.8;0.8;0.8</vAmbient>

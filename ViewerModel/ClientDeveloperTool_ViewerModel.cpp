@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -244,7 +244,7 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent, const 
   InitLog();
   mComponent = *pComponent; 
 
-  int cnt[3] = {1,1,1};
+  int cnt[3] = {3,3,3};
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
   guint32 start = ht_GetMSCount();
 #endif 

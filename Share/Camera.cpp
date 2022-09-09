@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -69,11 +69,16 @@ TCamera::~TCamera()
 
 }
 //----------------------------------------------------------------------------------------
-//void TCamera::SetView(TMatrix16* view)
-//{
-//  mChangedView = false; // сбросить все что делали до этого
-//  MATRIX16_EQUAL_M_P(mView,view);
-//}
+void TCamera::SetView(TMatrix16* view)
+{
+  MATRIX16_EQUAL_M_P(mView,view);
+  TMatrix16 mInv;
+  SetMatrixInverse(&mInv,NULL,&mView);
+  mRight    = TVector3(mInv._11,mInv._12,mInv._13);
+  mUp       = TVector3(mInv._21,mInv._22,mInv._23);
+  mLookAt   = TVector3(mInv._31,mInv._32,mInv._33);
+  mPosition = TVector3(mInv._41,mInv._42,mInv._43);
+}
 //----------------------------------------------------------------------------------------
 void TCamera::SetProj(TMatrix16* proj)
 {
@@ -137,11 +142,11 @@ void TCamera::RotateDown(float angle)
     angle *= 2;
     float a;
     TQuaternion axis;
-    SetQuaternionRotationAxis(&axis,&mRight,angle);
+    SetQuaternionRotationAxis(&axis,&mRight,angle);// вокруг этой оси будет производится вращение
     //-----------------------------------------
-    TQuaternion rot = TQuaternion(mLookAt.x,mLookAt.y,mLookAt.z,0);
-    SetQuaternionMultiply(&rot,&rot,&axis);
-    SetQuaternionToAxisAngle(&rot,&mLookAt,&a);
+    TQuaternion rot = TQuaternion(mLookAt.x,mLookAt.y,mLookAt.z,0);// этот вектор будет вращаться
+    SetQuaternionMultiply(&rot,&rot,&axis);// вращаем
+    SetQuaternionToAxisAngle(&rot,&mLookAt,&a);// получаем новый вектор и, как побочный продукт, угол
     //-----------------------------------------
     rot = TQuaternion(mUp.x,mUp.y,mUp.z,0);
     SetQuaternionMultiply(&rot,&rot,&axis);
@@ -229,10 +234,6 @@ void TCamera::UpdateView()
     SetVec3Normalize(&mRight, &mRight);
     SetVec3Normalize(&mUp,    &mUp);
     SetVec3Normalize(&mLookAt,&mLookAt);
-
-    //// привести в соответствии с вектором нормали к Земле.
-    //if(flgUseOrient)
-      //NormalByEarth();
 
     // вычисляет нижний ряд матрицы камеры
     float fView41, fView42, fView43;
@@ -353,7 +354,7 @@ void TCamera::SetDir(TVector3* right, TVector3* up, TVector3* lookat)
   mChangedView = true;
 }
 //----------------------------------------------------------------------------------------
-void TCamera::UpdateForRender()
+void TCamera::Update()
 {
   UpdateView();  
 }

@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -36,11 +36,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "ManagerEffect.h"
 #include "HiTimer.h"
 #include "Logger.h"
+#include "SaveOnHDD.h"
 
 using namespace std;
-
-
-//#define LOG_TIME_COMPILE_SHADER
 
 TManagerEffect::TManagerEffect()
 {
@@ -55,38 +53,42 @@ TManagerEffect::~TManagerEffect()
 void* TManagerEffect::Load(const wchar_t* sPath)
 {
   void* p = NULL;
-  HRESULT hr;
+  //HRESULT hr;
   TMapWStrPtr::iterator fit = mMapPathResource.find(wstring(sPath));
   TMapWStrPtr::iterator eit = mMapPathResource.end();
   if(fit==eit)// не нашли
   {
-    // компилировать Shader
+    // загрузить Shader
     ID3DXEffect* pEffect;
 
-    // замер времени загрузки и компиляции шейдера
-#ifdef LOG_TIME_COMPILE_SHADER
-    guint32 start = ht_GetMSCount();
-#endif
+		DWORD dwShaderFlags = D3DX_PARAMETER_SHARED; 
+		dwShaderFlags |= D3DXSHADER_DEBUG;
+		LPD3DXBUFFER ppBufferError = NULL;
+    D3DXCreateEffectFromFile( m_pd3dDevice, sPath, 
+      NULL, NULL, dwShaderFlags, NULL, &pEffect, &ppBufferError );
 
-    DWORD dwShaderFlags = D3DX_PARAMETER_SHARED;
-    V( D3DXCreateEffectFromFile( m_pd3dDevice, sPath, 
-      NULL, NULL, dwShaderFlags, NULL, &pEffect, NULL ) );
-#ifdef LOG_TIME_COMPILE_SHADER
-    start = ht_GetMSCount() - start;
-    GlobalLoggerGE.WriteF_time("ManagerEffect: LoadShader, compile=%u\n",start);
-#endif
+		if(ppBufferError)
+		{
+			char* sError = (char*)ppBufferError->GetBufferPointer();
+			int sizeError = ppBufferError->GetBufferSize();
+			if(sizeError)
+			{
+				GetLogger()->Get("GE")->Write(sError,sizeError);
+			}
+
+			SAFE_RELEASE(ppBufferError);
+      BL_FIX_BUG();
+		}
 
     p = pEffect;
 
     TMapWStrPtr::value_type val(wstring(sPath),pEffect);
     mMapPathResource.insert(val);
   }
-  else// дубликат
+  else// уже загружен
   {
     p = fit->second;
-  }
-
-  
+  } 
   return p;
 }
 //----------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "LoaderModelDX.h"
 
 
-TLoaderModelDX::TLoaderModelDX( void/*IDirect3DDevice9*/* _m_pd3dDevice)
+TLoaderModelDX::TLoaderModelDX( void* _m_pd3dDevice)
 {
   m_pd3dDevice = (IDirect3DDevice9*)_m_pd3dDevice;
 }

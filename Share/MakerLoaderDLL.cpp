@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -34,7 +34,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 #include "MakerLoaderDLL.h"
-#include "LoaderDLLImpl.h"
+#include "LoaderDLL.h"
 
-MACRO_MAKER_CPP_USE(LoaderDLL,TLoaderDLLImp)
+MACRO_MAKER_CPP_USE(LoaderDLL,TLoaderDLL)
 

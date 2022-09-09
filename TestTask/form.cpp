@@ -4,13 +4,15 @@
 #include <atlconv.h>
 #include "..\GameLib\IClientDeveloperTool.h"
 #include "IGraphicEngine.h"
-#include "SphericalDecart.h"
+#include "ControlLight.h"
+#include "BL_Debug.h"
 
 using namespace nsStruct3D;
 
 TForm::TForm()
 {
 	pGE = IClientDeveloperTool::GetSingleton()->GetComponent()->mGraphicEngine;
+  pCL = NULL;
 }
 //------------------------------------------------------
 TForm::~TForm()
@@ -20,61 +22,15 @@ TForm::~TForm()
 //-------------------------------------------------------------------------------------
 void TForm::Activate()
 {
-	ASSIGN_WIDGET(ebPitch)
-	ASSIGN_WIDGET(ebYaw)
-	ASSIGN_WIDGET(ebDist)
-}
-//-------------------------------------------------------------------------------------
-void TForm::sl_Enter(MyGUI::Widget* _sender)
-{
-  if(_sender==ebPitch)
-	{
-		TVector3 posLight = *(pGE->GetLightPosition(0));
+  ASSIGN_WIDGET(cbViewLight);
+  ASSIGN_WIDGET(cbCountLight);
+  ASSIGN_WIDGET(cbControlLight);
+	ASSIGN_WIDGET(cbPostEffectMirror);
 
-		TSphericalDecart sd;
-		TSphericalDecart::TSpheric s;
-		sd.Decart2Shperic(posLight,s);
-
-	  USES_CONVERSION;
-	  std::string sA = W2A((LPCWSTR)ebPitch->getOnlyText().data());
-		float v = atof(sA.data());
-		s.theta = v;
-		sd.Shperic2Decart(s,posLight);
-
-		pGE->SetLightPosition(0,&posLight);
-	}
-	else if(_sender==ebYaw)
-	{
-		TVector3 posLight = *(pGE->GetLightPosition(0));
-
-		TSphericalDecart sd;
-		TSphericalDecart::TSpheric s;
-		sd.Decart2Shperic(posLight,s);
-
-		USES_CONVERSION;
-		std::string sA = W2A((LPCWSTR)ebPitch->getOnlyText().data());
-		float v = atof(sA.data());
-		s.fi = v;
-		sd.Shperic2Decart(s,posLight);
-
-		pGE->SetLightPosition(0,&posLight);
-	}
-	else if(_sender==ebDist)
-	{
-		TVector3 posLight = *(pGE->GetLightPosition(0));
-
-		TSphericalDecart sd;
-		TSphericalDecart::TSpheric s;
-		sd.Decart2Shperic(posLight,s);
-
-		USES_CONVERSION;
-		std::string sA = W2A((LPCWSTR)ebPitch->getOnlyText().data());
-		float v = atof(sA.data());
-		s.r = v;
-		sd.Shperic2Decart(s,posLight);
-
-		pGE->SetLightPosition(0,&posLight);
-	}
+  cbViewLight->eventMouseButtonClick += MyGUI::newDelegate(this, &TForm::sl_View);
+  cbCountLight->eventComboChangePosition += MyGUI::newDelegate(this, &TForm::sl_Count);
+  cbControlLight->eventComboChangePosition += MyGUI::newDelegate(this, &TForm::sl_Control);
+  cbPostEffectMirror->eventMouseButtonClick += MyGUI::newDelegate(this, &TForm::sl_PostEffectMirror);
 }
 //-------------------------------------------------------------------------------------
 const char* TForm::GetNameLayout()
@@ -89,41 +45,91 @@ void* TForm::GetParent()
 //-------------------------------------------------------------------------------------
 void TForm::SetupTabChild()
 {
-  mVectorChild_Tab.push_back(ebPitch);
-  mVectorChild_Tab.push_back(ebYaw);
-  mVectorChild_Tab.push_back(ebDist);
+  mVectorChild_Tab.push_back(cbViewLight);
+  mVectorChild_Tab.push_back(cbCountLight);
+  mVectorChild_Tab.push_back(cbControlLight);
 }
 //-------------------------------------------------------------------------------------
 void TForm::KeyEvent(MyGUI::Widget* _sender, MyGUI::KeyCode _key, MyGUI::Char _char)
 {
-  switch(_key.getValue())
-  {
-    case MyGUI::KeyCode::Return:
-      sl_Enter(_sender);
-      break;
-    default:;
-  }
-}
-//-------------------------------------------------------------------------------------
-void TForm::SetPitch(float v)
-{
-	char s[100];
-	sprintf(s,"%2.2f",v);
-	ebPitch->setCaption(s);
-}
-//-------------------------------------------------------------------------------------
-void TForm::SetYaw(float v)
-{
-	char s[100];
-	sprintf(s,"%2.2f",v);
-	ebYaw->setCaption(s);
-}
-//-------------------------------------------------------------------------------------
-void TForm::SetDist(float v)
-{
-	char s[100];
-	sprintf(s,"%3.2f",v);
-	ebDist->setCaption(s);
-}
-//-------------------------------------------------------------------------------------
 
+}
+//-------------------------------------------------------------------------------------
+void TForm::SetCountLight(int v)
+{
+  cbCountLight->setIndexSelected(v-1);
+}
+//-------------------------------------------------------------------------------------
+void TForm::SetControlLight(int v)
+{
+  cbControlLight->setIndexSelected(v);
+}
+//-------------------------------------------------------------------------------------
+void TForm::SetViewLight(bool v)
+{
+	cbViewLight->setStateSelected(v);
+}
+//-------------------------------------------------------------------------------------
+void TForm::SetPostEffectMirror(bool v)
+{
+	cbPostEffectMirror->setStateSelected(v);
+}
+//-------------------------------------------------------------------------------------
+void TForm::sl_View(MyGUI::Widget* _sender)
+{
+  cbViewLight->setStateSelected(!cbViewLight->getStateSelected());
+  pCL->SetViewObject(cbViewLight->getStateSelected());
+}
+//-------------------------------------------------------------------------------------
+void TForm::sl_Count(MyGUI::ComboBox* _sender, size_t _index)
+{
+  BL_ASSERT(pCL);
+  SetAllLightDisable();
+  for(size_t i = 0 ; i < _index+1 ; i++ )
+    pCL->SetLightEnable(i,true);
+}
+//-------------------------------------------------------------------------------------
+void TForm::sl_Control(MyGUI::ComboBox* _sender, size_t _index)
+{
+  BL_ASSERT(pCL);
+}
+//-------------------------------------------------------------------------------------
+void TForm::SetControlLight(TControlLight* pcl)
+{
+  pCL = pcl;
+  //---------------------------------------------
+  cbCountLight->removeAllItems();
+  cbControlLight->removeAllItems();
+  int cnt = pCL->GetCountAllLight();
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    char s[10];
+    sprintf(s,"%d",i+1);
+    cbCountLight->addItem(s);
+    cbControlLight->addItem(s);
+  }
+  //---------------------------------------------
+  SetCountLight(1);
+  SetControlLight(0);
+  SetViewLight(true);
+	SetPostEffectMirror(pGE->GetPostEffectMirror());
+}
+//-------------------------------------------------------------------------------------
+int TForm::GetCurrentLight()
+{
+  return cbControlLight->getIndexSelected();
+}
+//-------------------------------------------------------------------------------------
+void TForm::SetAllLightDisable()
+{
+  int cnt = pCL->GetCountAllLight();
+  for(int i = 0 ; i < cnt ; i++)
+    pCL->SetLightEnable(i,false);
+}
+//-------------------------------------------------------------------------------------
+void TForm::sl_PostEffectMirror(MyGUI::Widget* _sender)
+{
+  cbPostEffectMirror->setStateSelected(!cbPostEffectMirror->getStateSelected());
+	pGE->SetPostEffectMirror(cbPostEffectMirror->getStateSelected());
+}
+//-------------------------------------------------------------------------------------

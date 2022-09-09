@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -50,6 +50,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "ShaderStack.h"
 #include "ExecShaderStack.h"
 #include "IModelGE.h"
+#include <list>
 
 class TManagerResourceDX;
 
@@ -68,6 +69,9 @@ protected:
   std::vector<int>           mVectorShaderStackMask;
   TExecShaderStack           mExecSS;
 
+	typedef std::list<IDirect3DCubeTexture9*> TListPtr;
+	TListPtr mListCubeMap;
+
 public:
   
   TModelDX(TManagerResourceDX* managerResourceDX);
@@ -77,17 +81,15 @@ public:
 
   virtual int GetCntEffect();
 
-  /*
-    Рендер маски частей
-    с ориентацией и положением частей
-    в мировых координатах
-  */
-  virtual void Draw(std::vector<unsigned char>* state, //                           (От ObjectDX)
-                    std::vector<unsigned char>* mask,  //                           (От ObjectDX)
-                    std::vector<nsStruct3D::TMatrix16/*D3DXMATRIXA16*/*>* matrix,//кол-во совпадает с cSubset (От ObjectDX)
-                    nsStruct3D::TMatrix16/*D3DXMATRIXA16*/* mWorld,    // где и как расположен объект         (От ObjectDX)
-                    float alphaTransparency,  // прозрачность                        (От ObjectDX)
-                    nsStruct3D::TMatrix16* pView); // расположение и ориентация камеры    (от ManagerDirectX)
+  virtual void Draw(std::vector<void*>* pVecTexCubeMap,//                           
+                    std::vector<unsigned char>* state, //                           
+                    std::vector<unsigned char>* mask,  //                           
+                    std::vector<nsStruct3D::TMatrix16*>* matrix,//кол-во совпадает с cSubset 
+                    nsStruct3D::TMatrix16* pWorld,    // где и как расположен объект         
+                    float alphaTransparency,  // прозрачность                       
+                    const nsStruct3D::TMatrix16* pView, // расположение и ориентация камеры    
+                    void* pEffect = NULL);
+
 
   bool Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strPath);
   void Destroy();
@@ -103,13 +105,14 @@ public:
   virtual void SetShaderStackMask(std::vector<int>* pVectorMask);// по этой маске настраиваются шейдеры эффектов
   virtual TShaderStack* GetShaderStack(int index);// взять стек для настройки
 
+	virtual void* MakeTextureForCubeMap(int index);// для получения текстуры - надо перебрать все эффекты
+
 protected:
   void Done();
   //---------------------------------------------------------
   void SetupVectorLOD();
   bool AddEffectDX(ILoaderModelGE::TDefGroup* pDefGroup);
-  float GetDist(D3DXMATRIXA16* mWorld, D3DXMATRIXA16* mView);
-  void Draw(TEffectDX* pEffect);
+  void Draw(TEffectDX* pEffect, ID3DXMesh* pCurMesh);
 
   virtual bool Load(LPCWSTR strFilenameData);
   //---------------------------------------------------------
@@ -144,6 +147,28 @@ protected:
   void SetupShaderStack();
   void SetShaderStack(TEffectDX* pEffect,int index);
   void AddShaderStack(ID3DXEffect* p);
+
+	void LostCubeMap();
+	void ResetCubeMap();
+
+  // использовать свой эффект
+  void DrawSelf(std::vector<void*>* pVecTexCubeMap,//                           
+						    std::vector<unsigned char>* state, //                           
+                std::vector<unsigned char>* mask,  //                           
+                std::vector<nsStruct3D::TMatrix16*>* matrix,//кол-во совпадает с cSubset 
+                nsStruct3D::TMatrix16* pWorld,    // где и как расположен объект         
+                float alphaTransparency,  // прозрачность                       
+                const nsStruct3D::TMatrix16* pView); // расположение и ориентация камеры    
+
+  // подменить эффект для отрисовки (модель служит как источник ресурсов)
+  void DrawBy(void* pVecEffect,// пока один эффект на модель, но нужно будет переделать на вектор
+              std::vector<void*>* pVecTexCubeMap,    //                           
+              std::vector<unsigned char>* state,     //                           
+              std::vector<unsigned char>* mask,      //                           
+              std::vector<nsStruct3D::TMatrix16*>* matrix,//кол-во совпадает с cSubset 
+              nsStruct3D::TMatrix16* pWorld,    // где и как расположен объект         
+              float alphaTransparency,  // прозрачность                        
+              const nsStruct3D::TMatrix16* pView); // расположение и ориентация камеры    
 };
 //-----------------------------------------------------------------
 

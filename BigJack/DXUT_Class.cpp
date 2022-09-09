@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -36,7 +36,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "DXUT_Class.h"
 #include "BigJack.h"
 
+
 using namespace std;
+using namespace nsStruct3D;
 
 TDXUT* pDXUT_Realize = NULL;
 
@@ -377,5 +379,21 @@ HRESULT TDXUT::CaptureState9()
 HRESULT TDXUT::ApplyState9()
 {
   return m_pManagerState.Pop();
+}
+//--------------------------------------------------------------------------------------
+void TDXUT::GetCubeMapViewMatrix( DWORD dwFace, TMatrix16& m)
+{
+	D3DXMATRIX mdx = DXUTGetCubeMapViewMatrix(dwFace);
+	MATRIX16_EQUAL_M_M(m,mdx);
+}
+//--------------------------------------------------------------------------------------
+DXUTDeviceSettings TDXUT::GetDeviceSettings()
+{
+	return DXUTGetDeviceSettings();
+}
+//--------------------------------------------------------------------------------------
+const D3DSURFACE_DESC* TDXUT::GetD3D9BackBufferSurfaceDesc()
+{
+  return DXUTGetD3D9BackBufferSurfaceDesc();
 }
 //--------------------------------------------------------------------------------------

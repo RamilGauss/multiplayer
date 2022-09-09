@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013, 2013, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -60,19 +60,21 @@ IBaseObjectGE::~IBaseObjectGE()
   Done();
 }
 //------------------------------------------------------------------------------------------------
-void IBaseObjectGE::Draw(TMatrix16* mView)
+void IBaseObjectGE::Draw(const TMatrix16* mView, void* pEffect)
 {          
   if(flgShow==false) return;
 
   // назначить шейдерный стек
   SetupShaderStackModelGE();
 
-  mModel->Draw(&mState,             //                       (От ObjectDX)
+  mModel->Draw(&mVectorUseCubeMap,
+		           &mState,             //                       
                &mMask,
-               &mVectorMatrix,//кол-во совпадает с cSubset   (От ObjectDX)
-               &mWorld,       // где и как расположен объект (От ObjectDX)
+               &mVectorMatrix,//кол-во совпадает с cSubset   
+               &mWorld,       // где и как расположен объект 
                mAlphaTransparency,
-               mView );// расположение и ориентация камеры   (от ManagerDirectX)
+               mView,// расположение и ориентация камеры   
+               pEffect);
 }
 //------------------------------------------------------------------------------------------------
 void IBaseObjectGE::SetModel(IModelGE* pModel)
@@ -84,6 +86,8 @@ void IBaseObjectGE::SetModel(IModelGE* pModel)
   SetupDefaultMapUse();
 
   EventSetModelGE();
+	// если используется cube map
+	SetupVectorForCubeMap();
 }
 //------------------------------------------------------------------------------------------------
 IModelGE* IBaseObjectGE::GetModel()
@@ -139,5 +143,37 @@ int IBaseObjectGE::GetShaderStackIndexByName(int index, const char* nameParam)
 {
   TShaderStack* pSS = mModel->GetShaderStack(index);
   return pSS->GetIndexByName(nameParam);
+}
+//------------------------------------------------------------------------------------------------
+int IBaseObjectGE::GetCountPartForCubeMap()
+{
+	int nFind = 0;
+	int cnt = mVectorUseCubeMap.size();
+	for(int i = 0 ; i < cnt ; i++)
+	{
+		if(mVectorUseCubeMap[i])
+			nFind++;
+	}
+	return nFind;
+}
+//------------------------------------------------------------------------------------------------
+void* IBaseObjectGE::GetTextureForCubeMap(int index)
+{
+	int nFind = 0;
+	int cnt = mVectorUseCubeMap.size();
+	for(int i = 0 ; i < cnt ; i++)
+	{
+		if(mVectorUseCubeMap[i])
+			nFind++;
+		if(index==nFind-1) return mVectorUseCubeMap[i];
+	}
+	return NULL;
+}
+//------------------------------------------------------------------------------------------------
+void IBaseObjectGE::SetupVectorForCubeMap()
+{
+	int cnt = mModel->GetCntEffect();
+	for(int i = 0 ; i < cnt ; i++ )
+		mVectorUseCubeMap.push_back(mModel->MakeTextureForCubeMap(i));
 }
 //------------------------------------------------------------------------------------------------

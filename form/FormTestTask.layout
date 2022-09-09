@@ -1,65 +1,42 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <MyGUI type="Layout" version="3.2.0">
-    <Widget type="Window" skin="Canvas" position="760 585 255 390" align="Right VCenter" layer="Main" name="_Main">
+    <Widget type="Window" skin="Canvas" position="760 353 255 382" align="Right VCenter" layer="Main" name="_Main">
         <Property key="MaxSize" value="330 240"/>
         <Property key="Movable" value="true"/>
         <Property key="MinSize" value="280 240"/>
-        <Property key="Caption" value="Colour picker"/>
-        <Widget type="EditBox" skin="EditBox" position="10 165 60 30" align="Right Top" name="ebPitch"/>
-        <Widget type="EditBox" skin="EditBox" position="10 200 60 30" align="Right Top" name="ebYaw"/>
-        <Widget type="TextBox" skin="TextBox" position="75 170 60 25" align="HStretch Top" name="lIP">
-            <Property key="TextAlign" value="Left VCenter"/>
-            <Property key="TextShadowColour" value="0.725146 0.258678 0.258678"/>
-            <Property key="Caption" value="Тангаж"/>
-        </Widget>
-        <Widget type="TextBox" skin="TextBox" position="70 200 95 30" align="Left Top" name="lLogin">
-            <Property key="Caption" value="Рыскание"/>
-            <Property key="TextAlign" value="Left VCenter"/>
-        </Widget>
-        <Widget type="TextBox" skin="TextBox" position="75 235 90 30" name="lPort">
-            <Property key="Caption" value="Расстояние"/>
-            <Property key="TextAlign" value="Left VCenter"/>
-        </Widget>
-        <Widget type="EditBox" skin="EditBox" position="10 235 60 30" align="Right Top" name="ebDist"/>
-        <Widget type="EditBox" skin="EditBox" position="5 275 240 110">
+        <Widget type="EditBox" skin="EditBox" position="10 200 240 105">
             <Property key="Caption" value="Управление камерой:\nW-вперед, S-назад, A-влево,D-вправо,\nQ-вниз,E-вверх,\nB-привязка к объекту(вкл/выкл), ЛКМ-камера, ПКМ-освещение"/>
             <Property key="TextAlign" value="Left Top"/>
             <Property key="WordWrap" value="true"/>
             <Property key="ReadOnly" value="true"/>
         </Widget>
-        <Widget type="EditBox" skin="EditBox" position="10 10 190 25">
+        <Widget type="EditBox" skin="EditBox" position="10 10 235 25">
             <Property key="Caption" value="Управление освещением:"/>
         </Widget>
-        <Widget type="Widget" skin="PanelSkin" position="15 45 107 107">
-            <Widget type="Widget" skin="WhiteSkin" position="2 2 101 101" name="widget_ColourView"/>
+        <Widget type="Button" skin="CheckBox" position="10 50 200 45" name="cbViewLight">
+            <Property key="Caption" value="Визуализировать \nисточники света"/>
+            <Property key="StateSelected" value="false"/>
         </Widget>
-        <Widget type="EditBox" skin="EditBox" position="190 110 56 26" name="edit_Blue">
-            <Property key="CursorPosition" value="0"/>
-            <Property key="Caption" value="256"/>
-            <Property key="TextAlign" value="Center"/>
-            <Property key="MaxTextLength" value="3"/>
+        <Widget type="ComboBox" skin="ComboBox" position="165 110 85 25" name="cbCountLight">
+            <Property key="AddItem" value="1"/>
+            <Property key="AddItem" value="2"/>
+            <Property key="AddItem" value="3"/>
+            <Property key="AddItem" value="4"/>
         </Widget>
-        <Widget type="TextBox" skin="TextBox" position="130 110 48 26">
-            <Property key="TextAlign" value="Right VCenter"/>
-            <Property key="Caption" value="Blue"/>
+        <Widget type="ComboBox" skin="ComboBox" position="167 155 84 25" name="cbControlLight">
+            <Property key="AddItem" value="1"/>
+            <Property key="AddItem" value="2"/>
+            <Property key="AddItem" value="3"/>
+            <Property key="AddItem" value="4"/>
         </Widget>
-        <Widget type="TextBox" skin="TextBox" position="130 80 48 26">
-            <Property key="TextAlign" value="Right VCenter"/>
-            <Property key="Caption" value="Green"/>
+        <Widget type="EditBox" skin="EditBox" position="11 155 149 25" name="ebControl">
+            <Property key="Caption" value="Текущий"/>
         </Widget>
-        <Widget type="EditBox" skin="EditBox" position="190 80 56 26" name="edit_Green">
-            <Property key="TextAlign" value="Center"/>
-            <Property key="Caption" value="256"/>
-            <Property key="MaxTextLength" value="3"/>
+        <Widget type="EditBox" skin="EditBox" position="9 110 150 25">
+            <Property key="Caption" value="Количество"/>
         </Widget>
-        <Widget type="TextBox" skin="TextBox" position="125 50 48 24">
-            <Property key="Caption" value="Red"/>
-            <Property key="TextAlign" value="Right VCenter"/>
-        </Widget>
-        <Widget type="EditBox" skin="EditBox" position="190 50 56 26" name="edit_Red">
-            <Property key="Caption" value="256"/>
-            <Property key="TextAlign" value="Center"/>
-            <Property key="MaxTextLength" value="3"/>
+        <Widget type="Button" skin="CheckBox" position="15 320 155 45" name="cbPostEffectMirror">
+            <Property key="Caption" value="Пост-эффект в\nотражении"/>
         </Widget>
     </Widget>
 </MyGUI>

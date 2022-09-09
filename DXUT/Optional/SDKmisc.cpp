@@ -1625,3 +1625,26 @@ HRESULT DXUTSnapD3D10Screenshot( LPCTSTR szFileName )
     return E_FAIL;
 }
 //--------------------------------------------------------------------------------------
+HRESULT DXUTSnapD3D9Screenshot_Surface( LPCTSTR szFileName, IDirect3DSurface9* pSurf )
+{
+	HRESULT hr = S_OK;
+	IDirect3DDevice9* pDev = DXUTGetD3D9Device();
+	if( !pDev )
+		return E_FAIL;
+
+	hr = D3DXSaveSurfaceToFile( szFileName, D3DXIFF_JPG, pSurf, NULL, NULL );
+
+	return hr;
+}
+//--------------------------------------------------------------------------------------
+HRESULT DXUTSnapD3D9Screenshot_Texture( LPCTSTR szFileName, IDirect3DTexture9* pText )
+{
+  HRESULT hr = S_OK;
+  IDirect3DDevice9* pDev = DXUTGetD3D9Device();
+  if( !pDev )
+    return E_FAIL;
+
+  hr = D3DXSaveTextureToFile( szFileName, D3DXIFF_JPG, pText, NULL );
+  return hr;
+}
+//--------------------------------------------------------------------------------------

@@ -1,0 +1,20 @@
+<root>
+	<lod>1000</lod>
+	<part>
+		<strPathShader>shaderPoolBall.fx</strPathShader>
+		<paramShader>paramShader.xml</paramShader>
+		<strTechnique>Render</strTechnique>
+		<useCubeMap>1</useCubeMap>
+		<texture>Pool_Ball.png</texture>
+		<name>PoolBall</name>
+		<numUse>0</numUse>
+		<vAmbient>0.6;0.6;0.6</vAmbient>
+		<vDiffuse>0.4;0.4;0.4</vDiffuse>
+		<vSpecular>1.0;1.0;1.0</vSpecular>
+		<nShininess>100</nShininess>
+		<bSpecular>1</bSpecular>
+		<mTypeLOD>0</mTypeLOD>
+		<mflgNormal>1</mflgNormal>
+		<primitives>PoolBall.obj</primitives>
+	</part>
+</root>

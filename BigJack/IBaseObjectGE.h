@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -57,9 +57,10 @@ public:
   void SetModel(IModelGE* pModel);
   IModelGE* GetModel();
 
-  void Draw(nsStruct3D::TMatrix16* mView);
+  void Draw(const nsStruct3D::TMatrix16* mView, void* pEffect = NULL);
 
   void SetShow(bool show){flgShow=show;}
+  bool IsShow(){return flgShow;}
 
   // вернет true - объект жив, false - закончил жить
   // должно быть задано время начало жизни, см. IBaseObject::mTimeCreation - хрень хрень
@@ -77,6 +78,14 @@ public:
   float GetAlphaTransparency(){return mAlphaTransparency;}
   void  SetAlphaTransparency(float val){mAlphaTransparency = val;}
 
+	int GetCountPartForCubeMap();
+
+	void* GetTextureForCubeMap(int i);
+
+  // пока так, в будущем должно быть const char* GetPostEffect();
+  virtual bool IsGlowEffect(){return false;};
+  virtual bool IsGlowable(){return false;};
+
 protected:
   IModelGE* mModel;// внешний вид 
 
@@ -84,6 +93,8 @@ protected:
 
   // время создания, необходимо для расчета анимации
   guint32 mTimeCreation;// мс
+
+	std::vector<void*> mVectorUseCubeMap;//вектор IDirect3DCubeTexture9**
 protected:
 
   void Done();
@@ -91,6 +102,7 @@ protected:
   // такие же функции должны быть и в Prediction
   void SetupVectorNamePart();
   void SetupVectorOrderPart();
+	void SetupVectorForCubeMap();
 
   void SetShaderStackMask(std::vector<int>* shaderStackMask);// настроить маску
   void SetupShaderStack(int indexSS, int index, void* data,int size);

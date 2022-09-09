@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -38,8 +38,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define MakerCameraH
 
 #include "MacroMaker.h"
+#include "TypeDef.h"
 
-MACRO_MAKER_H_USE(Camera)
+MACRO_MAKER_H_EXPORT_USE(SHARE_EI,Camera)
 
 #endif
 

@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 √удаков –амиль —ергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -52,7 +52,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "IControlCamera.h"
 #include <string.h>
 #include "IXML.h"
-#include "SphericalDecart.h"
 
 using namespace std;
 using namespace nsStruct3D;
@@ -67,16 +66,12 @@ using namespace nsKey;
 #define ASPECT_MOUSE_X 0.002f
 #define ASPECT_MOUSE_Y 0.002f
 
-#define ASPECT_LIGHT_X 0.01f
-#define ASPECT_LIGHT_Y 0.01f
-
-
 #define UP 1000000
 
 TClientDeveloperTool_TestTask::TClientDeveloperTool_TestTask()
 {
   flgDragCamera = false;
-	flgDragLight = false;
+	//flgDragLight = false;
 
   mForm = NULL;
 
@@ -102,7 +97,8 @@ bool TClientDeveloperTool_TestTask::MouseEvent(TMouseEvent* pEvent)
 			}
 			else if(pEvent->button==eRClick)// освещение
 			{
-				flgDragLight = false;
+				//flgDragLight = false;
+        mControlLight.EndDrag();
 			}
       break;
     case nsEvent::eButtonDown:
@@ -112,13 +108,9 @@ bool TClientDeveloperTool_TestTask::MouseEvent(TMouseEvent* pEvent)
 				mOldX_Camera = pEvent->x;
 				mOldY_Camera = pEvent->y;
 			}
-			else if(pEvent->button==eRClick)// освещение
-			{
-				flgDragLight = true;
-				mOldX_Light = pEvent->x;
-				mOldY_Light = pEvent->y;		
-				vLight = *(mComponent.mGraphicEngine->GetLightPosition(0));
-			}
+			else
+				if(pEvent->button==eRClick)// освещение
+	        mControlLight.BeginDrag(pEvent->x,pEvent->y);
       break;
     case nsEvent::eButtonDblClick:
       break;
@@ -136,21 +128,10 @@ bool TClientDeveloperTool_TestTask::MouseEvent(TMouseEvent* pEvent)
         mOldX_Camera = pEvent->x;
         mOldY_Camera = pEvent->y;
       }
-			if(flgDragLight)
-			{
-				float dPitch = float(pEvent->y - mOldY_Light)*ASPECT_LIGHT_X;// theta
-				float dYaw   = float(pEvent->x - mOldX_Light)*ASPECT_LIGHT_Y;// он же fi
-				TSphericalDecart::TSpheric s;
-				TSphericalDecart sd;
-				sd.Decart2Shperic(vLight,s);// из декартовых в сферические
-				s.fi += dYaw;
-				s.theta += dPitch;
-				TVector3 vNew;
-				sd.Shperic2Decart(s,vNew);// обратно
-				mComponent.mGraphicEngine->SetLightPosition(0,&vNew);
-				mForm->SetPitch(s.theta);
-				mForm->SetYaw(s.fi);
-			}
+      mControlLight.Drag(mForm->GetCurrentLight(),
+                         mComponent.mControlCamera->GetView(),
+                         pEvent->x,pEvent->y);
+      break;
   }
   return true;
 }
@@ -270,21 +251,16 @@ void TClientDeveloperTool_TestTask::Init(TComponentClient* pComponent, const cha
 
   CreateObjects();
 
-  mForm = new TForm;
- 
-  mComponent.mGUI->Add(string("mForm"),mForm);
-  // показать форму
-  mForm->Show();
-  // подстроитьс€
-  mComponent.mGUI->Resize();
-
   bool resLoadMSM = mComponent.mMStateMachine->Load("../game_param/TestTask.xml", mIDkey);
   BL_ASSERT(resLoadMSM);
 
 	mComponent.mControlCamera->RotateDown(float(M_PI/4));
 	mComponent.mControlCamera->SetDistObj(-5.0f);
 	BindObj();
-	InitForm();
+  // сначала подготовка управлением освещени€
+  InitControlLight();
+  // далее после подготовки отдать в форму
+  InitForm();
 }
 //------------------------------------------------------------------------------------
 void TClientDeveloperTool_TestTask::CreateObjects()
@@ -332,13 +308,24 @@ void TClientDeveloperTool_TestTask::BindObj()
 //---------------------------------------------------------------------------------------------
 void TClientDeveloperTool_TestTask::InitForm()
 {
-	TVector3 v = *(mComponent.mGraphicEngine->GetLightPosition(0));
-	TSphericalDecart::TSpheric s;
-	TSphericalDecart sd;
-	sd.Decart2Shperic(v,s);// из декартовых в сферические
-	
-	mForm->SetPitch(s.theta);
-	mForm->SetYaw(s.fi);
-	mForm->SetDist(s.r);
+  // настройка GUI
+  mForm = new TForm;
+  mComponent.mGUI->Add(string("mForm"),mForm);
+  // показать форму
+  mForm->Show();
+  // подстроитьс€
+  mComponent.mGUI->Resize();
+
+  mForm->SetControlLight(&mControlLight);
+}
+//---------------------------------------------------------------------------------------------
+void TClientDeveloperTool_TestTask::InitControlLight()
+{
+  mControlLight.Init();
+
+  // центр вращени€ будет центром шара
+  const TMatrix16* pM = pSphere->GetWorld();
+  TVector3 posSphere = TVector3(pM->_41,pM->_42,pM->_43);
+  mControlLight.SetPosition(&posSphere);
 }
 //---------------------------------------------------------------------------------------------

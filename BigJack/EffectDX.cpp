@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -39,6 +39,26 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "DXUT.h"
 #include "ModelDX.h"
 
+namespace nsEffectDX
+{
+	const char* strAmbient  			= "Ambient";
+	const char* strDiffuse  			= "Diffuse";
+	const char* strSpecular 			= "Specular";
+	const char* strOpacity  			= "Opacity";
+	const char* strSpecularPower  = "SpecularPower";
+	const char* strLightColor     = "LightColor";
+	const char* strLightPosition  = "LightPosition";
+	const char* strCameraPosition = "CameraPosition";
+	const char* strTexture    		= "Texture";
+	const char* strTime       		= "Time";
+	const char* strWorld      		= "World";
+	const char* strView       		= "View";
+	const char* strProjection 		= "Proj";
+	// доп. параметры
+	const char* strTexCubeMap     = "TextureCubeMap";
+};
+
+using namespace nsEffectDX;
 
 TEffectDX::TEffectDX()
 {
@@ -58,6 +78,8 @@ TEffectDX::TEffectDX()
   hWorld = NULL;
   hProjection = NULL;
   hView = NULL;
+
+	hTexCubeMap = NULL;
 } 
 //-----------------------------------------------------------
 TEffectDX::~TEffectDX()
@@ -68,19 +90,22 @@ TEffectDX::~TEffectDX()
 void TEffectDX::Init()
 {
   // Cache the effect handles
-  hAmbient = p->GetParameterBySemantic( 0, "Ambient" );
-  hDiffuse = p->GetParameterBySemantic( 0, "Diffuse" );
-  hSpecular = p->GetParameterBySemantic( 0, "Specular" );
-  hOpacity = p->GetParameterBySemantic( 0, "Opacity" );
-  hSpecularPower = p->GetParameterBySemantic( 0, "SpecularPower" );
-  hLightColor = p->GetParameterBySemantic( 0, "LightColor" );
-  hLightPosition = p->GetParameterBySemantic( 0, "LightPosition" );
-  hCameraPosition = p->GetParameterBySemantic( 0, "CameraPosition" );
-  hTexture = p->GetParameterBySemantic( 0, "Texture" );
-  hTime = p->GetParameterBySemantic( 0, "Time" );
-  hWorld = p->GetParameterBySemantic( 0, "World" );
-  hView = p->GetParameterBySemantic( 0, "View" );
-  hProjection = p->GetParameterBySemantic( 0, "Proj" );
+  hAmbient = p->GetParameterBySemantic( 0, strAmbient );
+  hDiffuse = p->GetParameterBySemantic( 0, strDiffuse );
+  hSpecular = p->GetParameterBySemantic( 0, strSpecular );
+  hOpacity = p->GetParameterBySemantic( 0, strOpacity );
+  hSpecularPower = p->GetParameterBySemantic( 0, strSpecularPower );
+  hLightColor = p->GetParameterBySemantic( 0, strLightColor );
+  hLightPosition = p->GetParameterBySemantic( 0, strLightPosition );
+  hCameraPosition = p->GetParameterBySemantic( 0, strCameraPosition );
+  hTexture = p->GetParameterBySemantic( 0, strTexture );
+  hTime = p->GetParameterBySemantic( 0, strTime );
+  hWorld = p->GetParameterBySemantic( 0, strWorld );
+  hView = p->GetParameterBySemantic( 0, strView );
+  hProjection = p->GetParameterBySemantic( 0, strProjection );
+	//---------------------------------------------------
+	// доп. параметры
+	hTexCubeMap = p->GetParameterBySemantic( 0, strTexCubeMap );
 }
 //-----------------------------------------------------------
 HRESULT TEffectDX::SetMatrixWorld(D3DXMATRIXA16* matrix)
@@ -150,8 +175,46 @@ void TEffectDX::SetInnerShaderParam()
   V( p->SetTexture(   hTexture,       mMaterial.pTexture ) );
 }
 //-----------------------------------------------------------
-void TEffectDX::GetAlphaTransparency(float alphaTransparency)
+void TEffectDX::SetAlphaTransparency(float alphaTransparency)
 {
   mMaterial.fAlpha = alphaTransparency;
 }
 //-----------------------------------------------------------
+bool TEffectDX::UseCubeMap()
+{
+	return mMaterial.flgUseCubeMap;
+}
+//-----------------------------------------------------------
+void TEffectDX::SetTexCubeMap(IDirect3DCubeTexture9** pTexture)
+{
+	if(mMaterial.flgUseCubeMap==false) return;
+	HRESULT hr;
+	V( p->SetTexture( hTexCubeMap, *pTexture ) );
+}
+//-----------------------------------------------------------
+void TEffectDX::SetTexture(IDirect3DTexture9* pTexture)
+{
+	mMaterial.pTexture = pTexture;
+}
+//----------------------------------------------------------------------------------------------------	
+void TEffectDX::SetTexture(const char* nameTexture, IDirect3DTexture9* pTexture)
+{
+  D3DXHANDLE hNameTexture = p->GetParameterBySemantic( 0, nameTexture );
+	HRESULT hr;
+  V( p->SetTexture( hNameTexture, pTexture ) );
+}
+//----------------------------------------------------------------------------------------------------	
+void TEffectDX::SetBool(const char* nameTexture, bool v)
+{
+	D3DXHANDLE hNameTexture = p->GetParameterBySemantic( 0, nameTexture );
+	HRESULT hr;
+	V( p->SetBool( hNameTexture, v ) );
+}
+//----------------------------------------------------------------------------------------------------	
+void TEffectDX::SetFloat(const char* nameTexture, float v)
+{
+	D3DXHANDLE hNameTexture = p->GetParameterBySemantic( 0, nameTexture );
+	HRESULT hr;
+	V( p->SetFloat( hNameTexture, v ) );
+}
+//----------------------------------------------------------------------------------------------------	

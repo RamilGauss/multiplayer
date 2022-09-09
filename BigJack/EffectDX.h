@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -64,12 +64,16 @@ class TEffectDX
   D3DXHANDLE  hProjection;
   D3DXHANDLE  hView;
   //----------------------------------------------------------------------------------------
+	D3DXHANDLE  hTexCubeMap;
+  //----------------------------------------------------------------------------------------
 
 public:
 
   // Material format 
   struct Material
   {
+		bool flgUseCubeMap;
+
     std::string strName;
     int         mNumUse;// в массиве может быть несколько частей с одинаковым именем, этот параметр поможет выбрать одну из частей
 
@@ -93,6 +97,7 @@ public:
     {
       pTexture = NULL;
       hTechnique = NULL;
+			flgUseCubeMap = false;
     }
   };
   // Vertex format
@@ -108,26 +113,42 @@ public:
   ~TEffectDX();
   
   void SetInnerShaderParam();
-  void GetAlphaTransparency(float alphaTransparency);
+  void SetAlphaTransparency(float alphaTransparency);
 
   void Init();
   void Destroy();
   void LostDevice();
   void ResetDevice();
 
+	void SetTexCubeMap(IDirect3DCubeTexture9** pTexture);
+	void SetTexture(IDirect3DTexture9* pTexture);	// назначить загруженную текстуру
+	void SetTexture(const char* nameTexture, IDirect3DTexture9* pTexture);
+
+	void SetBool(const char* nameTexture, bool v);
+	void SetFloat(const char* nameTexture, float v);
+
   HRESULT SetMatrixWorld(D3DXMATRIXA16* matrix);
   HRESULT Begin(UINT* cPasses , DWORD flag);
   HRESULT BeginPass(UINT iPass);
   HRESULT EndPass();
   HRESULT End();
-//----------------------------------------------------------
-  ID3DXMesh*    pMesh;
-  ID3DXEffect*  p;// функция шейдера
+	//----------------------------------------------------------
+	bool UseCubeMap();
+	//----------------------------------------------------------
+  ID3DXMesh* GetMesh(){return pMesh;}
+  void SetMesh(ID3DXMesh* pM){pMesh=pM;}
+
+  ID3DXEffect* GetEffect(){return p;}
+  void SetEffect(ID3DXEffect* pE){p=pE;}
 
   Material      mMaterial;
 
   unsigned char mTypeLOD;
   bool          mflgNormal;
+
+protected:
+  ID3DXMesh*    pMesh;
+  ID3DXEffect*  p;// функция шейдера
 
 };
 

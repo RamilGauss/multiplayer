@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -55,6 +55,15 @@ void CopyMatrix16(float* pSrc, float* pDst)
   memcpy(pDst,pSrc,sizeof(TMatrix16));
 }
 //-------------------------------------------------------------------------
+float CalcDist(const TMatrix16* m1, const TMatrix16* m2)
+{
+  TVector3 dist;
+  dist.x = m1->_41 - m2->_41;
+  dist.y = m1->_42 - m2->_42;
+  dist.z = m1->_43 - m2->_43;
+  return dist.lenght();
+}
+//-------------------------------------------------------------------------
 TMatrix16* SetMatrixIdentity(TMatrix16* pV)
 {
 #ifdef WIN32
@@ -71,6 +80,16 @@ TMatrix9* SetMatrixIdentity(TMatrix9* pV)
   pV->_21 = 0.0f;  pV->_22 = 1.0f;  pV->_23 = 0.0f;
   pV->_31 = 0.0f;  pV->_32 = 0.0f;  pV->_33 = 1.0f;
   return pV;
+}
+//-------------------------------------------------------------------------
+TMatrix16* SetMatrixTranslation(TMatrix16 *pOut, float x, float y, float z )
+{
+#ifdef WIN32
+  D3DXMATRIX* InOut = (D3DXMATRIX*)pOut;
+  D3DXMatrixTranslation(InOut,x,y,z);
+#else
+#endif
+  return pOut;
 }
 //-------------------------------------------------------------------------
 TMatrix16* SetMatrixRotateX(TMatrix16* pV, float ugol)
@@ -628,18 +647,18 @@ TVector3 TVector3::operator - () const
 TVector3 TVector3::operator + ( const TVector3& pV) const
 {
   TVector3 res;
-  res.x = pV.x + x;
-  res.y = pV.y + y;
-  res.z = pV.z + z;
+  res.x = x + pV.x;
+  res.y = y + pV.y;
+  res.z = z + pV.z;
   return res;
 }
 //-------------------------------------------------------------------------
 TVector3 TVector3::operator - ( const TVector3& pV) const
 {
   TVector3 res;
-  res.x = pV.x - x;
-  res.y = pV.y - y;
-  res.z = pV.z - z;
+  res.x = x - pV.x;
+  res.y = y - pV.y;
+  res.z = z - pV.z;
   return res;
 }
 //-------------------------------------------------------------------------
@@ -695,6 +714,11 @@ bool TVector3::operator < ( const TVector3& v) const
   if(z<v.z)// низший разряд
     return true;
   return false;
+}
+//-------------------------------------------------------------------------
+float TVector3::lenght()
+{
+  return sqrt(x*x+y*y+z*z);
 }
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------

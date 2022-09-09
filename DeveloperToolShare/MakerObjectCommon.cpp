@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -37,11 +37,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@gmai
 
 #include "namespace_ID_BEHAVIOR.h"
 #include "TankTower.h"
-#include "Building.h"
+#include "ObjectScene.h"
 #include "LoaderListPathID.h"
 #include "GlobalParams.h"
 #include "file_operation.h"
 #include "BL_Debug.h"
+#include "ObjectLight.h"
 
 using namespace nsID_BEHAVIOR;
 using namespace std;
@@ -60,11 +61,14 @@ IBaseObjectCommon* TMakerObjectCommon::NewByID_Behavior(unsigned int id_behavior
   IBaseObjectCommon* pObject = NULL;
   switch(id_behavior)
   {
-    case ID_BUILDING:
-      pObject = new TBuilding();
+    case ID_OBJECT_SCENE:
+      pObject = new TObjectScene();
       break;
     case ID_TANK_TOWER:
       pObject = new TTankTower();
+      break;
+    case ID_LIGHT:
+      pObject = new TObjectLight();
       break;
     default:BL_FIX_BUG();
   }

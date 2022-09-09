@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -78,10 +78,10 @@ void TControlCamera::Unlink()
   //return mCamera;
 //}
 //---------------------------------------------------------------------------------------
-//void TControlCamera::SetView(TMatrix16* view)
-//{
-//  mCamera->SetView(view);
-//}
+void TControlCamera::SetView(TMatrix16* view)
+{
+  mCamera->SetView(view);
+}
 ////---------------------------------------------------------------------------------------
 void TControlCamera::SetProj(TMatrix16* proj)
 {
@@ -224,7 +224,7 @@ void TControlCamera::GetFromLinkObj()
 
   // прежде чем менять позицию применить все операции вращения 
   // (что бы не было подергивания. т.к. камера работает по принципу микро изменений)
-  mCamera->UpdateForRender();
+  mCamera->Update();
 
   // взять данные с объекта координаты и ориентацию по маске
   const TMatrix16* pM_Obj = mLinkObj->GetMatrixForCamera();
@@ -259,12 +259,12 @@ void TControlCamera::SetDir(TVector3* right, TVector3* up, TVector3* lookat)
   mCamera->SetDir(lookat, up, right);
 }
 //----------------------------------------------------------------------------------------
-void TControlCamera::UpdateForRender()
+void TControlCamera::Update()
 {
   // применить изменения координат с учетом времени и скорости 
   ApplySpeed();
   GetFromLinkObj();
 
-  mCamera->UpdateForRender();
+  mCamera->Update();
 }
 //----------------------------------------------------------------------------------------

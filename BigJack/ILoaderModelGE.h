@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -46,6 +46,7 @@ class ILoaderModelGE
 public:
   struct TDefGroup
   {
+		bool         flgUseCubeMap;
     std::string  strPathShader;// относительный путь
     std::string  strTechnique;
     std::wstring strTexture;
@@ -74,6 +75,7 @@ public:
 
       mTypeLOD   = 0;
       mflgNormal = true;
+			flgUseCubeMap = false;
     }
   };
 

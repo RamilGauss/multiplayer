@@ -5,7 +5,8 @@
 #include <windows.h>
 #include <list>
 #include <algorithm>
-#include "ApplStandIndication.h"
+#include <vector>
+//#include "ApplStandIndication.h"
 
 
 using namespace std;
@@ -29,6 +30,16 @@ void MyFunc()
 
 int main(int argc, char** argv)
 {
+	std::list<int> v;
+	v.push_back(0);
+	v.push_back(1);
+	//void* p = &(v.at(v.size()-1));
+  std::list<int>::iterator p1 = v.begin();
+  void* p2 = &v.front();
+	v.push_back(2);
+	*p1 = 1;
+	std::list<int>::iterator p1 = v.begin();
+
   //std::vector<char> vec;
   //vec.push_back(0x8);	
 
@@ -40,8 +51,8 @@ int main(int argc, char** argv)
   //packet2.SetPacket((unsigned char*)p,sizeP);
 
   //MyFunc();
-  TApplStandIndication si;
-  si.TryConnect();
+  //TApplStandIndication si;
+  //si.TryConnect();
   //si.Set();
 
   _getch();

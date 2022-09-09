@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -50,9 +50,11 @@ public:
   TManagerResourceDX();
   ~TManagerResourceDX();
 
-  enum{eTypeShader  = 0, 
-       eTypeTexture = 1,
-  };
+  typedef 
+    enum{eUndef       =-1,
+         eTypeShader  = 0, 
+         eTypeTexture = 1,
+  }TypeResource;
   void Setup(IDirect3DDevice9* pd3dDevice);
   // настроить шейдеры движка
 
@@ -65,7 +67,7 @@ public:
   void Destroy();
 
 protected:
-  int FindExt(const wchar_t* sPath);
+  TypeResource DefType(const wchar_t* sPath);
 };
 
 

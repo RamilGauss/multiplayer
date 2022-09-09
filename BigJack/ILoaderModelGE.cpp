@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -52,6 +52,7 @@ const char* SectionPart = "part";
 const char* SectionPathShader = "strPathShader";
 const char* SectionTechnique  = "strTechnique";
 const char* SectionTexture    = "texture";
+const char* SectionUseCubeMap = "useCubeMap";
 const char* SectionName       = "name";
 const char* SectionNumUse     = "numUse";
 const char* SectionAmbient    = "vAmbient";
@@ -200,6 +201,10 @@ bool ILoaderModelGE::LoadPart(int i)
   }
   else return false;
   //------------------------------------------------------------
+	int useCubeMap;
+	if(mXML->ReadInt(SectionUseCubeMap,0,useCubeMap))
+		mVectorGroup[i]->flgUseCubeMap = bool(useCubeMap);
+	//------------------------------------------------------------
   str = mXML->ReadSection(SectionName,0);
   if(str.length())
   {

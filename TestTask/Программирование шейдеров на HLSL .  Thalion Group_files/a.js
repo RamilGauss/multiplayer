@@ -1,1 +1,0 @@
-BM_STAT={site:131020, total:421890, hosts:160, hits:188, users:148, online:4, time: 1362589945};try{;BM_Draw(BM_STAT);}catch(e){}finally{};

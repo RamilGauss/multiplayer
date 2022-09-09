@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -33,20 +33,33 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+
 #ifndef LoaderDLLH
 #define LoaderDLLH
 
-#include "TypeDef.h"
+#include "ILoaderDLL.h"
 
-class SHARE_EI ILoaderDLL
+#ifdef WIN32
+  #include <windows.h>
+#else
+
+#endif
+
+//------------------------------------------------------------------
+class TLoaderDLL : public ILoaderDLL
 {
-public:
-  ILoaderDLL(){};
-  virtual ~ILoaderDLL(){};
+#ifdef WIN32
+  HMODULE hModule;
+#else
+#endif
 
-  virtual bool Init(const char* sPath) = 0;
-  virtual void* Get(const char* nameFunc) = 0;
-  virtual void Done() = 0;
+public:
+  TLoaderDLL();
+  virtual ~TLoaderDLL();
+
+  virtual bool Init(const char* sPath);
+  virtual void* Get(const char* nameFunc);
+  virtual void Done();
 };
 
 #endif

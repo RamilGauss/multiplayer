@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -46,6 +46,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "ManagerResourceDX.h"
 #include "HiTimer.h"
 #include <atlconv.h>
+#include "IGraphicEngine.h"
 
 using namespace nsStruct3D;
 using namespace std;
@@ -66,22 +67,48 @@ TModelDX::~TModelDX()
   Done();
 }
 //----------------------------------------------------------------------------------------------------
-void TModelDX::Draw(vector<unsigned char>* state, // какое состояние нарисовать (От ObjectDX)
+void TModelDX::Draw(vector<void*>* pVecTexCubeMap,    //                           (От ObjectDX)
+                    vector<unsigned char>* state, // какое состояние нарисовать (От ObjectDX)
                     vector<unsigned char>* mask,  // какую из частей нарисовать (От ObjectDX)
                     vector<TMatrix16*>* matrix,// ориентация составных частей внутри объекта, кол-во совпадает с cSubset (От ObjectDX)
                     TMatrix16* pWorld,// где и как расположен объект         (От ObjectDX)
                     float alphaTransparency,
-                    TMatrix16* pView)/*для определения дистанции*/ // расположение и ориентация камеры    (от ManagerDirectX)                   
+                    const TMatrix16* pView,/*для определения дистанции*/ // расположение и ориентация камеры    (от ManagerDirectX)                   
+                    void* pEffect)
 {
-  D3DXMATRIXA16 mView;
-  MATRIX16_EQUAL_M_P(mView,pView)
-
+  if(pEffect)
+    DrawBy(pEffect,
+           pVecTexCubeMap,    //                           (От ObjectDX)
+           state, // какое состояние нарисовать (От ObjectDX)
+           mask,  // какую из частей нарисовать (От ObjectDX)
+           matrix,// ориентация составных частей внутри объекта, кол-во совпадает с cSubset (От ObjectDX)
+           pWorld,// где и как расположен объект         (От ObjectDX)
+           alphaTransparency,
+           pView);/*для определения дистанции*/ // расположение и ориентация камеры    (от ManagerDirectX)                   
+  else
+    DrawSelf(pVecTexCubeMap,    //
+             state, // какое состояние нарисовать 
+             mask,  // какую из частей нарисовать 
+             matrix,// ориентация составных частей внутри объекта, кол-во совпадает с cSubset
+             pWorld,// где и как расположен объект 
+             alphaTransparency,
+             pView);/*для определения дистанции*/ // расположение и ориентация камеры
+}
+//----------------------------------------------------------------------------------------------------
+void TModelDX::DrawSelf(vector<void*>* pVecTexCubeMap,    //    
+										    vector<unsigned char>* state, // какое состояние нарисовать 
+                        vector<unsigned char>* mask,  // какую из частей нарисовать 
+                        vector<TMatrix16*>* matrix,// ориентация составных частей внутри объекта, кол-во совпадает с cSubset
+                        TMatrix16* pWorld,// где и как расположен объект        
+                        float alphaTransparency,
+                        const TMatrix16* pView)/*для определения дистанции*/ // расположение и ориентация камеры
+{
   D3DXMATRIXA16 mWorld;// только из набора видимых
   MATRIX16_EQUAL_M_P(mWorld,pWorld)
 
   //1 Выбрать по ЛОДу mesh
   // расчет расстояния
-  float dist = GetDist(&mWorld,&mView);
+  float dist = CalcDist(pWorld,pView);
   //2 Настроить pEffect на координаты и ориентацию - передать в pEffect матрицу
   // если mArrMatrixSubset==NULL, то координаты и ориентация частей модели неизменны
   //3 Выбрать по состоянию subSet
@@ -117,20 +144,19 @@ void TModelDX::Draw(vector<unsigned char>* state, // какое состояние нарисовать 
 
       D3DXMATRIXA16 mWorld_pro = m * mWorld;
       //-------------------------------------------------
-      pEffect->GetAlphaTransparency(alphaTransparency);
+      pEffect->SetAlphaTransparency(alphaTransparency);
       pEffect->SetInnerShaderParam();
       pEffect->SetMatrixWorld(&mWorld_pro);
+			pEffect->SetTexCubeMap((IDirect3DCubeTexture9**)pVecTexCubeMap->at(i));
       SetShaderStack(pEffect,i);// все части, включая дубликаты
-      Draw(pEffect);
+      Draw(pEffect, pEffect->GetMesh());
       iView++;
     }
   }
 }
 //---------------------------------------------------------------------------------------------------
-void TModelDX::Draw( TEffectDX* pEffect)
+void TModelDX::Draw( TEffectDX* pEffect, ID3DXMesh* pCurMesh)
 {
-  ID3DXMesh* pCurMesh = pEffect->pMesh;
-
   HRESULT hr;
   UINT iPass, cPasses;
 
@@ -170,16 +196,6 @@ bool TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strAbsPath/*путь к фай
   return true;
 }
 //----------------------------------------------------------------------------------------------------
-float TModelDX::GetDist(D3DXMATRIXA16* mWorld, D3DXMATRIXA16* mView)
-{
-  float dist;
-  float dx = mView->_41-mWorld->_41;
-  float dy = mView->_42-mWorld->_42;
-  float dz = mView->_43-mWorld->_43;
-  dist = sqrt(dx*dx+dy*dy+dz*dz);
-  return dist;
-}
-//----------------------------------------------------------------------------------------------------
 void TModelDX::Destroy()
 {
   int cnt = GetCntEffect();
@@ -192,6 +208,7 @@ void TModelDX::LostDevice()
   int cnt = GetCntEffect();
   for(int i = 0 ; i < cnt ; i++)
     mVectorAllEffect[i]->LostDevice();
+	LostCubeMap();
 }
 //----------------------------------------------------------------------------------------------------
 void TModelDX::ResetDevice()
@@ -199,6 +216,8 @@ void TModelDX::ResetDevice()
   int cnt = GetCntEffect();
   for(int i = 0 ; i < cnt ; i++)
     mVectorAllEffect[i]->ResetDevice();
+
+	ResetCubeMap();
 }
 //----------------------------------------------------------------------------------------------------
 bool TModelDX::Load(LPCWSTR strFilenameData)
@@ -238,10 +257,11 @@ bool TModelDX::AddEffectDX(ILoaderModelGE::TDefGroup * pDefGroup)
   // Load material textures
   TEffectDX::Material* pMaterial = &pEffect->mMaterial;
   // заполнить материал данными
-  pMaterial->strTechnique = pDefGroup->strTechnique;
-  pMaterial->strName      = pDefGroup->strName;
-  pMaterial->mNumUse      = pDefGroup->mNumUse;
-  pMaterial->strTexture   = pDefGroup->strTexture;
+	pMaterial->flgUseCubeMap = pDefGroup->flgUseCubeMap;
+  pMaterial->strTechnique  = pDefGroup->strTechnique;
+  pMaterial->strName       = pDefGroup->strName;
+  pMaterial->mNumUse       = pDefGroup->mNumUse;
+  pMaterial->strTexture    = pDefGroup->strTexture;
   USES_CONVERSION;
   pMaterial->strShader = A2W(pDefGroup->strPathShader.data());
 
@@ -255,7 +275,7 @@ bool TModelDX::AddEffectDX(ILoaderModelGE::TDefGroup * pDefGroup)
 
   LoadTexture(pEffect);
 
-  pEffect->pMesh = (ID3DXMesh*)pDefGroup->pMesh;
+  pEffect->SetMesh( (ID3DXMesh*)pDefGroup->pMesh );
 
   mVectorAllEffect.push_back(pEffect);
   return true;
@@ -341,7 +361,7 @@ void TModelDX::LoadEffect(TEffectDX* pEffectDX)
 {
   //guint32 start = ht_GetMSCount();
 
-  pEffectDX->p = (ID3DXEffect*)mManagerResourceDX->Load(pEffectDX->mMaterial.strShader.data());
+  pEffectDX->SetEffect( (ID3DXEffect*)mManagerResourceDX->Load(pEffectDX->mMaterial.strShader.data()) );
 
   //start = ht_GetMSCount() - start;
   //GlobalLoggerGE.WriteF_time("Загрузка эффекта t=%u\n",start);
@@ -425,7 +445,7 @@ void TModelDX::SetShaderStack(TEffectDX* pEffect,int index)
   if(mVectorShaderStackMask[index]==1)
   {
     TShaderStack* pSS = mVectorShaderStack[index];
-    mExecSS.Set(pEffect->p,pSS);
+    mExecSS.Set(pEffect->GetEffect(),pSS);
   }
 }
 //----------------------------------------------------------------------------------------------------
@@ -437,7 +457,7 @@ void TModelDX::SetupShaderStack()
   {
     TEffectDX* pEffectDX = pPart->at(i);
     if(pEffectDX->mflgNormal)
-      AddShaderStack(pEffectDX->p);
+      AddShaderStack(pEffectDX->GetEffect());
   }
 }
 //----------------------------------------------------------------------------------------------------
@@ -478,4 +498,118 @@ void TModelDX::AddShaderStack(ID3DXEffect* p)
     }
   }
 }
-//----------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------	
+//вернет IDirect3DCubeTexture9**
+void* TModelDX::MakeTextureForCubeMap(int index)// для получения текстуры - надо перебрать все эффекты
+{
+	if(mVectorAllEffect[index]->UseCubeMap())
+	{
+		IDirect3DCubeTexture9* pTexCubeMap = NULL;
+		// Create the cube textures
+		HRESULT hr = m_pd3dDevice->CreateCubeTexture( IGraphicEngine::eEnvMapSizeCubemap,
+			1,
+			D3DUSAGE_RENDERTARGET,
+			D3DFMT_A16B16G16R16F,
+			D3DPOOL_DEFAULT,
+			&pTexCubeMap,
+			NULL );
+		mListCubeMap.push_back(pTexCubeMap);
+		return &mListCubeMap.front();
+	}
+
+	return NULL;
+}
+//----------------------------------------------------------------------------------------------------	
+void TModelDX::LostCubeMap()
+{
+	list<IDirect3DCubeTexture9*>::iterator bit = mListCubeMap.begin();
+	list<IDirect3DCubeTexture9*>::iterator eit = mListCubeMap.end();
+	while(bit!=eit)
+	{
+		SAFE_RELEASE(*bit);
+		bit++;
+	}
+}
+//----------------------------------------------------------------------------------------------------	
+void TModelDX::ResetCubeMap()
+{
+	list<IDirect3DCubeTexture9*>::iterator bit = mListCubeMap.begin();
+	list<IDirect3DCubeTexture9*>::iterator eit = mListCubeMap.end();
+	while(bit!=eit)
+	{
+		IDirect3DCubeTexture9* pTexCubeMap = *bit;
+		HRESULT hr = m_pd3dDevice->CreateCubeTexture( IGraphicEngine::eEnvMapSizeCubemap,
+			1,
+			D3DUSAGE_RENDERTARGET,
+			D3DFMT_A16B16G16R16F,
+			D3DPOOL_DEFAULT,
+			&pTexCubeMap,
+			NULL );
+		*bit = pTexCubeMap;
+		bit++;
+	}
+}
+//----------------------------------------------------------------------------------------------------	
+void TModelDX::DrawBy(void* pVecEffect,// пока один эффект на модель, но нужно будет переделать на вектор
+                      vector<void*>* pVecTexCubeMap,    //                           
+                      vector<unsigned char>* state,     //                           
+                      vector<unsigned char>* mask,      //                           
+                      vector<TMatrix16*>* matrix,//кол-во совпадает с cSubset 
+                      TMatrix16* pWorld,    // где и как расположен объект         
+                      float alphaTransparency,  // прозрачность                        
+                      const TMatrix16* pView)// расположение и ориентация камеры    
+{
+  TEffectDX* pEffectBy   = (TEffectDX*)pVecEffect;// одним эффектом прорисовываются все части
+  //------------------------------------------------
+  D3DXMATRIXA16 mWorld;// только из набора видимых
+  MATRIX16_EQUAL_M_P(mWorld,pWorld)
+
+  //1 Выбрать по ЛОДу mesh
+  // расчет расстояния
+  float dist = CalcDist(pWorld,pView);
+  //2 Настроить pEffect на координаты и ориентацию - передать в pEffect матрицу
+  // если mArrMatrixSubset==NULL, то координаты и ориентация частей модели неизменны
+  //3 Выбрать по состоянию subSet
+  TLOD* pCurLOD = &mVectorLOD[0];
+  if(mVectorLOD.size()>1)
+    if(dist>mLOD)
+      pCurLOD = &mVectorLOD[1];
+
+  int cnt = GetCntEffect();
+  int iView = 0;
+  for(int i = 0 ; i < cnt ; i++)
+  {
+    if(mask->operator[](i)==1)
+    {
+      TEffectDX* pEffectSelf = NULL;// одним эффектом прорисовываются все части
+      if(pCurLOD->normal.size()&&pCurLOD->damage.size())
+      {
+        pEffectSelf = pCurLOD->normal[i];
+        if(!state->operator[](i))
+          pEffectSelf = pCurLOD->damage[i];
+      }
+      else 
+      {
+        if(pCurLOD->normal.size())
+          pEffectSelf = pCurLOD->normal[i];
+        else
+          pEffectSelf = pCurLOD->damage[i];
+      }
+      //------------------------------------------
+      D3DXMATRIXA16 m;// только из набора видимых
+      TMatrix16* pV = matrix->operator [](iView);// только из набора видимых
+      MATRIX16_EQUAL_M_P(m,pV)
+
+      D3DXMATRIXA16 mWorld_pro = m * mWorld;
+      //-------------------------------------------------
+      pEffectBy->SetAlphaTransparency(alphaTransparency);
+      pEffectBy->SetInnerShaderParam();
+      pEffectBy->SetMatrixWorld(&mWorld_pro);
+      pEffectBy->SetTexCubeMap((IDirect3DCubeTexture9**)pVecTexCubeMap->at(i));
+      SetShaderStack(pEffectBy,i);// все части, включая дубликаты
+      Draw(pEffectBy, pEffectSelf->GetMesh());
+      iView++;
+    }
+  }
+}
+//----------------------------------------------------------------------------------------------------	

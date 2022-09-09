@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -61,12 +61,15 @@ public:
     с ориентацией и положением частей
     в мировых координатах
   */
-  virtual void Draw(std::vector<unsigned char>* state,     //                           (От ObjectDX)
-                    std::vector<unsigned char>* mask,      //                           (От ObjectDX)
-                    std::vector<nsStruct3D::TMatrix16*>* matrix,//кол-во совпадает с cSubset (От ObjectDX)
-                    nsStruct3D::TMatrix16* mWorld,    // где и как расположен объект         (От ObjectDX)
-                    float alphaTransparency,  // прозрачность                        (От ObjectDX)
-                    nsStruct3D::TMatrix16* pView) = 0; // расположение и ориентация камеры    (от ManagerDirectX)
+  virtual void Draw(std::vector<void*>* pVecTexCubeMap,//                           
+                    std::vector<unsigned char>* state, //                           
+                    std::vector<unsigned char>* mask,  //                           
+                    std::vector<nsStruct3D::TMatrix16*>* matrix,//кол-во совпадает с cSubset 
+                    nsStruct3D::TMatrix16* pWorld,    // где и как расположен объект         
+                    float alphaTransparency,  // прозрачность                       
+                    const nsStruct3D::TMatrix16* pView, // расположение и ориентация камеры    
+                    void* pEffect = NULL) = 0;// полменять ли эффект
+
 
   virtual void SortPartByAlphabetic() = 0;
 
@@ -77,6 +80,8 @@ public:
   
   virtual void SetShaderStackMask(std::vector<int>* pVectorMask) = 0;// по этой маске настраиваются шейдеры эффектов
   virtual TShaderStack* GetShaderStack(int index) = 0;// взять стек для настройки
+
+	virtual void* MakeTextureForCubeMap(int index) = 0;// для получения текстуры - надо перебрать все эффекты
 
 };
 //-----------------------------------------------------------------

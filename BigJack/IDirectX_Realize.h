@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -37,6 +37,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define IDirectX_RealizeH
 
 #include <windows.h>
+#include "Struct3D.h"
+#include "DXUT.h"
 
 class TBigJack;
 
@@ -70,6 +72,12 @@ public:
 
   virtual HRESULT CaptureState9() = 0;
   virtual HRESULT ApplyState9() = 0;
+
+	virtual void GetCubeMapViewMatrix( DWORD dwFace, nsStruct3D::TMatrix16& m ) = 0;
+
+	virtual DXUTDeviceSettings GetDeviceSettings() = 0;
+  
+  virtual const D3DSURFACE_DESC* GetD3D9BackBufferSurfaceDesc() = 0;
 
 protected:
 };

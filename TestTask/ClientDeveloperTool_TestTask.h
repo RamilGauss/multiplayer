@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -40,6 +40,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "Form.h"
 #include "Struct3D.h"
+#include "ControlLight.h"
 
 class IBaseObjectCommon;
 
@@ -52,17 +53,18 @@ class TClientDeveloperTool_TestTask : public IClientDeveloperTool
   int mOldY_Camera;
 
 
-	bool flgDragLight;
-	int mOldX_Light;
-	int mOldY_Light;
-	nsStruct3D::TVector3 vLight;
-
+	//bool flgDragLight;
+	//int mOldX_Light;
+	//int mOldY_Light;
+	//nsStruct3D::TVector3 vLight;
 
   unsigned int mIDkey;
 
   bool mUseBind;
 
 	IBaseObjectCommon* pSphere;
+
+  TControlLight mControlLight;
 
 public:
   TClientDeveloperTool_TestTask();
@@ -88,6 +90,8 @@ protected:
 
 	void BindObj();
 	void InitForm();
+
+  void InitControlLight();
 };
 
 #endif

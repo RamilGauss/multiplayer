@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012
+2011, 2012, 2013, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -40,7 +40,7 @@ namespace nsID_BEHAVIOR
     ID_NULL               = 0,// недействительное значение
     
     ID_TREE               = 1,
-    ID_BUILDING           = 2,
+    ID_OBJECT_SCENE       = 2,
     ID_TERRAIN            = 3,
     ID_BUSH               = 4,
     // bullet
@@ -56,6 +56,8 @@ namespace nsID_BEHAVIOR
     ID_WALL               = 10,
 
     ID_EXPLOSION          = 11,
+    
+    ID_LIGHT              = 12,
   };
   
 
