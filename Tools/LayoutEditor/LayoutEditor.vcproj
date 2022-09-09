@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Common.lib Platforms.lib EditorFramework.lib D3D9.lib D3dx9.lib MyGUIEngineDLL.lib"
+				AdditionalDependencies="Common.lib Platforms.lib EditorFramework.lib D3D9.lib D3dx9.lib MyGUIEngine.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\Lib;&quot;..\..\Lib\$(ConfigurationName)&quot;;&quot;..\..\Exe\$(ConfigurationName)&quot;"
 				IgnoreDefaultLibraryNames=""

@@ -5,27 +5,27 @@ Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 2011, 2012
 ===========================================================================
                         Common Information
-"Tanks" GPL Source Code
+"TornadoEngine" GPL Source Code
 
-This file is part of the "Tanks" GPL Source Code.
+This file is part of the "TornadoEngine" GPL Source Code.
 
-"Tanks" Source Code is free software: you can redistribute it and/or modify
+"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-"Tanks" Source Code is distributed in the hope that it will be useful,
+"TornadoEngine" Source Code is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
+along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
-In addition, the "Tanks" Source Code is also subject to certain additional terms. 
+In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
+the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -41,6 +41,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <map>
 #include <string>
 #include "Struct3D.h"
+#include "TypeDef.h"
 
 
 /*
@@ -60,7 +61,7 @@ you may contact in writing [ramil2085@gmail.com].
 */
 
 
-class TTreeJoint
+class SHARE_EI TTreeJoint
 {
   bool flgNeedSetup; // отладка
   bool flgWasSort;   // отладка
@@ -148,9 +149,9 @@ public:
   void SetOrderMatrixByName(std::vector<std::string>* order);// вызвать до вызова ChangeMatrix и GetMatrix // +
   
   // умножить матрицу по-умолчанию на новую матрицу и произвести изменения по всем детям
-  void ChangeMatrix(std::string& name, nsStruct3D::TMatrix16/*D3DXMATRIXA16*/* matrix, bool def = true);// +
+  void ChangeMatrix(std::string& name, nsStruct3D::TMatrix16* matrix, bool def = true);// +
   // заполнить матрицей
-  void GetMatrix(std::vector<nsStruct3D::TMatrix16/*D3DXMATRIXA16*/*>* matrix);// +
+  void GetMatrix(std::vector<nsStruct3D::TMatrix16*>* matrix);// +
   // сбросить все матрицы в дефолт
   void SetDefault(); // +
 
@@ -164,13 +165,12 @@ protected:
     TNodeJoint* pParent;
     std::vector<TNodeJoint*> mVectorChild;
     std::string   name;
-    nsStruct3D::TMatrix16/*D3DXMATRIXA16*/ matrixDef; // то что считали с файла настроек
-    nsStruct3D::TMatrix16/*D3DXMATRIXA16*/ matrix;    // эта матрица получается умножением матрицы по-умолчанию на заданную матрицу через метод ChangeMatrix
-    nsStruct3D::TMatrix16/*D3DXMATRIXA16*/ matrix_pro;// произведение по иерархии
+    nsStruct3D::TMatrix16 matrixDef; // то что считали с файла настроек
+    nsStruct3D::TMatrix16 matrix;    // эта матрица получается умножением матрицы по-умолчанию на заданную матрицу через метод ChangeMatrix
+    nsStruct3D::TMatrix16 matrix_pro;// произведение по иерархии
     
     TNodeJoint()
     {
-      //D3DXMatrixIdentity(&matrixDef);
       SetMatrixIdentity(&matrixDef);
       pParent = NULL;
       SetMatrixDef();

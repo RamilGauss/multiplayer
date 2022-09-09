@@ -5,27 +5,27 @@ Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 2011, 2012
 ===========================================================================
                         Common Information
-"Tanks" GPL Source Code
+"TornadoEngine" GPL Source Code
 
-This file is part of the "Tanks" GPL Source Code.
+This file is part of the "TornadoEngine" GPL Source Code.
 
-"Tanks" Source Code is free software: you can redistribute it and/or modify
+"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-"Tanks" Source Code is distributed in the hope that it will be useful,
+"TornadoEngine" Source Code is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
+along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
-In addition, the "Tanks" Source Code is also subject to certain additional terms. 
+In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
+the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -370,7 +370,31 @@ int ConvertMouseEvent2Value(...). Значение, полученное от этих функции подается
 21.12.2012:
   - Исправил глюк с некорректным ResizeGUI. Дело в том что DXUT вызывает Reset до реального
 изменения размера окна. Мне кажется так и должно быть. Reset так и должен себя вести.
-Сырость DXUT в том что нет события "переход в из оконного режима в полноконное и обратно".
+Сырость DXUT в том что нет события "переход в из оконного режима в полно экранное и обратно".
+22.12.2012:
+  - Блин. Когда создавал проект MyGUIEngine это был Dll-проект. Потом я его переделал в Lib.
+А вот EditorFramework был изначально как Lib. Надо было не менять тип проекта, а создавать заново.
+В проекте прописать define MYGUI_BUILD_DLL и все.
+25.12.2012:
+  - Мысль назвать игровой движок FullMaster или Tornado.
+  Танки - это всего лишь пример использования. Надо поправить заголовок файлов.
+26.12.2012:
+  - Добавил класс контроля за кол-вом создаваемых объектов одного класса.
+  Теперь если нужно ограничить кол-во создаваемых объектов нужно пронаследоваться
+  от TOnly_N_Object и указать в конструкторе макс. кол-во объектов и 
+  макросом NAME_CLASS прописать имя класса.
+  - Перевожу GBaseLib, Share из Lib в Dll (надо так же и проект модулей конвертировать в Dll).
+  - Потом нужно править архитектуру.
+27.12.2012:
+  - Делаю камеру. Для этого надо подготовить классы матриц (оптимизация).
+  Оптимизирую: по сути в памяти у DX и Struct3D одно и тоже.
+  Это можно применить в операциях над классом. А вот преобразовывать из Struct3D в DX 
+  и наоборот придется что-то еще придумать.
+09.01.2012:
+  - Заменил все классы типа TMakerXXX на макрос.
+  - Новогодний застой заканчивается. Все каникулы занимался поеданием еды, 
+  играми и ничего-не-деланьем.
+  - Пусть будет имя "TornadoEngine"
 //----------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------
     TODO:

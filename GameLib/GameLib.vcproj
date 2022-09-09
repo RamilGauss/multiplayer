@@ -49,6 +49,7 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="2"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4251"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -205,10 +206,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Camera.h"
-				>
-			</File>
-			<File
 				RelativePath=".\ClientGame.h"
 				>
 			</File>
@@ -273,7 +270,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\StrNameSrcEvent.h"
+				RelativePath=".\NameSrcEventID.h"
 				>
 			</File>
 		</Filter>

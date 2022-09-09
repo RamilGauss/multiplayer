@@ -5,27 +5,27 @@ Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 2011, 2012
 ===========================================================================
                         Common Information
-"Tanks" GPL Source Code
+"TornadoEngine" GPL Source Code
 
-This file is part of the "Tanks" GPL Source Code.
+This file is part of the "TornadoEngine" GPL Source Code.
 
-"Tanks" Source Code is free software: you can redistribute it and/or modify
+"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-"Tanks" Source Code is distributed in the hope that it will be useful,
+"TornadoEngine" Source Code is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
+along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
-In addition, the "Tanks" Source Code is also subject to certain additional terms. 
+In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
+the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -36,6 +36,8 @@ you may contact in writing [ramil2085@gmail.com].
 
 #ifndef Struct3DH
 #define Struct3DH
+
+#include "TypeDef.h"
 
 #define INDEX_I(M,k,n,I) \
 M I m[k][n]
@@ -92,24 +94,18 @@ MATRIX16_OP_V(M,VALUE,OP, . )
 #define MATRIX16_OP_P(M,VALUE,OP) \
 MATRIX16_OP_V(M,VALUE,OP, ->)
 //----------------------------------------------------------------------
-// проверка на равенство двух матриц
+// 
 #define MATRIX16_EQUAL_M_M(a,b) \
-MATRIX16_OP_M_M(a,b,=)
+CopyMatrix16((float*)&b,(float*)&a);
 
 #define MATRIX16_EQUAL_M_P(a,b) \
-MATRIX16_OP_M_P(a,b,=)
+CopyMatrix16((float*)b,(float*)&a);
 
 #define MATRIX16_EQUAL_P_M(a,b) \
-MATRIX16_OP_P_M(a,b,=)
+CopyMatrix16((float*)&b,(float*)a);
 
 #define MATRIX16_EQUAL_P_P(a,b) \
-MATRIX16_OP_P_P(a,b,=)
-//----------------------------------------------------------------------
-#define SET_MATRIX_ROTATE_WIN(pV,ugol,AXE) \
-D3DXMATRIX InOut; \
-MATRIX16_EQUAL_M_P(InOut,pV) \
-D3DXMatrixRotation##AXE(&InOut,ugol); \
-MATRIX16_EQUAL_P_M(pV,InOut)
+CopyMatrix16((float*)b,(float*)a);
 //----------------------------------------------------------------------
 
 namespace nsStruct3D
@@ -117,7 +113,7 @@ namespace nsStruct3D
 
 #pragma pack(push, 1)
 
-class TPoint2
+class SHARE_EI TPoint2
 {
 public:
   unsigned int x;
@@ -125,7 +121,7 @@ public:
   TPoint2(){x=0;y=0;}
 };
 
-class TVector3
+class SHARE_EI TVector3
 {
 public:
   float x;
@@ -141,7 +137,7 @@ public:
   }
 };
 //-----------------------------------------------------------------
-class TVector4
+class SHARE_EI TVector4
 {
 public:
   float x;
@@ -159,7 +155,7 @@ public:
 
 };
 //-----------------------------------------------------------------
-class TMatrix9
+class SHARE_EI TMatrix9
 {
   union {
     struct {
@@ -171,7 +167,7 @@ class TMatrix9
   };
 };
 //-----------------------------------------------------------------
-class TMatrix16
+class SHARE_EI TMatrix16
 {
 public:
   union {
@@ -207,8 +203,6 @@ public:
   TMatrix16 operator * ( float ) const;
   TMatrix16 operator / ( float ) const;
 
-  //friend TMatrix16 operator * ( float, const TMatrix16& );
-
   bool operator == ( const TMatrix16& ) const;
   bool operator != ( const TMatrix16& ) const;
 };
@@ -217,11 +211,13 @@ public:
 
 }
 
-extern void SetMatrixIdentity(nsStruct3D::TMatrix16* pV);
-extern void SetMatrixIdentity(nsStruct3D::TMatrix9* pV);
+SHARE_EI extern void CopyMatrix16(float* pSrc, float* pDst);
 
-extern void SetMatrixRotateX(nsStruct3D::TMatrix16* pV, float ugol);
-extern void SetMatrixRotateY(nsStruct3D::TMatrix16* pV, float ugol);
-extern void SetMatrixRotateZ(nsStruct3D::TMatrix16* pV, float ugol);
+SHARE_EI extern void SetMatrixIdentity(nsStruct3D::TMatrix16* pV);
+SHARE_EI extern void SetMatrixIdentity(nsStruct3D::TMatrix9* pV);
+
+SHARE_EI extern void SetMatrixRotateX(nsStruct3D::TMatrix16* pV, float ugol);
+SHARE_EI extern void SetMatrixRotateY(nsStruct3D::TMatrix16* pV, float ugol);
+SHARE_EI extern void SetMatrixRotateZ(nsStruct3D::TMatrix16* pV, float ugol);
 
 #endif

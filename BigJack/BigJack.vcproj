@@ -49,6 +49,7 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4996;4251"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -235,7 +236,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\StateManager9.cpp"
+				RelativePath=".\StateManagerD3D9.cpp"
 				>
 			</File>
 			<File
@@ -349,7 +350,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\StateManager9.h"
+				RelativePath=".\StateManagerD3D9.h"
 				>
 			</File>
 			<File

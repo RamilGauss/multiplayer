@@ -5,27 +5,27 @@ Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 2011, 2012
 ===========================================================================
                         Common Information
-"Tanks" GPL Source Code
+"TornadoEngine" GPL Source Code
 
-This file is part of the "Tanks" GPL Source Code.
+This file is part of the "TornadoEngine" GPL Source Code.
 
-"Tanks" Source Code is free software: you can redistribute it and/or modify
+"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-"Tanks" Source Code is distributed in the hope that it will be useful,
+"TornadoEngine" Source Code is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
+along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
-In addition, the "Tanks" Source Code is also subject to certain additional terms. 
+In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
+the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -94,6 +94,9 @@ void TTankTower::SetMirror(char *pData,int size)
 //-----------------------------------------------------------------------
 bool TTankTower::Animate(guint32 time_ms)
 {
+  RotateTurret(M_PI/4.1f);
+  RotateVerticalGun(-0.2f);
+
   return true;
 }
 //------------------------------------------------------------------------
@@ -138,8 +141,12 @@ void TTankTower::SetupShaderStackModelGE()
 
   SetShaderStackMask(&mShaderStackMask);// настроить маску
   // настроить сам шейдерный стек
+
+  mV *= -1; //###
   SetupShaderStack(mIndexTrackL,mIndexTime,    &time_ms,sizeof(time_ms));
   SetupShaderStack(mIndexTrackL,mIndexVelocity,&mV,     sizeof(mV));
+  
+  mV *= -1; //###
   SetupShaderStack(mIndexTrackR,mIndexTime,    &time_ms,sizeof(time_ms));
   SetupShaderStack(mIndexTrackR,mIndexVelocity,&mV,     sizeof(mV));
 

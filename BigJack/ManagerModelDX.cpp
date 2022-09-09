@@ -5,27 +5,27 @@ Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 2011, 2012
 ===========================================================================
                         Common Information
-"Tanks" GPL Source Code
+"TornadoEngine" GPL Source Code
 
-This file is part of the "Tanks" GPL Source Code.
+This file is part of the "TornadoEngine" GPL Source Code.
 
-"Tanks" Source Code is free software: you can redistribute it and/or modify
+"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-"Tanks" Source Code is distributed in the hope that it will be useful,
+"TornadoEngine" Source Code is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
+along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
-In addition, the "Tanks" Source Code is also subject to certain additional terms. 
+In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
+the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -61,7 +61,7 @@ TManagerModelDX::~TManagerModelDX()
 //--------------------------------------------------------------------------------------
 TModelDX* TManagerModelDX::Load(unsigned int id)
 {
-  GlobalLoggerGE.WriteF_time("Начало загрузки модели ID=%u\n",id);
+  GetLogger()->Get("GE")->WriteF_time("Начало загрузки модели ID=%u\n",id);
 
   string sPath = mMapPathModel[id];
   TModelDX* pModel = NULL;
@@ -72,7 +72,7 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
     USES_CONVERSION;
     if(pModel->Init(mD3dDevice,A2W(sPath.data()))==false)
     {
-      GlobalLoggerGE.WriteF_time("Не удалось загрузить модель sPath=%s, id=%u\n",sPath.data(),id);
+      GetLogger()->Get("GE")->WriteF_time("Не удалось загрузить модель sPath=%s, id=%u\n",sPath.data(),id);
       delete pModel;
       return NULL;
     }
@@ -82,11 +82,11 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
   }
   else
   {
-    GlobalLoggerGE.WriteF_time("Не удалось найти модель sPath=%s, id=%u\n",sPath.data(),id);
+    GetLogger()->Get("GE")->WriteF_time("Не удалось найти модель sPath=%s, id=%u\n",sPath.data(),id);
     BL_FIX_BUG();
   }
   
-  GlobalLoggerGE.WriteF_time("Конец загрузки модели ID=%u\n",id);
+  GetLogger()->Get("GE")->WriteF_time("Конец загрузки модели ID=%u\n",id);
   return pModel;
 }
 //--------------------------------------------------------------------------------------
@@ -138,14 +138,14 @@ bool TManagerModelDX::LoadListPath()
   FindAbsPath(PATH_LIST_MODELS,sAbsPath,sizeof(sAbsPath));
   if(loader.Load(sAbsPath,&mMapPathModel)==false)
   {
-    GlobalLoggerGE.WriteF_time("Не удалось загрузить список моделей.\n");
+    GetLogger()->Get("GE")->WriteF_time("Не удалось загрузить список моделей.\n");
     BL_FIX_BUG();
     return false;
   }
   
   PrepareForDX();
 
-  GlobalLoggerGE.WriteF_time("Список моделей загружен успешно.\n");
+  GetLogger()->Get("GE")->WriteF_time("Список моделей загружен успешно.\n");
   return true;
 }
 //--------------------------------------------------------------------------------------

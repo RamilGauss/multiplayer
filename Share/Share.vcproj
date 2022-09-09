@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="Share"
-	ProjectGUID="{DF0D719A-E5DE-4F17-9741-FCBDD15B3FE0}"
+	ProjectGUID="{4FE15A87-875C-41AB-B100-317EAA0A9E5A}"
 	RootNamespace="Share"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
@@ -18,10 +18,11 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="..\Lib\$(ConfigurationName)"
+			OutputDirectory="..\Exe\$(ConfigurationName)"
 			IntermediateDirectory="..\Temp\$(ConfigurationName)\$(ProjectName)"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			CharacterSet="0"
+			ManagedExtensions="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -40,17 +41,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				UseUnicodeResponseFiles="false"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\glib-2.0&quot;;..\GBaseLib"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;MARKUP_STL"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
+				AdditionalIncludeDirectories="..\glib-2.0;..\GBaseLib"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EXPORTS"
+				MinimalRebuild="false"
+				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
-				TreatWChar_tAsBuiltInType="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996;4251"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -62,11 +62,21 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\$(ProjectName).lib"
+				Name="VCLinkerTool"
+				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib glib-2.0.lib gthread-2.0.lib GBaseLib.lib"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
+				GenerateDebugInformation="true"
+				AssemblyDebug="1"
+				SubSystem="2"
+				ImportLibrary="..\Lib\$(ConfigurationName)\$(TargetName).lib"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -78,6 +88,9 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -85,7 +98,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -108,7 +121,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SHARE_EXPORTS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -125,10 +138,19 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				LinkIncremental="1"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -138,6 +160,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -161,11 +186,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Bufferizator2Thread.cpp"
+				RelativePath=".\CallBackRegistrator.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CallBackRegistrator.cpp"
+				RelativePath=".\Camera.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ControlCamera.cpp"
 				>
 			</File>
 			<File
@@ -189,10 +218,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LiveWall.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\LoaderListPathID.cpp"
 				>
 			</File>
@@ -206,6 +231,14 @@
 			</File>
 			<File
 				RelativePath=".\Logger.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerCamera.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerControlCamera.cpp"
 				>
 			</File>
 			<File
@@ -233,7 +266,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Only_N_Object.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SaveOnHDD.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ShareLibWin.cpp"
 				>
 			</File>
 			<File
@@ -246,10 +287,6 @@
 			</File>
 			<File
 				RelativePath=".\Struct3D.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Testing.cpp"
 				>
 			</File>
 			<File
@@ -311,11 +348,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Bufferizator2Thread.h"
+				RelativePath=".\CallBackRegistrator.h"
 				>
 			</File>
 			<File
-				RelativePath=".\CallBackRegistrator.h"
+				RelativePath=".\Camera.h"
 				>
 			</File>
 			<File
@@ -331,7 +368,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ControlCamera.h"
+				>
+			</File>
+			<File
 				RelativePath=".\DateChanges.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DescEvent.h"
 				>
 			</File>
 			<File
@@ -351,15 +396,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ICamera.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IControlCamera.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IXML.h"
 				>
 			</File>
 			<File
 				RelativePath=".\List.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LiveWall.h"
 				>
 			</File>
 			<File
@@ -376,6 +425,18 @@
 			</File>
 			<File
 				RelativePath=".\Logger.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MacroMaker.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerCamera.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerControlCamera.h"
 				>
 			</File>
 			<File
@@ -403,11 +464,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Paradigma.h"
+				RelativePath=".\Only_N_Object.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Rect.h"
+				RelativePath=".\Paradigma.h"
 				>
 			</File>
 			<File
@@ -428,10 +489,6 @@
 			</File>
 			<File
 				RelativePath=".\Struct3D.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Testing.h"
 				>
 			</File>
 			<File

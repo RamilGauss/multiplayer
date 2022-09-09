@@ -49,6 +49,7 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4996;4251"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -155,7 +156,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TransportProtocol.cpp"
+				RelativePath=".\NetTransport.cpp"
 				>
 			</File>
 		</Filter>
@@ -173,7 +174,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TransportProtocol.h"
+				RelativePath=".\NetTransport.h"
 				>
 			</File>
 			<File

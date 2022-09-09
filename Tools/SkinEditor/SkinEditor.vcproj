@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\Common;..\..\MyGUIEngine\include;..\..\MyGUIEngine\src;..\..\Common\Base;..\..\Common\Base\DirectX;..\..\Common\Input\Win32;..\EditorFramework"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;MYGUI_STATIC"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Common.lib MyGUIEngineLib.lib Platforms.lib EditorFramework.lib D3D9.lib D3dx9.lib"
+				AdditionalDependencies="Common.lib MyGUIEngine.lib Platforms.lib EditorFramework.lib D3D9.lib D3dx9.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\Lib;&quot;..\..\Lib\$(ConfigurationName)&quot;;&quot;..\..\Exe\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"

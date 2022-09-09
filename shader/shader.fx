@@ -7,8 +7,8 @@ float4x4 g_mWorld : World;          // World matrix
 
 bool bBeginOutputParam: BeginOutputParam = false;
 //--------------------------------------------------------------------
-float g_fTime     : Time = 0 ;            // App's time in seconds
-float g_fVelocity : Velocity = 0;        // скорость вращения гусеницы
+//float g_fTime     : Time = 0 ;            // App's time in seconds
+//float g_fVelocity : Velocity = 0;        // скорость вращения гусеницы
 //--------------------------------------------------------------------
 bool bEndOutputParam:   EndOutputParam   = false;
 

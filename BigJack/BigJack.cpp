@@ -5,27 +5,27 @@ Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 2011, 2012
 ===========================================================================
                         Common Information
-"Tanks" GPL Source Code
+"TornadoEngine" GPL Source Code
 
-This file is part of the "Tanks" GPL Source Code.
+This file is part of the "TornadoEngine" GPL Source Code.
 
-"Tanks" Source Code is free software: you can redistribute it and/or modify
+"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-"Tanks" Source Code is distributed in the hope that it will be useful,
+"TornadoEngine" Source Code is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
+along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
-In addition, the "Tanks" Source Code is also subject to certain additional terms. 
+In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
+the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -36,17 +36,19 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include <cmath>
 
-#include "DXUT.h"
 #include "BigJack.h"
+
+#include "IDirectX_Realize.h"
 #include "HiTimer.h"
 #include "Logger.h"
 #include "IBaseObjectGE.h"
 #include "BL_Debug.h"
 #include "SDKmisc.h"
-#include <DXGI.h>
 #include "IGUI_Core.h"
-#include "..\GUI\GUI_DescWindow.h"
-#include "..\Common\Base\DirectX\BaseManager.h"
+#include "GUI_DescWindow.h"
+#include "MyGUI.h"
+#include "DescEvent.h"
+#include "MakerDirectX_Realize.h"
 
 
 #define LOG_DX
@@ -54,13 +56,15 @@ you may contact in writing [ramil2085@gmail.com].
 
 using namespace std;
 using namespace nsStruct3D;
+using namespace nsEvent;
 
 #pragma warning(disable: 4355)
 
 TBigJack::TBigJack()
 {
 #ifdef WIN32
-  mDXUT = new TDXUT(this);
+  TMakerDirectX_Realize makerDXUT;
+  mDXUT = makerDXUT.New(this);
 #else
 #endif
   
@@ -69,20 +73,24 @@ TBigJack::TBigJack()
   mTime_ms = 0;
 
   mManagerModelDX.SetManagerResourceDX(&mManagerResourceDX);
-
+#ifdef WIN32
   mIndexView           = 
-    mMainShaderStack.Push("View",(void*)mCamera.GetViewMatrix(),     sizeof(D3DXMATRIXA16));
+    mMainShaderStack.Push("View",(void*)mCamera.GetViewMatrix(),     sizeof(D3DXMATRIX));
   mIndexProj           = 
-    mMainShaderStack.Push("Proj",(void*)mCamera.GetProjMatrix(),     sizeof(D3DXMATRIXA16));
+    mMainShaderStack.Push("Proj",(void*)mCamera.GetProjMatrix(),     sizeof(D3DXMATRIX));
   mIndexCameraPosition = 
-    mMainShaderStack.Push("CameraPosition",(void*)mCamera.GetEyePt(),sizeof(D3DXMATRIXA16));
+    mMainShaderStack.Push("CameraPosition",(void*)mCamera.GetEyePt(),sizeof(D3DXVECTOR3));
+#else
+#endif
 }
 //--------------------------------------------------------------------------------------------------------
 TBigJack::~TBigJack()
 {
   Done();
 #ifdef WIN32
-  delete mDXUT;
+  TMakerDirectX_Realize makerDXUT;
+  makerDXUT.Delete(mDXUT);
+  mDXUT = NULL;
 #else
 #endif
 }
@@ -97,6 +105,7 @@ void TBigJack::Optimize()
 //--------------------------------------------------------------------------------------------------------
 void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
 {
+#ifdef WIN32
   if(IsNeedResizeGUI())// когда произошло событие Reset, только после этого можно делать Resize (не было подстройки размера окна, сырость DXUT)
   {
     ResizeGUI();
@@ -110,9 +119,9 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
   // Render the scene
   if( SUCCEEDED( pd3dDevice->BeginScene() ) )
   {
-    D3DXMATRIXA16 mDXView = *mCamera.GetViewMatrix();// только дял совместимости с DirectX (временно)
+    D3DXMATRIXA16* mDXView = (D3DXMATRIXA16*)mCamera.GetViewMatrix();// только для совместимости с DirectX (временно)
     TMatrix16 mView;
-    MATRIX16_EQUAL_M_M(mView,mDXView)
+    MATRIX16_EQUAL_M_P(mView,mDXView)
 
     SetCommonShaderStack();// передать общие параметры в шейдер
 
@@ -132,6 +141,8 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
 
     V( pd3dDevice->EndScene() );
   }
+#else
+#endif
 }
 //--------------------------------------------------------------------------------------------------------
 void TBigJack::AddObject(IBaseObjectGE* pObject)
@@ -146,7 +157,7 @@ void TBigJack::AddObject(IBaseObjectGE* pObject)
     }
     else
     {
-      GlobalLoggerGE.WriteF_time("Повторная инициализация объекта сцены, PTR_OBJECT=0x%X\n",pObject);
+      GetLogger()->Get("GE")->WriteF_time("Повторная инициализация объекта сцены, PTR_OBJECT=0x%X\n",pObject);
       BL_FIX_BUG();
     }
   }
@@ -176,30 +187,6 @@ void TBigJack::SetEffect(unsigned short id_effect/*уникальный эффект, см. таблиц
 */
 }
 //--------------------------------------------------------------------------------------------------------
-//void TBigJack::NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext)
-//{
-  //set<TCallBackFrameMove>::iterator bit = mSetCallbackFrameMove.begin();
-  //set<TCallBackFrameMove>::iterator eit = mSetCallbackFrameMove.end();
-  //while(bit!=eit)
-  //{
-  //  TCallBackFrameMove pFunc = (*bit);
-  //  pFunc(fTime, fElapsedTime, pUserContext);
-  //  bit++;
-  //}
-//}
-//--------------------------------------------------------------------------------------
-//void TBigJack::NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-//{
-  //set<TCallBackMsg>::iterator bit = mSetCallbackMsg.begin();
-  //set<TCallBackMsg>::iterator eit = mSetCallbackMsg.end();
-  //while(bit!=eit)
-  //{
-  //  TCallBackMsg pFunc = (*bit);
-  //  pFunc(hWnd, uMsg, wParam, lParam);
-  //  bit++;
-  //}
-//}
-//--------------------------------------------------------------------------------------
 bool TBigJack::IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat,
                                D3DFORMAT BackBufferFormat, bool bWindowed, void* pUserContext )
 {
@@ -357,7 +344,7 @@ void TBigJack::Init()
   HRESULT hr = mDXUT->Init();
   if(hr!=S_OK)
   {
-    GlobalLoggerGE.WriteF_time("Init fail. hr=0x%X\n",hr);
+    GetLogger()->Get("GE")->WriteF_time("Init fail. hr=0x%X\n",hr);
   }
   SetIsCreateWindow(true);
   if(mGUI)
@@ -409,9 +396,9 @@ void TBigJack::Animate()
 //--------------------------------------------------------------------------------------
 void TBigJack::SetCommonShaderStack()
 {
-  mMainShaderStack.SetData(mIndexView,          (void*)mCamera.GetViewMatrix(), sizeof(D3DXMATRIXA16));
-  mMainShaderStack.SetData(mIndexProj,          (void*)mCamera.GetProjMatrix(), sizeof(D3DXMATRIXA16));
-  mMainShaderStack.SetData(mIndexCameraPosition,(void*)mCamera.GetEyePt(),      sizeof(D3DXMATRIXA16));
+  mMainShaderStack.SetData(mIndexView,          (void*)mCamera.GetViewMatrix(), sizeof(D3DXMATRIX));
+  mMainShaderStack.SetData(mIndexProj,          (void*)mCamera.GetProjMatrix(), sizeof(D3DXMATRIX));
+  mMainShaderStack.SetData(mIndexCameraPosition,(void*)mCamera.GetEyePt(),      sizeof(D3DXVECTOR3));
 
   mManagerResourceDX.Set(TManagerResourceDX::eTypeShader,&mMainShaderStack);
 }
@@ -580,6 +567,7 @@ bool TBigJack::InitGUI()
 #endif
 
   //### Gauss
+  // позже перенести в загрузку ресурсов из xml
   mGUI->AddResourceLocation("/Demos/Demo_Themes");
   mGUI->AddResourceLocation("/Common/Demos");
   mGUI->AddResourceLocation("/Common/Themes");

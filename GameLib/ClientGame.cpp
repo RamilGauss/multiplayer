@@ -5,27 +5,27 @@ Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 2011, 2012
 ===========================================================================
                         Common Information
-"Tanks" GPL Source Code
+"TornadoEngine" GPL Source Code
 
-This file is part of the "Tanks" GPL Source Code.
+This file is part of the "TornadoEngine" GPL Source Code.
 
-"Tanks" Source Code is free software: you can redistribute it and/or modify
+"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-"Tanks" Source Code is distributed in the hope that it will be useful,
+"TornadoEngine" Source Code is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
+along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
-In addition, the "Tanks" Source Code is also subject to certain additional terms. 
+In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
+the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -33,32 +33,36 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include <stddef.h>
-#include <string>
-
-#include "BL_Debug.h"
 #include "ClientGame.h"
-#include "MakerPhysicEngine.h"
+
+#include <string>
+#include <glib/gthread.h>
+
 #include "IGraphicEngine.h"
+#include "IPhysicEngine.h"
 #include "IManagerTime.h"
 #include "IManagerObjectCommon.h"
-#include "MakerGraphicEngine.h"
-#include "StrNameSrcEvent.h"
-#include "MakerManagerObjectCommon.h"
+#include "IGUI.h"
+#include "IXML.h"
 
+#include "MakerPhysicEngine.h"
+#include "MakerGraphicEngine.h"
+#include "MakerManagerObjectCommon.h"
+#include "MakerManagerTime.h"
+#include "MakerGUI.h"
+#include "MakerControlCamera.h"
+
+#include "common_defs.h"
+#include "BL_Debug.h"
 #include "HiTimer.h"
 #include "NetSystem.h"
 #include "ErrorReg.h"
-#include <glib/gthread.h>
-#include "IXML.h"
-#include "common_defs.h"
-#include "MakerManagerTime.h"
-#include "..\GUI\MakerGUI.h"
-#include "IGUI.h"
-#include "Logger.h"
 
+#include "Logger.h"
+#include "NameSrcEventID.h"
 
 using namespace std;
+using namespace nsEvent;
 
 TClientGame::TClientGame()
 {
@@ -107,11 +111,16 @@ void TClientGame::Work(const char* sNameDLL)// начало работы
 //------------------------------------------------------------------------
 bool TClientGame::Init(const char* sNameDLL)
 {
+  InitLog();
   // загрузка DLL
   CHECK_RET(LoadDLL(sNameDLL))
   if(mGetClientDeveloperTool==NULL)
     return false;
   // политика: нет DLL - нет движка.
+
+  // камера
+  TMakerControlCamera makerControlCamera;
+  mControlCamera = makerControlCamera.New();
 
   // создатель объектов
   IMakerObjectCommon* pMakerObjectCommon = mClientDeveloperTool->GetMakerObjectCommon();
@@ -120,13 +129,13 @@ bool TClientGame::Init(const char* sNameDLL)
   TMakerGraphicEngine makerGraphicEngine;
   mGraphicEngine = makerGraphicEngine.New();
   mGraphicEngine->Init();// создали окно
-  mGraphicEngine->SetSelfName(STR_SRC_EVENT_GRAPHIC_ENGINE);
+  mGraphicEngine->SetSelfName(ID_SRC_EVENT_GRAPHIC_ENGINE);
   mGraphicEngine->SetDstObject(this);
   mGraphicEngine->SetTitleWindow(mClientDeveloperTool->GetTitleWindow().data());
   //------------------------------------------
   TMakerPhysicEngine makerPhysicEngine;
   mPhysicEngine = makerPhysicEngine.New();
-  mPhysicEngine->SetSelfName(STR_SRC_EVENT_PHYSIC_ENGINE);
+  mPhysicEngine->SetSelfName(ID_SRC_EVENT_PHYSIC_ENGINE);
   mPhysicEngine->SetDstObject(this);
   //------------------------------------------
   //TMakerNET_Engine makerNET;
@@ -138,7 +147,7 @@ bool TClientGame::Init(const char* sNameDLL)
   TMakerManagerObjectCommon makerMOC;
   mMOC = makerMOC.New();
   mMOC->Init(pMakerObjectCommon);
-  mMOC->SetSelfName(STR_SRC_EVENT_MANAGER_OBJECT_COMMON);
+  mMOC->SetSelfName(ID_SRC_EVENT_MANAGER_OBJECT_COMMON);
   mMOC->SetDstObject(this);
   //------------------------------------------
   TMakerManagerTime makerMTime;
@@ -149,8 +158,9 @@ bool TClientGame::Init(const char* sNameDLL)
   mGraphicEngine->SetGUI(mGUI);
   //------------------------------------------
   //------------------------------------------
-  mClientDeveloperTool->SetInitLogFunc(::InitLogger);
+  mClientDeveloperTool->SetInitLogFunc(::GetLogger);
   IClientDeveloperTool::TComponentClient components;
+  components.mControlCamera = mControlCamera;
   components.mGUI           = mGUI;
   components.mGraphicEngine = mGraphicEngine;
   components.mMTime         = mMTime;
@@ -165,16 +175,25 @@ void TClientGame::Done()
   mClientDeveloperTool->Done();// освободить ресурсы DevTool
 
   // а теперь модули
-  delete mGUI;
+  TMakerGUI makerGUI;
+  makerGUI.Delete(mGUI);
   mGUI = NULL;
   mGraphicEngine->ZeroGUI();
-  delete mGraphicEngine;
+
+  TMakerGraphicEngine makerGE;
+  makerGE.Delete(mGraphicEngine);
   mGraphicEngine = NULL;
-  delete mPhysicEngine;
+
+  TMakerPhysicEngine makerPE;
+  makerPE.Delete(mPhysicEngine);
   mPhysicEngine = NULL;
-  delete mMOC;
+
+  TMakerManagerObjectCommon makerMOC;
+  makerMOC.Delete(mMOC);
   mMOC = NULL;
-  delete mMTime;
+
+  TMakerManagerTime makerMTimer;
+  makerMTimer.Delete(mMTime);
   mMTime = NULL;
 }
 //------------------------------------------------------------------------
@@ -218,5 +237,14 @@ void TClientGame::CollectEvent()
 bool TClientGame::HandleEvent(TEvent* pEvent)
 {
   return mClientDeveloperTool->HandleEvent(pEvent);
+}
+//------------------------------------------------------------------------
+void TClientGame::InitLog()
+{
+  GetLogger()->Done();
+  GetLogger()->Register("GE");
+  GetLogger()->Register("PE");
+  GetLogger()->Register("MOC");
+  GetLogger()->Register("Form");
 }
 //------------------------------------------------------------------------

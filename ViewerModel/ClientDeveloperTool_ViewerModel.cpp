@@ -5,27 +5,27 @@ Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 2011, 2012
 ===========================================================================
                         Common Information
-"Tanks" GPL Source Code
+"TornadoEngine" GPL Source Code
 
-This file is part of the "Tanks" GPL Source Code.
+This file is part of the "TornadoEngine" GPL Source Code.
 
-"Tanks" Source Code is free software: you can redistribute it and/or modify
+"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-"Tanks" Source Code is distributed in the hope that it will be useful,
+"TornadoEngine" Source Code is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with "Tanks" Source Code.  If not, see <http://www.gnu.org/licenses/>.
+along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
-In addition, the "Tanks" Source Code is also subject to certain additional terms. 
+In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
 You should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
-the "Tanks" Source Code.  If not, please request a copy in writing from at the address below.
+the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
@@ -41,9 +41,15 @@ you may contact in writing [ramil2085@gmail.com].
 #include "../GameLib/IBaseObjectCommon.h"
 #include "../GUI/IGUI.h"
 #include "Logger.h"
+#include "HiTimer.h"
+#include "../GameLib/NameSrcEventID.h"
+#include <string.h>
 
 using namespace std;
 using namespace nsStruct3D;
+using namespace nsEvent;
+
+#define LOG_TIME_LOAD_EDITOR_MODEL
 
 TClientDeveloperTool_ViewerModel::TClientDeveloperTool_ViewerModel()
 {
@@ -59,11 +65,32 @@ TClientDeveloperTool_ViewerModel::~TClientDeveloperTool_ViewerModel()
   delete mMakerObjectCommon;
 }
 //------------------------------------------------------------------------------------
-bool TClientDeveloperTool_ViewerModel::HandleEvent(TEvent* pEvent)
+bool TClientDeveloperTool_ViewerModel::MouseEvent(TMouseEvent* pEvent)
 {
+  int a = 0;
+  switch(pEvent->state)
+  {
+    case nsEvent::eButtonUp:
+      a = 1;
+      break;
+    case nsEvent::eButtonDown:
+      a = 2;
+      break;
+    case nsEvent::eButtonDblClick:
+      a = 3;
+      break;
+    case nsEvent::eWheel:
+      a = 4;
+      break;
+  }
   return true;
 }
 //------------------------------------------------------------------------------------
+bool TClientDeveloperTool_ViewerModel::KeyEvent(TKeyEvent* pEvent)
+{
+  return true;
+}
+//--------------------------------------------------------------------
 void TClientDeveloperTool_ViewerModel::Calc()
 {
 
@@ -92,7 +119,7 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent)
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
   start = ht_GetMSCount() - start;
   float v = start/float(cnt[0]*cnt[1]*cnt[2]);
-  GlobalLoggerForm.WriteF_time("EditorModel: Время загрузки объектов t=%u мс,v=%f мс/об.\n",start,v);
+  mFuncGetLogger()->Get("Form")->WriteF_time("ViewerModel: Время загрузки объектов t=%u мс,v=%f мс/об.\n",start,v);
 #endif
 
   mClientMain      = new TClientMain;
@@ -101,10 +128,11 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent)
   
   mComponent.mGUI->Add(std::string("mClientMain"),mClientMain);
   mComponent.mGUI->Add(std::string("mGameRoomPrepare"),mGameRoomPrepare);
+  mComponent.mGUI->Add(std::string("mWaitForm"),mWaitForm);
   // показать форму
-  //mClientMain->Show();
+  mClientMain->Show();
   //mGameRoomPrepare->Show();
-  mWaitForm->Show();
+  //mWaitForm->Show();
   // подстроиться
   mComponent.mGUI->Resize();
 }
@@ -151,7 +179,7 @@ void TClientDeveloperTool_ViewerModel::Done()
 //---------------------------------------------------------------------------------------------
 void TClientDeveloperTool_ViewerModel::InitLog()
 {
-  if(mFuncInitLogger)
-    mFuncInitLogger("ViewerModel");
+  if(mFuncGetLogger)
+    mFuncGetLogger()->Init("ViewerModel");
 }
 //---------------------------------------------------------------------------------------------

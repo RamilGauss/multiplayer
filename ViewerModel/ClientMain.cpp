@@ -34,7 +34,7 @@ void TClientMain::sl_Enter(MyGUI::Widget* _sender)
 //-------------------------------------------------------------------------------------
 void TClientMain::sl_Exit(MyGUI::Widget* _sender)
 {
-  Close();
+  Hide();
 }
 //-------------------------------------------------------------------------------------
 //void TClientMain::sl_IP(MyGUI::EditBox* _sender)
