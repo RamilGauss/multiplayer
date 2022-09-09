@@ -72,6 +72,20 @@
 #endif
 
 
+//// ### Gauss
+//// Windows settings
+//#define MYGUI_EXPORT __declspec( dllexport )
+////#define MYGUI_EXPORT __declspec( dllimport )
+////#define MYGUI_EXPORT_DLL
+//#define MYGUI_EXPORT_DLL __declspec( dllexport )
+////#define MYGUI_EXPORT_DLL __declspec( dllimport )
+//#ifdef _DEBUG
+//#	define MYGUI_DEBUG_MODE 1
+//#else
+//#	define MYGUI_DEBUG_MODE 0
+//#endif
+//### 
+
 // Windows settings
 #if MYGUI_PLATFORM == MYGUI_PLATFORM_WIN32
 #
@@ -106,7 +120,6 @@
 #		define MYGUI_DEBUG_MODE 0
 #	endif
 #endif
-
 
 // Linux/Apple Settings
 #if MYGUI_PLATFORM == MYGUI_PLATFORM_LINUX || MYGUI_PLATFORM == MYGUI_PLATFORM_APPLE

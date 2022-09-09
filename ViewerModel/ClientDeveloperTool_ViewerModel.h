@@ -38,15 +38,16 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "../GameLib/IClientDeveloperTool.h"
 
-//#include "FormClientMain.h"
-
 #include "ClientMain.h"
+#include "GameRoomPrepare.h"
+#include "WaitForm.h"
 
 class TClientDeveloperTool_ViewerModel : public IClientDeveloperTool
 {
  
-  //TFormClientMain mFormClientMain;
-  TClientMain mClientMain;
+  TClientMain*      mClientMain;
+  TGameRoomPrepare* mGameRoomPrepare;
+  TWaitForm *       mWaitForm;
 
 public:
   TClientDeveloperTool_ViewerModel();
@@ -60,8 +61,12 @@ public:
   virtual void Calc();
   virtual IMakerObjectCommon* GetMakerObjectCommon();
 
+  virtual void Done();
+
 protected:
   void CreateObjects(int cntK,int cntJ,int cntI);
+
+  void InitLog();
 };
 
 #endif

@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+
+
+<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+    <head><link rel="canonical" href="http://msdn.microsoft.com/ru-ru/library/vstudio/81h27t8c.aspx" />
+        <title>Использование dllimport и dllexport в классах C++</title>
+
+
+
+<meta name="DCS.dcsuri" content="/ru-ru/library/81h27t8c(d=default,l=ru-ru,v=vs.110).aspx" />
+
+<meta name="NormalizedUrl" content="http://msdn.microsoft.com/ru-ru/library/81h27t8c(d=default,l=ru-ru,v=vs.110).aspx" />
+
+<meta name="DCSext.ProductFamily" content="LIB_DG" />
+
+<meta name="DCSext.Product" content="VS_VC" />
+
+<meta name="DCSext.Title" content="Использование dllimport и dllexport в классах C++" />
+
+<meta name="VotingContextUrl" content="http://msdn.microsoft.com/ru-ru/library/81h27t8c(d=default,l=ru-ru,v=vs.110).aspx" />
+
+<meta name="MN" content="347ED6CB-6:31:18 AM" />
+
+<meta name="Search.ShortId" content="81h27t8c" />
+
+<meta name="Ms.Locale" content="ru-ru" />
+
+
+
+
+
+
+
+        
+    <link rel="stylesheet" type="text/css" href="http://i3.msdn.microsoft.com/Combined.css?resources=0:Topic,0:CodeSnippet,0:ProgrammingSelector,0:ExpandableCollapsibleArea,0:CommunityContent,0:TopicNotInScope,0:FeedViewerBasic,0:ImageSprite,1:Header.1,2:Toc,2:NavigationResize,2:TranslationWiki,2:jquery.popup,3:FeedbackCounter,0:VersionSelector,3:Feedback,0:NetReflector,1:Footer.1,4:Base\Content\LinkList,0:SiteFeedbackLink,1:Msdn;/Areas/Epx/Content/Css:0,/Areas/Epx/Themes/Msdn/Content:1,/Areas/Epx/Library/Content:2,/Areas/Epx/Shared/Content:3,/\Areas/Epx/Themes:4&amp;amp;hashKey=28C7FBDFA82B1A2730135F99669D3BFC" /></head>
+    <body class="library">
+        <div id="page">
+            
+            
+  
+            
+  
+
+
+
+    
+    <div id="ux-header" class="FF ltr">
+        <div class="BrandLogo">
+            <a href="http://msdn.microsoft.com/ru-ru">
+                <span class="BrandLogoImage msdn" title="MSDN"></span>
+            </a>
+        </div>
+        <div class="GlobalBar">
+            <div id="LocaleSelector">
+                
+
+<a title="Измените язык" id="SelectLocale" href="/ru-ru/SelectLocale?fromPage=http%3a%2f%2fmsdn.microsoft.com%2fru-ru%2flibrary%2f81h27t8c.aspx">Россия (Pусский)</a>
+        
+            
+            
+            </div>
+
+            <div class="Divide"> | </div>
+            <div class="PassportScarab">
+                    
+<a class="scarabLink" href="https://login.live.com/login.srf?wa=wsignin1.0&amp;rpsnv=11&amp;ct=1356013878&amp;rver=6.0.5276.0&amp;wp=MCLBI&amp;wlcxt=MSDN%24MSDN%24MSDN&amp;wreply=http%3a%2f%2fmsdn.microsoft.com%2fru-ru%2flibrary%2f81h27t8c.aspx&amp;lc=1049&amp;id=254354&amp;mkt=ru-RU" title=" Вход  "> Вход  </a>
+            </div>
+                
+                <div class="Divide"> | </div>
+                <div class="Icons">
+                    <a href="http://msdn.microsoft.com/ru-ru/library/preferences/experience/?returnurl=%252fru-ru%252flibrary%252f81h27t8c.aspx" title="Предпочтения" rel="nofollow">
+                        <div class="clip26x23">
+                            <img class="isd_settings" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" alt="" />
+                        </div>
+                    </a>
+                </div>
+                <div class="Divide"> | </div>
+                <div class="Icons">
+                    <a href="http://msdn.microsoft.com/ru-ru/library/81h27t8c(d=printer).aspx" title="Печать/экспорт" rel="nofollow">
+                        <div class="clip26x23">
+                            <img class="isd_print" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" alt="" />
+                        </div>
+                    </a>
+                </div>
+        </div>
+        <div class="internav">
+            
+
+
+    
+
+<div class="SearchBox">
+         <form id="HeaderSearchForm" name="HeaderSearchForm" method="get" action="http://social.msdn.microsoft.com/Search" onsubmit="return Epx.Controls.SearchBox.searchBoxOnSubmit(this, this.title);">
+            <input id="HeaderSearchTextBox" name="query" type="text" maxlength="200" onfocus="Epx.Controls.SearchBox.watermarkFocus(this, this.title, 'TextBoxSearch')" onblur="Epx.Controls.SearchBox.watermarkBlur(this, this.title, 'TextBoxSearchLoaded')" />
+            <input id="RefinementId" name="refinement" type="hidden" value="" />
+            <button id="HeaderSearchButton" value="" type="submit" class="header-search-button"></button>
+        </form>
+        
+    
+</div>
+
+            <div class="TocNavigation">
+   
+   <div class="toclevel1">
+          <a class="normal" href="http://msdn.microsoft.com/" title="Главная">Главная</a>
+          <a class="normal" href="http://blogs.msdn.com/b/rudevnews/" title="Новости">Новости</a>
+          <a class="active" href="http://msdn.microsoft.com/library/default.aspx" title="Библиотека">Библиотека</a>
+          <a class="normal" href="http://msdn.microsoft.com/bb188199" title="Обучение">Обучение</a>
+          <a class="normal" href="http://msdn.microsoft.com/aa570309" title="Скачать">Скачать</a>
+          <a class="normal" href="http://msdn.microsoft.com/gg557721" title="Мероприятия">Мероприятия</a>
+          <a class="normal" href="http://msdn.microsoft.com/aa497440" title="Сообщество">Сообщество</a>
+          <a class="normal" href="http://social.msdn.microsoft.com/Forums/ru-ru/categories/" title="Форумы">Форумы</a>
+          <a class="normal" href="http://msdn.microsoft.com/aa570318" title="Поддержка">Поддержка</a>
+    </div>
+  
+</div>
+        </div>
+    </div>
+
+
+        
+            <div id="body">
+                
+
+
+
+
+
+
+
+
+<div id="leftNav">
+
+
+
+
+<div id="tocnav">
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/ms123401.aspx" id="ms310241_MSDN.10_ru-ru" title="MSDN Library">MSDN Library</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/aa187916.aspx" id="aa187916_MSDN.10_ru-ru" title="Средства разработки">Средства разработки</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/dd831853.aspx" id="hh670790_VS.110_ru-ru" title="Visual Studio 2012">Visual Studio 2012</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/60k1461a.aspx" id="ms302012_VS.110_ru-ru" title="Visual C++">Visual C++</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/hh875057.aspx" id="ms300301_VS.110_ru-ru" title="Язык C++ и стандартные библиотеки">Язык C++ и стандартные библиотеки</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/dtefa218.aspx" id="ms300715_VS.110_ru-ru" title="Языках C/C++">Языках C/C++</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/3bstk3k5.aspx" id="ms300810_VS.110_ru-ru" title="Справочник по языку C++">Справочник по языку C++</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/6bh0054z.aspx" id="ms301411_VS.110_ru-ru" title="Модификаторы Майкрософт- Определенной">Модификаторы Майкрософт- Определенной</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/dabb5z75.aspx" id="ms301413_VS.110_ru-ru" title="__declspec">__declspec</a>
+            </div>
+            <div class="toclevel1" data-toclevel="1">
+                <a data-tochassubtree="true" href="/ru-ru/library/3y1sfaz2.aspx" id="jj143083_VS.110_ru-ru" title="dllexport, dllimport">dllexport, dllimport</a>
+            </div>
+            <div class="toclevel2" data-toclevel="2">
+                <a href="/ru-ru/library/y4h7bcy6.aspx" title="Определения и объявления (C++)">Определения и объявления (C++)</a>
+            </div>
+            <div class="toclevel2" data-toclevel="2">
+                <a href="/ru-ru/library/xa0d9ste.aspx" title="Указание встроенного C++ работает с dllexport, dllimport">Указание встроенного C++ работает с dllexport, dllimport</a>
+            </div>
+            <div class="toclevel2" data-toclevel="2">
+                <a href="/ru-ru/library/twa2aw10.aspx" title="Общие правила и ограничения">Общие правила и ограничения</a>
+            </div>
+            <div class="toclevel2 current" data-toclevel="2">
+                <a href="/ru-ru/library/81h27t8c.aspx" title="Использование dllimport и dllexport в классах C++">Использование dllimport и dllexport в классах C++</a>
+            </div>
+</div>    
+    
+    
+    
+
+
+<a id="NavigationResize" href="javascript:epx.library.navigationResize.resize()">
+    <img class="cl_nav_resize_open" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" title="Развернуть" alt="Развернуть" />
+    <img class="cl_nav_resize_close" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" title="Свернуть" alt="Свернуть" />
+</a>
+
+
+
+</div>
+<div id="content" class="content">
+
+
+<div id="MTPSTranslator" class="MTPSTranslator">
+    <table class="MTPSTranslatorTable" style="width: 100%">
+        <tr>
+            <td class="TranslationAlertBox">
+                <div>Данная статья переведена автоматически. Наведите указатель мыши на предложения статьи, чтобы просмотреть исходный текст. <a href="/ru-ru/dd362340.aspx">Дополнительные сведения.</a></div>
+            </td>
+                <td class="TranslationViewSwitcher">
+                    <div>
+                        <input title="Показать перевод" value="0" name="TrnaslatorView" type="radio" class="translatechoice" checked="checked" /><span>Перевод</span>
+                    </div>
+                    <div>
+                        <input title="Показать текст на английском языке" value="1" name="TrnaslatorView" type="radio" class="translatechoice" /><span>Текст оригинала</span>
+                    </div>
+                </td>
+        </tr>
+    </table>
+</div>
+    
+    
+    
+     
+
+
+
+
+
+
+
+    
+    
+
+    <div id="ratingCounterSeperator" class="cl_lw_vs_seperator" style="display: none;"></div>
+
+    <div id="ratingCounter">
+        <span id="rcA" class="ratingText">
+            Эта тема еще не получила оценку <span id="rateThisPrefix">- </span><a id="rateThisTopic" href="#feedback" title="Оценить эту тему">Оценить эту тему</a>
+            
+        </span>
+    </div>
+
+        
+
+<div class="topic" xmlns="http://www.w3.org/1999/xhtml">
+  <h1 class="title">Использование dllimport и dllexport в классах C++</h1>
+  
+  <div class="lw_vs">
+    <div id="curversion">
+      <strong>
+            Visual Studio 2012
+        </strong>
+    </div>
+    <div id="versionclick">
+      <div id="vsseperator" class="cl_lw_vs_seperator"></div>
+      <div>
+        <div>
+          <a id="vsLink" href="javascript:;">
+                        Другие версии
+                    </a>
+        </div>
+        <div class="cl_vs_arrow clip10x10">
+          <img class="cl_lw_vs_arrow" id="vsArrow" alt="" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" />
+        </div>
+      </div>
+      <ul id="vsPanel">
+        <li>
+          <a href="/ru-ru/library/81h27t8c(v=vs.100).aspx" title="">Visual Studio 2010</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div style="clear:both;"></div>
+  
+  <div id="mainSection">
+    <div id="mainBody">
+      <p>
+        
+      </p>
+      <div class="introduction">
+        
+      </div>
+      <div>
+        
+        <div class="LW_CollapsibleArea_TitleDiv">
+          <div>
+            <a href="javascript:void(0)" class="LW_CollapsibleArea_TitleAhref" title="Свернуть">
+              <span class="cl_CollapsibleArea_expanding LW_CollapsibleArea_Img"></span>
+              <span class="LW_CollapsibleArea_Title">Только для систем Microsoft</span>
+            </a>
+            <div class="LW_CollapsibleArea_HrDiv">
+              <hr class="LW_CollapsibleArea_Hr" />
+            </div>
+          </div>
+        </div>
+        <div class="sectionblock">
+          <a id="sectionToggle0">
+            
+          </a>
+          <p>
+            <span id="mt1" class="sentence" data-guid="ccffa0e805b36eaaf0f28baf50de8875" data-source="You can declare C++ classes with the &lt;strong&gt;dllimport&lt;/strong&gt; or &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; attribute." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Можно объявить с классами C++ <strong xmlns="http://www.w3.org/1999/xhtml">dllimport</strong> OR  <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> атрибут.</sentenceText>
+            </span>
+            <span id="mt2" class="sentence" data-guid="b3440bd7e0b4afa172fab848d531b98a" data-source="These forms imply that the entire class is imported or exported." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Эти формы подразумевают, что импортирован или экспортирован всего класса.</sentenceText>
+            </span>
+            <span id="mt3" class="sentence" data-guid="8b025afc8b3c27393156ebd3f13630e8" data-source="Classes exported this way are called exportable classes." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Классы экспортированные в этом случае вызываются экспортируемые классами.</sentenceText>
+            </span>
+          </p>
+          <p>
+            <span id="mt4" class="sentence" data-guid="0270c8658795b0fae701ce4029e57f1e" data-source="The following example defines an exportable class." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">В следующем примере определяется экспортируемые класс.</sentenceText>
+            </span>
+            <span id="mt5" class="sentence" data-guid="b203450f31ab5fc565cb010e7243ffc6" data-source="All its member functions and static data are exported:" xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Все свои данные и статические функции-члены экспортированы.</sentenceText>
+            </span>
+          </p>
+<div id="code-snippet-1" class="codeSnippetContainer" xmlns="">
+    <div class="codeSnippetContainerTabs">
+        
+    </div>
+    <div class="codeSnippetContainerCodeContainer">
+        <div class="codeSnippetToolBar">
+            <div class="codeSnippetToolBarText">
+                <a name="CodeSnippetCopyLink" style="display: none;" title="Копировать в буфер обмена." href="javascript:if (window.epx.codeSnippet)window.epx.codeSnippet.copyCode('CodeSnippetContainerCode_265a865c-4ccb-4427-898b-67301f39ec7a');">Копировать</a>
+            </div>
+        </div>
+        <div id="CodeSnippetContainerCode_265a865c-4ccb-4427-898b-67301f39ec7a" class="codeSnippetContainerCode" dir="ltr">
+            <div style="color:Black;"><pre>
+#define DllExport   __declspec( dllexport )
+
+class DllExport C {
+   int i;
+   virtual int func( void ) { return 1; }
+};
+</pre></div>
+            
+        </div>
+    </div>
+</div>
+<p><span id="mt6" class="sentence" data-guid="162d6db5a04b909dd93cc8685526cafd" data-source="Note that explicit use of the &lt;strong&gt;dllimport&lt;/strong&gt; and &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; attributes on members of an exportable class is prohibited." xml:space="preserve"><sentenceText xmlns="http://www.w3.org/1999/xhtml">Обратите внимание, что точного используйте <strong xmlns="http://www.w3.org/1999/xhtml">dllimport</strong> и  <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> атрибуты на элементах экспортируемые класса запрещены.</sentenceText></span></p></div>
+      </div>
+      <a id="_pluslang_using_dllimport_and_dllexport_in_c2b2bdllexportclasses">
+        
+      </a>
+      <div>
+        <div class="LW_CollapsibleArea_TitleDiv">
+          <div>
+            <a href="javascript:void(0)" class="LW_CollapsibleArea_TitleAhref" title="Свернуть">
+              <span class="cl_CollapsibleArea_expanding LW_CollapsibleArea_Img"></span>
+              <span class="LW_CollapsibleArea_Title">классы dllexport</span>
+            </a>
+            <div class="LW_CollapsibleArea_HrDiv">
+              <hr class="LW_CollapsibleArea_Hr" />
+            </div>
+          </div>
+        </div>
+        <div class="sectionblock">
+          <a id="sectionToggle1">
+            
+          </a>
+          <p>
+            <span id="mt7" class="sentence" data-guid="4e6d93017e3e7fc8a4d7acda973b4b1a" data-source="When you declare a class &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt;, all its member functions and static data members are exported." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">При объявлении класс <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span>все свои функции-члены и статические элементы данных экспортированы.</sentenceText>
+            </span>
+            <span id="mt8" class="sentence" data-guid="bb58bde22f35b7408cb9fc5d1a1df9da" data-source="You must provide the definitions of all such members in the same program." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Необходимо предоставить определения всех таких членов в одной программе.</sentenceText>
+            </span>
+            <span id="mt9" class="sentence" data-guid="e9014c2b99f28aea8635f1d8011631f1" data-source="Otherwise, a linker error is generated." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">В противном случае формируется ошибка компоновщика.</sentenceText>
+            </span>
+            <span id="mt10" class="sentence" data-guid="e5156ae41157236a21c260e32f1ffdf2" data-source="The one exception to this rule applies to pure virtual functions, for which you need not provide explicit definitions." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Единственное исключение из этого правила применяется к чисто виртуальные функции, для которых не нужно предоставить явные определения.</sentenceText>
+            </span>
+            <span id="mt11" class="sentence" data-guid="0eb2691e279747110cba4ecf8f736ceb" data-source="However, because a destructor for an abstract class is always called by the destructor for the base class, pure virtual destructors must always provide a definition." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Однако поскольку деструктор абстрактного класса всегда называется деструктором для базового класса, чисто виртуальный деструктор всегда следует предусматривать определение.</sentenceText>
+            </span>
+            <span id="mt12" class="sentence" data-guid="bf0f9890f442e2c22caffea9dd11bb0a" data-source="Note that these rules are the same for nonexportable classes." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Обратите внимание, что эти правила одинаковы для nonexportable классов.</sentenceText>
+            </span>
+          </p>
+          <p>
+            <span id="mt13" class="sentence" data-guid="589d3bb9526deb33f94d0113b8f9c94d" data-source="If you export data of class type or functions that return classes, be sure to export the class." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">При экспорте данных типа класса или функции, возвращающие классы, то убедитесь, чтобы экспортировать класс.</sentenceText>
+            </span>
+          </p>
+        </div>
+      </div>
+      <a id="_pluslang_dllexport_classesdllexportclasses">
+        
+      </a>
+      <div>
+        <div class="LW_CollapsibleArea_TitleDiv">
+          <div>
+            <a href="javascript:void(0)" class="LW_CollapsibleArea_TitleAhref" title="Свернуть">
+              <span class="cl_CollapsibleArea_expanding LW_CollapsibleArea_Img"></span>
+              <span class="LW_CollapsibleArea_Title">классы dllimport</span>
+            </a>
+            <div class="LW_CollapsibleArea_HrDiv">
+              <hr class="LW_CollapsibleArea_Hr" />
+            </div>
+          </div>
+        </div>
+        <div class="sectionblock">
+          <a id="sectionToggle2">
+            
+          </a>
+          <p>
+            <span id="mt14" class="sentence" data-guid="44c7d39f07220ccad1aee0e3c25df79f" data-source="When you declare a class &lt;strong&gt;dllimport&lt;/strong&gt;, all its member functions and static data members are imported." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">При объявлении класс dllimportвсе свои функции-члены и статические элементы данных импортируются.</sentenceText>
+            </span>
+            <span id="mt15" class="sentence" data-guid="f3330ce169eed9051b63434e9d4def19" data-source="Unlike the behavior of &lt;strong&gt;dllimport&lt;/strong&gt; and &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; on nonclass types, static data members cannot specify a definition in the same program in which a &lt;strong&gt;dllimport&lt;/strong&gt; class is defined." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">В отличие от расширения функциональности <strong xmlns="http://www.w3.org/1999/xhtml">dllimport</strong> и  <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> в типах nonclass, статические элементы данных нельзя определять определение в одной программе, в которой a  <strong xmlns="http://www.w3.org/1999/xhtml">dllimport</strong> класс определен.</sentenceText>
+            </span>
+          </p>
+        </div>
+      </div>
+      <a id="_pluslang_using_dllimport_and_dllexport_in_c2b2binheritanceandexportableclasses">
+        
+      </a>
+      <div>
+        <div class="LW_CollapsibleArea_TitleDiv">
+          <div>
+            <a href="javascript:void(0)" class="LW_CollapsibleArea_TitleAhref" title="Свернуть">
+              <span class="cl_CollapsibleArea_expanding LW_CollapsibleArea_Img"></span>
+              <span class="LW_CollapsibleArea_Title">Наследование и экспортируемые классы</span>
+            </a>
+            <div class="LW_CollapsibleArea_HrDiv">
+              <hr class="LW_CollapsibleArea_Hr" />
+            </div>
+          </div>
+        </div>
+        <div class="sectionblock">
+          <a id="sectionToggle3">
+            
+          </a>
+          <p>
+            <span id="mt16" class="sentence" data-guid="a5ec13ba7c16e39b213dacff1dfd1826" data-source="All base classes of an exportable class must be exportable." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Все базовые классы экспортируемые класса, должны быть может быть экспортирован.</sentenceText>
+            </span>
+            <span id="mt17" class="sentence" data-guid="ef6dcbc7d555a8e16bd962ac287dabe0" data-source="If not, a compiler warning is generated." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Если нет, создается предупреждение компилятора.</sentenceText>
+            </span>
+            <span id="mt18" class="sentence" data-guid="fa050588e7539f6078900421cbb7200c" data-source="Moreover, all accessible members that are also classes must be exportable." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Кроме того, все доступные элементы, которые также классы должны быть может быть экспортирован.</sentenceText>
+            </span>
+            <span id="mt19" class="sentence" data-guid="21bc7bb2dd4a4ce1ad53d79dd05088d8" data-source="This rule permits a &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; class to inherit from a &lt;strong&gt;dllimport&lt;/strong&gt; class, and a &lt;strong&gt;dllimport&lt;/strong&gt; class to inherit from a &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; class (though the latter is not recommended)." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Это правило позволяет a <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> класс, который должен наследоваться от a  <strong xmlns="http://www.w3.org/1999/xhtml">dllimport</strong> класс, и a  <strong xmlns="http://www.w3.org/1999/xhtml">dllimport</strong> класс, который должен наследоваться от a  <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> хотя класс (не рекомендуется использовать последний).</sentenceText>
+            </span>
+            <span id="mt20" class="sentence" data-guid="7de19f100e8ae26d397f93c7219de990" data-source="As a rule, everything that is accessible to the DLL's client (according to C++ access rules) should be part of the exportable interface." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Как правило, все который доступен клиенту библиотеки DLL (в соответствии с правилами доступа C++) должны быть частью экспортируемые интерфейса.</sentenceText>
+            </span>
+            <span id="mt21" class="sentence" data-guid="7987221fd82486baf12f054c210ee310" data-source="This includes private data members referenced in inline functions." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Это включает элементов личных данных, таких, на которые ссылается встроенных функциях.</sentenceText>
+            </span>
+          </p>
+        </div>
+      </div>
+      <a id="_pluslang_using_dllimport_and_dllexport_in_c2b2bselectivememberimportexport">
+        
+      </a>
+      <div>
+        <div class="LW_CollapsibleArea_TitleDiv">
+          <div>
+            <a href="javascript:void(0)" class="LW_CollapsibleArea_TitleAhref" title="Свернуть">
+              <span class="cl_CollapsibleArea_expanding LW_CollapsibleArea_Img"></span>
+              <span class="LW_CollapsibleArea_Title">Селективные импорт и экспорт элемента</span>
+            </a>
+            <div class="LW_CollapsibleArea_HrDiv">
+              <hr class="LW_CollapsibleArea_Hr" />
+            </div>
+          </div>
+        </div>
+        <div class="sectionblock">
+          <a id="sectionToggle4">
+            
+          </a>
+          <p>
+            <span id="mt22" class="sentence" data-guid="08f7bd788f5d15b212d086456537356f" data-source="Because member functions and static data within a class implicitly have external linkage, you can declare them with the &lt;strong&gt;dllimport&lt;/strong&gt; or &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; attribute, unless the entire class is exported." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Так как функции-члены и статические данные внутри класса неявно имеют внешний переключатель можно объявить их с <strong xmlns="http://www.w3.org/1999/xhtml">dllimport</strong> OR  <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> атрибут, если весь класс не будет экспортирован.</sentenceText>
+            </span>
+            <span id="mt23" class="sentence" data-guid="fa4733e33ca533973c30b5d9fa93002c" data-source="If the entire class is imported or exported, the explicit declaration of member functions and data as &lt;strong&gt;dllimport&lt;/strong&gt; or &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; is prohibited." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Если импортирован или экспортирован весь класс, то явное объявление функций-членов и данных <strong xmlns="http://www.w3.org/1999/xhtml">dllimport</strong> OR  <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> запрещает.</sentenceText>
+            </span>
+            <span id="mt24" class="sentence" data-guid="7d0ebfa02e16b4b01267d9082adc2854" data-source="If you declare a static data member within a class definition as &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt;, a definition must occur somewhere within the same program (as with nonclass external linkage)." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">При объявлении статический элемент данных в определении класса как <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span>определение должно происходить в пределах одной программы (например с компоновкой nonclass внешний).</sentenceText>
+            </span>
+          </p>
+          <p>
+            <span id="mt25" class="sentence" data-guid="f7bce1fe42d04039b3c5a3b205ae3e64" data-source="Similarly, you can declare member functions with the &lt;strong&gt;dllimport&lt;/strong&gt; or &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; attributes." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Аналогично можно объявить функции-члены с <strong xmlns="http://www.w3.org/1999/xhtml">dllimport</strong> OR  <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> атрибуты.</sentenceText>
+            </span>
+            <span id="mt26" class="sentence" data-guid="04b7b6e5cc22505c543ea555fe528049" data-source="In this case, you must provide a &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; definition somewhere within the same program." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">В этом случае необходимо обеспечить a <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> определение в пределах одной программы.</sentenceText>
+            </span>
+          </p>
+          <p>
+            <span id="mt27" class="sentence" data-guid="c742a666d7e8718badf7ca2b2f9b3b57" data-source="It is worthwhile to note several important points regarding selective member import and export:  " xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Стояще отметить несколько важных аспектов относительно селективных импорта и экспорта участника:  </sentenceText>
+            </span>
+          </p>
+          <ul>
+            <li>
+              <p>
+                <span id="mt28" class="sentence" data-guid="069cce2f45bfcc92d86974056d1ef5ab" data-source="Selective member import/export is best used for providing a version of the exported class interface that is more restrictive; that is, one for which you can design a DLL that exposes fewer public and private features than the language would otherwise allow." xml:space="preserve">
+                  <sentenceText xmlns="http://www.w3.org/1999/xhtml">Селективные импорт и экспорт элемента лучше всего используются для предоставления версию экспортированного интерфейса класса, накладывающее более строгое ограничение; иными словами, один для которого можно разработать библиотеку DLL, которая предоставляет меньшее число открытых и закрытых функций, чем язык в противном случае разрешитьTfо мере.</sentenceText>
+                </span>
+                <span id="mt29" class="sentence" data-guid="26e1916c1cfdf3de98455295325d63c6" data-source="It is also useful for fine-tuning the exportable interface: when you know that the client, by definition, is unable to access some private data, you need not export the entire class." xml:space="preserve">
+                  <sentenceText xmlns="http://www.w3.org/1999/xhtml">Также полезно для точной настройки экспортируемые интерфейс: если известно, что клиент, по определению, не может получить доступ к конфиденциальным данным, определенные не нужно экспортировать всего класса.</sentenceText>
+                </span>
+              </p>
+            </li>
+            <li>
+              <p>
+                <span id="mt30" class="sentence" data-guid="8193e8caf923b7e70c2a2e6aa1dd016f" data-source="If you export one virtual function in a class, you must export all of them, or at least provide versions that the client can use directly." xml:space="preserve">
+                  <sentenceText xmlns="http://www.w3.org/1999/xhtml">При экспорте одну виртуальную функцию в классе, необходимо экспортировать все они или хотя бы предоставить версии, которые клиент может использовать напрямую.</sentenceText>
+                </span>
+              </p>
+            </li>
+            <li>
+              <p>
+                <span id="mt31" class="sentence" data-guid="3b9b8210581444fc5bfc0cbb61266488" data-source="If you have a class in which you are using selective member import/export with virtual functions, the functions must be in the exportable interface or defined inline (visible to the client)." xml:space="preserve">
+                  <sentenceText xmlns="http://www.w3.org/1999/xhtml">Если имеется класс, в котором используется селективные импорт и экспорт член с виртуальными функциями, функции должны находиться в экспортируемые интерфейсе или указанном встроенной (видимых клиенту).</sentenceText>
+                </span>
+              </p>
+            </li>
+            <li>
+              <p>
+                <span id="mt32" class="sentence" data-guid="64359f5edf40e2c4b3bd3bf039a4d533" data-source="If you define a member as &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; but do not include it in the class definition, a compiler error is generated." xml:space="preserve">
+                  <sentenceText xmlns="http://www.w3.org/1999/xhtml">Если указать член как <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> но не включайте его в определении класса ошибка компилятора.</sentenceText>
+                </span>
+                <span id="mt33" class="sentence" data-guid="3eafd80d677dfe7b0dffc8d95850eea9" data-source="You must define the member in the class header." xml:space="preserve">
+                  <sentenceText xmlns="http://www.w3.org/1999/xhtml">Необходимо указать элемента в заголовке класса.</sentenceText>
+                </span>
+              </p>
+            </li>
+            <li>
+              <p>
+                <span id="mt34" class="sentence" data-guid="882065db59919360d7f69b6fb27e8bf1" data-source="Although the definition of class members as &lt;strong&gt;dllimport&lt;/strong&gt; or &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; is permitted, you cannot override the interface specified in the class definition." xml:space="preserve">
+                  <sentenceText xmlns="http://www.w3.org/1999/xhtml">Хотя определение членов класса как <strong xmlns="http://www.w3.org/1999/xhtml">dllimport</strong> OR  <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> разрешает не удалось переопределить интерфейс, указанного в определении класса.</sentenceText>
+                </span>
+              </p>
+            </li>
+            <li>
+              <p>
+                <span id="mt35" class="sentence" data-guid="1ff6c8ad32213c1c1d41ca1590861ca3" data-source="If you define a member function in a place other than the body of the class definition in which you declared it, a warning is generated if the function is defined as &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; or &lt;strong&gt;dllimport&lt;/strong&gt; (if this definition differs from that specified in the class declaration). " xml:space="preserve">
+                  <sentenceText xmlns="http://www.w3.org/1999/xhtml">При указании функции-члена в месте, отличном от тела определения класса, в котором он объявлен, предупреждение создается, если функция определяется как <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> OR  <strong xmlns="http://www.w3.org/1999/xhtml">dllimport</strong> (если это определение отличается от, указанное в объявлении класса). </sentenceText>
+                </span>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="LW_CollapsibleArea_TitleDiv">
+          <div>
+            <a href="javascript:void(0)" class="LW_CollapsibleArea_TitleAhref" title="Свернуть">
+              <span class="cl_CollapsibleArea_expanding LW_CollapsibleArea_Img"></span>
+              <span class="LW_CollapsibleArea_Title">См. также</span>
+            </a>
+            <div class="LW_CollapsibleArea_HrDiv">
+              <hr class="LW_CollapsibleArea_Hr" />
+            </div>
+          </div>
+        </div>
+        <div class="sectionblock">
+          <a id="seeAlsoToggle">
+            
+          </a>
+          <h4 class="subHeading">Ссылки</h4>
+          <div class="seeAlsoStyle">
+            <span>
+              <a href="http://msdn.microsoft.com/ru-ru/library/3y1sfaz2.aspx">dllexport, dllimport</a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div id="contentFeedback">
+    <form method="post" action="/ru-ru/library/feedback/add/81h27t8c.aspx">
+        <input name="__RequestVerificationToken" type="hidden" value="9JVICI9JIjF4oymJLIpetBO0cE+tlBMfOr20uD+/6DHCVYcgPbCrpTiMMxSMpHJJatpgAtVBd4C09kQk8bLYxlo2BS+9eK8Xd8+WRRwwZhKITZXsbJEiDCmqLphvVMw0QvF1Bg==" />
+    <div id="contentFeedbackContainer">
+        <div class="FeedbackTitleContainer">
+            <a name="feedback"></a>
+        Была ли вам полезна эта информация?
+            <input id="rdIsUsefulYes" name="rdIsUseful" type="radio" value="1" onclick="toggleContentFeedback('Yes');" /><label for="rdIsUsefulYes">Да</label>
+            <input id="rdIsUsefulNo" name="rdIsUseful" type="radio" value="0" onclick="toggleContentFeedback('No');" /><label for="rdIsUsefulNo">Нет</label>
+        
+        </div>
+        
+            <div id="contentFeedbackQAContainer">
+                
+                    <div id="feedbackListNoContainer" class="FeedbackListContainer">
+                        
+                            <div>
+                                <input id="chkbxNo201" name="chkbxNo" type="checkbox" value="201" />
+                                <label for="chkbxNo201">Неточный</label>
+                            </div>
+                        
+                            <div>
+                                <input id="chkbxNo202" name="chkbxNo" type="checkbox" value="202" />
+                                <label for="chkbxNo202">Недостаточно подробный</label>
+                            </div>
+                        
+                            <div>
+                                <input id="chkbxNo203" name="chkbxNo" type="checkbox" value="203" />
+                                <label for="chkbxNo203">Требуется больше примеров кода</label>
+                            </div>
+                        
+                            <div>
+                                <input id="chkbxNo204" name="chkbxNo" type="checkbox" value="204" />
+                                <label for="chkbxNo204">Перевод нуждается в правке</label>
+                            </div>
+                        
+                    </div>
+                
+                <div class="FeedbackTellUsMoreContainer">
+                    <textarea id="feedbackText" name="feedbackText" class="TellUsMoreTextBoxSearchLoaded" onfocus="WatermarkFocus(this, 'Сообщите нам дополнительную информацию...', 'TellUsMoreTextBoxSearch')" onblur="WatermarkBlur(this, 'Сообщите нам дополнительную информацию...', 'TellUsMoreTextBoxSearchLoaded')" onmouseover="TextBoxCharactersCounter(this, document.getElementById('feedbackTextCounter'), 1500)" onkeydown="TextBoxCharactersCounter(this, document.getElementById('feedbackTextCounter'), 1500)" onkeyup="TextBoxCharactersCounter(this, document.getElementById('feedbackTextCounter'), 1500)">Сообщите нам дополнительную информацию...</textarea>
+                </div>
+                <span class="counter">(<span id="feedbackTextCounter">1500</span> символов осталось)</span>
+                <input type="hidden" id="returnUrl" name="returnUrl" value="http://msdn.microsoft.com/ru-ru/library/81h27t8c.aspx" />
+                <input type="submit" id="submit" value="Отправить" title="Щелкните, чтобы отправить отзыв" onclick="WatermarkOnSubmit(document.getElementById('feedbackText'), 'Сообщите нам дополнительную информацию...', 'TellUsMoreTextBoxSearch')" />
+                <div style="clear: both;"></div>
+            </div>  
+        
+    </div>
+    </form>
+</div>
+    
+
+
+
+
+<script id="CommentTemplate" type="text/x-jquery-tmpl">
+    <div class="communityContentAnnotation">
+        <a name="${Index}"></a>
+        <h3>
+            ${Title}
+        </h3>
+        <div class="communityContentAnnotationBody">
+            {{html Body}}
+        </div>
+        <div class="communityContentAnnotationInfo">
+            <div class="communityContentAnnotationAvatarContainer">
+                <a href="${UserAvatar.Href}" title="${UserAvatar.ToolTip}" class="communityContentAnnotationAvatar"><img src="${UserAvatar.ImageUrl}" alt="${UserAvatar.ImageAltText}" width="34" height="34" /></a>
+            </div>
+            <div class="communityContentAnnotationUserDateContainer">
+                <div class="communityContentAnnotationUserContainer">
+                    <a href="${UserAvatar.Href}">
+                        ${User}
+                    </a>
+                </div>
+                <div class="communityContentAnnotationDateContainer">
+                    <span>${Date}</span>
+                    
+                    {{if EditLink}}
+                        <span>
+                            <a href="${EditLink.Href}" title="${EditLink.ToolTip}" class="communityContentCommentEditLink">${EditLink.Title}</a>
+                        </span>
+                    {{/if}}
+
+                    {{if DeleteLink}}
+                        <span>
+                            <a href="${DeleteLink.Href}" title="${DeleteLink.ToolTip}" class="communityContentDeleteLink">${DeleteLink.Title}</a>
+                        </span>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<div class="communityContentContainer">
+    <div id="CommunityContentHeader" class="communityContentHeader">
+        <div class="communityContentHeaderTitleContainer">
+            <h2>Добавления сообщества</h2>
+                <a class="communityContentAddLink" href="http://msdn.microsoft.com/ru-ru/library/community/add/81h27t8c.aspx">
+                    <span class="communityContentAddButton" title="Add («Добавить»)">
+                        ДОБАВИТЬ
+                    </span>
+                </a>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    
+    <div id="CommunityComments" data-url="/ru-ru/library/community/comments/81h27t8c.aspx"></div>
+</div>
+
+
+    
+     
+     
+    
+    <div class="NetReflectorMain">
+        <div class="msdn_NRHeader"></div>
+        <a class="NRCloseButton clip22x30" href="javascript:void(0);" style="display: inline-block;">
+            <img alt="" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" class="cl_msdn_close" />
+        </a>
+        <div class="NRTopStripe"></div>
+        <div class="NRNotification">
+            <div>
+                
+                Корпорация Майкрософт проводит интернет-опрос, чтобы выяснить ваше мнение о веб-сайте MSDN. Если вы желаете принять участие в этом интернет-опросе, он будет отображен при закрытии веб-сайта MSDN.<br /><br />Вы хотите принять участие?
+            </div>
+            <input class="NRSubmit" type="button" value="Да" />
+            <input class="NRCancel" type="button" value="Нет" />
+            <div class="PrivacyStatement">
+                <a href="http://msdn.microsoft.com/ru-ru/gg723766.aspx" target="_blank">
+                    Конфиденциальность
+                </a>
+            </div>
+        </div>
+        <div class="NRBottomStripe"></div>
+    </div>
+
+</div>
+
+
+            </div>
+            <div class="clear"></div>
+        
+            
+    
+   <div id="ux-footer" class="FF ltr">
+    <div id="ux-footer-cols">
+        <div class="TocNavigation">
+   
+   <div class="linksContainer">
+    </div>
+</div>
+    </div>
+
+    <div class="ux-footer-clear"></div>
+    <div id="footerRight">
+        <div id="FooterLogoContainer"><div id="FooterLogo"></div></div>
+        <div id="FooterCopyright">© 2012 Microsoft. Все права защищены.</div>
+    </div>
+    <div id="footerLeft">
+        <div id="footerGroup">
+            <div id="LinkGroup">
+                <div id="Links1"><div data-fragmentName="FooterLinks" id="Fragment_FooterLinks" xmlns="http://www.w3.org/1999/xhtml">
+  
+  <div class="LinkList">
+    <div>
+      <div class="LinkColumn">
+        <a href="http://go.microsoft.com/?linkid=8786242&amp;lcid=1049" xmlns="http://www.w3.org/1999/xhtml">Управление профилем</a>
+      </div>
+      <div class="LinksDivider">|</div>
+      <div class="LinkColumn">
+        <a href="http://www.microsoft.com/legal/" xmlns="http://www.w3.org/1999/xhtml">Юридическая информация</a>
+      </div>
+      <div class="LinksDivider">|</div>
+      <div class="LinkColumn">
+        <a href="http://www.microsoft.com/Rus/Msdn/flash/Default.mspx" xmlns="http://www.w3.org/1999/xhtml">Бюллетень MSDN</a>
+      </div>
+      <div class="LinksDivider">|</div>
+      <div class="LinkColumn">
+        <a href="http://msdn.microsoft.com/ru-ru/cc300389.aspx" xmlns="http://www.w3.org/1999/xhtml">Условия использования</a>
+      </div>
+      <div class="Clear"></div>
+    </div>
+  </div>
+</div></div>
+            </div>
+            <div id="Feedback">
+                <div class="feedbackListItem">
+                    <div class="LinksDivider">|</div>
+                    <div class="LinkColumn">
+                        
+
+
+
+
+
+<div class="FooterSiteFeedBack">
+    <a id="SiteFeedbackLinkOpener" href="javascript:void(0)">
+        <span class="FeedbackButton clip20x21" id="FeedbackButton">
+            <img id="feedBackImg" class="cl_footer_feedback_icon" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" alt="Site Feedback" />
+        </span>
+        Обратная связь
+    </a>
+    
+    <div id="SiteFeedbackLinkContainer" class="SiteFeedbackLinkContainer" style="display: none;">
+    <form id="siteFeedbackForm" method="post" action="/ru-ru/library/feedback/add/81h27t8c(v=msdn.10).aspx">
+        <input name="__RequestVerificationToken" type="hidden" value="MPWP9z8DjEQ9aoD31U3toAvvAopiakq7C/Cryaky/dU9v4YoHDZ7SHQm3f+4AyVl+faJAslJ47b3xxTLZPeCfyH/qzO70iB7KEF9lr5SsClVyDx8PIa6zNpQz1CGUe8mXA56EQ==" />
+        <div class="SiteFeedbackLinkTitleContainer">
+            <div class="SiteFeedbackLinkTitle">
+                Обратная связь
+            </div>
+            <div class="SiteFeedbackLinkCancel">
+                <a id="SiteFeedbackLinkCloser" href="javascript:void(0)">x</a>
+            </div>
+        </div>
+        <div class="SiteFeedbackLinkData">
+            <div class="SiteFeedbackLinkInfoText">
+                Расскажите о своем опыте…
+            </div>
+            <div class="QuestionText">
+                Быстро ли загрузилась страница?
+            </div>
+            <div class="AnswerText">
+                
+                <span>
+                    Да<span>
+                        <input id="searchBox" name="searchBox" type="radio" value="1" /></span></span>
+                
+                <span>
+                    Нет<span>
+                        <input id="searchBox" name="searchBox" type="radio" value="0" /></span></span>
+                
+            </div>
+            <div class="QuestionText">
+                Понравилось ли вам оформление страницы?
+            </div>
+            <div class="AnswerText">
+                
+                <span>
+                    Да<span>
+                        <input id="tabbedCode" name="tabbedCode" type="radio" value="1" /></span></span>
+                
+                <span>
+                    Нет<span>
+                        <input id="tabbedCode" name="tabbedCode" type="radio" value="0" /></span></span>
+                
+            </div>
+            <div class="QuestionText">
+                Tell us more
+            </div>
+            <div class="SiteFeedbackLinkTextAreaContainer">
+                <textarea id="feedbackText" data-maxlength="4000" name="feedbackText" cols="25" rows="5" class="SiteFeedbackLinkTextArea"></textarea>
+                
+                <textarea id="feedbackDescription" name="feedbackDescription" cols="25" rows="10" style="display: none;">Enter description here.</textarea>
+                <input type="hidden" id="feedbackPriority" name="feedbackPriority" value="" />
+                <input type="hidden" id="feedbackSourceUrl" name="feedbackSourceUrl" value="" />
+                <input type="hidden" id="ClientIP" name="ClientIP" value="" />
+                <input type="hidden" id="ClientOS" name="ClientOS" value="" />
+                <input type="hidden" id="ClientBrowser" name="ClientBrowser" value="" />
+                <input type="hidden" id="ClientTime" name="ClientTime" value="" />
+                <input type="hidden" id="ClientTimeZone" name="ClientTimeZone" value="" />
+                
+            </div>
+            <div>
+                <input id="siteFeedbackSubmit" type="submit" value="Отправить" class="SiteFeedbackLinkSubmit" />
+            </div>
+        </div>
+        <input type="hidden" id="returnUrl" name="returnUrl" value="http://msdn.microsoft.com/ru-ru/library/81h27t8c(v=msdn.10).aspx" />
+    </form>
+</div>
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="clear:both"></div>
+        <div id="Links2"><div data-fragmentName="FooterLinksBottom" id="Fragment_FooterLinksBottom" xmlns="http://www.w3.org/1999/xhtml">
+  
+  <div class="LinkList">
+    <div>
+      <div class="LinkColumn">
+        <a href="http://www.microsoft.com/library/toolbar/3.0/trademarks/ru-ru.mspx" xmlns="http://www.w3.org/1999/xhtml">Товарные знаки</a>
+      </div>
+      <div class="LinksDivider">|</div>
+      <div class="LinkColumn">
+        <a href="http://go.microsoft.com/fwlink/?LinkId=248681&amp;clcid=0x419" xmlns="http://www.w3.org/1999/xhtml">Конфиденциальность</a>
+      </div>
+      <div class="Clear"></div>
+    </div>
+  </div>
+</div></div>
+    </div>
+</div> 
+
+
+            <div class="footerPrintView">
+                <div class="footerCopyrightPrintView">© 2012 Microsoft. Все права защищены.</div>
+            </div>
+
+            
+            
+    
+    <input id="tocPaddingPerLevel" type="hidden" value="17" />
+
+
+        
+            <input id="MtpsDevice" type="hidden" value="Default" />
+
+
+<![CDATA[ Third party scripts and code linked to or referenced from this website are licensed to you by the parties that own such code, not by Microsoft.  See ASP.NET Ajax CDN Terms of Use – http://www.asp.net/ajaxlibrary/CDN.ashx. ]]>        
+            
+            
+            
+            
+            
+        
+
+
+
+<noscript><div><img alt="DCSIMG" id="Img1" width="1" height="1" src="http://m.webtrends.com/dcsmgru7m99k7mqmgrhudo0k8_8c6m/njs.gif?dcsuri=/nojavascript&amp;WT.js=No" /></div></noscript>
+
+
+
+
+<noscript>
+  <a href="http://www.omniture.com" title="Web Analytics">
+    <img src="//msstonojsmsdn.112.2o7.net/b/ss/msstonojsmsdn/1/H.20.2--NS/0" height="1" width="1" border="0" alt="" />
+  </a>
+</noscript>
+
+
+        </div>
+    <script type="text/javascript" class="mtps-injected">
+/*<![CDATA[*/
+(function(window,document){"use strict";function preload(scripts){for(var result=[],script,e,i=0;i<scripts.length;i++)script=scripts[i],script.hasOwnProperty("url")&&(e=document.createElement("script"),e.src=script.url,script.throwaway=e),result.push(script);return result}function inject(scripts,index){var script,elem;if(index>=scripts.length){delete mtps.injectScripts;return}script=scripts[index],elem=document.createElement("script"),elem.className="mtps-injected",elem.async=!1;var isLoaded=!1,timeoutId=0,injectNextFnName="",injectNext=elem.onerror=function(){isLoaded||(isLoaded=!0,inject(scripts,index+1),window.clearTimeout(timeoutId),elem.onload=elem.onerror=elem.onreadystatechange=null,injectNextFnName&&delete mtps[injectNextFnName],elem.removeEventListener&&elem.removeEventListener("load",injectNext,!1))};elem.addEventListener?elem.addEventListener("load",injectNext,!1):elem.readyState==="uninitialized"?elem.onreadystatechange=function(){(this.readyState==="loaded"||this.readyState==="complete")&&injectNext()}:elem.onload=injectNext,script.hasOwnProperty("url")?(timeoutId=window.setTimeout(injectNext,12e4),elem.src=script.url):(injectNextFnName="_injectNextScript_"+index,mtps[injectNextFnName]=injectNext,timeoutId=window.setTimeout(injectNext,2e3),elem.text="try {\n"+script.txt+"\n} finally { MTPS."+injectNextFnName+" && MTPS."+injectNextFnName+"(); }"),parent.appendChild(elem)}var mtps=window.MTPS||(window.MTPS={}),parent=document.getElementsByTagName("head")[0];mtps.injectScripts=function(scripts){inject(preload(scripts),0)}})(window,document);
+MTPS.injectScripts([
+	{ txt: "/**/\r\n(window.MTPS || (window.MTPS = {})).cdnDomains || (window.MTPS.cdnDomains = { \r\n\t\"image\": \"http://i.msdn.microsoft.com\", \r\n\t\"js\": \"http://i2.msdn.microsoft.com\", \r\n\t\"css\": \"http://i3.msdn.microsoft.com\"\r\n});\r\n/**/" },
+	{ txt: "//\n  var literalNormalizedUrl = \u0027/ru-ru/library/81h27t8c(d=default,l=ru-ru,v=vs.110).aspx\u0027;\n  var wt_nvr_ru = \u0027WT_NVR_RU\u0027;\n  var wt_fpcdom = \u0027.microsoft.com\u0027;\n  var wt_domlist = \u0027msdn.microsoft.com\u0027;\n  var wt_pathlist = \u0027\u0027;\n  var wt_paramlist = \u0027DCSext.mtps_devcenter\u0027;\n  var wt_siteid = \u0027MSDN\u0027;\n  var gDomain = \u0027m.webtrends.com\u0027;\n  var gDcsId = \u0027dcsmgru7m99k7mqmgrhudo0k8_8c6m\u0027;\n  var gFpc = \u0027WT_FPC\u0027;\n  if (document.cookie.indexOf(gFpc + \"=\") == -1) {\n    var wtidJs = document.createElement(\"script\");\n    wtidJs.src = \"//\" + gDomain + \"/\" + gDcsId + \"/wtid.js\";\n    document.getElementsByTagName(\"head\")[0].appendChild(wtidJs);\n  }\n  var detectedLocale = \u0027ru-ru\u0027;\n  var wtsp = \u0027msdnlib_hp\u0027;\n  var gTrackEvents = \u00270\u0027;\n/**/" },
+	{ txt: "/**/\n  var omni_guid = \"27783e6a-0894-4ee7-9cbc-0ac38fca5a88\";\n/**/" },
+	{ url: "http://i2.msdn.microsoft.com/Combined.js?resources=0:webtrendsscript,1:omni_rsid_MSDN;/Areas/Global/Content/Webtrends/resources:0,/Areas/Global/Content/Omniture/resources/MSDN:1&amp;hashKey=2A2EA78286FAF39A313149F2A3E6EE83" },
+	{ url: "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js" },
+	{ url: "http://i2.msdn.microsoft.com/Combined.js?resources=0:Utilities,1:Base\\Content\\SearchBox;/Areas/Epx/Content/Scripts:0,/\\Areas/Epx/Themes:1&amp;hashKey=E9622D63FB4FA8800F7E6436FBD42CF5" },
+	{ url: "http://i3.services.social.microsoft.com/search/Widgets/SearchBox.jss?boxid=HeaderSearchTextBox&btnid=HeaderSearchButton&brand=MSDN&loc=ru-ru&watermark=MSDN" },
+	{ url: "http://i2.msdn.microsoft.com/Combined.js?resources=0:Toc,0:NavigationResize;/Areas/Epx/Library/Content:0&amp;hashKey=F7A9CA3A41588647BDDE44700C927966" },
+	{ txt: "//\n    MTPS = window.MTPS || {};\n    MTPS.Translation = window.MTPS.Translation || {};\n\n    MTPS.Translation.TranslationType =  0;\n    \n    \n        \n        MTPS.Translation.EditorLink = {\n            includeEditor : 0,\n            editLink: \"http://msdn.microsoft.com/ru-ru/library/translation/edit/81h27t8c.aspx\",\n            editLinkText: \"Предложите более удачный вариант перевода\"\n        };\n        \n    //" },
+	{ url: "http://i2.msdn.microsoft.com/Combined.js?resources=0:jquery.popup,0:Translator,1:FeedbackCounter;/Areas/Epx/Library/Content:0,/Areas/Epx/Shared/Content:1&amp;hashKey=AF7281B4CC2FF60BA3D91851B54686EC" },
+	{ txt: "MTPS = window.MTPS || {}; MTPS.LocalizedStrings = window.MTPS.LocalizedStrings || {}; MTPS.LocalizedStrings.ExpandButtonTooltip = \u0027Развернуть\u0027; MTPS.LocalizedStrings.CollapseButtonTooltip = \u0027Свернуть\u0027;" },
+	{ url: "http://i2.msdn.microsoft.com/Areas/Epx/Shared/Content/Feedback.js" },
+	{ url: "http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js" },
+	{ url: "http://i2.msdn.microsoft.com/Areas/Epx/Content/Scripts/CommunityContent.js" },
+	{ txt: "//\n        MTPS = window.MTPS || {};\n        MTPS.NetReflectorInit = {\n            surveyUrl: \"http://vp-nri.com/take?i=164845&amp;h=31BP3J-vCdvnmELPHGeZ9A\",\n            privacyStatementText: \"Конфиденциальность\",\n            trackerWindowText: \"Не закрывайте это окно.\u003cbr /\u003e\u003cbr /\u003eСпасибо! Когда вы покинете данный веб-узел, в этом окне появится опрос, поэтому не закрывайте его.\",\n            privacyStatementLink: \"http://msdn.microsoft.com/ru-ru/gg723766.aspx\",\n            trackerHeaderClass: \"msdn_TrackerHeader\"\n        };\n        //" },
+	{ url: "http://i2.msdn.microsoft.com/Combined.js?resources=0:NetReflector,0:SiteFeedbackLink,0:Topic,0:CodeSnippet,0:TopicNotInScope,0:CollapsibleArea,0:VersionSelector,0:SurveyBroker;/Areas/Epx/Content/Scripts:0&amp;hashKey=F4776AF8D2CF4AA85758347DB0903989" }
+]);
+
+/*]]>*/
+</script></body>
+</html>

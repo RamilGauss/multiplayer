@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\Common;..\MyGUIEngine\include;..\MyGUIEngine\src;..\Common\Base;..\Common\Base\DirectX;..\Common\Input\Win32;..\GUI;..\Share"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;MYGUI_STATIC"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="Common.lib MyGUIEngine.lib Platforms.lib D3D9.lib D3dx9.lib Share.lib GBaseLib.lib glib-2.0.lib gthread-2.0.lib shlwapi.lib"
+				AdditionalDependencies="Common.lib MyGUIEngineDLL.lib Platforms.lib D3D9.lib D3dx9.lib Share.lib GBaseLib.lib glib-2.0.lib gthread-2.0.lib shlwapi.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
+				AdditionalLibraryDirectories="..\Lib;&quot;..\Lib\$(ConfigurationName)&quot;;&quot;..\Exe\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"

@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\MyGUIEngine\include;..\MyGUIEngine\src;.\Base\DirectX;.\;.\Input\Win32;..\Platforms\DirectX\DirectXPlatform\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;MYGUIENGINE_EXPORTS;MYGUI_BUILD;MYGUI_PLATFORM=MYGUI_PLATFORM_WIN32;MYGUI_STATIC"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"

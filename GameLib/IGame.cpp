@@ -58,8 +58,13 @@ IGame::IGame()
 //----------------------------------------------------------------------
 IGame::~IGame()
 {
-  if(mFreeDeveloperTool) mFreeDeveloperTool(mClientDeveloperTool);
-  if(mFreeDeveloperTool) mFreeDeveloperTool(mServerDeveloperTool);
+  if(mFreeDeveloperTool)
+  {
+    if(mFreeDeveloperTool) 
+      mFreeDeveloperTool(mClientDeveloperTool);
+    if(mFreeDeveloperTool) 
+      mFreeDeveloperTool(mServerDeveloperTool);
+  }
 
   FreeLib();
 }

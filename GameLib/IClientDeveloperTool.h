@@ -79,7 +79,11 @@ public:
 protected:
   // компоненты
   TComponentClient mComponent;
+  
+  typedef void (*TInitLogFunc)(char*); 
+  TInitLogFunc mFuncInitLogger;
 public:
+
   IClientDeveloperTool();
   virtual ~IClientDeveloperTool();
 
@@ -91,6 +95,8 @@ public:
 
   virtual void Calc() = 0;
   virtual IMakerObjectCommon* GetMakerObjectCommon() = 0;
+
+  virtual void SetInitLogFunc(TInitLogFunc pFunc){mFuncInitLogger=pFunc;}
 
   // доступ к компонентам
   TComponentClient* GetComponent(){return &mComponent;}

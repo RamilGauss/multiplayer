@@ -553,25 +553,25 @@ namespace base
   {
     Sleep( 100 );
 
-    HRESULT hr;
-    if (FAILED(hr = mDevice->TestCooperativeLevel()))
+    //HRESULT hr;
+    //if (FAILED(hr = mDevice->TestCooperativeLevel()))
     {
-      if (hr == D3DERR_DEVICELOST)
-        return;
+      //if (hr == D3DERR_DEVICELOST)
+        //return;
 
-      if (hr == D3DERR_DEVICENOTRESET)
-      {
+      //if (hr == D3DERR_DEVICENOTRESET)
+      //{
         if (mPlatform != nullptr)
           mPlatform->getRenderManagerPtr()->deviceLost();
 
         // hr = mDevice->Reset( &mD3dpp ); // 19.12.2012 Gauss конвейер сам сделает 
 
-        if (FAILED(hr))
-          return;
+        //if (FAILED(hr))
+          //return;
 
         if (mPlatform != nullptr)
           mPlatform->getRenderManagerPtr()->deviceRestore();
-      }
+      //}
     }
   }
   //------------------------------------------------------------------------

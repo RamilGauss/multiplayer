@@ -45,7 +45,7 @@ class IGUI : public IGUI_Core,
 public:
 
   IGUI(){};
-  virtual ~IGUI(){};
+  virtual ~IGUI(){}
 
 };
 

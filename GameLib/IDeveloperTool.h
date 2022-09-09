@@ -46,6 +46,8 @@ public:
   IDeveloperTool(){};
   virtual ~IDeveloperTool(){};
 
+  virtual void Done(){};
+
 
 };
 

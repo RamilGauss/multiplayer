@@ -40,12 +40,17 @@ you may contact in writing [ramil2085@gmail.com].
 #include "../BigJack/IGraphicEngine.h"
 #include "../GameLib/IBaseObjectCommon.h"
 #include "../GUI/IGUI.h"
+#include "Logger.h"
 
 using namespace std;
 using namespace nsStruct3D;
 
 TClientDeveloperTool_ViewerModel::TClientDeveloperTool_ViewerModel()
 {
+  mClientMain      = NULL;
+  mGameRoomPrepare = NULL;
+  mWaitForm        = NULL;
+
   mMakerObjectCommon = new TMakerObjectCommon;
 }
 //------------------------------------------------------------------------------------
@@ -76,6 +81,7 @@ string TClientDeveloperTool_ViewerModel::GetTitleWindow()
 //------------------------------------------------------------------------------------
 void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent)
 {
+  InitLog();
   mComponent = *pComponent; 
 
   int cnt[3] = {3,3,3};
@@ -88,14 +94,17 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent)
   float v = start/float(cnt[0]*cnt[1]*cnt[2]);
   GlobalLoggerForm.WriteF_time("EditorModel: Время загрузки объектов t=%u мс,v=%f мс/об.\n",start,v);
 #endif
-  //mComponent.mGraphicEngine->AddGUI(&mFormClientMain);
-  //mFormClientMain.Init();
-  //mComponent.mGraphicEngine->ForceResizeEventGUI();
+
+  mClientMain      = new TClientMain;
+  mGameRoomPrepare = new TGameRoomPrepare;
+  mWaitForm        = new TWaitForm;
   
-  //mClientMain.
-  mComponent.mGUI->Add(std::string("mClientMain"),&mClientMain);
+  mComponent.mGUI->Add(std::string("mClientMain"),mClientMain);
+  mComponent.mGUI->Add(std::string("mGameRoomPrepare"),mGameRoomPrepare);
   // показать форму
-  mClientMain.Show();
+  //mClientMain->Show();
+  //mGameRoomPrepare->Show();
+  mWaitForm->Show();
   // подстроиться
   mComponent.mGUI->Resize();
 }
@@ -128,5 +137,21 @@ void TClientDeveloperTool_ViewerModel::CreateObjects(int cntK,int cntJ,int cntI)
       }
     }
   }
+}
+//---------------------------------------------------------------------------------------------
+void TClientDeveloperTool_ViewerModel::Done()
+{
+  delete mClientMain;
+  mClientMain = NULL;
+  delete mGameRoomPrepare;
+  mGameRoomPrepare = NULL;
+  delete mWaitForm;
+  mWaitForm = NULL;
+}        
+//---------------------------------------------------------------------------------------------
+void TClientDeveloperTool_ViewerModel::InitLog()
+{
+  if(mFuncInitLogger)
+    mFuncInitLogger("ViewerModel");
 }
 //---------------------------------------------------------------------------------------------

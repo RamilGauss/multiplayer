@@ -47,7 +47,7 @@ TGUI_Class::TGUI_Class()
 //------------------------------------------------------------------------
 TGUI_Class::~TGUI_Class()
 {
-
+  Destroy();
 }
 //------------------------------------------------------------------------
 bool TGUI_Class::AddWindow(TGUIDescWindow* descWindow)
@@ -71,7 +71,7 @@ void TGUI_Class::Render()
 //------------------------------------------------------------------------
 void TGUI_Class::Resize()
 {
-  mMyGUI._windowResized();
+  mMyGUI._windowResizedPartly();
 }
 //------------------------------------------------------------------------
 void TGUI_Class::Destroy()

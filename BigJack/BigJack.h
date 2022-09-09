@@ -93,6 +93,7 @@ protected:
 
   CModelViewerCamera mCamera;                // A model viewing camera
 
+  bool flgNeedResizeGUI;
 public:
   //----------------------------------------------------------------
   //                              INTERFACE
@@ -100,12 +101,6 @@ public:
   TBigJack();
   virtual ~TBigJack();
 
-  // на получение событий WinApi окна и DirectX
-  //virtual void Register(void*   pFunc, int type);
-  //virtual void Unregister(void* pFunc, int type);
-  // в частности события мыши и клавиатуры
-  //virtual void NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-  //virtual void NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext);
   //------------------------------------------------------------------------
   virtual void Init();
   virtual void Work(guint32 time_ms);
@@ -162,7 +157,6 @@ protected:
   LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,void* pUserContext );
   void OnLostDevice( void* pUserContext );
   void OnDestroyDevice( void* pUserContext );
-  //void OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext );
   
   void OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext );
   void OnMouseEvent( int state, 
@@ -184,11 +178,15 @@ protected:
 
   void SetCommonShaderStack();
 
-  //virtual void* GetFuncEventGUI();
-  
-  //virtual void* GetObjectForInitGUI();
   virtual bool InitGUI();
 
+  void SaveRenderState();
+  void RestoreRenderState();
+
+
+  // подстрйока под глюк DXUT 21.12.2012 Gauss
+  bool IsNeedResizeGUI(){return flgNeedResizeGUI;}
+  void SetNeedResizeGUI(bool val){flgNeedResizeGUI=val;}
 };
 
 #endif

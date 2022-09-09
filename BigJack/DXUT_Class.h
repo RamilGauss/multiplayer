@@ -42,6 +42,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "SDKmisc.h"
 #include "IDirectX_Realize.h"
 #include <string>
+#include "DXUTgui.h"
+#include "StateManager9.h"
 
 class TDXUT : public IDirectX_Realize
 {
@@ -50,9 +52,14 @@ class TDXUT : public IDirectX_Realize
   bool flgWasLostEvent;
   bool flgWasDestroyEvent;
 
+  TStateManager9 m_pManagerState;
+
 public:
   TDXUT(TBigJack * pMDX );
   virtual ~TDXUT();
+
+  virtual HRESULT CaptureState9();
+  virtual HRESULT ApplyState9();
 
   virtual void* GetWndProc();
   virtual bool IsFullScreen();
@@ -73,9 +80,6 @@ public:
 
   virtual IDirect3D9*       GetD3D9Object();
   virtual IDirect3DDevice9* GetD3D9Device();
-
-  //virtual void* GetFuncEventGUI();
-  //void SetSrcGUI(TGraphicEngineGUI* pForm);
 
 protected:
 

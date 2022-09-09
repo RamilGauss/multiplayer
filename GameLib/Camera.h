@@ -36,7 +36,7 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef CameraH
 #define CameraH
 
-#include "DXUT.h"
+#include "Struct3D.h"
 
 // контейнер для матрицы камеры
 
@@ -44,17 +44,17 @@ class TCamera
 {
 protected:
 
-  D3DXMATRIXA16 mView;
-  D3DXMATRIXA16 mProj;
+  nsStruct3D::TMatrix16 mView;
+  nsStruct3D::TMatrix16 mProj;
 public:
 
   TCamera();
   virtual ~TCamera();
 
-  virtual void SetView(D3DXMATRIXA16* view);
-  virtual void SetProj(D3DXMATRIXA16* proj);
-  virtual const D3DXMATRIXA16* GetView()const;
-  virtual const D3DXMATRIXA16* GetProj()const;
+  virtual void SetView(nsStruct3D::TMatrix16* view);
+  virtual void SetProj(nsStruct3D::TMatrix16* proj);
+  virtual const nsStruct3D::TMatrix16* GetView()const;
+  virtual const nsStruct3D::TMatrix16* GetProj()const;
 };
 
 

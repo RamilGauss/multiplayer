@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".\;..\GBaseLib;&quot;..\glib-2.0&quot;;..\Share;..\DXUT\Core;..\DXUT\Optional;..\Robert;..\GUI;..\MyGUIEngine\include;..\Common;..\MyGUIEngine\src;..\Common\Base;..\Common\Base\DirectX;..\Common\Input\Win32"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;PROFILE;_WINDOWS;D3DXFX_LARGEADDRESS_HANDLE;MYGUI_STATIC"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;PROFILE;_WINDOWS;D3DXFX_LARGEADDRESS_HANDLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -155,23 +155,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ButtonWin.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CheckBoxWin.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ComboBoxWin.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\DXUT_Class.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\EditBoxWin.cpp"
 				>
 			</File>
 			<File
@@ -180,14 +164,6 @@
 			</File>
 			<File
 				RelativePath=".\ExecShaderStack.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\GraphicEngineGUI.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\GraphicEngineGUI_Private.cpp"
 				>
 			</File>
 			<File
@@ -207,10 +183,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ListBoxWin.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\LoaderModelDX.cpp"
 				>
 			</File>
@@ -220,10 +192,6 @@
 			</File>
 			<File
 				RelativePath=".\MakerGraphicEngine.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MakerGUI.cpp"
 				>
 			</File>
 			<File
@@ -263,19 +231,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\RadioButtonWin.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\ShaderStack.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\SliderWin.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\StaticWin.cpp"
+				RelativePath=".\StateManager9.cpp"
 				>
 			</File>
 			<File
@@ -289,23 +249,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\BaseGUI_Win.h"
-				>
-			</File>
-			<File
 				RelativePath=".\BigJack.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ButtonWin.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CheckBoxWin.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ComboBoxWin.h"
 				>
 			</File>
 			<File
@@ -317,10 +261,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\EditBoxWin.h"
-				>
-			</File>
-			<File
 				RelativePath=".\EffectDX.h"
 				>
 			</File>
@@ -329,31 +269,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GraphicEngineGUI.h"
-				>
-			</File>
-			<File
-				RelativePath=".\GraphicEngineGUI_Private.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IBaseGUI.h"
-				>
-			</File>
-			<File
 				RelativePath=".\IBaseObjectGE.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IButton.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ICheckBox.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IComboBox.h"
 				>
 			</File>
 			<File
@@ -361,19 +277,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IEditBox.h"
-				>
-			</File>
-			<File
 				RelativePath=".\IGraphicEngine.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IGUI_Win.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IListBox.h"
 				>
 			</File>
 			<File
@@ -389,22 +293,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IRadioButton.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ISlider.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IStatic.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ListBoxWin.h"
-				>
-			</File>
-			<File
 				RelativePath=".\LoaderModelDX.h"
 				>
 			</File>
@@ -414,10 +302,6 @@
 			</File>
 			<File
 				RelativePath=".\MakerGraphicEngine.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MakerGUI.h"
 				>
 			</File>
 			<File
@@ -461,15 +345,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\RadioButtonWin.h"
-				>
-			</File>
-			<File
 				RelativePath=".\ShaderStack.h"
 				>
 			</File>
 			<File
-				RelativePath=".\SliderWin.h"
+				RelativePath=".\StateManager9.h"
 				>
 			</File>
 			<File
@@ -480,12 +360,6 @@
 				RelativePath=".\ViewerFPS.h"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
 		</Filter>
 	</Files>
 	<Globals>

@@ -55,6 +55,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "MakerManagerTime.h"
 #include "..\GUI\MakerGUI.h"
 #include "IGUI.h"
+#include "Logger.h"
 
 
 using namespace std;
@@ -148,6 +149,7 @@ bool TClientGame::Init(const char* sNameDLL)
   mGraphicEngine->SetGUI(mGUI);
   //------------------------------------------
   //------------------------------------------
+  mClientDeveloperTool->SetInitLogFunc(::InitLogger);
   IClientDeveloperTool::TComponentClient components;
   components.mGUI           = mGUI;
   components.mGraphicEngine = mGraphicEngine;
@@ -160,6 +162,12 @@ bool TClientGame::Init(const char* sNameDLL)
 //------------------------------------------------------------------------
 void TClientGame::Done()
 {
+  mClientDeveloperTool->Done();// освободить ресурсы DevTool
+
+  // а теперь модули
+  delete mGUI;
+  mGUI = NULL;
+  mGraphicEngine->ZeroGUI();
   delete mGraphicEngine;
   mGraphicEngine = NULL;
   delete mPhysicEngine;
@@ -168,8 +176,6 @@ void TClientGame::Done()
   mMOC = NULL;
   delete mMTime;
   mMTime = NULL;
-  delete mGUI;
-  mGUI = NULL;
 }
 //------------------------------------------------------------------------
 bool TClientGame::HandleExternalEvent()

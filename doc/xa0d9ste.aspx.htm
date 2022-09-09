@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+
+
+<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+    <head><link rel="canonical" href="http://msdn.microsoft.com/ru-ru/library/vstudio/xa0d9ste.aspx" />
+        <title>Указание встроенного C++ работает с dllexport, dllimport</title>
+
+
+
+<meta name="DCS.dcsuri" content="/ru-ru/library/xa0d9ste(d=default,l=ru-ru,v=vs.110).aspx" />
+
+<meta name="NormalizedUrl" content="http://msdn.microsoft.com/ru-ru/library/xa0d9ste(d=default,l=ru-ru,v=vs.110).aspx" />
+
+<meta name="DCSext.ProductFamily" content="LIB_DG" />
+
+<meta name="DCSext.Product" content="VS_VC" />
+
+<meta name="DCSext.Title" content="Указание встроенного C++ работает с dllexport, dllimport" />
+
+<meta name="VotingContextUrl" content="http://msdn.microsoft.com/ru-ru/library/xa0d9ste(d=default,l=ru-ru,v=vs.110).aspx" />
+
+<meta name="MN" content="91D7622F-7:57:46 AM" />
+
+<meta name="Search.ShortId" content="xa0d9ste" />
+
+<meta name="Ms.Locale" content="ru-ru" />
+
+
+
+
+
+
+
+        
+    <link rel="stylesheet" type="text/css" href="http://i3.msdn.microsoft.com/Combined.css?resources=0:Topic,0:CodeSnippet,0:ProgrammingSelector,0:ExpandableCollapsibleArea,0:CommunityContent,0:TopicNotInScope,0:FeedViewerBasic,0:ImageSprite,1:Header.1,2:Toc,2:NavigationResize,2:TranslationWiki,2:jquery.popup,3:FeedbackCounter,0:VersionSelector,3:Feedback,1:Footer.1,4:Base\Content\LinkList,0:SiteFeedbackLink,1:Msdn;/Areas/Epx/Content/Css:0,/Areas/Epx/Themes/Msdn/Content:1,/Areas/Epx/Library/Content:2,/Areas/Epx/Shared/Content:3,/\Areas/Epx/Themes:4&amp;amp;hashKey=292FA940C6F653B5FD866BF3A4F1E8AC" /></head>
+    <body class="library">
+        <div id="page">
+            
+            
+  
+            
+  
+
+
+
+    
+    <div id="ux-header" class="FF ltr">
+        <div class="BrandLogo">
+            <a href="http://msdn.microsoft.com/ru-ru">
+                <span class="BrandLogoImage msdn" title="MSDN"></span>
+            </a>
+        </div>
+        <div class="GlobalBar">
+            <div id="LocaleSelector">
+                
+
+<a title="Измените язык" id="SelectLocale" href="/ru-ru/SelectLocale?fromPage=http%3a%2f%2fmsdn.microsoft.com%2fru-ru%2flibrary%2fxa0d9ste.aspx">Россия (Pусский)</a>
+        
+            
+            
+            </div>
+
+            <div class="Divide"> | </div>
+            <div class="PassportScarab">
+                    
+<a class="scarabLink" href="https://login.live.com/login.srf?wa=wsignin1.0&amp;rpsnv=11&amp;ct=1356019066&amp;rver=6.0.5276.0&amp;wp=MCLBI&amp;wlcxt=MSDN%24MSDN%24MSDN&amp;wreply=http%3a%2f%2fmsdn.microsoft.com%2fru-ru%2flibrary%2fxa0d9ste.aspx&amp;lc=1049&amp;id=254354&amp;mkt=ru-RU" title=" Вход  "> Вход  </a>
+            </div>
+                
+                <div class="Divide"> | </div>
+                <div class="Icons">
+                    <a href="http://msdn.microsoft.com/ru-ru/library/preferences/experience/?returnurl=%252fru-ru%252flibrary%252fxa0d9ste.aspx" title="Предпочтения" rel="nofollow">
+                        <div class="clip26x23">
+                            <img class="isd_settings" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" alt="" />
+                        </div>
+                    </a>
+                </div>
+                <div class="Divide"> | </div>
+                <div class="Icons">
+                    <a href="http://msdn.microsoft.com/ru-ru/library/xa0d9ste(d=printer).aspx" title="Печать/экспорт" rel="nofollow">
+                        <div class="clip26x23">
+                            <img class="isd_print" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" alt="" />
+                        </div>
+                    </a>
+                </div>
+        </div>
+        <div class="internav">
+            
+
+
+    
+
+<div class="SearchBox">
+         <form id="HeaderSearchForm" name="HeaderSearchForm" method="get" action="http://social.msdn.microsoft.com/Search" onsubmit="return Epx.Controls.SearchBox.searchBoxOnSubmit(this, this.title);">
+            <input id="HeaderSearchTextBox" name="query" type="text" maxlength="200" onfocus="Epx.Controls.SearchBox.watermarkFocus(this, this.title, 'TextBoxSearch')" onblur="Epx.Controls.SearchBox.watermarkBlur(this, this.title, 'TextBoxSearchLoaded')" />
+            <input id="RefinementId" name="refinement" type="hidden" value="" />
+            <button id="HeaderSearchButton" value="" type="submit" class="header-search-button"></button>
+        </form>
+        
+    
+</div>
+
+            <div class="TocNavigation">
+   
+   <div class="toclevel1">
+          <a class="normal" href="http://msdn.microsoft.com/" title="Главная">Главная</a>
+          <a class="normal" href="http://blogs.msdn.com/b/rudevnews/" title="Новости">Новости</a>
+          <a class="active" href="http://msdn.microsoft.com/library/default.aspx" title="Библиотека">Библиотека</a>
+          <a class="normal" href="http://msdn.microsoft.com/bb188199" title="Обучение">Обучение</a>
+          <a class="normal" href="http://msdn.microsoft.com/aa570309" title="Скачать">Скачать</a>
+          <a class="normal" href="http://msdn.microsoft.com/gg557721" title="Мероприятия">Мероприятия</a>
+          <a class="normal" href="http://msdn.microsoft.com/aa497440" title="Сообщество">Сообщество</a>
+          <a class="normal" href="http://social.msdn.microsoft.com/Forums/ru-ru/categories/" title="Форумы">Форумы</a>
+          <a class="normal" href="http://msdn.microsoft.com/aa570318" title="Поддержка">Поддержка</a>
+    </div>
+  
+</div>
+        </div>
+    </div>
+
+
+        
+            <div id="body">
+                
+
+
+
+
+
+
+
+
+<div id="leftNav">
+
+
+
+
+<div id="tocnav">
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/ms123401.aspx" id="ms310241_MSDN.10_ru-ru" title="MSDN Library">MSDN Library</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/aa187916.aspx" id="aa187916_MSDN.10_ru-ru" title="Средства разработки">Средства разработки</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/dd831853.aspx" id="hh670790_VS.110_ru-ru" title="Visual Studio 2012">Visual Studio 2012</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/60k1461a.aspx" id="ms302012_VS.110_ru-ru" title="Visual C++">Visual C++</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/hh875057.aspx" id="ms300301_VS.110_ru-ru" title="Язык C++ и стандартные библиотеки">Язык C++ и стандартные библиотеки</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/dtefa218.aspx" id="ms300715_VS.110_ru-ru" title="Языках C/C++">Языках C/C++</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/3bstk3k5.aspx" id="ms300810_VS.110_ru-ru" title="Справочник по языку C++">Справочник по языку C++</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/6bh0054z.aspx" id="ms301411_VS.110_ru-ru" title="Модификаторы Майкрософт- Определенной">Модификаторы Майкрософт- Определенной</a>
+            </div>
+            <div class="toclevel0" data-toclevel="0">
+                <a data-tochassubtree="true" href="/ru-ru/library/dabb5z75.aspx" id="ms301413_VS.110_ru-ru" title="__declspec">__declspec</a>
+            </div>
+            <div class="toclevel1" data-toclevel="1">
+                <a data-tochassubtree="true" href="/ru-ru/library/3y1sfaz2.aspx" id="jj143083_VS.110_ru-ru" title="dllexport, dllimport">dllexport, dllimport</a>
+            </div>
+            <div class="toclevel2" data-toclevel="2">
+                <a href="/ru-ru/library/y4h7bcy6.aspx" title="Определения и объявления (C++)">Определения и объявления (C++)</a>
+            </div>
+            <div class="toclevel2 current" data-toclevel="2">
+                <a href="/ru-ru/library/xa0d9ste.aspx" title="Указание встроенного C++ работает с dllexport, dllimport">Указание встроенного C++ работает с dllexport, dllimport</a>
+            </div>
+            <div class="toclevel2" data-toclevel="2">
+                <a href="/ru-ru/library/twa2aw10.aspx" title="Общие правила и ограничения">Общие правила и ограничения</a>
+            </div>
+            <div class="toclevel2" data-toclevel="2">
+                <a href="/ru-ru/library/81h27t8c.aspx" title="Использование dllimport и dllexport в классах C++">Использование dllimport и dllexport в классах C++</a>
+            </div>
+</div>    
+    
+    
+    
+
+
+<a id="NavigationResize" href="javascript:epx.library.navigationResize.resize()">
+    <img class="cl_nav_resize_open" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" title="Развернуть" alt="Развернуть" />
+    <img class="cl_nav_resize_close" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" title="Свернуть" alt="Свернуть" />
+</a>
+
+
+
+</div>
+<div id="content" class="content">
+
+
+<div id="MTPSTranslator" class="MTPSTranslator">
+    <table class="MTPSTranslatorTable" style="width: 100%">
+        <tr>
+            <td class="TranslationAlertBox">
+                <div>Данная статья переведена автоматически. Наведите указатель мыши на предложения статьи, чтобы просмотреть исходный текст. <a href="/ru-ru/dd362340.aspx">Дополнительные сведения.</a></div>
+            </td>
+                <td class="TranslationViewSwitcher">
+                    <div>
+                        <input title="Показать перевод" value="0" name="TrnaslatorView" type="radio" class="translatechoice" checked="checked" /><span>Перевод</span>
+                    </div>
+                    <div>
+                        <input title="Показать текст на английском языке" value="1" name="TrnaslatorView" type="radio" class="translatechoice" /><span>Текст оригинала</span>
+                    </div>
+                </td>
+        </tr>
+    </table>
+</div>
+    
+    
+    
+     
+
+
+
+
+
+
+
+    
+    
+
+    <div id="ratingCounterSeperator" class="cl_lw_vs_seperator" style="display: none;"></div>
+
+    <div id="ratingCounter">
+        <span id="rcA" class="ratingText">
+            Эта тема еще не получила оценку <span id="rateThisPrefix">- </span><a id="rateThisTopic" href="#feedback" title="Оценить эту тему">Оценить эту тему</a>
+            
+        </span>
+    </div>
+
+        
+
+<div class="topic" xmlns="http://www.w3.org/1999/xhtml">
+  <h1 class="title">Указание встроенного C++ работает с dllexport, dllimport</h1>
+  
+  <div class="lw_vs">
+    <div id="curversion">
+      <strong>
+            Visual Studio 2012
+        </strong>
+    </div>
+    <div id="versionclick">
+      <div id="vsseperator" class="cl_lw_vs_seperator"></div>
+      <div>
+        <div>
+          <a id="vsLink" href="javascript:;">
+                        Другие версии
+                    </a>
+        </div>
+        <div class="cl_vs_arrow clip10x10">
+          <img class="cl_lw_vs_arrow" id="vsArrow" alt="" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" />
+        </div>
+      </div>
+      <ul id="vsPanel">
+        <li>
+          <a href="/ru-ru/library/xa0d9ste(v=vs.100).aspx" title="">Visual Studio 2010</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div style="clear:both;"></div>
+  
+  <div id="mainSection">
+    <div id="mainBody">
+      <p>
+        
+      </p>
+      <div class="introduction">
+        
+      </div>
+      <div>
+        
+        <div class="LW_CollapsibleArea_TitleDiv">
+          <div>
+            <a href="javascript:void(0)" class="LW_CollapsibleArea_TitleAhref" title="Свернуть">
+              <span class="cl_CollapsibleArea_expanding LW_CollapsibleArea_Img"></span>
+              <span class="LW_CollapsibleArea_Title">Только для систем Microsoft</span>
+            </a>
+            <div class="LW_CollapsibleArea_HrDiv">
+              <hr class="LW_CollapsibleArea_Hr" />
+            </div>
+          </div>
+        </div>
+        <div class="sectionblock">
+          <a id="sectionToggle0">
+            
+          </a>
+          <p>
+            <span id="mt1" class="sentence" data-guid="3b216c2485ba7e85f00a171f25d537ca" data-source="You can define as inline a function with the &lt;span&gt;&lt;span class=&quot;input&quot;&gt;dllexport&lt;/span&gt;&lt;/span&gt; attribute." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Можно определить как встроенные функции с <span xmlns="http://www.w3.org/1999/xhtml"><span class="input">dllexport</span></span> атрибут.</sentenceText>
+            </span>
+            <span id="mt2" class="sentence" data-guid="d72e6b1b7bd6976673b770cb6768d5f5" data-source="In this case, the function is always instantiated and exported, whether or not any module in the program references the function." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">В этом случае функция всегда создается и экспортировать, ссылается ли какой-либо модуль в программе функции.</sentenceText>
+            </span>
+            <span id="mt3" class="sentence" data-guid="f70af0a3bd180766b8769e6b9fa5ba1c" data-source="The function is presumed to be imported by another program." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Предполагается, что импортирована функция другой программой.</sentenceText>
+            </span>
+          </p>
+          <p>
+            <span id="mt4" class="sentence" data-guid="f9321bddbc8928dd9b41180e5f58129c" data-source="You can also define as inline a function declared with the &lt;strong&gt;dllimport&lt;/strong&gt; attribute." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Можно также задать в качестве встроенного объявила с функция dllimport атрибут.</sentenceText>
+            </span>
+            <span id="mt5" class="sentence" data-guid="1c7942bece0236b3322840d2571d6cea" data-source="In this case, the function can be expanded (subject to /Ob specifications), but never instantiated." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">В этом случае функция может быть развернут на спецификациям /Ob (раздел), но никогда не создается.</sentenceText>
+            </span>
+            <span id="mt6" class="sentence" data-guid="f8830a45a77b9501c5463f387108273c" data-source="In particular, if the address of an inline imported function is taken, the address of the function residing in the DLL is returned." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">В частности, если принимается адрес импортированной функции встроенным, возвращается адрес функции, находящейся в библиотеке DLL.</sentenceText>
+            </span>
+            <span id="mt7" class="sentence" data-guid="0c55a73c2f8434928f5682f35a76454c" data-source="This behavior is the same as taking the address of a non-inline imported function." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Эта функциональности такой же, как и с учетом адрес импортированной функции non-встроенным.</sentenceText>
+            </span>
+          </p>
+          <p>
+            <span id="mt8" class="sentence" data-guid="a742cabde83b7b1ecf6a4340294691a5" data-source="These rules apply to inline functions whose definitions appear within a class definition." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Эти правила применяются к встроенным функциям, определения которых отображаются внутри определения класса.</sentenceText>
+            </span>
+            <span id="mt9" class="sentence" data-guid="75d667b1b409e751b0aaefaca30c6568" data-source="In addition, static local data and strings in inline functions maintain the same identities between the DLL and client as they would in a single program (that is, an executable file without a DLL interface)." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Кроме этого, статические локальные данные и строки в встроенных функциях поддерживают одинаковые идентификаторы между библиотекой DLL и клиентом, и в одной программе (исполняемом файле без интерфейса DLL).</sentenceText>
+            </span>
+          </p>
+          <p>
+            <span id="mt10" class="sentence" data-guid="34edc6c1dd3090e9626b5c6f321ee1bd" data-source="Exercise care when providing imported inline functions." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Внимательность тренировки что импортированные встроенные функции.</sentenceText>
+            </span>
+            <span id="mt11" class="sentence" data-guid="c3103114578c1f674d07efa0c82dc306" data-source="For example, if you update the DLL, don't assume that the client will use the changed version of the DLL." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Например, при обновлении библиотеки DLL, не следует предполагать, что клиент использует измененную версию DLL.</sentenceText>
+            </span>
+            <span id="mt12" class="sentence" data-guid="533429c9dc1f425aa0418921aa449278" data-source="To ensure that you are loading the proper version of the DLL, rebuild the DLL's client as well." xml:space="preserve">
+              <sentenceText xmlns="http://www.w3.org/1999/xhtml">Чтобы гарантировать правильную версию загрузке библиотеки DLL, перестройте клиент библиотеки DLL.</sentenceText>
+            </span>
+          </p>
+        </div>
+      </div>
+      <div>
+        <div class="LW_CollapsibleArea_TitleDiv">
+          <div>
+            <a href="javascript:void(0)" class="LW_CollapsibleArea_TitleAhref" title="Свернуть">
+              <span class="cl_CollapsibleArea_expanding LW_CollapsibleArea_Img"></span>
+              <span class="LW_CollapsibleArea_Title">См. также</span>
+            </a>
+            <div class="LW_CollapsibleArea_HrDiv">
+              <hr class="LW_CollapsibleArea_Hr" />
+            </div>
+          </div>
+        </div>
+        <div class="sectionblock">
+          <a id="seeAlsoToggle">
+            
+          </a>
+          <h4 class="subHeading">Ссылки</h4>
+          <div class="seeAlsoStyle">
+            <span>
+              <a href="http://msdn.microsoft.com/ru-ru/library/3y1sfaz2.aspx">dllexport, dllimport</a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div id="contentFeedback">
+    <form method="post" action="/ru-ru/library/feedback/add/xa0d9ste.aspx">
+        <input name="__RequestVerificationToken" type="hidden" value="dZL9X4rUGHBhsqAXh1it5n4SkFZOF+T9XEzLGVVCNwCWdZLwBq7hEN/f8/lgjQjourrMvrT0tTBKvDH5y+/p7ElByt5LZDkRYFCMtGVB8VwSLg+gwfhgvP7vTKzTrK7eKBxvwg==" />
+    <div id="contentFeedbackContainer">
+        <div class="FeedbackTitleContainer">
+            <a name="feedback"></a>
+        Была ли вам полезна эта информация?
+            <input id="rdIsUsefulYes" name="rdIsUseful" type="radio" value="1" onclick="toggleContentFeedback('Yes');" /><label for="rdIsUsefulYes">Да</label>
+            <input id="rdIsUsefulNo" name="rdIsUseful" type="radio" value="0" onclick="toggleContentFeedback('No');" /><label for="rdIsUsefulNo">Нет</label>
+        
+        </div>
+        
+            <div id="contentFeedbackQAContainer">
+                
+                    <div id="feedbackListNoContainer" class="FeedbackListContainer">
+                        
+                            <div>
+                                <input id="chkbxNo201" name="chkbxNo" type="checkbox" value="201" />
+                                <label for="chkbxNo201">Неточный</label>
+                            </div>
+                        
+                            <div>
+                                <input id="chkbxNo202" name="chkbxNo" type="checkbox" value="202" />
+                                <label for="chkbxNo202">Недостаточно подробный</label>
+                            </div>
+                        
+                            <div>
+                                <input id="chkbxNo203" name="chkbxNo" type="checkbox" value="203" />
+                                <label for="chkbxNo203">Требуется больше примеров кода</label>
+                            </div>
+                        
+                            <div>
+                                <input id="chkbxNo204" name="chkbxNo" type="checkbox" value="204" />
+                                <label for="chkbxNo204">Перевод нуждается в правке</label>
+                            </div>
+                        
+                    </div>
+                
+                <div class="FeedbackTellUsMoreContainer">
+                    <textarea id="feedbackText" name="feedbackText" class="TellUsMoreTextBoxSearchLoaded" onfocus="WatermarkFocus(this, 'Сообщите нам дополнительную информацию...', 'TellUsMoreTextBoxSearch')" onblur="WatermarkBlur(this, 'Сообщите нам дополнительную информацию...', 'TellUsMoreTextBoxSearchLoaded')" onmouseover="TextBoxCharactersCounter(this, document.getElementById('feedbackTextCounter'), 1500)" onkeydown="TextBoxCharactersCounter(this, document.getElementById('feedbackTextCounter'), 1500)" onkeyup="TextBoxCharactersCounter(this, document.getElementById('feedbackTextCounter'), 1500)">Сообщите нам дополнительную информацию...</textarea>
+                </div>
+                <span class="counter">(<span id="feedbackTextCounter">1500</span> символов осталось)</span>
+                <input type="hidden" id="returnUrl" name="returnUrl" value="http://msdn.microsoft.com/ru-ru/library/xa0d9ste.aspx" />
+                <input type="submit" id="submit" value="Отправить" title="Щелкните, чтобы отправить отзыв" onclick="WatermarkOnSubmit(document.getElementById('feedbackText'), 'Сообщите нам дополнительную информацию...', 'TellUsMoreTextBoxSearch')" />
+                <div style="clear: both;"></div>
+            </div>  
+        
+    </div>
+    </form>
+</div>
+    
+
+
+
+
+<script id="CommentTemplate" type="text/x-jquery-tmpl">
+    <div class="communityContentAnnotation">
+        <a name="${Index}"></a>
+        <h3>
+            ${Title}
+        </h3>
+        <div class="communityContentAnnotationBody">
+            {{html Body}}
+        </div>
+        <div class="communityContentAnnotationInfo">
+            <div class="communityContentAnnotationAvatarContainer">
+                <a href="${UserAvatar.Href}" title="${UserAvatar.ToolTip}" class="communityContentAnnotationAvatar"><img src="${UserAvatar.ImageUrl}" alt="${UserAvatar.ImageAltText}" width="34" height="34" /></a>
+            </div>
+            <div class="communityContentAnnotationUserDateContainer">
+                <div class="communityContentAnnotationUserContainer">
+                    <a href="${UserAvatar.Href}">
+                        ${User}
+                    </a>
+                </div>
+                <div class="communityContentAnnotationDateContainer">
+                    <span>${Date}</span>
+                    
+                    {{if EditLink}}
+                        <span>
+                            <a href="${EditLink.Href}" title="${EditLink.ToolTip}" class="communityContentCommentEditLink">${EditLink.Title}</a>
+                        </span>
+                    {{/if}}
+
+                    {{if DeleteLink}}
+                        <span>
+                            <a href="${DeleteLink.Href}" title="${DeleteLink.ToolTip}" class="communityContentDeleteLink">${DeleteLink.Title}</a>
+                        </span>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<div class="communityContentContainer">
+    <div id="CommunityContentHeader" class="communityContentHeader">
+        <div class="communityContentHeaderTitleContainer">
+            <h2>Добавления сообщества</h2>
+                <a class="communityContentAddLink" href="http://msdn.microsoft.com/ru-ru/library/community/add/xa0d9ste.aspx">
+                    <span class="communityContentAddButton" title="Add («Добавить»)">
+                        ДОБАВИТЬ
+                    </span>
+                </a>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    
+    <div id="CommunityComments" data-url="/ru-ru/library/community/comments/xa0d9ste.aspx"></div>
+</div>
+
+
+
+</div>
+
+
+            </div>
+            <div class="clear"></div>
+        
+            
+    
+   <div id="ux-footer" class="FF ltr">
+    <div id="ux-footer-cols">
+        <div class="TocNavigation">
+   
+   <div class="linksContainer">
+    </div>
+</div>
+    </div>
+
+    <div class="ux-footer-clear"></div>
+    <div id="footerRight">
+        <div id="FooterLogoContainer"><div id="FooterLogo"></div></div>
+        <div id="FooterCopyright">© 2012 Microsoft. Все права защищены.</div>
+    </div>
+    <div id="footerLeft">
+        <div id="footerGroup">
+            <div id="LinkGroup">
+                <div id="Links1"><div data-fragmentName="FooterLinks" id="Fragment_FooterLinks" xmlns="http://www.w3.org/1999/xhtml">
+  
+  <div class="LinkList">
+    <div>
+      <div class="LinkColumn">
+        <a href="http://go.microsoft.com/?linkid=8786242&amp;lcid=1049" xmlns="http://www.w3.org/1999/xhtml">Управление профилем</a>
+      </div>
+      <div class="LinksDivider">|</div>
+      <div class="LinkColumn">
+        <a href="http://www.microsoft.com/legal/" xmlns="http://www.w3.org/1999/xhtml">Юридическая информация</a>
+      </div>
+      <div class="LinksDivider">|</div>
+      <div class="LinkColumn">
+        <a href="http://www.microsoft.com/Rus/Msdn/flash/Default.mspx" xmlns="http://www.w3.org/1999/xhtml">Бюллетень MSDN</a>
+      </div>
+      <div class="LinksDivider">|</div>
+      <div class="LinkColumn">
+        <a href="http://msdn.microsoft.com/ru-ru/cc300389.aspx" xmlns="http://www.w3.org/1999/xhtml">Условия использования</a>
+      </div>
+      <div class="Clear"></div>
+    </div>
+  </div>
+</div></div>
+            </div>
+            <div id="Feedback">
+                <div class="feedbackListItem">
+                    <div class="LinksDivider">|</div>
+                    <div class="LinkColumn">
+                        
+
+
+
+
+
+<div class="FooterSiteFeedBack">
+    <a id="SiteFeedbackLinkOpener" href="javascript:void(0)">
+        <span class="FeedbackButton clip20x21" id="FeedbackButton">
+            <img id="feedBackImg" class="cl_footer_feedback_icon" src="http://i3.msdn.microsoft.com/Areas/Epx/Content/Images/ImageSprite.png" alt="Site Feedback" />
+        </span>
+        Обратная связь
+    </a>
+    
+    <div id="SiteFeedbackLinkContainer" class="SiteFeedbackLinkContainer" style="display: none;">
+    <form id="siteFeedbackForm" method="post" action="/ru-ru/library/feedback/add/xa0d9ste(v=msdn.10).aspx">
+        <input name="__RequestVerificationToken" type="hidden" value="zIwPX55Sf+kqBZW2zBX4yAI+AWTHctq+V4GnnTy+CZvN6bJ5MqxsG9hgIhDzSmSWaD2Vm1bIyE45r6pGpmBqn4U45YAsbHBHf/U19kx7PvxssZGEK6I37jDmVM87hrcD4NuDYw==" />
+        <div class="SiteFeedbackLinkTitleContainer">
+            <div class="SiteFeedbackLinkTitle">
+                Обратная связь
+            </div>
+            <div class="SiteFeedbackLinkCancel">
+                <a id="SiteFeedbackLinkCloser" href="javascript:void(0)">x</a>
+            </div>
+        </div>
+        <div class="SiteFeedbackLinkData">
+            <div class="SiteFeedbackLinkInfoText">
+                Расскажите о своем опыте…
+            </div>
+            <div class="QuestionText">
+                Быстро ли загрузилась страница?
+            </div>
+            <div class="AnswerText">
+                
+                <span>
+                    Да<span>
+                        <input id="searchBox" name="searchBox" type="radio" value="1" /></span></span>
+                
+                <span>
+                    Нет<span>
+                        <input id="searchBox" name="searchBox" type="radio" value="0" /></span></span>
+                
+            </div>
+            <div class="QuestionText">
+                Понравилось ли вам оформление страницы?
+            </div>
+            <div class="AnswerText">
+                
+                <span>
+                    Да<span>
+                        <input id="tabbedCode" name="tabbedCode" type="radio" value="1" /></span></span>
+                
+                <span>
+                    Нет<span>
+                        <input id="tabbedCode" name="tabbedCode" type="radio" value="0" /></span></span>
+                
+            </div>
+            <div class="QuestionText">
+                Tell us more
+            </div>
+            <div class="SiteFeedbackLinkTextAreaContainer">
+                <textarea id="feedbackText" data-maxlength="4000" name="feedbackText" cols="25" rows="5" class="SiteFeedbackLinkTextArea"></textarea>
+                
+                <textarea id="feedbackDescription" name="feedbackDescription" cols="25" rows="10" style="display: none;">Enter description here.</textarea>
+                <input type="hidden" id="feedbackPriority" name="feedbackPriority" value="" />
+                <input type="hidden" id="feedbackSourceUrl" name="feedbackSourceUrl" value="" />
+                <input type="hidden" id="ClientIP" name="ClientIP" value="" />
+                <input type="hidden" id="ClientOS" name="ClientOS" value="" />
+                <input type="hidden" id="ClientBrowser" name="ClientBrowser" value="" />
+                <input type="hidden" id="ClientTime" name="ClientTime" value="" />
+                <input type="hidden" id="ClientTimeZone" name="ClientTimeZone" value="" />
+                
+            </div>
+            <div>
+                <input id="siteFeedbackSubmit" type="submit" value="Отправить" class="SiteFeedbackLinkSubmit" />
+            </div>
+        </div>
+        <input type="hidden" id="returnUrl" name="returnUrl" value="http://msdn.microsoft.com/ru-ru/library/xa0d9ste(v=msdn.10).aspx" />
+    </form>
+</div>
+    
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="clear:both"></div>
+        <div id="Links2"><div data-fragmentName="FooterLinksBottom" id="Fragment_FooterLinksBottom" xmlns="http://www.w3.org/1999/xhtml">
+  
+  <div class="LinkList">
+    <div>
+      <div class="LinkColumn">
+        <a href="http://www.microsoft.com/library/toolbar/3.0/trademarks/ru-ru.mspx" xmlns="http://www.w3.org/1999/xhtml">Товарные знаки</a>
+      </div>
+      <div class="LinksDivider">|</div>
+      <div class="LinkColumn">
+        <a href="http://go.microsoft.com/fwlink/?LinkId=248681&amp;clcid=0x419" xmlns="http://www.w3.org/1999/xhtml">Конфиденциальность</a>
+      </div>
+      <div class="Clear"></div>
+    </div>
+  </div>
+</div></div>
+    </div>
+</div> 
+
+
+            <div class="footerPrintView">
+                <div class="footerCopyrightPrintView">© 2012 Microsoft. Все права защищены.</div>
+            </div>
+
+            
+            
+    
+    <input id="tocPaddingPerLevel" type="hidden" value="17" />
+
+
+        
+            <input id="MtpsDevice" type="hidden" value="Default" />
+
+
+<![CDATA[ Third party scripts and code linked to or referenced from this website are licensed to you by the parties that own such code, not by Microsoft.  See ASP.NET Ajax CDN Terms of Use – http://www.asp.net/ajaxlibrary/CDN.ashx. ]]>        
+            
+            
+            
+            
+            
+        
+
+
+
+<noscript><div><img alt="DCSIMG" id="Img1" width="1" height="1" src="http://m.webtrends.com/dcsmgru7m99k7mqmgrhudo0k8_8c6m/njs.gif?dcsuri=/nojavascript&amp;WT.js=No" /></div></noscript>
+
+
+
+
+<noscript>
+  <a href="http://www.omniture.com" title="Web Analytics">
+    <img src="//msstonojsmsdn.112.2o7.net/b/ss/msstonojsmsdn/1/H.20.2--NS/0" height="1" width="1" border="0" alt="" />
+  </a>
+</noscript>
+
+
+        </div>
+    <script type="text/javascript" class="mtps-injected">
+/*<![CDATA[*/
+(function(window,document){"use strict";function preload(scripts){for(var result=[],script,e,i=0;i<scripts.length;i++)script=scripts[i],script.hasOwnProperty("url")&&(e=document.createElement("script"),e.src=script.url,script.throwaway=e),result.push(script);return result}function inject(scripts,index){var script,elem;if(index>=scripts.length){delete mtps.injectScripts;return}script=scripts[index],elem=document.createElement("script"),elem.className="mtps-injected",elem.async=!1;var isLoaded=!1,timeoutId=0,injectNextFnName="",injectNext=elem.onerror=function(){isLoaded||(isLoaded=!0,inject(scripts,index+1),window.clearTimeout(timeoutId),elem.onload=elem.onerror=elem.onreadystatechange=null,injectNextFnName&&delete mtps[injectNextFnName],elem.removeEventListener&&elem.removeEventListener("load",injectNext,!1))};elem.addEventListener?elem.addEventListener("load",injectNext,!1):elem.readyState==="uninitialized"?elem.onreadystatechange=function(){(this.readyState==="loaded"||this.readyState==="complete")&&injectNext()}:elem.onload=injectNext,script.hasOwnProperty("url")?(timeoutId=window.setTimeout(injectNext,12e4),elem.src=script.url):(injectNextFnName="_injectNextScript_"+index,mtps[injectNextFnName]=injectNext,timeoutId=window.setTimeout(injectNext,2e3),elem.text="try {\n"+script.txt+"\n} finally { MTPS."+injectNextFnName+" && MTPS."+injectNextFnName+"(); }"),parent.appendChild(elem)}var mtps=window.MTPS||(window.MTPS={}),parent=document.getElementsByTagName("head")[0];mtps.injectScripts=function(scripts){inject(preload(scripts),0)}})(window,document);
+MTPS.injectScripts([
+	{ txt: "/**/\r\n(window.MTPS || (window.MTPS = {})).cdnDomains || (window.MTPS.cdnDomains = { \r\n\t\"image\": \"http://i.msdn.microsoft.com\", \r\n\t\"js\": \"http://i2.msdn.microsoft.com\", \r\n\t\"css\": \"http://i3.msdn.microsoft.com\"\r\n});\r\n/**/" },
+	{ txt: "//\n  var literalNormalizedUrl = \u0027/ru-ru/library/xa0d9ste(d=default,l=ru-ru,v=vs.110).aspx\u0027;\n  var wt_nvr_ru = \u0027WT_NVR_RU\u0027;\n  var wt_fpcdom = \u0027.microsoft.com\u0027;\n  var wt_domlist = \u0027msdn.microsoft.com\u0027;\n  var wt_pathlist = \u0027\u0027;\n  var wt_paramlist = \u0027DCSext.mtps_devcenter\u0027;\n  var wt_siteid = \u0027MSDN\u0027;\n  var gDomain = \u0027m.webtrends.com\u0027;\n  var gDcsId = \u0027dcsmgru7m99k7mqmgrhudo0k8_8c6m\u0027;\n  var gFpc = \u0027WT_FPC\u0027;\n  if (document.cookie.indexOf(gFpc + \"=\") == -1) {\n    var wtidJs = document.createElement(\"script\");\n    wtidJs.src = \"//\" + gDomain + \"/\" + gDcsId + \"/wtid.js\";\n    document.getElementsByTagName(\"head\")[0].appendChild(wtidJs);\n  }\n  var detectedLocale = \u0027ru-ru\u0027;\n  var wtsp = \u0027msdnlib_hp\u0027;\n  var gTrackEvents = \u00270\u0027;\n/**/" },
+	{ txt: "/**/\n  var omni_guid = \"3c672b0e-ba52-4f34-9285-009d9461e758\";\n/**/" },
+	{ url: "http://i2.msdn.microsoft.com/Combined.js?resources=0:webtrendsscript,1:omni_rsid_MSDN;/Areas/Global/Content/Webtrends/resources:0,/Areas/Global/Content/Omniture/resources/MSDN:1&amp;hashKey=2A2EA78286FAF39A313149F2A3E6EE83" },
+	{ url: "http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js" },
+	{ url: "http://i2.msdn.microsoft.com/Combined.js?resources=0:Utilities,1:Base\\Content\\SearchBox;/Areas/Epx/Content/Scripts:0,/\\Areas/Epx/Themes:1&amp;hashKey=E9622D63FB4FA8800F7E6436FBD42CF5" },
+	{ url: "http://i4.services.social.microsoft.com/search/Widgets/SearchBox.jss?boxid=HeaderSearchTextBox&btnid=HeaderSearchButton&brand=MSDN&loc=ru-ru&watermark=MSDN" },
+	{ url: "http://i2.msdn.microsoft.com/Combined.js?resources=0:Toc,0:NavigationResize;/Areas/Epx/Library/Content:0&amp;hashKey=F7A9CA3A41588647BDDE44700C927966" },
+	{ txt: "//\n    MTPS = window.MTPS || {};\n    MTPS.Translation = window.MTPS.Translation || {};\n\n    MTPS.Translation.TranslationType =  0;\n    \n    \n        \n        MTPS.Translation.EditorLink = {\n            includeEditor : 0,\n            editLink: \"http://msdn.microsoft.com/ru-ru/library/translation/edit/xa0d9ste.aspx\",\n            editLinkText: \"Предложите более удачный вариант перевода\"\n        };\n        \n    //" },
+	{ url: "http://i2.msdn.microsoft.com/Combined.js?resources=0:jquery.popup,0:Translator,1:FeedbackCounter;/Areas/Epx/Library/Content:0,/Areas/Epx/Shared/Content:1&amp;hashKey=AF7281B4CC2FF60BA3D91851B54686EC" },
+	{ txt: "MTPS = window.MTPS || {}; MTPS.LocalizedStrings = window.MTPS.LocalizedStrings || {}; MTPS.LocalizedStrings.ExpandButtonTooltip = \u0027Развернуть\u0027; MTPS.LocalizedStrings.CollapseButtonTooltip = \u0027Свернуть\u0027;" },
+	{ url: "http://i2.msdn.microsoft.com/Areas/Epx/Shared/Content/Feedback.js" },
+	{ url: "http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js" },
+	{ url: "http://i2.msdn.microsoft.com/Combined.js?resources=0:CommunityContent,0:SiteFeedbackLink,0:Topic,0:CodeSnippet,0:TopicNotInScope,0:CollapsibleArea,0:VersionSelector,0:SurveyBroker;/Areas/Epx/Content/Scripts:0&amp;hashKey=ED7A3D1C12AEF89E6D6FCF90A2DDAB5A" }
+]);
+
+/*]]>*/
+</script></body>
+</html>

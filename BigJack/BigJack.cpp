@@ -63,6 +63,8 @@ TBigJack::TBigJack()
   mDXUT = new TDXUT(this);
 #else
 #endif
+  
+  SetNeedResizeGUI(true);
 
   mTime_ms = 0;
 
@@ -95,6 +97,12 @@ void TBigJack::Optimize()
 //--------------------------------------------------------------------------------------------------------
 void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
 {
+  if(IsNeedResizeGUI())// когда произошло событие Reset, только после этого можно делать Resize (не было подстройки размера окна, сырость DXUT)
+  {
+    ResizeGUI();
+    SetNeedResizeGUI(false);
+  }
+  //-----------------------------------------------------------------------
   HRESULT hr;
   // Clear the render target and the zbuffer 
   V( pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_ARGB( 0, 141, 153, 191 ), 1.0f, 0 ) );
@@ -118,7 +126,9 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
 
     mViewerFPS.Render(mDXUT->GetFPS());
 
-    RenderGUI();
+    SaveRenderState();
+      RenderGUI();
+    RestoreRenderState();
 
     V( pd3dDevice->EndScene() );
   }
@@ -295,8 +305,7 @@ HRESULT TBigJack::OnResetDevice( IDirect3DDevice9* pd3dDevice,
 
   mCamera.SetWindow( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
 
-  //ResetGUI(pBackBufferSurfaceDesc->Width,pBackBufferSurfaceDesc->Height);
-
+  SetNeedResizeGUI(true);
   return S_OK;
 }
 //--------------------------------------------------------------------------------------
@@ -321,8 +330,6 @@ LRESULT TBigJack::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, b
   if( *pbNoFurtherProcessing )
     return 0;
 
-  //MsgProcGUI((unsigned int)hWnd, (unsigned int)uMsg, (unsigned int)wParam, (unsigned int)lParam);
-
   mCamera.HandleMessages( hWnd, uMsg, wParam, lParam );
   return 0;
 }
@@ -333,6 +340,8 @@ void TBigJack::OnLostDevice( void* pUserContext )
   mManagerModelDX.LostDevice();
   mManagerResourceDX.Lost();
   mViewerFPS.Lost();
+
+  LostDeviceGUI();
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::OnDestroyDevice( void* pUserContext )
@@ -368,50 +377,6 @@ void TBigJack::Work(guint32 time_ms)
   mTime_ms = time_ms;
   mDXUT->Work();
 }
-//--------------------------------------------------------------------------------------
-// на получение событий WinApi окна и DirectX
-//void TBigJack::Register(void* pFunc, int type)
-//{
-//  switch(type)
-//  {
-//    case eTypeMsg:
-//      RegisterSet((std::set<void*>*)&mSetCallbackMsg,(void*)pFunc);
-//      break;
-//    case eTypeFrameMove:
-//      RegisterSet((std::set<void*>*)&mSetCallbackFrameMove,pFunc);
-//      break;
-//    default:;
-//  }
-//}
-////--------------------------------------------------------------------------------------
-//void TBigJack::Unregister(void* pFunc, int type)
-//{
-//  switch(type)
-//  {
-//    case eTypeMsg:
-//      UnregisterSet((std::set<void*>*)&mSetCallbackMsg,pFunc);
-//      break;
-//    case eTypeFrameMove:
-//      UnregisterSet((std::set<void*>*)&mSetCallbackFrameMove,pFunc);
-//      break;
-//    default:;
-//  }
-//}
-//--------------------------------------------------------------------------------------
-//void TBigJack::UnregisterSet(std::set<void*>* setCallback, void* pFunc)
-//{
-//  set<void*>::iterator fit = setCallback->find(pFunc);
-//  set<void*>::iterator eit = setCallback->end();
-//  if(fit!=eit)
-//    setCallback->erase(fit);
-//  else
-//    BL_FIX_BUG();
-//}
-////--------------------------------------------------------------------------------------
-//void TBigJack::RegisterSet(std::set<void*>* setCallback, void* pFunc)
-//{
-//  setCallback->insert(pFunc);
-//}
 //--------------------------------------------------------------------------------------
 void TBigJack::Animate()
 {
@@ -530,21 +495,6 @@ bool TBigJack::HandleInternalEvent()
   return false;
 }
 //--------------------------------------------------------------------------------------
-//void* TBigJack::GetFuncEventGUI()
-//{
-//  void* funcGUI = NULL;
-//#ifdef WIN32
-//  funcGUI = mDXUT->GetFuncEventGUI();
-//#else
-//#endif
-//  return funcGUI;
-//}
-//--------------------------------------------------------------------------------------
-//void TBigJack::OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext )
-//{
-//  GUIEvent(nEvent, nControlID, pUserContext);
-//}
-//--------------------------------------------------------------------------------------
 void TBigJack::OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
 {
   // конвертируем в стандартный вид для клавиатуры
@@ -616,25 +566,6 @@ void TBigJack::SetTitleWindow(const char* sTitle)
 #endif
 }
 //--------------------------------------------------------------------------------------
-//void* TBigJack::GetObjectForInitGUI()
-//{
-//  return 
-//#ifdef WIN32
-//  &mDialogResourceManager;
-//#else
-//#endif
-//}
-////--------------------------------------------------------------------------------------
-//void TBigJack::ForceResizeEventGUI()
-//{
-//  int w,h;
-//#ifdef WIN32
-//  mDXUT->GetSizeWindow(w,h);
-//#else
-//#endif
-//  ResetGUI(w,h);
-//}
-//--------------------------------------------------------------------------------------
 bool TBigJack::InitGUI()
 {
 #ifdef WIN32
@@ -656,5 +587,15 @@ bool TBigJack::InitGUI()
   //### Gauss
 
   return res;
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::SaveRenderState()
+{
+  mDXUT->CaptureState9();  
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::RestoreRenderState()
+{
+  mDXUT->ApplyState9();
 }
 //--------------------------------------------------------------------------------------

@@ -65,18 +65,6 @@ void TDXUT::OnMouseEvent( UINT state, bool bLeftButtonDown, bool bRightButtonDow
     pGE->OnMouseEvent( state, nMouseWheelDelta, xPos, yPos, pUserContext );
 }
 //--------------------------------------------------------------------------------------
-//void CALLBACK OnGUIEvent(UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext)
-//{
-//  if(pDXUT_Realize)
-//    pDXUT_Realize->OnGUIEvent( nEvent, nControlID, pControl, pUserContext );
-//}
-//--------------------------------------------------------------------------------------
-//void TDXUT::OnGUIEvent( UINT nEvent, int nControlID, CDXUTControl* pControl, void* pUserContext )
-//{
-//  if(pGE)
-//    return pGE->OnGUIEvent( nEvent, nControlID, pControl, pUserContext );
-//}
-//--------------------------------------------------------------------------------------
 // Called during device initialization, this code checks the device for some 
 // minimum set of capabilities, and rejects those that don't pass by returning false.
 //--------------------------------------------------------------------------------------
@@ -157,8 +145,14 @@ HRESULT CALLBACK OnResetDevice( IDirect3DDevice9* pd3dDevice,
 HRESULT TDXUT::OnResetDevice( IDirect3DDevice9* pd3dDevice,
                                 const D3DSURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
 {
+  HRESULT hr;
   if(pGE)
-    return pGE->OnResetDevice( pd3dDevice, pBackBufferSurfaceDesc, pUserContext );
+  {
+    V_RETURN(pGE->OnResetDevice( pd3dDevice, pBackBufferSurfaceDesc, pUserContext ));
+    m_pManagerState.Reset(pd3dDevice);
+    return S_OK;
+  }
+
   return S_FALSE;
 }
 //--------------------------------------------------------------------------------------
@@ -234,6 +228,8 @@ void TDXUT::OnLostDevice( void* pUserContext )
     pGE->OnLostDevice(pUserContext);
 
   flgWasLostEvent = true;
+
+  m_pManagerState.Lost();
 }
 //--------------------------------------------------------------------------------------
 // This callback function will be called immediately after the Direct3D device has 
@@ -376,5 +372,15 @@ IDirect3D9* TDXUT::GetD3D9Object()
 IDirect3DDevice9* TDXUT::GetD3D9Device()
 {
   return DXUTGetD3D9Device(); // Does not addref unlike typical Get* APIs
+}
+//--------------------------------------------------------------------------------------
+HRESULT TDXUT::CaptureState9()
+{
+  return m_pManagerState.Push();
+}
+//--------------------------------------------------------------------------------------
+HRESULT TDXUT::ApplyState9()
+{
+  return m_pManagerState.Pop();
 }
 //--------------------------------------------------------------------------------------

@@ -35,7 +35,6 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "IGraphicEngine.h"
 #include "HiTimer.h"
-#include "GraphicEngineGUI_Private.h"
 #include "IGUI_Core.h"
 
 using namespace std;
@@ -43,7 +42,7 @@ using namespace std;
 //------------------------------------------------------------------------
 IGraphicEngine::IGraphicEngine()
 {
-  mGUI = NULL;
+  ZeroGUI();
   SetIsCreateWindow(false);
 }
 //------------------------------------------------------------------------
@@ -52,36 +51,17 @@ IGraphicEngine::~IGraphicEngine()
 
 }
 //------------------------------------------------------------------------
-//int IGraphicEngine::GetCountGUI()
-//{
-//  return mListGUI.size();
-//}
-////------------------------------------------------------------------------
-//void IGraphicEngine::AddGUI(TGraphicEngineGUI* pForm)
-//{
-//  mListGUI.push_back(pForm);
-//  void* pObjectForGUI = GetObjectForInitGUI();
-//  pForm->GetPrivate()->Init(pObjectForGUI);
-//
-//  void* funcGUI = GetFuncEventGUI();
-//  pForm->GetPrivate()->SetCallback(funcGUI);
-//}
-////------------------------------------------------------------------------
-//void IGraphicEngine::ClearGUI()
-//{
-//  mListGUI.clear();
-//}
-////------------------------------------------------------------------------
-//void IGraphicEngine::ResetGUI(int Width, int Height)
-//{
-//  TListGUI::iterator bit = mListGUI.begin();
-//  TListGUI::iterator eit = mListGUI.end();
-//  while(bit!=eit)
-//  {
-//    (*bit)->GetPrivate()->ResizeEvent(Width, Height);
-//    bit++;
-//  }
-//}
+void IGraphicEngine::LostDeviceGUI()
+{
+  if(mGUI)
+    mGUI->LostDevice();
+}
+//------------------------------------------------------------------------
+void IGraphicEngine::ResizeGUI()
+{
+  if(mGUI)
+    mGUI->Resize();
+}
 //------------------------------------------------------------------------
 void IGraphicEngine::RenderGUI()
 {
@@ -89,57 +69,15 @@ void IGraphicEngine::RenderGUI()
     mGUI->Render();
 }
 //------------------------------------------------------------------------
-//{
-//  float elapsedtime = (float)ht_GetMSCount();
-//  TListGUI::iterator bit = mListGUI.begin();
-//  TListGUI::iterator eit = mListGUI.end();
-//  while(bit!=eit)
-//  {
-//    (*bit)->GetPrivate()->Render(elapsedtime);
-//    bit++;
-//  }
-//}
-////------------------------------------------------------------------------
-//void IGraphicEngine::GUIEvent(unsigned int nEvent, int nControlID, void* pGUI)
-//{
-//  TListGUI::iterator bit = mListGUI.begin();
-//  TListGUI::iterator eit = mListGUI.end();
-//  while(bit!=eit)
-//  {
-//    TGraphicEngineGUI* pGE_GUI = (TGraphicEngineGUI*)*bit;
-//    const void* pForm = pGE_GUI->GetPrivate()->GetPrivateDialog();
-//    if(pGUI==pForm)
-//    {
-//      pGE_GUI->GetPrivate()->GUIEvent(nEvent,nControlID);
-//      break;
-//    }
-//    bit++;
-//  }
-//}
-//------------------------------------------------------------------------
-//#ifdef WIN32
-//bool IGraphicEngine::MsgProcGUI(unsigned int hWnd, 
-//                                unsigned int uMsg, 
-//                                unsigned int wParam, 
-//                                unsigned int lParam)
-//{
-//  TListGUI::iterator bit = mListGUI.begin();
-//  TListGUI::iterator eit = mListGUI.end();
-//  while(bit!=eit)
-//  {
-//    if((*bit)->GetPrivate()->MsgProc(hWnd,uMsg,wParam,lParam)==false)
-//      return false;
-//    bit++;
-//  }
-//  return true;
-//}
-//#else
-//#endif
-//------------------------------------------------------------------------
 void IGraphicEngine::SetGUI(IGUI_Core* pGUI)
 {
   mGUI = pGUI;
   if(IsCreateWindow())// иначе вызовется в Init()
     InitGUI();
+}
+//------------------------------------------------------------------------
+void IGraphicEngine::ZeroGUI()
+{
+  mGUI = NULL;
 }
 //------------------------------------------------------------------------
