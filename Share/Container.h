@@ -41,6 +41,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@mail
 
 /*
   Копирующий контейнер
+  копировать внутрь контейнера данные,
+  объект сам освободит
 */
 
 class SHARE_EI TContainer

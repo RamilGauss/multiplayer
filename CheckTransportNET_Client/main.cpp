@@ -3,8 +3,8 @@
 #include <map>
 #include <string>
 #include <windows.h>
-#include "..\NetTransport\MakerNetTransport.h"
-#include "..\NetTransport\INetTransport.h"
+#include "MakerNetTransport.h"
+#include "INetTransport.h"
 #include "..\Share\GlobalParams.h"
 #include "..\glib-2.0\glib\gthread.h"
 #include "..\GBaseLib\ErrorReg.h"
@@ -28,7 +28,7 @@ struct TArgData
   TArgData()
   {
     ip = ns_inet_addr(ns_getSelfIP(numNetWork));
-    cnt = 180;
+    cnt = 190;
     time_sleep = 15;
   }
 };
@@ -52,6 +52,7 @@ int main(int argc, char** argv)
   GetByArg(argc,argv,d);
   printf("TimeSleep=%d,cnt=%d\n",d.time_sleep, d.cnt);
 
+  TBreakPacket packetForSend;
 	if(pNetTransport->Synchro(d.ip, PORT_SERVER))
 	{
 		pNetTransport->Start(); TL_POINT("Start");
@@ -59,14 +60,13 @@ int main(int argc, char** argv)
 		TL_POINT("Before send");
 		unsigned int start = ht_GetMSCount();
 
-		//pNetTransport->Write(d.ip, PORT_SERVER, &packet[0], sizeof(packet), true);
-		//_getch();
-
 		for(int i = 0 ; i < CNT_RECV_PACKET ;)
 		{
 			for(int j = 0 ; j < d.cnt ; j++ )
 			{
-				pNetTransport->Write(d.ip, PORT_SERVER, &packet[0], sizeof(packet), true);
+        packetForSend.UnlinkPart();
+        packetForSend.PushFront(&packet[0], sizeof(packet));
+        pNetTransport->Send(d.ip, PORT_SERVER, packetForSend, true);
 				i++;
 				if(i==CNT_RECV_PACKET)
 					break;

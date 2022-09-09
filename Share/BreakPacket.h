@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
+2011, 2012, 2013, 2013, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -29,60 +29,56 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "WrapperTransport.h"
 
-TWrapperTransport::TWrapperTransport()
-{
+#ifndef BreakPacketH
+#define BreakPacketH
 
-}
-//-------------------------------------------------------------------------
-TWrapperTransport::~TWrapperTransport()
-{
+#include <list>
 
-}
-//-------------------------------------------------------------------------
-void TWrapperTransport::InitLog(char* pPathLog)
-{
+#include "TypeDef.h"
+#include "ContainerPtr.h"
+#include "Container.h"
 
-}
-//-------------------------------------------------------------------------
-bool TWrapperTransport::Open(unsigned char subNet, unsigned short port )
-{
-	return true;
-}
-//-------------------------------------------------------------------------
-void TWrapperTransport::Write(unsigned int ip, unsigned short port, void* packet, int size, bool check)
-{
+/*
+  Не копирующий контейнер
+  хранит указатель на память и размер
+  не освободит память
+*/
 
-}
-//-------------------------------------------------------------------------
-void TWrapperTransport::Register(TCallBackRegistrator::TCallBackFunc pFunc, int type)
+class SHARE_EI TBreakPacket
 {
+  typedef std::list<TContainerPtr> TListC_Ptr;
+  typedef TListC_Ptr::iterator TListC_PtrIt;
+  
+  TListC_Ptr mList;
 
-}
-//-------------------------------------------------------------------------
-void TWrapperTransport::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type)
-{
+  TContainer mCollect;
 
-}
-//-------------------------------------------------------------------------
-void TWrapperTransport::Start()
-{
+public:
+  TBreakPacket();
+  virtual ~TBreakPacket();
 
-}
-//-------------------------------------------------------------------------
-void TWrapperTransport::Stop()
-{
+  // добавить кусок памяти
+  void PushFront(char* p,int size);
+  // собрать кусочки в одно целое (копированием), теперь можно получить указатель на собранный пакет через GetPtr
+  void Collect();
+  void* GetCollectPtr();
+  int GetSize();
+  // кол-во частей
+  int GetCountPart();
 
-}
-//-------------------------------------------------------------------------
-bool TWrapperTransport::Synchro(unsigned int ip, unsigned short port)
-{
-	return true;
-}
-//-------------------------------------------------------------------------
+  // освободить память, которая использовалась под собранный пакет
+  void DeleteCollect();
+
+  void UnlinkPart();
+protected:
+
+};
+
+
+#endif
 

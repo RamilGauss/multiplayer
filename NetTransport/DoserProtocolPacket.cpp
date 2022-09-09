@@ -33,51 +33,29 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include <stddef.h>
-#include <string.h>
-#include <stdio.h>
 
-#include "memory_operation.h"
-#include "CallBackRegistrator.h"
-#include "BL_Debug.h"
+#include "DoserProtocolPacket.h"
 
-using namespace std;
+using namespace nsNetDoser;
 
-TCallBackRegistrator::TCallBackRegistrator()
+//----------------------------------------------------------------------------------
+unsigned int TDescConnect::GetIP()const
 {
+  return mIP_port.ip;
 }
-//--------------------------------------------------------------
-TCallBackRegistrator::~TCallBackRegistrator()
+//----------------------------------------------------------------------------------
+unsigned short TDescConnect::GetPort() const
 {
-  int size = mSetCallback.size();
-  BL_ASSERT(size==0);
-  mSetCallback.clear();
+  return mIP_port.port;
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Register(TCallBackFunc pFunc)
+//----------------------------------------------------------------------------------
+TIP_Port* TDescConnect::GetIP_Port()
 {
-  mSetCallback.insert(pFunc);
+  return &mIP_port;
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Unregister(TCallBackFunc pFunc)
+//----------------------------------------------------------------------------------
+TAutomatRegularSpeed* TDescConnect::GetAutomat()
 {
-  TSetFunc::iterator fit = mSetCallback.find(pFunc);
-  TSetFunc::iterator eit = mSetCallback.end();
-  if(fit!=eit)
-    mSetCallback.erase(fit);
-  else
-    BL_FIX_BUG();
+  return &mAutomatRegularSpeed;
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Notify(void* data, int size)
-{
-  TSetFunc::iterator bit = mSetCallback.begin();
-  TSetFunc::iterator eit = mSetCallback.end();
-  while(bit!=eit)
-	{
-		TCallBackFunc pFunc = (*bit);
-		pFunc(data,size);
-    bit++;
-	}
-}
-//--------------------------------------------------------------
+//----------------------------------------------------------------------------------

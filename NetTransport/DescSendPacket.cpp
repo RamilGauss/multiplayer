@@ -33,51 +33,24 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include <stddef.h>
-#include <string.h>
-#include <stdio.h>
 
-#include "memory_operation.h"
-#include "CallBackRegistrator.h"
-#include "BL_Debug.h"
+#include "DescSendPacket.h"
 
-using namespace std;
+using namespace nsNetDoser;
 
-TCallBackRegistrator::TCallBackRegistrator()
+TDescSendPacket::TDescSendPacket(TIP_Port &_ip_port, 
+                                 bool _check, TBreakPacket& packet)
 {
+  ip_port = _ip_port;
+  check   = _check;
+  packet.Collect();
+  int sizeData = packet.GetSize();
+  mContainer.SetData((char*)packet.GetCollectPtr(),sizeData);
+  mPacket.PushFront((char*)mContainer.GetPtr(),    mContainer.GetSize());
 }
-//--------------------------------------------------------------
-TCallBackRegistrator::~TCallBackRegistrator()
+//----------------------------------------------------------------------------------
+void TDescSendPacket::Done()
 {
-  int size = mSetCallback.size();
-  BL_ASSERT(size==0);
-  mSetCallback.clear();
+
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Register(TCallBackFunc pFunc)
-{
-  mSetCallback.insert(pFunc);
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::Unregister(TCallBackFunc pFunc)
-{
-  TSetFunc::iterator fit = mSetCallback.find(pFunc);
-  TSetFunc::iterator eit = mSetCallback.end();
-  if(fit!=eit)
-    mSetCallback.erase(fit);
-  else
-    BL_FIX_BUG();
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::Notify(void* data, int size)
-{
-  TSetFunc::iterator bit = mSetCallback.begin();
-  TSetFunc::iterator eit = mSetCallback.end();
-  while(bit!=eit)
-	{
-		TCallBackFunc pFunc = (*bit);
-		pFunc(data,size);
-    bit++;
-	}
-}
-//--------------------------------------------------------------
+//----------------------------------------------------------------------------------

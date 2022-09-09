@@ -36,18 +36,16 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef WRAPPER_MAKER_TRANSPORT_H
 #define WRAPPER_MAKER_TRANSPORT_H
 
-#include "..\Melissa\IMakerTransport.h"
-#include "..\Melissa\ITransport.h"
+#include "IMakerTransport.h"
 
 class TWrapperMakerTransport : public nsMelissa::IMakerTransport
 {
-
 public:
 	TWrapperMakerTransport();
 	virtual ~TWrapperMakerTransport();
 
-	virtual nsMelissa::ITransport* New();
-	virtual void Delete(nsMelissa::ITransport* pTransport);
+	virtual INetTransport* New();
+	virtual void Delete(INetTransport* pTransport);
 
 protected:
 private:

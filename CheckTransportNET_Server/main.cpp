@@ -4,7 +4,7 @@
 #include <string>
 #include <windows.h>
 #include "..\NetTransport\MakerNetTransport.h"
-#include "..\NetTransport\INetTransport.h"
+#include "INetTransport.h"
 #include "..\Share\GlobalParams.h"
 #include "..\glib-2.0\glib\gthread.h"
 #include "..\GBaseLib\ErrorReg.h"

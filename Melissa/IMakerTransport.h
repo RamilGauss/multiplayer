@@ -36,7 +36,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef MELISSA_IMAKERTRANSPORT_H
 #define MELISSA_IMAKERTRANSPORT_H
 
-#include "ITransport.h"
+#include "INetTransport.h"
 
 namespace nsMelissa
 {
@@ -47,8 +47,8 @@ namespace nsMelissa
     IMakerTransport(){}
     virtual ~IMakerTransport(){}
     
-    virtual ITransport* New() = 0;
-    virtual void Delete(ITransport* pTransport)= 0;
+    virtual INetTransport* New() = 0;
+    virtual void Delete(INetTransport* pTransport)= 0;
   };
 }
 

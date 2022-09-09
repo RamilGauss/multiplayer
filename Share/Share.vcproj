@@ -195,6 +195,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BreakPacket.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\CallBackRegistrator.cpp"
 				>
 			</File>
@@ -204,6 +208,10 @@
 			</File>
 			<File
 				RelativePath=".\Container.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ContainerPtr.cpp"
 				>
 			</File>
 			<File
@@ -224,6 +232,10 @@
 			</File>
 			<File
 				RelativePath=".\IBaseObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\INetTransport.cpp"
 				>
 			</File>
 			<File
@@ -357,6 +369,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BreakPacket.h"
+				>
+			</File>
+			<File
 				RelativePath=".\CallBackRegistrator.h"
 				>
 			</File>
@@ -374,6 +390,10 @@
 			</File>
 			<File
 				RelativePath=".\Container.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ContainerPtr.h"
 				>
 			</File>
 			<File
@@ -418,6 +438,10 @@
 			</File>
 			<File
 				RelativePath=".\ILoaderDLL.h"
+				>
+			</File>
+			<File
+				RelativePath=".\INetTransport.h"
 				>
 			</File>
 			<File

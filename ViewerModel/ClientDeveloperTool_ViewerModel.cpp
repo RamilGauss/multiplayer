@@ -124,51 +124,39 @@ bool TClientDeveloperTool_ViewerModel::KeyEvent(TKeyEvent* pEvent)
   {
     // клавиатура
     case e_W://W
-      //mComponent.mControlCamera->MoveForward(DELTA_MOVE);
       mComponent.mControlCamera->SetSpeedForward(DELTA_MOVE);
       break;
     case e_W|UP://W
-      //mComponent.mControlCamera->MoveForward(DELTA_MOVE);
       mComponent.mControlCamera->SetSpeedForward(0);
       break;
     case e_S://S
-      //mComponent.mControlCamera->MoveForward(-DELTA_MOVE);
       mComponent.mControlCamera->SetSpeedForward(-DELTA_MOVE);
       break;
     case e_S|UP://S
-      //mComponent.mControlCamera->MoveForward(-DELTA_MOVE);
       mComponent.mControlCamera->SetSpeedForward(0);
       break;
     case e_A://A
-      //mComponent.mControlCamera->MoveRight(-DELTA_MOVE);
       mComponent.mControlCamera->SetSpeedRight(-DELTA_MOVE);
       break;
     case e_A|UP://A
-      //mComponent.mControlCamera->MoveRight(-DELTA_MOVE);
       mComponent.mControlCamera->SetSpeedRight(0);
       break;
     case e_D://D
-      //mComponent.mControlCamera->MoveRight(DELTA_MOVE);
       mComponent.mControlCamera->SetSpeedRight(DELTA_MOVE);
       break;
     case e_D|UP://D
-      //mComponent.mControlCamera->MoveRight(DELTA_MOVE);
       mComponent.mControlCamera->SetSpeedRight(0);
       break;
     case e_Q://Q
-      //mComponent.mControlCamera->MoveUp(DELTA_MOVE);
       mComponent.mControlCamera->SetSpeedUp(DELTA_MOVE);
       break;
     case e_Q|UP://Q
-      //mComponent.mControlCamera->MoveUp(DELTA_MOVE);
       mComponent.mControlCamera->SetSpeedUp(0);
       break;
     case e_E://E
-      //mComponent.mControlCamera->MoveUp(-DELTA_MOVE);
       mComponent.mControlCamera->SetSpeedUp(-DELTA_MOVE);
       break;
     case e_E|UP://E
-      //mComponent.mControlCamera->MoveUp(-DELTA_MOVE);
       mComponent.mControlCamera->SetSpeedUp(0);
       break;
     // мышь
@@ -217,7 +205,6 @@ bool TClientDeveloperTool_ViewerModel::KeyEvent(TKeyEvent* pEvent)
     }
     case e_O: 
     {
-
       break;
     }
   }

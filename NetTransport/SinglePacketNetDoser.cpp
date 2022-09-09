@@ -33,51 +33,34 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include <stddef.h>
-#include <string.h>
-#include <stdio.h>
 
-#include "memory_operation.h"
-#include "CallBackRegistrator.h"
-#include "BL_Debug.h"
+#include "SinglePacketNetDoser.h"
 
 using namespace std;
+using namespace nsNetDoser;
 
-TCallBackRegistrator::TCallBackRegistrator()
+TSinglePacketNetDoser::TSinglePacketNetDoser()
 {
+  Init();
 }
-//--------------------------------------------------------------
-TCallBackRegistrator::~TCallBackRegistrator()
+//------------------------------------------------------
+TSinglePacketNetDoser::~TSinglePacketNetDoser()
 {
-  int size = mSetCallback.size();
-  BL_ASSERT(size==0);
-  mSetCallback.clear();
+
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Register(TCallBackFunc pFunc)
+//------------------------------------------------------
+void TSinglePacketNetDoser::Init()
 {
-  mSetCallback.insert(pFunc);
+  vector<TMarkUpContainer::TCommonDesc> vcd;
+  TMarkUpContainer::TCommonDesc cd;
+  // разметка заголовка пакета
+  cd.type = TMarkUpContainer::eConst;
+  cd.name = "Header";
+  cd.c.size = sizeof(THeaderSinglePacket);
+  vcd.push_back(cd);
+
+  mC.SetMarkUp(&vcd);
+  mC.Update();
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Unregister(TCallBackFunc pFunc)
-{
-  TSetFunc::iterator fit = mSetCallback.find(pFunc);
-  TSetFunc::iterator eit = mSetCallback.end();
-  if(fit!=eit)
-    mSetCallback.erase(fit);
-  else
-    BL_FIX_BUG();
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::Notify(void* data, int size)
-{
-  TSetFunc::iterator bit = mSetCallback.begin();
-  TSetFunc::iterator eit = mSetCallback.end();
-  while(bit!=eit)
-	{
-		TCallBackFunc pFunc = (*bit);
-		pFunc(data,size);
-    bit++;
-	}
-}
-//--------------------------------------------------------------
+//------------------------------------------------------
+

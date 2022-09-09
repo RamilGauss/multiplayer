@@ -33,51 +33,20 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include <stddef.h>
-#include <string.h>
-#include <stdio.h>
 
-#include "memory_operation.h"
-#include "CallBackRegistrator.h"
-#include "BL_Debug.h"
+#ifndef DoserProtocolEnumH
+#define DoserProtocolEnumH
 
-using namespace std;
+namespace nsNetDoser
+{
 
-TCallBackRegistrator::TCallBackRegistrator()
+typedef enum
 {
+  eOverload     = 'O',// перегрузка по трафику
+  eBigPacket    = 'B',// разбитый большой пакет
+  eSinglePacket = 'P',// одиночный пакет
+}eTypePacket;
+
 }
-//--------------------------------------------------------------
-TCallBackRegistrator::~TCallBackRegistrator()
-{
-  int size = mSetCallback.size();
-  BL_ASSERT(size==0);
-  mSetCallback.clear();
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::Register(TCallBackFunc pFunc)
-{
-  mSetCallback.insert(pFunc);
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::Unregister(TCallBackFunc pFunc)
-{
-  TSetFunc::iterator fit = mSetCallback.find(pFunc);
-  TSetFunc::iterator eit = mSetCallback.end();
-  if(fit!=eit)
-    mSetCallback.erase(fit);
-  else
-    BL_FIX_BUG();
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::Notify(void* data, int size)
-{
-  TSetFunc::iterator bit = mSetCallback.begin();
-  TSetFunc::iterator eit = mSetCallback.end();
-  while(bit!=eit)
-	{
-		TCallBackFunc pFunc = (*bit);
-		pFunc(data,size);
-    bit++;
-	}
-}
-//--------------------------------------------------------------
+
+#endif

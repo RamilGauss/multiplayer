@@ -33,51 +33,48 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include <stddef.h>
-#include <string.h>
-#include <stdio.h>
+#include "AutomatRegularSpeed.h"
+#include "DoserProtocolPacket.h"
 
-#include "memory_operation.h"
-#include "CallBackRegistrator.h"
-#include "BL_Debug.h"
+using namespace nsNetDoser;
 
-using namespace std;
+TAutomatRegularSpeed::TAutomatRegularSpeed()
+{
+  mTransport = NULL;
+}
+//------------------------------------------------------------------------
+TAutomatRegularSpeed::~TAutomatRegularSpeed()
+{
 
-TCallBackRegistrator::TCallBackRegistrator()
-{
 }
-//--------------------------------------------------------------
-TCallBackRegistrator::~TCallBackRegistrator()
+//------------------------------------------------------------------------
+bool TAutomatRegularSpeed::AddInQueue(int sizeBuffer)// добавлять ли в автомат пакеты, общий размер которых sizeBuffer
 {
-  int size = mSetCallback.size();
-  BL_ASSERT(size==0);
-  mSetCallback.clear();
+  return false;
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Register(TCallBackFunc pFunc)
+//------------------------------------------------------------------------
+void TAutomatRegularSpeed::Add(TDescSendPacket* pDescPacket)// добавить 
 {
-  mSetCallback.insert(pFunc);
+
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Unregister(TCallBackFunc pFunc)
+//------------------------------------------------------------------------
+bool TAutomatRegularSpeed::NeedSend()// опрос, надо ли что-то отправлять
 {
-  TSetFunc::iterator fit = mSetCallback.find(pFunc);
-  TSetFunc::iterator eit = mSetCallback.end();
-  if(fit!=eit)
-    mSetCallback.erase(fit);
-  else
-    BL_FIX_BUG();
+  return false;
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Notify(void* data, int size)
+//------------------------------------------------------------------------
+void TAutomatRegularSpeed::Send()// будет отсылать до тех пор пока не истечет время или не закончатся пакеты
 {
-  TSetFunc::iterator bit = mSetCallback.begin();
-  TSetFunc::iterator eit = mSetCallback.end();
-  while(bit!=eit)
-	{
-		TCallBackFunc pFunc = (*bit);
-		pFunc(data,size);
-    bit++;
-	}
+
 }
-//--------------------------------------------------------------
+//------------------------------------------------------------------------
+void TAutomatRegularSpeed::Overload(unsigned short over_ms)// обратная связь с каналом
+{
+
+}
+//------------------------------------------------------------------------
+void TAutomatRegularSpeed::SetTransport(INetTransport* pTransport)
+{
+  mTransport = pTransport;
+}
+//------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 ===========================================================================
 Author: Gudakov Ramil Sergeevich a.k.a. Gauss
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
+2011, 2012, 2013, 2013, 2013
 ===========================================================================
                         Common Information
 "TornadoEngine" GPL Source Code
@@ -29,56 +29,41 @@ the "TornadoEngine" Source Code.  If not, please request a copy in writing from 
 ===========================================================================
                                   Contacts
 If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
+you may contact in writing [ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
 
-#ifndef INetTransportH
-#define INetTransportH
+#ifndef ContainerPtrH
+#define ContainerPtrH
 
-#include "CallBackRegistrator.h"
-#include "UdpDevice.h"
-#include "glib/gthread.h"
-#include "TransportProtocolPacket.h"
-#include "hArray.h"
-#include "GCS.h"
-#include "BL_Debug.h"
 #include "TypeDef.h"
 
-// транспорт
-class NET_TRANSPORT_EI INetTransport
+/*
+  Не копирующий контейнер
+  хранит указатель на память и размер
+  не освободит память
+*/
+
+class SHARE_EI TContainerPtr
 {
+protected:
+  char* pData;
+  int size;
 public:
-  //типы callback вызовов
-  enum{
-    eRcvPacket  = 0,		   
-    eRcvStream  = 1,
-    eDisconnect = 2,
-  };
-
-	enum{eWaitSynchro=5,// сек
-  };
-
-
-  INetTransport(char* pPathLog=NULL){};
-  virtual ~INetTransport(){};
-	virtual void InitLog(char* pPathLog) = 0;
-
-  virtual bool Open(unsigned short port, unsigned char numNetWork = 0) = 0;
-
-	virtual void Write(unsigned int ip, unsigned short port, void* packet, int size, bool check = true) = 0;
-
-	// чтение - зарегистрируйся
-  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
-  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
-
-	virtual void Start() = 0;
-	virtual void Stop()  = 0;
-
-  // синхронная функция
-  virtual bool Synchro(unsigned int ip, unsigned short port) = 0; // вызов только для клиента
+  TContainerPtr();
+  virtual ~TContainerPtr();
+  // обнулить указатель
+  virtual void Unlink();
+  // копировать внутрь данные
+  virtual void SetData(char* p, int s);
+  // получить доступ к данным
+  virtual char* GetData(int &s);
+  // более короткая версия для получения доступа
+  virtual void* GetPtr()const;
+  virtual int GetSize()const;
 };
 
 
 #endif
+

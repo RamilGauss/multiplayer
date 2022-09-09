@@ -33,51 +33,57 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include <stddef.h>
-#include <string.h>
-#include <stdio.h>
 
-#include "memory_operation.h"
-#include "CallBackRegistrator.h"
-#include "BL_Debug.h"
+#ifndef AutomatRegularSpeedH
+#define AutomatRegularSpeedH
 
-using namespace std;
+#include "List.h"
 
-TCallBackRegistrator::TCallBackRegistrator()
+class INetTransport;
+
+namespace nsNetDoser
 {
-}
-//--------------------------------------------------------------
-TCallBackRegistrator::~TCallBackRegistrator()
+
+class TDescSendPacket;
+
+class TAutomatRegularSpeed
 {
-  int size = mSetCallback.size();
-  BL_ASSERT(size==0);
-  mSetCallback.clear();
+
+  INetTransport* mTransport;
+
+  struct TDescSpeed
+  {
+    short time_sleep_ms;
+    short cnt_portion_packet;// 
+  };
+
+  // пакеты на отправку
+  TList<TDescSendPacket> mListPacket; 
+
+  TDescSpeed mSpeed;
+
+  unsigned int mNextUpSpeed;// мс
+  unsigned int mLastUpSpeed;// мс
+
+public:
+  TAutomatRegularSpeed();
+  ~TAutomatRegularSpeed();
+
+  void SetTransport(INetTransport* pTransport);
+  // ведет статистику по времени опроса
+  // например если опрос был 10 раз по 1350 байт в течение 1 секунды, то вернет 10 раз false
+  // но если опрос был в течение 1 мс, то на 10 опрос вернет true
+  // все зависит от настроек скорости в данный момент
+  bool AddInQueue(int sizeBuffer);// добавлять ли в автомат пакеты, общий размер которых sizeBuffer
+
+  void Add(TDescSendPacket* pDescPacket);// добавить 
+
+  bool NeedSend();// опрос, надо ли что-то отправлять
+  void Send();    // будет отсылать до тех пор пока не истечет время или не закончатся пакеты
+
+  void Overload(unsigned short over_ms);// обратная связь с каналом
+};
+
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Register(TCallBackFunc pFunc)
-{
-  mSetCallback.insert(pFunc);
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::Unregister(TCallBackFunc pFunc)
-{
-  TSetFunc::iterator fit = mSetCallback.find(pFunc);
-  TSetFunc::iterator eit = mSetCallback.end();
-  if(fit!=eit)
-    mSetCallback.erase(fit);
-  else
-    BL_FIX_BUG();
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::Notify(void* data, int size)
-{
-  TSetFunc::iterator bit = mSetCallback.begin();
-  TSetFunc::iterator eit = mSetCallback.end();
-  while(bit!=eit)
-	{
-		TCallBackFunc pFunc = (*bit);
-		pFunc(data,size);
-    bit++;
-	}
-}
-//--------------------------------------------------------------
+
+#endif

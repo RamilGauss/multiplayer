@@ -55,7 +55,7 @@ class TManagerStateMachine : public IManagerStateMachine
     }
   };
 
-  typedef std::map< unsigned int, TDesc/*unsigned int*/> TMapUintPtr;
+  typedef std::map<unsigned int, TDesc> TMapUintPtr;
 
   typedef TStateMachine<unsigned int, TMapUintPtr> TSM_UintUint;
 
@@ -78,7 +78,6 @@ public:
 protected:
 
   void Done();
-
 
 };
 

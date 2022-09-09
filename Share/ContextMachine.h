@@ -66,13 +66,16 @@ protected:
 
   int GetCountByKey(Key& k);
   void UpdateMapKeyCount(Key& k, int count);
+  
+  void ActionForSameKey(Key& k);
+  void ActionForOtherKey(Key& k);
 
   typedef std::map<Key, int> TMapKeyInt;
 
   // для оптимизации
   TMapKeyInt mMapKeyCount; 
   int mCurCount;
-  bool flgNeedInitSame;
+  bool flgFirstUse;
   typename TMultiMapKeyMap::iterator mBeginSameIt;
   typename TMultiMapKeyMap::iterator mCurSameIt;
 
@@ -87,7 +90,7 @@ TContextMachine<Key,Value>::TContextMachine()
 {
   mCurrentMap = NULL;
   mCurSameState = 0;
-  flgNeedInitSame = true;
+  flgFirstUse = true;
 }
 //---------------------------------------------------------------------
 template <class Key, class Value>
@@ -101,47 +104,9 @@ bool TContextMachine<Key,Value>::Action(Key k, Value& v)
 {
   // определить состояние
   if(mSameState==k)// то же значение состояния
-  {
-    if(flgNeedInitSame)
-    {
-      TMultiMapKeyMap::iterator fit = mMultiMapKeyMap.lower_bound(k);
-      if(fit!=mMultiMapKeyMap.end())
-      {
-        mBeginSameIt = fit;
-        mCurCount    = GetCountByKey(k);
-        
-        mCurSameIt = mBeginSameIt;
-      }
-      flgNeedInitSame = false;
-    }
-    //------------------------------------
-    mCurSameState++;
-    if(mCurSameState==mCurCount)
-    {
-      mCurSameState = 0;
-      mCurSameIt = mBeginSameIt;
-    }
-    else
-      mCurSameIt++;
-    
-    mCurrentMap = &(mCurSameIt->second);
-  }
+    ActionForSameKey(k);
   else
-  {
-    TMultiMapKeyMap::iterator fit = mMultiMapKeyMap.lower_bound(k);
-    if(fit!=mMultiMapKeyMap.end())
-    {
-      mSameState      = k;
-      mCurSameState   = 0;
-      mCurCount       = GetCountByKey(k);
-      mBeginSameIt    = fit;
-      flgNeedInitSame = false;
-
-      mCurSameIt = mBeginSameIt;
-      
-      mCurrentMap = &(mCurSameIt->second);
-    }
-  }
+    ActionForOtherKey(k);
   //------------------------------------------------------------------
   // поиск для состояния
   TMapKeyValue::iterator ffit = mCurrentMap->find(k);
@@ -200,7 +165,52 @@ void TContextMachine<Key,Value>::UpdateMapKeyCount(Key& k, int count)
     mMapKeyCount.insert(TMapKeyInt::value_type(k,count));
 }
 //---------------------------------------------------------------------
+template <class Key, class Value>
+void TContextMachine<Key,Value>::ActionForSameKey(Key& k)
+{
+  if(flgFirstUse)
+  {
+    TMultiMapKeyMap::iterator fit = mMultiMapKeyMap.lower_bound(k);
+    if(fit!=mMultiMapKeyMap.end())
+    if(fit->first==k)
+    {
+      mBeginSameIt = fit;
+      mCurCount    = GetCountByKey(k);
 
+      mCurSameIt = mBeginSameIt;
+    }
+    flgFirstUse = false;
+  }
+  //------------------------------------
+  mCurSameState++;
+  if(mCurSameState==mCurCount)
+  {
+    mCurSameState = 0;
+    mCurSameIt = mBeginSameIt;
+  }
+  else
+    mCurSameIt++;
+  mCurrentMap = &(mCurSameIt->second);
+}
+//---------------------------------------------------------------------
+template <class Key, class Value>
+void TContextMachine<Key,Value>::ActionForOtherKey(Key& k)
+{
+  TMultiMapKeyMap::iterator fit = mMultiMapKeyMap.lower_bound(k);
+  if(fit!=mMultiMapKeyMap.end())
+  if(fit->first==k)
+  {
+    mSameState      = k;
+    mCurSameState   = 0;
+    mCurCount       = GetCountByKey(k);
+    mBeginSameIt    = fit;
+    flgFirstUse = false;
 
+    mCurSameIt = mBeginSameIt;
+
+    mCurrentMap = &(mCurSameIt->second);
+  }
+}
+//---------------------------------------------------------------------
 
 #endif

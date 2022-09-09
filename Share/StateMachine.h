@@ -40,6 +40,20 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <map>
 #include <string>
 
+/*
+  Машина описывается набором "Имя- Набор Ключ-Имя состояния" и данными
+  То есть например находясь в одном состоянии можно перейти в другое по ключу,
+  ключ в наборе связан с именем состояния.
+
+
+  Имя1 - набор {Ключ2-Имя2, Ключ3-Имя3}
+  Имя2 - набор {Ключ1-Имя1}
+  Имя3 - набор {Ключ1-Имя1, Ключ2-Имя2}
+
+  Например текущее состояние Имя1, и введя в Action(Ключ2), текущее состояние сменится на Имя2 и 
+  получим данные для Имя2.
+*/
+
 template <class Key, class Data>
 class TStateMachine
 {
@@ -74,17 +88,18 @@ public:
   virtual ~TStateMachine();
 
   // для инициализации
+  // mKS - описание состояний(имена), в которые можно перейти по ключу
   void AddState(std::string name, TMapKeyStr* mKS, Data* pData);
-
-  bool Init(const char* name);
+  // назначить состояние по имени
+  bool Init(const char* sNewStateName);
 
   // добавить событие - получить реакцию (реакции может и не быть)
   Data* Action(Key k);
-
+  
   std::string GetNameCurrent();
-
+  
   Data* GetDataCurrent();
-
+  
   int GetStateCount() const;
 
 protected:

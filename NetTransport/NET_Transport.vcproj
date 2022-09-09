@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\glib-2.0;..\GBaseLib;..\Share"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;NET_TRANSPORT_EI=__declspec(dllexport);NET_TRANSPORT_EXPORTS;FAST_NET_TRANSPORT"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;TD_CROSSPLATFORM;NET_TRANSPORT_EI=__declspec(dllexport);NET_TRANSPORT_EXPORTS;FAST_NET_TRANSPORT"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -179,7 +179,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\AutomatRegularSpeed.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\BasePacketNetTransport.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BigPacketNetDoser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DescSendPacket.cpp"
 				>
 			</File>
 			<File
@@ -205,6 +217,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\DoserProtocolPacket.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MakerNetTransport.cpp"
 				>
 			</File>
@@ -216,6 +232,14 @@
 				RelativePath=".\NetTransport.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\OverloadNetDoser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SinglePacketNetDoser.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -223,11 +247,27 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\AutomatRegularSpeed.h"
+				>
+			</File>
+			<File
 				RelativePath=".\BasePacketNetTransport.h"
 				>
 			</File>
 			<File
-				RelativePath=".\INetTransport.h"
+				RelativePath=".\BigPacketNetDoser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DescSendPacket.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DoserProtocolEnum.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DoserProtocolPacket.h"
 				>
 			</File>
 			<File
@@ -240,6 +280,14 @@
 			</File>
 			<File
 				RelativePath=".\NetTransport.h"
+				>
+			</File>
+			<File
+				RelativePath=".\OverloadNetDoser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SinglePacketNetDoser.h"
 				>
 			</File>
 			<File

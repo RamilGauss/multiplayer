@@ -37,14 +37,16 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef NetTransportH
 #define NetTransportH
 
+#include <set>
+
+#include "glib/gthread.h"
+
 #include "CallBackRegistrator.h"
 #include "UdpDevice.h"
-#include "glib/gthread.h"
 #include "hArray.h"
 #include "GCS.h"
 #include "BL_Debug.h"
 #include "INetTransport.h"
-#include <set>
 #include "BasePacketNetTransport.h"
 
 // содержит поток дл€ проверки получени€ пакетов по сети
@@ -70,16 +72,20 @@ protected:
 
 	UdpDevice mUDP;	
 
-	bool flgActive;
-	bool flgNeedStop;
+	volatile bool flgActive;
+	volatile bool flgNeedStop;
 
-	enum{eSizeBuffer     = 65535,
-       eCntTry         = 10,//15,
-       eTimeLivePacket = 120,//60,// мс
-			 eTimeout        = 60,// частота обновлени€ движка, мс
-       eWaitThread     = eCntTry*eTimeLivePacket,// мс
-       eSizeBufferForRecv = 30000000, // байт
-       eSizeBufferForSend = 30000000, // байт
+	enum
+  {
+    eSizeBuffer     = 65535,
+    eCntTry         = 10, //15,
+    eTimeLivePacket = 120,//60,//если в течение такого времени не будет квитанции, считаетс€ пакет не доставлен, мс
+    eTimeout        = 60, // частота обновлени€ движка, мс
+    eWaitThread     = eCntTry*eTimeLivePacket,// мс
+    // размер системных буферов
+    eSizeBufferForRecv = 30000000, // байт
+    eSizeBufferForSend = 30000000, // байт
+    eWaitActivation    = 20,// ждать пока активизируетс€ двигатель, мс
 	};
 	typedef enum
 	{
@@ -88,6 +94,11 @@ protected:
 		eSynchro = 'C',
 		eCheck   = 'K',
 	}eTypePacket;
+  enum
+  {
+    eWaitSynchro=5,// сек
+  };
+
 	char mBuffer[eSizeBuffer];
 	
 	GThread* thread;
@@ -100,13 +111,17 @@ public:
 
   virtual bool Open(unsigned short port, unsigned char numNetWork = 0);
 
-	virtual void Write(unsigned int ip, unsigned short port, void* packet, int size, bool check = true);
+	virtual void Send(unsigned int ip, unsigned short port, 
+                    TBreakPacket& packet,//void* packet, int size, 
+                    bool check = true);
+
 	// чтение - зарегистрируйс€
   virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type);
   virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type);
 
 	virtual void Start();
 	virtual void Stop();
+	virtual bool IsActive();
 
   // синхронна€ функци€
   virtual bool Synchro(unsigned int ip, unsigned short port); // вызов только дл€ клиента
@@ -118,8 +133,6 @@ protected:
   void Unlock(void* pLocker);
 
 protected:
-  void notifyRcvPacket(void * data,int size){mCallBackRecvPacket.Notify(data,size);};
-  void notifyRcvStream(void * data,int size){mCallBackRecvStream.Notify(data,size);};
   void notifyDisconnect(TIP_Port* data){mCallBackDisconnect.Notify(data,sizeof(TIP_Port));};
 
 	friend void* ThreadTransport(void*p);
@@ -129,23 +142,22 @@ protected:
 
   // пакеты, ожидающие квитанцию
 	TArrayObject mArrWaitCheck;
-  // пакеты, ожидающие отправку
-  TArrayObject mArrWaitSend;
 	
 	void* FindInList();
 
 protected:
 	void AnalizPacket(unsigned int ip,unsigned short port,int size);
-  void FindAndCheck(TPrefixTransport* prefix,unsigned int ip,unsigned short port);
-  void NotifyRcvPacket(int size);
-  void NotifyRcvStream(int size);
-  void SendCheck(TPrefixTransport* prefix,unsigned int ip,unsigned short port);
+  void FindAndCheck(nsNetTransportStruct::THeader* prefix,
+                    unsigned int ip,unsigned short port);
+  void NotifyRecv(TCallBackRegistrator& callBack, int size);
+  void SendCheck(nsNetTransportStruct::THeader* prefix,
+                 unsigned int ip,unsigned short port);
 
   // сколько ждать в чтении
 	int GetTimeout();// мс
 	void SendUnchecked();
 
-  bool Send(TBasePacketNetTransport/*TDescPacket*/* pDefPacket);
+  bool Send(TBasePacketNetTransport* pDefPacket);
   void Disconnect(TIP_Port* ip_port);
 
 protected:
@@ -156,7 +168,7 @@ protected:
 
   void WriteLog(void *p, int size, unsigned int ip, unsigned short port);
 	void ReadLog(int size, unsigned int ip, unsigned short port);
-	void LogTransportInfo(TPrefixTransport* p,int size);
+	void LogTransportInfo(nsNetTransportStruct::THeader* p,int size);
 
 protected:
 
@@ -173,9 +185,7 @@ protected:
 
   // если найдет объект - вернет указатель на него
   // иначе создаст новый
-	InfoConnect* GetInfoConnect(unsigned int ip,unsigned short port);
-
-	bool FindInArrWaitCheckQ(TBasePacketNetTransport/*TDescPacket*/* pDefPacket);
+	nsNetTransportStruct::TInfoConnect* GetInfoConnect(TIP_Port& v);
 
   // в массиве pArr найти и удалить €чейки, которые найдутс€ по pDefPacket
   void SearchAndDelete(TArrayObject* pArr, TIP_Port* ip_port);

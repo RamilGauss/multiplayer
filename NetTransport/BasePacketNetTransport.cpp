@@ -37,6 +37,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "BasePacketNetTransport.h"
 
 using namespace std;
+using namespace nsNetTransportStruct;
 
 const char* strPrefixTransport = "PrefixTransport";
 
@@ -52,7 +53,7 @@ TBasePacketNetTransport::~TBasePacketNetTransport()
 //-------------------------------------------------------------------------
 int TBasePacketNetTransport::GetType()
 {
-	TPrefixTransport v;
+	THeader v;
 	GetPrefixTransport(v);
 	return v.type;
 }
@@ -64,7 +65,7 @@ void TBasePacketNetTransport::Init()
 	// разметка заголовка пакета
 	cd.type = TMarkUpContainer::eConst;
 	cd.name = strPrefixTransport;
-	cd.c.size = sizeof(TPrefixTransport);
+	cd.c.size = sizeof(THeader);
 	vcd.push_back(cd);
 
 	mC.SetMarkUp(&vcd);
@@ -72,30 +73,16 @@ void TBasePacketNetTransport::Init()
 }
 //-------------------------------------------------------------------------
 //-------------------------------------------------------------------------
-void TBasePacketNetTransport::SetHeader(InfoData* pInfoD )
+void TBasePacketNetTransport::SetHeader(TShortDescPacket* pInfoD )
 {
-	TPrefixTransport v;
-  v.ip_port_dst.ip   = pInfoD->ip_dst;
-	v.ip_port_dst.port = pInfoD->port_dst;
-	v.ip_port_src.ip   = pInfoD->ip_src;
-	v.ip_port_src.port = pInfoD->port_src;
+	THeader v;
+  v.ip_port_dst = pInfoD->ip_port_dst;
+	v.ip_port_src = pInfoD->ip_port_src;
 	v.cntTry           = -1;
 	
-	//void* ppp = mC.Get("PrefixTransport");
 	SetPrefixTransport(v);
 
 	SetData(pInfoD->packet, pInfoD->size);
-
-	//mInfoData = *pInfoD;
-	//delete[]mReadyPacket;
-	//mSizePacket = mInfoData.size+sizeof(TPrefixTransport);
-	//mReadyPacket = new char[mSizePacket];
-	//memcpy((char*)mReadyPacket+sizeof(TPrefixTransport),pInfoD->packet, mInfoData.size);
-	//((TPrefixTransport*)mReadyPacket)->ip_port_dst.ip   = mInfoData.ip_dst;
-	//((TPrefixTransport*)mReadyPacket)->ip_port_dst.port = mInfoData.port_dst;
-	//((TPrefixTransport*)mReadyPacket)->ip_port_src.ip   = mInfoData.ip_src;
-	//((TPrefixTransport*)mReadyPacket)->ip_port_src.port = mInfoData.port_src;
-	//((TPrefixTransport*)mReadyPacket)->cntTry           = -1;
 }
 //-------------------------------------------------------------------------
 void TBasePacketNetTransport::SetType(unsigned char type)
@@ -159,15 +146,5 @@ unsigned int TBasePacketNetTransport::GetIP_dst() const
 unsigned short TBasePacketNetTransport::GetPort_dst() const
 {
 	return GetPrefix()->ip_port_dst.port;
-}
-//-------------------------------------------------------------------------
-void TBasePacketNetTransport::SetIsQueue(bool v)
-{
-	isQueue = v;
-}
-//-------------------------------------------------------------------------
-bool TBasePacketNetTransport::GetIsQueue()const
-{
-	return isQueue;
 }
 //-------------------------------------------------------------------------

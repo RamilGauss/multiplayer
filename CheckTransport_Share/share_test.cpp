@@ -8,6 +8,7 @@
 #include "..\GBaseLib\HiTimer.h"
 #include "..\share\NetSystem.h"
 #include "SaveOnHDD.h"
+#include "glib\gthread.h"
 
 char packet[SIZE_PACKET];
 

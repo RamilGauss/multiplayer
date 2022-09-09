@@ -34,76 +34,97 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 
-#ifndef TransportProtocolPacketH
-#define TransportProtocolPacketH
+#ifndef DoserProtocolPacketH
+#define DoserProtocolPacketH
 
 #include <stddef.h>
 #include <set>
+
 #include "TObject.h"
 #include "ShareMisc.h"
+#include "List.h"
+#include "AutomatRegularSpeed.h"
+#include "DoserProtocolEnum.h"
 
-namespace nsNetTransportStruct
+#include "HiTimer.h"
+#include "BreakPacket.h"
+
+namespace nsNetDoser
 {
 
 #if defined( WIN32 )
 #pragma pack(push, 1)
 #endif
 
-// базовые структуры
-//-----------------------------------------------------------------------------
-// заголовок пакета транспортного уровня
-struct THeader
+struct THeaderBasePacket
 {
-  unsigned char  type;   // K - квитанция, S - нет гарантии доставки, P - гарантия доставки, С-обмен циклическими номерами, нужен для синхронизации транспорта
-  unsigned short cn_in;  // циклический номер для определения свежести при Rcv
-  unsigned short cn_out; // циклический номер при Send
-  unsigned char  cntTry;
-	unsigned int time_ms;// для проверки необходимости отсылки неподтвержденного пакета
-  TIP_Port ip_port_dst;  //
-	TIP_Port ip_port_src;  //
-  THeader()
+  unsigned char type;
+};
+//------------------------------------------------
+struct THeaderOverload : public THeaderBasePacket
+{
+  // среднее значение перегруза, мс
+  unsigned short over_ms;
+  // время последнего полученного пакета (содержалось в полученном пакете)
+  unsigned int time_last_packet_ms;
+  
+  THeaderOverload()
   {
-    cntTry = -1;
-  };
+    type = eOverload;
+  }
 };
-//-----------------------------------------------------------------------------
-// описание пакета, который будут отправлять, задание краткого описания заголовка
-struct TShortDescPacket
+//------------------------------------------------
+struct THeaderSinglePacket : public THeaderBasePacket
 {
-  TIP_Port ip_port_dst;  //
-  TIP_Port ip_port_src;  //
-	void*    packet;
-	int      size;
-	TShortDescPacket(){size=0;packet = NULL;}
-	~TShortDescPacket(){}
+  unsigned int time_ms;// локальное время отправки, мс
+  THeaderSinglePacket()
+  {
+    type = eSinglePacket;
+  }
+  void SetTime()
+  {
+    time_ms = ht_GetMSCount();
+  }
 };
-//-----------------------------------------------------------------------------
-class TInfoConnect : public TObject
+//------------------------------------------------
+struct THeaderBigPacket : public THeaderSinglePacket
 {
-	// информация по сокету
+  unsigned short id; // id большого пакета
+  unsigned short cnt;// кол-во пакетов в одном большом пакете
+  unsigned short num;// номер в партии
+  THeaderBigPacket()
+  {
+    type = eBigPacket;
+  }
+};
+//------------------------------------------------
+class TDescSendPacket
+{
+  TIP_Port ip_port;
+  bool check;
+  TBreakPacket mPacket;
+  TContainer mContainer;
 public:
-	TInfoConnect(){init();}
-	unsigned int   ip;
-	unsigned short port;
-	// для Stream
-	unsigned short cn_in_s;     // циклический номер для определения свежести при Rcv
-	unsigned short cn_out_s;    // циклический номер при Send
-	// для Packet
-	unsigned short cn_in_p;     // циклический номер для определения свежести при Rcv
-	unsigned short cn_out_p;    // циклический номер при Send
-
-	typedef std::set<unsigned short> TSetUshort;
-	TSetUshort setIndexWaitRecv;// список пакетов, ЦН которых меньше текущего, но которые еще не были получены
-	void init()
-	{
-		cn_in_s  = 0;
-		cn_out_s = 0;
-		cn_in_p  = 0;
-		cn_out_p = 0;
-		setIndexWaitRecv.clear();
-	}
+  TDescSendPacket(TIP_Port &_ip_port, bool check, TBreakPacket& packet);
+  ~TDescSendPacket(){Done();}
+  void Done();
 };
-//-----------------------------------------------------------------------------
+//------------------------------------------------
+class TDescConnect : public TObject
+{
+public:
+
+  TAutomatRegularSpeed* GetAutomat();
+  unsigned int   GetIP()const;
+  unsigned short GetPort()const;
+  TIP_Port* GetIP_Port();
+protected:
+  // key
+  TIP_Port mIP_port;
+  // value
+  TAutomatRegularSpeed mAutomatRegularSpeed;  // автомат, который настраивает скорость канала
+};
+//------------------------------------------------
 
 #if defined( WIN32 )
 #pragma pack(pop)

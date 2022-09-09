@@ -33,51 +33,47 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include <stddef.h>
-#include <string.h>
-#include <stdio.h>
+#include "ContainerPtr.h"
+#include <memory.h>
 
-#include "memory_operation.h"
-#include "CallBackRegistrator.h"
-#include "BL_Debug.h"
 
-using namespace std;
-
-TCallBackRegistrator::TCallBackRegistrator()
+TContainerPtr::TContainerPtr()
 {
+  pData = NULL;
+  size  = 0;
 }
-//--------------------------------------------------------------
-TCallBackRegistrator::~TCallBackRegistrator()
+//---------------------------------------------------------------
+TContainerPtr::~TContainerPtr()
 {
-  int size = mSetCallback.size();
-  BL_ASSERT(size==0);
-  mSetCallback.clear();
+  Unlink();
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Register(TCallBackFunc pFunc)
+//---------------------------------------------------------------
+void TContainerPtr::SetData(char* p, int s)
 {
-  mSetCallback.insert(pFunc);
+  Unlink();
+  size  = s;
+  pData = p;
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Unregister(TCallBackFunc pFunc)
+//---------------------------------------------------------------
+char* TContainerPtr::GetData(int &s)
 {
-  TSetFunc::iterator fit = mSetCallback.find(pFunc);
-  TSetFunc::iterator eit = mSetCallback.end();
-  if(fit!=eit)
-    mSetCallback.erase(fit);
-  else
-    BL_FIX_BUG();
+  s = size;
+  return pData;
 }
-//--------------------------------------------------------------
-void TCallBackRegistrator::Notify(void* data, int size)
+//---------------------------------------------------------------
+void* TContainerPtr::GetPtr()const
 {
-  TSetFunc::iterator bit = mSetCallback.begin();
-  TSetFunc::iterator eit = mSetCallback.end();
-  while(bit!=eit)
-	{
-		TCallBackFunc pFunc = (*bit);
-		pFunc(data,size);
-    bit++;
-	}
+  return pData;
 }
-//--------------------------------------------------------------
+//---------------------------------------------------------------
+int TContainerPtr::GetSize()const
+{
+  return size;
+}
+//---------------------------------------------------------------
+void TContainerPtr::Unlink()
+{
+  pData = NULL;
+  size = 0;
+}
+//---------------------------------------------------------------

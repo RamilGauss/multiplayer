@@ -33,51 +33,26 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include <stddef.h>
-#include <string.h>
-#include <stdio.h>
 
-#include "memory_operation.h"
-#include "CallBackRegistrator.h"
-#include "BL_Debug.h"
+#ifndef SinglePacketNetDoserH
+#define SinglePacketNetDoserH
 
-using namespace std;
+#include "BasePacket.h"
+#include "DoserProtocolPacket.h"
 
-TCallBackRegistrator::TCallBackRegistrator()
+class TSinglePacketNetDoser : public TBasePacket
 {
-}
-//--------------------------------------------------------------
-TCallBackRegistrator::~TCallBackRegistrator()
-{
-  int size = mSetCallback.size();
-  BL_ASSERT(size==0);
-  mSetCallback.clear();
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::Register(TCallBackFunc pFunc)
-{
-  mSetCallback.insert(pFunc);
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::Unregister(TCallBackFunc pFunc)
-{
-  TSetFunc::iterator fit = mSetCallback.find(pFunc);
-  TSetFunc::iterator eit = mSetCallback.end();
-  if(fit!=eit)
-    mSetCallback.erase(fit);
-  else
-    BL_FIX_BUG();
-}
-//--------------------------------------------------------------
-void TCallBackRegistrator::Notify(void* data, int size)
-{
-  TSetFunc::iterator bit = mSetCallback.begin();
-  TSetFunc::iterator eit = mSetCallback.end();
-  while(bit!=eit)
-	{
-		TCallBackFunc pFunc = (*bit);
-		pFunc(data,size);
-    bit++;
-	}
-}
-//--------------------------------------------------------------
+public:
+	TSinglePacketNetDoser();
+	virtual ~TSinglePacketNetDoser();
+
+  GetSet(nsNetDoser::THeaderSinglePacket,Header)
+
+protected:
+
+	virtual void Init();
+
+};
+
+
+#endif

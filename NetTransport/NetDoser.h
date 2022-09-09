@@ -37,20 +37,24 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef NetDoserH
 #define NetDoserH
 
+#include <set>
+
 #include "NetTransport.h"
-#include "List.h"
+#include "DoserProtocolPacket.h"
+#include "hArray.h"
+#include "GCS.h"
 
 // цель класса:
 // 1. Контроль трафика (слишком частая отправка может привести к дисконнекту), сгладить высокую нагрузку.
 // 2. Отправка пакетов размера 1.4кб - 1Мб.
-// В классе запускается поток, который тут переходит в спячку.
+// В классе запускается поток, который тут же переходит в спячку.
 // Поток будится только в случае останова и в случае передачи пакета больше определенного размера
 
 class TNetDoser : public INetTransport
 {
   enum
   {
-    eLimitSizePacket  = 1350,// максимальный размер пакета, который не требует дробления, байт
+    eLimitSizePacket  = 1355,// максимальный размер пакета, который не требует дробления, байт
     eLimitCountPacket = 10, 
     // пакет, размер которого равно кол-ву пакетов, имеющих размер eLimitSizePacket
     eSizeWakeUpThread = eLimitCountPacket*eLimitSizePacket,// байт
@@ -60,25 +64,29 @@ class TNetDoser : public INetTransport
     // 
     eCntGroupSend     = 100, // 
     eTimeSleepBetweenGroup = 10,// мс
+
+    eWaitActivation = 20,
   };
 
-	typedef enum
+	struct TCollectBigPacket : public TObject
 	{
-		eTest         = 'T',
-		eAnswerTest   = 'A',
-		eResultTest   = 'R',
-		eBigPacket    = 'D',
-		eSinglePacket = 'S',
-	}eTypePacket;
+		TIP_Port                ip_port;
+		std::vector<TContainer> arrPart;
+		unsigned short          cntReadyPart;
+	};
 
-  bool flgActive;
-  bool flgNeedStop;
+  volatile bool flgActive;
+  volatile bool flgNeedStop;
 	
   GThread* thread;
 
   TCallBackRegistrator mCallBackRecvPacket;// указатель на ip, port, пакет и размер данных по указателю, данные - {4б|2б|sizeб-6б}
   TCallBackRegistrator mCallBackRecvStream;// указатель на ip, port, пакет и размер данных по указателю, данные - {4б|2б|sizeб-6б}
   TCallBackRegistrator mCallBackDisconnect;// указатель на ip, port с кем произошел разрыв связи
+
+  GCS gcsSendRcv;
+  void lockSendRcv(){Lock(&gcsSendRcv);};
+  void unlockSendRcv(){Unlock(&gcsSendRcv);};
 
 public:
 
@@ -88,7 +96,9 @@ public:
 
   virtual bool Open(unsigned short port, unsigned char numNetWork = 0);
 
-	virtual void Write(unsigned int ip, unsigned short port, void* packet, int size, bool check = true);
+	virtual void Send(unsigned int ip, unsigned short port, 
+                    TBreakPacket& packet,//void* packet, int size, 
+                    bool check = true);
 
 	// чтение - зарегистрируйся
   virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type);
@@ -96,6 +106,7 @@ public:
 
 	virtual void Start();
 	virtual void Stop();
+	virtual bool IsActive();
 
   // синхронная функция
   virtual bool Synchro(unsigned int ip, unsigned short port); // вызов только для клиента
@@ -103,47 +114,51 @@ public:
 private:
 	TNetTransport mTransport;
   //---------------------------------------------------------------
-  // заголовок описания части пакета, который раздробили
-  struct THeaderDescPart
-  {
-    unsigned short cnt;// кол-во частей в пакете
-    unsigned short num;// номер части
-  };
-  //---------------------------------------------------------------
-  struct TPacket
-  {
-    unsigned int ip;
-    unsigned short port;
-    void* packet;
-    int size;
-    bool check;
-    TPacket(unsigned int ip, unsigned short port, void* packet, int size, bool check);
-    ~TPacket(){Done();}
-    void Done();
-  };
-  //---------------------------------------------------------------
-  // добавка в список происходит только из внешнего потока
-  // удаление только из рабочего
-  TList<TPacket> mListPacket; // пакеты, которые в данный момент либо отправляются, либо ждут этого
+  // по каждому ip ведется статистика и учет. Регулируется скорость подачи данных
+  // содержится список пакетов на отправку
+  TArrayObject mArrConnect;
 
-  volatile int mSumSizePacket;// сумма всех байт, которые требуется отправить
+  // активные соединения
+  // в пользовательском потоке только добавление
+  // в рабочем только удаление
+  // !!! обрамлять критической секцией удаление и добавление
+  std::set<nsNetDoser::TDescConnect*> mActiveConnect;
+
+	TArrayObject mArrBigPacket;
 
 protected:
   friend void* ThreadDoser(void*p);
   void Engine();
 
-  int GetSizeTrySend();
-  void AddPacket(unsigned int ip, unsigned short port, void* packet, int size, bool check);
-  void RemovePacket(TPacket** pPacket);
-  bool Send(TPacket* pPacket);
-  void Work();
+  bool Work();
+	void Analiz(TDescRecv* p, int s);
 
-	bool TestConnection();// только клиент
+  // гарантированно вернет указатель на описание соединения
+  nsNetDoser::TDescConnect* GetDescConnect(unsigned int ip, unsigned short port);
+
+  void SendBigPacket(unsigned int ip, unsigned short port, 
+                     TBreakPacket& packet, bool check);
+  void SendSinglePacket(unsigned int ip, unsigned short port, 
+                        TBreakPacket& packet, bool check);
 
 public:
-  void RecvPacket(void* p, int s);
-  void RecvStream(void* p, int s);
-  void Disconnect(void* p, int s);
+  void RecvPacket(TDescRecv* p, int s);
+  void RecvStream(TDescRecv* p, int s);
+  void Disconnect(TIP_Port* p, int s);
+
+protected:
+  void NotifySinglePacket(TDescRecv* p, int s,TCallBackRegistrator& callback);
+
+  static int SortConnect(const void* p1, const void* p2);
+  static int SortConnectByIP_Port(const void* p1, const void* p2);
+
+	static int SortBigPacket(const void* p1, const void* p2);
+	static int SortBigPacketByIP_Port(const void* p1, const void* p2);
+protected:
+  // передать объект 
+  void Lock(void* pLocker);
+  void Unlock(void* pLocker);
+
 };
 
 

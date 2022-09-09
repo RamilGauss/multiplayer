@@ -40,6 +40,31 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define CHECK_RET(f) \
   if(f==false) \
   return false;
+//--------------------------------------------------
+#if defined( WIN32 )
+#pragma pack(push, 1)
+#endif
 
+struct TIP_Port
+{
+  unsigned int ip;
+  unsigned short port;
+  TIP_Port(){}
+  TIP_Port(unsigned int _ip, unsigned short _port)
+  {
+    ip   = _ip;
+    port = _port;
+  }
+  void Set(unsigned int _ip, unsigned short _port)
+  {
+    ip   = _ip;
+    port = _port;
+  }
+};
+
+#if defined( WIN32 )
+#pragma pack(pop)
+#endif
+//--------------------------------------------------
 
 #endif

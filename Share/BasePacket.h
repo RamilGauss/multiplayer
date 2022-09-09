@@ -110,15 +110,13 @@ public:
   virtual bool Set(void* p, int size);
   virtual void* Get(int &size);
   
-  virtual int GetType() = 0;
+  virtual int GetType(){return 0;}
 
 	void  SetData(void* pData, int size);
 	void* GetData(int& size);
 	
 protected:
-
   virtual void Init() = 0;
-
 
 };
 

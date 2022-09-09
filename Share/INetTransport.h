@@ -33,36 +33,57 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_ITRANSPORT_H
-#define MELISSA_ITRANSPORT_H
+
+#ifndef INetTransportH
+#define INetTransportH
 
 #include "CallBackRegistrator.h"
+#include "TypeDef.h"
+#include "ShareMisc.h"
+#include "BreakPacket.h"
 
-namespace nsMelissa
+// транспорт
+class SHARE_EI INetTransport
 {
-  class MELISSA_EI ITransport
-  {
-
-  public:
-    //типы callback вызовов
-    typedef enum{
-      eRcvPacket  = 0,		   
-      eRcvStream  = 1,
-      eDisconnect = 2,
-    }tTypeEventTransport;
-
-    ITransport(){}
-    virtual ~ITransport(){}
-    
-    virtual void InitLog(char* pPathLog) = 0;
-    virtual bool Open(unsigned char subNet, unsigned short port ) = 0;
-   	virtual void Write(unsigned int ip, unsigned short port, void* packet, int size, bool check = true) = 0;
-    virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
-    virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
-    virtual void Start() = 0;
-    virtual void Stop()  = 0;
-    virtual bool Synchro(unsigned int ip, unsigned short port) = 0; // вызов только для клиента
+public:
+  //типы callback вызовов
+  enum{
+    eRcvPacket  = 0,		   
+    eRcvStream  = 1,
+    eDisconnect = 2,
   };
-}
+  // callback вернет данную структуру
+  struct TDescRecv
+  {
+    TIP_Port ip_port;
+    char* data;
+    int   sizeData;
+  };
+
+  INetTransport(char* pPathLog = NULL);
+  virtual ~INetTransport();
+	virtual void InitLog(char* pPathLog) = 0;
+  virtual bool Open(unsigned short port, unsigned char numNetWork = 0) = 0;
+
+  // в качестве передаваемых данных выступает объект, который
+  // содержит цепочку данных
+	virtual void Send(unsigned int ip, unsigned short port,
+                    TBreakPacket& packet,//void* packet, int size, 
+                    bool check = true) = 0;
+
+	// чтение - зарегистрируйся
+  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
+  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
+
+	// старт и стоп движка
+	virtual void Start() = 0;
+	virtual void Stop()  = 0;
+	virtual bool IsActive() = 0;
+
+  // синхронная функция
+	// вызывать до вызова Start()
+  virtual bool Synchro(unsigned int ip, unsigned short port) = 0; // вызов только для клиента
+};
+
 
 #endif

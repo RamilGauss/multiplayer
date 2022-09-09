@@ -1,12 +1,12 @@
 #ifndef SHARE_TESTH
 #define SHARE_TESTH
 
-#include "..\NetTransport\INetTransport.h"
+#include "INetTransport.h"
 #include "..\NetTransport\MakerNetTransport.h"
 
 #define PORT_CLIENT 1234
 #define PORT_SERVER 1235
-#define SIZE_PACKET 1370
+#define SIZE_PACKET 1350
 #define CNT_RECV_PACKET 100000
 
 extern char packet[SIZE_PACKET];

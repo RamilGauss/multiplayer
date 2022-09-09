@@ -33,30 +33,29 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef WRAPPER_TRANSPORT_H
-#define WRAPPER_TRANSPORT_H
 
-#include "..\Melissa\ITransport.h"
+#ifndef DescSendPacketH
+#define DescSendPacketH
 
-class TWrapperTransport : public nsMelissa::ITransport
+#include "BreakPacket.h"
+#include "Container.h"
+#include "ShareMisc.h"
+
+namespace nsNetDoser
 {
 
+class TDescSendPacket
+{
+  TIP_Port ip_port;
+  bool check;
+  TBreakPacket mPacket;
+  TContainer mContainer;
 public:
-	TWrapperTransport();
-	virtual ~TWrapperTransport();
-	//типы callback вызовов
-	virtual void InitLog(char* pPathLog);
-	virtual bool Open(unsigned char subNet, unsigned short port );
-	virtual void Write(unsigned int ip, unsigned short port, void* packet, int size, bool check = true);
-	virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type);
-	virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type);
-	virtual void Start();
-	virtual void Stop();
-	virtual bool Synchro(unsigned int ip, unsigned short port); // вызов только для клиента
-
-protected:
-private:
-
+  TDescSendPacket(TIP_Port &_ip_port, bool check, TBreakPacket& packet);
+  ~TDescSendPacket(){Done();}
+  void Done();
 };
+//------------------------------------------------
 
+}
 #endif

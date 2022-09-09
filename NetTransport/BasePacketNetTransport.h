@@ -40,23 +40,18 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "BasePacket.h"
 #include "TransportProtocolPacket.h"
 #include "TypeDef.h"
-#include "TObject.h"
 
-
-class NET_TRANSPORT_EI TBasePacketNetTransport : public TBasePacket
+class TBasePacketNetTransport : public TBasePacket
 {
-
-  bool isQueue;// зависимость от очереди, целевой сокет примет пакеты в определенном порядке.
-
 public:
 	TBasePacketNetTransport();
 	virtual ~TBasePacketNetTransport();
 
 	virtual int GetType();
 
-	GetSet(TPrefixTransport,PrefixTransport)
+  GetSet(nsNetTransportStruct::THeader,PrefixTransport)
 
-  void SetHeader(InfoData* pInfoD );
+  void SetHeader(nsNetTransportStruct::TShortDescPacket* pInfoD );
 
   void SetType(unsigned char type);
   void SetCnIn(unsigned short cn);
@@ -72,15 +67,12 @@ public:
   unsigned int GetIP_dst() const;
   unsigned short GetPort_dst() const;
 
-	// не затрагивает внутренней структуры
-  void SetIsQueue(bool v);
-  bool GetIsQueue()const;
-
 protected:
 
 	virtual void Init();
 
-	TPrefixTransport* GetPrefix() const{return (TPrefixTransport*)mC.GetPtr();}
+	nsNetTransportStruct::THeader* GetPrefix() const
+  {return (nsNetTransportStruct::THeader*)mC.GetPtr();}
 
 };
 

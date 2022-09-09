@@ -208,10 +208,8 @@ bool UdpDevice::SetRecvBuffer(unsigned int size)
 {
   bool resSet = false;
 #ifdef WIN32
-
   int res = setsockopt(mSocket, SOL_SOCKET, SO_RCVBUF, (char*)&size, sizeof(int));
   resSet = ( res != SOCKET_ERROR );
-
 #else
 #endif
   return resSet;
@@ -228,8 +226,6 @@ bool UdpDevice::SetSendBuffer(unsigned int size)
 #else
 #endif
   return resSet;
-
-  return true;
 }
 //-----------------------------------------------------------------------------
 unsigned int UdpDevice::GetMaxSizeBufferForSocket()

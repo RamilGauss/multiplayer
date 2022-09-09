@@ -34,7 +34,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 #include "WrapperMakerTransport.h"
-#include "WrapperTransport.h"
+#include "MakerNetTransport.h"
+#include "INetTransport.h"
 
 using namespace nsMelissa;
 
@@ -48,14 +49,19 @@ TWrapperMakerTransport::~TWrapperMakerTransport()
 
 }
 //-------------------------------------------------------------------------
-ITransport* TWrapperMakerTransport::New()
+INetTransport* TWrapperMakerTransport::New()
 {
-	return new TWrapperTransport;
+  // указать создателя интерфейса и сам интерфейс
+  //TMakerNetDoser
+  TMakerNetTransport 
+  maker;
+	return maker.New();
 }
 //-------------------------------------------------------------------------
-void TWrapperMakerTransport::Delete(ITransport* pTransport)
+void TWrapperMakerTransport::Delete(INetTransport* pTransport)
 {
-	delete pTransport;
+  TMakerNetTransport maker;
+  maker.Delete(pTransport);
 }
 //-------------------------------------------------------------------------
 
