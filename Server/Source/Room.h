@@ -50,7 +50,7 @@ class TRoom : public TManagerObjectCommon
 
   TTransportProtocol* mTransport;
 
-  TArrayObject mArrTank;// содержит указатели на TObject, но из-за виртуального наследования нельзя перейти к TBaseObjectCommon, использовать GetPtrInherits()
+  TArrayObject mArrTank;// содержит указатели на TObject, но из-за виртуального наследования нельзя перейти к IBaseObjectCommon, использовать GetPtrInherits()
 
   guint32 mTimeBeginCountDown;// начался обратный отсчет
   guint32 mTimeAfterCountDown;// после окончания обратного отсчета (начался собственно сам бой)
@@ -83,7 +83,7 @@ class TRoom : public TManagerObjectCommon
   //---------------------------------------------------
   struct TAction
   {
-    TTank* pTank;
+    IActor* pTank;
     nsServerStruct::TPacketServer* pDefPacket;
   };
   //---------------------------------------------------
@@ -96,7 +96,7 @@ public:
   TRoom();
   ~TRoom();
 
-  void AddTank(TTank* pTank);
+  void AddTank(IActor* pTank);
 
 	void SetTransport(TTransportProtocol* pTransport);//старт боя, передача возможности вещать на клиента
 
@@ -105,13 +105,13 @@ public:
   void SetIDMap(unsigned short val);
   unsigned short GetIDMap(){return mID_map;};
 
-  TTank* GetTank(int i);
+  IActor* GetTank(int i);
 
   void MakeGroup();
   void PreparePrediction();// настроить предсказатель для получения координат объектов, коллизий, событий
   void LoadMap();
 
-  void SetPacket(nsServerStruct::TPacketServer* pPacket,TTank* ptank);
+  void SetPacket(nsServerStruct::TPacketServer* pPacket,IActor* ptank);
 
   void Done();
 

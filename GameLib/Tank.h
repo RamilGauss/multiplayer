@@ -44,7 +44,7 @@ class TClient;
 class TRoom;
 
 //------------------------------------------------------------------------------
-class TTank : public TBaseObjectCommon
+class IActor : public IBaseObjectCommon
 {
 
 public:
@@ -92,10 +92,10 @@ public:
     eForward,
   }ePushButton;
 public:
-  TTank();
-  virtual ~TTank();
+  IActor();
+  virtual ~IActor();
 //--------------------------------------------------------------------------------
-  // от TBaseObjectCommon
+  // от IBaseObjectCommon
   virtual bool GetMirror(char** pData, int& size){return false;}
   virtual void SetMirror(char* pData, int size){}
 
@@ -103,7 +103,7 @@ public:
   virtual char* GetProperty();
   virtual void SetProperty(char* pData,int size);
 //--------------------------------------------------------------------------------
-  // TTank интерфейс
+  // IActor интерфейс
   void SetTypeTank(unsigned int id_tank);
   unsigned int GetTypeTank();
 //--------------------------------------------------------------------------------

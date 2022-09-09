@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <map>
 #include <vector>
 
-class TBaseObjectCommon;
+class IBaseObjectCommon;
 
 class TLoaderObjectCommon
 {
@@ -50,7 +50,7 @@ protected:
 
   std::map<unsigned int,std::string> mMapID;
 
-  std::vector<TBaseObjectCommon*> mVectorObject;
+  std::vector<IBaseObjectCommon*> mVectorObject;
 
 
 public:
@@ -59,12 +59,12 @@ public:
   virtual ~TLoaderObjectCommon();
   
   int GetCountObject();
-  TBaseObjectCommon* Get(int i);
+  IBaseObjectCommon* Get(int i);
 
   
-  void Delete(TBaseObjectCommon* pObject);
+  void Delete(IBaseObjectCommon* pObject);
 
-  TBaseObjectCommon* LoadObject(unsigned int id_model);
+  IBaseObjectCommon* LoadObject(unsigned int id_model);
   void LoadMap(unsigned int id_map);
 
   void LoadListMap();

@@ -36,34 +36,34 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef IDirectX_RealizeH
 #define IDirectX_RealizeH
 
-#include "DXUT.h"
-#include <string>
+//#include "DXUT.h"
+#include <windows.h>
 
-class IGraphicEngine;
+class TBigJack;
 
 class IDirectX_Realize
 {
 protected:
 
-  IGraphicEngine * pMDX;
+  //IGraphicEngine * pGE;
+  TBigJack * pGE;
 
 public:
-  IDirectX_Realize(IGraphicEngine* _pMDX){pMDX = _pMDX;}
+  IDirectX_Realize(TBigJack * _pGE){pGE=_pGE;}//IGraphicEngine* _pGE){pGE = _pGE;}
   virtual ~IDirectX_Realize(){};
 
-  virtual void* GetWndProc() = 0;
-  virtual bool IsFullScreen() = 0;
+  virtual void*   GetWndProc() = 0;
+  virtual bool    IsFullScreen() = 0;
+  virtual void    ToggleFullScreen() = 0;
 
   virtual HRESULT Init(HWND hwnd = NULL) = 0;
-  virtual void Work() = 0;
-  virtual int Done()  = 0;
+  virtual void    Work() = 0;
+  virtual int     Done()  = 0;
 
-  virtual float GetFPS() = 0;
+  virtual float   GetFPS() = 0;
 
 protected:
 };
-
-
 
 
 #endif

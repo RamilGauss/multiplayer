@@ -41,51 +41,51 @@ you may contact in writing [ramil2085@gmail.com].
 #include "glibconfig.h"
 #include "MakerDirectX_Realize.h"
 
-class TBaseObjectDX;
+class IBaseObjectDX;
 
 class IGraphicEngine
 {
 protected:
+
   guint32 mTime_ms;// время для рендера, используется для анимации
-  IDirectX_Realize* mDXUT;
+  //IDirectX_Realize* mDXUT;
 
 public:
-  typedef void (*TCallBackMsg)( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-  typedef void (*TCallBackFrameMove)( double fTime, float fElapsedTime, void* pUserContext );
+  //typedef void (*TCallBackMsg)( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+  //typedef void (*TCallBackFrameMove)( double fTime, float fElapsedTime, void* pUserContext );
 
   IGraphicEngine()
   {  
-    TMakerDirectX_Realize makerDX;
-    mDXUT = makerDX.New(this);
+    //TMakerDirectX_Realize makerDX;
+    //mDXUT = makerDX.New(this);
   }
   virtual ~IGraphicEngine()
   { 
-    delete mDXUT;
-    mDXUT = NULL;
+    //delete mDXUT;
+    //mDXUT = NULL;
   }
 
-  enum{eTypeMsg     = 0,
-    eTypeFrameMove,
-  };
+  //enum{eTypeMsg     = 0,
+    //eTypeFrameMove,
+  //};
 
-  virtual bool IsFullScreen(){return mDXUT->IsFullScreen();};
-  virtual void* GetWndProc(){return mDXUT->GetWndProc();}
+  virtual bool IsFullScreen() = 0;
+  virtual void ToggleFullScreen() = 0;
+  //virtual void* GetWndProc(){return mDXUT->GetWndProc();}
   // на получение событий WinApi окна и DirectX
-  virtual void Register(void*   pFunc, int type) = 0;
-  virtual void Unregister(void* pFunc, int type) = 0;
+  //virtual void Register(void*   pFunc, int type) = 0;
+  //virtual void Unregister(void* pFunc, int type) = 0;
   // в частности события мыши и клавиатуры
-  virtual void NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
-  virtual void NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext) = 0;
+  //virtual void NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
+  //virtual void NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext) = 0;
   //------------------------------------------------------------------------
   virtual void Init(HWND hwnd = NULL) = 0;
   virtual void Work(guint32 time_ms) = 0;
   virtual void Done() = 0;
-  virtual void* GetSurfaceCurrentFrame(int& w, int& h) = 0;// формат X8R8G8B8, может вернуть NULL
-  virtual void  EndSurfaceUse() = 0;
   virtual void  GetResolutionFrame(int& h, int& w ) = 0;// формат X8R8G8B8
   virtual void  SetResolutionFrame(int  h, int  w ) = 0;// формат X8R8G8B8
   //------------------------------------------------------------------------
-  virtual void AddObject(TBaseObjectDX* pObject) = 0;
+  virtual void AddObject(IBaseObjectDX* pObject) = 0;
   virtual void Clear() = 0;
   // камера
   virtual void SetViewParams(D3DXVECTOR3* pvEyePt, D3DXVECTOR3* pvLookatPt) = 0;// расположение камеры
@@ -99,7 +99,7 @@ public:
   virtual void SetViewFPS(bool val) = 0;
   // источники освещения
   // ###
-  // ввод освещение накладывает условия на шейдер. он обязан содержать интерфейс
+  // ввод освещения накладывает условия на шейдер. он обязан содержать интерфейс
   virtual int GetCountLight() = 0;
   virtual const D3DVECTOR* GetCoordLight(int index) = 0;
   virtual const D3DVECTOR* GetCoordAtLight(int index) = 0;
@@ -113,8 +113,9 @@ public:
   //----------------------------------------------------------------
   //                             ~INTERFACE
   //----------------------------------------------------------------
-
+/*
 public:
+  //friend class IDirectX_Realize;
   //----------------------------------------------------------------
   // Для внутренних событий движка.
   //----------------------------------------------------------------
@@ -128,7 +129,7 @@ public:
   virtual LRESULT MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,void* pUserContext ) = 0;
   virtual void OnLostDevice( void* pUserContext ) = 0;
   virtual void OnDestroyDevice( void* pUserContext ) = 0;
-
+*/
 };
 
 

@@ -59,12 +59,12 @@ TInterpretatorPredictionTank::~TInterpretatorPredictionTank()
 //
 //}
 ////--------------------------------------------------------------------
-//void TPrediction::SetOrientAim(unsigned int id_Tank /*TTank* pTank*/, TPacketServer* pDefPacket)
+//void TPrediction::SetOrientAim(unsigned int id_Tank /*IActor* pTank*/, TPacketServer* pDefPacket)
 //{
 //  
 //}
 ////--------------------------------------------------------------------
-//void TPrediction::SetKeyEvent(unsigned int id_Tank  /*TTank*pTank*/, TPacketServer* pDefPacket)
+//void TPrediction::SetKeyEvent(unsigned int id_Tank  /*IActor*pTank*/, TPacketServer* pDefPacket)
 //{
 //  TC_Key_Event* packet = (TC_Key_Event*)pDefPacket->packet;
 //  pTank->mMaskPushButton &= packet->getKeyEvent();

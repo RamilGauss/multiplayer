@@ -149,7 +149,7 @@ bool TManagerObjectCommon::IsLoadMap(unsigned char* procent)
   return false;
 }
 //--------------------------------------------------------------------
-void TManagerObjectCommon::AddObject(TBaseObjectCommon* pObject)
+void TManagerObjectCommon::AddObject(IBaseObjectCommon* pObject)
 {
   mVectorObject.push_back(pObject);
   mMDX_Scene->AddObject(pObject);
@@ -171,7 +171,7 @@ void TManagerObjectCommon::AddFromLoaderObjectInMDX()
   int cnt = mVectorObject.size();
   for(int i = 0 ; i < cnt ; i++ )
   {
-    mMDX_Scene->AddObject((TBaseObjectDX*)mVectorObject[i]);
+    mMDX_Scene->AddObject((IBaseObjectDX*)mVectorObject[i]);
   }
 }
 //--------------------------------------------------------------------
@@ -180,7 +180,7 @@ void TManagerObjectCommon::AddFromLoaderObjectInPrediction()
   int cnt = mVectorObject.size();
   for(int i = 0 ; i < cnt ; i++ )
   {
-    mPrediction.AddObject((TBaseObjectPrediction*)mVectorObject[i]);
+    mPrediction.AddObject((IBaseObjectPrediction*)mVectorObject[i]);
   }
 }
 //--------------------------------------------------------------------
@@ -218,9 +218,9 @@ void TManagerObjectCommon::SetCameraDelta(int x, int y)
   //mMDX_Scene->SetViewParams();
 }
 //--------------------------------------------------------------------
-TBaseObjectCommon* TManagerObjectCommon::Get(int index)
+IBaseObjectCommon* TManagerObjectCommon::Get(int index)
 {
-  TBaseObjectCommon* pObject = mVectorObject.at(index);
+  IBaseObjectCommon* pObject = mVectorObject.at(index);
   return pObject;
 }
 //--------------------------------------------------------------

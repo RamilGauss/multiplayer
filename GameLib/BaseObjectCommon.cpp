@@ -35,12 +35,12 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "BaseObjectCommon.h"
 
-TBaseObjectCommon::TBaseObjectCommon()
+IBaseObjectCommon::IBaseObjectCommon()
 {
   mPtrInherits = this;
 }
 //-------------------------------------------------------------
-TBaseObjectCommon::~TBaseObjectCommon()
+IBaseObjectCommon::~IBaseObjectCommon()
 {
 
 }

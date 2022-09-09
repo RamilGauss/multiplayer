@@ -60,17 +60,17 @@ TMakerObject::~TMakerObject()
 
 }
 //------------------------------------------------------------------------
-TBaseObjectCommon* TMakerObject::New(unsigned int id_model)
+IBaseObjectCommon* TMakerObject::New(unsigned int id_model)
 {
   unsigned int id_behavior = GetID_ModelByID_Behavior(id_model);
-  TBaseObjectCommon* pObject = NewByID_Behavior(id_behavior);
+  IBaseObjectCommon* pObject = NewByID_Behavior(id_behavior);
   pObject->SetID_Model(id_model);
   return pObject;
 }
 //------------------------------------------------------------------------
-TBaseObjectCommon* TMakerObject::NewByID_Behavior(unsigned int id_behavior)
+IBaseObjectCommon* TMakerObject::NewByID_Behavior(unsigned int id_behavior)
 {
-  TBaseObjectCommon* pObject = NULL;
+  IBaseObjectCommon* pObject = NULL;
   switch(id_behavior)
   {
     case ID_TANK_TOWER:
@@ -89,7 +89,7 @@ unsigned int TMakerObject::GetID_ModelByID_Behavior(unsigned int id_model)
   return fit->second;
 }
 //------------------------------------------------------------------------
-void TMakerObject::Delete(TBaseObjectCommon* pObject)
+void TMakerObject::Delete(IBaseObjectCommon* pObject)
 {
   delete pObject;
 }

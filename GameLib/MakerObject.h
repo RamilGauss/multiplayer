@@ -39,7 +39,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <map>
 
 
-class TBaseObjectCommon;
+class IBaseObjectCommon;
 
 class TMakerObject
 {
@@ -48,18 +48,18 @@ public:
   TMakerObject();
   virtual ~TMakerObject();
 
-  TBaseObjectCommon* New(unsigned int id_model);
+  IBaseObjectCommon* New(unsigned int id_model);
 
 
   // данное требование объ€сн€етс€ просто: что создали в либине, то и уничтожили там же,
   // т.к. в родительской библиотеки при вызове деструктора линковщик не найдет деструктор дл€ наследника
 
   // ### In future must overload
-  virtual void Delete(TBaseObjectCommon* pObject);// просто вызвать delete pObject;
+  virtual void Delete(IBaseObjectCommon* pObject);// просто вызвать delete pObject;
 
 protected:
   // ### In future must overload
-  virtual TBaseObjectCommon* NewByID_Behavior(unsigned int id_behavior);
+  virtual IBaseObjectCommon* NewByID_Behavior(unsigned int id_behavior);
 
   unsigned int GetID_ModelByID_Behavior(unsigned int id_model);
 };

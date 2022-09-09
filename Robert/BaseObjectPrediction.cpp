@@ -38,7 +38,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include <memory.h>
 #include <stddef.h>
 
-TBaseObjectPrediction::TBaseObjectPrediction()
+IBaseObjectPrediction::IBaseObjectPrediction()
 {
   //mType = type;
   //pUserData = NULL;
@@ -47,28 +47,28 @@ TBaseObjectPrediction::TBaseObjectPrediction()
   //mCntDef = 0;
 }
 //--------------------------------------------------------------------------
-TBaseObjectPrediction::~TBaseObjectPrediction()
+IBaseObjectPrediction::~IBaseObjectPrediction()
 {
   //CleanUserData();
   //CleanArrDef();
 }
 ////--------------------------------------------------------------------------
-//unsigned short TBaseObjectPrediction::GetID()
+//unsigned short IBaseObjectPrediction::GetID()
 //{
 //  return mID;
 //}
 ////--------------------------------------------------------------------------
-//void TBaseObjectPrediction::SetID(unsigned short id)
+//void IBaseObjectPrediction::SetID(unsigned short id)
 //{
 //  mID = id;
 //}
 //--------------------------------------------------------------------------
-//unsigned int TBaseObjectPrediction::GetMaskState()
+//unsigned int IBaseObjectPrediction::GetMaskState()
 //{
 //  return mMaskState;
 //}
 ////--------------------------------------------------------------------------
-//void TBaseObjectPrediction::SetUserData(char* pData, int size)
+//void IBaseObjectPrediction::SetUserData(char* pData, int size)
 //{
 //  CleanUserData();
 //  mUserDataSize = size;
@@ -76,26 +76,26 @@ TBaseObjectPrediction::~TBaseObjectPrediction()
 //  memcpy(pUserData,pData,mUserDataSize);
 //}
 ////--------------------------------------------------------------------------
-//void TBaseObjectPrediction::GetUserData(char* pData, int& size)
+//void IBaseObjectPrediction::GetUserData(char* pData, int& size)
 //{
 //  memcpy(pData,pUserData,mUserDataSize);
 //}
 ////--------------------------------------------------------------------------
-//void TBaseObjectPrediction::CleanUserData()
+//void IBaseObjectPrediction::CleanUserData()
 //{
 //  delete[] pUserData;
 //  pUserData = NULL;
 //  mUserDataSize = 0;
 //}
 ////--------------------------------------------------------------------------
-//void TBaseObjectPrediction::CleanArrDef()
+//void IBaseObjectPrediction::CleanArrDef()
 //{
 //  delete []mArrDef;
 //  mArrDef = NULL;
 //  mCntDef = 0;
 //}
 ////--------------------------------------------------------------------------
-void TBaseObjectPrediction::SetupVectorNamePart()
+void IBaseObjectPrediction::SetupVectorNamePart()
 {
   
 }

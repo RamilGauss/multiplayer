@@ -62,7 +62,7 @@ TManagerObjectCommonClient::~TManagerObjectCommonClient()
 //  for(int i = 0 ; i < cntTank ; i++ )
 //  {
 //    // 
-//    TBaseObjectCommon* pObject = mMaker.New(ID_TANK_TOWER);
+//    IBaseObjectCommon* pObject = mMaker.New(ID_TANK_TOWER);
 //    PrepareTank((TTankTower*)pObject,i);
 //
 //    pGame->AddObject(pObject);

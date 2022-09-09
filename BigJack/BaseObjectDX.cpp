@@ -42,7 +42,7 @@ you may contact in writing [ramil2085@gmail.com].
 using namespace nsStruct3D;
 using namespace std;
 
-TBaseObjectDX::TBaseObjectDX(int typeDX)
+IBaseObjectDX::IBaseObjectDX(int typeDX)
 {
   flgShow = true;// показан ли объект на сцене
   mTimeCreation = 0;
@@ -53,12 +53,12 @@ TBaseObjectDX::TBaseObjectDX(int typeDX)
   mTypeDX = typeDX;// по-умолчанию не чисто анимированный
 }
 //------------------------------------------------------------------------------------------------
-TBaseObjectDX::~TBaseObjectDX()
+IBaseObjectDX::~IBaseObjectDX()
 {
   Done();
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObjectDX::Draw(D3DXMATRIXA16* mView)
+void IBaseObjectDX::Draw(D3DXMATRIXA16* mView)
 {          
   if(flgShow==false) return;
 
@@ -73,7 +73,7 @@ void TBaseObjectDX::Draw(D3DXMATRIXA16* mView)
                mView );// расположение и ориентация камеры    (от ManagerDirectX)
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObjectDX::SetModel(TModelDX* pModel)
+void IBaseObjectDX::SetModel(TModelDX* pModel)
 {
   mModel = pModel;
   // скинуть инфу об именах в базовый объект
@@ -84,16 +84,16 @@ void TBaseObjectDX::SetModel(TModelDX* pModel)
   EventSetModelDX();
 }
 //------------------------------------------------------------------------------------------------
-TModelDX* TBaseObjectDX::GetModel()
+TModelDX* IBaseObjectDX::GetModel()
 {
   return mModel;
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObjectDX::Done()
+void IBaseObjectDX::Done()
 {
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObjectDX::SetupVectorNamePart()
+void IBaseObjectDX::SetupVectorNamePart()
 {
   int cnt = mModel->GetCntEffect();
   for(int i = 0 ; i < cnt ; i++)
@@ -105,7 +105,7 @@ void TBaseObjectDX::SetupVectorNamePart()
   }
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObjectDX::SetupVectorOrderPart()
+void IBaseObjectDX::SetupVectorOrderPart()
 {
   int cnt = mModel->GetCntEffect();
   for(int i = 0 ; i < cnt ; i++)

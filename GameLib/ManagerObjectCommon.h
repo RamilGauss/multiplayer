@@ -52,7 +52,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ControlEventWinApiNET.h"
 #include "ControlEventWinApiGUI.h"
 
-class TBaseObjectCommon;
+class IBaseObjectCommon;
 
 class TManagerObjectCommon
 {
@@ -75,7 +75,7 @@ protected:
 
 protected:
   
-  std::vector< TBaseObjectCommon* > mVectorObject;
+  std::vector< IBaseObjectCommon* > mVectorObject;
   
   TLoaderObjectCommon mLoaderObject;
 
@@ -123,8 +123,8 @@ protected:
   void EndLoadMap();// очень криво и отвратительно, что есть такой метод! но пока только так.
   void StopLoadMap();// синхронно, придется подождать маленько
 
-  TBaseObjectCommon* Get(int index);// отдать объект на изменение свойств объекта
-  void AddObject(TBaseObjectCommon* pObject);
+  IBaseObjectCommon* Get(int index);// отдать объект на изменение свойств объекта
+  void AddObject(IBaseObjectCommon* pObject);
   void Fresh();
 
   void SetEffect(unsigned int id_effect, // номер эффекта

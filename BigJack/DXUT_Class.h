@@ -41,6 +41,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "DXUTsettingsdlg.h"
 #include "SDKmisc.h"
 #include "IDirectX_Realize.h"
+#include <string>
 
 class TDXUT : public IDirectX_Realize
 {
@@ -50,11 +51,12 @@ class TDXUT : public IDirectX_Realize
   bool flgWasDestroyEvent;
 
 public:
-  TDXUT(IGraphicEngine * pMDX );
+  TDXUT(TBigJack * pMDX );
   virtual ~TDXUT();
 
   virtual void* GetWndProc();
   virtual bool IsFullScreen();
+  virtual void ToggleFullScreen();
 
   virtual HRESULT Init(HWND hwnd = NULL);
   virtual void Work();

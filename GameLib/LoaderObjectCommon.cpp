@@ -55,7 +55,7 @@ TLoaderObjectCommon::~TLoaderObjectCommon()
   Done();
 }
 //-------------------------------------------------------------
-TBaseObjectCommon* TLoaderObjectCommon::LoadObject(unsigned int id_model)
+IBaseObjectCommon* TLoaderObjectCommon::LoadObject(unsigned int id_model)
 {
   return mMakerObject.New(id_model);
 }
@@ -86,7 +86,7 @@ int TLoaderObjectCommon::GetCountObject()
   return mVectorObject.size();
 }
 //-------------------------------------------------------------
-TBaseObjectCommon* TLoaderObjectCommon::Get(int i)
+IBaseObjectCommon* TLoaderObjectCommon::Get(int i)
 {
   return mVectorObject[i];
 }
@@ -108,7 +108,7 @@ void TLoaderObjectCommon::PrepareMapPath()
   }
 }
 //-------------------------------------------------------------
-void TLoaderObjectCommon::Delete(TBaseObjectCommon* pObject)
+void TLoaderObjectCommon::Delete(IBaseObjectCommon* pObject)
 {
   mMakerObject.Delete(pObject);
 }

@@ -39,7 +39,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Tank.h"
 
 
-class TTankTower : public TTank
+class TTankTower : public IActor
 {
 public:
   TTankTower();

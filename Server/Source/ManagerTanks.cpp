@@ -47,7 +47,7 @@ TManagerTanks::TManagerTanks()
 {
 }
 //--------------------------------------------------------
-void TManagerTanks::LoadPropertyFromIni(TTank* pTank)
+void TManagerTanks::LoadPropertyFromIni(IActor* pTank)
 {
   //char path[400];
   //strcpy(path,"..\\tanks\\");
@@ -65,7 +65,7 @@ void TManagerTanks::LoadPropertyFromIni(TTank* pTank)
   //Load(path,pTank);
 }
 //--------------------------------------------------------
-void TManagerTanks::Load(char* path,TTank* pTank)
+void TManagerTanks::Load(char* path,IActor* pTank)
 {
   // перечисление параметров
   

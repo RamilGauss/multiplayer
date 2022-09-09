@@ -49,7 +49,7 @@ public:
   IPhysicEngine();
   virtual ~IPhysicEngine();
 
-  virtual void AddObject(TBaseObjectPrediction* pObject) = 0;
+  virtual void AddObject(IBaseObjectPrediction* pObject) = 0;
   virtual void Clear() = 0;
 
 
@@ -58,9 +58,9 @@ public:
   virtual void Calc() = 0;
 
 public:
-  std::list<TBaseObjectPrediction*> mListObject;
+  std::list<IBaseObjectPrediction*> mListObject;
   // список разрушенных или поврежденных объектов.
-  std::list<TBaseObjectPrediction*> mListDamageObject;
+  std::list<IBaseObjectPrediction*> mListDamageObject;
 
   struct TEvent
   {

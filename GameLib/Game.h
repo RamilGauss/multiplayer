@@ -33,58 +33,25 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "Garage.h"
-#include "namespace_ID_BEHAVIOR.h"
-#include "Tank.h"
-#include "TypeTank.h"
+#ifndef IGameH
+#define IGameH
 
-using namespace nsID_BEHAVIOR;
 
-void TGarage::InitArrTank()
+class IGame
 {
-  // читаем из БД
-  mArrTanks.Clear();
+protected:
 
-  int cnt = 1;// ReadFromBD(...);
-  mCurTank = 0; // первый в массиве
 
-  IActor* pTank = (IActor*)mMakerBehaviorServer.New(0/*KingTiger*/);
-  pTank->SetTypeTank(nsTank_ID::eID_KingTiger);
-  pTank->SetMasterClient(pMasterClient);
-  mArrTanks.Add(pTank);
-    
-  //TTankServer* pTank = new IActor(pMasterClient);
-  //pTank->SetTypeTank(nsTank_ID::eID_Tiger);
-  //mArrTanks.Add(pTank);
 
-  //pTank = new IActor(pMasterClient);
-  //pTank->SetTypeTank(nsTank_ID::eID_IS);
-  //mArrTanks.Add(pTank);
+public:
+  IGame();
+  virtual ~IGame();
 
-}
-//------------------------------------------------------------------------------
-bool TGarage::SetCurTank(int i)
-{
-  if(i>=mArrTanks.Count())
-    return false;
-  mCurTank = i;
-  return true;
-}
-//------------------------------------------------------------------------------
-int TGarage::GetCurTank()
-{
-  return mCurTank;
-}
-//------------------------------------------------------------------------------
-IActor* TGarage::GetPointerCurTank()
-{
-  return GetTank(mCurTank);
-}
-//------------------------------------------------------------------------------
-IActor* TGarage::GetTank(int i)
-{
-  IActor* pTank = (IActor*) ((IBaseObject*)mArrTanks.Get(i))->GetPtrInherits();
-  return pTank;
-}
-//----------------------------------------------------------------------------------
+  virtual void Work(const char* sNameDLL) = 0;// начало работы
+  
 
+protected:
+
+};
+
+#endif

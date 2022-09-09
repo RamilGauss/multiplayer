@@ -41,7 +41,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 
 class TClient;
-class TTank;
+class IActor;
 
 class TGarage
 {
@@ -65,11 +65,11 @@ public:
 
   bool SetCurTank(int i);
   int  GetCurTank();
-  TTank* GetPointerCurTank();
+  IActor* GetPointerCurTank();
 
   TClient* GetMasterClient(){return pMasterClient;};
   
-  TTank* GetTank(int i);
+  IActor* GetTank(int i);
 
 };
 

@@ -54,12 +54,12 @@ TManagerBaseObject::~TManagerBaseObject()
   Done();
 }
 //-------------------------------------------------------------------------------------------
-void TManagerBaseObject::AddObject(TBaseObject* pObject)
+void TManagerBaseObject::AddObject(IBaseObject* pObject)
 {
   SetTree(pObject);
 }
 //-------------------------------------------------------------------------------------------
-void TManagerBaseObject::SetTree(TBaseObject* pObject)
+void TManagerBaseObject::SetTree(IBaseObject* pObject)
 {
   TTreeJoint::TLoadedJoint* pLoaded = NULL;
   unsigned int id = pObject->GetID_Model();

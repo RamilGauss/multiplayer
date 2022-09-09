@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef ManagerTanksH
 #define ManagerTanksH
 
-class TTank;
+class IActor;
 
 class TManagerTanks 
 {
@@ -45,10 +45,10 @@ class TManagerTanks
 public:
   TManagerTanks();
 
-  void LoadPropertyFromIni(TTank* pTank);
+  void LoadPropertyFromIni(IActor* pTank);
 
 protected:
-  void Load(char* path,TTank* pTank);
+  void Load(char* path,IActor* pTank);
 
 };
 

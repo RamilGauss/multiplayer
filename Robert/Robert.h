@@ -51,7 +51,7 @@ public:
   TRobert();
   ~TRobert();
 
-  void AddObject(TBaseObjectPrediction* pObject);
+  void AddObject(IBaseObjectPrediction* pObject);
   void Clear();
 
 
@@ -61,9 +61,9 @@ public:
 
 
 /*public:
-  std::list<TBaseObjectPrediction*> mListObject;
+  std::list<IBaseObjectPrediction*> mListObject;
   // список разрушенных или поврежденных объектов.
-  std::list<TBaseObjectPrediction*> mListDamageObject;
+  std::list<IBaseObjectPrediction*> mListDamageObject;
 
   struct TEvent
   {

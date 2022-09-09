@@ -54,7 +54,7 @@ using namespace nsStruct3D;
 
 #pragma warning(disable: 4355)
 
-TBigJack::TBigJack()
+TBigJack::TBigJack():mDXUT(this)
 {
   mTime_ms = 0;
 
@@ -67,16 +67,16 @@ TBigJack::TBigJack()
   mIndexCameraPosition = 
     mMainShaderStack.Push("CameraPosition",(void*)mCamera.GetEyePt(),sizeof(D3DXMATRIXA16));
 
-  mSurfaceBackBuffer = NULL;
-  mSurfaceRender     = NULL;
+  //mSurfaceBackBuffer = NULL;
+  //mSurfaceRender     = NULL;
 
 }
 //--------------------------------------------------------------------------------------------------------
 TBigJack::~TBigJack()
 {
-  int size = mSetCallbackMsg.size();
-  BL_ASSERT(size==0);
-  mSetCallbackMsg.clear();
+  //int size = mSetCallbackMsg.size();
+  //BL_ASSERT(size==0);
+  //mSetCallbackMsg.clear();
 }
 //--------------------------------------------------------------------------------------------------------
 void TBigJack::Optimize()
@@ -87,10 +87,6 @@ void TBigJack::Optimize()
 
 }
 //--------------------------------------------------------------------------------------------------------
-#if 1
-  static IDirect3DSurface9* pSurfaceSrc = NULL;
-  static IDirect3DSurface9 *pSurfaceRender = NULL;
-#endif
 void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
 {
   HRESULT hr;
@@ -103,15 +99,15 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
     D3DXMATRIXA16 mView = *mCamera.GetViewMatrix();
     SetCommonShaderStack();// передать общие параметры в шейдер
 
-    std::list<TBaseObjectDX*>::iterator it = mListReadyRender.begin();
-    std::list<TBaseObjectDX*>::iterator eit = mListReadyRender.end();
+    std::list<IBaseObjectDX*>::iterator it = mListReadyRender.begin();
+    std::list<IBaseObjectDX*>::iterator eit = mListReadyRender.end();
     while(it!=eit)
     {
       (*it)->Draw(&mView);
       it++;
     }
 
-    mViewerFPS.Render(mDXUT->GetFPS());
+    mViewerFPS.Render(mDXUT.GetFPS());
     V( pd3dDevice->EndScene() );
 
     //int w,h;
@@ -121,7 +117,7 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
   }
 }
 //--------------------------------------------------------------------------------------------------------
-void TBigJack::AddObject(TBaseObjectDX* pObject)
+void TBigJack::AddObject(IBaseObjectDX* pObject)
 {
   TModelDX* pModel = mManagerModelDX.Find(pObject->GetID_Model());
   if(pModel)
@@ -155,7 +151,7 @@ void TBigJack::SetEffect(unsigned short id_effect/*уникальный эффект, см. таблиц
                guint32 time_past/*// прошло времени, мс*/)
 {
 /*
-  TBaseObjectDX* pObjectDX = MakerEffect.New(id_effect);
+  IBaseObjectDX* pObjectDX = MakerEffect.New(id_effect);
   pObjectDX->SetTimeCreation(mTime_ms - time_past);
   pObjectDX->SetCoord(coord);
   pObjectDX->SetOrient(orient);
@@ -163,29 +159,29 @@ void TBigJack::SetEffect(unsigned short id_effect/*уникальный эффект, см. таблиц
 */
 }
 //--------------------------------------------------------------------------------------------------------
-void TBigJack::NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext)
-{
-  set<TCallBackFrameMove>::iterator bit = mSetCallbackFrameMove.begin();
-  set<TCallBackFrameMove>::iterator eit = mSetCallbackFrameMove.end();
-  while(bit!=eit)
-  {
-    TCallBackFrameMove pFunc = (*bit);
-    pFunc(fTime, fElapsedTime, pUserContext);
-    bit++;
-  }
-}
+//void TBigJack::NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext)
+//{
+  //set<TCallBackFrameMove>::iterator bit = mSetCallbackFrameMove.begin();
+  //set<TCallBackFrameMove>::iterator eit = mSetCallbackFrameMove.end();
+  //while(bit!=eit)
+  //{
+  //  TCallBackFrameMove pFunc = (*bit);
+  //  pFunc(fTime, fElapsedTime, pUserContext);
+  //  bit++;
+  //}
+//}
 //--------------------------------------------------------------------------------------
-void TBigJack::NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-  set<TCallBackMsg>::iterator bit = mSetCallbackMsg.begin();
-  set<TCallBackMsg>::iterator eit = mSetCallbackMsg.end();
-  while(bit!=eit)
-  {
-    TCallBackMsg pFunc = (*bit);
-    pFunc(hWnd, uMsg, wParam, lParam);
-    bit++;
-  }
-}
+//void TBigJack::NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+//{
+  //set<TCallBackMsg>::iterator bit = mSetCallbackMsg.begin();
+  //set<TCallBackMsg>::iterator eit = mSetCallbackMsg.end();
+  //while(bit!=eit)
+  //{
+  //  TCallBackMsg pFunc = (*bit);
+  //  pFunc(hWnd, uMsg, wParam, lParam);
+  //  bit++;
+  //}
+//}
 //--------------------------------------------------------------------------------------
 bool TBigJack::IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat,
                                D3DFORMAT BackBufferFormat, bool bWindowed, void* pUserContext )
@@ -295,7 +291,7 @@ void TBigJack::OnFrameMove( double fTime, float fElapsedTime, void* pUserContext
   // Update the camera's position based on user input 
   mCamera.FrameMove( fElapsedTime );
 
-  NotifyFrameMove(fTime, fElapsedTime, pUserContext);
+  //NotifyFrameMove(fTime, fElapsedTime, pUserContext);
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
@@ -311,7 +307,7 @@ LRESULT TBigJack::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, b
 {
   mCamera.HandleMessages( hWnd, uMsg, wParam, lParam );
 
-  NotifyMsg(hWnd, uMsg, wParam, lParam);
+  //NotifyMsg(hWnd, uMsg, wParam, lParam);
   return 0;
 }
 //--------------------------------------------------------------------------------------
@@ -332,7 +328,7 @@ void TBigJack::OnDestroyDevice( void* pUserContext )
 //--------------------------------------------------------------------------------------
 void TBigJack::Init(HWND hwnd)
 {
-  HRESULT hr = mDXUT->Init(hwnd);
+  HRESULT hr = mDXUT.Init(hwnd);
   if(hr!=S_OK)
   {
     GlobalLoggerDX.WriteF_time("Init fail. hr=0x%X\n",hr);
@@ -341,7 +337,7 @@ void TBigJack::Init(HWND hwnd)
 //--------------------------------------------------------------------------------------
 void TBigJack::Done()
 {
-  mDXUT->Done();
+  mDXUT.Done();
   
   mManagerModelDX.DestroyModel();
 }
@@ -349,64 +345,64 @@ void TBigJack::Done()
 void TBigJack::Work(guint32 time_ms)
 {
   mTime_ms = time_ms;
-  mDXUT->Work();
+  mDXUT.Work();
 }
 //--------------------------------------------------------------------------------------
 // на получение событий WinApi окна и DirectX
-void TBigJack::Register(void* pFunc, int type)
-{
-  switch(type)
-  {
-    case eTypeMsg:
-      RegisterSet((std::set<void*>*)&mSetCallbackMsg,(void*)pFunc);
-      break;
-    case eTypeFrameMove:
-      RegisterSet((std::set<void*>*)&mSetCallbackFrameMove,pFunc);
-      break;
-    default:;
-  }
-}
+//void TBigJack::Register(void* pFunc, int type)
+//{
+//  switch(type)
+//  {
+//    case eTypeMsg:
+//      RegisterSet((std::set<void*>*)&mSetCallbackMsg,(void*)pFunc);
+//      break;
+//    case eTypeFrameMove:
+//      RegisterSet((std::set<void*>*)&mSetCallbackFrameMove,pFunc);
+//      break;
+//    default:;
+//  }
+//}
+////--------------------------------------------------------------------------------------
+//void TBigJack::Unregister(void* pFunc, int type)
+//{
+//  switch(type)
+//  {
+//    case eTypeMsg:
+//      UnregisterSet((std::set<void*>*)&mSetCallbackMsg,pFunc);
+//      break;
+//    case eTypeFrameMove:
+//      UnregisterSet((std::set<void*>*)&mSetCallbackFrameMove,pFunc);
+//      break;
+//    default:;
+//  }
+//}
 //--------------------------------------------------------------------------------------
-void TBigJack::Unregister(void* pFunc, int type)
-{
-  switch(type)
-  {
-    case eTypeMsg:
-      UnregisterSet((std::set<void*>*)&mSetCallbackMsg,pFunc);
-      break;
-    case eTypeFrameMove:
-      UnregisterSet((std::set<void*>*)&mSetCallbackFrameMove,pFunc);
-      break;
-    default:;
-  }
-}
-//--------------------------------------------------------------------------------------
-void TBigJack::UnregisterSet(std::set<void*>* setCallback, void* pFunc)
-{
-  set<void*>::iterator fit = setCallback->find(pFunc);
-  set<void*>::iterator eit = setCallback->end();
-  if(fit!=eit)
-    setCallback->erase(fit);
-  else
-    BL_FIX_BUG();
-}
-//--------------------------------------------------------------------------------------
-void TBigJack::RegisterSet(std::set<void*>* setCallback, void* pFunc)
-{
-  setCallback->insert(pFunc);
-}
+//void TBigJack::UnregisterSet(std::set<void*>* setCallback, void* pFunc)
+//{
+//  set<void*>::iterator fit = setCallback->find(pFunc);
+//  set<void*>::iterator eit = setCallback->end();
+//  if(fit!=eit)
+//    setCallback->erase(fit);
+//  else
+//    BL_FIX_BUG();
+//}
+////--------------------------------------------------------------------------------------
+//void TBigJack::RegisterSet(std::set<void*>* setCallback, void* pFunc)
+//{
+//  setCallback->insert(pFunc);
+//}
 //--------------------------------------------------------------------------------------
 void TBigJack::Animate()
 {
-  list<TBaseObjectDX*>::iterator bit = mListAnimateObject.begin();
-  list<TBaseObjectDX*>::iterator eit = mListAnimateObject.end();
+  list<IBaseObjectDX*>::iterator bit = mListAnimateObject.begin();
+  list<IBaseObjectDX*>::iterator eit = mListAnimateObject.end();
   while(bit!=eit)
   {
     if((*bit)->Animate(mTime_ms)==false)
     {
       // уничтожить эффект
       delete (*bit);
-      list<TBaseObjectDX*>::iterator nit = bit;
+      list<IBaseObjectDX*>::iterator nit = bit;
       nit++;
       mListAnimateObject.erase(bit);
       bit = nit;
@@ -451,11 +447,11 @@ void TBigJack::MakeVectorOnRender()
   mListReadyRender.clear();
   mListTransparencyObject.clear();
   //--------------------------------------------------------------
-  list<TBaseObjectDX*>::iterator bit = mListAllObject.begin();
-  list<TBaseObjectDX*>::iterator eit = mListAllObject.end();
+  list<IBaseObjectDX*>::iterator bit = mListAllObject.begin();
+  list<IBaseObjectDX*>::iterator eit = mListAllObject.end();
   while(bit!=eit)
   {
-    TBaseObjectDX* pObject = *(bit);
+    IBaseObjectDX* pObject = *(bit);
     if(pObject->GetAlphaTransparency()==1.0f)
       mListReadyRender.push_back(pObject);
     else
@@ -468,41 +464,41 @@ void TBigJack::MakeVectorOnRender()
                           mListTransparencyObject.end());
 }
 //--------------------------------------------------------------------------------------
-void* TBigJack::GetSurfaceCurrentFrame(int& w, int& h)
-{
-  HRESULT hr;
-  guint32 start = ht_GetMSCount();
-  V(D3DXLoadSurfaceFromSurface(
-      mSurfaceRender,
-      NULL,
-      NULL,
-      mSurfaceBackBuffer,
-      NULL,
-      NULL,
-      D3DX_FILTER_NONE,
-      0))
-
-  start = ht_GetMSCount()-start;
-
-  D3DSURFACE_DESC surfaceDesc; 
-  mSurfaceRender->GetDesc(&surfaceDesc); 
-
-  w = surfaceDesc.Width; 
-  h = surfaceDesc.Height;
-
-  D3DLOCKED_RECT lockedRect; 
-  V(mSurfaceRender->LockRect(
-    &lockedRect,   // pointer to receive locked data 
-    0,             // lock entire surface 
-    0))            // no lock flags specified 
-
-  return lockedRect.pBits;
-}
-//--------------------------------------------------------------------------------------
-void TBigJack::EndSurfaceUse()
-{
-  mSurfaceRender->UnlockRect();
-}
+//void* TBigJack::GetSurfaceCurrentFrame(int& w, int& h)
+//{
+//  HRESULT hr;
+//  guint32 start = ht_GetMSCount();
+//  V(D3DXLoadSurfaceFromSurface(
+//      mSurfaceRender,
+//      NULL,
+//      NULL,
+//      mSurfaceBackBuffer,
+//      NULL,
+//      NULL,
+//      D3DX_FILTER_NONE,
+//      0))
+//
+//  start = ht_GetMSCount()-start;
+//
+//  D3DSURFACE_DESC surfaceDesc; 
+//  mSurfaceRender->GetDesc(&surfaceDesc); 
+//
+//  w = surfaceDesc.Width; 
+//  h = surfaceDesc.Height;
+//
+//  D3DLOCKED_RECT lockedRect; 
+//  V(mSurfaceRender->LockRect(
+//    &lockedRect,   // pointer to receive locked data 
+//    0,             // lock entire surface 
+//    0))            // no lock flags specified 
+//
+//  return lockedRect.pBits;
+//}
+////--------------------------------------------------------------------------------------
+//void TBigJack::EndSurfaceUse()
+//{
+//  mSurfaceRender->UnlockRect();
+//}
 //--------------------------------------------------------------------------------------
 void TBigJack::GetResolutionFrame(int& h, int& w )// формат X8R8G8B8
 {
@@ -516,35 +512,45 @@ void TBigJack::SetResolutionFrame(int  h, int  w )// формат X8R8G8B8
 //--------------------------------------------------------------------------------------
 void TBigJack::OnLostDevice_Surface()
 {
-  SAFE_RELEASE(mSurfaceBackBuffer);
-  SAFE_RELEASE(mSurfaceRender);
+  //SAFE_RELEASE(mSurfaceBackBuffer);
+  //SAFE_RELEASE(mSurfaceRender);
 }
 //--------------------------------------------------------------------------------------
-void TBigJack::OnResetDevice_Surface(IDirect3DDevice9 *pd3dDevice)
+//void TBigJack::OnResetDevice_Surface(IDirect3DDevice9 *pd3dDevice)
+//{
+//  HRESULT hr;
+//  if(SUCCEEDED(pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &mSurfaceBackBuffer))) 
+//  {
+//    D3DSURFACE_DESC surfaceDesc; 
+//    mSurfaceBackBuffer->GetDesc(&surfaceDesc); 
+//
+//    V ( pd3dDevice->CreateOffscreenPlainSurface(
+//      surfaceDesc.Width,
+//      surfaceDesc.Height,
+//      surfaceDesc.Format,
+//      surfaceDesc.Pool,
+//      &mSurfaceRender,
+//      NULL
+//      ))
+//
+//
+//    //V(pd3dDevice->CreateRenderTarget(surfaceDesc.Width, surfaceDesc.Height,
+//    //  surfaceDesc.Format,surfaceDesc.MultiSampleType,surfaceDesc.MultiSampleQuality,
+//    //  false,
+//    //  &mSurfaceRender,
+//    //  NULL))
+//  }
+//  else
+//    BL_FIX_BUG();
+//}
+//--------------------------------------------------------------------------------------
+bool TBigJack::IsFullScreen()
 {
-  HRESULT hr;
-  if(SUCCEEDED(pd3dDevice->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &mSurfaceBackBuffer))) 
-  {
-    D3DSURFACE_DESC surfaceDesc; 
-    mSurfaceBackBuffer->GetDesc(&surfaceDesc); 
-
-    V ( pd3dDevice->CreateOffscreenPlainSurface(
-      surfaceDesc.Width,
-      surfaceDesc.Height,
-      surfaceDesc.Format,
-      surfaceDesc.Pool,
-      &mSurfaceRender,
-      NULL
-      ))
-
-
-    //V(pd3dDevice->CreateRenderTarget(surfaceDesc.Width, surfaceDesc.Height,
-    //  surfaceDesc.Format,surfaceDesc.MultiSampleType,surfaceDesc.MultiSampleQuality,
-    //  false,
-    //  &mSurfaceRender,
-    //  NULL))
-  }
-  else
-    BL_FIX_BUG();
+  return mDXUT.IsFullScreen();
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::ToggleFullScreen()
+{
+  return mDXUT.ToggleFullScreen();
 }
 //--------------------------------------------------------------------------------------

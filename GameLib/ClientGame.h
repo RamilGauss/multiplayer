@@ -33,58 +33,73 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "Garage.h"
-#include "namespace_ID_BEHAVIOR.h"
-#include "Tank.h"
-#include "TypeTank.h"
+#ifndef ClientGameH
+#define ClientGameH
 
-using namespace nsID_BEHAVIOR;
 
-void TGarage::InitArrTank()
+#include "ManagerObjectCommon.h"
+#include "IPhysicEngine.h"
+#include "INET_Engine.h"
+
+
+/*
+    Краткая концепция
+Постулат: Менеджер компонентов (МК) является игровым движком.
+От него наследуется Клиент и Сервер. Это два движка.
+
+Исходя из этого:
+1. Должен содержать строгое кол-во компонентов (в соответствии со своим предназначением).
+2. Ядро МК занимается рендером, расчетом и диспетчеризацией событий между компонентами
+3. Вводится понятие "Источник событий" SrcEvent и "Поглотитель событий" DstEvent.
+4. 
+*/
+
+
+class TClientGame : public IGame
 {
-  // читаем из БД
-  mArrTanks.Clear();
+protected:
+  volatile bool flgNeedStop;
+  volatile bool flgActive;
 
-  int cnt = 1;// ReadFromBD(...);
-  mCurTank = 0; // первый в массиве
 
-  IActor* pTank = (IActor*)mMakerBehaviorServer.New(0/*KingTiger*/);
-  pTank->SetTypeTank(nsTank_ID::eID_KingTiger);
-  pTank->SetMasterClient(pMasterClient);
-  mArrTanks.Add(pTank);
-    
-  //TTankServer* pTank = new IActor(pMasterClient);
-  //pTank->SetTypeTank(nsTank_ID::eID_Tiger);
-  //mArrTanks.Add(pTank);
 
-  //pTank = new IActor(pMasterClient);
-  //pTank->SetTypeTank(nsTank_ID::eID_IS);
-  //mArrTanks.Add(pTank);
+  //IAI*               mAI;
+  //IReplay*           mReplay;
+  //ISoundEngine*      mSound;
+  INET_Engine*         mNET;
+  IPhysicEngine*       mPhysicEngine;
+  IGraphicEngine*      mGraphicEngine; // отрисовка сцены
+  TManagerGUI          mMGUI;
+  TManagerKeyMouse     mMKM;
+  TManagerObjectCommon mMOC;
+  TManagerTime         mMTime;
 
-}
-//------------------------------------------------------------------------------
-bool TGarage::SetCurTank(int i)
-{
-  if(i>=mArrTanks.Count())
-    return false;
-  mCurTank = i;
-  return true;
-}
-//------------------------------------------------------------------------------
-int TGarage::GetCurTank()
-{
-  return mCurTank;
-}
-//------------------------------------------------------------------------------
-IActor* TGarage::GetPointerCurTank()
-{
-  return GetTank(mCurTank);
-}
-//------------------------------------------------------------------------------
-IActor* TGarage::GetTank(int i)
-{
-  IActor* pTank = (IActor*) ((IBaseObject*)mArrTanks.Get(i))->GetPtrInherits();
-  return pTank;
-}
-//----------------------------------------------------------------------------------
 
+public:
+  TClientGame();
+  virtual ~TClientGame();
+
+  void Work(const char* sNameDLL);// начало работы
+  
+  // диспетчеризация событий
+  // решение принимается на основании скрипта (что-то типа машины состояния)
+  void SetEvent(const char* sFrom, unsigned int key, void* pData, int sizeData);
+
+protected:
+  void Init(const char* sNameDLL);
+  void Done();
+
+
+  typedef enum{ eNoWindowEvent,
+        eQuit,
+      } tResHandleWindowEvent;
+
+
+  tResHandleWindowEvent HandleWindowEvent();
+  void HandleExternalEvent();
+  void Calc();
+  void Render();
+
+};
+
+#endif

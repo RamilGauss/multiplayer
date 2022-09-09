@@ -273,6 +273,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IGraphicEngineGUI.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ILoaderModelDX.h"
 				>
 			</File>

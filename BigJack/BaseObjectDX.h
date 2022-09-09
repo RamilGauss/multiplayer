@@ -45,7 +45,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 class TManagerObjectDX;
 
-class TBaseObjectDX : virtual public TBaseObject
+class IBaseObjectDX : virtual public IBaseObject
 {
 protected:
 
@@ -53,8 +53,8 @@ protected:
   float mAlphaTransparency;// прозрачность всего объекта, нельзя задать прозрачность части модели
   
 public:
-  TBaseObjectDX(int typeDX = eDirtyAnimate);
-  virtual ~TBaseObjectDX();
+  IBaseObjectDX(int typeDX = eDirtyAnimate);
+  virtual ~IBaseObjectDX();
 
   void SetModel(TModelDX* pModel);
   TModelDX* GetModel();
@@ -64,7 +64,7 @@ public:
   void SetShow(bool show){flgShow=show;}
 
   // вернет true - объект жив, false - закончил жить
-  // должно быть задано время начало жизни, см. TBaseObject::mTimeCreation - хрень хрень
+  // должно быть задано время начало жизни, см. IBaseObject::mTimeCreation - хрень хрень
   // только для полностью анимированных объектов!!!
   // данная функция подготавливает данные для стека шейдера для данного момента времени
   // окончательная реализация стека должна быть в методе SetupShaderStackModelDX

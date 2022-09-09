@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BoundingBox.h"
 #include "BaseObject.h"
 
-class TBaseObjectPrediction : virtual public TBaseObject
+class IBaseObjectPrediction : virtual public IBaseObject
 {
 public:
   // тип объекта, важно для Prediction
@@ -86,8 +86,8 @@ public:
 
 public:
   
-  TBaseObjectPrediction();
-  virtual ~TBaseObjectPrediction();
+  IBaseObjectPrediction();
+  virtual ~IBaseObjectPrediction();
 
   //unsigned short GetID();
   //void SetID(unsigned short id);

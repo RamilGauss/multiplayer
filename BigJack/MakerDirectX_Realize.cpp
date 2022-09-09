@@ -34,11 +34,11 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 #include "MakerDirectX_Realize.h"
-#include "DXUT_Class.h"
-
-//--------------------------------------------------------------------------
-IDirectX_Realize* TMakerDirectX_Realize::New(void* userData)
-{
-  return new TDXUT((IGraphicEngine*)userData);
-}
-//--------------------------------------------------------------------------
+//#include "DXUT_Class.h"
+//
+////--------------------------------------------------------------------------
+//IDirectX_Realize* TMakerDirectX_Realize::New(void* userData)
+//{
+//  return new TDXUT((IGraphicEngine*)userData);
+//}
+////--------------------------------------------------------------------------

@@ -55,8 +55,8 @@ bool CALLBACK IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat,
 bool TDXUT::IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat,
                                   D3DFORMAT BackBufferFormat, bool bWindowed, void* pUserContext )
 {
-  if(pMDX)
-    return pMDX->IsDeviceAcceptable( pCaps, AdapterFormat,BackBufferFormat, bWindowed, pUserContext );
+  if(pGE)
+    return pGE->IsDeviceAcceptable( pCaps, AdapterFormat,BackBufferFormat, bWindowed, pUserContext );
 
   return false;
 }
@@ -77,8 +77,8 @@ bool CALLBACK ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* p
 //--------------------------------------------------------------------------------------
 bool TDXUT::ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext )
 {
-  if(pMDX)
-    return pMDX->ModifyDeviceSettings( pDeviceSettings, pUserContext );
+  if(pGE)
+    return pGE->ModifyDeviceSettings( pDeviceSettings, pUserContext );
   return false;
 }
 //--------------------------------------------------------------------------------------
@@ -99,8 +99,8 @@ HRESULT CALLBACK OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_
 HRESULT TDXUT::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
                                  void* pUserContext )
 {
-  if(pMDX)
-    return pMDX->OnCreateDevice( pd3dDevice, pBackBufferSurfaceDesc, pUserContext );
+  if(pGE)
+    return pGE->OnCreateDevice( pd3dDevice, pBackBufferSurfaceDesc, pUserContext );
   return S_FALSE;
 }
 //--------------------------------------------------------------------------------------
@@ -121,8 +121,8 @@ HRESULT CALLBACK OnResetDevice( IDirect3DDevice9* pd3dDevice,
 HRESULT TDXUT::OnResetDevice( IDirect3DDevice9* pd3dDevice,
                                 const D3DSURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
 {
-  if(pMDX)
-    return pMDX->OnResetDevice( pd3dDevice, pBackBufferSurfaceDesc, pUserContext );
+  if(pGE)
+    return pGE->OnResetDevice( pd3dDevice, pBackBufferSurfaceDesc, pUserContext );
   return S_FALSE;
 }
 //--------------------------------------------------------------------------------------
@@ -139,8 +139,8 @@ void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext 
 //--------------------------------------------------------------------------------------
 void TDXUT::OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
 {
-  if(pMDX)
-    pMDX->OnFrameMove(fTime, fElapsedTime, pUserContext);
+  if(pGE)
+    pGE->OnFrameMove(fTime, fElapsedTime, pUserContext);
 }
 //--------------------------------------------------------------------------------------
 // This callback function will be called at the end of every frame to perform all the 
@@ -156,8 +156,8 @@ void CALLBACK OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float f
 //--------------------------------------------------------------------------------------
 void TDXUT::OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
 {
-  if(pMDX)
-    pMDX->OnFrameRender( pd3dDevice, fTime, fElapsedTime, pUserContext );
+  if(pGE)
+    pGE->OnFrameRender( pd3dDevice, fTime, fElapsedTime, pUserContext );
 }
 //--------------------------------------------------------------------------------------
 // Before handling window messages, DXUT passes incoming windows 
@@ -175,8 +175,8 @@ LRESULT CALLBACK MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bo
 LRESULT TDXUT::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,
                           void* pUserContext )
 {
-  if(pMDX)
-    return pMDX->MsgProc(hWnd, uMsg, wParam, lParam, pbNoFurtherProcessing,pUserContext);
+  if(pGE)
+    return pGE->MsgProc(hWnd, uMsg, wParam, lParam, pbNoFurtherProcessing,pUserContext);
   return 0;
 }
 //--------------------------------------------------------------------------------------
@@ -194,8 +194,8 @@ void CALLBACK OnLostDevice( void* pUserContext )
 //--------------------------------------------------------------------------------------
 void TDXUT::OnLostDevice( void* pUserContext )
 {
-  if(pMDX)
-    pMDX->OnLostDevice(pUserContext);
+  if(pGE)
+    pGE->OnLostDevice(pUserContext);
 
   flgWasLostEvent = true;
 }
@@ -213,13 +213,13 @@ void CALLBACK OnDestroyDevice( void* pUserContext )
 //--------------------------------------------------------------------------------------
 void TDXUT::OnDestroyDevice( void* pUserContext )
 {
-  if(pMDX)
-    pMDX->OnDestroyDevice(pUserContext);
+  if(pGE)
+    pGE->OnDestroyDevice(pUserContext);
 
   flgWasDestroyEvent = true;
 }
 //--------------------------------------------------------------------------------------
-TDXUT::TDXUT( IGraphicEngine * _pMDX )
+TDXUT::TDXUT( TBigJack * _pMDX )
 : IDirectX_Realize(_pMDX)
 {
   pDXUT_Realize = this;
@@ -284,7 +284,7 @@ int TDXUT::Done()
   {
     Sleep(eWaitDestroy);
   }
-  pMDX = NULL;
+  pGE = NULL;
   return res;
 }
 //--------------------------------------------------------------------------------------
@@ -306,5 +306,10 @@ void* TDXUT::GetWndProc()
 bool TDXUT::IsFullScreen()
 {
   return !DXUTIsWindowed();
+}
+//--------------------------------------------------------------------------------------
+void TDXUT::ToggleFullScreen()
+{
+  DXUTToggleFullScreen();
 }
 //--------------------------------------------------------------------------------------

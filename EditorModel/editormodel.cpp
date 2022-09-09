@@ -132,7 +132,7 @@ void TEditorModel::mousePressEvent ( QMouseEvent * event )
 //{
 //  //### пока так
 //  TMakerBehavior maker;
-//  TBaseObjectCommon* pObject = maker.New(ID_TANK_TOWER);
+//  IBaseObjectCommon* pObject = maker.New(ID_TANK_TOWER);
 //  pObject->SetID_Model(0);
 //  pGame->AddObject(pObject);
 //  //###

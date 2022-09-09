@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "TypeTank.h"
 
 
-TTank::TTank()
+IActor::IActor()
 {
   pRoom = NULL;
 
@@ -60,12 +60,12 @@ TTank::TTank()
   mProperty.mHMinGunUgol = 0.0f;  // против часовой стрелке, рад
 }
 //------------------------------------------------------------------------
-TTank::~TTank()
+IActor::~IActor()
 {
 
 }
 //------------------------------------------------------------------------
-void TTank::SetTypeTank(unsigned int id_tank)
+void IActor::SetTypeTank(unsigned int id_tank)
 {
   mProperty.mID_tank = id_tank;
 
@@ -77,28 +77,28 @@ void TTank::SetTypeTank(unsigned int id_tank)
   }
 }
 //------------------------------------------------------------------------
-unsigned int TTank::GetTypeTank()
+unsigned int IActor::GetTypeTank()
 {
   return mProperty.mID_tank;
 }
 //------------------------------------------------------------------------
-TClient* TTank::GetMasterClient()
+TClient* IActor::GetMasterClient()
 {
   return pMasterClient;
 }
 //------------------------------------------------------------------------
-void TTank::SetMasterClient(TClient* _pClient)
+void IActor::SetMasterClient(TClient* _pClient)
 {
   pMasterClient = _pClient;
 }
 //------------------------------------------------------------------------
-int TTank::GetSizeProperty()
+int IActor::GetSizeProperty()
 {
   int size = sizeof(TProperty)+sClientName.length();
   return size;
 }
 //------------------------------------------------------------------------
-char* TTank::GetProperty()
+char* IActor::GetProperty()
 {
   int size = GetSizeProperty();
   char* pData = new char[size];
@@ -108,7 +108,7 @@ char* TTank::GetProperty()
   return pData;
 }
 //------------------------------------------------------------------------
-void TTank::SetProperty(char* pData,int size)
+void IActor::SetProperty(char* pData,int size)
 {
   mProperty = *((TProperty*)pData);
   sClientName.insert(0,pData+sizeof(TProperty),size-sizeof(TProperty));

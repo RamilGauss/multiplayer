@@ -41,7 +41,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "TreeJoint.h"
 #include "LoaderTree.h"
 
-class TBaseObject;
+class IBaseObject;
 
 class TManagerBaseObject
 {
@@ -54,14 +54,14 @@ public:
   TManagerBaseObject();
   virtual ~TManagerBaseObject();
 
-  void AddObject(TBaseObject* pObject);  
+  void AddObject(IBaseObject* pObject);  
 
 protected:
   void Done();
   bool LoadListPath();
   void PrepareForTreeJoint();
 
-  void SetTree(TBaseObject* pObject);
+  void SetTree(IBaseObject* pObject);
 
 };
 

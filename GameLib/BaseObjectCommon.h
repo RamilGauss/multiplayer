@@ -40,12 +40,12 @@ you may contact in writing [ramil2085@gmail.com].
 #include "BaseObjectPrediction.h"
 
 
-class TBaseObjectCommon : public TBaseObjectDX, public TBaseObjectPrediction
+class IBaseObjectCommon : public IBaseObjectDX, public IBaseObjectPrediction
 {
 
 public:
-  TBaseObjectCommon();
-  virtual ~TBaseObjectCommon();
+  IBaseObjectCommon();
+  virtual ~IBaseObjectCommon();
 
 
   // зеркальное отражение такого же объекта на "той стороне"

@@ -37,17 +37,17 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef MakerDirectX_RealizeH
 #define MakerDirectX_RealizeH
 
-#include <stddef.h>
-#include "IDirectX_Realize.h"
-
-class TMakerDirectX_Realize
-{
-public:
-
-  TMakerDirectX_Realize(){};
-  ~TMakerDirectX_Realize(){};
-
-  IDirectX_Realize* New(void* userData = NULL);
-};
-
+//#include <stddef.h>
+//#include "IDirectX_Realize.h"
+//
+//class TMakerDirectX_Realize
+//{
+//public:
+//
+//  TMakerDirectX_Realize(){};
+//  ~TMakerDirectX_Realize(){};
+//
+//  IDirectX_Realize* New(void* userData = NULL);
+//};
+//
 #endif

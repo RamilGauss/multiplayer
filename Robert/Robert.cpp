@@ -59,7 +59,7 @@ void TRobert::Calc()
 
 }
 //--------------------------------------------------------------------
-void TRobert::AddObject(TBaseObjectPrediction* pObject)
+void TRobert::AddObject(IBaseObjectPrediction* pObject)
 {
 
 }

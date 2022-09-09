@@ -159,6 +159,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ClientGame.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ControlCamera.cpp"
 				>
 			</File>
@@ -188,10 +192,6 @@
 			</File>
 			<File
 				RelativePath=".\MakerObject.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ManagerComponent.cpp"
 				>
 			</File>
 			<File
@@ -229,6 +229,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ClientGame.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ControlCamera.h"
 				>
 			</File>
@@ -249,6 +253,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Game.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IControlEventWinApi.h"
 				>
 			</File>
@@ -262,10 +270,6 @@
 			</File>
 			<File
 				RelativePath=".\MakerObject.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ManagerComponent.h"
 				>
 			</File>
 			<File

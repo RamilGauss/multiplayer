@@ -33,73 +33,32 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef ManagerComponentH
-#define ManagerComponentH
+#ifndef IGraphicEngineGUIH
+#define IGraphicEngineGUIH
 
-
-#include "ManagerObjectCommon.h"
-#include "IPhysicEngine.h"
-#include "INET_Engine.h"
-
-
-/*
-    Краткая концепция
-Постулат: Менеджер компонентов (МК) является игровым движком.
-От него наследуется Клиент и Сервер. Это два движка.
-
-Исходя из этого:
-1. Должен содержать строгое кол-во компонентов (в соответствии со своим предназначением).
-2. Ядро МК занимается рендером, расчетом и диспетчеризацией событий между компонентами
-3. Вводится понятие "Источник событий" SrcEvent и "Поглотитель событий" DstEvent.
-4. 
-*/
-
-
-class TManagerComponent
+class IGraphicEngineGUI
 {
-protected:
-  volatile bool flgNeedStop;
-  volatile bool flgActive;
-
-
-
-  //IAI*               mAI;
-  //IReplay*           mReplay;
-  //ISoundEngine*      mSound;
-  INET_Engine*         mNET;
-  IPhysicEngine*       mPhysicEngine;
-  IGraphicEngine*      mGraphicEngine; // отрисовка сцены
-  TManagerGUI          mMGUI;
-  TManagerKeyMouse     mMKM;
-  TManagerObjectCommon mMOC;
-  TManagerTime         mMTime;
-
-
 public:
-  TManagerComponent();
-  virtual ~TManagerComponent();
+  typedef enum
+  {
+    eEventButtonClicked,
+    eEventComboBoxSelectedChanged,
+    eEventRadioButtonChanged,
+    eEventCheckBoxChanged,
+    eEventSliderValueChanged,
+    eEventEDITBOX_STRING,/// ###
+    eEventEDITBOX_CHANGE,
+    eEventLISTBOX_ITEM_DBLCLK,
+    eEventLISTBOX_SELECTION,
+    eEventLISTBOX_SELECTION_END,
+  }tEvent;
 
-  void Work(const char* sNameDLL);// начало работы
-  
-  // диспетчеризация событий
-  // решение принимается на основании скрипта (что-то типа машины состояния)
-  void SetEvent(const char* sFrom, unsigned int key, void* pData, int sizeData);
+  IGraphicEngineGUI(){}
+  virtual ~IGraphicEngineGUI(){};
 
-protected:
-  void Init(const char* sNameDLL);
-  void Done();
-
-
-  typedef enum{ eNoWindowEvent,
-        eQuit,
-      } tResHandleWindowEvent;
-
-
-  tResHandleWindowEvent HandleWindowEvent();
-  void HandleExternalEvent();
-  void Calc();
-  void Render();
-
+  virtual bool Load(const char* sFullPath) = 0;
+  virtual void Connect(const char* nameMember, int event, void* pCallBack) = 0;
 };
+
 
 #endif

@@ -98,7 +98,7 @@ void TManagerObjectCommonEditorModel::LoadModel()
     return;
 
   //TMakerObject maker;
-  //TBaseObjectCommon* pObject = mLoaderObject.LoadObject(0);//####
+  //IBaseObjectCommon* pObject = mLoaderObject.LoadObject(0);//####
 
   //AddObject(pObject);//###
 
@@ -147,7 +147,7 @@ void TManagerObjectCommonEditorModel::CreateObjects(int cntK,int cntJ,int cntI)
       w._42 += sizeJ;
       for(int i = 0 ; i < cntI ; i ++)
       {
-        TBaseObjectCommon* pObject = mLoaderObject.LoadObject(0);
+        IBaseObjectCommon* pObject = mLoaderObject.LoadObject(0);
         pObject->SetVelocity(0.1f);
         w._41 += sizeI;
         pObject->SetWorld(w);

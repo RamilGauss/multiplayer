@@ -47,7 +47,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "CallBackRegistrator.h"
 
 
-class TBaseObject : public TObject
+class IBaseObject : public TObject
 {
 protected:
   TCallBackRegistrator mCallBackEvent;
@@ -60,8 +60,8 @@ public:
     eMapUse,
   };
 
-  TBaseObject();
-  virtual ~TBaseObject();
+  IBaseObject();
+  virtual ~IBaseObject();
 
   void SetWorld(D3DXMATRIXA16& world){mWorld=world;Notify(eWorld);}
   void SetID_Model(unsigned int id);
@@ -128,7 +128,7 @@ protected:
   // 1 0 0 1 1 1 1
 
 
-  void* mPtrInherits;// назначить в TBaseObjectCommon (решение проблемы виртуального наследования)
+  void* mPtrInherits;// назначить в IBaseObjectCommon (решение проблемы виртуального наследования)
 
   int GetCountPart(const char* name, std::vector<std::string>* pVec);
 

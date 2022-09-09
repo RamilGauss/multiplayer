@@ -59,14 +59,16 @@ you may contact in writing [ramil2085@gmail.com].
 
 
 
-class TBaseObjectDX;
+class IBaseObjectDX;
 
 // BigJack - графический движок
 class TBigJack : public IGraphicEngine
 {
 protected:
-  IDirect3DSurface9* mSurfaceBackBuffer;
-  IDirect3DSurface9* mSurfaceRender;
+
+  TDXUT mDXUT;
+  //IDirect3DSurface9* mSurfaceBackBuffer;
+  //IDirect3DSurface9* mSurfaceRender;
 
 
   TManagerResourceDX mManagerResourceDX;
@@ -82,13 +84,13 @@ protected:
 
 
   // все объекты
-  std::list<TBaseObjectDX*> mListAllObject;// движок не освобождает память из-под этих объектов
+  std::list<IBaseObjectDX*> mListAllObject;// движок не освобождает память из-под этих объектов
   // список на отрисовку
-  std::list<TBaseObjectDX*> mListReadyRender;// временный список
+  std::list<IBaseObjectDX*> mListReadyRender;// временный список
 
-  std::list<TBaseObjectDX*> mListAnimateObject;// только анимированные. создаются движком(эффект движка), движок сам должен освободить память
+  std::list<IBaseObjectDX*> mListAnimateObject;// только анимированные. создаются движком(эффект движка), движок сам должен освободить память
 
-  std::list<TBaseObjectDX*> mListTransparencyObject;// прозрачные объекты, временный список, только на этапе создания списка на отображение
+  std::list<IBaseObjectDX*> mListTransparencyObject;// прозрачные объекты, временный список, только на этапе создания списка на отображение
 
   CModelViewerCamera mCamera;                // A model viewing camera
 
@@ -100,23 +102,23 @@ public:
   virtual ~TBigJack();
 
   // на получение событий WinApi окна и DirectX
-  virtual void Register(void*   pFunc, int type);
-  virtual void Unregister(void* pFunc, int type);
+  //virtual void Register(void*   pFunc, int type);
+  //virtual void Unregister(void* pFunc, int type);
   // в частности события мыши и клавиатуры
-  virtual void NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-  virtual void NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext);
+  //virtual void NotifyMsg(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+  //virtual void NotifyFrameMove(double fTime, float fElapsedTime, void* pUserContext);
   //------------------------------------------------------------------------
   virtual void Init(HWND hwnd = NULL);
   virtual void Work(guint32 time_ms);
   virtual void Done();
-  
-  virtual void* GetSurfaceCurrentFrame(int& w, int& h);// формат X8R8G8B8, может вернуть NULL
-  virtual void  EndSurfaceUse();
 
+  virtual bool IsFullScreen();
+  virtual void ToggleFullScreen();
+  
   virtual void  GetResolutionFrame(int& h, int& w );// формат X8R8G8B8
   virtual void  SetResolutionFrame(int  h, int  w );// формат X8R8G8B8
   //------------------------------------------------------------------------
-  virtual void AddObject(TBaseObjectDX* pObject);
+  virtual void AddObject(IBaseObjectDX* pObject);
   virtual void Clear();
   // камера
   virtual void SetViewParams(D3DXVECTOR3* pvEyePt, D3DXVECTOR3* pvLookatPt);// расположение камеры
@@ -144,11 +146,11 @@ public:
   //----------------------------------------------------------------
   //                             ~INTERFACE
   //----------------------------------------------------------------
-public:
+protected:
   //----------------------------------------------------------------
   // Для внутренних событий движка.
   //----------------------------------------------------------------
-
+  friend class TDXUT;
   virtual bool IsDeviceAcceptable( D3DCAPS9* pCaps, D3DFORMAT AdapterFormat, D3DFORMAT BackBufferFormat, bool bWindowed,void* pUserContext );
   virtual bool ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* pUserContext );
   virtual HRESULT OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,void* pUserContext );
@@ -160,8 +162,8 @@ public:
   virtual void OnDestroyDevice( void* pUserContext );
 
 protected:
-  std::set<TCallBackMsg>       mSetCallbackMsg;
-  std::set<TCallBackFrameMove> mSetCallbackFrameMove;
+  //std::set<TCallBackMsg>       mSetCallbackMsg;
+  //std::set<TCallBackFrameMove> mSetCallbackFrameMove;
 
   void RegisterSet  (std::set<void*>* setCallback, void* pFunc);
   void UnregisterSet(std::set<void*>* setCallback, void* pFunc);

@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Camera.h"
 #include <vector>
 
-class TBaseObjectCommon;
+class IBaseObjectCommon;
 
 class TControlCamera
 {
@@ -48,7 +48,7 @@ protected:
 
   TCamera mCamera;
   // параметры для привязки к объекту
-  std::vector<TBaseObjectCommon*> mVecObject;
+  std::vector<IBaseObjectCommon*> mVecObject;
   int mCurIndex;
   float mRadius;
   // параметры привязки к координатам
@@ -69,7 +69,7 @@ public:
   //-----------------------------------------------------------------------
   // BindObject
   //-----------------------------------------------------------------------
-  virtual void SetListObject(std::vector<TBaseObjectCommon*>* vec);
+  virtual void SetListObject(std::vector<IBaseObjectCommon*>* vec);
 
   // привязать к одному из объектов камеру
   // работают только если включен режим eBindObject иначе игнорируется.

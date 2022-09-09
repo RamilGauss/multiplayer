@@ -62,7 +62,7 @@ TControlCamera::~TControlCamera()
   Done();
 }
 //------------------------------------------------------------------------------------------------
-void TControlCamera::SetListObject(vector<TBaseObjectCommon*>* vec)
+void TControlCamera::SetListObject(vector<IBaseObjectCommon*>* vec)
 {
   mVecObject = *vec;
   ZeroCurIndex();
@@ -173,9 +173,9 @@ void TControlCamera::Notify(void* p, int s)
   int event = *((int*)p);
   switch(event)
   {
-  case TBaseObject::eWorld:
+  case IBaseObject::eWorld:
     {
-      TBaseObjectCommon* pBOC = mVecObject.at(mCurIndex);  
+      IBaseObjectCommon* pBOC = mVecObject.at(mCurIndex);  
       const D3DXMATRIXA16* pMat = pBOC->GetWorld();// координаты изменились, обновить
       // что-то там сделать
       break;
@@ -186,13 +186,13 @@ void TControlCamera::Notify(void* p, int s)
 //------------------------------------------------------------------------------------------------
 void TControlCamera::RegisterOnCurObjectEvent()
 {
-  TBaseObjectCommon* pBOC = mVecObject.at(mCurIndex);  
+  IBaseObjectCommon* pBOC = mVecObject.at(mCurIndex);  
   pBOC->RegisterOnEvent(ObjectEvent);
 }
 //------------------------------------------------------------------------------------------------
 void TControlCamera::UnregisterOnCurObjectEvent()
 {
-  TBaseObjectCommon* pBOC = mVecObject.at(mCurIndex);  
+  IBaseObjectCommon* pBOC = mVecObject.at(mCurIndex);  
   pBOC->UnregisterOnEvent(ObjectEvent);
 }
 //------------------------------------------------------------------------------------------------

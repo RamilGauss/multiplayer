@@ -47,7 +47,7 @@ using namespace std;
 
 static TManagerBaseObject mManagerObject;
 
-TBaseObject::TBaseObject()
+IBaseObject::IBaseObject()
 {
   mPtrInherits = NULL;
   ID_model = 0;
@@ -58,7 +58,7 @@ TBaseObject::TBaseObject()
   D3DXMatrixIdentity(&mWorld);
 }
 //------------------------------------------------------------------------------------------------
-TBaseObject::~TBaseObject()
+IBaseObject::~IBaseObject()
 {
   int cnt = mVectorMatrix.size();
   for(int i = 0 ; i < cnt ; i++)
@@ -69,13 +69,13 @@ TBaseObject::~TBaseObject()
   pLoadedTree = NULL;
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObject::SetState(std::vector<unsigned char>* state)
+void IBaseObject::SetState(std::vector<unsigned char>* state)
 {
   BL_ASSERT(mState.size()==state->size());
   mState = *state;
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObject::SetTree(TTreeJoint::TLoadedJoint* pTree)
+void IBaseObject::SetTree(TTreeJoint::TLoadedJoint* pTree)
 {
   delete pLoadedTree;
   pLoadedTree = new TTreeJoint::TLoadedJoint;
@@ -85,7 +85,7 @@ void TBaseObject::SetTree(TTreeJoint::TLoadedJoint* pTree)
 // считываем данные либо из —”Ѕƒ либо с GUI -
 // считать с объекта информацию о част€х, 
 // выставить использование на первой неповтор€ющейс€ части и задать в окне в виде CheckBox
-void TBaseObject::SetMapUse(map<string, int>* mapUse)
+void IBaseObject::SetMapUse(map<string, int>* mapUse)
 {
   if(mapUse)
     mMapUse = *mapUse;
@@ -97,7 +97,7 @@ void TBaseObject::SetMapUse(map<string, int>* mapUse)
   SetupMask();// известно кол-во и пор€док следовани€ элементов
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObject::SetDefaultMatrix() 
+void IBaseObject::SetDefaultMatrix() 
 {
   int cnt = mTree.GetCountPart();
   for(int i = 0 ; i < cnt ; i++) 
@@ -109,7 +109,7 @@ void TBaseObject::SetDefaultMatrix()
   mTree.GetMatrix(&mVectorMatrix);
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObject::SetupState()
+void IBaseObject::SetupState()
 {
   int cnt = mTree.GetCountPart();
   if(cnt==mState.size()) return;
@@ -119,7 +119,7 @@ void TBaseObject::SetupState()
     mState.push_back(1);// по-умолчанию
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObject::SetupMask()
+void IBaseObject::SetupMask()
 {
   BL_ASSERT(mVectorNamePart.size());// сначала должна быть проинициализирована модель!
   //-------------------------------------------------------------------------------
@@ -146,13 +146,13 @@ void TBaseObject::SetupMask()
   BL_ASSERT(sumMask==mVectorOrderPart.size());
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObject::SetID_Model(unsigned int id)
+void IBaseObject::SetID_Model(unsigned int id)
 {
   ID_model=id;
   mManagerObject.AddObject(this);
 }
 //------------------------------------------------------------------------------------------------
-int TBaseObject::GetCountPart(const char* name,vector<string>* pVec)
+int IBaseObject::GetCountPart(const char* name,vector<string>* pVec)
 {
   int found = 0;
   int cnt = pVec->size();
@@ -164,12 +164,12 @@ int TBaseObject::GetCountPart(const char* name,vector<string>* pVec)
   return found;
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObject::GetDefaultMapUse(std::map<std::string,int>* mapUse)
+void IBaseObject::GetDefaultMapUse(std::map<std::string,int>* mapUse)
 {
   *mapUse = mMapUse;
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObject::SetupDefaultMapUse()
+void IBaseObject::SetupDefaultMapUse()
 {
   mMapUse.clear();
   int cnt = mVectorOrderPart.size();
@@ -182,17 +182,17 @@ void TBaseObject::SetupDefaultMapUse()
   SetMapUse();
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObject::RegisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc)
+void IBaseObject::RegisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc)
 {
   mCallBackEvent.Register(pFunc);
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObject::UnregisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc)
+void IBaseObject::UnregisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc)
 {
   mCallBackEvent.Unregister(pFunc);
 }
 //------------------------------------------------------------------------------------------------
-void TBaseObject::Notify(int event)
+void IBaseObject::Notify(int event)
 {
   mCallBackEvent.Notify(&event,sizeof(event));
 }

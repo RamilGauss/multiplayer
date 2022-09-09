@@ -200,7 +200,7 @@ you may contact in writing [ramil2085@gmail.com].
  - Консервация проекта с веткой на основе DXUT. Развитие ветки Qt+DX.
 19.07.2012:
  - Консервация. Серьезные архитектурные изменения. Приводится в порядок модульная структура проекта.
- TBaseObject, TanksLib.lib, TManagerGUI, TBaseGUI_DX.
+ITBaseObject, TanksLib.lib, TManagerGUI, TBaseGUI_DX.
  - Нашел простые редакторы моделей OBJ. По идее EditorModel пока не нужен.
 07.08.2012:
  - Общая архитектура в Enterprise Architect.
@@ -208,7 +208,7 @@ you may contact in writing [ramil2085@gmail.com].
  - Оживил Клиента и Сервер. С новой архитектурой. (doc/Общая архитектура.EAP)
  - Версия v0.040
 15.08.2012:
- - Почти запустил BigJack. Осталось доделать TBaseObjectDX::SetModel - установить матрицы.
+ - Почти запустил BigJack. Осталось доделать IBaseObjectDX::SetModel - установить матрицы.
 20.08.2012:
  - Улучшил TCallbackRegistrator, добавил std::set<...>.
 29.08.2012:
@@ -278,7 +278,7 @@ you may contact in writing [ramil2085@gmail.com].
 разные части у пушки и ходовой заданы с помощью Bounding Box, а траки обрабатываются в шейдере (за 3 прохода),
 придумал: дробить при загрузке модели если кол-во BB > 1 в соответствии с BB(решается проблема движения пушки
  и роликов). А для траков Unity 3d - глянь инфу.
-65) TBaseObject-> TBaseObjectDX + TBaseObjectPrediction ->TBaseCommon->TTank+TBullet+TTree+TBush+TTerrain+TBuilding
+65) IBaseObject-> IBaseObjectDX + IBaseObjectPrediction ->TBaseCommon->TTank+TBullet+TTree+TBush+TTerrain+TBuilding
 использовать виртуальное наследование.
 66) Описать взаимодействие TManagerCommonObject + TGameForm = Translate+VisualEvent+KeyMouseEvent -
 67) Реализовать классы поведения: Tree, Terrain и т.д. -

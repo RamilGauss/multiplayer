@@ -37,24 +37,24 @@ you may contact in writing [ramil2085@gmail.com].
 #include <string>
 
 #include "BL_Debug.h"
-#include "ManagerComponent.h"
+#include "ClientGame.h"
 #include "MakerPhysicEngine.h"
 #include "MakerGraphicEngine.h"
 
 
 using namespace std;
 
-TManagerComponent::TManagerComponent()
+TClientGame::TClientGame()
 {
 
 }
 //------------------------------------------------------------------------
-TManagerComponent::~TManagerComponent()
+TClientGame::~TClientGame()
 {
 
 }
 //------------------------------------------------------------------------
-void TManagerComponent::Work(const char* sNameDLL)// начало работы
+void TClientGame::Work(const char* sNameDLL)// начало работы
 {
   Init(sNameDLL);
 
@@ -78,7 +78,7 @@ void TManagerComponent::Work(const char* sNameDLL)// начало работы
   Done();
 }
 //------------------------------------------------------------------------
-void TManagerComponent::Init(const char* sNameDLL)
+void TClientGame::Init(const char* sNameDLL)
 {
   // создать двигатели и проинициализировать менеджеры
   TMakerGraphicEngine makerGraphicEngine;
@@ -93,13 +93,13 @@ void TManagerComponent::Init(const char* sNameDLL)
   mNET = makerNET.New();
 }
 //------------------------------------------------------------------------
-void TManagerComponent::Done()
+void TClientGame::Done()
 {
   delete mGraphicEngine;
   mGraphicEngine = NULL;
 }
 //------------------------------------------------------------------------
-TManagerComponent::tResHandleWindowEvent TManagerComponent::HandleWindowEvent()
+TClientGame::tResHandleWindowEvent TClientGame::HandleWindowEvent()
 {
   HWND hWnd = mGraphicEngine->GetHWND();
 
@@ -129,27 +129,27 @@ TManagerComponent::tResHandleWindowEvent TManagerComponent::HandleWindowEvent()
   return eQuit;
 }
 //------------------------------------------------------------------------
-void TManagerComponent::HandleExternalEvent()
+void TClientGame::HandleExternalEvent()
 {
 
 }
 //------------------------------------------------------------------------
-void TManagerComponent::Calc()
+void TClientGame::Calc()
 {
 
 }
 //------------------------------------------------------------------------
-void TManagerComponent::Render()
+void TClientGame::Render()
 {
   mGraphicEngine->Work(mMTime.GetTime());
 }
 //------------------------------------------------------------------------
-void TManagerComponent::SetEvent(const char* sFrom, unsigned int key, void* pData, int sizeData)
+void TClientGame::SetEvent(const char* sFrom, unsigned int key, void* pData, int sizeData)
 {
 
 }
 //------------------------------------------------------------------------
-HWND TManagerComponent::GetHandleWindow()
+HWND TClientGame::GetHandleWindow()
 {
   return mGraphicEngine->GetHWND();
 }

@@ -62,7 +62,7 @@ TRoom::~TRoom()
   mArrTank.Unlink();
 }
 //----------------------------------------------------------------
-void TRoom::AddTank(TTank* pTank)
+void TRoom::AddTank(IActor* pTank)
 {
   mArrTank.Add(pTank);
   // подготовка к бою
@@ -125,7 +125,7 @@ void TRoom::Done()
   // разослать результаты боя
   for(int i = 0 ; i < mArrTank.Count() ; i++)
   {
-    TTank* pTank = GetTank(i);
+    IActor* pTank = GetTank(i);
 
     TClient* pClient = pTank->GetMasterClient();
     if(pClient->GetCurRoom()==pTank->pRoom)// а вдруг клиент на другом танке в другом бою?
@@ -200,7 +200,7 @@ void TRoom::WorkCountDown()
     int cnt = mArrTank.Count();
     for(int i = 0 ; i < cnt ; i++)
     {
-      TTank* pTank = GetTank(i);
+      IActor* pTank = GetTank(i);
       TClient* pClient = pTank->GetMasterClient();
       WriteTransportStream(pClient,&S_Count_Down);
     }
@@ -220,7 +220,7 @@ void TRoom::WorkFight()
   s_coord.setCntTank(cnt);
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = GetTank(i);
+    IActor* pTank = GetTank(i);
     TClient* pClient = pTank->GetMasterClient();
     if(pClient->GetCurRoom()==this)// уменьшить трафик
       WriteTransportStream(pClient,&s_coord);
@@ -241,7 +241,7 @@ void TRoom::WorkFight()
     //------------------------------------------------------------------------------------
     for(int i = 0 ; i < cnt ; i++)
     {
-      TTank* pTank = GetTank(i);
+      IActor* pTank = GetTank(i);
       TClient* pClient = pTank->GetMasterClient();
       if(pClient->GetCurRoom()==this)// уменьшить трафик
         WriteTransportAnswer(pClient,&event_packet);
@@ -264,7 +264,7 @@ void TRoom::MakeGroup()
   int cnt = mArrTank.Count();
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = GetTank(i);
+    IActor* pTank = GetTank(i);
     if(i>cnt/2)
       pTank->mGroup = 1;
     else
@@ -289,7 +289,7 @@ void TRoom::WorkLoadMap()
   int cnt = mArrTank.Count();
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = GetTank(i);
+    IActor* pTank = GetTank(i);
     TClient* pClient = pTank->GetMasterClient();
     WriteTransportStream(pClient,&S_Load_Map);
   }
@@ -370,7 +370,7 @@ void TRoom::LoadMap()
   threadLoadMap = g_thread_create(::ThreadLoadMap, (gpointer)this, true, NULL);
 }
 //----------------------------------------------------------------------------------
-void TRoom::SetPacket(nsServerStruct::TPacketServer* pDefPacket,TTank* pTank)
+void TRoom::SetPacket(nsServerStruct::TPacketServer* pDefPacket,IActor* pTank)
 {
   TAction* pAction = new TAction;
   pAction->pTank   = pTank;
@@ -386,7 +386,7 @@ void TRoom::SendInitCoordTank(TClient* pClient)
   packet.setCountTank(cnt);
   for(int i = 0 ; i < cnt ; i++)
   {
-    TTank* pTank = GetTank(i);
+    IActor* pTank = GetTank(i);
     // ### заменить на GetMirror()
     //packet.setID(i,i);
     //packet.setX(i,pTank->mCoord.x);
@@ -413,8 +413,8 @@ void TRoom::SendStateObject(TClient* pClient)
 #if 0
   TA_Correct_Packet_State_Object packet;
   // все данные хранятся в списке объектов
-  std::list<TBaseObjectPrediction*>::iterator it  = mPrediction.mListDamageObject.begin();
-  std::list<TBaseObjectPrediction*>::iterator eit = mPrediction.mListDamageObject.end();
+  std::list<IBaseObjectPrediction*>::iterator it  = mPrediction.mListDamageObject.begin();
+  std::list<IBaseObjectPrediction*>::iterator eit = mPrediction.mListDamageObject.end();
 
   int cnt = mPrediction.mListDamageObject.size();
   if(cnt==0) return;//###
@@ -452,7 +452,7 @@ int TRoom::GetActiveClient()
   int cnt = mArrTank.Count();
   for(int i = 0 ; i < cnt ; i++ )
   {
-    TTank* pTank = GetTank(i);
+    IActor* pTank = GetTank(i);
     if(pTank)
     if(pTank->GetMasterClient()->GetCurRoom()==this)
       cntActive++;
@@ -460,9 +460,9 @@ int TRoom::GetActiveClient()
   return cntActive;
 }
 //----------------------------------------------------------------------------------
-TTank* TRoom::GetTank(int i)
+IActor* TRoom::GetTank(int i)
 {
-  TTank* pTank = (TTank*) ((TBaseObject*)mArrTank.Get(i))->GetPtrInherits();
+  IActor* pTank = (IActor*) ((IBaseObject*)mArrTank.Get(i))->GetPtrInherits();
   return pTank;
 }
 //----------------------------------------------------------------------------------
