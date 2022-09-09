@@ -23,7 +23,7 @@ You should have received a copy of the GNU General Public License
 along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
 
 In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
+aaaaaaaYou should have received a copy of these additional terms immediately following 
 the terms and conditions of the GNU General Public License which accompanied
 the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
 ===========================================================================
@@ -50,6 +50,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "DescEvent.h"
 #include "MakerDirectX_Realize.h"
 #include "ICamera.h"
+#include <xstring>
 
 
 #define LOG_DX
@@ -78,6 +79,9 @@ TBigJack::TBigJack(ICamera* pCamera):IGraphicEngine(pCamera)
 #ifdef WIN32
   mManagerModelDX.SetManagerResourceDX(&mManagerResourceDX);
 #ifndef USE_ICAMERA
+  mCamera.SetEnablePositionMovement(true);
+  mCamera.SetEnableYAxisMovement(false);
+
   mIndexView           = 
     mMainShaderStack.Push("View",(void*)mCamera.GetViewMatrix(),     sizeof(D3DXMATRIX));
   mIndexProj           = 
@@ -150,7 +154,7 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
       it++;
     }
 
-    mViewerFPS.Render(mDXUT->GetFPS());
+    DispFPS();
 
     SaveRenderState();
       RenderGUI();
@@ -266,8 +270,8 @@ bool TBigJack::ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, void* 
 HRESULT TBigJack::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE_DESC* pBackBufferSurfaceDesc,
                               void* pUserContext )
 {
-  HRESULT hr;
-  V_RETURN(mDialogResourceManager.OnD3D9CreateDevice( pd3dDevice ))
+  //HRESULT hr;
+  //V_RETURN(mDialogResourceManager.OnD3D9CreateDevice( pd3dDevice ))
 
   mManagerModelDX.Setup(pd3dDevice);
   mManagerResourceDX.Setup(pd3dDevice);
@@ -287,15 +291,15 @@ HRESULT TBigJack::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE
   mCamera.SetViewMatrix(&newView);
 #else
   TVector3 eye(0,0,0);
-  float angleDown  = M_PI_2;
+  float angleDown  = 0;//float(M_PI_2);
   float angleRight = 0;
   float angleRoll  = 0;//M_PI_2;
   mICamera->SetPosition(&eye);
   mICamera->RotateDown(angleDown);
   mICamera->RotateRight(angleRight);
   mICamera->Roll(angleRoll);
-  //mICamera->MoveForward(10.0f);
-  mICamera->MoveUp(30.0f);
+  mICamera->MoveForward(-30.0f);
+  //mICamera->MoveUp(30.0f);
 #endif
   return S_OK;
 }
@@ -303,8 +307,8 @@ HRESULT TBigJack::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE
 HRESULT TBigJack::OnResetDevice( IDirect3DDevice9* pd3dDevice,
                              const D3DSURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
 {
-  HRESULT hr;
-  V_RETURN( mDialogResourceManager.OnD3D9ResetDevice() );
+  //HRESULT hr;
+  //V_RETURN( mDialogResourceManager.OnD3D9ResetDevice() );
 
   // для прозрачности текстур
   pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
@@ -348,9 +352,9 @@ void TBigJack::OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float 
 LRESULT TBigJack::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, bool* pbNoFurtherProcessing,
                        void* pUserContext )
 {
-  *pbNoFurtherProcessing = mDialogResourceManager.MsgProc( hWnd, uMsg, wParam, lParam );
-  if( *pbNoFurtherProcessing )
-    return 0;
+  //*pbNoFurtherProcessing = mDialogResourceManager.MsgProc( hWnd, uMsg, wParam, lParam );
+  //if( *pbNoFurtherProcessing )
+    //return 0;
 #ifndef USE_ICAMERA
   mCamera.HandleMessages( hWnd, uMsg, wParam, lParam );
 #endif
@@ -359,7 +363,7 @@ LRESULT TBigJack::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, b
 //--------------------------------------------------------------------------------------
 void TBigJack::OnLostDevice( void* pUserContext )
 {
-  mDialogResourceManager.OnD3D9LostDevice();
+  //mDialogResourceManager.OnD3D9LostDevice();
   mManagerModelDX.LostDevice();
   mManagerResourceDX.Lost();
   mViewerFPS.Lost();
@@ -369,7 +373,7 @@ void TBigJack::OnLostDevice( void* pUserContext )
 //--------------------------------------------------------------------------------------
 void TBigJack::OnDestroyDevice( void* pUserContext )
 {
-  mDialogResourceManager.OnD3D9DestroyDevice();
+  //mDialogResourceManager.OnD3D9DestroyDevice();
   mManagerModelDX.DestroyModel();
   mManagerResourceDX.Destroy();
   mViewerFPS.Destroy();
@@ -627,5 +631,14 @@ void TBigJack::SaveRenderState()
 void TBigJack::RestoreRenderState()
 {
   mDXUT->ApplyState9();
+}
+//--------------------------------------------------------------------------------------
+void TBigJack::DispFPS()
+{
+  float FPS = mDXUT->GetFPS();
+  wchar_t sFPS[100];
+  swprintf_s(sFPS,L"FPS:%0.2f",FPS);
+  mViewerFPS.SetText(wstring(sFPS));
+  mViewerFPS.Render();
 }
 //--------------------------------------------------------------------------------------

@@ -40,8 +40,7 @@ you may contact in writing [ramil2085@gmail.com].
 #ifdef WIN32
   #include "DXUT.h"
   #include "DXUTcamera.h"
-  #include "DXUTsettingsdlg.h"
-  #include "ViewerFPS.h"
+  #include "DispTextDX.h"
   #include "ManagerModelDX.h"
   #include "ManagerResourceDX.h"
 #else
@@ -62,16 +61,18 @@ class TBigJack : public IGraphicEngine
 {
 protected:
 
-  CDXUTDialogResourceManager mDialogResourceManager;
-
+#ifdef WIN32
   IDirectX_Realize* mDXUT;
-
   TManagerResourceDX mManagerResourceDX;
   TManagerModelDX mManagerModelDX;
 
-  TShaderStack mMainShaderStack;
+  TDispTextDX mViewerFPS;
 
-  TViewerFPS mViewerFPS;
+  CModelViewerCamera mCamera;                       // A model viewing camera
+#else
+#endif
+
+  TShaderStack mMainShaderStack;
 
   int mIndexView;
   int mIndexProj;
@@ -87,8 +88,6 @@ protected:
 
   std::list<IBaseObjectGE*> mListTransparencyObject;// прозрачные объекты, временный список, только на этапе создания списка на отображение
 
-  CModelViewerCamera mCamera;                       // A model viewing camera
-  
   bool flgNeedResizeGUI;
 public:
   //----------------------------------------------------------------
@@ -182,6 +181,8 @@ protected:
   // подстрйока под глюк DXUT 21.12.2012 Gauss
   bool IsNeedResizeGUI(){return flgNeedResizeGUI;}
   void SetNeedResizeGUI(bool val){flgNeedResizeGUI=val;}
+
+  void DispFPS();
 };
 
 #endif

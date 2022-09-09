@@ -33,24 +33,28 @@ you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "ViewerFPS.h"
+#include "DispTextDX.h"
 #include "SDKmisc.h"
 
+using namespace std;
 
-TViewerFPS::TViewerFPS()
+TDispTextDX::TDispTextDX()
 {
   mpd3dDevice = NULL;
   pFont = NULL;
   pTextSprite = NULL;
   bShow = true;
+
+  mX = 5;
+  mY = 5;
 }
 //-----------------------------------------------------
-TViewerFPS::~TViewerFPS()
+TDispTextDX::~TDispTextDX()
 {
 
 }
 //-----------------------------------------------------
-HRESULT TViewerFPS::CreateDevice(IDirect3DDevice9* pd3dDevice)
+HRESULT TDispTextDX::CreateDevice(IDirect3DDevice9* pd3dDevice)
 {
   HRESULT hr;
   mpd3dDevice = pd3dDevice;
@@ -60,39 +64,42 @@ HRESULT TViewerFPS::CreateDevice(IDirect3DDevice9* pd3dDevice)
   return S_OK;
 }
 //-----------------------------------------------------
-void TViewerFPS::Show()
+void TDispTextDX::Show()
 {
   bShow = true;
 }
 //-----------------------------------------------------
-void TViewerFPS::Hide()
+void TDispTextDX::Hide()
 {
   bShow = false;
 }
 //-----------------------------------------------------
-void TViewerFPS::SetPos()
+void TDispTextDX::SetPos(int x, int y)
 {
-
+  mX = x;
+  mY = y;
 }
 //-----------------------------------------------------
-void TViewerFPS::Render(float FPS)
+void TDispTextDX::SetText(wstring& str)
+{
+  mText = str;
+}
+//-----------------------------------------------------
+void TDispTextDX::Render()
 {
   if(bShow==false) return;
 
-  wchar_t sFPS[100];
-  swprintf_s(sFPS,L"FPS:%0.2f",FPS);
   CDXUTTextHelper txtHelper( pFont, pTextSprite, 15 );
 
-  // Output statistics
   txtHelper.Begin();
-  txtHelper.SetInsertionPos( 5, 5 );
+  txtHelper.SetInsertionPos( mX, mY );
   txtHelper.SetForegroundColor( D3DXCOLOR( 1.0f, 1.0f, 0.0f, 1.0f ) );
-  txtHelper.DrawTextLine( sFPS );
+  txtHelper.DrawTextLine( mText.data() );
 
   txtHelper.End();
 }
 //-----------------------------------------------------
-HRESULT TViewerFPS::SetupFont()
+HRESULT TDispTextDX::SetupFont()
 {
   HRESULT hr;
   V_RETURN( D3DXCreateFont( mpd3dDevice, 15, 0, FW_BOLD, 1, FALSE, DEFAULT_CHARSET,
@@ -102,7 +109,7 @@ HRESULT TViewerFPS::SetupFont()
   return S_OK;
 }
 //-----------------------------------------------------
-HRESULT TViewerFPS::Lost()
+HRESULT TDispTextDX::Lost()
 {
   HRESULT hr;
   if( pFont )
@@ -111,13 +118,13 @@ HRESULT TViewerFPS::Lost()
   return S_OK;
 }
 //-----------------------------------------------------
-HRESULT TViewerFPS::Destroy()
+HRESULT TDispTextDX::Destroy()
 {
   SAFE_RELEASE( pFont );
   return S_OK;
 }
 //-----------------------------------------------------
-HRESULT TViewerFPS::Reset()
+HRESULT TDispTextDX::Reset()
 {
   HRESULT hr;
   if( pFont )

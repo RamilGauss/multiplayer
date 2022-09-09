@@ -66,20 +66,27 @@ public:
   virtual void  AddDistObj(float dV);
   //---------------------------------------------------
   // интерфейс камеры
-  virtual void SetView(nsStruct3D::TMatrix16* view);
-  virtual void SetProj(nsStruct3D::TMatrix16* proj);
-  virtual void SetProjParams( float fFOV, float fAspect, float fNearPlane, float fFarPlane );
   // выдать результат манипул€ций
   virtual const nsStruct3D::TMatrix16* GetView();
   virtual const nsStruct3D::TMatrix16* GetProj();
   virtual const nsStruct3D::TVector3*  GetEyePt();
+
+  // базова€ настройка
+  virtual void SetView(nsStruct3D::TMatrix16* view);
+  virtual void SetProj(nsStruct3D::TMatrix16* proj);
+  virtual void SetProjParams( float fFOV, float fAspect, float fNearPlane, float fFarPlane );
+  virtual void SetOrient(nsStruct3D::TVector3* up, bool use = true);
+
   // положение
+  virtual void SetPositionLookAt(nsStruct3D::TVector3* pPosLookAt);
   virtual void SetPosition(nsStruct3D::TVector3* pPos);
   virtual void MoveInDirection(float dist, nsStruct3D::TVector3* pDir);
   virtual void MoveForward(float dist);// вдоль осей камеры
   virtual void MoveRight(float dist);
   virtual void MoveUp(float dist);
 
+  // сбросить вращение
+  virtual void ClearRotate();
   // вращать 
   virtual void RotateDown(float angle);
   virtual void RotateRight(float angle);

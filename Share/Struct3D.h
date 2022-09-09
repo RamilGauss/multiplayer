@@ -233,6 +233,63 @@ public:
   bool operator != ( const TMatrix16& ) const;
 };
 
+class TPlane
+{
+public:
+  TPlane() {}
+  TPlane( const float* );
+  TPlane( float a, float b, float c, float d );
+
+  // casting
+  operator float* ();
+  operator const float* () const;
+
+  // assignment operators
+  TPlane& operator *= ( float );
+  TPlane& operator /= ( float );
+
+  // unary operators
+  TPlane operator + () const;
+  TPlane operator - () const;
+
+  // binary operators
+  TPlane operator * ( float ) const;
+  TPlane operator / ( float ) const;
+
+  //friend TPlane operator * ( float, const TPlane& );
+
+  bool operator == ( const TPlane& ) const;
+  bool operator != ( const TPlane& ) const;
+
+  float a, b, c, d;
+};
+
+class TLine
+{
+  enum{
+      eX,// a = ky, b = by, c = kz, d = bz
+      eY,// a = kx, b = bx, c = kz, d = bz
+      eZ,// a = kx, b = bx, c = ky, d = by
+      eUndef, 
+  };
+
+  int mType;
+  float a,b,c,d;
+
+public:
+  TLine(){mType=eUndef;}
+
+  // сформировать уравнение прямой при пересечении 2-ух плоскостей
+  bool FindAndSetIntersect(TPlane* pP1,TPlane* pP2);
+  // найти 2 вектора(нормальные) на прямой от точки
+  bool FindVector(TVector3* pOut1, TVector3* pOut2, bool do_normal = false);
+
+protected:
+  void SetType(int v){mType=v;}
+  void Calc(float arg, float& res1, float& res2);
+};
+
+
 #pragma pack(pop)
 
 }
@@ -258,6 +315,15 @@ SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixMultiply(nsStruct3D::TMatrix16 *
                                                          const nsStruct3D::TMatrix16 *pM1,
                                                          const nsStruct3D::TMatrix16 *pM2);
 
+SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixPerspectiveFovLH( nsStruct3D::TMatrix16* pOut, 
+                                                                 float fovy, 
+                                                                 float Aspect, 
+                                                                 float zn, float zf );
+
+SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixInverse(nsStruct3D::TMatrix16* pOut,
+                                                        float* pDeterminant,
+                                                        const nsStruct3D::TMatrix16* pM );
+
 SHARE_EI extern nsStruct3D::TVector3*  SetVec3TransformCoord(nsStruct3D::TVector3* pOut,
                                                              const nsStruct3D::TVector3* pV,
                                                              const nsStruct3D::TMatrix16* pM);
@@ -270,9 +336,19 @@ SHARE_EI extern float SetVec3Dot( const nsStruct3D::TVector3* pV1,
 SHARE_EI extern nsStruct3D::TVector3* SetVec3Normalize(nsStruct3D::TVector3* pOut,
                                                        const nsStruct3D::TVector3* pV);
 
-SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixPerspectiveFovLH( nsStruct3D::TMatrix16* pOut, 
-                                                                   float fovy, 
-                                                                   float Aspect, 
-                                                                   float zn, float zf );
+SHARE_EI extern nsStruct3D::TPlane* SetPlaneFromPointNormal(nsStruct3D::TPlane* pOut,
+                                                            const nsStruct3D::TVector3* pPoint,
+                                                            const nsStruct3D::TVector3* pNormal);
+SHARE_EI extern nsStruct3D::TPlane* SetPlaneFromPoints( nsStruct3D::TPlane* pOut,
+                                                        const nsStruct3D::TVector3* pV1,
+                                                        const nsStruct3D::TVector3* pV2,
+                                                        const nsStruct3D::TVector3* pV3);
+SHARE_EI extern nsStruct3D::TVector3* SetPlaneIntersectLine( nsStruct3D::TVector3*       pOut,
+                                                             const nsStruct3D::TPlane*   pP,
+                                                             const nsStruct3D::TVector3* pV1,
+                                                             const nsStruct3D::TVector3* pV2);
+SHARE_EI extern nsStruct3D::TPlane* SetPlaneTransform( nsStruct3D::TPlane*       pOut,
+                                                        const nsStruct3D::TPlane*    pP,
+                                                        const nsStruct3D::TMatrix16* pM);
 
 #endif

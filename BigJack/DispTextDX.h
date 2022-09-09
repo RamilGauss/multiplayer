@@ -34,12 +34,13 @@ you may contact in writing [ramil2085@gmail.com].
 */ 
 
 
-#ifndef ViewerFPSH
-#define ViewerFPSH
+#ifndef DispTextDXH
+#define DispTextDXH
 
 #include "DXUT.h"
+#include <xstring>
 
-class TViewerFPS
+class TDispTextDX
 {
   IDirect3DDevice9* mpd3dDevice;
   ID3DXFont*        pFont;
@@ -47,10 +48,14 @@ class TViewerFPS
 
   bool bShow;
 
+  int mX, mY;
+
+  std::wstring mText;
+
 public:
   
-  TViewerFPS();
-  ~TViewerFPS();
+  TDispTextDX();
+  ~TDispTextDX();
 
   HRESULT CreateDevice(IDirect3DDevice9* pd3dDevice);
   HRESULT Reset();
@@ -60,9 +65,9 @@ public:
   void Show();
   void Hide();
 
-  void SetPos();
-
-  void Render(float FPS);
+  void SetPos(int x, int y);
+  void SetText(std::wstring& str);
+  void Render();
 protected:
   HRESULT SetupFont();
 };

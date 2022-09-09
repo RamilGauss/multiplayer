@@ -224,6 +224,80 @@ TMatrix16* SetMatrixPerspectiveFovLH( TMatrix16* pOut,
   return pOut;
 }
 //-------------------------------------------------------------------------
+TMatrix16* SetMatrixInverse(TMatrix16* pOut,
+                            float* pDeterminant,
+                            const TMatrix16* pM_ )
+{
+#ifdef WIN32
+  D3DXMATRIX* InOut = (D3DXMATRIX*)pOut;
+  const D3DXMATRIX* pM = (const D3DXMATRIX*)pM_;
+  D3DXMatrixInverse(InOut,pDeterminant,pM);
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+TPlane* SetPlaneFromPointNormal(TPlane* pOut,
+                                const TVector3* _pPoint,
+                                const TVector3* _pNormal)
+{
+#ifdef WIN32
+  D3DXPLANE* InOut = (D3DXPLANE*)pOut; 
+  const D3DXVECTOR3 *pPoint  = (const D3DXVECTOR3*)_pPoint;
+  const D3DXVECTOR3 *pNormal = (const D3DXVECTOR3*)_pNormal;
+
+  D3DXPlaneFromPointNormal(InOut,pPoint,pNormal);
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+TPlane* SetPlaneFromPoints( TPlane* pOut,
+                            const TVector3* _pV1,
+                            const TVector3* _pV2,
+                            const TVector3* _pV3)
+{
+#ifdef WIN32
+  D3DXPLANE* InOut = (D3DXPLANE*)pOut; 
+  const D3DXVECTOR3* pV1 = (const D3DXVECTOR3*)_pV1;
+  const D3DXVECTOR3* pV2 = (const D3DXVECTOR3*)_pV2;
+  const D3DXVECTOR3* pV3 = (const D3DXVECTOR3*)_pV3;
+  D3DXPlaneFromPoints(InOut,pV1,pV2,pV3);
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+TVector3* SetPlaneIntersectLine( TVector3* pOut,
+                                 const TPlane*   _pP,
+                                 const TVector3* _pV1,
+                                 const TVector3* _pV2)
+{
+#ifdef WIN32
+  D3DXVECTOR3* InOut = (D3DXVECTOR3*)pOut; 
+  const D3DXPLANE*   pP  = (const D3DXPLANE*)_pP;
+  const D3DXVECTOR3 *pV1 = (const D3DXVECTOR3 *)_pV1;
+  const D3DXVECTOR3 *pV2 = (const D3DXVECTOR3 *)_pV2;
+  D3DXPlaneIntersectLine(InOut,pP,pV1,pV2);
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+TPlane* SetPlaneTransform( TPlane* pOut,
+                            const TPlane*    _pP,
+                            const TMatrix16* _pM)
+{
+#ifdef WIN32
+  D3DXPLANE* InOut = (D3DXPLANE*)pOut;
+  const D3DXPLANE *pP  = (const D3DXPLANE*) _pP;
+  const D3DXMATRIX *pM = (const D3DXMATRIX*)_pM;
+  D3DXPlaneTransform(InOut,pP,pM);
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
 TMatrix16::TMatrix16( float _11, float _12, float _13, float _14,
                       float _21, float _22, float _23, float _24,
                       float _31, float _32, float _33, float _34,
@@ -433,5 +507,188 @@ bool TVector3::operator == ( const TVector3& pV) const
 bool TVector3::operator != ( const TVector3& pV) const
 {
   return ((pV.x!=x)||(pV.y!=y)||(pV.z!=z));
+}
+//-------------------------------------------------------------------------
+//-------------------------------------------------------------------------
+TPlane::TPlane( const float* pF)
+{
+  a = pF[0];
+  b = pF[1];
+  c = pF[2];
+  d = pF[3];
+}
+//-------------------------------------------------------------------------
+TPlane::TPlane( float _a, float _b, float _c, float _d )
+{
+  a = _a;
+  b = _b;
+  c = _c;
+  d = _d;
+}
+//-------------------------------------------------------------------------
+TPlane::operator float* ()
+{
+  return (float*)this;
+}
+//-------------------------------------------------------------------------
+TPlane::operator const float* () const
+{
+  return (const float*)this;
+}
+//-------------------------------------------------------------------------
+TPlane& TPlane::operator *= ( float v)
+{
+  a *= v;
+  b *= v;
+  c *= v;
+  d *= v;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TPlane& TPlane::operator /= ( float v)
+{
+  a /= v;
+  b /= v;
+  c /= v;
+  d /= v;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TPlane TPlane::operator + () const
+{
+  TPlane res = *this;
+  res.a += a;
+  res.b += b;
+  res.c += c;
+  res.d += d;
+  return res;
+}
+//-------------------------------------------------------------------------
+TPlane TPlane::operator - () const
+{
+  TPlane res = *this;
+  res.a -= a;
+  res.b -= b;
+  res.c -= c;
+  res.d -= d;
+  return res;
+}
+//-------------------------------------------------------------------------
+TPlane TPlane::operator * ( float v) const
+{
+  TPlane res;
+  res.a *= v;
+  res.b *= v;
+  res.c *= v;
+  res.d *= v;
+  return res;
+}
+//-------------------------------------------------------------------------
+TPlane TPlane::operator / ( float v) const
+{
+  TPlane res;
+  res.a /= v;
+  res.b /= v;
+  res.c /= v;
+  res.d /= v;
+  return res;
+}
+//-------------------------------------------------------------------------
+bool TPlane::operator == ( const TPlane& p) const
+{
+  return ((p.a==a)&&(p.b==b)&&(p.c==c)&&(p.d==d));
+}
+//-------------------------------------------------------------------------
+bool TPlane::operator != ( const TPlane& p) const
+{
+  return ((p.a!=a)||(p.b!=b)||(p.c!=c)||(p.d!=d));
+}
+//-------------------------------------------------------------------------
+// сформировать уравнение прямой при пересечении 2-ух плоскостей
+bool TLine::FindAndSetIntersect(TPlane* pP1,TPlane* pP2)
+{
+  //1 найдем тип прямой (зависит от того равны ли коэффициенты плоскости нулю)
+
+
+  if((*pP1==*pP2)           ||// линия выродилась в плоскость
+     (*pP1==TPlane(0,0,0,0))||// вырожденное уравнение
+     (*pP2==TPlane(0,0,0,0)))
+  {
+    SetType(eUndef);
+    return false;
+  }
+  //  через Х
+  if(pP1->c*pP1->b!=pP2->c*pP2->b)
+  {
+    float div = pP1->c*pP2->b - pP1->b*pP2->c;// c1*b2-b1*c2
+    a = (pP1->a*pP2->c - pP1->c*pP2->a)/div;// a1*c2-c1*a2
+    b = (pP1->d*pP2->c - pP1->c*pP2->d)/div;// d1*c2-d2*c1
+    c = (pP1->b*pP2->a - pP1->a*pP2->b)/div;// b1*a2-b2*a1
+    d = (pP1->b*pP2->d - pP1->d*pP2->b)/div;// b1*d2-b2*d1
+    SetType(eX);
+  }// через Z
+  else if(pP1->a*pP1->b!=pP2->a*pP2->b)
+  {
+    float div = pP1->b*pP2->a - pP1->a*pP2->b;// b1*a2-a1*b2 
+    a = (pP1->c*pP2->b - pP1->b*pP2->c)/div;// c1*b2-b1*c2 
+    b = (pP1->d*pP2->b - pP1->b*pP2->d)/div;// d1*b2-d2*b1
+    div *= -1.0f;;// b2*a1-a2*b1 
+    c = (pP1->c*pP2->a - pP1->a*pP2->c)/div;// c1*a2-a1*c2
+    d = (pP1->d*pP2->a - pP1->a*pP2->d)/div;// d1*a2-a1*d2
+    SetType(eZ);
+  }// через Y
+  else
+  {
+    float div = pP1->a*pP2->c - pP1->c*pP2->a;// a1*c2-c1*a2
+    a = (pP1->c*pP2->b - pP1->b*pP2->c)/div;// c1*b2-b1*c2
+    b = (pP1->c*pP2->d - pP1->d*pP2->c)/div;// c1*d2-d1*c2
+    div *= -1.0f;// c1*a2-a1*c2
+    c = (pP1->a*pP2->b - pP1->b*pP2->a)/div;// a1*b2-b1*a2
+    d = (pP1->a*pP2->d - pP1->d*pP2->a)/div;// a1*d2-d1*a2
+    SetType(eY);    
+  }
+  return true;
+}
+//-------------------------------------------------------------------------
+// найти 2 вектора(нормальные) на прямой от точки
+bool TLine::FindVector(TVector3* pOut1, TVector3* pOut2, bool do_normal)
+{
+  if(mType==eUndef)
+    return false;
+
+  switch(mType)
+  {
+    case eX:
+      pOut1->x = 1.0f;
+      Calc(pOut1->x,pOut1->y,pOut1->z);
+      pOut2->x = -1.0f;
+      Calc(pOut2->x,pOut2->y,pOut2->z);
+      break;
+    case eY:
+      pOut1->y = 1.0f;
+      Calc(pOut1->y,pOut1->x,pOut1->z);
+      pOut2->y = -1.0f;
+      Calc(pOut2->y,pOut2->x,pOut2->z);
+      break;
+    case eZ:
+      pOut1->z = 1.0f;
+      Calc(pOut1->z,pOut1->x,pOut1->y);
+      pOut2->z = -1.0f;
+      Calc(pOut2->z,pOut2->x,pOut2->y);
+      break;
+  }
+
+  if(do_normal)
+  {
+    SetVec3Normalize(pOut1,pOut1);
+    SetVec3Normalize(pOut2,pOut2);
+  }
+  return true;
+}
+//-------------------------------------------------------------------------
+void TLine::Calc(float arg, float& res1, float& res2)
+{
+  res1 = a*arg + b;
+  res2 = c*arg + d;
 }
 //-------------------------------------------------------------------------

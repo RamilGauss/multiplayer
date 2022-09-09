@@ -43,6 +43,7 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Logger.h"
 #include "HiTimer.h"
 #include "../GameLib/NameSrcEventID.h"
+#include "IControlCamera.h"
 #include <string.h>
 
 using namespace std;
@@ -51,8 +52,15 @@ using namespace nsEvent;
 
 #define LOG_TIME_LOAD_EDITOR_MODEL
 
+#define DELTA_MOVE 0.4f
+#define DELTA_ROTATE 0.01f
+#define ASPECT_MOUSE_X 0.003f
+#define ASPECT_MOUSE_Y 0.003f
+
 TClientDeveloperTool_ViewerModel::TClientDeveloperTool_ViewerModel()
 {
+  flgDragCamera = false;
+
   mClientMain      = NULL;
   mGameRoomPrepare = NULL;
   mWaitForm        = NULL;
@@ -67,27 +75,92 @@ TClientDeveloperTool_ViewerModel::~TClientDeveloperTool_ViewerModel()
 //------------------------------------------------------------------------------------
 bool TClientDeveloperTool_ViewerModel::MouseEvent(TMouseEvent* pEvent)
 {
-  int a = 0;
   switch(pEvent->state)
   {
     case nsEvent::eButtonUp:
-      a = 1;
+      flgDragCamera = false;
       break;
     case nsEvent::eButtonDown:
-      a = 2;
+      flgDragCamera = true;
+      mOldX = pEvent->x;
+      mOldY = pEvent->y;
       break;
     case nsEvent::eButtonDblClick:
-      a = 3;
+
       break;
     case nsEvent::eWheel:
-      a = 4;
+
       break;
+    case nsEvent::eMove:
+      if(flgDragCamera)
+      {
+        float dRight = float(pEvent->x - mOldX)*ASPECT_MOUSE_X;
+        float dDown  = float(pEvent->y - mOldY)*ASPECT_MOUSE_Y;
+        mComponent.mControlCamera->GetCamera()->RotateRight(dRight);
+        mComponent.mControlCamera->GetCamera()->RotateDown(dDown);
+        
+        mOldX = pEvent->x;
+        mOldY = pEvent->y;
+      }
   }
   return true;
 }
 //------------------------------------------------------------------------------------
 bool TClientDeveloperTool_ViewerModel::KeyEvent(TKeyEvent* pEvent)
 {
+  switch(pEvent->key)
+  {
+    // клавиатура
+    case 87://W
+      mComponent.mControlCamera->GetCamera()->MoveForward(DELTA_MOVE);
+      break;
+    case 83://S
+      mComponent.mControlCamera->GetCamera()->MoveForward(-DELTA_MOVE);
+      break;
+    case 65://A
+      mComponent.mControlCamera->GetCamera()->MoveRight(-DELTA_MOVE);
+      break;
+    case 68://D
+      mComponent.mControlCamera->GetCamera()->MoveRight(DELTA_MOVE);
+      break;
+    case 81://Q
+      mComponent.mControlCamera->GetCamera()->MoveUp(DELTA_MOVE);
+      break;
+    case 69://E
+      mComponent.mControlCamera->GetCamera()->MoveUp(-DELTA_MOVE);
+      break;
+    // мышь
+    case 100:// влево 4
+      mComponent.mControlCamera->GetCamera()->RotateRight(-DELTA_ROTATE);
+      break;
+    case 102:// вправо 6
+      mComponent.mControlCamera->GetCamera()->RotateRight(DELTA_ROTATE);
+      break;
+    case 104:// вверх 8
+      mComponent.mControlCamera->GetCamera()->RotateDown(-DELTA_ROTATE);
+      break;
+    case 98:// вниз 2
+      mComponent.mControlCamera->GetCamera()->RotateDown(DELTA_ROTATE);
+      break;
+    case 103:// вращаться влево 7
+      mComponent.mControlCamera->GetCamera()->Roll(DELTA_ROTATE);
+      break;
+    case 105:// вращаться вправо 9
+      mComponent.mControlCamera->GetCamera()->Roll(-DELTA_ROTATE);
+      break;
+    case 67:// сбросить ориентацию камеры C
+      mComponent.mControlCamera->GetCamera()->ClearRotate();
+      break;
+    case 86:// сбросить ориентацию камеры C
+    {
+      TVector3 v;
+      v.x = 0.0f;
+      v.y = 0.0f;
+      v.z = 0.0f;
+      mComponent.mControlCamera->GetCamera()->SetPositionLookAt(&v);
+      break;
+    }
+  }
   return true;
 }
 //--------------------------------------------------------------------

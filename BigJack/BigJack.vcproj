@@ -156,6 +156,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DispTextDX.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DXUT_Class.cpp"
 				>
 			</File>
@@ -239,10 +243,6 @@
 				RelativePath=".\StateManagerD3D9.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\ViewerFPS.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -255,6 +255,10 @@
 			</File>
 			<File
 				RelativePath=".\Define_DX.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DispTextDX.h"
 				>
 			</File>
 			<File
@@ -355,10 +359,6 @@
 			</File>
 			<File
 				RelativePath=".\StaticWin.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ViewerFPS.h"
 				>
 			</File>
 		</Filter>

@@ -49,6 +49,11 @@ class TClientDeveloperTool_ViewerModel : public IClientDeveloperTool
   TGameRoomPrepare* mGameRoomPrepare;
   TWaitForm *       mWaitForm;
 
+  bool flgDragCamera;
+  int mOldX;
+  int mOldY;
+
+
 public:
   TClientDeveloperTool_ViewerModel();
   virtual ~TClientDeveloperTool_ViewerModel();

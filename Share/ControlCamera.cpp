@@ -36,6 +36,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ControlCamera.h"
 #include "MakerCamera.h"
 
+using namespace nsStruct3D;
+
 TControlCamera::TControlCamera()
 {
   TMakerCamera makerCamera;
@@ -69,27 +71,27 @@ ICamera* TControlCamera::GetCamera()
   return mCamera;
 }
 //---------------------------------------------------------------------------------------
-void TControlCamera::SetView(nsStruct3D::TMatrix16* view)
+void TControlCamera::SetView(TMatrix16* view)
 {
   mCamera->SetView(view);
 }
 //---------------------------------------------------------------------------------------
-void TControlCamera::SetProj(nsStruct3D::TMatrix16* proj)
+void TControlCamera::SetProj(TMatrix16* proj)
 {
   mCamera->SetProj(proj);
 }
 //---------------------------------------------------------------------------------------
-const nsStruct3D::TMatrix16* TControlCamera::GetView()
+const TMatrix16* TControlCamera::GetView()
 {
   return mCamera->GetView();
 }
 //---------------------------------------------------------------------------------------
-const nsStruct3D::TMatrix16* TControlCamera::GetProj()
+const TMatrix16* TControlCamera::GetProj()
 {
   return mCamera->GetProj();
 }
 //---------------------------------------------------------------------------------------
-const nsStruct3D::TVector3*  TControlCamera::GetEyePt()
+const TVector3*  TControlCamera::GetEyePt()
 {
   return mCamera->GetEyePt();
 }
@@ -109,12 +111,12 @@ void TControlCamera::AddDistObj(float dV)
   mDist += dV;
 }
 //---------------------------------------------------------------------------------------
-void TControlCamera::SetPosition(nsStruct3D::TVector3* pPos)
+void TControlCamera::SetPosition(TVector3* pPos)
 {
 
 }
 //---------------------------------------------------------------------------------------
-void TControlCamera::MoveInDirection(float dist, nsStruct3D::TVector3* pDir)
+void TControlCamera::MoveInDirection(float dist, TVector3* pDir)
 {
 
 }
@@ -154,3 +156,20 @@ void TControlCamera::SetProjParams( float fFOV, float fAspect, float fNearPlane,
 
 }
 //----------------------------------------------------------------------------------------
+void TControlCamera::SetOrient(TVector3* up, bool use)
+{
+  mCamera->SetOrient(up,use);
+}
+//----------------------------------------------------------------------------------------
+void TControlCamera::ClearRotate()
+{
+
+}
+//----------------------------------------------------------------------------------------
+void TControlCamera::SetPositionLookAt(TVector3* pPosLookAt)
+{
+
+}
+//----------------------------------------------------------------------------------------
+
+

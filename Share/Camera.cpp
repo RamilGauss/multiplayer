@@ -44,10 +44,11 @@ using namespace nsStruct3D;
 
 TCamera::TCamera()
 {
+  InitVector();
   mPosition = TVector3(0.0f,0.0f,0.0f);
-  mLookAt   = TVector3(0.0f,0.0f,1.0f);
-  mRight    = TVector3(1.0f,0.0f,0.0f);
-  mUp       = TVector3(0.0f,1.0f,0.0f);
+
+  flgUseOrient = true;
+  mNormal2Earth      = mUp;
 
   mRotateRight = mRotateLookAt = mRotateUp = 0.0f;
   SetMatrixIdentity(&mView);
@@ -180,6 +181,10 @@ void TCamera::UpdateView()
     SetVec3Normalize(&mUp,    &mUp);
     SetVec3Normalize(&mLookAt,&mLookAt);
 
+    // привести в соответствии с вектором нормали к Земле.
+    if(flgUseOrient)
+      NormalByEarth();
+
     // вычисляет нижний ряд матрицы камеры
     float fView41, fView42, fView43;
     fView41 = -SetVec3Dot(&mRight,  &mPosition);
@@ -191,7 +196,6 @@ void TCamera::UpdateView()
                        mRight.z, mUp.z,   mLookAt.z, 0.0f,
                        fView41,  fView42, fView43,   1.0f);
 
-
     mChangedView = false;
     mRotateRight = mRotateLookAt = mRotateUp = 0.0f;
   }
@@ -200,11 +204,87 @@ void TCamera::UpdateView()
 void TCamera::SetProjParams( float fFOV, float fAspect, float fNearPlane, float fFarPlane )
 {
   // Set attributes for the projection matrix
-  mfFOV = fFOV;
-  mfAspect = fAspect;
+  mfFOV       = fFOV;
+  mfAspect    = fAspect;
   mfNearPlane = fNearPlane;
-  mfFarPlane = fFarPlane;
+  mfFarPlane  = fFarPlane;
 
   SetMatrixPerspectiveFovLH( &mProj, fFOV, fAspect, fNearPlane, fFarPlane );
+}
+//----------------------------------------------------------------------------------------
+void TCamera::SetOrient(TVector3* up, bool use)
+{
+  mNormal2Earth      = *up;
+  flgUseOrient = use;
+}
+//----------------------------------------------------------------------------------------
+void TCamera::ClearRotate()
+{
+  InitVector();
+  mChangedView = true;
+}
+//----------------------------------------------------------------------------------------
+void TCamera::SetPositionLookAt(TVector3* pPosLookAt)
+{
+  ClearRotate();// вернуть ориентацию
+  mLookAt = mPosition - *pPosLookAt;
+  if(mLookAt==TVector3(0,0,0))
+    mLookAt=TVector3(0,1.0f,0);
+  else
+    SetVec3Normalize(&mLookAt,&mLookAt);
+
+  if(mPosition.y>=0)
+    SetVec3Cross(&mUp,&mLookAt,&mRight);
+  else
+    SetVec3Cross(&mUp,&mRight,&mLookAt);
+
+  SetVec3Cross(&mRight,&mUp,&mLookAt);
+
+  SetVec3Normalize(&mRight,&mRight);
+  SetVec3Normalize(&mUp,&mUp);
+}
+//----------------------------------------------------------------------------------------
+void TCamera::InitVector()
+{
+  mLookAt   = TVector3(0.0f,1.0f,0.0f);
+  mRight    = TVector3(1.0f,0.0f,0.0f);
+  mUp       = TVector3(0.0f,0.0f,1.0f);
+
+  mRotateRight = mRotateLookAt = mRotateUp = 0.0f;
+}
+//----------------------------------------------------------------------------------------
+void TCamera::NormalByEarth()
+{
+  // mRight должен быть ортогонален к mNormal2Earth
+  // если нет, то рассчитать угол расхождения и подкорректировать mRight и mUp
+  float dotRN = SetVec3Dot(&mRight,&mNormal2Earth);
+  if(fabs(dotRN)<0.001f) return;
+  // неортогональны
+  //  плоскость для right
+  TPlane planeRoll;
+  SetPlaneFromPointNormal(&planeRoll,&mPosition,&mLookAt);
+  // плоскость normal2earth
+  TPlane planeN2E;
+  SetPlaneFromPointNormal(&planeN2E,&mPosition,&mNormal2Earth);
+
+  TLine lineRoll_N2E;
+  lineRoll_N2E.FindAndSetIntersect(&planeRoll,&planeN2E);
+  // найти 2 точки для 2 векторов, отстоящих от mPosition
+  TVector3 v1,v2;
+  lineRoll_N2E.FindVector(&v1,&v2,true);
+
+  SetVec3Cross(&mUp,&mLookAt,&v1);
+  float dotUpN2E = SetVec3Dot(&mUp,&mNormal2Earth);
+  if(dotUpN2E<0)//  если скалярное произведение отрицательно, то вектора не соосны
+  {
+    SetVec3Cross(&mUp,&mLookAt,&v2);
+    mRight = v2;
+  }
+  else
+    mRight = v1;
+  // проверить каждую точку на скалярное произведение mUp - оно должно быть больше нуля
+
+  SetVec3Normalize(&mRight,&mRight);
+  SetVec3Normalize(&mUp,&mUp);
 }
 //----------------------------------------------------------------------------------------
