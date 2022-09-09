@@ -36,6 +36,11 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "FormClientMain.h"
 
+//###
+#include "..\GameLib\IClientDeveloperTool.h"
+#include "IGraphicEngine.h"
+//###
+
 const char *sSelfName = "ClientMain";
 
 TFormClientMain::TFormClientMain()
@@ -56,6 +61,8 @@ const char* TFormClientMain::GetNameForm()
 void TFormClientMain::Init()
 {
   Load("..\\form\\FormClientMain.xml");
-  //Connect("ebLogin", nsTypeGUI::eEventEditBoxString, 0);
+  Connect("bEnter", nsTypeGUI::eEventButtonClicked, 0);
+  
+  IClientDeveloperTool::GetSingleton()->GetComponent()->mGraphicEngine->ForceResizeEventGUI();
 }
 //-----------------------------------------------------------------------------------------

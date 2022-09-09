@@ -46,9 +46,10 @@ class IGame
   typedef IServerDeveloperTool*(*GetServerDeveloperTool)();
   typedef void (*FreeDeveloperTool)(IDeveloperTool*);
 
+  FreeDeveloperTool      mFreeDeveloperTool;
+protected:  
   GetClientDeveloperTool mGetClientDeveloperTool;
   GetServerDeveloperTool mGetServerDeveloperTool;
-  FreeDeveloperTool      mFreeDeveloperTool;
 protected:  
   IClientDeveloperTool* mClientDeveloperTool;
   IServerDeveloperTool* mServerDeveloperTool;

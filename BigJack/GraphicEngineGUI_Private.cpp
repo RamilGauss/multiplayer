@@ -95,7 +95,8 @@ bool TGraphicEngineGUI_Private::Load(const char* sFullPathXML)
 #ifdef WIN32
     CDXUTControl* pControl = (CDXUTControl*)pDefGUI->pPrivateGUI;
     pControl->SetID(pObject->id);
-    BL_ASSERT(mPrivateDialog.AddControl(pControl)==S_OK);
+    HRESULT hr = mPrivateDialog.AddControl(pControl);
+    BL_ASSERT(hr==S_OK);
 #endif
   }
 

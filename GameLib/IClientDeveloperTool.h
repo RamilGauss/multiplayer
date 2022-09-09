@@ -76,10 +76,9 @@ public:
 protected:
   // компоненты
   TComponentClient mComponent;
-
 public:
-  IClientDeveloperTool(){};
-  virtual ~IClientDeveloperTool(){};
+  IClientDeveloperTool();
+  virtual ~IClientDeveloperTool();
 
   virtual void Init(TComponentClient* pComponent) = 0;
 
@@ -90,6 +89,13 @@ public:
   virtual void Calc() = 0;
   virtual IMakerObjectCommon* GetMakerObjectCommon() = 0;
 
+  // доступ к компонентам
+  TComponentClient* GetComponent(){return &mComponent;}
+
+
+  static IClientDeveloperTool* GetSingleton();
 };
+
+//extern IClientDeveloperTool* g_ClientDeveloperTool;
 
 #endif

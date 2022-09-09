@@ -82,6 +82,8 @@ public:
 
 public:
   // GE
+  const void* GetPrivateDialog(){return &mPrivateDialog;}
+
   void Init(void* ptr);
   void ResizeEvent(int Width, int Height);
   void Render(float elapsedtime);

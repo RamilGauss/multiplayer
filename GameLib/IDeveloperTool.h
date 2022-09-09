@@ -36,10 +36,11 @@ you may contact in writing [ramil2085@gmail.com].
 #ifndef IDeveloperToolH
 #define IDeveloperToolH
 
+#include "classTools.h"
 
 class IDeveloperTool
 {
-
+  NO_COPY_OBJECT(IDeveloperTool)
 public:
 
   IDeveloperTool(){};

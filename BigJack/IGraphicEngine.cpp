@@ -89,9 +89,11 @@ void IGraphicEngine::GUIEvent(unsigned int nEvent, int nControlID, void* pGUI)
   TListGUI::iterator eit = mListGUI.end();
   while(bit!=eit)
   {
-    if(pGUI==(*bit))
+    TGraphicEngineGUI* pGE_GUI = (TGraphicEngineGUI*)*bit;
+    const void* pForm = pGE_GUI->GetPrivate()->GetPrivateDialog();
+    if(pGUI==pForm)
     {
-      (*bit)->GetPrivate()->GUIEvent(nEvent,nControlID);
+      pGE_GUI->GetPrivate()->GUIEvent(nEvent,nControlID);
       break;
     }
     bit++;

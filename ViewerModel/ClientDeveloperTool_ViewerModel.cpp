@@ -89,7 +89,7 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent)
 #endif
   mComponent.mGraphicEngine->AddGUI(&mFormClientMain);
   mFormClientMain.Init();
-  mComponent.mGraphicEngine->ForceResizeEventGUI();
+  //mComponent.mGraphicEngine->ForceResizeEventGUI();
 }
 //------------------------------------------------------------------------------------
 void TClientDeveloperTool_ViewerModel::CreateObjects(int cntK,int cntJ,int cntI)
