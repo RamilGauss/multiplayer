@@ -130,7 +130,7 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent)
   mComponent.mGUI->Add(std::string("mGameRoomPrepare"),mGameRoomPrepare);
   mComponent.mGUI->Add(std::string("mWaitForm"),mWaitForm);
   // показать форму
-  mClientMain->Show();
+  //mClientMain->Show();
   //mGameRoomPrepare->Show();
   //mWaitForm->Show();
   // подстроиться

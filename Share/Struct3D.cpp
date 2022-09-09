@@ -50,49 +50,189 @@ D3DXMatrixRotation##AXE(InOut,ugol);
 using namespace nsStruct3D;
 
 //-------------------------------------------------------------------------
-void SetMatrixIdentity(TMatrix16* pV)
+void CopyMatrix16(float* pSrc, float* pDst)
+{
+  memcpy(pDst,pSrc,sizeof(TMatrix16));
+}
+//-------------------------------------------------------------------------
+TMatrix16* SetMatrixIdentity(TMatrix16* pV)
 {
 #ifdef WIN32
   D3DXMATRIXA16* pM = (D3DXMATRIXA16*)pV;
   D3DXMatrixIdentity(pM);
 #else
 #endif
+  return pV;
 }
 //-------------------------------------------------------------------------
-void SetMatrixIdentity(TMatrix9* pV)
+TMatrix9* SetMatrixIdentity(TMatrix9* pV)
 {
   pV->_11 = 1.0f;  pV->_12 = 0.0f;  pV->_13 = 0.0f;
   pV->_21 = 0.0f;  pV->_22 = 1.0f;  pV->_23 = 0.0f;
   pV->_31 = 0.0f;  pV->_32 = 0.0f;  pV->_33 = 1.0f;
+  return pV;
 }
 //-------------------------------------------------------------------------
-void SetMatrixRotateX(TMatrix16* pV, float ugol)
+TMatrix16* SetMatrixRotateX(TMatrix16* pV, float ugol)
 {
 #ifdef WIN32
   SET_MATRIX_ROTATE_DX(pV,ugol,X)
 #else
 #endif
+  return pV;
 }
 //-------------------------------------------------------------------------
-void SetMatrixRotateY(TMatrix16* pV, float ugol)
+TMatrix16* SetMatrixRotateY(TMatrix16* pV, float ugol)
 {
 #ifdef WIN32
   SET_MATRIX_ROTATE_DX(pV,ugol,Y)
 #else
 #endif
+  return pV;
 }
 //-------------------------------------------------------------------------
-void SetMatrixRotateZ(TMatrix16* pV, float ugol)
+TMatrix16* SetMatrixRotateZ(TMatrix16* pV, float ugol)
 {
 #ifdef WIN32
   SET_MATRIX_ROTATE_DX(pV,ugol,Z)
 #else
 #endif
+  return pV;
 }
 //-------------------------------------------------------------------------
-void CopyMatrix16(float* pSrc, float* pDst)
+TMatrix16* SetMatrixRotationYawPitchRoll(nsStruct3D::TMatrix16* pV,
+                                                   float Yaw,
+                                                   float Pitch,
+                                                   float Roll )
 {
-  memcpy(pDst,pSrc,sizeof(TMatrix16));
+#ifdef WIN32
+  D3DXMATRIX* InOut = (D3DXMATRIX*)pV;
+  D3DXMatrixRotationYawPitchRoll(InOut,
+                                 Yaw,
+                                 Pitch,
+                                 Roll);
+#else
+#endif
+  return pV;
+}
+//-------------------------------------------------------------------------
+TMatrix16* SetMatrixRotationAxis(TMatrix16 *pOut,
+                                 const TVector3 *pV_,
+                                 float Angle)
+{
+#ifdef WIN32
+  D3DXMATRIX* InOut = (D3DXMATRIX*)pOut;
+  const D3DXVECTOR3* pV = (const D3DXVECTOR3*)pV_;
+  D3DXMatrixRotationAxis(InOut,
+                         pV,
+                         Angle);
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+TMatrix16* SetMatrixMultiply(TMatrix16 *pOut,
+                             const TMatrix16 *pM1,
+                             const TMatrix16 *pM2)
+{
+#ifdef WIN32
+  D3DXMATRIX* InOut = (D3DXMATRIX*)pOut;
+  D3DXMATRIX* In1 = (D3DXMATRIX*)pM1;
+  D3DXMATRIX* In2 = (D3DXMATRIX*)pM2;
+  D3DXMatrixMultiply(InOut,
+                     In1,
+                     In2);
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+TVector3*  SetVec3TransformCoord(TVector3* pOut,
+                                 const TVector3* pV_,
+                                 const TMatrix16* pM_)
+{
+#ifdef WIN32
+  D3DXVECTOR3* InOut = (D3DXVECTOR3*)pOut;
+  const D3DXVECTOR3* pV = (const D3DXVECTOR3*)pV_;
+  const D3DXMATRIX* pM  = (const D3DXMATRIX*)pM_;
+  D3DXVec3TransformCoord(InOut,
+                         pV,
+                         pM );
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+TVector3* SetVec3Cross( TVector3* pOut,
+                        const TVector3* pV1_,
+                        const TVector3* pV2_)
+{
+#ifdef WIN32
+  D3DXVECTOR3* InOut     = (D3DXVECTOR3*) pOut;
+  const D3DXVECTOR3* pV1 = (const D3DXVECTOR3*) pV1_;
+  const D3DXVECTOR3* pV2 = (const D3DXVECTOR3*) pV2_;
+ 
+  D3DXVec3Cross(InOut,
+                pV1,
+                pV2);
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+float SetVec3Dot( const TVector3* pV1_,
+                  const TVector3* pV2_)
+{
+  float res;
+#ifdef WIN32
+  const D3DXVECTOR3* pV1 = (const D3DXVECTOR3*)pV1_;
+  const D3DXVECTOR3* pV2 = (const D3DXVECTOR3*)pV2_;
+
+  res = D3DXVec3Dot(pV1,
+                    pV2);
+#else
+#endif
+  return res;
+}
+//-------------------------------------------------------------------------
+TVector3* SetVec3Normalize(TVector3* pOut,
+                           const TVector3* pV_)
+{
+#ifdef WIN32
+  D3DXVECTOR3 *InOut    = (D3DXVECTOR3*)pOut;
+  const D3DXVECTOR3* pV = (const D3DXVECTOR3*)pV_;
+  D3DXVec3Normalize(InOut,
+                    pV);
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+TMatrix16* SetMatrixPerspectiveFovLH( TMatrix16* pOut, 
+                                      float fovy, 
+                                      float Aspect, 
+                                      float zn, float zf )
+{
+#ifdef WIN32
+  D3DXMATRIX* InOut = (D3DXMATRIX*)pOut;
+  D3DXMatrixPerspectiveFovLH( InOut, 
+                              fovy, 
+                              Aspect, 
+                              zn, zf );
+#else
+#endif
+  return pOut;
+}
+//-------------------------------------------------------------------------
+TMatrix16::TMatrix16( float _11, float _12, float _13, float _14,
+                      float _21, float _22, float _23, float _24,
+                      float _31, float _32, float _33, float _34,
+                      float _41, float _42, float _43, float _44 )
+{
+  this->_11 = _11; this->_12 = _12; this->_13 = _13; this->_14 = _14;
+  this->_21 = _21; this->_22 = _22; this->_23 = _23; this->_24 = _24;
+  this->_31 = _31; this->_32 = _32; this->_33 = _33; this->_34 = _34;
+  this->_41 = _41; this->_42 = _42; this->_43 = _43; this->_44 = _44;
 }
 //-------------------------------------------------------------------------
 // assignment operators
@@ -202,5 +342,96 @@ TMatrix16 TMatrix16::operator * ( const TMatrix16& v) const
 #else
 #endif
   return res;
+}
+//-------------------------------------------------------------------------
+// assignment operators
+TVector3& TVector3::operator += ( const TVector3& pV)
+{
+  x += pV.x;
+  y += pV.y;
+  z += pV.z;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TVector3& TVector3::operator -= ( const TVector3& pV)
+{
+  x -= pV.x;
+  y -= pV.y;
+  z -= pV.z;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TVector3& TVector3::operator *= ( float v)
+{
+  x *= v;
+  y *= v;
+  z *= v;
+  return *this;
+}
+//-------------------------------------------------------------------------
+TVector3& TVector3::operator /= ( float v)
+{
+  x /= v;
+  y /= v;
+  z /= v;
+  return *this;
+}
+//-------------------------------------------------------------------------
+// unary operators
+TVector3 TVector3::operator + () const
+{
+  return *this;
+}
+//-------------------------------------------------------------------------
+TVector3 TVector3::operator - () const
+{
+  return *this;
+}
+//-------------------------------------------------------------------------
+// binary operators
+TVector3 TVector3::operator + ( const TVector3& pV) const
+{
+  TVector3 res;
+  res.x = pV.x + x;
+  res.y = pV.y + y;
+  res.z = pV.z + z;
+  return res;
+}
+//-------------------------------------------------------------------------
+TVector3 TVector3::operator - ( const TVector3& pV) const
+{
+  TVector3 res;
+  res.x = pV.x - x;
+  res.y = pV.y - y;
+  res.z = pV.z - z;
+  return res;
+}
+//-------------------------------------------------------------------------
+TVector3 TVector3::operator * ( float v) const
+{
+  TVector3 res;
+  res.x = x * v;
+  res.y = y * v;
+  res.z = z * v;
+  return res;
+}
+//-------------------------------------------------------------------------
+TVector3 TVector3::operator / ( float v) const
+{
+  TVector3 res;
+  res.x = x / v;
+  res.y = y / v;
+  res.z = z / v;
+  return res;
+}
+//-------------------------------------------------------------------------
+bool TVector3::operator == ( const TVector3& pV) const
+{
+  return ((pV.x==x)&&(pV.y==y)&&(pV.z==z));
+}
+//-------------------------------------------------------------------------
+bool TVector3::operator != ( const TVector3& pV) const
+{
+  return ((pV.x!=x)||(pV.y!=y)||(pV.z!=z));
 }
 //-------------------------------------------------------------------------

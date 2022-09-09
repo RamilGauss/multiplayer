@@ -79,17 +79,17 @@ void TControlCamera::SetProj(nsStruct3D::TMatrix16* proj)
   mCamera->SetProj(proj);
 }
 //---------------------------------------------------------------------------------------
-const nsStruct3D::TMatrix16* TControlCamera::GetView()const
+const nsStruct3D::TMatrix16* TControlCamera::GetView()
 {
   return mCamera->GetView();
 }
 //---------------------------------------------------------------------------------------
-const nsStruct3D::TMatrix16* TControlCamera::GetProj()const
+const nsStruct3D::TMatrix16* TControlCamera::GetProj()
 {
   return mCamera->GetProj();
 }
 //---------------------------------------------------------------------------------------
-const nsStruct3D::TVector3*  TControlCamera::GetEyePt()const
+const nsStruct3D::TVector3*  TControlCamera::GetEyePt()
 {
   return mCamera->GetEyePt();
 }
@@ -114,7 +114,7 @@ void TControlCamera::SetPosition(nsStruct3D::TVector3* pPos)
 
 }
 //---------------------------------------------------------------------------------------
-void TControlCamera::MovePosition(float dist, nsStruct3D::TVector3* pDir)
+void TControlCamera::MoveInDirection(float dist, nsStruct3D::TVector3* pDir)
 {
 
 }
@@ -149,8 +149,8 @@ void TControlCamera::Roll(float angle)
 
 }
 //---------------------------------------------------------------------------------------
-void TControlCamera::SetRotate(nsStruct3D::TVector3* pAngles)
+void TControlCamera::SetProjParams( float fFOV, float fAspect, float fNearPlane, float fFarPlane )
 {
 
 }
-//---------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------

@@ -143,7 +143,7 @@ public:
   //----------------------
   typedef std::map<std::string, int> TNumUseMap;
 
-  void Setup(TLoadedJoint* pLoadedTree,TNumUseMap* mapUse);// -
+  void Setup(TLoadedJoint* pLoadedTree,TNumUseMap* mapUse);// +
 
   int GetCountPart();// +
   void SetOrderMatrixByName(std::vector<std::string>* order);// вызвать до вызова ChangeMatrix и GetMatrix // +

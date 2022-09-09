@@ -135,6 +135,27 @@ public:
   {
     x=0;y=0;z=0;
   }
+
+  // assignment operators
+  TVector3& operator += ( const TVector3& );
+  TVector3& operator -= ( const TVector3& );
+  TVector3& operator *= ( float );
+  TVector3& operator /= ( float );
+
+  // unary operators
+  TVector3 operator + () const;
+  TVector3 operator - () const;
+
+  // binary operators
+  TVector3 operator + ( const TVector3& ) const;
+  TVector3 operator - ( const TVector3& ) const;
+  TVector3 operator * ( float ) const;
+  TVector3 operator / ( float ) const;
+
+  //friend TVector3 operator * ( float, const struct TVector3& );
+
+  bool operator == ( const TVector3& ) const;
+  bool operator != ( const TVector3& ) const;
 };
 //-----------------------------------------------------------------
 class SHARE_EI TVector4
@@ -179,6 +200,11 @@ public:
     };
     float m[4][4];
   };
+  TMatrix16(){};
+  TMatrix16( float _11, float _12, float _13, float _14,
+             float _21, float _22, float _23, float _24,
+             float _31, float _32, float _33, float _34,
+             float _41, float _42, float _43, float _44 );
 
   // assignment operators
   TMatrix16& operator += ( const TMatrix16& );
@@ -213,11 +239,40 @@ public:
 
 SHARE_EI extern void CopyMatrix16(float* pSrc, float* pDst);
 
-SHARE_EI extern void SetMatrixIdentity(nsStruct3D::TMatrix16* pV);
-SHARE_EI extern void SetMatrixIdentity(nsStruct3D::TMatrix9* pV);
+SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixIdentity(nsStruct3D::TMatrix16* pV);
+SHARE_EI extern nsStruct3D::TMatrix9* SetMatrixIdentity(nsStruct3D::TMatrix9* pV);
 
-SHARE_EI extern void SetMatrixRotateX(nsStruct3D::TMatrix16* pV, float ugol);
-SHARE_EI extern void SetMatrixRotateY(nsStruct3D::TMatrix16* pV, float ugol);
-SHARE_EI extern void SetMatrixRotateZ(nsStruct3D::TMatrix16* pV, float ugol);
+SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixRotateX(nsStruct3D::TMatrix16* pV, float ugol);
+SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixRotateY(nsStruct3D::TMatrix16* pV, float ugol);
+SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixRotateZ(nsStruct3D::TMatrix16* pV, float ugol);
+
+SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixRotationYawPitchRoll(nsStruct3D::TMatrix16* pV,
+                                                         float Yaw,
+                                                         float Pitch,
+                                                         float Roll );
+SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixRotationAxis(nsStruct3D::TMatrix16 *pOut,
+                                                 const nsStruct3D::TVector3 *pV,
+                                                 float Angle);
+
+SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixMultiply(nsStruct3D::TMatrix16 *pOut,
+                                                         const nsStruct3D::TMatrix16 *pM1,
+                                                         const nsStruct3D::TMatrix16 *pM2);
+
+SHARE_EI extern nsStruct3D::TVector3*  SetVec3TransformCoord(nsStruct3D::TVector3* pOut,
+                                                             const nsStruct3D::TVector3* pV,
+                                                             const nsStruct3D::TMatrix16* pM);
+SHARE_EI extern nsStruct3D::TVector3*  SetVec3Cross( nsStruct3D::TVector3* pOut,
+                                                     const nsStruct3D::TVector3* pV1,
+                                                     const nsStruct3D::TVector3* pV2);
+SHARE_EI extern float SetVec3Dot( const nsStruct3D::TVector3* pV1,
+                                  const nsStruct3D::TVector3* pV2);
+
+SHARE_EI extern nsStruct3D::TVector3* SetVec3Normalize(nsStruct3D::TVector3* pOut,
+                                                       const nsStruct3D::TVector3* pV);
+
+SHARE_EI extern nsStruct3D::TMatrix16* SetMatrixPerspectiveFovLH( nsStruct3D::TMatrix16* pOut, 
+                                                                   float fovy, 
+                                                                   float Aspect, 
+                                                                   float zn, float zf );
 
 #endif

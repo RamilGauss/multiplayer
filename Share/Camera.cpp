@@ -32,12 +32,27 @@ If you have questions concerning this license or the applicable additional terms
 you may contact in writing [ramil2085@gmail.com].
 ===========================================================================
 */ 
+#define _USE_MATH_DEFINES
+
+#include <cmath>
 
 #include "Camera.h"
+#include "BL_Debug.h"
+#include <math.h>
+
+using namespace nsStruct3D;
 
 TCamera::TCamera()
 {
+  mPosition = TVector3(0.0f,0.0f,0.0f);
+  mLookAt   = TVector3(0.0f,0.0f,1.0f);
+  mRight    = TVector3(1.0f,0.0f,0.0f);
+  mUp       = TVector3(0.0f,1.0f,0.0f);
 
+  mRotateRight = mRotateLookAt = mRotateUp = 0.0f;
+  SetMatrixIdentity(&mView);
+
+  SetProjParams( float(M_PI) / 4.0f, 1.0f, 1.0f, 1000.0f);
 }
 //----------------------------------------------------------------------------------------
 TCamera::~TCamera()
@@ -47,6 +62,7 @@ TCamera::~TCamera()
 //----------------------------------------------------------------------------------------
 void TCamera::SetView(nsStruct3D::TMatrix16* view)
 {
+  mChangedView = false; // сбросить все что делали до этого
   MATRIX16_EQUAL_M_P(mView,view);
 }
 //----------------------------------------------------------------------------------------
@@ -56,65 +72,139 @@ void TCamera::SetProj(nsStruct3D::TMatrix16* proj)
 }
 //----------------------------------------------------------------------------------------
 // выдать результат манипуляций
-const nsStruct3D::TMatrix16* TCamera::GetView()const
+const nsStruct3D::TMatrix16* TCamera::GetView()
 {
+  UpdateView();
   return &mView;
 }
 //----------------------------------------------------------------------------------------
-const nsStruct3D::TMatrix16* TCamera::GetProj()const
+const nsStruct3D::TMatrix16* TCamera::GetProj()
 {
   return &mProj;
 }
 //----------------------------------------------------------------------------------------
-const nsStruct3D::TVector3* TCamera::GetEyePt()const
+const nsStruct3D::TVector3* TCamera::GetEyePt()
 {
-  return NULL;
+  UpdateView();
+  return &mPosition;
 }
 //----------------------------------------------------------------------------------------
 // положение
 void TCamera::SetPosition(nsStruct3D::TVector3* pPos)
 {
-
+  mPosition = *pPos;
+  mChangedView = true;
 }
 //----------------------------------------------------------------------------------------
-void TCamera::MovePosition(float dist, nsStruct3D::TVector3* pDir)
+void TCamera::MoveInDirection(float dist, nsStruct3D::TVector3* pDir)
 {
-
+  mPosition += (*pDir)*dist;
+  mChangedView = true;
 }
 //----------------------------------------------------------------------------------------
 void TCamera::MoveForward(float dist)
 {
-
+  mPosition += mLookAt*dist;
+  mChangedView = true;
 }
 //----------------------------------------------------------------------------------------
 void TCamera::MoveRight(float dist)
 {
-
+  mPosition += mRight*dist;
+  mChangedView = true;
 }
 //----------------------------------------------------------------------------------------
 void TCamera::MoveUp(float dist)
 {
-
+  mPosition += mUp*dist;
+  mChangedView = true;
 }
 //----------------------------------------------------------------------------------------
 // вращать 
 void TCamera::RotateDown(float angle)
 {
-
+  mRotateRight += angle;
+  mChangedView = true;
 }
 //----------------------------------------------------------------------------------------
 void TCamera::RotateRight(float angle)
 {
-
+  mRotateUp += angle;
+  mChangedView = true;
 }
 //----------------------------------------------------------------------------------------
 void TCamera::Roll(float angle)
 {
-
+  mRotateLookAt += angle;
+  mChangedView = true;
 }
 //----------------------------------------------------------------------------------------
-void TCamera::SetRotate(nsStruct3D::TVector3* pAngles)
+void TCamera::UpdateView()
 {
+  if(mChangedView)
+  {
+    // матрицы для установки трансформаций относительно осей
+    TMatrix16 MatTotal;
+    TMatrix16 MatRotateRight;
+    TMatrix16 MatRotateUp;
+    TMatrix16 MatRotateLookAt;
 
+    // создание матрицы для каждого вида вращения
+    SetMatrixRotationAxis(&MatRotateRight,
+                          &mRight,mRotateRight);
+    SetMatrixRotationAxis(&MatRotateUp,
+                          &mUp,mRotateUp);
+    SetMatrixRotationAxis(&MatRotateLookAt,
+                          &mLookAt,mRotateLookAt);
+    // сочетание трансформаций в одной матрице
+    SetMatrixMultiply(&MatTotal,&MatRotateUp,
+                      &MatRotateRight);
+    SetMatrixMultiply(&MatTotal,&MatRotateLookAt,
+                      &MatTotal);
+    // трансформирует два вектора посредством  одной матрицы и вычисляет
+    // произведение векторов
+    SetVec3TransformCoord(&mRight,&mRight,&MatTotal);
+    SetVec3TransformCoord(&mUp,&mUp,&MatTotal);
+
+    SetVec3Cross(&mLookAt,&mRight,&mUp);
+
+    // проверяет перпендикулярность векторов
+    if(fabs(SetVec3Dot(&mUp,&mRight))>0.01f)
+    {
+      // если они не перпендикулярны
+      SetVec3Cross(&mUp,&mLookAt,&mRight);
+    }
+
+    // нормализует наши векторы
+    SetVec3Normalize(&mRight, &mRight);
+    SetVec3Normalize(&mUp,    &mUp);
+    SetVec3Normalize(&mLookAt,&mLookAt);
+
+    // вычисляет нижний ряд матрицы камеры
+    float fView41, fView42, fView43;
+    fView41 = -SetVec3Dot(&mRight,  &mPosition);
+    fView42 = -SetVec3Dot(&mUp,     &mPosition);
+    fView43 = -SetVec3Dot(&mLookAt, &mPosition);
+    // заполняет матрицу камеры
+    mView = TMatrix16( mRight.x, mUp.x,   mLookAt.x, 0.0f,
+                       mRight.y, mUp.y,   mLookAt.y, 0.0f,
+                       mRight.z, mUp.z,   mLookAt.z, 0.0f,
+                       fView41,  fView42, fView43,   1.0f);
+
+
+    mChangedView = false;
+    mRotateRight = mRotateLookAt = mRotateUp = 0.0f;
+  }
+}
+//----------------------------------------------------------------------------------------
+void TCamera::SetProjParams( float fFOV, float fAspect, float fNearPlane, float fFarPlane )
+{
+  // Set attributes for the projection matrix
+  mfFOV = fFOV;
+  mfAspect = fAspect;
+  mfNearPlane = fNearPlane;
+  mfFarPlane = fFarPlane;
+
+  SetMatrixPerspectiveFovLH( &mProj, fFOV, fAspect, fNearPlane, fFarPlane );
 }
 //----------------------------------------------------------------------------------------

@@ -44,6 +44,7 @@ you may contact in writing [ramil2085@gmail.com].
 
 class IBaseObjectGE;
 class IGUI_Core;
+class ICamera;
 
 class IGraphicEngine : public TSrcEvent
 {
@@ -54,10 +55,11 @@ protected:
   
   IGUI_Core* mGUI;// NOT Thread Safe
 
+  ICamera* mICamera;                                // кросс платформенная камера
 
 public:
 
-  IGraphicEngine();
+  IGraphicEngine(ICamera* pCamera);
   virtual ~IGraphicEngine();
 
   void SetGUI(IGUI_Core* pGUI);
@@ -66,7 +68,6 @@ public:
   virtual bool IsFullScreen() = 0;
   virtual void ToggleFullScreen() = 0;
   virtual void SetTitleWindow(const char* sTitle) = 0;
-  //virtual void ForceResizeEventGUI() = 0;
   //------------------------------------------------------------------------
   virtual void Init() = 0;
   virtual void Work(guint32 time_ms) = 0;

@@ -40,8 +40,9 @@ you may contact in writing [ramil2085@gmail.com].
 using namespace std;
 
 //------------------------------------------------------------------------
-IGraphicEngine::IGraphicEngine()
+IGraphicEngine::IGraphicEngine(ICamera* pCamera)
 {
+  mICamera = pCamera;
   ZeroGUI();
   SetIsCreateWindow(false);
 }

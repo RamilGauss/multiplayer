@@ -39,6 +39,8 @@ you may contact in writing [ramil2085@gmail.com].
 
 #include "MacroMaker.h"
 
-MACRO_MAKER_H_USE(GraphicEngine)
+class ICamera;
+
+MACRO_MAKER_H_USE_P(GraphicEngine,ICamera* pCamera)
 
 #endif

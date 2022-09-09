@@ -39,19 +39,31 @@ you may contact in writing [ramil2085@gmail.com].
 #include "ICamera.h"
 #include <list>
 
+// Not Thread Safe!
+
 class TCamera : public ICamera
 {
-protected:
-
   nsStruct3D::TMatrix16 mView;
   nsStruct3D::TMatrix16 mProj;
 
-  struct TChangedParam
-  {
-  };
+  nsStruct3D::TVector3  mPosition;
+  nsStruct3D::TVector3  mLookAt;
+  nsStruct3D::TVector3  mRight;
+  nsStruct3D::TVector3  mUp;
 
-  std::list<TChangedParam> mListChanged;
-  
+  bool mChangedView;
+
+  float mRotateUp;
+  float mRotateRight;
+  float mRotateLookAt;
+
+  // дл€ матрицы проекции
+  float mfFOV;
+  float mfAspect;
+  float mfNearPlane;
+  float mfFarPlane;
+
+
 public:
   TCamera();
   virtual ~TCamera();
@@ -59,22 +71,24 @@ public:
   virtual void SetView(nsStruct3D::TMatrix16* view);
   virtual void SetProj(nsStruct3D::TMatrix16* proj);
   // выдать результат манипул€ций
-  virtual const nsStruct3D::TMatrix16* GetView()const;
-  virtual const nsStruct3D::TMatrix16* GetProj()const;
-  virtual const nsStruct3D::TVector3*  GetEyePt()const;
+  virtual const nsStruct3D::TMatrix16* GetView();
+  virtual const nsStruct3D::TMatrix16* GetProj();
+  virtual const nsStruct3D::TVector3*  GetEyePt();
+
+  virtual void SetProjParams( float fFOV, float fAspect, float fNearPlane, float fFarPlane );
   //-------------------------------------------
   // положение
   virtual void SetPosition(nsStruct3D::TVector3* pPos);
-  virtual void MovePosition(float dist, nsStruct3D::TVector3* pDir);
+  virtual void MoveInDirection(float dist, nsStruct3D::TVector3* pDir);
   virtual void MoveForward(float dist);// вдоль осей камеры
   virtual void MoveRight(float dist);
   virtual void MoveUp(float dist);
   // вращать 
-  virtual void SetRotate(nsStruct3D::TVector3* pAngles);
   virtual void RotateDown(float angle);
   virtual void RotateRight(float angle);
   virtual void Roll(float angle);
 protected:
+  void UpdateView();
 };
 
 #endif

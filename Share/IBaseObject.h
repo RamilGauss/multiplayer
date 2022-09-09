@@ -85,9 +85,6 @@ public:
   void RegisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc);
   void UnregisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc);
 
-  // наклон для камеры
-  virtual float GetRoll(){return 0.0f;}// радианы
-
 protected:
   
   float mV;// скорость, м/с

@@ -61,6 +61,8 @@ you may contact in writing [ramil2085@gmail.com].
 #include "Logger.h"
 #include "NameSrcEventID.h"
 
+#include "IControlCamera.h"
+
 using namespace std;
 using namespace nsEvent;
 
@@ -127,7 +129,7 @@ bool TClientGame::Init(const char* sNameDLL)
 
   // создать двигатели и проинициализировать менеджеры
   TMakerGraphicEngine makerGraphicEngine;
-  mGraphicEngine = makerGraphicEngine.New();
+  mGraphicEngine = makerGraphicEngine.New(mControlCamera->GetCamera());
   mGraphicEngine->Init();// создали окно
   mGraphicEngine->SetSelfName(ID_SRC_EVENT_GRAPHIC_ENGINE);
   mGraphicEngine->SetDstObject(this);

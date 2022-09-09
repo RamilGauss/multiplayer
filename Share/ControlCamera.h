@@ -58,28 +58,29 @@ public:
 
   virtual ICamera* GetCamera();
 
-  virtual void SetView(nsStruct3D::TMatrix16* view);
-  virtual void SetProj(nsStruct3D::TMatrix16* proj);
-  // выдать результат манипул€ций
-  virtual const nsStruct3D::TMatrix16* GetView()const;
-  virtual const nsStruct3D::TMatrix16* GetProj()const;
-  virtual const nsStruct3D::TVector3*  GetEyePt()const;
   // смещение от eye обзора. Ќапример, от 3 лица вид координаты точка больше 0
   // от 1 лица координаты равны нулю
   // вли€ет на вращение камеры (задает центр вращени€)
   virtual float GetDistObj();
   virtual void  SetDistObj(float v);
   virtual void  AddDistObj(float dV);
-
+  //---------------------------------------------------
+  // интерфейс камеры
+  virtual void SetView(nsStruct3D::TMatrix16* view);
+  virtual void SetProj(nsStruct3D::TMatrix16* proj);
+  virtual void SetProjParams( float fFOV, float fAspect, float fNearPlane, float fFarPlane );
+  // выдать результат манипул€ций
+  virtual const nsStruct3D::TMatrix16* GetView();
+  virtual const nsStruct3D::TMatrix16* GetProj();
+  virtual const nsStruct3D::TVector3*  GetEyePt();
   // положение
   virtual void SetPosition(nsStruct3D::TVector3* pPos);
-  virtual void MovePosition(float dist, nsStruct3D::TVector3* pDir);
+  virtual void MoveInDirection(float dist, nsStruct3D::TVector3* pDir);
   virtual void MoveForward(float dist);// вдоль осей камеры
   virtual void MoveRight(float dist);
   virtual void MoveUp(float dist);
 
   // вращать 
-  virtual void SetRotate(nsStruct3D::TVector3* pAngles);
   virtual void RotateDown(float angle);
   virtual void RotateRight(float angle);
   virtual void Roll(float angle);

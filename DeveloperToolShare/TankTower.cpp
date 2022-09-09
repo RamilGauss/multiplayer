@@ -103,10 +103,6 @@ bool TTankTower::Animate(guint32 time_ms)
 void TTankTower::RotateTurret(float ugol)
 {
   // вращаем башню
-  //D3DXMATRIXA16 matrix;
-  //D3DXMatrixIdentity(&matrix);
-  //D3DXMatrixRotationZ(&matrix, ugol);
-
   TMatrix16 matrix;
   SetMatrixIdentity(&matrix);
   SetMatrixRotateZ(&matrix,ugol);
@@ -118,15 +114,27 @@ void TTankTower::RotateTurret(float ugol)
 void TTankTower::RotateVerticalGun(float ugol)
 {
   // двигаем пушкой
-  //D3DXMATRIXA16 matrix;
-  //D3DXMatrixIdentity(&matrix);
-  //D3DXMatrixRotationX(&matrix, ugol);
   TMatrix16 matrix;
   SetMatrixIdentity(&matrix);
   SetMatrixRotateX(&matrix,ugol);
 
   mTree.ChangeMatrix(string("Gun"),&matrix);
   mTree.GetMatrix(&mVectorMatrix);
+
+
+  //###
+  //TMatrix16 a,b,c,d;
+  //SetMatrixIdentity(&a);
+  //SetMatrixIdentity(&b);
+  //SetMatrixIdentity(&c);
+  //SetMatrixIdentity(&d);
+  //a._41 = 1.0f;a._42 = 2.0f;a._43 = 3.0f;
+  //SetMatrixRotateX(&a,1.0f);
+  //SetMatrixRotateY(&b,1.0f);
+  //SetMatrixRotateZ(&c,1.0f);
+  //TMatrix16 abc = a*b*c;
+  //SetMatrixRotationYawPitchRoll(&d,1.0f,1.0f,1.0f);
+  //int adasda = 0;
 }
 //------------------------------------------------------------------------
 void TTankTower::SetHuman(char* pData, int size)

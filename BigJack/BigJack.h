@@ -87,14 +87,14 @@ protected:
 
   std::list<IBaseObjectGE*> mListTransparencyObject;// прозрачные объекты, временный список, только на этапе создания списка на отображение
 
-  CModelViewerCamera mCamera;                // A model viewing camera
-
+  CModelViewerCamera mCamera;                       // A model viewing camera
+  
   bool flgNeedResizeGUI;
 public:
   //----------------------------------------------------------------
   //                              INTERFACE
   //----------------------------------------------------------------
-  TBigJack();
+  TBigJack(ICamera* pCamera);
   virtual ~TBigJack();
 
   //------------------------------------------------------------------------
@@ -106,7 +106,6 @@ public:
   virtual bool IsFullScreen();
   virtual void ToggleFullScreen();
   virtual void SetTitleWindow(const char* sTitle);
-  //virtual void ForceResizeEventGUI();
 
   virtual void  GetResolutionFrame(int& h, int& w );// формат X8R8G8B8
   virtual void  SetResolutionFrame(int  h, int  w );// формат X8R8G8B8

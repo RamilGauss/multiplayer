@@ -49,10 +49,13 @@ you may contact in writing [ramil2085@gmail.com].
 #include "MyGUI.h"
 #include "DescEvent.h"
 #include "MakerDirectX_Realize.h"
+#include "ICamera.h"
 
 
 #define LOG_DX
 //#define LOG_DX_STREAM
+
+#define USE_ICAMERA
 
 using namespace std;
 using namespace nsStruct3D;
@@ -60,7 +63,7 @@ using namespace nsEvent;
 
 #pragma warning(disable: 4355)
 
-TBigJack::TBigJack()
+TBigJack::TBigJack(ICamera* pCamera):IGraphicEngine(pCamera)
 {
 #ifdef WIN32
   TMakerDirectX_Realize makerDXUT;
@@ -72,14 +75,24 @@ TBigJack::TBigJack()
 
   mTime_ms = 0;
 
-  mManagerModelDX.SetManagerResourceDX(&mManagerResourceDX);
 #ifdef WIN32
+  mManagerModelDX.SetManagerResourceDX(&mManagerResourceDX);
+#ifndef USE_ICAMERA
   mIndexView           = 
     mMainShaderStack.Push("View",(void*)mCamera.GetViewMatrix(),     sizeof(D3DXMATRIX));
   mIndexProj           = 
     mMainShaderStack.Push("Proj",(void*)mCamera.GetProjMatrix(),     sizeof(D3DXMATRIX));
   mIndexCameraPosition = 
     mMainShaderStack.Push("CameraPosition",(void*)mCamera.GetEyePt(),sizeof(D3DXVECTOR3));
+#else
+  mIndexView           = 
+    mMainShaderStack.Push("View",(void*)mICamera->GetView(),     sizeof(TMatrix16));
+  mIndexProj           = 
+    mMainShaderStack.Push("Proj",(void*)mICamera->GetProj(),     sizeof(TMatrix16));
+  mIndexCameraPosition = 
+    mMainShaderStack.Push("CameraPosition",(void*)mICamera->GetEyePt(),sizeof(TVector3));
+#endif
+
 #else
 #endif
 }
@@ -119,9 +132,13 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
   // Render the scene
   if( SUCCEEDED( pd3dDevice->BeginScene() ) )
   {
-    D3DXMATRIXA16* mDXView = (D3DXMATRIXA16*)mCamera.GetViewMatrix();// только для совместимости с DirectX (временно)
     TMatrix16 mView;
+#ifndef USE_ICAMERA
+    D3DXMATRIXA16* mDXView = (D3DXMATRIXA16*)mCamera.GetViewMatrix();// только для совместимости с DirectX (временно)
     MATRIX16_EQUAL_M_P(mView,mDXView)
+#else
+    mView = *mICamera->GetView();// только для совместимости с DirectX (временно)
+#endif
 
     SetCommonShaderStack();// передать общие параметры в шейдер
 
@@ -255,6 +272,7 @@ HRESULT TBigJack::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE
   mManagerModelDX.Setup(pd3dDevice);
   mManagerResourceDX.Setup(pd3dDevice);
   mViewerFPS.CreateDevice(pd3dDevice);
+#ifndef USE_ICAMERA
   // Setup the camera's view parameters
   D3DXVECTOR3 vecEye( 0.0f, -10.0f, 0.0001f );
   D3DXVECTOR3 vecAt ( 0.0f, 0.0f, 0.0f );
@@ -267,7 +285,18 @@ HRESULT TBigJack::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DSURFACE
   D3DXMatrixIdentity(&matrix);
   D3DXMatrixRotationZ(&matrix, float(M_PI));
   mCamera.SetViewMatrix(&newView);
-
+#else
+  TVector3 eye(0,0,0);
+  float angleDown  = M_PI_2;
+  float angleRight = 0;
+  float angleRoll  = 0;//M_PI_2;
+  mICamera->SetPosition(&eye);
+  mICamera->RotateDown(angleDown);
+  mICamera->RotateRight(angleRight);
+  mICamera->Roll(angleRoll);
+  //mICamera->MoveForward(10.0f);
+  mICamera->MoveUp(30.0f);
+#endif
   return S_OK;
 }
 //--------------------------------------------------------------------------------------
@@ -288,9 +317,13 @@ HRESULT TBigJack::OnResetDevice( IDirect3DDevice9* pd3dDevice,
   mViewerFPS.Reset();
   // Setup the camera's projection parameters
   float fAspectRatio = pBackBufferSurfaceDesc->Width / ( FLOAT )pBackBufferSurfaceDesc->Height;
-  mCamera.SetProjParams( D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f );
 
+#ifndef USE_ICAMERA
+  mCamera.SetProjParams( D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f );
   mCamera.SetWindow( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
+#else
+  mICamera->SetProjParams(D3DX_PI / 4, fAspectRatio, 0.1f, 1000.0f);
+#endif
 
   SetNeedResizeGUI(true);
   return S_OK;
@@ -298,8 +331,10 @@ HRESULT TBigJack::OnResetDevice( IDirect3DDevice9* pd3dDevice,
 //--------------------------------------------------------------------------------------
 void TBigJack::OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
 {
+#ifndef USE_ICAMERA
   // Update the camera's position based on user input 
   mCamera.FrameMove( fElapsedTime );
+#endif
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::OnFrameRender( IDirect3DDevice9* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
@@ -316,8 +351,9 @@ LRESULT TBigJack::MsgProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, b
   *pbNoFurtherProcessing = mDialogResourceManager.MsgProc( hWnd, uMsg, wParam, lParam );
   if( *pbNoFurtherProcessing )
     return 0;
-
+#ifndef USE_ICAMERA
   mCamera.HandleMessages( hWnd, uMsg, wParam, lParam );
+#endif
   return 0;
 }
 //--------------------------------------------------------------------------------------
@@ -396,9 +432,15 @@ void TBigJack::Animate()
 //--------------------------------------------------------------------------------------
 void TBigJack::SetCommonShaderStack()
 {
+#ifndef USE_ICAMERA
   mMainShaderStack.SetData(mIndexView,          (void*)mCamera.GetViewMatrix(), sizeof(D3DXMATRIX));
   mMainShaderStack.SetData(mIndexProj,          (void*)mCamera.GetProjMatrix(), sizeof(D3DXMATRIX));
   mMainShaderStack.SetData(mIndexCameraPosition,(void*)mCamera.GetEyePt(),      sizeof(D3DXVECTOR3));
+#else
+  mMainShaderStack.SetData(mIndexView,          (void*)mICamera->GetView(), sizeof(TMatrix16));
+  mMainShaderStack.SetData(mIndexProj,          (void*)mICamera->GetProj(), sizeof(TMatrix16));
+  mMainShaderStack.SetData(mIndexCameraPosition,(void*)mICamera->GetEyePt(),sizeof(TVector3));
+#endif
 
   mManagerResourceDX.Set(TManagerResourceDX::eTypeShader,&mMainShaderStack);
 }
