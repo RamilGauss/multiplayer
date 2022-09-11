@@ -40,9 +40,11 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include <stdio.h>
 #include <vector>
+//#include <list>
+
 #include "TypeDef.h"
-#include <list>
 #include "Container.h"
+#include "ListPtr.h"
 
 /*
   Сохранение файла. 
@@ -60,8 +62,8 @@ class SHARE_EI TSaveOnHDD
   bool flgEnable;
   bool flgBuffer;
 
-  typedef std::list< TContainer* > TListContainer;
-
+  typedef TListPtr<TContainer> TListContainer;
+  
   TListContainer mListBuffer;
 
 public:

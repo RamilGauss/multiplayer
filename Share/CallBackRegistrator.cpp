@@ -33,11 +33,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include <stddef.h>
-#include <string.h>
-#include <stdio.h>
-
-#include "memory_operation.h"
 #include "CallBackRegistrator.h"
 #include "BL_Debug.h"
 

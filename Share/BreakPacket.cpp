@@ -50,6 +50,14 @@ TBreakPacket::~TBreakPacket()
   DeleteCollect();
 }
 //-----------------------------------------------------------------
+void TBreakPacket::PushBack(char* p,int size)
+{
+  TContainerPtr cPtr;
+  cPtr.SetData(p, size);
+
+  mList.push_back(cPtr);
+}
+//-----------------------------------------------------------------
 void TBreakPacket::PushFront(char* p,int size)
 {
   TContainerPtr cPtr;
@@ -60,6 +68,8 @@ void TBreakPacket::PushFront(char* p,int size)
 //-----------------------------------------------------------------
 void TBreakPacket::Collect()
 {
+  if(mList.size()<=1) return;// Gauss для одно пакетного не надо делать сборку (оптимизация) 03.06.2013
+
   DeleteCollect();
   int size = GetSize();
 
@@ -74,7 +84,6 @@ void TBreakPacket::Collect()
     char* ptrPart = (char*)bit->GetPtr(); 
     memcpy(pCollect, ptrPart, sizePart);
     pCollect += sizePart;
-    size     += sizePart;
 
     bit++;
   }
@@ -82,6 +91,14 @@ void TBreakPacket::Collect()
 //-----------------------------------------------------------------
 void* TBreakPacket::GetCollectPtr()
 {
+  if(mList.size()==1)//Gauss для одно пакетного не надо делать сборку (оптимизация) 03.06.2013
+  {
+    return mList.begin()->GetPtr();
+  }
+  else 
+    if(mList.size()==0)
+      return NULL;
+
   return mCollect.GetPtr();
 }
 //-----------------------------------------------------------------
@@ -114,5 +131,11 @@ void TBreakPacket::DeleteCollect()
 void TBreakPacket::UnlinkPart()
 {
   mList.clear();
+}
+//-----------------------------------------------------------------	
+const TBreakPacket& TBreakPacket::operator =( const TBreakPacket& b )
+{
+	mList = b.mList;
+	return *this;
 }
 //-----------------------------------------------------------------

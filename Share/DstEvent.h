@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <vector>
 #include "TypeDef.h"
 #include "DescEvent.h"
-#include "List.h"
+#include "ListMultiThread.h"
 
 class TSrcEvent;
 
@@ -53,7 +53,7 @@ class TSrcEvent;
 
 class SHARE_EI TDstEvent
 {
-  TList<nsEvent::TEvent>* pListEvent;
+  TListMultiThread<nsEvent::TEvent>* pListEvent;
 
 public:
 

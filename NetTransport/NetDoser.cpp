@@ -49,20 +49,20 @@ void g_doser_unlock(){g_doser_gcs.unlock();}
 //-----------------------------------------------------------------------
 static TNetDoser* g_NetDoser = NULL;
 //-----------------------------------------------------------------------
-void FuncRecvPacket(void* p, int s)
+void FuncRecv(void* p, int s)
 {
   g_doser_lock();
   if(g_NetDoser)
-    g_NetDoser->RecvPacket((INetTransport::TDescRecv*)p,s);
+    g_NetDoser->Analiz((INetTransport::TDescRecv*)p,s);
   g_doser_unlock();
 }
 //-----------------------------------------------------------------------
-void FuncRecvStream(void* p, int s)
+void FuncLostPacket(void* p, int s)
 {
-  g_doser_lock();
-  if(g_NetDoser)
-    g_NetDoser->RecvStream((INetTransport::TDescRecv*)p,s);
-  g_doser_unlock();
+	g_doser_lock();
+	if(g_NetDoser)
+		g_NetDoser->LostPacket((INetTransport::TLostPacket*)p,s);
+	g_doser_unlock();
 }
 //-----------------------------------------------------------------------
 void FuncDisconnect(void* p, int s)
@@ -73,7 +73,10 @@ void FuncDisconnect(void* p, int s)
   g_doser_unlock();
 }
 //-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
+void FuncRecvFromDoserPacket(void *p, int s)
+{
+  g_NetDoser->RecvBigPacket((INetTransport::TDescRecv*)p, s);
+}
 //-----------------------------------------------------------------------
 TNetDoser::TNetDoser(char* pPathLog) : INetTransport(pPathLog)
 {
@@ -82,11 +85,17 @@ TNetDoser::TNetDoser(char* pPathLog) : INetTransport(pPathLog)
   g_NetDoser = this;
   g_doser_unlock();
 
-  mArrConnect.Sort(SortConnect);
+  mDoserPacket.Register(FuncRecvFromDoserPacket);
+  mDoserPacket.SetControlTraffic(&mControlTrafficTo);
+	
+	mControlTrafficTo.SetTransport(&mTransport);
+	//mControlTrafficFrom.SetTransport(&mTransport);
 }
 //--------------------------------------------------------------------------
 TNetDoser::~TNetDoser()
 {
+  mDoserPacket.Unregister(FuncRecvFromDoserPacket);
+
   g_doser_lock();
   g_NetDoser = NULL;
   g_doser_unlock();
@@ -103,46 +112,44 @@ bool TNetDoser::Open(unsigned short port, unsigned char numNetWork)
 	return mTransport.Open(port, numNetWork);
 }
 //--------------------------------------------------------------------------
-void TNetDoser::Register(TCallBackRegistrator::TCallBackFunc pFunc, int type)
+void TNetDoser::Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type)
 {
   TCallBackRegistrator::TCallBackFunc pDoserFunc = NULL;
   switch(type)
   {
-    case eRcvPacket:
-      pDoserFunc = FuncRecvPacket;
-      mCallBackRecvPacket.Register(pFunc);
+    case eRecv:
+      pDoserFunc = FuncRecv;
+      mCallBackRecv.Register(pFunc);
       break;
-    case eRcvStream:
-      pDoserFunc = FuncRecvStream;
-      mCallBackRecvStream.Register(pFunc);
-      break;
+		case eLostPacket:
+      pDoserFunc = FuncLostPacket;
+			mCallBackLostPacket.Register(pFunc);
+			break;
     case eDisconnect:
       pDoserFunc = FuncDisconnect;
       mCallBackDisconnect.Register(pFunc);
       break;
-    default:BL_FIX_BUG();
   }
   mTransport.Register(pDoserFunc,type);
 }
 //--------------------------------------------------------------------------
-void TNetDoser::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type)
+void TNetDoser::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type)
 {
   TCallBackRegistrator::TCallBackFunc pDoserFunc = NULL;
   switch(type)
   {
-    case eRcvPacket:
-      pDoserFunc = FuncRecvPacket;
-      mCallBackRecvPacket.Unregister(pFunc);
+    case eRecv:
+      pDoserFunc = FuncRecv;
+      mCallBackRecv.Unregister(pFunc);
       break;
-    case eRcvStream:
-      pDoserFunc = FuncRecvStream;
-      mCallBackRecvStream.Unregister(pFunc);
-      break;
-    case eDisconnect:
+		case eLostPacket:
+      pDoserFunc = FuncLostPacket;
+			mCallBackLostPacket.Unregister(pFunc);
+			break; 
+		case eDisconnect:
       pDoserFunc = FuncDisconnect;
       mCallBackDisconnect.Unregister(pFunc);
       break;
-    default:BL_FIX_BUG();
   }
   mTransport.Unregister(pDoserFunc,type);
 }
@@ -151,7 +158,6 @@ bool TNetDoser::Synchro(unsigned int ip, unsigned short port)
 {
 	return mTransport.Synchro(ip,port);
 }
-//--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
 void* ThreadDoser(void*p)
 {
@@ -164,7 +170,6 @@ void* ThreadDoser(void*p)
 void TNetDoser::Start()
 {
 	mTransport.Start();
-
   thread = g_thread_create(ThreadDoser,
     (gpointer)this,
     true,
@@ -178,9 +183,7 @@ void TNetDoser::Stop()
   mTransport.Stop();
   flgNeedStop = true;
   while(IsActive())
-  {
     ht_msleep(eWaitThread);
-  }
 }
 //--------------------------------------------------------------------------
 bool TNetDoser::IsActive()
@@ -192,24 +195,7 @@ void TNetDoser::Send(unsigned int ip, unsigned short port,
                      TBreakPacket& packet,
                      bool check )
 {
-  int sizePacket = packet.GetSize();
-  // найти описание соединения
-  TDescConnect* pDescConnect = GetDescConnect(ip, port);
-  // узнать надо ли помещать в автомат пакеты для отправки из рабочего потока
-  bool resAdd = pDescConnect->GetAutomat()->AddInQueue(sizePacket);
-  if(resAdd)
-  {
-    // создать описание пакетов и поместить в список на отправку. 
-    // Эти пакеты отправятся в рабочем потоке.
-
-  }
-  else
-  {
-    if(sizePacket>eLimitSizePacket)
-      SendBigPacket(ip, port, packet, check);
-    else
-      SendSinglePacket(ip, port, packet, check);
-  }
+  mDoserPacket.Send(ip, port, packet, check);
 }
 //--------------------------------------------------------------------------
 void TNetDoser::Engine()
@@ -218,255 +204,71 @@ void TNetDoser::Engine()
   flgActive = true;
   while(!flgNeedStop)
   {
-    if(Work()==false)// если надо работать, то пропуск сна
+    if(mControlTrafficTo.Work()==false)// если не работать, то спать
       ht_msleep(eSleepThread);
+    mDoserPacket.Work();
   }
   flgActive = false;
 }
 //----------------------------------------------------------------------------------
-//int TNetDoser::GetSizeTrySend()
-//{
-//  return mSumSizePacket;
-//}
-////----------------------------------------------------------------------------------
-//void TNetDoser::AddPacket(unsigned int ip, unsigned short port, void* packet, int size, bool check)
-//{
-//  TPacket* pPacket = new TPacket(ip, port, packet, size, check);
-//  mListPacket.Add(pPacket);
-//  mSumSizePacket += size;
-//}
-////----------------------------------------------------------------------------------
-//void TNetDoser::RemovePacket(TPacket** ppPacket)
-//{
-//  TPacket* pPacket = *ppPacket;
-//  int size = pPacket->size;
-//  mListPacket.Remove(ppPacket);
-//  mSumSizePacket -= size;
-//  BL_ASSERT(mSumSizePacket>=0);
-//}
-//----------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------
-bool TNetDoser::Work()
-{
-//  TPacket** ppPacket = mListPacket.GetFirst();
-//  // дробим пакет или отправляем оставшиеся части
-//  while(ppPacket&&!flgNeedStop)// либо пока не закончатся пакеты либо пока не остановили
-//  {
-//    TPacket* pPacket = *ppPacket;
-//    // "Дробление"
-//    // начинаем с первого пакета и по счетчику отсылаем его части
-//    if(Send(pPacket))// удалить только если дали отправить
-//      RemovePacket(ppPacket);
-//    // закончился пакет - смотрим есть ли еще
-//    // если есть повторяем процесс "Дробления"
-//    // если нет выходим
-//    ppPacket = mListPacket.GetFirst();
-//  }
-  return false;
-}
-//----------------------------------------------------------------------------------
-//bool TNetDoser::Send(TPacket* pPacket)
-//{
-  //int cnt_recv = (pPacket->size - 1)/eLimitSizePacket + 1;
-  //char* pPart  = (char*)pPacket->packet;
-  //int sizePart = pPacket->size;
-  //int restPacket = pPacket->size;
-  //for(int i = 0 ; i < cnt_recv ;)
-  //{
-  //  for(int j = 0 ; j < eCntGroupSend ; j++ )
-  //  {
-  //    sizePart = (restPacket/eLimitSizePacket) ? eLimitSizePacket : restPacket;
-  //    //---------------------------------------------------------------------------
-  //    mTransport.Send(pPacket->ip, pPacket->port, pPart, sizePart, pPacket->check);
-  //    restPacket -= sizePart;
-  //    pPart   += eLimitSizePacket;
-  //    i++;
-  //    if(i==cnt_recv)
-  //      return true;
-  //    if(flgNeedStop) return false;
-  //  }
-  //  ht_msleep(eTimeSleepBetweenGroup);
-  //}
-  //return true;
-//}
-//----------------------------------------------------------------------------------
-void TNetDoser::RecvPacket(TDescRecv* p, int s)
-{
-	// анализ содержимого пакетов и принятие решения по настройке трафика
-  // и сборка больших пакетов
-  Analiz(p, s);
-}
-//----------------------------------------------------------------------------------
-void TNetDoser::RecvStream(TDescRecv* p, int s)
-{
-  NotifySinglePacket(p, s, mCallBackRecvStream);
-}
-//----------------------------------------------------------------------------------
 void TNetDoser::Disconnect(TIP_Port* p, int s)
 {
-  // транслировать дальше
-  mCallBackDisconnect.Notify(p,s);
+  mCallBackDisconnect.Notify(p,s);// транслировать дальше
 }
 //----------------------------------------------------------------------------------
 void TNetDoser::Analiz(TDescRecv* p, int s)
 {
+	//ControlTrafficFrom(p);
+	// анализ содержимого пакетов и принятие решения по настройке трафика
+  // и сборка больших пакетов
   THeaderBasePacket* pPacket = (THeaderBasePacket*)(p->data);
   switch(pPacket->type)
   {
     case eBigPacket:
-      // дособрать пакет
+      // собрать пакет
+      mDoserPacket.Recv(p);
       break;
     case eSinglePacket:
-      NotifySinglePacket(p, s, mCallBackRecvPacket);
+      NotifyRecvSinglePacket(p);
       break;
-    case eOverload:
-      // отреагировать на перегрузку
-      break;
+    //case eOverload:
+    //  // отреагировать на перегрузку
+    //  mControlTrafficTo.Recv(p);
+    //  break;
     default:BL_FIX_BUG();
   }
 }
 //----------------------------------------------------------------------------------
-void TNetDoser::NotifySinglePacket(TDescRecv* p, int s, TCallBackRegistrator& callback)
+void TNetDoser::NotifyRecvSinglePacket(TDescRecv* p)
 {
-  TDescRecv descRecv;
-  descRecv.ip_port  = p->ip_port;
-  descRecv.data     = p->data     + sizeof(THeaderSinglePacket);
-  descRecv.sizeData = p->sizeData - sizeof(THeaderSinglePacket);
-  callback.Notify(&descRecv,sizeof(descRecv)); // транслировать дальше
+  TDescRecv descRecv = *p;
+  descRecv.data     += sizeof(THeaderSinglePacket);
+  descRecv.sizeData -= sizeof(THeaderSinglePacket);
+  mCallBackRecv.Notify(&descRecv,sizeof(TDescRecv)); // транслировать дальше
 }
 //----------------------------------------------------------------------------------
-int TNetDoser::SortConnect(const void* p1, const void* p2)
+void TNetDoser::RecvBigPacket(TDescRecv* p, int s)
 {
-  const TDescConnect *s1 = *( const TDescConnect **)p1;
-  const TDescConnect *s2 = *( const TDescConnect **)p2;
-
-  if(s1->GetIP()>s2->GetIP())
-    return -1;
-  else 
-    if(s1->GetIP()==s2->GetIP())
-    {
-      if(s1->GetPort()>s2->GetPort())
-        return -1;
-      else 
-        if(s1->GetPort()==s2->GetPort())
-          return 0;
-    }
-    return 1;
+  // пришло от DoserPacket, собранный пакет
+  // не содержит заголовков, "чистые" данные
+  mCallBackRecv.Notify(p,sizeof(TDescRecv)); // транслировать дальше
 }
 //----------------------------------------------------------------------------------
-int TNetDoser::SortConnectByIP_Port(const void* p1, const void* p2)
+//void TNetDoser::ControlTrafficFrom(TDescRecv* p)
+//{
+//	THeaderBasePacket* pPacket = (THeaderBasePacket*)(p->data);
+//	switch(pPacket->type)
+//	{
+//		case eBigPacket:
+//		case eSinglePacket:
+//			mControlTrafficFrom.Recv(p);
+//			break;
+//		default:;
+//	}
+//}
+//----------------------------------------------------------------------------------
+void TNetDoser::LostPacket(INetTransport::TLostPacket* p, int s)
 {
-  const TDescConnect *s1 = *( const TDescConnect **)p1;
-  const TIP_Port *s2 = *( const TIP_Port **)p2;
-
-  if(s1->GetIP()>s2->ip)
-    return -1;
-  else 
-    if(s1->GetIP()==s2->ip)
-    {
-      if(s1->GetPort()>s2->port)
-        return -1;
-      else 
-        if(s1->GetPort()==s2->port)
-          return 0;
-    }
-    return 1;
+	mCallBackLostPacket.Notify(p,s);
 }
 //----------------------------------------------------------------------------------
-int TNetDoser::SortBigPacket(const void* p1, const void* p2)
-{
-	const TCollectBigPacket *s1 = *( const TCollectBigPacket **)p1;
-	const TCollectBigPacket *s2 = *( const TCollectBigPacket **)p2;
-
-	if(s1->ip_port.ip>s2->ip_port.ip)
-		return -1;
-	else 
-		if(s1->ip_port.ip==s2->ip_port.ip)
-		{
-			if(s1->ip_port.port>s2->ip_port.port)
-				return -1;
-			else 
-				if(s1->ip_port.port==s2->ip_port.port)
-					return 0;
-		}
-		return 1;
-}
-//----------------------------------------------------------------------------------
-int TNetDoser::SortBigPacketByIP_Port(const void* p1, const void* p2)
-{
-	const TCollectBigPacket *s1 = *( const TCollectBigPacket **)p1;
-	const TIP_Port *s2 = *( const TIP_Port **)p2;
-
-	if(s1->ip_port.ip>s2->ip)
-		return -1;
-	else 
-		if(s1->ip_port.ip==s2->ip)
-		{
-			if(s1->ip_port.port>s2->port)
-				return -1;
-			else 
-				if(s1->ip_port.port==s2->port)
-					return 0;
-		}
-		return 1;
-}
-//----------------------------------------------------------------------------------
-TDescConnect* TNetDoser::GetDescConnect(unsigned int ip, unsigned short port)
-{
-  TIP_Port ip_port(ip,port);
-  TIP_Port* pIP_Port = &ip_port;
-
-  lockSendRcv();
-  TDescConnect* pFoundFresh = 
-    (TDescConnect*)mArrConnect.Get(mArrConnect.FastSearch(&pIP_Port,NULL,SortConnectByIP_Port));
-  unlockSendRcv();
-  if(pFoundFresh==NULL)
-  {
-    TDescConnect* pFresh = new TDescConnect;
-    pFresh->GetAutomat()->SetTransport(&mTransport);
-    *(pFresh->GetIP_Port()) = ip_port;
-
-    lockSendRcv();
-    mArrConnect.Add(pFresh);
-    unlockSendRcv();
-    return pFresh;
-  }
-  return pFoundFresh;
-}
-//----------------------------------------------------------------------------------
-void TNetDoser::SendBigPacket(unsigned int ip, unsigned short port, 
-                              TBreakPacket& packet, bool check)
-{
-  //THeaderBigPacket header;
-  //header.type    = eBigPacket;
-  //header.time_ms = ht_GetMSCount();
-  //TBigPacketNetDoser bigPacket;
-  //bigPacket.SetHeader(header);
-  //bigPacket.SetData(packet,size);
-  //int sizeData;
-  //void* pData = bigPacket.Get(sizeData);
-}
-//----------------------------------------------------------------------------------
-void TNetDoser::SendSinglePacket(unsigned int ip, unsigned short port, 
-                                 TBreakPacket& packet, bool check)
-{
-  THeaderSinglePacket header;
-  header.SetTime();
-  packet.PushFront((char*)&header, sizeof(header));
-  mTransport.Send(ip, port, packet, check);
-}
-//----------------------------------------------------------------------------------
-void TNetDoser::Lock(void* pLocker)
-{
-  GCS* pGCS = (GCS*)pLocker;
-  pGCS->lock();
-}
-//----------------------------------------------------------------------------------
-void TNetDoser::Unlock(void* pLocker)
-{
-  GCS* pGCS = (GCS*)pLocker;
-  pGCS->unlock();
-}
-//----------------------------------------------------------------------------------
-

@@ -38,6 +38,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define hArrayH
 
 #include "TObject.h"
+#include <wchar.h>
 
 //-----------------------------------------------------------------------------
 // Прототип функции сортировки
@@ -344,12 +345,15 @@ TItem TArrayVALUE<TItem>::Delete( int d )
   {
     TItem* tPtr = baseItem() + d;
     TItem retVal = *tPtr;
-    int i = count - d - 1;
-    while( i-- )
-    {
-      *tPtr = *(tPtr + 1);
-      tPtr++;
-    }
+    //int i = count - d - 1;
+    //while( i-- )
+    //{
+    //  *tPtr = *(tPtr + 1);
+    //  tPtr++;
+    //}
+    // Gauss 24.05.2013
+    memmove(tPtr, tPtr+1, (count - d - 1)*sizeof(TItem*) );
+
     count--;
     softTrim();
     return retVal;

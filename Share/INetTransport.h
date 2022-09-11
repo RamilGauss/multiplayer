@@ -47,18 +47,33 @@ class SHARE_EI INetTransport
 {
 public:
   //типы callback вызовов
-  enum{
-    eRcvPacket  = 0,		   
-    eRcvStream  = 1,
-    eDisconnect = 2,
-  };
+  typedef enum{
+    eRecv       = 0, // TDescRecv		   
+    eLostPacket = 1, // TLostPacket
+    eDisconnect = 2, // TIP_Port
+  }eTypeCallback;
+	typedef enum{
+		ePacket  = 0,		   
+		eStream  = 1,
+	}eTypeRecv;
   // callback вернет данную структуру
   struct TDescRecv
   {
     TIP_Port ip_port;
     char* data;
     int   sizeData;
+		eTypeRecv type;
   };
+	struct TLostPacket
+	{
+		TIP_Port      mIP_Port;
+		unsigned char mCntTry;
+		TLostPacket( TIP_Port& ip_port, unsigned char c)
+		{
+			mIP_Port = ip_port;
+			mCntTry  = c;
+		}
+	};
 
   INetTransport(char* pPathLog = NULL);
   virtual ~INetTransport();
@@ -68,12 +83,11 @@ public:
   // в качестве передаваемых данных выступает объект, который
   // содержит цепочку данных
 	virtual void Send(unsigned int ip, unsigned short port,
-                    TBreakPacket& packet,//void* packet, int size, 
-                    bool check = true) = 0;
+                    TBreakPacket& packet, bool check = true) = 0;
 
 	// чтение - зарегистрируйся
-  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
-  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
+  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type) = 0;
+  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type) = 0;
 
 	// старт и стоп движка
 	virtual void Start() = 0;
@@ -83,6 +97,9 @@ public:
   // синхронная функция
 	// вызывать до вызова Start()
   virtual bool Synchro(unsigned int ip, unsigned short port) = 0; // вызов только для клиента
+
+	virtual void SetTimeOutPacket( int t_ms) = 0;
+	virtual void SetCntTry( int c) = 0;
 };
 
 

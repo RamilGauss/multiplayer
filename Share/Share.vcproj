@@ -215,6 +215,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ContainerRise.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ControlCamera.cpp"
 				>
 			</File>
@@ -311,6 +315,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Queue2Thread.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SaveOnHDD.cpp"
 				>
 			</File>
@@ -397,6 +405,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ContainerRise.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ContextMachine.h"
 				>
 			</File>
@@ -449,7 +461,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\List.h"
+				RelativePath=".\ListMultiThread.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ListPtr.h"
 				>
 			</File>
 			<File
@@ -534,6 +550,10 @@
 			</File>
 			<File
 				RelativePath=".\Paradigma.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Queue2Thread.h"
 				>
 			</File>
 			<File

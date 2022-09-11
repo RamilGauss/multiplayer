@@ -35,8 +35,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 
 #include <string.h>
-#include "hArray.h"
 #include <stdlib.h>
+
+#include "hArray.h"
 
 #include "BL_Debug.h"
 #include <glib.h>

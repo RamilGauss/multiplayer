@@ -66,8 +66,8 @@ string TShaderStack::GetName(int index)
 void* TShaderStack::GetData(int index, int& size)
 {
   BL_ASSERT(index<int(mVectorNameData.size()));
-  size = mVectorNameData.at(index)->size;
-  return mVectorNameData.at(index)->data;
+  size = mVectorNameData.at(index)->c.GetSize();
+  return mVectorNameData.at(index)->c.GetPtr();
 }
 //-----------------------------------------------------------------------------------------------------
 void TShaderStack::Done()

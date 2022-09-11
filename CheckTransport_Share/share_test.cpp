@@ -14,6 +14,7 @@ char packet[SIZE_PACKET];
 
 float freq_printf_recv_packet = 10.0f;// %
 float limit_recv_packet = 0;// %
+static int cntLostPacket = 0;
 
 //TMakerNetTransport
 TMakerNetDoser 
@@ -80,5 +81,30 @@ void RecvStream(void* p, int s)
 void Disconnect(void* p, int s)
 {
   printf("Disconnect\n");
+}
+//-----------------------------------------------------------------------
+void Recv(void* p, int s)
+{
+	INetTransport::TDescRecv* pDesc = (INetTransport::TDescRecv*)p;
+	switch(pDesc->type)
+	{
+		case INetTransport::ePacket:
+			RecvPacket(NULL,0);
+			break;
+		case INetTransport::eStream:
+			RecvStream(NULL,0);
+			break;
+	}
+}
+//-----------------------------------------------------------------------
+void LostPacket(void* p, int s)
+{
+	INetTransport::TLostPacket* pDesc = (INetTransport::TLostPacket*)p;
+	cntLostPacket++;
+}
+//-----------------------------------------------------------------------
+int GetCntLostPacket()
+{
+	return cntLostPacket;
 }
 //-----------------------------------------------------------------------

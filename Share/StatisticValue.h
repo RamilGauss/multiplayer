@@ -153,6 +153,11 @@ public:
     mSKO = 0;
   }
 
+
+  TAverage summa() const
+  {
+    return TAverage(mSum);
+  }
   // среднее арифметическое значение (мат. ожидание)
   TAverage aver() const
   {

@@ -52,6 +52,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 // содержит поток для проверки получения пакетов по сети
 // ограничение по максимальному размеру пакета - 1400 байт.
 
+// Thread safe - Send поддерживает.
+
 class TNetTransport : public INetTransport
 {
 protected:
@@ -63,25 +65,38 @@ protected:
   void unlockArrConnect(){Unlock(&gcsArrFresh);};
 
 	GCS gcsSendRcv;
-	void lockSendRcv(){Lock(&gcsSendRcv);};
+	void lockSendRcv()  {Lock(&gcsSendRcv);};
 	void unlockSendRcv(){Unlock(&gcsSendRcv);};
 
-  TCallBackRegistrator mCallBackRecvPacket;// указатель на ip, port, пакет и размер данных по указателю, данные - {4б|2б|sizeб-6б}
-  TCallBackRegistrator mCallBackRecvStream;// указатель на ip, port, пакет и размер данных по указателю, данные - {4б|2б|sizeб-6б}
-  TCallBackRegistrator mCallBackDisconnect;// указатель на ip, port с кем произошел разрыв связи
+	TCallBackRegistrator mCallBackRecv;      // TDescRecv		
+	TCallBackRegistrator mCallBackLostPacket;// TLostPacket
+	TCallBackRegistrator mCallBackDisconnect;// TIP_Port
 
 	UdpDevice mUDP;	
 
 	volatile bool flgActive;
 	volatile bool flgNeedStop;
 
+	int mTimeOut;
+	int mCntTry;
+
+	// пакеты, ожидающие квитанцию
+	TArrayObject mArrWaitCheck;
+	// информация по сокету. какой текущий номер пакета идет на прием и на отправку
+	TArrayObject mArrConnect;
+
+	typedef std::list<TLostPacket> TListLP;
+	typedef TListLP::iterator TListLPIt;
+
+	TListLP mListLostPacket;
+
 	enum
   {
-    eSizeBuffer     = 65535,
-    eCntTry         = 10, //15,
-    eTimeLivePacket = 120,//60,//если в течение такого времени не будет квитанции, считается пакет не доставлен, мс
-    eTimeout        = 60, // частота обновления движка, мс
-    eWaitThread     = eCntTry*eTimeLivePacket,// мс
+    eSizeBuffer        = 65535,
+    eCntTryDef         = 10,
+    eTimeLivePacketDef = 120, //если в течение такого времени не будет квитанции, считается пакет не доставлен, мс
+    eTimeRefreshEngine = 60,  // частота обновления движка, мс
+    
     // размер системных буферов
     eSizeBufferForRecv = 30000000, // байт
     eSizeBufferForSend = 30000000, // байт
@@ -93,7 +108,7 @@ protected:
 		eStream  = 'S',
 		eSynchro = 'C',
 		eCheck   = 'K',
-	}eTypePacket;
+	}eTypeHeadPacket;
   enum
   {
     eWaitSynchro=5,// сек
@@ -112,12 +127,12 @@ public:
   virtual bool Open(unsigned short port, unsigned char numNetWork = 0);
 
 	virtual void Send(unsigned int ip, unsigned short port, 
-                    TBreakPacket& packet,//void* packet, int size, 
+                    TBreakPacket& packet,
                     bool check = true);
 
 	// чтение - зарегистрируйся
-  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type);
-  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type);
+  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type);
+  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type);
 
 	virtual void Start();
 	virtual void Stop();
@@ -125,6 +140,10 @@ public:
 
   // синхронная функция
   virtual bool Synchro(unsigned int ip, unsigned short port); // вызов только для клиента
+
+	virtual void SetTimeOutPacket( int t_ms);
+	virtual void SetCntTry( int c);
+
 protected:
   bool SendSynchro(unsigned int ip, unsigned short port, int cntTry);
 
@@ -133,23 +152,20 @@ protected:
   void Unlock(void* pLocker);
 
 protected:
-  void notifyDisconnect(TIP_Port* data){mCallBackDisconnect.Notify(data,sizeof(TIP_Port));};
+  void NotifyDisconnect(TIP_Port* data){mCallBackDisconnect.Notify(data,sizeof(TIP_Port));};
 
 	friend void* ThreadTransport(void*p);
 	void Engine();
 
 protected:
 
-  // пакеты, ожидающие квитанцию
-	TArrayObject mArrWaitCheck;
-	
 	void* FindInList();
 
 protected:
 	void AnalizPacket(unsigned int ip,unsigned short port,int size);
   void FindAndCheck(nsNetTransportStruct::THeader* prefix,
                     unsigned int ip,unsigned short port);
-  void NotifyRecv(TCallBackRegistrator& callBack, int size);
+  void NotifyRecv(eTypeRecv type, int size);
   void SendCheck(nsNetTransportStruct::THeader* prefix,
                  unsigned int ip,unsigned short port);
 
@@ -172,9 +188,6 @@ protected:
 
 protected:
 
-  // информация по сокету. какой текущий номер пакета идет на прием и на отправку
-  TArrayObject mArrConnect;
-
   bool IsPacketFresh();
   bool IsStreamFresh();
 
@@ -193,6 +206,11 @@ protected:
   void SearchAndDeleteConnect(TIP_Port* ip_port);
 
   void SetupBufferForSocket();
+
+	int WaitThread(){return mTimeOut*mCntTry;}
+
+	void AddEventLostPacket( TIP_Port& ip_port, unsigned char c);
+	void NotifyLostPacket();
 };
 
 

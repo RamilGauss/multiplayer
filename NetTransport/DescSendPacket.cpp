@@ -38,15 +38,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 using namespace nsNetDoser;
 
-TDescSendPacket::TDescSendPacket(TIP_Port &_ip_port, 
-                                 bool _check, TBreakPacket& packet)
+TDescSendPacket::TDescSendPacket()
 {
-  ip_port = _ip_port;
-  check   = _check;
-  packet.Collect();
-  int sizeData = packet.GetSize();
-  mContainer.SetData((char*)packet.GetCollectPtr(),sizeData);
-  mPacket.PushFront((char*)mContainer.GetPtr(),    mContainer.GetSize());
+
 }
 //----------------------------------------------------------------------------------
 void TDescSendPacket::Done()

@@ -1,0 +1,23 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+                  <script type="text/javascript">
+                  var data = {"ReadSession":"https://stackauth.com/auth/global/read-session","Request":"kK1nyMmIIO2v8CcT0i0hy6hpK1B7dfgtKyZz7fgTU23YfM+WfEbvUDU32FBj81REhmqUkVFMV79VLCAVg7L14A==","Nonce":"OxKzUQAAAAALJ9dO+lKVLw==","Referrer":"http://stackoverflow.com/questions/12205393/server-client-tcp-asynchronous-winsock-fd-write-issue","StorageName":"GlobalLogin"};
+
+                  var toMsg = window.parent;
+
+                  var obj = localStorage.getItem(data.StorageName);
+                  if(obj != null) {
+                  var req = new XMLHttpRequest();
+                  req.open('POST', data.ReadSession+'?request='+encodeURIComponent(data.Request)+'&nonce='+encodeURIComponent(data.Nonce)+'&seriesAndToken='+encodeURIComponent(obj), false);
+                  req.send(null);
+                  
+                    if(req.status == 200){
+                      toMsg.postMessage(req.responseText, data.Referrer);
+                    }else{
+                      toMsg.postMessage('No Session', data.Referrer);
+                    }
+                  }else{
+                    toMsg.postMessage('No Local Storage', data.Referrer);
+                  }
+                  </script>
+                  </head><body></body></html>

@@ -74,7 +74,8 @@ using namespace nsNetTransportStruct;
 #endif
 
 //----------------------------------------------------------------------------
-TNetTransport::TNetTransport(char* pPathLog) : INetTransport(pPathLog)
+TNetTransport::TNetTransport(char* pPathLog) : INetTransport(pPathLog),	
+mTimeOut(eTimeLivePacketDef), mCntTry(eCntTryDef)
 {
   flgActive = false;
   mArrConnect.Sort(SortFreshInfoConnect);
@@ -119,7 +120,7 @@ bool TNetTransport::Open(unsigned short port, unsigned char numNetWork)
 //----------------------------------------------------------------------------------
 // Gauss 04.05.2013
 void TNetTransport::Send(unsigned int ip, unsigned short port, 
-                         TBreakPacket& packet,//void* packet, int size, 
+                         TBreakPacket& packet, 
                          bool check)
 {
   // собрать все части пакета, которые образовались при проходе через уровни
@@ -195,6 +196,7 @@ void TNetTransport::Engine()
 			};
 		}
 		SendUnchecked();
+		NotifyLostPacket();
 	}
 	flgActive = false;
 }
@@ -214,7 +216,7 @@ void TNetTransport::Stop()
 	flgNeedStop = true;
 	while(IsActive())
 	{
-		ht_msleep(eWaitThread);
+		ht_msleep(WaitThread());
 	}
 	mUDP.close();
 }
@@ -250,11 +252,11 @@ void TNetTransport::AnalizPacket(unsigned int ip,unsigned short port,int size)
     case ePacket:// пакет, требующий подтверждения
       SendCheck(prefix,ip,port);
 			if(IsPacketFresh())
-        NotifyRecv(mCallBackRecvPacket, size);
+				NotifyRecv(INetTransport::ePacket, size);
       break;
     case eStream:// пакет, не требующий подтверждения
 			if(IsStreamFresh())
-        NotifyRecv(mCallBackRecvStream, size);
+        NotifyRecv(INetTransport::eStream, size);
       break;
     default:BL_FIX_BUG();;
   }
@@ -291,7 +293,7 @@ void TNetTransport::FindAndCheck(THeader* prefix,unsigned int ip,unsigned short 
 //----------------------------------------------------------------------------------
 int TNetTransport::GetTimeout()
 {
-	int to = eTimeout;//###
+	int to = eTimeRefreshEngine;//###
 	return to;
 }
 //----------------------------------------------------------------------------------
@@ -304,14 +306,17 @@ void TNetTransport::SendUnchecked()
 		TBasePacketNetTransport* pDefPacket = (TBasePacketNetTransport*)mArrWaitCheck.Get(i);
 		if(pDefPacket)
 		{
-			if(pDefPacket->GetTime()+eTimeLivePacket<now_ms) 
-			if(Send(pDefPacket)==false)
+			if(pDefPacket->GetTime()+eTimeLivePacketDef<now_ms) 
 			{
-        TIP_Port ip_port;
-        ip_port.ip   = pDefPacket->GetIP_dst();
-        ip_port.port = pDefPacket->GetPort_dst();
-        Disconnect(&ip_port);
-        i--;
+				TIP_Port ip_port;
+				ip_port.ip   = pDefPacket->GetIP_dst();
+				ip_port.port = pDefPacket->GetPort_dst();
+				AddEventLostPacket(ip_port, pDefPacket->GetCntTry());
+				if(Send(pDefPacket)==false)
+				{
+					Disconnect(&ip_port);
+					i--;
+				}
 			}
 		}
 		else BL_FIX_BUG();
@@ -319,44 +324,42 @@ void TNetTransport::SendUnchecked()
 	unlockSendRcv();
 }
 //----------------------------------------------------------------------------------
-void TNetTransport::Register(TCallBackRegistrator::TCallBackFunc pFunc, int type)
+void TNetTransport::Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type)
 {
   switch(type)
   {
-		case eRcvPacket:
-      mCallBackRecvPacket.Register(pFunc);
+		case eRecv:
+      mCallBackRecv.Register(pFunc);
       break;
-		case eRcvStream:
-			mCallBackRecvStream.Register(pFunc);
+		case eLostPacket:
+			mCallBackLostPacket.Register(pFunc);
 			break;
     case eDisconnect:
       mCallBackDisconnect.Register(pFunc);
       break;
-    default:BL_FIX_BUG();
   }
 }
 //----------------------------------------------------------------------------------
-void TNetTransport::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type)
+void TNetTransport::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type)
 {
   switch(type)
   {
-		case eRcvPacket:
-			mCallBackRecvPacket.Unregister(pFunc);
+		case eRecv:
+			mCallBackRecv.Unregister(pFunc);
 			break;
-		case eRcvStream:
-			mCallBackRecvStream.Unregister(pFunc);
+		case eLostPacket:
+			mCallBackLostPacket.Unregister(pFunc);
 			break;
 		case eDisconnect:
 			mCallBackDisconnect.Unregister(pFunc);
 			break;
-    default:BL_FIX_BUG();
   }
 }
 //----------------------------------------------------------------------------------
 bool TNetTransport::Send(TBasePacketNetTransport* pDefPacket)
 {
   unsigned char cntTry = pDefPacket->GetCntTry();
-  if((unsigned char)(cntTry+1)>eCntTry)
+  if((unsigned char)(cntTry+1)>eCntTryDef)
     return false;
   
   pDefPacket->SetCntTry(cntTry+1);  
@@ -371,7 +374,7 @@ bool TNetTransport::Send(TBasePacketNetTransport* pDefPacket)
 //----------------------------------------------------------------------------------
 void TNetTransport::Disconnect(TIP_Port* ip_port)
 {
-  notifyDisconnect(ip_port);
+  NotifyDisconnect(ip_port);
   // Gauss 04.02.2013
   // удалить пакеты, которые стоят в очереди на отправку и получение квитанции
   // ищем в массиве пакетов, ожидающих подтверждение
@@ -410,14 +413,15 @@ void TNetTransport::SearchAndDelete(TArrayObject* pArr, TIP_Port* ip_port)
   }
 }
 //----------------------------------------------------------------------------------
-void TNetTransport::NotifyRecv(TCallBackRegistrator& callBack, int size)
+void TNetTransport::NotifyRecv(eTypeRecv type, int size)
 {
   TDescRecv descRecv;
   descRecv.ip_port  = ((THeader*)mBuffer)->ip_port_src;
   descRecv.data     = mBuffer + sizeof(THeader);
   descRecv.sizeData = size - sizeof(THeader);
+	descRecv.type     = type;
 
-  callBack.Notify(&descRecv,sizeof(descRecv));
+  mCallBackRecv.Notify(&descRecv,sizeof(descRecv));
 }
 //----------------------------------------------------------------------------------
 void TNetTransport::SendCheck(THeader* prefix,unsigned int ip,unsigned short port)
@@ -603,7 +607,7 @@ int TNetTransport::SortFreshDefPacket(const void* p1, const void* p2)
   return 1;
 }
 //----------------------------------------------------------------------------------
-TInfoConnect* TNetTransport::GetInfoConnect(TIP_Port& v)//unsigned int ip, unsigned short port)
+TInfoConnect* TNetTransport::GetInfoConnect(TIP_Port& v)
 {
   TInfoConnect fresh;
   TInfoConnect* pFresh = &fresh;
@@ -651,16 +655,16 @@ bool TNetTransport::Synchro(unsigned int ip, unsigned short port)
 	unsigned int time_send = 0;
   while((start_ms+eWaitSynchro*1000)>now_ms)
   {
-		if(now_ms>time_send+eTimeLivePacket)
+		if(now_ms>time_send+eTimeLivePacketDef)
 		{
 			time_send	= ht_GetMSCount();
 			if(!SendSynchro(ip,port,cntTry)) {mUDP.close();return false;}
-		  if(cntTry>eCntTry) 
+		  if(cntTry>eCntTryDef) 
         return false;
       cntTry++;
 		}
     
-    int res = mUDP.read(mBuffer,eSizeBuffer,(eWaitSynchro*1000)/eCntTry, ip, port);
+    int res = mUDP.read(mBuffer,eSizeBuffer,(eWaitSynchro*1000)/eCntTryDef, ip, port);
     switch(res)
     {
       case RR_ERROR:
@@ -749,5 +753,32 @@ void TNetTransport::SetupBufferForSocket()
   bool resSetRecv = mUDP.SetRecvBuffer(eSizeBufferForRecv);
   bool resSetSend = mUDP.SetSendBuffer(eSizeBufferForSend);
   BL_ASSERT(resSetRecv&resSetSend);
+}
+//----------------------------------------------------------------------------------
+void TNetTransport::SetTimeOutPacket( int t_ms)
+{
+	mTimeOut = t_ms;
+}
+//----------------------------------------------------------------------------------
+void TNetTransport::SetCntTry( int c)
+{
+	mCntTry = c;
+}
+//----------------------------------------------------------------------------------
+void TNetTransport::AddEventLostPacket( TIP_Port& ip_port, unsigned char c)
+{
+	mListLostPacket.push_back(TLostPacket(ip_port,c));
+}
+//----------------------------------------------------------------------------------
+void TNetTransport::NotifyLostPacket()
+{
+	TListLPIt bit = mListLostPacket.begin();
+	TListLPIt eit = mListLostPacket.end();
+	while(bit!=eit)
+	{
+		mCallBackLostPacket.Notify((void*)&(*bit), sizeof(TLostPacket));
+		bit++;
+	}
+	mListLostPacket.clear();
 }
 //----------------------------------------------------------------------------------

@@ -65,5 +65,4 @@ bool SortByAlphabetic( TSortByAlphabetic::T elem1, TSortByAlphabetic::T elem2 )
   }
   return (res<0);
 }
-
 //----------------------------------------------------------------------------

@@ -18,9 +18,11 @@ g_MakerNetTransport;
 
 extern void Init();
 
-extern void RecvPacket(void* p, int s);
-extern void RecvStream(void* p, int s);
+extern void Recv(void* p, int s);
+extern void LostPacket(void* p, int s);
 extern void Disconnect(void* p, int s);
+
+extern int GetCntLostPacket();
 
 #endif
 

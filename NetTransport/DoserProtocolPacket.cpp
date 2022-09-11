@@ -39,6 +39,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 using namespace nsNetDoser;
 
 //----------------------------------------------------------------------------------
+TDescConnect::TDescConnect(TIP_Port* ip_port) : 
+mAutomatRegularSpeed(ip_port)
+{
+  mIP_port = *ip_port;
+}
+//----------------------------------------------------------------------------------
 unsigned int TDescConnect::GetIP()const
 {
   return mIP_port.ip;
@@ -47,11 +53,6 @@ unsigned int TDescConnect::GetIP()const
 unsigned short TDescConnect::GetPort() const
 {
   return mIP_port.port;
-}
-//----------------------------------------------------------------------------------
-TIP_Port* TDescConnect::GetIP_Port()
-{
-  return &mIP_port;
 }
 //----------------------------------------------------------------------------------
 TAutomatRegularSpeed* TDescConnect::GetAutomat()

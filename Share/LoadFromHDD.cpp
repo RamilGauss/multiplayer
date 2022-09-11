@@ -39,9 +39,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <algorithm>
 
-
-
+using namespace std;
 
 TLoadFromHDD::TLoadFromHDD(char* path)
 {
@@ -49,7 +49,6 @@ TLoadFromHDD::TLoadFromHDD(char* path)
   sPath[0] = '\0';
 
 	ReOpen(path);
-
 }
 //---------------------------------------------------------------
 TLoadFromHDD::~TLoadFromHDD()
@@ -102,9 +101,16 @@ unsigned int TLoadFromHDD::Size()
 #endif
 }
 //---------------------------------------------------------------
-void TLoadFromHDD::Read(void* buffer, int size)
+int TLoadFromHDD::Read(void* buffer, int size, int offset)
 {
-	size = fread(buffer, size,1,pFile);
+  int res = fseek(pFile, offset, SEEK_SET);
+  if(res!=0) return 0;
+
+  int max_read = Size() - offset;
+  if(max_read<=0) return 0;
+
+  fread(buffer, size, 1, pFile);
+  return min(max_read, size);
 }
 //---------------------------------------------------------------
 void TLoadFromHDD::Close()

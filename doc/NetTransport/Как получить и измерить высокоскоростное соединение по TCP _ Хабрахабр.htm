@@ -1,0 +1,2917 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru"><head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<title>Как получить и измерить высокоскоростное соединение по TCP / Хабрахабр</title>
+		<meta name="description" content="Надежная передача данных в Интернете осуществляется на базе протокола TCP (Transmission Control Protocol), спецификация к которому была опубликована почти 30 лет назад. Алгоритм TCP (RFC793),...">		
+		<meta name="keywords" content="tcp, speedtest, nuttcp, high performance, optimization, iperf">
+		
+			<meta property="fb:app_id" content="437464306275519"> 
+<meta property="og:type" content="article"> 
+<meta property="og:url" content="http://habrahabr.ru/post/115527/"> 
+<meta property="og:title" content="Как получить и измерить высокоскоростное соединение по TCP"> 
+	<meta property="og:image" content="http://habrastorage.org/storage/0ffe0ef9/b9b856e0/e1ac57c7/0b2702f7.png">
+	<link rel="image_src" href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/0b2702f7.png"><meta property="og:image" content="http://habrastorage.org/storage/954c0433/91f4c80c/c70b187b/69f825ac.png">
+	<link rel="image_src" href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/69f825ac.png"><meta property="og:image" content="http://habrastorage.org/storage/af89294a/649d44ec/8ea950e3/c94cac4b.png">
+	<link rel="image_src" href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/c94cac4b.png"><meta property="og:image" content="http://habrastorage.org/storage/1afbb9ed/9ae4a75e/ec1da01c/baee9938.png">
+	<link rel="image_src" href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/baee9938.png"><meta property="og:image" content="http://c.statcounter.com/6719145/0/f4a67137/1/">
+	<link rel="image_src" href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/a.gif">
+	
+<meta property="og:description" content="Надежная передача данных в Интернете осуществляется на базе протокола TCP (Transmission Control Protocol), спецификация к которому была опубликована почти 30..."> 
+
+
+			<link href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all_002.css" rel="stylesheet" media="all">
+
+
+		  <link href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/posts.css" rel="stylesheet" media="all">
+  <link href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/comments.css" rel="stylesheet" media="all">
+  <link href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/forms.css" rel="stylesheet" media="all">
+  <link href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/highlight.css" rel="stylesheet" media="all">
+  <link href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all.css" rel="stylesheet" media="all">
+  
+		<link href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/printer.css" rel="stylesheet" media="print">
+
+	
+
+			<script src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/watch.js" async="" type="text/javascript"></script><script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all_002.js"></script>
+		
+		
+		
+			<meta name="robots" content="noindex">
+
+	
+	
+	
+	
+		  <script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery_002.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/wysiwyg.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/highlight.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/jquery-ui-highlight.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/posts.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/comments.js"></script>
+  <script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/all.js"></script>
+
+		
+		<script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/adriver.js"></script>
+		
+		
+		
+		<link title="Хабрахабр / Комментарии к публикации «Как получить и измерить высокоскоростное соединение по TCP»" type="application/rss+xml" rel="alternate" href="http://habrahabr.ru/rss/post/115527/">
+				
+			<script type="text/javascript">
+			var _gaq = window._gaq || [];
+			window.onerror = function(msg, url, line) {
+			    //var preventErrorAlert = true;
+			    //_gaq.push(['_trackEvent', 'JS Error', msg, navigator.userAgent + ' -> ' + url + " : " + line]);
+			    //return preventErrorAlert;
+			};
+			
+			jQuery.error = function (message) {
+			    _gaq.push(['_trackEvent', 'jQuery Error', message, navigator.userAgent]);
+			}
+			</script>
+			 
+	<script src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/ga.js" async="true"></script></head>
+
+	<body>
+	  
+		
+		<div id="layout">
+		  <div id="header">
+  <div class="userpanel silver">
+      <a href="http://habrahabr.ru/login/" class="login">войти</a> <a href="http://habrahabr.ru/register/">зарегистрироваться</a>
+  </div>
+  <a class="logo" href="http://habrahabr.ru/" title="На главную страницу"></a>
+  <div class="search">
+    <form id="search_form" name="search" method="get" action="/search/">
+      <input value="" type="submit">
+      <input autocomplete="off" name="q" x-webkit-speech="" speech="" type="text">
+    </form>
+  </div>
+
+	<div class="main_menu">
+		<a href="http://habrahabr.ru/posts/top/" class="active">посты</a><a href="http://habrahabr.ru/qa/">q&amp;a</a><a href="http://habrahabr.ru/events/coming/">события</a><a href="http://habrahabr.ru/hubs/">хабы</a><a href="http://habrahabr.ru/companies/">компании</a>
+		<div class="banner_special">
+
+		<script type="text/javascript">
+			(function(){
+				var custom = [];
+				/* custom params */
+					custom[1] = 'closet';
+				/* end of custom params */
+				var std = {gender:100, age:101},i;for(i in std){try{custom[std[i]]=eval(i)}catch(e){} }
+				custom.getStd = function(){for(var i=0,j,s=[];i<this.length;i++){if(this[i])s.push((!j?(j=1,i+'='):'')+escape(this[i]));else j=0}return s.length?'&custom='+s.join(';'):''};
+				var RndNum4NoCash = Math.round(Math.random() * 1000000000), ar_Tail = escape(document.referrer || 'unknown');
+				document.write('<iframe src="http://ad.adriver.ru/cgi-bin/erle.cgi?' + 'sid=176776&target=top&w=135&h=35&bt=25&pz=0&rnd=' +
+				RndNum4NoCash + '&tail256=' + ar_Tail + custom.getStd() + '" frameborder=0 vspace=0 hspace=0 width=135 height=35 marginwidth=0'
+				+ ' marginheight=0 scrolling=no></iframe>');
+			})();
+ 		</script><iframe class="ecbrnikxzbxwrqftcuyx" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/erle.htm" vspace="0" hspace="0" marginwidth="0" marginheight="0" frameborder="0" height="35" scrolling="no" width="135"></iframe>
+	
+
+</div>
+		
+	</div>
+
+</div>
+
+
+
+		  
+		  
+
+	
+  <div class="content_left">
+
+	
+
+
+
+
+
+
+
+
+	
+  <div class="post shortcuts_item" id="post_115527">
+  	<div class="published">15 марта 2011 в 19:20</div>
+    <h1 class="title">
+
+	    
+
+        <span class="post_title">Как получить и измерить высокоскоростное соединение по TCP</span>
+
+      
+
+			
+
+      
+			
+			
+
+  	</h1>
+  	
+  	<div class="hubs">
+		<a href="http://habrahabr.ru/hub/closet/" class="hub " title="Вы не подписаны на этот хаб">Чулан</a>
+</div>
+
+  	
+  	<div class="content html_format">
+  	Надежная передача данных в Интернете осуществляется на базе протокола TCP (<b>Transmission Control Protocol</b>), спецификация к которому была опубликована почти 30 лет назад. Алгоритм TCP (<a href="http://www.ietf.org/rfc/rfc793.txt">RFC793</a>),
+ позволяет подключенному устройству адаптироваться для работы в сети на 
+скоростях в пределах десятков мегабит в секунду и задержки до 100 
+секунд. С бурным развитием новых технологий передачи данных, уже через 
+10 лет после <a href="http://www.securitylab.ru/informer/240661.php">внедрения</a> стало ясно что производительность протокола не будет хватать для более широких каналов. <br>
+<a name="habracut"></a><br>
+<h4><font color="#153E7E"><strong>1) Ограничения TCP</strong></font></h4><br>
+Скорость передачи данных зависит от сетевых и системных характеристик.<br>
+<img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/0b2702f7.png"><br>
+<i>img1 Процесс передачи данных по сети</i><br>
+<br>
+<b><i>a) Буферы</i></b><br>
+Оригинальная конфигурация TCP ограничивает скорость передачи буфером 
+(опция Window Size — «размер окна») и является полем размером в 2^16 
+байт (до 64 КБайт). Максимальная пропускная способность в данном случае:<br>
+<img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/12b30235.png" align="middle"><br>
+Пример: У вас 100 мегабитное соединение к Интернету и до сервера задержка 100 мс.<br>
+Стандартным стеком TCP, максимальная скорость передачи данных не превысит 10 Мбит/сек<br>
+( 524288 бит / 0.1 сек = 5.24 Мбит/сек не смотря на то что у вас 100 мегабитный линк).<br>
+<br>
+<i><b>b) Bandwidth-delay product (BDP)</b></i><br>
+Производительность TCP в принципе не столько зависит от скорости канала,
+ сколько от так называемом «bandwidth*delay product» или BDP (результат 
+пропускная способность*задержка), который представляет собой число байт 
+необходимых отправителю и получателю для максимального заполнения TCP 
+соединения.<br>
+Проблемы производительности возникают в случаях так называемых «длинных и
+ широких труб» (LFN «long fat network»), так как BDP в таком случае 
+превышает размер окна TCP, тем самым ограничивая скорость передачи.<br>
+<img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/69f825ac.png"><br>
+<i>img2 Влияние задержки на максимальную пропускную способность TCP</i><br>
+<br>
+Примером могут служить мобильный интернет или быстрый оптический линк.<br>
+Пример расчетов BDP:<br>
+a) широкополосный мобильный интернет: 10 Mb/s, 100 ms RTT<br>
+<code>B×D = 10^7 b/s × 10^-1 s = 10^6 b, or 1 Mb / 125 kB</code><br>
+b) высокоскоростная наземной сеть: 1 Gb/s, 10 ms RTT<br>
+<code>B×D = 10^9 b/s × 10^-2 s = 10^7 b, or 10 Mb / 1.25 MB</code><br>
+<br>
+Рассчитать BDP можно <a href="http://www.speedguide.net/bdp.php">тут</a>.<br>
+”Размер окна” TCP должен превышать BDP для достижение максимальной нагрузки канала.<br>
+<br>
+<i><b>c) Protocol Overhead</b></i><br>
+По некоторым оценкам около 95% компьютеров мира подключены через технологию Ethernet.<br>
+Ethernet MTU (полезная нагрузка кадра Ethernet) = макс. 1500 bytes.<br>
+Если принять во внимание все заголовки Ethernet, IP, TCP, картина будет выглядеть так:<br>
+<img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/c94cac4b.png"><br>
+<i>img3 Передача одного Ethernet кадра</i><br>
+<br>
+Цифры указывают размер (в байтах) заголовка для определенного протокола.<br>
+IFG (Interframe gap) — обязательное межкадровое пространство.<br>
+Заголовки: preamble, frame delimiter, Ethernet header/FCS – 26 bytes, 
+IFG – 12 bytes, IP header – 20 bytes, TCP header – 20 bytes.<br>
+<br>
+Если исключить VLAN tagging, TCP timestamp и другие опциональные 
+возможности, максимальная полезная нагрузка (Payload) TCP в сетях 
+Ethernet будет:<br>
+<b>Max TCP Payload</b>= (MTU–TCP–IP) / (MTU+Ethernet+IFG) = (1500–40) / (1500+26+12) = <b>94.9 %</b><br>
+<br>
+<i><b>d) Задержка и потеря пакетов</b></i><br>
+Так как речь идет о надежной передачи информации, потеря пакетов в сети 
+вынуждает TCP передавать повторно сегменты и влияет непосредственно на 
+понижение скорости. <br>
+Зависимость скорости TCP в соотношении к потери пакетов, определяется формулой Mathis-а:<br>
+<img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/b36a31f1.png" align="middle"><br>
+где: MSS (Maximum segment size) – максимальный размер сегмента TCP (MSS = MTU – packet headers=1460 bytes), <br>
+MTU — максимальный размер передаваемого блока нижнего уровня OSI (Ethernet MTU = 1500 bytes),<br>
+RTT — время двусторонней задержки (от одного конца к другому и назад, от англ. Round Trip Time)<br>
+Ploss — Loss probability (вероятность потерь).<br>
+Можно обратить внимание что формула не действительна с Ploss = 0. Это 
+нормально, так как в реальном мире всегда есть потери пакетов.<br>
+<br>
+<img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/baee9938.png"><br>
+<i>img4 Влияние задержки и потеря пакетов на максимальную пропускную способность TCP</i><br>
+<br>
+Большинство провайдеров не будет гарантировать потери менее 0.01% (1 пакет из 10`000).<br>
+Проверить статистику по протоколам можно командой “netstat –s”.<br>
+<br>
+<h4><font color="#153E7E"><strong>2) Оптимизация TCP</strong></font></h4><br>
+<i><b>a) усовершенствования протокола</b></i><br>
+В связи с этим были разработаны расширения протокола, описанные в стандарте <b>TCP Extensions for High Performance</b> (<a href="http://www.ietf.org/rfc/rfc1323.txt">RFC1323</a>), которые призваны решить ограничения.<br>
+Среди них:<br>
+ — TCP <b>Window Scale</b> Option: возможность увеличение Размера Окна до 2^30 (1 ГБайт),<br>
+ — TCP selective acknowledgment (<b>SACK</b>) options: принимающая сторона указывает какие именно пакеты в потоке подтверждены (положительно или отрицательно) (<a href="http://www.ietf.org/rfc/rfc2018.txt">RFC2018</a>),<br>
+ — <b>TCP timestamps</b>: улучшение замеров RTT (Round Trip Time 
+Measurement — RTTM), предотвращение накладки порядковых чисел ACK 
+(Prevention Against Wrapped Sequence numbers — PAWS),<br>
+ — <b>Path MTU discovery</b>: определение максимального MTU на всем пути,<br>
+ — Explicit Congestion Notification (<b>ECN</b>): указывает на перегрузку пути без сбрасывание пакетов (<a href="http://www.ietf.org/rfc/rfc3168.txt">RFC3168</a>).<br>
+<br>
+Проверить текущие настройки TCP/IP компьютера можно <a href="http://www.speedguide.net/analyzer.php">здесь</a>.<br>
+<br>
+<i><b>b) aдаптация oперационных систем</b></i><br>
+Несмотря на то что документ RFC1323 был опубликован в далеком 1992 году, в ОС-ы внедряли изменения не сразу.<br>
+<br>
+<b>OS Windows</b><br>
+Поддержка RFC1323 появилась начиная с Windows 2000 (XP, Server 2003) и для активации опции необходимо покрутить в реестре.<br>
+Системы Windows Server 2008, Vista, 7 включают новую реализацию стека 
+протоколов TCP/IP, известную как стек протоколов TCP/IP нового поколения
+ («Next Generation TCP/IP Stack»). Он спроектирован для того, чтобы 
+обеспечивать сетевые технологии Windows на несколько лет вперед. Среди 
+нововведений:<br>
+ — aвтонастройка окна получения (Receive Window Auto-Tuning),<br>
+ — compound TCP: решает проблему низкой производительности в сетях с 
+высокой пропускной способностью с помощью нового алгоритма, вместо 
+алгоритмов, использовавшихся на других платформах,<br>
+ — усовершенствования для сред с высоким уровнем потерь и <a href="http://technet.microsoft.com/en-us/library/bb726965.aspx">еще много чего</a>.<br>
+Многие опции включены по умолчанию. Конфигурация через командную строку.<br>
+<br>
+С подробными процедурами настройки <b>для различных ОС</b> (Windows XP, FreeBSD, Linux, Solaris, Mac OS X), можно ознакомится на <a href="http://www.psc.edu/networking/projects/tcptune/">сайте суперкомпьютерного центра Питтсбурга</a>.<br>
+<br>
+Примечание: Хотя через маршрутизаторы в основном проходит весь трафик 
+(между разными сетями), отношение к оптимизации TCP имеют только 
+косвенное (в некоторых случаях), так как работают на более нижнем уровне
+ сетевой модели OSI и выполняют функцию определение оптимальных 
+маршрутов и лишь доставку пакетов до назначения.<br>
+<br>
+<h4><font color="#153E7E"><strong>3) Измерения производительности стека TCP/IP</strong></font></h4><br>
+В сети существуют множество методов измерения скорости подключения к Интернету.<br>
+Здесь будет рассмотрен случай с использованием утилиты <a href="http://www.lcp.nrl.navy.mil/nuttcp/">nuttcp</a> («New TTCP»), так как она имеет несколько приятных преимуществ:<br>
+ — простой и эффективный метод измерения пропускной способности канала через TCP или UDP,<br>
+ — кроссплатформенная одно-файловая программа (CLI),<br>
+ — возможность проверки эффективности локального стека TCP/IP (loopback),<br>
+ — стабильная работа сервера (корректное завершения TCP сессий), без подвисаний и падений <br>
+(как в случае с iperf),<br>
+ — работа клиента из NAT-а.<br>
+<br>
+Немного истории: В 1980 году, Mike Muuss (автор ping-а) создал ttcp 
+(«Test TCP») — один из первых инструментов тестирования пропускной 
+способности TCP. Многие изменения с тех пор были созданы в различных 
+реализациях и с новыми возможностями. <b>Nuttcp</b> является одной из них. Последняя бета — апрель 2010.<br>
+<br>
+Тестирования работает по схеме клиент-сервер. <br>
+Измеряется payload — полезная нагрузка (без заголовков).<br>
+Подключение по порту 5000. Передача данных — 5001 (и выше если указать многопоточный тест).<br>
+<br>
+Сервер — достаточно указать <b>#nuttcp -S</b><br>
+Клиент — можно указывать <a href="ftp://ftp.lcp.nrl.navy.mil/pub/nuttcp/nuttcp.html">множество опций</a>.<br>
+<br>
+Пример:<br>
+Сервер FreeBSD, клиент Windows XP SP3, FastEthernet (100Mbps).<br>
+<b>server-ip# nuttcp –S</b><br>
+<br>
+опции клиента:<br>
+-w128 — TCP receive window size = 128 KB<br>
+-r — receiving (прием, для клиента)<br>
+-F — устраняет возможные проблемы с соединением если вы в NAT-е<br>
+-i5 — показывать результат каждые 5 секунд<br>
+-T15 — длительность тестирования (15 секунд).<br>
+<br>
+TX% и RX% являются загрузкой процессора на передатчике и приемнике.<br>
+<br>
+Проверка производительности железа и стека TCP/IP ОС:<br>
+<b>C:\&gt; nuttcp.exe -w1m 127.0.0.1</b><br>
+205.0625 MB / 10.00 sec = 172.0189 Mbps 19 %TX 12 %RX<br>
+<br>
+Примеры результатов:<br>
+ — Intel Core 2 Duo (2 core) @ 1.6 GHz/ 1 GB RAM / Windows XP = 1300/1400 Mbps<br>
+ — AMD Athlon X2 Dual-Core 4600 @ 2.4 GHz/ 2 GB RAM / Windows 7 = 2000/2100 Mbps<br>
+ — Intel XEON X5650 (24 cores) @ 2.67GHz/ 8 GB RAM / FreeBSD = 16600/18000 Mbps<br>
+<br>
+<u>Проверяем Download (от сервера к клиенту)</u>:<br>
+<b>C:\&gt; nuttcp.exe -w128 -r -F –i5 -T15 server-ip</b><br>
+ 56.0166 MB / 5.00 sec = 93.9803 Mbps<br>
+ 56.0575 MB / 5.00 sec = 94.0489 Mbps<br>
+ 56.0338 MB / 5.00 sec = 94.0090 Mbps<br>
+<br>
+168.2676 MB / 15.00 sec = 94.1020 Mbps 3 %TX 10 %RX<br>
+<br>
+<b>some-unix-client# nuttcp -r -F -i5 -T15 server-ip</b><br>
+ 429.0000 MB / 5.02 sec = 717.3541 Mbps<br>
+ 526.0000 MB / 5.00 sec = 882.0518 Mbps<br>
+<br>
+1371.1741 MB / 15.00 sec = 766.6703 Mbps 26 %TX 39 %RX 3153 host-retrans 0.29 msRTT<br>
+<br>
+<u>Проверяем Upload (от клиента к серверу)</u>:<br>
+<b>C:\&gt; nuttcp.exe -w128 –i5 -T15 server-ip</b><br>
+ 55.6250 MB / 5.00 sec = 93.3169 Mbps<br>
+ 55.8125 MB / 5.00 sec = 93.6562 Mbps<br>
+ 55.6875 MB / 5.00 sec = 93.4277 Mbps<br>
+<br>
+167.2500 MB / 15.12 sec = 92.7664 Mbps 17 %TX 6 %RX<br>
+<br>
+<b>some-unix-client# nuttcp -i5 -T15 server-ip</b><br>
+ 422.9375 MB / 5.00 sec = 709.5294 Mbps<br>
+ 420.6875 MB / 5.00 sec = 705.9357 Mbps<br>
+ 456.3750 MB / 5.00 sec = 765.6674 Mbps<br>
+<br>
+1305.3853 MB / 15.06 sec = 727.0077 Mbps 20 %TX 48 %RX 24478 host-retrans 0.29 msRTT<br>
+<br>
+<h4><font color="#153E7E"><strong>4) Вместо заключения</strong></font></h4><br>
+В процессе тестирования, нужно помнить что максимальная скорость<b> отдельного TCP соединения</b> определяется различными факторами:<br>
+ — максимальная пропускная способность самого медленного участка пути,<br>
+ — время между отправкой запроса и получением ответа (RTT),<br>
+ — большинство задержек на больших расстояниях вызваны скоростью света в волокне (~ 200 км/мс),<br>
+ — дополнительные задержки могут возникнуть в момент перегрузки сети или устройства (сервер, рутер, пк),<br>
+ — автоматическое понижение скорости при обнаружении потерь пакетов (стандартный механизм TCP предотвращения перегрузок),<br>
+ — отсутствие других негативных эффектов (минимальное количество ошибок битов на физическом уровне (Bit Error Rate&lt;10^-8),<br>
+ — исправность сетевой карты и корректная работа драйвера),<br>
+ — один физический линк может нести множество одновременных TCP соединений,<br>
+ — один хост может иметь несколько одновременных соединений, даже с тем же удаленным хостом (быстро проверить можно с <a href="http://technet.microsoft.com/en-us/sysinternals/bb897437">TCPView</a> или <a href="http://tcpmonitor.altervista.org/tcpeye-network-monitoring/">TCPEye</a>).<br>
+<br>
+Популярные speedtest-ы обычно работают в связке browser, flash + geo-локация до ближайшего доступного сервера, что создает:<br>
+ — дополнительную нагрузку на локальную машину (ЦП, память) и сеть (заголовки WWW и т.п.),<br>
+ — выбор сервера может быть не оптимальным,<br>
+ — возможность ошибочных результатов.<br>
+<br>
+И на последок, хотелось бы отметить часто встречаемые проблемы с низкой производительностью сети:<br>
+ — узкое окно TCP (Window Size),<br>
+ — несоответствие Ethernet Duplex,<br>
+ — плохой сетевой кабель.<br>
+<br>
+Ссылки по теме:<br>
+<a href="http://technet.microsoft.com/en-us/magazine/2007.01.cableguy.aspx">technet.microsoft.com/en-us/magazine/2007.01.cableguy.aspx</a><br>
+<a href="http://fasterdata.es.net/fasterdata/host-tuning/">fasterdata.es.net/fasterdata/host-tuning/</a><br>
+<br>
+<a title="free hit counters" href="http://statcounter.com/free-hit-counter/"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/a.gif" alt="free hit counters"></a> 
+  	<div class="clear"></div> 	
+  	</div>
+    <ul class="tags">
+	<li><a href="http://habrahabr.ru/search/?q=%5Btcp%5D&amp;target_type=posts" rel="tag">tcp</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5Bspeedtest%5D&amp;target_type=posts" rel="tag">speedtest</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5Bnuttcp%5D&amp;target_type=posts" rel="tag">nuttcp</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5Bhigh%20performance%5D&amp;target_type=posts" rel="tag">high performance</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5Boptimization%5D&amp;target_type=posts" rel="tag">optimization</a></li><li>, <a href="http://habrahabr.ru/search/?q=%5Biperf%5D&amp;target_type=posts" rel="tag">iperf</a></li>
+</ul>
+
+    <div class="infopanel_wrapper">
+	<div class="infopanel " id="infopanel_post_115527">
+	
+				<div class="voting   ">
+	
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи."></span>
+	
+					<div class="mark positive ">
+							<span class="score" title="Всего 106: ↑105 и ↓1">+104</span>
+					</div>
+					
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи."></span>
+		
+				</div>
+	
+			
+		<div class="favorite">
+				<a class="guest" href="#" onclick="return false;" title="Только зарегистрированные пользователи могут добавлять посты в избранное"></a>
+		</div>
+		<div class="favs_count" title="Количество пользователей, добавивших пост в избранное">281</div>
+		
+		
+		
+	
+	
+	
+	
+				<div class="author">
+					<a title="Автор текста" href="http://habrahabr.ru/users/prox/">prox</a>
+					<span class="rating" title="рейтинг пользователя">23,8</span>
+				</div>
+		
+	
+	
+		
+			<div class="share">
+				<div class="twitter">
+					<a href="http://twitter.com/intent/tweet?text=%D0%9A%D0%B0%D0%BA+%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C+%D0%B8+%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C+%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5+%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5+%D0%BF%D0%BE+TCP+%23habr+http://habr.ru/p/115527/" title="Опубликовать ссылку в Twitter" target="_blank"></a>
+				</div>
+				<div class="vkontakte">
+					<a href="http://vk.com/share.php?url=http://habrahabr.ru/post/115527/" title="Опубликовать ссылку во ВКонтакте" onclick="window.open(this.href, 'Опубликовать ссылку во Вконтакте', 'width=800,height=300'); return false"></a>
+				</div>
+				<div class="facebook">
+					<a href="https://www.facebook.com/sharer/sharer.php?u=http://habrahabr.ru/post/115527/" title="Опубликовать ссылку в Facebook" onclick="window.open(this.href, 'Опубликовать ссылку в Facebook', 'width=640,height=436,toolbar=0,status=0'); return false"></a>
+				</div>
+				<div class="googleplus">
+					<a href="https://plus.google.com/share?url=http://habrahabr.ru/post/115527/" title="Опубликовать ссылку в Google Plus" onclick="window.open(this.href, 'Опубликовать ссылку в Google Plus', 'width=800,height=300'); return false"></a>
+				</div>
+			</div>
+	
+	</div>
+	<div class="clear"></div>
+</div>
+
+
+
+
+    
+    
+	</div>
+
+
+
+	
+	<style type="text/css">
+	.post_inner_banner.alfaclick20_inner_banner {overflow:hidden;text-align:center;height:67px;border:1px solid #d4d4d4;border-radius:15px;background: url(/images/posts/inner_post_banner/alfaclick20/logo.png) no-repeat 20px 12px;}
+	.post_inner_banner.alfaclick20_inner_banner  a.alfalink {display:block;position:absolute;top:12px;left:18px;color:#eb312d;width:30px;height:42px;}
+	.post_inner_banner.alfaclick20_inner_banner  a.alfa {vertical-align:top;margin-top:16px;display:inline-block;color:#eb312d;font-size:16px;border:1px solid #ee2e22;border-radius:15px;padding:5px 10px;}
+	.post_inner_banner.alfaclick20_inner_banner  .ironman {display:inline-block;background: url(/images/posts/inner_post_banner/alfaclick20/ironman.png) no-repeat;width:180px;height:67px;}
+	.post_inner_banner.alfaclick20_inner_banner .alfaone {margin-right:50px;}
+	.post_inner_banner.alfaclick20_inner_banner .alfatwo {margin-right:30px;}
+	.post_inner_banner.alfaclick20_inner_banner .alfathree {margin-right:40px;}
+	@media (max-width: 1300px) { 
+		.post_inner_banner.alfaclick20_inner_banner .alfaone {margin-left:50px;}
+		.post_inner_banner.alfaclick20_inner_banner .alfathree {margin-right:20px;}
+		.post_inner_banner.alfaclick20_inner_banner .alfafour {}
+	}
+	@media (max-width: 1200px) { 
+		.post_inner_banner.alfaclick20_inner_banner .alfaone {margin-left:50px;margin-right:20px;}
+		.post_inner_banner.alfaclick20_inner_banner .alfatwo {margin-right:10px;}
+		.post_inner_banner.alfaclick20_inner_banner .alfathree {margin-right:20px;}
+	}
+	@media (max-width: 1100px) { 
+		.post_inner_banner.alfaclick20_inner_banner .alfaone {margin-left:30px;}
+		.post_inner_banner.alfaclick20_inner_banner .alfatwo {margin-right:10px;}
+		.post_inner_banner.alfaclick20_inner_banner .alfathree {margin-right:10px;}
+	}
+</style>
+<div class="alfaclick20_inner_banner post_inner_banner hidden">
+	<a href="http://ad.adriver.ru/cgi-bin/click.cgi?sid=1&amp;ad=398663&amp;bt=21&amp;bid=2536141&amp;bn=2536141&amp;rnd=793043413" class="alfalink"></a>
+	<a href="http://ad.adriver.ru/cgi-bin/click.cgi?sid=1&amp;ad=398663&amp;bt=21&amp;bid=2562310&amp;bn=2562310&amp;rnd=738964705" class="alfa alfaone">«Альфа-Клик 2.0»</a>
+	<a href="http://ad.adriver.ru/cgi-bin/click.cgi?sid=1&amp;ad=398663&amp;bt=21&amp;pid=1170584&amp;bid=2562317&amp;bn=2562317&amp;rnd=564129589" class="alfa alfatwo">Подключить</a>
+	<div class="ironman alfathree"></div>
+	<a href="http://ad.adriver.ru/cgi-bin/click.cgi?sid=1&amp;ad=398663&amp;bt=21&amp;pid=1170585&amp;bid=2562503&amp;bn=2562503&amp;rnd=1923962480" class="alfa alfafour">Трейлер</a>
+</div>
+	<style type="text/css">
+	.post_inner_banner.badoo_inner_banner .badoo_left {float:left;background: url(/images/posts/inner_post_banner/badoo/badoo_post_left.png) no-repeat;width:152px;height:71px;}
+	.post_inner_banner.badoo_inner_banner .badoo_center {width:99.9%;text-align:center;line-height:69px;font-family:'PT Sans', sans-serif;font-size:18px;color:#000;border-right:1px solid #d9d9d9;border-top:1px solid #d9d9d9;border-bottom:1px solid #d9d9d9;border-radius:13px;height:69px;}
+	.post_inner_banner.badoo_inner_banner #badoo_logo {display:inline-block;position:relative;top:5px;width:76px;height:22px;margin:3px 10px 0 10px;background: url(/images/posts/inner_post_banner/badoo/badoo_post_logo.png) no-repeat;}
+</style>
+<div class="badoo_inner_banner post_inner_banner hidden">
+	<a class="block_url" href="">
+		<div class="badoo_left"></div>
+		<div class="badoo_center">
+			Developers, stick with Russians – work in <span id="badoo_logo"></span> London
+		</div>
+	</a>
+</div>
+	
+	
+
+	<script type="text/javascript">
+		
+	
+function show_inner_banner_block(name, url) {
+	if( typeof(name) !== 'undefined') {
+		if( $('.'+name+'_inner_banner').size() > 0) {
+			$('.'+name+'_inner_banner').show();
+		}
+	}
+
+	if( typeof(url) !== 'undefined') {
+		$('.'+name+'_inner_banner .block_url').attr('href', url);
+	}
+}
+</script>
+
+<!--  AdRiver code START. Type:AjaxJS Site: SP PZ: 0 BN: 3 -->
+<div id="adriver_banner_1586921565"></div>
+
+<script type="text/javascript">
+new adriver("adriver_banner_1586921565", {sid:179440, bt:52, bn:3});
+</script>
+
+<!--  AdRiver code END  -->
+
+
+	
+	<div class="comments_list " id="comments">
+
+  <h2 class="title ">комментарии (<span id="comments_count">41</span>)
+  
+  </h2>
+
+    <div class="comment_item" id="comment_3741998">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3741998">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3741998" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/TheBits/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_3350.jpg" alt=""></a>
+				<a href="http://habrahabr.ru/users/TheBits/" class="username">TheBits</a><span class="comma">,</span>
+				<time>15 марта 2011 в 19:41</time>
+				
+				<a href="#comment_3741998" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				У Вас есть возможность в тех же условиях проверить Compound TCP в 
+Windows? Я когда включил на Windows 7, заметил что веб-страницы стали 
+быстрее загружаться. Но у веб-страниц много маленьких файлов, а не один 
+долго скачивающийся. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3741998">
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3742039">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742039">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742039" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 2: ↑1 и ↓1">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/aelan/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_20416.jpg" alt=""></a>
+				<a href="http://habrahabr.ru/users/aelan/" class="username">aelan</a><span class="comma">,</span>
+				<time>15 марта 2011 в 19:51</time>
+				
+				<a href="#comment_3742039" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				На картинке в пункте C payload не может быть равным 1500 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742039">
+		<div class="comment_item" id="comment_3742236">
+	
+	<span class="parent_id" data-parent_id="3742039"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742236">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742236" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/prox/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_63435.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/prox/" class="username">prox</a><span class="comma">,</span>
+				<time>15 марта 2011 в 20:49</time>
+				
+				<a href="#comment_3742236" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3742236" data-parent_id="3742039" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3742039" data-id="3742236" data-parent_id="3742039" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				это payload Ethernet-а (MTU), то есть число байт переданных высшему уровню (IP), без своих заголовков.<br>
+Max Ethernet MTU = 1500 bytes (есть также расширения Jumbo Frames).<br>
+<br>
+Сам кадр Ethernet будет = MTU + свой заголовки. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742236">
+	</div>
+</div>
+
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3742112">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742112">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742112" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/VolCh/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+				<a href="http://habrahabr.ru/users/VolCh/" class="username">VolCh</a><span class="comma">,</span>
+				<time>15 марта 2011 в 20:08</time>
+				
+				<a href="#comment_3742112" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Если в линукс стоит net.ipv4.tcp_moderate_rcvbuf = 1 то можно рассчитывать, что настройки оптимальны?<br>
+<br>
+ 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742112">
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3742156">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742156">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742156" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark positive ">
+							<span class="score" title="Всего 3: ↑2 и ↓1">+1</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/eyeofhell/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_18285.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/eyeofhell/" class="username">eyeofhell</a><span class="comma">,</span>
+				<time>15 марта 2011 в 20:25</time>
+				
+				<a href="#comment_3742156" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Спасибо за систематизацию и изложение в одном месте. Наглядность картинок очень радует.<br>
+<br>
+Оффтопик. И при всем при этом даже последние версии браузеров не умеют 
+ни качать в несколько TCP соединений, ни восстанавливать закачку после 
+обрыва связи :(. Прям когнитивный диссонанс какой-то. В субботу весь 
+день качал XCode4 через последний хром — благодаря количеству желающих 
+связь рвалась каждые 20 минут, и хром честно рапортовал что «Гигабайт из
+ пяти загружен — все готово. Опять скачивать? Ой, а тако файлик уже 
+есть. перезаписывать будем?» O_O. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742156">
+		<div class="comment_item" id="comment_3742327">
+	
+	<span class="parent_id" data-parent_id="3742156"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742327">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742327" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 2: ↑1 и ↓1">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/serbod/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_20949.jpg" alt=""></a>
+				<a href="http://habrahabr.ru/users/serbod/" class="username">serbod</a><span class="comma">,</span>
+				<time>15 марта 2011 в 21:16</time>
+				
+				<a href="#comment_3742327" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3742327" data-parent_id="3742156" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3742156" data-id="3742327" data-parent_id="3742156" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				В Опере есть встроенный клиент torrent, который этих недостатков лишен.<br>
+<br>
+Но в целом поддерживаю — хотя бы элементарное автоматическое продолжение
+ прерванной закачки необходимо, ибо даже на хороших каналах бывают сбои 
+загрузок. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742327">
+		<div class="comment_item" id="comment_3742387">
+	
+	<span class="parent_id" data-parent_id="3742327"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742387">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742387" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/TijAY/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_16252.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/TijAY/" class="username">TijAY</a><span class="comma">,</span>
+				<time>15 марта 2011 в 21:40</time>
+				
+				<a href="#comment_3742387" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3742387" data-parent_id="3742327" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3742327" data-id="3742387" data-parent_id="3742327" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				offtop. У Опера, коль скоро речь идет о Mac OS, проблемы с 
+отображением русских шрифтов в окнах комментариев. Поэтому уж лучше без 
+нее. Я бы раскошелился на Speed Download. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742387">
+	</div>
+</div>
+
+		<div class="comment_item" id="comment_3743078">
+	
+	<span class="parent_id" data-parent_id="3742327"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743078">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743078" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark positive ">
+							<span class="score" title="Всего 2: ↑2 и ↓0">+2</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/Pilat/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+				<a href="http://habrahabr.ru/users/Pilat/" class="username">Pilat</a><span class="comma">,</span>
+				<time>16 марта 2011 в 03:59</time>
+				
+				<a href="#comment_3743078" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743078" data-parent_id="3742327" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3742327" data-id="3743078" data-parent_id="3742327" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				В FF есть DownThemAll — и многопоточность, и докачка. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743078">
+	</div>
+</div>
+
+	</div>
+</div>
+
+		<div class="comment_item" id="comment_3742907">
+	
+	<span class="parent_id" data-parent_id="3742156"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742907">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742907" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/seriyPS/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_18215.jpg" alt=""></a>
+				<a href="http://habrahabr.ru/users/seriyPS/" class="username">seriyPS</a><span class="comma">,</span>
+				<time>16 марта 2011 в 01:19</time>
+				
+				<a href="#comment_3742907" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3742907" data-parent_id="3742156" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3742156" data-id="3742907" data-parent_id="3742156" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				wget ))<br>
+<br>
+А вообще докачку должен еще и сервер поддерживать (но вроде сейчас все поддерживают) 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742907">
+		<div class="comment_item" id="comment_3743158">
+	
+	<span class="parent_id" data-parent_id="3742907"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743158">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743158" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/eyeofhell/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_18285.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/eyeofhell/" class="username">eyeofhell</a><span class="comma">,</span>
+				<time>16 марта 2011 в 07:17</time>
+				
+				<a href="#comment_3743158" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743158" data-parent_id="3742907" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3742907" data-id="3743158" data-parent_id="3742907" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				<blockquote>wget</blockquote><br>
+<br>
+Увы, сейчас модно динамически генерировать ссылку на скачивание, которую
+ фиг из хрома выпилишь «откуда он это качает». А даже если и выпилишь 
+(есть способы), то wget скачивает не файл, а html с кучкой 
+жаваскриптовской авторизации и редиректа :(.<br>
+<br>
+Предвосхищая следующий вопрос — lynx качать начал, но размер правильно определить не смог O_O.<br>
+<br>
+<blockquote>А вообще докачку должен еще и сервер поддерживать (но вроде сейчас все поддерживают)</blockquote><br>
+<br>
+Редкий апач не подерживает докачку :).<br>
+ 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743158">
+		<div class="comment_item" id="comment_3743312">
+	
+	<span class="parent_id" data-parent_id="3743158"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743312">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743312" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/andoriyu/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_18384.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/andoriyu/" class="username">andoriyu</a><span class="comma">,</span>
+				<time>16 марта 2011 в 10:17</time>
+				
+				<a href="#comment_3743312" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743312" data-parent_id="3743158" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3743158" data-id="3743312" data-parent_id="3743158" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				А вот сафари поддерживает докачку. wget'у надо только куки скормить, чтобы скачать.  
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743312">
+	</div>
+</div>
+
+	</div>
+</div>
+
+	</div>
+</div>
+
+		<div class="comment_item" id="comment_3742909">
+	
+	<span class="parent_id" data-parent_id="3742156"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742909">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742909" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 2: ↑1 и ↓1">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/braintorch/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_21500.jpg" alt=""></a>
+				<a href="http://habrahabr.ru/users/braintorch/" class="username">braintorch</a><span class="comma">,</span>
+				<time>16 марта 2011 в 01:22</time>
+				
+				<a href="#comment_3742909" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3742909" data-parent_id="3742156" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3742156" data-id="3742909" data-parent_id="3742156" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				В опере докачка есть. Но, как уже отписались, докачка должна быть включена и на сервере. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742909">
+	</div>
+</div>
+
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3742314">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742314">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742314" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  negative">
+							<span class="score" title="Всего 2: ↑0 и ↓2">–2</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/porutchik/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_43767.jpg" alt=""></a>
+				<a href="http://habrahabr.ru/users/porutchik/" class="username">porutchik</a><span class="comma">,</span>
+				<time>15 марта 2011 в 21:13</time>
+				
+				<a href="#comment_3742314" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format bad bad2">
+				Почему у вас в окончаниях вместо «я» используется «е» и наоборот? 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742314">
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3742543">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742543">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742543" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark positive ">
+							<span class="score" title="Всего 3: ↑3 и ↓0">+3</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/vitmeat/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_19890.jpg" alt=""></a>
+				<a href="http://habrahabr.ru/users/vitmeat/" class="username">vitmeat</a><span class="comma">,</span>
+				<time>15 марта 2011 в 22:37</time>
+				
+				<a href="#comment_3742543" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				"*опции необходимо покрутить в регистре." <br>
+<br>
+<a href="http://ru.wikipedia.org/wiki/%D0%A0%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%80_%28%D1%86%D0%B8%D1%84%D1%80%D0%BE%D0%B2%D0%B0%D1%8F_%D1%82%D0%B5%D1%85%D0%BD%D0%B8%D0%BA%D0%B0%29">Сдвиговый регистр</a> <a href="http://conductiveresistance.com/interactive-595-shift-register-simulator/">74hc595</a> одобряет! =)<br>
+<br>
+А вообще, видимо, имелось введу реестре. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742543">
+		<div class="comment_item" id="comment_3742563">
+	
+	<span class="parent_id" data-parent_id="3742543"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742563">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742563" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/prox/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_63435.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/prox/" class="username">prox</a><span class="comma">,</span>
+				<time>15 марта 2011 в 22:43</time>
+				
+				<a href="#comment_3742563" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3742563" data-parent_id="3742543" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3742543" data-id="3742563" data-parent_id="3742543" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				конечно же «Windows Registry» <br>
+поправил 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742563">
+	</div>
+</div>
+
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3742591">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742591">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742591" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark positive ">
+							<span class="score" title="Всего 4: ↑4 и ↓0">+4</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/Karroplan/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+				<a href="http://habrahabr.ru/users/Karroplan/" class="username">Karroplan</a><span class="comma">,</span>
+				<time>15 марта 2011 в 22:55</time>
+				
+				<a href="#comment_3742591" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				а есть ещё полезная утилитка iperf, которая прекрасно позволяет 
+играть и разером TCP MSS и отключением мягкого старта, да и всякие 
+междумордия красивые для неё есть, если надо<br>
+IPERF<br>
+ 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742591">
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3742874">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742874">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742874" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 2: ↑1 и ↓1">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/amarao/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_22226.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/amarao/" class="username">amarao</a><span class="comma">,</span>
+				<time>16 марта 2011 в 00:58</time>
+				
+				<a href="#comment_3742874" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Что-то ваша формула подвирает.<br>
+<br>
+Смотрите, пинг у нас 100мкс (0.00005с в одну сторону), буфер, допустим, 64к.<br>
+<br>
+Имеем: 65536/0.00005=1.3Гб/с.<br>
+<br>
+А я лично видел 8.5-9 гигабит при 100мкс пинге. Все настройки дефолтные,
+ ixgbe собран с ключами, которые не мешают маршрутизации. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742874">
+		<div class="comment_item" id="comment_3743163">
+	
+	<span class="parent_id" data-parent_id="3742874"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743163">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743163" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/eyeofhell/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_18285.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/eyeofhell/" class="username">eyeofhell</a><span class="comma">,</span>
+				<time>16 марта 2011 в 07:21</time>
+				
+				<a href="#comment_3743163" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743163" data-parent_id="3742874" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3742874" data-id="3743163" data-parent_id="3742874" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Это на дефолтном TCP стеке в один поток? Если на дефолтном, то при 
+чем тут ixgbe (драфвер intel, специыичный для 10 гигабитной сетевой 
+карты)? 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743163">
+	</div>
+</div>
+
+		<div class="comment_item" id="comment_3743340">
+	
+	<span class="parent_id" data-parent_id="3742874"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743340">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743340" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/lorc/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+				<a href="http://habrahabr.ru/users/lorc/" class="username">lorc</a><span class="comma">,</span>
+				<time>16 марта 2011 в 10:38</time>
+				
+				<a href="#comment_3743340" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743340" data-parent_id="3742874" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3742874" data-id="3743340" data-parent_id="3742874" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Скажите, а пинг вы чем мерили? Обычная утилита ping выводит время с точностью до миллисекунд.  
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743340">
+		<div class="comment_item" id="comment_3743354">
+	
+	<span class="parent_id" data-parent_id="3743340"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743354">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743354" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark positive ">
+							<span class="score" title="Всего 1: ↑1 и ↓0">+1</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/galaxy/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+				<a href="http://habrahabr.ru/users/galaxy/" class="username">galaxy</a><span class="comma">,</span>
+				<time>16 марта 2011 в 10:44</time>
+				
+				<a href="#comment_3743354" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743354" data-parent_id="3743340" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3743340" data-id="3743354" data-parent_id="3743340" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Unix'овая до микросекунд 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743354">
+	</div>
+</div>
+
+		<div class="comment_item" id="comment_3743510">
+	
+	<span class="parent_id" data-parent_id="3743340"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743510">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743510" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 2: ↑1 и ↓1">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/amarao/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_22226.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/amarao/" class="username">amarao</a><span class="comma">,</span>
+				<time>16 марта 2011 в 11:45</time>
+				
+				<a href="#comment_3743510" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743510" data-parent_id="3743340" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3743340" data-id="3743510" data-parent_id="3743340" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Обычный пинг выводит в микросекундах. <br>
+<br>
+ping selectel.ru<br>
+PING selectel.ru (188.93.16.18) 56(84) bytes of data.<br>
+64 bytes from selectel.ru (188.93.16.18): icmp_req=1 ttl=57 time=0.977 ms<br>
+64 bytes from selectel.ru (188.93.16.18): icmp_req=2 ttl=57 time=0.759 ms<br>
+^C<br>
+ — selectel.ru ping statistics — 2 packets transmitted, 2 received, 0% packet loss, time 1001ms<br>
+rtt min/avg/max/mdev = 0.759/0.868/0.977/0.109 ms<br>
+ 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743510">
+	</div>
+</div>
+
+	</div>
+</div>
+
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3742875">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3742875">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3742875" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  negative">
+							<span class="score" title="Всего 1: ↑0 и ↓1">–1</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/amarao/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_22226.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/amarao/" class="username">amarao</a><span class="comma">,</span>
+				<time>16 марта 2011 в 01:00</time>
+				
+				<a href="#comment_3742875" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format bad bad1">
+				ой, пардон, забыл про биты. <br>
+<br>
+Вопрос, если я сделаю пинг в 1мс, я получу потолок в гигабит? Не верю. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3742875">
+		<div class="comment_item" id="comment_3743001">
+	
+	<span class="parent_id" data-parent_id="3742875"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743001">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743001" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/bitterman/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+				<a href="http://habrahabr.ru/users/bitterman/" class="username">bitterman</a><span class="comma">,</span>
+				<time>16 марта 2011 в 02:30</time>
+				
+				<a href="#comment_3743001" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743001" data-parent_id="3742875" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3742875" data-id="3743001" data-parent_id="3742875" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				речь, судя по всему, про ограничение сверху. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743001">
+		<div class="comment_item" id="comment_3743013">
+	
+	<span class="parent_id" data-parent_id="3743001"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743013">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743013" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/amarao/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_22226.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/amarao/" class="username">amarao</a><span class="comma">,</span>
+				<time>16 марта 2011 в 02:37</time>
+				
+				<a href="#comment_3743013" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743013" data-parent_id="3743001" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3743001" data-id="3743013" data-parent_id="3743001" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Да, я про это и говорю. Я не верю, что 1мс пинг даст лимит в чуть больше гигабита. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743013">
+		<div class="comment_item" id="comment_3743166">
+	
+	<span class="parent_id" data-parent_id="3743013"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743166">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743166" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/eyeofhell/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_18285.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/eyeofhell/" class="username">eyeofhell</a><span class="comma">,</span>
+				<time>16 марта 2011 в 07:23</time>
+				
+				<a href="#comment_3743166" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743166" data-parent_id="3743013" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3743013" data-id="3743166" data-parent_id="3743013" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Вы не верите что лимит будет такой маленький или такой большой? В 
+локальной сети (пинг примерно 0 мс) windows на дефолтном TCP стэке 
+вполне способна утилизировать гигабитную сетевую карту. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743166">
+		<div class="comment_item" id="comment_3743483">
+	
+	<span class="parent_id" data-parent_id="3743166"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743483">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743483" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 2: ↑1 и ↓1">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/amarao/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_22226.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/amarao/" class="username">amarao</a><span class="comma">,</span>
+				<time>16 марта 2011 в 11:36</time>
+				
+				<a href="#comment_3743483" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743483" data-parent_id="3743166" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3743166" data-id="3743483" data-parent_id="3743166" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Я не знаю, что там может виндоуз, я говорю, что не верю, что пинг в 
+1мс не даст возможности утилизовать 10G карточку. И разумеется, речь про
+ линукс (при чём тут вообще винды?) 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743483">
+		<div class="comment_item" id="comment_3743575">
+	
+	<span class="parent_id" data-parent_id="3743483"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743575">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743575" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark positive ">
+							<span class="score" title="Всего 1: ↑1 и ↓0">+1</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/prox/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_63435.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/prox/" class="username">prox</a><span class="comma">,</span>
+				<time>16 марта 2011 в 12:10</time>
+				
+				<a href="#comment_3743575" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743575" data-parent_id="3743483" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3743483" data-id="3743575" data-parent_id="3743483" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				а вы попробуйте и сообщите о результатах<br>
+(убедитесь что окно = 64КB и РТТ &gt;1000 microsec. )<br>
+<br>
+так же можете проверить скорость, уменьшая окно с RTT ~ 0.0001 sec <br>
+<br>
+ 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743575">
+	</div>
+</div>
+
+	</div>
+</div>
+
+	</div>
+</div>
+
+	</div>
+</div>
+
+	</div>
+</div>
+
+		<div class="comment_item" id="comment_3743561">
+	
+	<span class="parent_id" data-parent_id="3742875"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743561">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743561" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark positive ">
+							<span class="score" title="Всего 1: ↑1 и ↓0">+1</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/digreen/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_22418.jpg" alt=""></a>
+				<a href="http://habrahabr.ru/users/digreen/" class="username">digreen</a><span class="comma">,</span>
+				<time>16 марта 2011 в 12:04</time>
+				
+				<a href="#comment_3743561" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743561" data-parent_id="3742875" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3742875" data-id="3743561" data-parent_id="3742875" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				В одном TCP соединении, скорее всего, так и получится.  
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743561">
+	</div>
+</div>
+
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3743187">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743187">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743187" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/Vandal/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_13285.jpg" alt=""></a>
+				<a href="http://habrahabr.ru/users/Vandal/" class="username">Vandal</a><span class="comma">,</span>
+				<time>16 марта 2011 в 07:54</time>
+				
+				<a href="#comment_3743187" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Отличная серьёзная статья, спасибо автору. Однако статистику 
+измерения скорости в конце поста рекомендую сделать табличкой, а то ж 
+нихрена не понятно. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743187">
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3743226">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743226">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743226" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/Simplevolk/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+				<a href="http://habrahabr.ru/users/Simplevolk/" class="username">Simplevolk</a><span class="comma">,</span>
+				<time>16 марта 2011 в 08:57</time>
+				
+				<a href="#comment_3743226" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				какой минимально возможный пинг у протокола TCP/IP? допустим, 
+расстояние между компьютерами не превышает нескольких метров (до 10м). 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743226">
+		<div class="comment_item" id="comment_3743367">
+	
+	<span class="parent_id" data-parent_id="3743226"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743367">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743367" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/VolCh/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+				<a href="http://habrahabr.ru/users/VolCh/" class="username">VolCh</a><span class="comma">,</span>
+				<time>16 марта 2011 в 10:49</time>
+				
+				<a href="#comment_3743367" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743367" data-parent_id="3743226" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3743226" data-id="3743367" data-parent_id="3743226" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				ping 127.0.0.1 :) 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743367">
+	</div>
+</div>
+
+		<div class="comment_item" id="comment_3743501">
+	
+	<span class="parent_id" data-parent_id="3743226"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743501">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743501" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/Drugsoul/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_5519.jpg" alt=""></a>
+				<a href="http://habrahabr.ru/users/Drugsoul/" class="username">Drugsoul</a><span class="comma">,</span>
+				<time>16 марта 2011 в 11:42</time>
+				
+				<a href="#comment_3743501" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743501" data-parent_id="3743226" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3743226" data-id="3743501" data-parent_id="3743226" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Пропингуйте 127.0.0.1 :) 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743501">
+	</div>
+</div>
+
+		<div class="comment_item" id="comment_3743552">
+	
+	<span class="parent_id" data-parent_id="3743226"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743552">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743552" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/prox/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_63435.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/prox/" class="username">prox</a><span class="comma">,</span>
+				<time>16 марта 2011 в 12:02</time>
+				
+				<a href="#comment_3743552" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3743552" data-parent_id="3743226" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3743226" data-id="3743552" data-parent_id="3743226" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				зависит от:<br>
+ — метода передачи данных (оптика, медь)<br>
+ — производительности систем (ЦП, ОС)<br>
+ — количество устройств в том же домене коллизий <br>
+и т.д.<br>
+<br>
+реальные данные:<br>
+1) пинг на себя же (слабая машина)<br>
+Source address is 127.0.0.1; using ICMP echo-request<br>
+Pinging 127.0.0.1 with 32 bytes data (60 bytes IP):<br>
+Reply from 127.0.0.1: seq=0001 time=0.108ms TTL=64 ID=4000<br>
+Reply from 127.0.0.1: seq=0002 time=0.094ms TTL=64 ID=4006<br>
+Reply from 127.0.0.1: seq=0003 time=0.089ms TTL=64 ID=400a<br>
+Reply from 127.0.0.1: seq=0004 time=0.092ms TTL=64 ID=400f<br>
+<br>
+2) пинг между 2-мя серверами подключенные через Ethernet медь (1 Gbps), ~ 30 метров между ними<br>
+64 bytes from SOMESRVIP: icmp_seq=6 ttl=255 time=0.094 ms<br>
+64 bytes from SOMESRVIP: icmp_seq=7 ttl=255 time=0.086 ms<br>
+64 bytes from SOMESRVIP: icmp_seq=8 ttl=255 time=0.096 ms<br>
+64 bytes from SOMESRVIP: icmp_seq=9 ttl=255 time=0.092 ms<br>
+<br>
+т.е. по сети получилось быстрее чем локально <br>
+<br>
+FYI:«This limitation results from the timing of the Ethernet signals on 
+the cable and not necessarily the cable characteristics, and is, 
+therefore, a „hard“ number.» 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743552">
+	</div>
+</div>
+
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3743292">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743292">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743292" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/XolodIT/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_18787.jpg" alt=""></a>
+				<a href="http://habrahabr.ru/users/XolodIT/" class="username">XolodIT</a><span class="comma">,</span>
+				<time>16 марта 2011 в 10:03</time>
+				
+				<a href="#comment_3743292" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Спасибо! Будто качественную лекцию выслушил, а не статью прочел, очень интересно. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743292">
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3743823">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743823">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743823" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/navion/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+				<a href="http://habrahabr.ru/users/navion/" class="username">navion</a><span class="comma">,</span>
+				<time>16 марта 2011 в 14:13</time>
+				
+				<a href="#comment_3743823" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Очень полезная статья для тех, кто надумает организовать выделенный канал между удалёнными площадками. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743823">
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3743971">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3743971">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3743971" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark positive ">
+							<span class="score" title="Всего 5: ↑5 и ↓0">+5</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/Lovets/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+				<a href="http://habrahabr.ru/users/Lovets/" class="username">Lovets</a><span class="comma">,</span>
+				<time>16 марта 2011 в 15:10</time>
+				
+				<a href="#comment_3743971" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Автор плохо разобрался в материале и сеет дезу в массы.<br>
+<br>
+1) Проблему с максимальным размером окна в 64к решили еще в 92-м году, введя в протокол флаг<br>
+<a href="http://en.wikipedia.org/wiki/TCP_window_scale_option">масштабирования окна TCP</a>. Насколько мне известно, Windows штатно поддерживает его начиная с версии 2000.<br>
+<br>
+2) Проблемы с производительностью TCP в LFN-сетях связаны не с 
+превышением размера окна TCP (см. пункт 1), а с медленным темпом 
+«разгона» древних вариантов алгоритмов управления перегрузками TCP до 
+нужного размера окна и их неадекватной реакцией на потери пакетов.<br>
+<br>
+3) Производительность TCP по большей части зависит от алгоритма 
+управления перегрузками на стороне, передающей данные. В не-windows мире
+ серверных систем уже давно используются современные варианты TCP, 
+отлично работающие при большом BDP (например, BIC и <a href="http://en.wikipedia.org/wiki/CUBIC_TCP">CUBIC</a>).
+ Насколько мне известно, Windows начиная с 98 застряла на TCP Reno + 
+SACK, но Compound TCP в 2008-Server призван сократить это отставание.<br>
+<br>
+К слову, для передачи больших объемов данных в сетях с большими 
+задержками используется либо несколько параллельных потоков TCP, либо 
+специальные варианты TCP (HSTCP, HYBLA), либо немножко другие протоколы 
+(см., например, SABUL).<br>
+<br>
+4) Потери пакетов сильно влияют на производительность не потому, что 
+данные приходится передавать повторно — с введением SACK передаются 
+только потерянные сегменты, а не всё окно передачи начиная с первого 
+неподтвержденного байта. На самом деле проблема в том, что потеря даже 
+одного пакета в большинстве старых реализаций TCP (см. пункт 3) 
+интерпретировалась как перегруженность сети, и протокол резко уменьшал 
+окно передачи. В современных вариантах TCP это во многом вылечено. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3743971">
+		<div class="comment_item" id="comment_3755742">
+	
+	<span class="parent_id" data-parent_id="3743971"></span>
+	<div class="comment_body">
+			<div class="info " rel="3755742">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3755742" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/prox/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_63435.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/prox/" class="username">prox</a><span class="comma">,</span>
+				<time>21 марта 2011 в 13:52</time>
+				
+				<a href="#comment_3755742" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3755742" data-parent_id="3743971" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3743971" data-id="3755742" data-parent_id="3743971" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Такое впечатление что вы прочли только пункт 1) из статьи.<br>
+O потерях, SACK, Compound TCP в вкратце изложено, для общей картины, в пункте 2)<br>
+<br>
+и еще, вы сами себе противоречите:<br>
+как же проблему с максимальным размером окна в 64к «решили еще в 92-м 
+году», если «Windows… поддерживает… с версии 2000», а в XP опции по 
+умолчанию отключены?<br>
+ 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3755742">
+		<div class="comment_item" id="comment_3756501">
+	
+	<span class="parent_id" data-parent_id="3755742"></span>
+	<div class="comment_body">
+			<div class="info " rel="3756501">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3756501" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/Lovets/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+				<a href="http://habrahabr.ru/users/Lovets/" class="username">Lovets</a><span class="comma">,</span>
+				<time>21 марта 2011 в 17:49</time>
+				
+				<a href="#comment_3756501" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3756501" data-parent_id="3755742" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3755742" data-id="3756501" data-parent_id="3755742" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Собственно, я лишь указал на самые заметные из фактических ошибок, 
+которые создают неправильное представление о современном положении дел с
+ TCP. Если же речь в статье только о проблемах старых версий windows, 
+неплохо бы указать это в заголовке.<br>
+<br>
+Фраза про 92-й год о протоколе, а не о его реализации в какой-то операционной системе.<br>
+<br>
+P.S.:<br>
+<ul>
+<li> PAWS — не «накладка», а переполнение.<br>
+</li>
+<li> SACK… «положительно или отрицательно» — SACK в TCP использует только положительные подтверждения.<br>
+</li>
+</ul><br>
+Да и зачем в тегах статьи упомянута замечательная утилита iperf, если в примерах вы используете что-то другое.<br>
+ 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3756501">
+		<div class="comment_item" id="comment_3756773">
+	
+	<span class="parent_id" data-parent_id="3756501"></span>
+	<div class="comment_body">
+			<div class="info " rel="3756773">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3756773" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/prox/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_63435.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/prox/" class="username">prox</a><span class="comma">,</span>
+				<time>21 марта 2011 в 19:16</time>
+				
+				<a href="#comment_3756773" class="link_to_comment">#</a>
+					<div class="show_tree" data-id="3756773" data-parent_id="3756501" title="Показать ветку комментариев">↵</div>
+					
+					<a href="#comment_3756501" data-id="3756773" data-parent_id="3756501" class="to_parent">↑</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				«Да и зачем в тегах статьи упомянута замечательная утилита iperf, если в примерах вы используете что-то другое.»<br>
+<br>
+в статье указанно 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3756773">
+	</div>
+</div>
+
+	</div>
+</div>
+
+	</div>
+</div>
+
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3823633">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3823633">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3823633" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/Nakilon/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_9217.png" alt=""></a>
+				<a href="http://habrahabr.ru/users/Nakilon/" class="username">Nakilon</a><span class="comma">,</span>
+				<time>14 апреля 2011 в 16:11</time>
+				
+				<a href="#comment_3823633" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Блин, а я всегда смеялся, когда связывают пропускную способность и 
+пинг, а взаимосвязь, оказывается, есть. Только пинг-&gt;скорость, а не 
+наоборот, если я правильно понял.<br>
+А для UDP тоже существует подобный график? 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3823633">
+	</div>
+</div>
+
+    <div class="comment_item" id="comment_3940732">
+	
+	<span class="parent_id" data-parent_id="0"></span>
+	<div class="comment_body">
+			<div class="info " rel="3940732">
+				<div class="folding-dot-holder"><div class="folding-dot"></div></div>
+				<div id="voting_3940732" class="voting   ">
+						<span class="minus" title="Голосовать могут только зарегистрированные пользователи"></span>
+						<span class="plus" title="Голосовать могут только зарегистрированные пользователи"></span>
+					<div class="mark  ">
+							<span class="score" title="Всего 0: ↑0 и ↓0">0</span> 
+					</div>	 
+				</div>
+				<a href="http://habrahabr.ru/users/Dyr/" class="avatar"><img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/stub-user-small.gif" alt=""></a>
+				<a href="http://habrahabr.ru/users/Dyr/" class="username">Dyr</a><span class="comma">,</span>
+				<time>30 мая 2011 в 16:46</time>
+				
+				<a href="#comment_3940732" class="link_to_comment">#</a>
+				<span class="to_chidren"></span>
+				<div class="clear"></div>
+			</div>
+			<div class="message html_format ">
+				Отличная статья, спасибо. 
+			</div>
+			<div class="reply_form_placeholder"></div>
+			<div class="reply">
+				
+			</div>
+	</div>
+	
+	<div class="reply_comments" id="reply_comments_3940732">
+	</div>
+</div>
+
+</div>
+				<p class="for_users_only_msg">Только зарегистрированные пользователи могут оставлять комментарии. <a href="http://habrahabr.ru/login/">Войдите</a>, пожалуйста.</p>
+
+
+	
+<form action="/json/favorites/" method="post" id="edit_tags_form" class="hidden">
+  <input name="action" value="add" type="hidden">
+  <input name="ti" value="0" type="hidden">
+  <input name="tt" value="0" type="hidden">
+  <label>Пометьте топик понятными вам метками, если хотите</label>
+  <input autocomplete="off" name="tags_string" class="tags_string" type="text">
+  <div class="description">Метки лучше разделять запятой. Например: <i>общение, социальные сети, myspace.com, подростки, мердок</i></div>
+  <input value="Сохранить" class="submit" type="submit"> или <a href="#" class="close" onclick="return close_edit_tags()">закрыть</a>
+</form>
+    
+
+
+  </div>
+  <div class="sidebar_right">
+			
+	
+		<div class="banner_300x500">
+		<div id="adriver_banner_1863387959"></div>
+		<script type="text/javascript">
+			(function(){
+				var custom = {};
+					custom[1] = 'closet';
+				
+				var std = {},i;for(i in
+				std){try{custom[std[i]]=eval(i)}catch(e){} }
+				new adriver("adriver_banner_1863387959", {sid: 176776, bt: 52, bn: 1, custom:
+				custom});
+			}());
+		</script>
+		</div>
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+		
+<div style="opacity: 1; width: auto;" class="block daily_best_posts">
+  <div class="title">Лучшее <sup>за 24 часа</sup></div>
+  <div class="posts_list">
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/182458/" class="post_name">Когда-то я говорил…</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/182428/" class="post_name">Скорости разработки и исполнения, не достижимые на С</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/company/yandex/blog/182522/" class="post_name">Позиция Яндекса о новом законопроекте о регулировании интернета</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/182356/" class="post_name">Возможности оптимизации в языках C и C++</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/182454/" class="post_name">WTF QR CODE</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/company/apps4all/blog/182450/" class="post_name">The Washington Post: АНБ собирает данные непосредственно с серверов Google, Facebook, Microsoft и Apple</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/company/smartgadget/blog/182478/" class="post_name">Как я ездила на море с голубым… Just5</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/182382/" class="post_name">Boid'ы, птички и Unity3D</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/182434/" class="post_name">Физики научились терять в дифракционных карманах до 46% трафика</a>
+      </div>
+      <div class="post_item">
+        
+				
+				
+				
+				
+				
+
+        <a href="http://habrahabr.ru/post/182432/" class="post_name">Программирование, быстрое и медленное: разработчики и психология самоуверенности</a>
+      </div>
+  </div>
+  <div class="all"><a href="http://habrahabr.ru/top/">все лучшие</a></div>
+</div>
+
+		
+		
+
+
+<div class="block similar_posts">
+
+	<div class="title">Похожие посты</div>
+  <div class="posts_list">
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/173543/">2 апреля в Петербурге состоится High Performance Conference 4.0</a>
+    				<span class="when">20.03.2013</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/168407/">TCP Congestion Control или Почему скорость прыгает</a>
+    				<span class="when">06.02.2013</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/166677/">Новый тип EC2 инстанса — High Memory Cluster Eight Extra Large Instance</a>
+    				<span class="when">22.01.2013</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/161139/">Конференция High Performance Conference 3.0</a>
+    				<span class="when">03.12.2012</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/157997/">О тонкостях повышения performance на С++, или как делать не надо</a>
+    				<span class="when">09.11.2012</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/154487/">Видеозаписи докладов с High Performance Conference</a>
+    				<span class="when">12.10.2012</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/149194/">High Performance Conference — 9 августа</a>
+    				<span class="when">08.08.2012</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/101655/">22 октября, Минск. Семинар от одного из авторов «High performance MySQL» Петра Зайцева</a>
+    				<span class="when">13.08.2010</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/47336/">10 Tips to improve Linq2Sql performance</a>
+    				<span class="when">19.12.2008</span>
+      </div>
+    	<div class="post_item">
+    				<a class="post_name" href="http://habrahabr.ru/post/38826/">High Performance MySQL, Second Edition</a>
+    				<span class="when">03.09.2008</span>
+      </div>
+  </div>			
+</div>
+
+
+
+		
+		
+
+	<div class="block live_broadcast">
+		<div class="title">Прямой эфир &nbsp;<sup><span class="dotted tab open" data-type="live_broadcast_activity">посты</span> 
+																											 &nbsp;<span class="dotted tab " data-type="qa_activity">q&amp;a</span></sup></div>
+
+		<div class="live_broadcast_activity ">
+				<div class="posts_list">
+							<div class="post_item">
+								<a href="http://habrahabr.ru/users/ohmytribe/" class="user_name">ohmytribe</a> →
+								<a href="http://habrahabr.ru/post/145960/#comment_6340658" class="post_name">Когда я говорил…</a>&nbsp;<span class="count">439</span>
+							</div>
+							<div class="post_item">
+								<a href="http://habrahabr.ru/users/res/" class="user_name">res</a> →
+								<a href="http://habrahabr.ru/post/176299/#comment_6340656" class="post_name">Как я учился защищать изображения</a>&nbsp;<span class="count">90</span>
+							</div>
+							<div class="post_item">
+								<a href="http://habrahabr.ru/users/HostingManager/" class="user_name">HostingManager</a> →
+								<a href="http://habrahabr.ru/post/182534/#comment_6340654" class="post_name">Зеленое будущее ЦОД</a>&nbsp;<span class="count">8</span>
+							</div>
+							<div class="post_item">
+								<a href="http://habrahabr.ru/users/VolCh/" class="user_name">VolCh</a> →
+								<a href="http://habrahabr.ru/post/182522/#comment_6340652" class="post_name">Позиция Яндекса о новом законопроекте о регулировании интернета</a>&nbsp;<span class="count">132</span>
+							</div>
+							<div class="post_item">
+								<a href="http://habrahabr.ru/users/15432/" class="user_name">15432</a> →
+								<a href="http://habrahabr.ru/post/182540/#comment_6340650" class="post_name">Компания Intel представила самую быструю «Thunderbolt-флешку» в мире</a>&nbsp;<span class="count">3</span>
+							</div>
+							<div class="post_item">
+								<a href="http://habrahabr.ru/users/vertus/" class="user_name">vertus</a> →
+								<a href="http://habrahabr.ru/post/182478/#comment_6340644" class="post_name">Как я ездила на море с голубым… Just5</a>&nbsp;<span class="count">86</span>
+							</div>
+							<div class="post_item">
+								<a href="http://habrahabr.ru/users/Nothingman/" class="user_name">Nothingman</a> →
+								<a href="http://habrahabr.ru/post/182528/#comment_6340638" class="post_name">Ubuntu Phone уже поддерживает интернет-подключение, социальные приложения, звонки и многое другое</a>&nbsp;<span class="count">20</span>
+							</div>
+							<div class="post_item">
+								<a href="http://habrahabr.ru/users/CaptainFlint/" class="user_name">CaptainFlint</a> →
+								<a href="http://habrahabr.ru/post/182510/#comment_6340630" class="post_name">Вышел дистрибутив linux ROSA Desktop FRESH R1</a>&nbsp;<span class="count">9</span>
+							</div>
+							<div class="post_item">
+								<a href="http://habrahabr.ru/users/Dr_Death/" class="user_name">Dr_Death</a> →
+								<a href="http://habrahabr.ru/post/182530/#comment_6340626" class="post_name">Игровая консоль NVIDIA Shield в работе (видео от Nvidia)</a>&nbsp;<span class="count">10</span>
+							</div>
+							<div class="post_item">
+								<a href="http://habrahabr.ru/users/crackedmind/" class="user_name">crackedmind</a> →
+								<a href="http://habrahabr.ru/post/182526/#comment_6340620" class="post_name">Bitbucket выпустил лимитированную серию брендированных футболок</a>&nbsp;<span class="count">4</span>
+							</div>
+				</div>
+				<div class="all"><a href="http://habrahabr.ru/posts/">все посты</a></div>
+		</div>
+
+		<div class="qa_activity hidden">
+				
+			
+			
+					<div class="posts_list">
+								<div class="post_item">
+									<a href="http://habrahabr.ru/users/FeNUMe/" class="user_name">FeNUMe</a> →
+									<a href="http://habrahabr.ru/qa/41394/#answer_157896" class="post_name">Какой Linux выбрать для Web-сервера?</a>&nbsp;<span class="count">13</span>
+								</div>
+								<div class="post_item">
+									<a href="http://habrahabr.ru/users/ZhukV/" class="user_name">ZhukV</a> →
+									<a href="http://habrahabr.ru/qa/39411/#answer_157894" class="post_name">Как получить доступ к базе в DependencyInjection?</a>&nbsp;<span class="count">3</span>
+								</div>
+								<div class="post_item">
+									<a href="http://habrahabr.ru/users/FeNUMe/" class="user_name">FeNUMe</a> →
+									<a href="http://habrahabr.ru/qa/41414/#answer_157892" class="post_name">Подскажите программу для необычного бекапа</a>&nbsp;<span class="count">9</span>
+								</div>
+								<div class="post_item">
+									<a href="http://habrahabr.ru/users/Peretyaka/" class="user_name">Peretyaka</a> →
+									<a href="http://habrahabr.ru/qa/41436/#comment_197792" class="post_name">Один номер телефона на двух мобильных устройствах</a>&nbsp;<span class="count">7</span>
+								</div>
+								<div class="post_item">
+									<a href="http://habrahabr.ru/users/Argons/" class="user_name">Argons</a> →
+									<a href="http://habrahabr.ru/qa/41490/#answer_157890" class="post_name">Подскажите какой SSD выбрать?</a>&nbsp;<span class="count">3</span>
+								</div>
+								<div class="post_item">
+									<a href="http://habrahabr.ru/users/w1z/" class="user_name">w1z</a> →
+									<a href="http://habrahabr.ru/qa/41508/#comment_197790" class="post_name">Windows 8 переустановка на ssd из ранее созданного Recovery образа</a>&nbsp;<span class="count">1</span>
+								</div>
+								<div class="post_item">
+									<a href="http://habrahabr.ru/users/0000168/" class="user_name">0000168</a> →
+									<a href="http://habrahabr.ru/qa/41462/#answer_157888" class="post_name">Собственное мнение. Существует или это миф?</a>&nbsp;<span class="count">16</span>
+								</div>
+								<div class="post_item">
+									<a href="http://habrahabr.ru/users/Arktos/" class="user_name">Arktos</a> →
+									<a href="http://habrahabr.ru/qa/41506/#answer_157886" class="post_name">Где скачать образ windows 8 pro</a>&nbsp;<span class="count">2</span>
+								</div>
+								<div class="post_item">
+									<a href="http://habrahabr.ru/users/Jeditobe/" class="user_name">Jeditobe</a> →
+									<a href="http://habrahabr.ru/qa/41446/#comment_197786" class="post_name">Для данного видео сбор статистики отключен. Почему?</a>&nbsp;<span class="count">1</span>
+								</div>
+								<div class="post_item">
+									<a href="http://habrahabr.ru/users/opium/" class="user_name">opium</a> →
+									<a href="http://habrahabr.ru/qa/41450/#comment_197784" class="post_name">Подключение EBS к EC2</a>&nbsp;<span class="count">3</span>
+								</div>
+					</div>
+					<div class="all"><a href="http://habrahabr.ru/qa/">все вопросы</a></div>
+		</div>  
+	</div>
+
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('.live_broadcast .tab').click(function(){
+				$('.live_broadcast .tab').removeClass('open')
+				$(this).addClass('open')
+
+				$('.live_broadcast_activity').hide()
+				$('.qa_activity').hide()
+
+				$('.' + $(this).data('type')).show();
+
+			})
+		})
+	</script>
+
+
+
+  
+		
+<div id="htmlblock_placeholder"></div>
+
+	<script type="text/javascript">
+	var htmlblock_hidden = true;
+	var check_window_position = function(name, html, url){
+		var screen_top = window.pageYOffset
+		var screen_bottom = window.pageYOffset + $(window).height()
+		var htmlblock_placeholder_top = $('#htmlblock_placeholder').offset().top // + ($(window).height() / 2 )
+		if( screen_top < htmlblock_placeholder_top && htmlblock_placeholder_top < screen_bottom ){
+			if ( htmlblock_hidden ){
+				$('#htmlblock_placeholder').html(html);
+				$('.'+name+'_htmlblock').removeClass('hidden');
+				if( typeof(url) !== 'undefined'){
+					$('.'+name+'_htmlblock .block_url').attr('href', url);
+				}
+				if (name == 'ie10_2' || name == 'ie10_3'){
+					var imgie = new Image(1,1);
+					imgie.src = 'http://view.atdmt.com/MRR/view/442774355/direct/01/';
+				}
+
+				htmlblock_hidden = false
+			}
+		}
+	}
+	
+	function show_html_block(name, url){
+		if( typeof(name) !== 'undefined'){
+			$.post('/json/html/'+name+'/', function(html){
+				$(window).bind('scroll', function(){
+					check_window_position(name, html, url);
+				});
+				check_window_position(name, html, url);
+			})
+		}
+	}
+
+	</script>
+
+
+	<!--  AdRiver code START. Type:AjaxJS Site: SP SZ: html PZ: 0 BN: 2 -->
+
+	<div id="adriver_banner_327292689"></div>
+
+	<script type="text/javascript">
+	new adriver("adriver_banner_327292689", {sid:179440, bt:52, sz:'html', bn:2});
+	</script>
+
+	<!--  AdRiver code END  -->
+
+		
+<div class="block best_company">
+
+		<div class="title">Компания дня <img src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/bg_cicle_help.png" class="help-tip"></div>
+
+		<div class="company_info">
+			<div class="name">
+			 <img class="favicon" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/small_63973.jpg" alt="Rozetked" height="16" width="16">
+			 <div class="company_name"><a href="http://habrahabr.ru/company/rozetked/" class="title">Rozetked</a></div>
+			</div>
+
+			<p>Последний пост:
+				<a href="http://habrahabr.ru/company/rozetked/blog/181948/">Большой русский обзор Google Glass</a>
+			</p>
+
+			<div class="buttons">
+  			<div id="fans_count">144 подписчика</div>
+			</div>
+		</div>
+
+	</div>
+
+
+		
+
+		
+	<div class="block new_vacanies">
+  <a href="http://hantim.ru/" class="title">Хантим</a>
+  <div class="vacancies">
+		<div class="job_item marked">
+			<a href="http://hantim.ru/jobs/18298-razrabotchik-python-django">Разработчик Python/Django</a>
+		</div>
+		<div class="job_item marked">
+			<a href="http://hantim.ru/jobs/19066-front-end-developer">Front-end Developer</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://hantim.ru/jobs/19112-php-programmist">PHP-программист</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://hantim.ru/jobs/19110-razrabotchik-php-kohana">Разработчик PHP / Kohana</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://hantim.ru/jobs/17210-programmist-php">Программист php</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://hantim.ru/jobs/18762-python-django-razrabotchik-backend">Python / Django разработчик (Backend)</a>&nbsp;→ <a href="http://intellectplanet.hantim.ru/jobs" class="company_name">Intellect Planet</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://hantim.ru/jobs/18242-web-programmist">Web-программист</a>&nbsp;→ <a href="http://vizerra.hantim.ru/jobs" class="company_name">Визерра</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://hantim.ru/jobs/18186-microsoft-bi-razrabotchik">Microsoft BI разработчик</a>&nbsp;→ <a href="http://epam.hantim.ru/jobs" class="company_name">EPAM Systems</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://hantim.ru/jobs/18900-java-developer-for-android">Java Developer for Android</a>&nbsp;→ <a href="http://epam.hantim.ru/jobs" class="company_name">EPAM Systems</a>
+		</div>
+		<div class="job_item ">
+			<a href="http://hantim.ru/jobs/18892-senior-asp-net-c-developer">Senior ASP.NET/C# Developer</a>&nbsp;→ <a href="http://epam.hantim.ru/jobs" class="company_name">EPAM Systems</a>
+		</div>
+  </div>
+  <div class="all"><a href="http://hantim.ru/">все вакансии</a></div>
+</div>
+
+		
+	<div class="block freelansim">
+	  <a href="http://freelansim.ru/" class="title"></a>
+	  <div class="tasks">
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/26526">Классный арт для приложения</a>
+				</div>
+				<div class="task marked">
+					<a href="http://freelansim.ru/tasks/26524">Создание дизайна для сайта</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/26522">Одностраничный магазин</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/26322">Нужен 3D-моделлер (продуктовые упаковки)</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/26518">Специалист по Joomla 2.5</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/26520">Три рисунка для вебсайта про Амстердам</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/26202">1С Битрикс: программист или тандем (прог + верстка) - постоянные заказы</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/26516">Логотип для сайта</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/26514">Дизайн iOS-приложения</a>
+				</div>
+				<div class="task ">
+					<a href="http://freelansim.ru/tasks/26512">Ищем хорошего оптимизатора</a>
+				</div>
+
+	  </div>
+	  <div class="all"><a href="http://freelansim.ru/tasks">все заказы</a></div>
+	</div>
+
+		
+		
+		
+
+<div class="block similar_events">
+	<div class="title">Ближайшие события</div>
+		<div class="events_items">
+				<div class="event_item">
+						<div class="date">
+						<div class="dayname dayname_6"></div>
+						<div class="day">08</div>
+						<div class="month">июн</div>
+						</div>
+					<div class="title">
+						<a href="http://habrahabr.ru/events/2439/">Web Standards Days в Петербурге</a>
+					</div>
+				</div>
+				<div class="event_item">
+						<div class="date">
+						<div class="dayname dayname_0"></div>
+						<div class="day">09</div>
+						<div class="month">июн</div>
+						</div>
+					<div class="title">
+						<a href="http://habrahabr.ru/events/2578/">TagConf — Третья ежегодная IT-конференция в Таганроге</a>
+					</div>
+				</div>
+				<div class="event_item">
+						<div class="date">
+						<div class="dayname dayname_0"></div>
+						<div class="day">09</div>
+						<div class="month">июн</div>
+						</div>
+					<div class="title">
+						<a href="http://habrahabr.ru/events/2624/">Бесплатный вебинар «Как стать профессионалом в Oracle Database»</a>
+					</div>
+				</div>
+				<div class="event_item">
+						<div class="date">
+						<div class="dayname dayname_1"></div>
+						<div class="day">10</div>
+						<div class="month">июн</div>
+						</div>
+					<div class="title">
+						<a href="http://habrahabr.ru/events/2654/">Бесплатный вебинар «Бизнес-аналитика с Oracle Business Intelligence Server»</a>
+					</div>
+				</div>
+				<div class="event_item">
+						<div class="date">
+						<div class="dayname dayname_2"></div>
+						<div class="day">11</div>
+						<div class="month">июн</div>
+						</div>
+					<div class="title">
+						<a href="http://habrahabr.ru/events/2572/">Microsoft Project для чайников: бесплатный вебинар</a>
+					</div>
+				</div>
+		</div>
+	<div class="all"><a href="http://habrahabr.ru/events/">все события</a></div>
+</div>
+
+		
+  </div>
+  <div class="clear"></div>
+
+				
+	<div class="rotated_posts">
+			<div class="rotated_post ">
+				<a href="http://habrahabr.ru/post/175999/" class="grey">ASP.NET MVC. Урок 0. Вступление</a>
+			</div>
+			<div class="rotated_post ">
+				<a href="http://habrahabr.ru/post/171535/" class="grey">Короткометражная анимация «Damage»</a>
+			</div>
+			<div class="rotated_post last">
+				<a href="http://habrahabr.ru/company/uidesign/blog/177973/" class="grey">Общие заблуждения о сенсорных экранах</a>
+			</div>
+	</div>
+
+		  <div id="footer">
+			<dl>
+				<dd><a href="http://habrahabr.ru/login/">Войти</a></dd>
+				<dd><a href="http://habrahabr.ru/register/">Регистрация</a></dd>
+			</dl>
+			<dl>
+				<dt>Разделы</dt>
+
+				<dd><a href="http://habrahabr.ru/qa/">Q&amp;A</a></dd>
+				<dd><a href="http://habrahabr.ru/hubs/">Хабы</a></dd>
+				<dd><a href="http://habrahabr.ru/events/">События</a></dd>
+				<dd><a href="http://habrahabr.ru/companies/">Компании</a></dd>
+				<dd><a href="http://habrahabr.ru/users/">Пользователи</a></dd>
+			</dl>
+			<dl>
+				<dt>Посты</dt>
+				
+				<dd><a href="http://habrahabr.ru/posts/top/">Лучшие</a></dd>
+				<dd><a href="http://habrahabr.ru/posts/collective/">Тематические</a></dd>
+				<dd><a href="http://habrahabr.ru/posts/corporative/">Корпоративные</a></dd>
+				<dd><a href="http://habrahabr.ru/sandbox/">Песочница</a></dd>
+			</dl>
+			<dl>
+				<dt>Инфо</dt>
+				<dd><a href="http://habrahabr.ru/info/about/">О сайте</a></dd>
+				<dd><a href="http://habrahabr.ru/info/help/rules/">Правила</a></dd>
+				<dd><a href="http://habrahabr.ru/info/help/">Помощь</a></dd>
+				<dd><a href="http://habrahabr.ru/info/agreement/">Соглашение</a></dd>
+				<dd><a href="http://habrahabr.ru/info/stats/">Статистика</a></dd>
+			</dl>
+			<dl>
+				<dt>Услуги</dt>
+				<dd><a href="http://habrahabr.ru/info/advertising/">Реклама</a></dd>
+				<dd><a href="http://habrahabr.ru/info/advertising/corporate/">Корпоративные тарифы</a></dd>
+				<dd><a href="http://habrahabr.ru/info/advertising/workshops/">Семинары</a></dd>
+				<dd><a href="http://habrahabr.ru/special/">Спецпроекты</a></dd>
+			</dl>
+      <div class="copyright">
+
+    		<div class="about">
+    		  <a class="footer_logo" href="http://thematicmedia.ru/">Тематические Медиа</a>
+    			© 2006–2013
+			<br><br>
+			<a href="http://habrahabr.ru/feedback/">Служба поддержки</a><br><br>
+			<a href="http://m.habrahabr.ru/">Мобильная версия</a><br><br>
+			
+			
+			<div class="social_accounts">
+				<a href="https://twitter.com/habrahabr" class="tw"></a>
+				<a href="https://www.facebook.com/habrahabr.ru" class="fb"></a>
+				<a href="http://vk.com/habr" class="vk"></a>
+				<!-- <a href="" class="gp"></a> //-->
+			</div>
+			
+		</div>
+      </div>
+
+</div>
+
+		</div>
+
+		
+    
+		
+		
+    <script type="text/javascript">
+      $(document).ready(function(){
+        // test gggg
+        // настройки всплывающих уведомлений
+        $.jGrowl.defaults.closerTemplate = '<div>Закрыть все уведомления</div>';         
+        
+        // настройки тултипов
+        $(".help-tip").tipTip({maxWidth: "300px", edgeOffset: 10});  
+        
+      });
+      // global vars
+      var g_base_url = 'habrahabr.ru';
+      var g_show_xpanel = false;
+      var g_base_fullurl = 'http://habrahabr.ru/';
+      var g_is_guest = false;
+    </script>
+		
+    <script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/shortcuts.js"></script>
+		<script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/to_top.js"></script>
+		<link href="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/_to_top.css" rel="stylesheet" media="all">
+
+		
+		<script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/float_block.js"></script>
+		
+		<!-- <script type="text/javascript" src="/javascripts/1370596409/_parts/float_block.js"></script> //-->
+			<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter19919284 = new Ya.Metrika({id:19919284,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/19919284" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+<script type="text/javascript">
+	/*<![CDATA[*/
+	var ga = document.createElement('script');
+		ga.setAttribute('async', 'true');
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	/* ]]>*/
+</script>
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(
+	    ['_setAccount', 'UA-726094-1'],
+	    ['_setDomainName', '.habrahabr.ru'],
+	    ["_addOrganic", "mail.ru", "q"],
+	    ["_addOrganic","rambler.ru", "words"],
+	    ["_addOrganic","nigma.ru", "s"],
+	    ["_addOrganic","blogs.yandex.ru", "text"],
+	    ["_addOrganic","webalta.ru", "q"],
+	    ["_addOrganic","aport.ru", "r"],
+	    ["_addOrganic","akavita.by", "z"],
+	    ["_addOrganic","meta.ua", "q"],
+	    ["_addOrganic","bigmir.net", "q"],
+	    ["_addOrganic","tut.by", "query"],
+	    ["_addOrganic","all.by", "query"],
+	    ["_addOrganic","i.ua", "q"],
+	    ["_addOrganic","online.ua", "q"],
+	    ["_addOrganic","a.ua", "s"],
+	    ["_addOrganic","ukr.net", "search_query"],
+	    ["_addOrganic","search.com.ua", "q"],
+	    ["_addOrganic","search.ua", "query"],
+	    ["_addOrganic","poisk.ru", "text"],
+	    ["_addOrganic","km.ru", "sq"],
+	    ["_addOrganic","liveinternet.ru", "ask"],
+	    ["_addOrganic","gogo.ru", "q"],
+	    ["_addOrganic","gde.ru", "keywords"],
+	    ["_addOrganic","quintura.ru", "request"],
+	    ['_trackPageview']
+	);
+	document.documentElement.firstChild.appendChild(ga);
+</script>	
+
+		
+			<script type="text/javascript" src="%D0%9A%D0%B0%D0%BA%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%B8%20%D0%B8%D0%B7%D0%BC%D0%B5%D1%80%D0%B8%D1%82%D1%8C%20%D0%B2%D1%8B%D1%81%D0%BE%D0%BA%D0%BE%D1%81%D0%BA%D0%BE%D1%80%D0%BE%D1%81%D1%82%D0%BD%D0%BE%D0%B5%20%D1%81%D0%BE%D0%B5%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BF%D0%BE%20TCP%20_%20%D0%A5%D0%B0%D0%B1%D1%80%D0%B0%D1%85%D0%B0%D0%B1%D1%80_files/a"></script>
+
+		
+		<div class="footer_logos">
+		
+		<div class="project freelansim">
+			<a href="http://freelansim.ru/" class="icon "></a>
+			<div class="text">Заказы для фрилансеров</div>
+		</div>
+		
+		<div class="project brainstorage">
+			<a href="http://brainstorage.ru/" class="icon "></a>
+			<div class="text">Все мозги в одном месте</div>
+		</div>
+		
+		<div class="project hantim">
+			<a href="http://hantim.ru/" class="icon "></a>
+			<div class="text">Вакансии для айтишников</div>
+		</div>
+		
+		<div class="project autokadabra">
+			<a href="http://autokadabra.ru/" class="icon "></a>
+			<div class="text ">Уютная и дружелюбная</div>
+		</div>
+		
+</div>
+
+
+		
+		
+		
+	
+
+<div id="AutocompleteContainter_9d86f" style="position: absolute; z-index: 9999; top: 51px; left: 1289.5px;"><div class="autocomplete-w1"><div class="autocomplete" id="Autocomplete_9d86f" style="display: none; width: 300px; max-height: 400px;"></div></div></div><div id="AutocompleteContainter_bd79c" style="position: absolute; z-index: 9999; top: 2px; left: 0px;"><div class="autocomplete-w1"><div class="autocomplete" id="Autocomplete_bd79c" style="display: none; width: 300px; max-height: 400px;"></div></div></div><div id="tiptip_holder" style="max-width:300px;"><div id="tiptip_arrow"><div id="tiptip_arrow_inner"></div></div><div id="tiptip_content"></div></div><div style="display: block;" class="to_top"><div class="to_top_panel"><div class="to_top_button" title="Наверх"><span class="arrow">↑</span> <span class="label">наверх</span></div>  </div></div></body></html>

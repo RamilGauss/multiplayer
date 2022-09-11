@@ -191,6 +191,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ControlTraffic.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DescSendPacket.cpp"
 				>
 			</File>
@@ -217,6 +221,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\DoserPacket.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DoserProtocolPacket.cpp"
 				>
 			</File>
@@ -233,11 +241,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\NetTransport_TCP_UDP.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\OverloadNetDoser.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\SinglePacketNetDoser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\StateARS.cpp"
 				>
 			</File>
 		</Filter>
@@ -259,7 +275,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ControlTraffic.h"
+				>
+			</File>
+			<File
 				RelativePath=".\DescSendPacket.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DoserPacket.h"
 				>
 			</File>
 			<File
@@ -283,11 +307,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\NetTransport_TCP_UDP.h"
+				>
+			</File>
+			<File
 				RelativePath=".\OverloadNetDoser.h"
 				>
 			</File>
 			<File
 				RelativePath=".\SinglePacketNetDoser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\StateARS.h"
 				>
 			</File>
 			<File

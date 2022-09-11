@@ -60,7 +60,7 @@ class GBASELIB_EI GCS
   const char* mDbgName;
 public:
   GCS( const char * _dbgname = NULL );
-  ~GCS();
+  virtual ~GCS();
 
   void setDbgName( const char *_dbgname ) { mDbgName = _dbgname; }
   const char * dbgName() { return mDbgName; }
@@ -82,7 +82,7 @@ class TBL_Locker
 public:
   TBL_Locker( GCS* cs )     { mCS = cs; mCS->lock(); }
 
-  ~TBL_Locker()             { done(); }
+  virtual ~TBL_Locker()             { done(); }
 
   void done()               { if( mCS ) { mCS->unlock(); mCS = NULL; } }
 };

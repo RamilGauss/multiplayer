@@ -46,7 +46,7 @@ public:
 	TOverloadNetDoser();
 	virtual ~TOverloadNetDoser();
 
-  GetSet(nsNetDoser::THeaderOverload,Header)
+  //GetSet(nsNetDoser::THeaderOverload,Header)
 
 protected:
 

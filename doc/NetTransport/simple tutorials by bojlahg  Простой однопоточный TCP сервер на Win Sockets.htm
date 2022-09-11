@@ -1,0 +1,965 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.google.com/2005/gml/b" xmlns:data="http://www.google.com/2005/gml/data" xmlns:expr="http://www.google.com/2005/gml/expr"><head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<script async="" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/cbgapi.loaded_2"></script><script async="" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/cbgapi.loaded_1"></script><script async="" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/cbgapi.loaded_0"></script><script type="text/javascript">(function() { var b=window,e="jstiming",g="tick";(function(){function d(a){this.t={};this.tick=function(a,d,c){c=void 0!=c?c:(new Date).getTime();this.t[a]=[c,d]};this[g]("start",null,a)}var a=new d;b.jstiming={Timer:d,load:a};if(b.performance&&b.performance.timing){var a=b.performance.timing,c=b[e].load,f=a.navigationStart,a=a.responseStart;0<f&&a>=f&&(c[g]("_wtsrt",void 0,f),c[g]("wtsrt_","_wtsrt",a),c[g]("tbsd_","wtsrt_"))}try{a=null,b.chrome&&b.chrome.csi&&(a=Math.floor(b.chrome.csi().pageT),c&&0<f&&(c[g]("_tbnd",void 0,b.chrome.csi().startE),
+c[g]("tbnd_","_tbnd",f))),null==a&&b.gtbExternal&&(a=b.gtbExternal.pageT()),null==a&&b.external&&(a=b.external.pageT,c&&0<f&&(c[g]("_tbnd",void 0,b.external.startE),c[g]("tbnd_","_tbnd",f))),a&&(b[e].pt=a)}catch(l){}})();b.tickAboveFold=function(d){var a=0;if(d.offsetParent){do a+=d.offsetTop;while(d=d.offsetParent)}d=a;750>=d&&b[e].load[g]("aft")};var h=!1;function k(){h||(h=!0,b[e].load[g]("firstScrollTime"))}b.addEventListener?b.addEventListener("scroll",k,!1):b.attachEvent("onscroll",k);
+ })();</script>
+<meta content="true" name="MSSmartTagsPreventParsing">
+<meta content="blogger" name="generator">
+<link href="http://bojlahg.blogspot.ru/favicon.ico" rel="icon" type="image/x-icon">
+<link href="http://bojlahg.blogspot.com/2009/07/tcp-win-sockets.html" rel="canonical">
+<link rel="alternate" type="application/atom+xml" title="simple tutorials by bojlahg - Atom" href="http://bojlahg.blogspot.com/feeds/posts/default">
+<link rel="alternate" type="application/rss+xml" title="simple tutorials by bojlahg - RSS" href="http://bojlahg.blogspot.com/feeds/posts/default?alt=rss">
+<link rel="service.post" type="application/atom+xml" title="simple tutorials by bojlahg - Atom" href="http://www.blogger.com/feeds/6557408083774244462/posts/default">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.blogger.com/rsd.g?blogID=6557408083774244462">
+<link rel="alternate" type="application/atom+xml" title="simple tutorials by bojlahg - Atom" href="http://bojlahg.blogspot.com/feeds/8049229572859437726/comments/default">
+<link rel="image_src" href="http://4.bp.blogspot.com/__Mh7mi6SzOE/SmIhrYwqxbI/AAAAAAAAAA4/lWm5XRy3qG8/s72-c/screenshot.jpg">
+<!--[if IE]> <script> (function() { var html5 = ("abbr,article,aside,audio,canvas,datalist,details," + "figure,footer,header,hgroup,mark,menu,meter,nav,output," + "progress,section,time,video").split(','); for (var i = 0; i < html5.length; i++) { document.createElement(html5[i]); } try { document.execCommand('BackgroundImageCache', false, true); } catch(e) {} })(); </script> <![endif]-->
+<title>simple tutorials by bojlahg: Простой однопоточный TCP сервер на Win Sockets.</title>
+<link type="text/css" rel="stylesheet" href="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/1832531788-widget_css_bundle.css">
+<link type="text/css" rel="stylesheet" href="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/authorization.css">
+<style id="page-skin-1" type="text/css"><!--
+/*
+-----------------------------------------------
+Blogger Template Style
+Name:     Minima Black
+Date:     26 Feb 2004
+Updated by: Blogger Team
+----------------------------------------------- */
+/* Variable definitions
+====================
+<Variable name="bgcolor" description="Page Background Color"
+type="color" default="#000">
+<Variable name="textcolor" description="Text Color"
+type="color" default="#ccc">
+<Variable name="linkcolor" description="Link Color"
+type="color" default="#9ad">
+<Variable name="pagetitlecolor" description="Blog Title Color"
+type="color" default="#ccc">
+<Variable name="descriptioncolor" description="Blog Description Color"
+type="color" default="#777">
+<Variable name="titlecolor" description="Post Title Color"
+type="color" default="#ad9">
+<Variable name="bordercolor" description="Border Color"
+type="color" default="#333">
+<Variable name="sidebarcolor" description="Sidebar Title Color"
+type="color" default="#777">
+<Variable name="sidebartextcolor" description="Sidebar Text Color"
+type="color" default="#999">
+<Variable name="visitedlinkcolor" description="Visited Link Color"
+type="color" default="#a7a">
+<Variable name="bodyfont" description="Text Font"
+type="font" default="normal normal 100% 'Trebuchet MS',Trebuchet,Verdana,Sans-serif">
+<Variable name="headerfont" description="Sidebar Title Font"
+type="font"
+default="normal bold 78% 'Trebuchet MS',Trebuchet,Arial,Verdana,Sans-serif">
+<Variable name="pagetitlefont" description="Blog Title Font"
+type="font"
+default="normal bold 200% 'Trebuchet MS',Trebuchet,Verdana,Sans-serif">
+<Variable name="descriptionfont" description="Blog Description Font"
+type="font"
+default="normal normal 78% 'Trebuchet MS', Trebuchet, Verdana, Sans-serif">
+<Variable name="postfooterfont" description="Post Footer Font"
+type="font"
+default="normal normal 78% 'Trebuchet MS', Trebuchet, Arial, Verdana, Sans-serif">
+<Variable name="startSide" description="Start side in blog language"
+type="automatic" default="left">
+<Variable name="endSide" description="End side in blog language"
+type="automatic" default="right">
+*/
+/* Use this with templates/template-twocol.html */
+body {
+background:#000000;
+margin:0;
+color:#cccccc;
+font: x-small "Trebuchet MS", Trebuchet, Verdana, Sans-serif;
+font-size/* */:/**/small;
+font-size: /**/small;
+text-align: center;
+}
+a:link {
+color:#99aadd;
+text-decoration:none;
+}
+a:visited {
+color:#aa77aa;
+text-decoration:none;
+}
+a:hover {
+color:#aadd99;
+text-decoration:underline;
+}
+a img {
+border-width:0;
+}
+/* Header
+-----------------------------------------------
+*/
+#header-wrapper {
+width:660px;
+margin:0 auto 10px;
+border:1px solid #333333;
+}
+#header-inner {
+background-position: center;
+margin-left: auto;
+margin-right: auto;
+}
+#header {
+margin: 5px;
+border: 1px solid #333333;
+text-align: center;
+color:#cccccc;
+}
+#header h1 {
+margin:5px 5px 0;
+padding:15px 20px .25em;
+line-height:1.2em;
+text-transform:uppercase;
+letter-spacing:.2em;
+font: normal bold 200% 'Trebuchet MS',Trebuchet,Verdana,Sans-serif;
+}
+#header a {
+color:#cccccc;
+text-decoration:none;
+}
+#header a:hover {
+color:#cccccc;
+}
+#header .description {
+margin:0 5px 5px;
+padding:0 20px 15px;
+max-width:700px;
+text-transform:uppercase;
+letter-spacing:.2em;
+line-height: 1.4em;
+font: normal normal 78% 'Trebuchet MS', Trebuchet, Verdana, Sans-serif;
+color: #777777;
+}
+#header img {
+margin-left: auto;
+margin-right: auto;
+}
+/* Outer-Wrapper
+----------------------------------------------- */
+#outer-wrapper {
+width: 660px;
+margin:0 auto;
+padding:10px;
+text-align:left;
+font: normal normal 100% 'Trebuchet MS',Trebuchet,Verdana,Sans-serif;
+}
+#main-wrapper {
+width: 410px;
+float: left;
+word-wrap: break-word; /* fix for long text breaking sidebar float in IE */
+overflow: hidden;     /* fix for long non-text content breaking IE sidebar float */
+}
+#sidebar-wrapper {
+width: 220px;
+float: right;
+word-wrap: break-word; /* fix for long text breaking sidebar float in IE */
+overflow: hidden;     /* fix for long non-text content breaking IE sidebar float */
+}
+/* Headings
+----------------------------------------------- */
+h2 {
+margin:1.5em 0 .75em;
+font:normal bold 78% 'Trebuchet MS',Trebuchet,Arial,Verdana,Sans-serif;
+line-height: 1.4em;
+text-transform:uppercase;
+letter-spacing:.2em;
+color:#777777;
+}
+/* Posts
+-----------------------------------------------
+*/
+h2.date-header {
+margin:1.5em 0 .5em;
+}
+.post {
+margin:.5em 0 1.5em;
+border-bottom:1px dotted #333333;
+padding-bottom:1.5em;
+}
+.post h3 {
+margin:.25em 0 0;
+padding:0 0 4px;
+font-size:140%;
+font-weight:normal;
+line-height:1.4em;
+color:#aadd99;
+}
+.post h3 a, .post h3 a:visited, .post h3 strong {
+display:block;
+text-decoration:none;
+color:#aadd99;
+font-weight:bold;
+}
+.post h3 strong, .post h3 a:hover {
+color:#cccccc;
+}
+.post-body {
+margin:0 0 .75em;
+line-height:1.6em;
+}
+.post-body blockquote {
+line-height:1.3em;
+}
+.post-footer {
+margin: .75em 0;
+color:#777777;
+text-transform:uppercase;
+letter-spacing:.1em;
+font: normal normal 78% 'Trebuchet MS', Trebuchet, Arial, Verdana, Sans-serif;
+line-height: 1.4em;
+}
+.comment-link {
+margin-left:.6em;
+}
+.post img, table.tr-caption-container {
+padding:4px;
+border:1px solid #333333;
+}
+.tr-caption-container img {
+border: none;
+padding: 0;
+}
+.post blockquote {
+margin:1em 20px;
+}
+.post blockquote p {
+margin:.75em 0;
+}
+/* Comments
+----------------------------------------------- */
+#comments h4 {
+margin:1em 0;
+font-weight: bold;
+line-height: 1.4em;
+text-transform:uppercase;
+letter-spacing:.2em;
+color: #777777;
+}
+#comments-block {
+margin:1em 0 1.5em;
+line-height:1.6em;
+}
+#comments-block .comment-author {
+margin:.5em 0;
+}
+#comments-block .comment-body {
+margin:.25em 0 0;
+}
+#comments-block .comment-footer {
+margin:-.25em 0 2em;
+line-height: 1.4em;
+text-transform:uppercase;
+letter-spacing:.1em;
+}
+#comments-block .comment-body p {
+margin:0 0 .75em;
+}
+.deleted-comment {
+font-style:italic;
+color:gray;
+}
+.feed-links {
+clear: both;
+line-height: 2.5em;
+}
+#blog-pager-newer-link {
+float: left;
+}
+#blog-pager-older-link {
+float: right;
+}
+#blog-pager {
+text-align: center;
+}
+/* Sidebar Content
+----------------------------------------------- */
+.sidebar {
+color: #999999;
+line-height: 1.5em;
+}
+.sidebar ul {
+list-style:none;
+margin:0 0 0;
+padding:0 0 0;
+}
+.sidebar li {
+margin:0;
+padding-top:0;
+padding-right:0;
+padding-bottom:.25em;
+padding-left:15px;
+text-indent:-15px;
+line-height:1.5em;
+}
+.sidebar .widget, .main .widget {
+border-bottom:1px dotted #333333;
+margin:0 0 1.5em;
+padding:0 0 1.5em;
+}
+.main .Blog {
+border-bottom-width: 0;
+}
+/* Profile
+----------------------------------------------- */
+.profile-img {
+float: left;
+margin-top: 0;
+margin-right: 5px;
+margin-bottom: 5px;
+margin-left: 0;
+padding: 4px;
+border: 1px solid #333333;
+}
+.profile-data {
+margin:0;
+text-transform:uppercase;
+letter-spacing:.1em;
+font: normal normal 78% 'Trebuchet MS', Trebuchet, Arial, Verdana, Sans-serif;
+color: #777777;
+font-weight: bold;
+line-height: 1.6em;
+}
+.profile-datablock {
+margin:.5em 0 .5em;
+}
+.profile-textblock {
+margin: 0.5em 0;
+line-height: 1.6em;
+}
+.profile-link {
+font: normal normal 78% 'Trebuchet MS', Trebuchet, Arial, Verdana, Sans-serif;
+text-transform: uppercase;
+letter-spacing: .1em;
+}
+/* Footer
+----------------------------------------------- */
+#footer {
+width:660px;
+clear:both;
+margin:0 auto;
+padding-top:15px;
+line-height: 1.6em;
+text-transform:uppercase;
+letter-spacing:.1em;
+text-align: center;
+}
+
+--></style>
+<script type="text/javascript">var a=navigator,b="userAgent",c="indexOf",f="&m=1",g="(^|&)m=",h="?",k="?m=1";function l(){var d=window.location.href,e=d.split(h);switch(e.length){case 1:return d+k;case 2:return 0<=e[1].search(g)?null:d+f;default:return null}}if(-1!=a[b][c]("Mobile")&&-1!=a[b][c]("WebKit")&&-1==a[b][c]("iPad")||-1!=a[b][c]("Opera Mini")||-1!=a[b][c]("IEMobile")){var m=l();m&&window.location.replace(m)};
+</script><script type="text/javascript">
+if (window.jstiming) window.jstiming.load.tick('headEnd');
+</script><script src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/google_top_exp.js" type="text/javascript"></script><style>.gc-bubbleDefault{background-color:transparent !important;text-align:left;padding:0 !important;margin:0 !important;border:0 !important;table-layout:auto !important}.gc-reset{background-color:transparent !important;border:0 !important;padding:0 !important;margin:0 !important;text-align:left}.pls-bubbleTop{border-bottom:1px solid #ccc !important}.pls-topTail,.pls-vertShimLeft,.pls-contentLeft{background-image:url(//ssl.gstatic.com/s2/oz/images/stars/po/bubblev1/border_3.gif) !important}.pls-topTail{background-repeat:repeat-x !important;background-position:bottom !important}.pls-vertShim{background-color:#fff !important;text-align:right}.tbl-grey .pls-vertShim{background-color:#f5f5f5 !important}.pls-vertShimLeft{background-repeat:repeat-y !important;background-position:right !important;height:4px}.pls-vertShimRight{height:4px}.pls-confirm-container .pls-vertShim{background-color:#fff3c2 !important}.pls-contentWrap{background-color:#fff !important;position:relative !important;vertical-align:top}.pls-contentLeft{background-repeat:repeat-y;background-position:right;vertical-align:top}.pls-dropRight{background-image:url(//ssl.gstatic.com/s2/oz/images/stars/po/bubblev1/bubbleDropR_3.png) !important;background-repeat:repeat-y !important;vertical-align:top}.pls-vert,.pls-tailleft,.pls-dropTR .pls-dropBR,.pls-dropBL,.pls-vert img{vertical-align:top}.pls-dropBottom{background-image:url(//ssl.gstatic.com/s2/oz/images/stars/po/bubblev1/bubbleDropB_3.png) !important;background-repeat:repeat-x !important;width:100%;vertical-align:top}.pls-topLeft{background:inherit !important;text-align:right;vertical-align:bottom}.pls-topRight{background:inherit !important;text-align:left;vertical-align:bottom}.pls-bottomLeft{background:inherit !important;text-align:right}.pls-bottomRight{background:inherit !important;text-align:left;vertical-align:top}.pls-tailtop,.pls-tailright,.pls-tailbottom,.pls-tailleft{display:none;position:relative}.pls-tailbottom,.pls-tailtop,.pls-tailright,.pls-tailleft,.pls-dropTR,.pls-dropBR,.pls-dropBL{background-image:url(//ssl.gstatic.com/s2/oz/images/stars/po/bubblev1/bubbleSprite_3.png) !important;background-repeat:no-repeat}.tbl-grey .pls-tailbottom,.tbl-grey .pls-tailtop,.tbl-grey .pls-tailright,.tbl-grey .pls-tailleft,.tbl-grey .pls-dropTR,.tbl-grey .pls-dropBR,.tbl-grey .pls-dropBL{background-image:url(//ssl.gstatic.com/s2/oz/images/stars/po/bubblev1/bubbleSprite-grey.png) !important}.pls-tailbottom{background-position:-23px 0}.pls-confirm-container .pls-tailbottom{background-position:-23px -10px}.pls-tailtop{background-position:-19px -20px}.pls-tailright{background-position:0 0}.pls-tailleft{background-position:-10px 0}.pls-tailtop{vertical-align:top}.gc-bubbleDefault td{line-height:0;font-size:0}.pls-topLeft img,.pls-topRight img,.pls-tailbottom{vertical-align:bottom}.pls-bottomLeft img,.bubbleDropTR,.pls-dropBottomL img,.pls-dropBottom img,.pls-dropBottomR img,.pls-bottomLeft{vertical-align:top}.pls-dropTR{background-position:0 -22px}.pls-dropBR{background-position:0 -27px}.pls-dropBL{background-position:0 -16px}.pls-spacertop,.pls-spacerright,.pls-spacerbottom,.pls-spacerleft{position:static !important}.pls-spinner{bottom:0;position:absolute;left:0;margin:auto;right:0;top:0}</style></head>
+<body>
+<div class="navbar section" id="navbar"><div class="widget Navbar" id="Navbar1"><script type="text/javascript">
+    function setAttributeOnload(object, attribute, val) {
+      if(window.addEventListener) {
+        window.addEventListener('load',
+          function(){ object[attribute] = val; }, false);
+      } else {
+        window.attachEvent('onload', function(){ object[attribute] = val; });
+      }
+    }
+  </script>
+<div id="navbar-iframe-container"><iframe src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/navbar.htm" name="navbar-iframe" id="navbar-iframe" vspace="0" tabindex="0" style="" marginwidth="0" marginheight="0" hspace="0" frameborder="0" scrolling="no" width="100%"></iframe></div>
+<script gapi_processed="true" type="text/javascript" src="navbar_data/plusone.js"></script>
+<script type="text/javascript">
+        gapi.load("iframes-styles-bubble", function() {
+          if (window.iframes && iframes.open) {
+            iframes.open(
+                '//www.blogger.com/navbar.g?targetBlogID\0756557408083774244462\46blogName\75simple+tutorials+by+bojlahg\46publishMode\75PUBLISH_MODE_BLOGSPOT\46navbarType\75BLUE\46layoutType\75LAYOUTS\46searchRoot\75http://bojlahg.blogspot.com/search\46blogLocale\75ru\46v\0752\46homepageUrl\75http://bojlahg.blogspot.com/\46targetPostID\758049229572859437726\46blogPostOrPageUrl\75http://bojlahg.blogspot.com/2009/07/tcp-win-sockets.html\46vt\075220353717015918479',
+                {
+                  container: "navbar-iframe-container",
+                  id: "navbar-iframe"
+                },
+                {
+                });
+          }
+        });
+      </script><script type="text/javascript">
+(function() {
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.src = '//pagead2.googlesyndication.com/pagead/js/google_top_exp.js';
+var head = document.getElementsByTagName('head')[0];
+if (head) {
+head.appendChild(script);
+}})();
+</script>
+</div></div>
+<div id="outer-wrapper"><div id="wrap2">
+<!-- skip links for text browsers -->
+<span id="skiplinks" style="display:none;">
+<a href="#main">skip to main </a> |
+      <a href="#sidebar">skip to sidebar</a>
+</span>
+<div id="header-wrapper">
+<div class="header section" id="header"><div class="widget Header" id="Header1">
+<div id="header-inner">
+<div class="titlewrapper">
+<h1 class="title">
+<a href="http://bojlahg.blogspot.ru/">simple tutorials by bojlahg</a>
+</h1>
+</div>
+<div class="descriptionwrapper">
+<p class="description"><span>c/c++ game development</span></p>
+</div>
+</div>
+</div></div>
+</div>
+<div id="content-wrapper">
+<div id="crosscol-wrapper" style="text-align:center">
+<div class="crosscol section" id="crosscol"></div>
+</div>
+<div id="main-wrapper">
+<div class="main section" id="main"><div class="widget Blog" id="Blog1">
+<div class="blog-posts hfeed">
+<!-- google_ad_section_start(name=default) -->
+
+          <div class="date-outer">
+        
+<h2 class="date-header"><span>18.07.09</span></h2>
+
+          <div class="date-posts">
+        
+<div class="post-outer">
+<div class="post hentry uncustomized-post-template" itemprop="blogPost" itemscope="itemscope" itemtype="http://schema.org/BlogPosting">
+<meta content="http://4.bp.blogspot.com/__Mh7mi6SzOE/SmIhrYwqxbI/AAAAAAAAAA4/lWm5XRy3qG8/s320/screenshot.jpg" itemprop="image_url">
+<meta content="6557408083774244462" itemprop="blogId">
+<meta content="8049229572859437726" itemprop="postId">
+<a name="8049229572859437726"></a>
+<h3 class="post-title entry-title" itemprop="name">
+Простой однопоточный TCP сервер на Win Sockets.
+</h3>
+<div class="post-header">
+<div class="post-header-line-1"></div>
+</div>
+<div class="post-body entry-content" id="post-body-8049229572859437726" itemprop="description articleBody">
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://4.bp.blogspot.com/__Mh7mi6SzOE/SmIhrYwqxbI/AAAAAAAAAA4/lWm5XRy3qG8/s1600-h/screenshot.jpg"><img style="display:block; margin:0px auto 10px; text-align:center;cursor:pointer; cursor:hand;width: 320px; height: 200px;" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/screenshot_002.jpg" alt="" id="BLOGGER_PHOTO_ID_5359883535788983730" border="0"></a><div>Прежде всего для использования Winsock необходимо подключить заголовочный winsock2.h .</div><div>Так же для того чтобы проект слинковался без ошибок необходимо указать библиотеку wsock32.lib .</div><div><br></div><div><b>Подробный алгоритм программы</b></div><div>1. Установка обработчика консольного окна SetConsoleCtrlHandler();</div><div>2. Инициализация Win Socks WSAStartup();</div><div>3. Создание сокета сервера socket();</div><div>4. Установка сокета в неблокирующий режим ioctlsocket();</div><div>5. Привязывание сокета к адресу и порту bind();</div><div>6. Установка сокета в режим прослушивания listen();</div><div>7. Цикл работы сервера (см Алгоритм цикла работы сервера).</div><div>8. Закрытие прослушивающего сокета closesocket();</div><div>9. Закрытие открытых клиентских сокетов shutdown(); + closesocket();</div><div>10. Деинициализаци WniSocks WSACleanup();</div><div>11. Снятие обработчика консольного окна SetConsoleCtrlHandler();</div><div><br></div><div><b>Алгоритм цикла работы сервера</b></div><div>1. Принятие подключений от клиентов accept();</div><div>2. Добавление вновь подключенных клиентов в общий спиок.</div><div>3. Получение данных от подключенных клиентов recv();</div><div>4. Закрытие сокетов с ошибкой либо отключившихся shutdown(); + closesocket();</div><div>5. Удаление отключенных клиентских сокетов из общего списка.</div><div>6. Обработка данных полученных от клиентов.</div><div>7. Отсылка данных клиентам send();</div><div>8. Закрытие сокетов с ошибкой либо отключившихся shutdown(); + closesocket();</div><div>9. Удаление отключенных клиентских сокетов из общего списка.</div><div>10. Ожидание (даем время остальным процессам и потокам) Sleep();</div><div>11. Выход из цикла если сервер заканчивает работу иначе переход к шагу 1.</div><div><br></div><div>Что такое обработчик консольного окна и зачем он нужен в этой программе</div><div>Так
+ как наше приложение является однопоточным сервером, то при закрытии 
+консольного окна клиенты подключенные к серверу могут зависнуть на 
+некоторое время, так как не клиентские сокеты не были закрыты. 
+Получается ситуация что клиенты ждут ответа сервера не зная что сервер 
+завершил свою работу (либо просто "упал"). Поэтому мы сделаем так что 
+при закрытии консольного окна все клиенты будут корректно отключены, 
+произойдет деинициализация Winsocks и т.д (Корректное завершение). Затем
+ произойдет выход из программы.</div><div><br></div><div><b>Инициализировать/деинициализация Winsocks</b></div><div>Для
+ инициализации и деинициализации используются функции WSAStartup() и 
+WSACleanup() соответственно. Если в программе не был инициализирован 
+Winsocks то все функции Winsocks будут завершаться с ошибкой а 
+WSAGetLastError() вернет WSANOTINITIALISED. Проще говоря инициализация 
+Winsocks обязательна если вам нужна сеть будь то ваше приложение 
+клиентом или сервером.</div><div><br></div><div><b>Создание серверного (прослушивающего) сокета</b></div><div>Сокет создается функцией socket().</div><div>Установка сокета в неблокирующий режим функцией ioctlsocket(). </div><div>Привязка сокета к интерфейсу (конкретному доступному локальному IP адресу) и порту bind().</div><div>Установка сокета в режим прослушивания listen().</div><div><br></div><div><b>Что такое блокирующие и не блокирующие сокеты</b></div><div>При
+ использовании блокирующих сокетов многие функции как бы "зависают" и не
+ дают исполнятся программе до тех пор пока они не получат конкретный 
+результат либо ошибку.</div><div>К примеру при выполнении функции recv()
+ если клиент не посылал данные то сервер будет ожидать когда клиент их 
+пришлет либо пока клиент отключится. Соответственно если было подключено
+ несколько других клиентов то они тоже будут ждать пока не произойдет 
+завершение функции recv(). Для решения данной проблемы применяется 
+многопоточность (для каждого клиента выделяется отдельный поток) либо 
+при помощи функции select().</div><div>Не блокирующие же сокеты в случае
+ если операция не может завершиться сразу (например еще не пришло 
+никаких данных от клиента при вызове recv()) просто возвращается с 
+ошибкой. При этом эта ошибка возвращаемая функцией WSAGetLastError() 
+устанавливается в значение WSAWOULDBLOCK.</div><div><br></div><div><b>Почему использованы неблокирующие сокеты</b></div><div>Неблокирующие
+ сокеты использованы специально для того чтобы приложение было 
+однопоточным и максимально простым, но тем не менее функциональным. 
+Новички смогут разобраться без вникания в то, что такое многопоточность и
+ как происходит синхронизация между потоками.</div><div><br></div><div><b>Подключение клиентов</b></div><div>После
+ того как создали серверный сокет клиенты уже могут подключаться к 
+серверу. Все подключенные клиенты будут помещаться в очередь. Функция 
+accept() вернет дескриптор сокета клиента и удалит его из очереди. Через
+ него наше приложение и будет общаться с конкретным клиентом. Так же 
+accept() вернет данные о клиенте IP адрес и порт с которого произошло 
+подключение, эту информацию к примеру можно использовать для отключения 
+неугодных клиентов (забаненных IP арресов).</div><div><br></div><div><b>Работа с подключенными клиентами</b></div><div>После
+ того как клиент подключен можно посылать данные либо получать от него. 
+Посылают данные клиенту при помощи функции send(). При этом функция 
+возвращает количество посланных байт и если это значение отличается от 
+заданного нами то придется остатки послать позже. Если же функция вернет
+ SOCKET_ERROR то необходимо проверить код ошибки при помощи 
+WSAGetLastError().</div><div>Функция recv() получает данные от 
+подключенного клиента. Функция возвращает количество полученных байт, но
+ не более чем размер буффера для данных. Так же функция возвращает 
+SOCKET_ERROR в случае ошибке (ошибку можно получить функцией 
+WSAGetLastError()). Если же функция recv() возвращает значение 0 это 
+означает что клиент решил закрыть подключение (вызвал shutdown с 
+SD_SEND). После этого (если к примеру положено по протоколу) он может 
+дополнительно послать данные (принять от клиента уже ничего не 
+получится) и закрыть сокет.</div><div>Приложение в примере к статье при 
+появлении ошибки отличной от WSAEWOULDBLOCK при вызовах функций send() и
+ recv() считает что клиент отключился и закрывает сокет. Однако лучше 
+всего обрабатывать эти ошибки так как некоторые из них могут быть не 
+критические. </div><div><br></div><div><b>Закрытие сокетов</b></div><div>"Неправильное" закрытие сокета</div><div>Сокет
+ можно закрыть просто функцией closesocket(), при этом противоположная 
+сторона при выполнении функции recv() получит сообщение об ошибке 
+ECONNRESET.</div><div>"Правильное" закрытие сокета (graceful close).</div><div>Если
+ же перед закрытием используется функция shutdown() с параметром SD_SEND
+ то при выполнении функции recv() программа не получит ошибки но функция
+ вернет значение 0. Рекомендуется использовать именно "правильное 
+закрытие", хотя при "Неправильном" закрытии никаких утечек системных 
+ресурсов не происходит.</div><div><br></div><div><b>Приложение пример</b></div><div><a href="http://bojlahg.googlecode.com/files/nbst_server_tutorial.zip">Скачать пример</a></div><div>Открывает на всех интерфейсах порт 8000. К серверу можно подключиться например используя браузер (<a href="http://127.0.0.1:8000/">http://127.0.0.1:8000</a>, <a href="http://localhost:8000/">http://localhost:8000</a>
+ либо http://&lt;ваш ип адрес&gt;:8000 ). При подключении сервер 
+сгенерирует простейшую HTML страницу с текстом "test" после чего закроет
+ соединение.</div><blockquote style="text-decoration: underline;"></blockquote><blockquote style="text-decoration: underline;"></blockquote><br><div><span class="Apple-style-span" style=" color: rgb(0, 0, 102);  font-family:-webkit-monospace;font-size:10px;"><span class="br0" style="color: rgb(0, 128, 0); "></span></span></div>
+<div style="clear: both;"></div>
+</div>
+<div class="post-footer">
+<div class="post-footer-line post-footer-line-1">
+<span class="post-author vcard">
+Автор:
+<span class="fn" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">
+<meta content="http://www.blogger.com/profile/06065336536790752703" itemprop="url">
+<a data-gapiattached="true" data-onload="true" data-gapiscan="true" class="g-profile" href="http://www.blogger.com/profile/06065336536790752703" rel="author" title="author profile">
+<span itemprop="name">bojlahg</span>
+</a>
+</span>
+</span>
+<span class="post-timestamp">
+на
+<meta content="http://bojlahg.blogspot.com/2009/07/tcp-win-sockets.html" itemprop="url">
+<a class="timestamp-link" href="http://bojlahg.blogspot.ru/2009/07/tcp-win-sockets.html" rel="bookmark" title="permanent link"><abbr class="published" itemprop="datePublished" title="2009-07-18T09:49:00-07:00">9:49</abbr></a>
+</span>
+<span class="reaction-buttons">
+</span>
+<span class="star-ratings">
+</span>
+<span class="post-comment-link">
+</span>
+<span class="post-backlinks post-comment-link">
+</span>
+<span class="post-icons">
+<span class="item-control blog-admin pid-1846121758">
+<a href="http://www.blogger.com/post-edit.g?blogID=6557408083774244462&amp;postID=8049229572859437726&amp;from=pencil" title="Изменить сообщение">
+<img alt="" class="icon-action" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/icon18_edit_allbkg.gif" height="18" width="18">
+</a>
+</span>
+</span>
+<div class="post-share-buttons goog-inline-block">
+</div>
+</div>
+<div class="post-footer-line post-footer-line-2">
+<span class="post-labels">
+Ярлыки:
+<a href="http://bojlahg.blogspot.ru/search/label/Example%20code" rel="tag">Example code</a>,
+<a href="http://bojlahg.blogspot.ru/search/label/MSVCEX%202008" rel="tag">MSVCEX 2008</a>,
+<a href="http://bojlahg.blogspot.ru/search/label/Network" rel="tag">Network</a>,
+<a href="http://bojlahg.blogspot.ru/search/label/TcpIp" rel="tag">TcpIp</a>,
+<a href="http://bojlahg.blogspot.ru/search/label/Tutorial" rel="tag">Tutorial</a>,
+<a href="http://bojlahg.blogspot.ru/search/label/Win%20Sockets" rel="tag">Win Sockets</a>,
+<a href="http://bojlahg.blogspot.ru/search/label/Windows" rel="tag">Windows</a>
+</span>
+</div>
+<div class="post-footer-line post-footer-line-3">
+<span class="post-location">
+</span>
+</div>
+</div>
+</div>
+<div class="comments" id="comments">
+<a name="comments"></a>
+<h4>Комментариев нет:</h4>
+<div id="Blog1_comments-block-wrapper">
+<dl class="avatar-comment-indent" id="comments-block">
+</dl>
+</div>
+<p class="comment-footer">
+</p><div class="comment-form">
+<a name="comment-form"></a>
+<h4 id="comment-post-message">Отправить комментарий</h4>
+<p>
+</p>
+<a href="http://www.blogger.com/comment-iframe.g?blogID=6557408083774244462&amp;postID=8049229572859437726&amp;blogspotRpcToken=8885132" id="comment-editor-src"></a>
+<iframe allowtransparency="true" class="blogger-iframe-colorize blogger-comment-from-post" id="comment-editor" name="comment-editor" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/comment-iframe.htm" frameborder="0" height="240px" width="100%"></iframe>
+<script type="text/javascript" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/3659618153-comment_from_post_iframe.js"></script>
+<script type="text/javascript">
+      BLOG_CMT_createIframe('http://www.blogger.com/rpc_relay.html', '07605937514192839900');
+    </script>
+</div>
+<p></p>
+<div id="backlinks-container">
+<div id="Blog1_backlinks-container">
+</div>
+</div>
+</div>
+</div>
+<!-- google_ad_section_end(name=default) -->
+<div class="inline-ad">
+<script type="text/javascript"><!--
+google_ad_client="pub-0056993523919680";
+google_ad_host="pub-1556223355139109";
+google_ad_host_channel="00000";
+google_ad_width=300;
+google_ad_height=250;
+google_ad_format="300x250_as";
+google_ad_type="text_image";
+google_color_border="000000";
+google_color_bg="000000";
+google_color_link="AADD99";
+google_color_url="CCCCCC";
+google_color_text="CCCCCC";
+//--></script>
+<script type="text/javascript" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/show_ads.js">
+</script>
+</div>
+<!-- google_ad_section_start -->
+
+        </div></div>
+      
+<!-- google_ad_section_end -->
+</div>
+<div class="blog-pager" id="blog-pager">
+<span id="blog-pager-newer-link">
+<a class="blog-pager-newer-link" href="http://bojlahg.blogspot.ru/2009/08/2d-convex-hull.html" id="Blog1_blog-pager-newer-link" title="Следующее">Следующее</a>
+</span>
+<a class="home-link" href="http://bojlahg.blogspot.ru/">Главная страница</a>
+</div>
+<div class="clear"></div>
+<div class="post-feeds">
+<div class="feed-links">
+Подписаться на:
+<a class="feed-link" href="http://bojlahg.blogspot.com/feeds/8049229572859437726/comments/default" target="_blank" type="application/atom+xml">Комментарии к сообщению (Atom)</a>
+</div>
+</div>
+<script type="text/javascript">window.___gcfg = {'lang': 'ru'};</script>
+</div></div>
+</div>
+<div id="sidebar-wrapper">
+<div class="sidebar section" id="sidebar"><div class="widget Profile" id="Profile1">
+<h2>Обо мне</h2>
+<div class="widget-content">
+<a href="http://www.blogger.com/profile/06065336536790752703"><img alt="Моя фотография" class="profile-img" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/screenshot.jpg" height="50" width="80"></a>
+<dl class="profile-datablock">
+<dt class="profile-data">
+<a data-gapiattached="true" data-onload="true" data-gapiscan="true" class="profile-name-link g-profile" href="http://www.blogger.com/profile/06065336536790752703" rel="author" style="background-image: url(//www.blogger.com/img/logo-16.png);">
+bojlahg
+</a>
+</dt>
+</dl>
+<a class="profile-link" href="http://www.blogger.com/profile/06065336536790752703" rel="author">Просмотреть профиль</a>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=6557408083774244462&amp;widgetType=Profile&amp;widgetId=Profile1&amp;action=editWidget&amp;sectionId=sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("Profile1"));' target="configProfile1" title="Изменить">
+<img alt="" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/icon18_wrench_allbkg.png" height="18" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div>
+</div><div class="widget BlogArchive" id="BlogArchive1">
+<h2>Архив блога</h2>
+<div class="widget-content">
+<div id="ArchiveList">
+<div id="BlogArchive1_ArchiveList">
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://bojlahg.blogspot.ru/search?updated-min=2012-01-01T00:00:00-08:00&amp;updated-max=2013-01-01T00:00:00-08:00&amp;max-results=1">2012</a>
+<span class="post-count" dir="ltr">(1)</span>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://bojlahg.blogspot.ru/2012_11_01_archive.html">Ноябрь</a>
+<span class="post-count" dir="ltr">(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://bojlahg.blogspot.ru/search?updated-min=2011-01-01T00:00:00-08:00&amp;updated-max=2012-01-01T00:00:00-08:00&amp;max-results=3">2011</a>
+<span class="post-count" dir="ltr">(3)</span>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://bojlahg.blogspot.ru/2011_12_01_archive.html">Декабрь</a>
+<span class="post-count" dir="ltr">(1)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://bojlahg.blogspot.ru/2011_08_01_archive.html">Август</a>
+<span class="post-count" dir="ltr">(1)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://bojlahg.blogspot.ru/2011_03_01_archive.html">Март</a>
+<span class="post-count" dir="ltr">(1)</span>
+</li>
+</ul>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate expanded">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy toggle-open">▼&nbsp;</span>
+</a>
+<a class="post-count-link" href="http://bojlahg.blogspot.ru/search?updated-min=2009-01-01T00:00:00-08:00&amp;updated-max=2010-01-01T00:00:00-08:00&amp;max-results=2">2009</a>
+<span class="post-count" dir="ltr">(2)</span>
+<ul class="hierarchy">
+<li class="archivedate collapsed">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy">
+
+          ►&nbsp;
+        
+</span>
+</a>
+<a class="post-count-link" href="http://bojlahg.blogspot.ru/2009_08_01_archive.html">Август</a>
+<span class="post-count" dir="ltr">(1)</span>
+</li>
+</ul>
+<ul class="hierarchy">
+<li class="archivedate expanded">
+<a class="toggle" href="javascript:void(0)">
+<span class="zippy toggle-open">▼&nbsp;</span>
+</a>
+<a class="post-count-link" href="http://bojlahg.blogspot.ru/2009_07_01_archive.html">Июль</a>
+<span class="post-count" dir="ltr">(1)</span>
+<ul class="posts">
+<li><a href="http://bojlahg.blogspot.ru/2009/07/tcp-win-sockets.html">Простой однопоточный TCP сервер на Win Sockets.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=6557408083774244462&amp;widgetType=BlogArchive&amp;widgetId=BlogArchive1&amp;action=editWidget&amp;sectionId=sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("BlogArchive1"));' target="configBlogArchive1" title="Изменить">
+<img alt="" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/icon18_wrench_allbkg.png" height="18" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div>
+</div><div class="widget Followers" id="Followers1">
+<h2 class="title">Постоянные читатели</h2>
+<div class="widget-content">
+<div id="Followers1-wrapper">
+<div style="margin-right:2px;">
+<script type="text/javascript">
+        if (!window.google || !google.friendconnect) {
+          document.write('<script type="text/javascript"' +
+              'src="http://www.google.com/friendconnect/script/friendconnect.js">' +
+              '</scr' + 'ipt>');
+        }
+      </script><script type="text/javascript" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/friendconnect.js"></script>
+<script type="text/javascript">
+      if (!window.registeredBloggerCallbacks) {
+        window.registeredBloggerCallbacks = true;
+
+        
+
+        
+        gadgets.rpc.register('requestReload', function() {
+          document.location.reload();
+        });
+
+        
+        gadgets.rpc.register('requestSignOut', function(siteId) {
+          
+          google.friendconnect.container.openSocialSiteId = siteId;
+          google.friendconnect.requestSignOut();
+        });
+      }
+    </script>
+<script type="text/javascript">
+    
+    function registerGetBlogUrls() {
+      gadgets.rpc.register('getBlogUrls', function() {
+        var holder = {};
+        
+          
+            
+            
+              holder.currentPost = "http://www.blogger.com/feeds/6557408083774244462/posts/default/8049229572859437726";
+            
+            
+            
+              holder.currentComments = "http://www.blogger.com/feeds/6557408083774244462/8049229572859437726/comments/default";
+            
+            holder.currentPostUrl = "";
+            holder.currentPostId = 8049229572859437726
+          
+          
+          
+            holder.postFeed = "http://www.blogger.com/feeds/6557408083774244462/posts/default";
+          
+          
+          
+            holder.commentFeed = "http://www.blogger.com/feeds/6557408083774244462/comments/default";
+          
+          holder.currentBlogUrl = "http://bojlahg.blogspot.com/";
+          holder.currentBlogId = "6557408083774244462";
+        
+        return holder;
+      });
+    }
+  </script>
+<script type="text/javascript">
+  if (!window.registeredCommonBloggerCallbacks) {
+    window.registeredCommonBloggerCallbacks = true;
+
+    gadgets.rpc.register('resize_iframe', function(height) {
+      var el = document.getElementById(this['f']);
+      if (el) {
+        el.style.height = height + 'px';
+      }
+    });
+
+    
+    gadgets.rpc.register('set_pref', function() {});
+
+    registerGetBlogUrls();
+  }
+  </script>
+<div class="gadgets-gadget-container" id="div-shtrjzyj866q" style="width: 100%; visibility: visible;"><div id="gfc_iframe_1347230370_0_body"><iframe id="gfc_iframe_1347230370_0" name="gfc_iframe_1347230370_0" style="width: 100%; height: 187px;" allowtransparency="true" frameborder="0" height="260" scrolling="no"></iframe></div></div>
+<script type="text/javascript">
+    var skin = {};
+    skin['FACE_SIZE'] = '32';
+    skin['HEIGHT'] = "260";
+    skin['TITLE'] = "\u041f\u043e\u0441\u0442\u043e\u044f\u043d\u043d\u044b\u0435 \u0447\u0438\u0442\u0430\u0442\u0435\u043b\u0438";
+    skin['BORDER_COLOR'] = "transparent";
+    skin['ENDCAP_BG_COLOR'] = "transparent";
+    skin['ENDCAP_TEXT_COLOR'] = "#999999";
+    skin['ENDCAP_LINK_COLOR'] = "#99aadd";
+    skin['ALTERNATE_BG_COLOR'] = "transparent";
+    
+    skin['CONTENT_BG_COLOR'] = "transparent";
+    skin['CONTENT_LINK_COLOR'] = "#99aadd";
+    skin['CONTENT_TEXT_COLOR'] = "#999999";
+    skin['CONTENT_SECONDARY_LINK_COLOR'] = "#99aadd";
+    skin['CONTENT_SECONDARY_TEXT_COLOR'] = "#777777";
+    skin['CONTENT_HEADLINE_COLOR'] = "#aadd99";
+    skin['FONT_FACE'] = "normal normal 100% \x27Trebuchet MS\x27,Trebuchet,Verdana,Sans-serif";
+    google.friendconnect.container.setParentUrl("/");
+    google.friendconnect.container["renderMembersGadget"](
+    {id: "div-shtrjzyj866q",
+     height: 260,
+     
+     
+     
+     site: "07605937514192839900",
+     
+     locale: 'ru' },
+     skin);
+  </script>
+</div>
+</div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=6557408083774244462&amp;widgetType=Followers&amp;widgetId=Followers1&amp;action=editWidget&amp;sectionId=sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("Followers1"));' target="configFollowers1" title="Изменить">
+<img alt="" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/icon18_wrench_allbkg.png" height="18" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div>
+</div><div class="widget AdSense" id="AdSense1">
+<div class="widget-content">
+<script type="text/javascript"><!--
+google_ad_client="pub-0056993523919680";
+google_ad_host="pub-1556223355139109";
+google_ad_host_channel="00000";
+google_alternate_ad_url="http://www.blogger.com/img/blogger_ad160x600.html";
+google_ad_width=160;
+google_ad_height=600;
+google_ad_format="160x600_as";
+google_ad_type="text_image";
+google_color_border="000000";
+google_color_bg="000000";
+google_color_link="777777";
+google_color_url="99AADD";
+google_color_text="999999";
+//--></script>
+<script type="text/javascript" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/show_ads.js">
+</script>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="http://www.blogger.com/rearrange?blogID=6557408083774244462&amp;widgetType=AdSense&amp;widgetId=AdSense1&amp;action=editWidget&amp;sectionId=sidebar" onclick='return _WidgetManager._PopupConfig(document.getElementById("AdSense1"));' target="configAdSense1" title="Изменить">
+<img alt="" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/icon18_wrench_allbkg.png" height="18" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div>
+</div></div>
+</div>
+<!-- spacer for skins that want sidebar and main to be the same height-->
+<div class="clear">&nbsp;</div>
+</div>
+<!-- end content-wrapper -->
+<div id="footer-wrapper">
+<div class="footer section" id="footer"></div>
+</div>
+</div></div>
+<!-- end outer-wrapper -->
+<script type="text/javascript">
+if (window.jstiming) window.jstiming.load.tick('widgetJsBefore');
+</script><script type="text/javascript" src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/2293351789-widgets.js"></script>
+<script gapi_processed="true" type="text/javascript" src="navbar_data/plusone.js"></script>
+<script type="text/javascript">
+if (typeof(BLOG_attachCsiOnload) != 'undefined' && BLOG_attachCsiOnload != null) { window['blogger_templates_experiment_id'] = "templatesV1";window['blogger_blog_id'] = '6557408083774244462';BLOG_attachCsiOnload('item_'); }_WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d6557408083774244462','//bojlahg.blogspot.ru/2009/07/tcp-win-sockets.html','6557408083774244462');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'blogId': '6557408083774244462', 'bloggerUrl': 'http://www.blogger.com', 'title': 'simple tutorials by bojlahg', 'pageType': 'item', 'url': 'http://bojlahg.blogspot.ru/2009/07/tcp-win-sockets.html', 'canonicalUrl': 'http://bojlahg.blogspot.com/2009/07/tcp-win-sockets.html', 'canonicalHomepageUrl': 'http://bojlahg.blogspot.com/', 'homepageUrl': 'http://bojlahg.blogspot.ru/', 'blogspotFaviconUrl': 'http://bojlahg.blogspot.ru/favicon.ico', 'enabledCommentProfileImages': true, 'adultContent': false, 'disableAdSenseWidget': false, 'analyticsAccountNumber': '', 'searchLabel': '', 'searchQuery': '', 'pageName': 'Простой однопоточный TCP сервер на Win Sockets.', 'pageTitle': 'simple tutorials by bojlahg: Простой однопоточный TCP сервер на Win Sockets.', 'encoding': 'UTF-8', 'locale': 'ru', 'localeUnderscoreDelimited': 'ru', 'isPrivate': false, 'isMobile': false, 'isMobileRequest': false, 'mobileClass': '', 'isPrivateBlog': false, 'languageDirection': 'ltr', 'feedLinks': '\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42simple tutorials by bojlahg - Atom\42 href\75\42http://bojlahg.blogspot.com/feeds/posts/default\42 /\76\n\74link rel\75\42alternate\42 type\75\42application/rss+xml\42 title\75\42simple tutorials by bojlahg - RSS\42 href\75\42http://bojlahg.blogspot.com/feeds/posts/default?alt\75rss\42 /\76\n\74link rel\75\42service.post\42 type\75\42application/atom+xml\42 title\75\42simple tutorials by bojlahg - Atom\42 href\75\42http://www.blogger.com/feeds/6557408083774244462/posts/default\42 /\76\n\74link rel\75\42EditURI\42 type\75\42application/rsd+xml\42 title\75\42RSD\42 href\75\42http://www.blogger.com/rsd.g?blogID\0756557408083774244462\42 /\76\n\74link rel\75\42alternate\42 type\75\42application/atom+xml\42 title\75\42simple tutorials by bojlahg - Atom\42 href\75\42http://bojlahg.blogspot.com/feeds/8049229572859437726/comments/default\42 /\76\n', 'meTag': '', 'openIdOpTag': '', 'postImageThumbnailUrl': 'http://4.bp.blogspot.com/__Mh7mi6SzOE/SmIhrYwqxbI/AAAAAAAAAA4/lWm5XRy3qG8/s72-c/screenshot.jpg', 'imageSrcTag': '\74link rel\75\42image_src\42 href\75\42http://4.bp.blogspot.com/__Mh7mi6SzOE/SmIhrYwqxbI/AAAAAAAAAA4/lWm5XRy3qG8/s72-c/screenshot.jpg\42 /\76\n', 'latencyHeadScript': '\74script type\75\42text/javascript\42\76(function() { var b\75window,e\75\42jstiming\42,g\75\42tick\42;(function(){function d(a){this.t\75{};this.tick\75function(a,d,c){c\75void 0!\75c?c:(new Date).getTime();this.t[a]\75[c,d]};this[g](\42start\42,null,a)}var a\75new d;b.jstiming\75{Timer:d,load:a};if(b.performance\46\46b.performance.timing){var a\75b.performance.timing,c\75b[e].load,f\75a.navigationStart,a\75a.responseStart;0\74f\46\46a\76\75f\46\46(c[g](\42_wtsrt\42,void 0,f),c[g](\42wtsrt_\42,\42_wtsrt\42,a),c[g](\42tbsd_\42,\42wtsrt_\42))}try{a\75null,b.chrome\46\46b.chrome.csi\46\46(a\75Math.floor(b.chrome.csi().pageT),c\46\0460\74f\46\46(c[g](\42_tbnd\42,void 0,b.chrome.csi().startE),\nc[g](\42tbnd_\42,\42_tbnd\42,f))),null\75\75a\46\46b.gtbExternal\46\46(a\75b.gtbExternal.pageT()),null\75\75a\46\46b.external\46\46(a\75b.external.pageT,c\46\0460\74f\46\46(c[g](\42_tbnd\42,void 0,b.external.startE),c[g](\42tbnd_\42,\42_tbnd\42,f))),a\46\46(b[e].pt\75a)}catch(l){}})();b.tickAboveFold\75function(d){var a\0750;if(d.offsetParent){do a+\75d.offsetTop;while(d\75d.offsetParent)}d\75a;750\76\75d\46\46b[e].load[g](\42aft\42)};var h\75!1;function k(){h||(h\75!0,b[e].load[g](\42firstScrollTime\42))}b.addEventListener?b.addEventListener(\42scroll\42,k,!1):b.attachEvent(\42onscroll\42,k);\n })();\74/script\076', 'mobileHeadScript': '', 'adsenseClientId': 'pub-0056993523919680', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/2556441d711ff161', 'plusOneApiSrc': 'https://apis.google.com/js/plusone.js', 'sf': 'n', 'tf': ''}}, {'name': 'skin', 'data': {'vars': {'sidebartextcolor': '#999999', 'linkcolor': '#99aadd', 'visitedlinkcolor': '#aa77aa', 'textcolor': '#cccccc', 'headerfont': 'normal bold 78% \47Trebuchet MS\47,Trebuchet,Arial,Verdana,Sans-serif', 'pagetitlefont': 'normal bold 200% \47Trebuchet MS\47,Trebuchet,Verdana,Sans-serif', 'bgcolor': '#000000', 'descriptioncolor': '#777777', 'titlecolor': '#aadd99', 'bordercolor': '#333333', 'postfooterfont': 'normal normal 78% \47Trebuchet MS\47, Trebuchet, Arial, Verdana, Sans-serif', 'pagetitlecolor': '#cccccc', 'bodyfont': 'normal normal 100% \47Trebuchet MS\47,Trebuchet,Verdana,Sans-serif', 'endSide': 'right', 'startSide': 'left', 'descriptionfont': 'normal normal 78% \47Trebuchet MS\47, Trebuchet, Verdana, Sans-serif', 'sidebarcolor': '#777777'}, 'override': ''}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '/?view\75classic'}, 'flipcard': {'name': 'flipcard', 'url': '/?view\75flipcard'}, 'magazine': {'name': 'magazine', 'url': '/?view\75magazine'}, 'mosaic': {'name': 'mosaic', 'url': '/?view\75mosaic'}, 'sidebar': {'name': 'sidebar', 'url': '/?view\75sidebar'}, 'snapshot': {'name': 'snapshot', 'url': '/?view\75snapshot'}, 'timeslide': {'name': 'timeslide', 'url': '/?view\75timeslide'}}}]);
+_WidgetManager._RegisterWidget('_ProfileView', new _WidgetInfo('Profile1', 'sidebar', null, document.getElementById('Profile1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogArchiveView', new _WidgetInfo('BlogArchive1', 'sidebar', null, document.getElementById('BlogArchive1'), {'languageDirection': 'ltr'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_FollowersView', new _WidgetInfo('Followers1', 'sidebar', null, document.getElementById('Followers1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_AdSenseView', new _WidgetInfo('AdSense1', 'sidebar', null, document.getElementById('AdSense1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'header', null, document.getElementById('Header1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_NavbarView', new _WidgetInfo('Navbar1', 'navbar', null, document.getElementById('Navbar1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', null, document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'lightboxEnabled': true, 'lightboxModuleUrl': '//www.blogger.com/static/v1/jsbin/3336878752-lbx__ru.js', 'lightboxCssUrl': '//www.blogger.com/static/v1/v-css/228702327-lightbox_bundle.css'}, 'displayModeFull'));
+</script>
+
+<link href="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/228702327-lightbox_bundle.css" rel="stylesheet" type="text/css"><script src="simple%20tutorials%20by%20bojlahg%20%20%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%BE%D0%B9%20%D0%BE%D0%B4%D0%BD%D0%BE%D0%BF%D0%BE%D1%82%D0%BE%D1%87%D0%BD%D1%8B%D0%B9%20TCP%20%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%20%D0%BD%D0%B0%20Win%20Sockets_files/3336878752-lbx__ru.js" type="text/javascript"></script></body></html>

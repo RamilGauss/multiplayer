@@ -60,6 +60,10 @@ public:
   bool GetValueByKey(Key& k, Value& v);
   bool GetKeyByValue(Key& k, Value& v);
 
+  // изменение
+  bool SetValueByKey(Key& k, Value& v);
+  bool SetKeyByValue(Key& k, Value& v);
+
   // удаление
   bool RemoveValueByKey(Key& k);
   bool RemoveValue(Value& v);
@@ -145,5 +149,30 @@ void TMapDual<Key,Value>::Clear()
   mMapValueKey.clear();
 }
 //-------------------------------------------------------------------
+template <class Key, class Value>
+bool TMapDual<Key,Value>::SetValueByKey(Key& k, Value& v)
+{
+  TMapKeyValue::iterator fitKey = mMapKeyValue.find(k);
+  if(fitKey!=mMapKeyValue.end())
+  {
+    fitKey->second = v;
+    return true;
+  }
+  return false;
+}
+//-------------------------------------------------------------------
+template <class Key, class Value>
+bool TMapDual<Key,Value>::SetKeyByValue(Key& k, Value& v)
+{
+  TMapValueKey::iterator fitValue = mMapValueKey.find(v);
+  if(fitValue!=mMapValueKey.end())
+  {
+    fitValue->second = k;
+    return true;
+  }
+  return false;
+}
+//-------------------------------------------------------------------
+
 
 #endif

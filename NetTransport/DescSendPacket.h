@@ -46,14 +46,21 @@ namespace nsNetDoser
 
 class TDescSendPacket
 {
-  TIP_Port ip_port;
-  bool check;
+  bool         mCheck;
   TBreakPacket mPacket;
-  TContainer mContainer;
+	
 public:
-  TDescSendPacket(TIP_Port &_ip_port, bool check, TBreakPacket& packet);
+  TDescSendPacket();
   ~TDescSendPacket(){Done();}
   void Done();
+
+	void SetCheck(bool check){mCheck = check;}
+	bool GetCheck(){return mCheck;}
+
+	void SetPacket(TBreakPacket& packet){mPacket = packet;}
+	TBreakPacket* GetPacket(){return &mPacket;}
+
+
 };
 //------------------------------------------------
 

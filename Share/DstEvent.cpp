@@ -35,13 +35,13 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "DstEvent.h"
 #include "SrcEvent.h"
-#include "List.h"
+#include "ListMultiThread.h"
 
 using namespace nsEvent;
 
 TDstEvent::TDstEvent()
 {
-  pListEvent = new TList<TEvent>;
+  pListEvent = new TListMultiThread<TEvent>;
 }
 //------------------------------------------------------------
 TDstEvent::~TDstEvent()

@@ -64,6 +64,8 @@ public:
   virtual int GetSize()const;
   // что бы не освобождать память с помощью Done()
   virtual void Unlink();
+
+  static void Free(char* p){delete[]p;}
 };
 
 

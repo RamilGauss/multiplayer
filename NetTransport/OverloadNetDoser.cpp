@@ -51,16 +51,16 @@ TOverloadNetDoser::~TOverloadNetDoser()
 //------------------------------------------------------
 void TOverloadNetDoser::Init()
 {
-  vector<TMarkUpContainer::TCommonDesc> vcd;
-  TMarkUpContainer::TCommonDesc cd;
-  // разметка заголовка пакета
-  cd.type = TMarkUpContainer::eConst;
-  cd.name = "Header";
-  cd.c.size = sizeof(THeaderOverload);
-  vcd.push_back(cd);
+  //vector<TMarkUpContainer::TCommonDesc> vcd;
+  //TMarkUpContainer::TCommonDesc cd;
+  //// разметка заголовка пакета
+  //cd.type = TMarkUpContainer::eConst;
+  //cd.name = "Header";
+  //cd.c.size = sizeof(THeaderOverload);
+  //vcd.push_back(cd);
 
-  mC.SetMarkUp(&vcd);
-  mC.Update();
+  //mC.SetMarkUp(&vcd);
+  //mC.Update();
 }
 //------------------------------------------------------
 

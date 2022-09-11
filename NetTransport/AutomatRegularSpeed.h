@@ -37,51 +37,63 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef AutomatRegularSpeedH
 #define AutomatRegularSpeedH
 
-#include "List.h"
+#include <list>
+
+#include "DescSendPacket.h"
+#include "StateARS.h"
+
+
+/*
+	Not Thread Safe
+*/
 
 class INetTransport;
 
 namespace nsNetDoser
 {
 
-class TDescSendPacket;
-
 class TAutomatRegularSpeed
 {
-
+  TIP_Port mIP_Port;
   INetTransport* mTransport;
 
-  struct TDescSpeed
+  enum{
+       eDefTimeSleep = 18,// мс
+    };
+  // пакеты на отправку
+  struct TReadyPacket
   {
-    short time_sleep_ms;
-    short cnt_portion_packet;// 
+    TDescSendPacket d;
+    TContainer      collectPacket;
+
+    void Init();
   };
 
-  // пакеты на отправку
-  TList<TDescSendPacket> mListPacket; 
+  typedef std::list<TReadyPacket> TListReadyPacket;
+  typedef TListReadyPacket::iterator TListReadyPacketIt;
+  TListReadyPacket mListPacket; 
 
-  TDescSpeed mSpeed;
-
-  unsigned int mNextUpSpeed;// мс
-  unsigned int mLastUpSpeed;// мс
+  TStateARS mStateARS;
 
 public:
-  TAutomatRegularSpeed();
+  TAutomatRegularSpeed(TIP_Port* ip_port);
   ~TAutomatRegularSpeed();
 
-  void SetTransport(INetTransport* pTransport);
+  void SetTransport(INetTransport* pTransport);// +
   // ведет статистику по времени опроса
   // например если опрос был 10 раз по 1350 байт в течение 1 секунды, то вернет 10 раз false
   // но если опрос был в течение 1 мс, то на 10 опрос вернет true
   // все зависит от настроек скорости в данный момент
-  bool AddInQueue(int sizeBuffer);// добавлять ли в автомат пакеты, общий размер которых sizeBuffer
+  bool AddInQueue(int sizeBuffer);// добавлять ли в автомат пакеты, общий размер которых sizeBuffer -
 
-  void Add(TDescSendPacket* pDescPacket);// добавить 
+  void Add(TDescSendPacket* pDescPacket);// добавить -
 
-  bool NeedSend();// опрос, надо ли что-то отправлять
-  void Send();    // будет отсылать до тех пор пока не истечет время или не закончатся пакеты
+  bool NeedSend();// опрос, надо ли что-то отправлять -
+  void Send();    // будет отсылать до тех пор пока не истечет время или не закончатся пакеты -
 
-  void Overload(unsigned short over_ms);// обратная связь с каналом
+  void Overload(unsigned char cntTry);//unsigned short over_ms);// обратная связь с каналом -
+
+protected:
 };
 
 }

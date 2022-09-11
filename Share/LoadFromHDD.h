@@ -58,9 +58,10 @@ public:
 
 	bool IsOpen();
 	unsigned int Size();
-  void Read(void* buffer, int size);
 
-	void Close();
+  int Read(void* buffer, int size, int offset = 0);
+
+ 	void Close();
 
 };
 

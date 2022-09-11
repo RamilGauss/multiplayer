@@ -447,10 +447,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\MultiThreadQueue.h"
-				>
-			</File>
-			<File
 				RelativePath=".\RWLock.h"
 				>
 			</File>

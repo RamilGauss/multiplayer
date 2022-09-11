@@ -1,0 +1,47 @@
+BODY {MARGIN-TOP:0px; BACKGROUND:ghostwhite transparent scroll repeat 0% 0%; MARGIN-BOTTOM:0px; PADDING-BOTTOM:0px; PADDING-TOP:0px}
+
+.copiright {FONT-SIZE:xx-small; COLOR:white; FONT-FAMILY:Arial, Helvetica, sans-serif}
+.tdproject {BACKGROUND: #f7a221}
+
+.news {FONT-SIZE:x-small; VERTICAL-ALIGN:top; FONT-FAMILY:Arial, Verdana, Geneva, Helvetica, sans-serif}
+
+.txtsearch {BORDER-RIGHT:activeborder 1px solid; BORDER-TOP:activeborder 1px solid; FONT-SIZE:x-small; BORDER-LEFT: activeborder 1px solid; WIDTH: 140px; BORDER-BOTTOM: activeborder 1px solid; FONT-FAMILY: tahoma, arial; HEIGHT: 18px; BACKGROUND-COLOR: #dcdbb8}
+
+.tdsolid {BORDER-RIGHT:black 1px solid; BORDER-TOP:black 1px solid; BORDER-LEFT:black 1px solid; BORDER-BOTTOM:black 1px solid; BACKGROUND-COLOR:silver}
+
+H1 {FONT-SIZE:16pt; PADDING-BOTTOM:0px; text-align:center; MARGIN:10px; page-break-after:avoid; COLOR:darkblue; FONT-FAMILY:"Arial", Tahoma, Times, serif}
+H2 {FONT-SIZE:14pt; PADDING-BOTTOM:0px; text-align:center; MARGIN:10px 5px 5px; COLOR:darkblue; page-break-after:avoid; FONT-FAMILY:"Arial", Tahoma, sanserif}
+H3 {FONT-SIZE:13pt; PADDING-BOTTOM:0px; text-align:center; MARGIN:10px 5px 5px; COLOR:darkblue; page-break-after:avoid; FONT-FAMILY:"Arial", Tahoma, sanserif}
+H4 {FONT-SIZE:12pt; PADDING-BOTTOM:0px; text-align:center; MARGIN:10px; COLOR:darkblue; page-break-after:avoid; FONT-FAMILY:"Arial", Tahoma, sanserif}
+
+P {FONT-SIZE:xsmall; PADDING-BOTTOM:5px; MARGIN:0px 5px 5px; TEXT-INDENT:35.45pt; color:black; FONT-FAMILY:Arial, Verdana, Geneva, Helvetica, sans-serif; TEXT-ALIGN: justify}
+TD {vertical-align:top; font-size:12pt; font-family:arial, Verdana, Geneva, Helvetica, sans-serif}
+UL {MARGIN-TOP:0px; PADDING-TOP:0px}
+LI {FONT-SIZE:xsmall; text-align:justify;text-indent:0; PADDING-BOTTOM:0px; MARGIN:0px; PADDING-TOP:0px; color:black; FONT-FAMILY:Arial, Verdana, Geneva, Helvetica, sans-serif}
+.sign	{text-align:center;text-indent:0}
+.grey	{background-color:gainsboro}
+.grey1	{font-size:9pt}
+.explain	{text-align:justify; text-indent:0}
+
+PRE {FONT-SIZE:x-small; FONT-FAMILY:courier}
+A {COLOR: navy}
+A:hover {COLOR:blue}
+
+table {width:600; border-style:ridge;border-color:lightblue;}
+.tbl	{border-style:ridge;border-color:lightblue;}
+.txt1 {FONT-SIZE:12pt; FONT-FAMILY:arial, tahoma}
+.txt2 {text-align:justify;text-indent:0}
+.txt3 {text-align:justify; font-size:12pt;font-family:arial}
+.txt4	{text-align:center}
+.txt5	{text-align:left;text-indent:0;}
+.txt6	{text-align:left; font-family:arial; font-size:8pt; text-indent:0;}
+.txt_s	{text-align:center; font-size:10pt}
+.txt_sg	{text-align:center; font-size:10pt; background:gainsboro}
+.txt_g	{text-align:center; font-family:arial; background:gainsboro}
+.down	{text-align:center;color:white; font-family:arial;font-size:11pt}
+.cell	{font-size:12pt; font-family:arial;}
+.x-small {FONT-SIZE:12pt; FONT-FAMILY:Arial, Geneva, Helvetica, sans-serif}
+.mark	{list-style-image:url(http://book.itep.ru/css/marker_news.gif)}
+.frame	{background-color:gainsboro; text-align:justify;font-style:italic;border-width:4;text-indent:35.45pt;}
+.frame1	{border-style:ridge; border-color:lightblue; border-width:2; background-color:whitesmoke; text-align:justify; font-style:italic; text-indent:35.45pt;}
+.tab_small	{FONT-SIZE:5pt;border-width:2;CELLSPACING:2; CELLPADDING:2;}

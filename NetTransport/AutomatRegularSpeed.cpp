@@ -35,11 +35,14 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "AutomatRegularSpeed.h"
 #include "DoserProtocolPacket.h"
+#include "BreakPacket.h"
+#include "INetTransport.h"
 
 using namespace nsNetDoser;
 
-TAutomatRegularSpeed::TAutomatRegularSpeed()
+TAutomatRegularSpeed::TAutomatRegularSpeed(TIP_Port* ip_port)
 {
+  mIP_Port = *ip_port;
   mTransport = NULL;
 }
 //------------------------------------------------------------------------
@@ -50,31 +53,75 @@ TAutomatRegularSpeed::~TAutomatRegularSpeed()
 //------------------------------------------------------------------------
 bool TAutomatRegularSpeed::AddInQueue(int sizeBuffer)// добавлять ли в автомат пакеты, общий размер которых sizeBuffer
 {
-  return false;
+  return mStateARS.TrySendWithoutBuffer(sizeBuffer);
 }
 //------------------------------------------------------------------------
 void TAutomatRegularSpeed::Add(TDescSendPacket* pDescPacket)// добавить 
 {
+  mStateARS.UpSize(pDescPacket->GetPacket()->GetSize());// добавить в набор данных
 
+  mListPacket.push_back(TReadyPacket());
+  TReadyPacket& rp = mListPacket.back();
+  rp.d = *pDescPacket;
+  rp.Init();
 }
 //------------------------------------------------------------------------
 bool TAutomatRegularSpeed::NeedSend()// опрос, надо ли что-то отправлять
 {
-  return false;
+  // наличие пакетов
+  if(mListPacket.size()==0) return false;
+  return true;
 }
 //------------------------------------------------------------------------
-void TAutomatRegularSpeed::Send()// будет отсылать до тех пор пока не истечет время или не закончатся пакеты
+// будет отсылать до тех пор пока не истечет время или не закончатся пакеты
+void TAutomatRegularSpeed::Send()
 {
+  TListReadyPacketIt bit = mListPacket.begin();
+  TListReadyPacketIt eit = mListPacket.end();
+  while(bit!=eit)
+  {
+    int size = bit->d.GetPacket()->GetSize();
+    if(mStateARS.TrySendFromBuffer(size))
+    {
+      // после TReadyPacket::Init() гарантированно содержится 1 часть
+      void* p = bit->d.GetPacket()->GetCollectPtr();
+     ((THeaderSinglePacket*)p)->SetTime();// выставить время отправления
 
+      mTransport->Send(mIP_Port.ip, mIP_Port.port, *(bit->d.GetPacket()), bit->d.GetCheck());
+      mStateARS.DownSize(size);
+      mListPacket.erase(bit);
+      bit = mListPacket.begin();
+    }
+    else
+      return;
+  }
 }
 //------------------------------------------------------------------------
-void TAutomatRegularSpeed::Overload(unsigned short over_ms)// обратная связь с каналом
+void TAutomatRegularSpeed::Overload(unsigned char cntTry)// обратная связь с каналом
 {
-
+	mStateARS.Event(cntTry);
 }
 //------------------------------------------------------------------------
 void TAutomatRegularSpeed::SetTransport(INetTransport* pTransport)
 {
   mTransport = pTransport;
+}
+//------------------------------------------------------------------------
+void TAutomatRegularSpeed::TReadyPacket::Init()
+{
+  d.GetPacket()->Collect();// собрать пакет
+  // теперь то что собрали
+  char* p = (char*)d.GetPacket()->GetCollectPtr();
+  int size = d.GetPacket()->GetSize();
+  if(d.GetPacket()->GetCountPart()==1)
+  {
+    // если кол-во частей равно 1, то копирования не произойдет и память так и будет находиться
+    // снаружи, тогда нужно скопировать в свой буфер
+    collectPacket.SetData(p, size);
+    p = (char*)collectPacket.GetPtr();// это поместить в список BreakPacket
+  }
+
+  d.GetPacket()->UnlinkPart();
+  d.GetPacket()->PushBack(p,size);
 }
 //------------------------------------------------------------------------

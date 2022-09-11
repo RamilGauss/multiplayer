@@ -42,7 +42,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "TObject.h"
 #include "ShareMisc.h"
-#include "List.h"
+#include "ListMultiThread.h"
 #include "AutomatRegularSpeed.h"
 #include "DoserProtocolEnum.h"
 
@@ -61,21 +61,22 @@ struct THeaderBasePacket
   unsigned char type;
 };
 //------------------------------------------------
-struct THeaderOverload : public THeaderBasePacket
-{
-  // среднее значение перегруза, мс
-  unsigned short over_ms;
-  // время последнего полученного пакета (содержалось в полученном пакете)
-  unsigned int time_last_packet_ms;
-  
-  THeaderOverload()
-  {
-    type = eOverload;
-  }
-};
+//struct THeaderOverload : public THeaderBasePacket
+//{
+//  // среднее значение перегруза, мс
+//  unsigned short over_ms;
+//  // время последнего полученного пакета (содержалось в полученном пакете)
+//  unsigned int time_last_packet_ms;
+//  
+//  THeaderOverload()
+//  {
+//    type = eOverload;
+//  }
+//};
 //------------------------------------------------
 struct THeaderSinglePacket : public THeaderBasePacket
 {
+  // совет: меняется только непосредственно перед отправкой (важно для определения перегрузок)
   unsigned int time_ms;// локальное время отправки, мс
   THeaderSinglePacket()
   {
@@ -83,7 +84,7 @@ struct THeaderSinglePacket : public THeaderBasePacket
   }
   void SetTime()
   {
-    time_ms = ht_GetMSCount();
+    time_ms = ht_GetUSCount();//ht_GetMSCount();
   }
 };
 //------------------------------------------------
@@ -98,26 +99,15 @@ struct THeaderBigPacket : public THeaderSinglePacket
   }
 };
 //------------------------------------------------
-class TDescSendPacket
-{
-  TIP_Port ip_port;
-  bool check;
-  TBreakPacket mPacket;
-  TContainer mContainer;
-public:
-  TDescSendPacket(TIP_Port &_ip_port, bool check, TBreakPacket& packet);
-  ~TDescSendPacket(){Done();}
-  void Done();
-};
-//------------------------------------------------
 class TDescConnect : public TObject
 {
 public:
+  TDescConnect(TIP_Port* ip_port);
 
   TAutomatRegularSpeed* GetAutomat();
   unsigned int   GetIP()const;
   unsigned short GetPort()const;
-  TIP_Port* GetIP_Port();
+  //TIP_Port* GetIP_Port();
 protected:
   // key
   TIP_Port mIP_port;

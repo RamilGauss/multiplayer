@@ -33,33 +33,23 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
 #ifndef ShaderStackH
 #define ShaderStackH
 
 #include <string>
 #include <vector>
 
+#include "Container.h"
+
 class TShaderStack
 {
-
   struct TData
   {
     std::string name;
-    char* data;
-    int size;
-    TData(){data=NULL;size=0;}
-    ~TData(){Done();}
-    void Done(){delete[]data;data=NULL;size=0;}
+    TContainer c;
     void Set(char* p,int s)
     {
-      if(s!=size)
-      {
-        Done();
-        size=s;
-        data=new char[s];
-      }
-      memcpy(data,p,size);
+      c.SetData(p, s);
     }
   };
   

@@ -33,12 +33,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
-#include "BL_IOStream.h"
-#include "ErrorReg.h"
 #include <string.h>
 #include <glib.h>
 #include <glib/gprintf.h>
+
+#include "BL_IOStream.h"
+#include "ErrorReg.h"
 
 //---------------------------------------------------------------
 TIOStream::TIOStream(void)

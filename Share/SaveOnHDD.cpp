@@ -42,8 +42,16 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <errno.h>
 #include <time.h>
 #include <sys/timeb.h>
+#include <algorithm>
+
 #include "BL_Debug.h"
 #include "HiTimer.h"
+
+#define CHECK_LEN(buffer) \
+{ \
+  int len = _vscprintf( format, list )+ 1; \
+  BL_ASSERT(len<sizeof(buffer)); \
+}
 
 using namespace std;
 
@@ -84,7 +92,7 @@ bool TSaveOnHDD::ReOpen(char* path, bool append )
 
 	char sErr[1000];
 	sprintf(sErr,"fopen Error: %s path=\"%s\"",strerror(errno),path);
-	BL_MessageBug(sErr,0);
+	BL_MessageBug(sErr);
 
 	return false;
 }
@@ -125,12 +133,13 @@ void TSaveOnHDD::WriteF(const char* format, ... )
 	va_start(list,format);
 
   char s[10000]; 
+  CHECK_LEN(s);
 	int res = vsprintf(s,format,list); 
 	
   va_end(list);
   if(res==-1)
   {
-    BL_MessageBug("WriteF Error!",0);
+    BL_MessageBug("WriteF Error!");
     return;
   }
   // делаем то что хотели, будь то запись в файл или в консоль
@@ -149,12 +158,13 @@ void TSaveOnHDD::WriteF_time(const char* format, ... )
   va_start(list,format);
 
   char s[10000]; 
+  CHECK_LEN(s);
   int res = vsprintf(s,format,list); 
 
   va_end(list);
   if(res==-1)  
   {
-    BL_MessageBug("WriteF_time Error!",0);
+    BL_MessageBug("WriteF_time Error!");
     return;
   }
 
@@ -193,23 +203,21 @@ void TSaveOnHDD::Write_Time()
 //---------------------------------------------------------------
 void TSaveOnHDD::FlushBuffer()
 {
-  int cnt = mListBuffer.size();
-  TListContainer::iterator bit = mListBuffer.begin();
-  TListContainer::iterator eit = mListBuffer.end();
+  TListContainer::T::iterator bit = mListBuffer->begin();
+  TListContainer::T::iterator eit = mListBuffer->end();
   while(bit!=eit)
   {
     TContainer* v = *bit;
-    v->GetPtr();
     Write(v->GetPtr(),v->GetSize());
     delete v;
     bit++;
   }
-  mListBuffer.clear();
+  mListBuffer->clear();
 }
 //---------------------------------------------------------------
 void TSaveOnHDD::ClearBuffer()
 {
-  mListBuffer.clear();
+  mListBuffer.Clear();
 }
 //---------------------------------------------------------------
 void TSaveOnHDD::FlushInBuffer(char* buffer, int size)
@@ -217,6 +225,6 @@ void TSaveOnHDD::FlushInBuffer(char* buffer, int size)
   TContainer* v = new TContainer;
   v->SetData(buffer,size);
 
-  mListBuffer.push_back(v);
+  mListBuffer->push_back(v);
 }
 //---------------------------------------------------------------
