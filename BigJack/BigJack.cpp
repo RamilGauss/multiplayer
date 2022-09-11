@@ -188,7 +188,7 @@ void TBigJack::AddObject(IBaseObjectGE* pObject)
     }
     else
     {
-      GetLogger()->Get(STR_NAME_GE)->WriteF_time("Повторная инициализация объекта сцены, PTR_OBJECT=0x%X\n",pObject);
+      GetLogger(STR_NAME_GE)->WriteF_time("Повторная инициализация объекта сцены, PTR_OBJECT=0x%X\n",pObject);
       BL_FIX_BUG();
     }
   }
@@ -415,7 +415,7 @@ void TBigJack::Init()
   HRESULT hr = mDXUT->Init();
   if(hr!=S_OK)
   {
-    GetLogger()->Get(STR_NAME_GE)->WriteF_time("Init fail. hr=0x%X\n",hr);
+    GetLogger(STR_NAME_GE)->WriteF_time("Init fail. hr=0x%X\n",hr);
   }
   SetIsCreateWindow(true);
   if(mGUI)
@@ -546,7 +546,7 @@ void TBigJack::OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUser
   keyEvent.pressed  = bKeyDown;
   AddEventCopy(&keyEvent,sizeof(TKeyEvent));
 
-  //GetLogger()->Get("GE")->WriteF("%d,%d\n",nChar,keyEvent.key);
+  //GetLogger("GE")->WriteF("%d,%d\n",nChar,keyEvent.key);
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::OnMouseEvent( int state, int nMouseWheelDelta, 

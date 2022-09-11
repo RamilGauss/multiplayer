@@ -77,14 +77,14 @@ void TManagerObjectCommon::Done()
 //--------------------------------------------------------------------
 void TManagerObjectCommon::EndLoadMap()
 {
-  GetLogger()->Get("MOC")->WriteF_time("Загрузка карты завершена (поток Form).\n");
+  GetLogger("MOC")->WriteF_time("Загрузка карты завершена (поток Form).\n");
   mProcentLoadMap          = 100;
   flgLoadMap               = false;
 }
 //--------------------------------------------------------------
 void TManagerObjectCommon::StopLoadMap()// синхронно, придется подождать маленько
 {
-  GetLogger()->Get("MOC")->WriteF_time("Приказ остановить загрузку карты.\n");
+  GetLogger("MOC")->WriteF_time("Приказ остановить загрузку карты.\n");
   flgNeedStopThreadLoadMap = true;
 }
 //-------------------------------------------------------------------------------------------------------------  

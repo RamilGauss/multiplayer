@@ -50,7 +50,7 @@ void TShareTest::Init(char* nameLog)
   GetLogger()->Done();
   GetLogger()->Register(STR_NAME_NET_TRANSPORT);
   GetLogger()->Init(nameLog);
-  GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF_time("Start.\n");
+  GetLogger(STR_NAME_NET_TRANSPORT)->WriteF_time("Start.\n");
 
 #ifdef TD_WINDOWS
   setlocale( LC_ALL, "Russian_russia.1251" );

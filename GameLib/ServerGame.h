@@ -18,7 +18,6 @@ See for more information License.h.
 class TServerGame : public IGame
 {
 protected:
-
 	TSaveOnHDD mLogLoad;
 
 	typedef TStatType_double TStatLoad;
@@ -28,18 +27,12 @@ protected:
 
 	unsigned int mStartTime;
 public:
-	typedef enum{
-		eSlave,eMaster,eSuperServer,
-	}eTypeRealize;
   TServerGame(eTypeRealize type);
   virtual ~TServerGame();
 protected:
-
-	eTypeRealize mType;
-
 	virtual bool Init(int variant_use, 
                     const char* sNameDLL, 
-                    const char* arg = NULL);
+                    std::vector<std::string>& arg);
 	virtual void Done();
   virtual bool Work();
 
@@ -48,9 +41,6 @@ protected:
 	virtual void CollectEvent();
 	virtual void HandleEvent(nsEvent::TEvent* pEvent);
 
-  void Render();
-
-  bool HandleGraphicEngineEvent();
   bool HandleNetEngineEvent();
   bool HandleSceneEvent();
 

@@ -16,9 +16,16 @@ namespace nsMelissa
 {
   class TScenarioDisconnectSlave : public IScenario
   {
+    enum{eFromMasterToSuperServer,};
     struct THeaderDisconnectSlave : public IScenario::TBaseHeader
     {
       THeaderDisconnectSlave(){type=TMakerScenario::eDisconnectSlave;} 
+    };
+    //-------------------------------------------------
+    struct THeaderFromMasterToSuperServer : public IScenario::TBaseHeader
+    {
+      THeaderFromMasterToSuperServer(){subType=eFromMasterToSuperServer;countIDClient=0;} 
+      int countIDClient;// type id is unsigned int 
     };
     //-------------------------------------------------
 
@@ -27,8 +34,10 @@ namespace nsMelissa
 
     virtual void Recv(TDescRecvSession* pDesc);
 
+    void SendFromMasterToSuperServer(std::vector<unsigned int>& vID_client);
   protected:
-    virtual void Work();
+
+    void RecvFromMaster();
   private:
     TContextScDisconnectSlave* Context(){return (TContextScDisconnectSlave*)mCurContext;}
   };

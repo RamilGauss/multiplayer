@@ -45,7 +45,7 @@ void TContextScFlow::SaveBreakPacket(TBreakPacket& bp, bool check)
   // отдать на хранение память пакета в контейнер
   pSP->c.Entrust(p, size);
   // теперь когда память хранится в контейнере добавить в break packet
-  pSP->bp.PushBack(p, size);
+  pSP->bp.PushFront(p, size);
   pSP->check = check;
 
   mListSave.push_back(pSP);

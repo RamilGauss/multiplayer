@@ -16,6 +16,7 @@ See for more information License.h.
 #include "GameRoomPrepare.h"
 #include "WaitForm.h"
 #include "../Melissa/Include/BaseEvent.h"
+#include "InputCmdDevTool.h"
 
 class TClientMain;
 class TGameRoomPrepare;
@@ -24,6 +25,8 @@ class TWaitForm;
 
 class TClientDeveloperTool_ClientTank : public IClientDeveloperTool
 {
+  TInputCmdDevTool mInputCmd;
+
   TClientMain*      mClientMain;
   TGameRoomPrepare* mGameRoomPrepare;
   TWaitForm*        mWaitForm;
@@ -40,7 +43,7 @@ public:
   TClientDeveloperTool_ClientTank ();
   virtual ~TClientDeveloperTool_ClientTank ();
 
-  virtual void Init(TComponentClient* pComponent, const char* arg = NULL);
+  virtual void Init(TComponentClient* pComponent, std::vector<std::string>& arg);
 
   virtual std::string GetTitleWindow();
   
@@ -55,6 +58,8 @@ public:
   virtual std::string GetPathXMLFile();
 
 protected:
+  void ParseCmd(std::vector<std::string>& arg);
+
   void InitLog();
   void HandleFromMelissa(nsMelissa::TBaseEvent* pBE);
 };

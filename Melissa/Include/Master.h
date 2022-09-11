@@ -92,7 +92,6 @@ namespace nsMelissa
                                 unsigned int id_client, // ключ, из БД например
                                 void* resForClient, int sizeResClient);// +
     virtual unsigned int GetSlaveSessionByGroup(unsigned int id_group);// -
-    virtual void SendToClient(unsigned int id_client, void* data, int size, bool check = true);// -
    
 		// BaseServer
     virtual void SendByClientKey(std::list<unsigned int>& l, TBreakPacket bp);
@@ -103,7 +102,7 @@ namespace nsMelissa
 		virtual int  GetCountDown();
 		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);// pDesc имеет тип TDescDownMaster*
 
-    virtual void SendDown(unsigned int id_session, TBreakPacket bp, bool check);
+    virtual void SendDown(unsigned int id_session, TBreakPacket bp, bool check = true);
 
     // ActiveServer      
     virtual void ConnectUp(unsigned int ip, unsigned short port);

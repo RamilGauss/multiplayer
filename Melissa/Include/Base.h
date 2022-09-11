@@ -86,6 +86,7 @@ namespace nsMelissa
 
     virtual void SetTimeLiveSession(unsigned int time_ms);
 
+    bool GetInfoSession(unsigned int id_session, TIP_Port& ip_port);
 	protected:
     void Recv( TDescRecvSession* pDescRecvSession );
     void Disconnect(unsigned int id);

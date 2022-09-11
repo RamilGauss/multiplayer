@@ -5,10 +5,11 @@ Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
 See for more information License.h.
 */
 
-#include <map>
+#ifndef INPUT_CMD_TORNADO_H
+#define INPUT_CMD_TORNADO_H
+
 #include <string>
 #include <vector>
-#include <set>
 
 #include "CmdParam.h"
  
@@ -24,11 +25,11 @@ public:
 
 	struct TInput
 	{
-		std::string libName;
-		std::string param;
-		std::string type; 
-		int         variant_use;
-    bool        useConsole;
+		std::string              libName;
+    std::vector<std::string> param;
+		std::string              type; 
+		int                      variant_use;
+    bool                     useConsole;
 		TInput()
 		{
 			variant_use = 0;
@@ -45,3 +46,5 @@ public:
 protected:
 	TInput mInput;
 };
+
+#endif

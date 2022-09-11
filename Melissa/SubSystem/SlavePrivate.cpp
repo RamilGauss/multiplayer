@@ -41,11 +41,6 @@ unsigned char TSlavePrivate::GetLoadProcent()
   return mLoadProcent;
 }
 //----------------------------------------------------------------------
-void TSlavePrivate::SendToClient(unsigned int id_client, void* data, int size, bool check )
-{
-
-}
-//----------------------------------------------------------------------
 TSlavePrivate::tState TSlavePrivate::GetState()
 {
   return mState;
@@ -98,24 +93,29 @@ void TSlavePrivate::RemoveClient(list<unsigned int>& l_id_client)
   mCountFreeClient -= l_id_client.size();
 }
 //----------------------------------------------------------------------
-void TSlavePrivate::AddGroupClient(int count)
+void TSlavePrivate::AddDeltaGroupClient(int count)
 {
   mCountGroupClient += count;
   mCountFreeClient  -= count;
 }
 //----------------------------------------------------------------------
-void TSlavePrivate::AddFreeClient(int count)
+void TSlavePrivate::AddDeltaFreeClient(int count)
 {
   mCountFreeClient  += count;
   mCountGroupClient -= count;
 }
 //----------------------------------------------------------------------
-int TSlavePrivate::GetCountClient(std::list<unsigned int>& l_id_client)
+int TSlavePrivate::GetCountClient(list<unsigned int>& l_id_client)
 {
   int cnt = 0;
   BOOST_FOREACH( unsigned int id, l_id_client)
     if(mSetClientKey.find(id)!=mSetClientKey.end())
       cnt++;
   return cnt;
+}
+//----------------------------------------------------------------------
+void TSlavePrivate::GetVectorID_client(vector<unsigned int>& vID_client)
+{
+
 }
 //----------------------------------------------------------------------

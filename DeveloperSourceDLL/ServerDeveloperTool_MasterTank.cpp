@@ -15,6 +15,8 @@ See for more information License.h.
 #include "NetSystem.h"
 #include "GlobalParam.h"
 #include "../GUI/IGUI.h"
+#include "MasterForm.h"
+#include "../QtLib/IQtLib.h"
 
 using namespace std;
 using namespace nsMelissa;
@@ -24,6 +26,8 @@ TServerDeveloperTool_MasterTank::TServerDeveloperTool_MasterTank()
   mCounterClient = 0;
 
   mMakerObjectCommon = new TMakerObjectCommon;
+  
+  mMasterForm = NULL;
 }
 //---------------------------------------------------------------------------------
 TServerDeveloperTool_MasterTank::~TServerDeveloperTool_MasterTank()
@@ -31,18 +35,22 @@ TServerDeveloperTool_MasterTank::~TServerDeveloperTool_MasterTank()
   delete mMakerObjectCommon;
 }
 //---------------------------------------------------------------------------------
-void TServerDeveloperTool_MasterTank::Init(TComponentServer* pComponent, const char* arg)
+void TServerDeveloperTool_MasterTank::Init(TComponentServer* pComponent, vector<string>& arg)
 {
   InitLog();
   mComponent = *pComponent;
 
-  unsigned int ip = boost::asio::ip::address_v4::from_string(ns_getSelfIP(0)).to_ulong();
+  ParseCmd(arg);
 
-  bool resOpen = mComponent.mNet.Master->Open(MASTER_PORT);
+  TInputCmdDevTool::TInput input;
+  mInputCmd.Get(input);
+
+  bool resOpen = mComponent.mNet.Master->Open(input.port);
   BL_ASSERT(resOpen);
 
-  // подстроиться
-  mComponent.mGUI->Resize();
+  mComponent.mNet.Master->ConnectUp(input.ip, SUPERSERVER_PORT);
+
+  mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_MasterTank::InitQtForm,this);
 }
 //---------------------------------------------------------------------------------
 int TServerDeveloperTool_MasterTank::GetTimeRefreshMS()// как часто происходит вызов Refresh()
@@ -81,6 +89,9 @@ void TServerDeveloperTool_MasterTank::Event(nsEvent::TEvent* pEvent)
       break;
     case ID_SRC_EVENT_MANAGER_OBJECT_COMMON:
       break;
+    case ID_SRC_EVENT_QT_LIB:
+      HandleFromQt(pEvent);
+      break;
   }
 }
 //---------------------------------------------------------------------------------------------
@@ -91,16 +102,19 @@ void TServerDeveloperTool_MasterTank::HandleFromMelissa(TBaseEvent* pBE)
   {
     case TBase::eConnectDown:
       sEvent = "ConnectDown";
-      TryLogin((TEventTryLogin*)pBE);
+      ConnectDown((TEventConnectDown*)pBE);
       break;
     case TBase::eDisconnectDown:
       sEvent = "DisconnectDown";
+      DisconnectDown((TEventDisconnectDown*)pBE);
       break;
     case TBase::eConnectUp:
       sEvent = "ConnectUp";
+      ConnectUp((TEventConnectUp*)pBE);
       break;
     case TBase::eDisconnectUp:
       sEvent = "DisconnectUp";
+      DisconnectUp((TEventDisconnectUp*)pBE);
       break;
     case TBase::eError:
       sEvent = "Error";
@@ -119,6 +133,7 @@ void TServerDeveloperTool_MasterTank::HandleFromMelissa(TBaseEvent* pBE)
       break;
     case TBase::eTryLogin:
       sEvent = "TryLogin";
+      TryLogin((TEventTryLogin*)pBE);
       break;
     case TBase::eResultLogin:
       sEvent = "ResultLogin";
@@ -133,7 +148,7 @@ void TServerDeveloperTool_MasterTank::HandleFromMelissa(TBaseEvent* pBE)
       sEvent = "DestroyGroup";
       break;
   }
-  GetLogger()->Get("Inner")->WriteF_time("Melissa: %s.\n",sEvent.data());
+  GetLogger("Inner")->WriteF_time("Melissa: %s.\n",sEvent.data());
 }
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_MasterTank::InitLog()
@@ -145,6 +160,22 @@ void TServerDeveloperTool_MasterTank::InitLog()
   }
 }
 //---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_MasterTank::ConnectDown(TEventConnectDown* pEvent)
+{
+  unsigned int* pID = new unsigned int(pEvent->id_session);
+  mListID_SessionAdd.Add(pID);
+
+  mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_MasterTank::AddSlaveQt,this);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_MasterTank::DisconnectDown(TEventDisconnectDown* pEvent)
+{
+  unsigned int* pID = new unsigned int(pEvent->id_session);
+  mListID_SessionDelete.Add(pID);
+
+  mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_MasterTank::DeleteSlaveQt,this);
+}
+//---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_MasterTank::TryLogin(TEventTryLogin* pEvent)
 {
   mCounterClient++;
@@ -152,8 +183,93 @@ void TServerDeveloperTool_MasterTank::TryLogin(TEventTryLogin* pEvent)
   sprintf(s,"hello, Client %u",mCounterClient);
   string result = s;
   mComponent.mNet.Master->SetResultLogin(true, 
-                                         pEvent->id_session, 
-                                         mCounterClient,
-                                         (void*)result.data(),result.length());
+    pEvent->id_session, 
+    mCounterClient,
+    (void*)result.data(),result.length());
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_MasterTank::InitQtForm()
+{
+  mMasterForm = new MasterForm;
+  mMasterForm->show();
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_MasterTank::HandleFromQt(nsEvent::TEvent* pEvent)
+{
+  int type = *((int*)pEvent->container.GetPtr());
+  switch(type)
+  {
+    case 0:
+      Exit();
+      break;
+    default:;
+  }
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_MasterTank::ConnectUp(TEventConnectUp* pBE)
+{
+  mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_MasterTank::ConnectUpQt,this);
+  // ###
+  //char s = 'm';
+  //TBreakPacket bp;
+  //bp.PushBack(&s, sizeof(s));
+  //mComponent.mNet.Master->SendUp(bp);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_MasterTank::DisconnectUp(TEventDisconnectUp* pBE)
+{
+  mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_MasterTank::DisconnectUpQt,this);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_MasterTank::ConnectUpQt()
+{
+  mMasterForm->SetConnect(true);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_MasterTank::DisconnectUpQt()
+{
+  mMasterForm->SetConnect(false);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_MasterTank::ParseCmd(std::vector<std::string>& arg)
+{
+  TInputCmdDevTool::TInput input;
+  input.ip = boost::asio::ip::address_v4::from_string(ns_getSelfIP(0)).to_ulong();
+  input.port = MASTER_PORT;
+ 
+  mInputCmd.SetDefParam(input);
+  mInputCmd.SetArg(arg);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_MasterTank::AddSlaveQt()
+{
+  unsigned int** ppFirst = mListID_SessionAdd.GetFirst();
+  while(ppFirst)
+  {
+    unsigned int ID = *(*ppFirst);
+
+    MasterForm::TDesc desc;
+    desc.id_session = ID;
+    bool resInfoSession = mComponent.mNet.Master->GetInfoSession(ID, desc.ip_port);
+    BL_ASSERT(resInfoSession);
+    mMasterForm->Add(desc);
+    // следующий ID
+    mListID_SessionAdd.Remove(ppFirst);
+    ppFirst = mListID_SessionAdd.GetFirst();
+  }
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_MasterTank::DeleteSlaveQt()
+{
+  unsigned int** ppFirst = mListID_SessionDelete.GetFirst();
+  while(ppFirst)
+  {
+    unsigned int ID = *(*ppFirst);
+
+    mMasterForm->Delete(ID);
+    // следующий ID
+    mListID_SessionDelete.Remove(ppFirst);
+    ppFirst = mListID_SessionDelete.GetFirst();
+  }
 }
 //---------------------------------------------------------------------------------------------

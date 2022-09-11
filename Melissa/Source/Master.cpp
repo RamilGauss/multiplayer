@@ -14,12 +14,14 @@ See for more information License.h.
 #include "BL_Debug.h"
 #include "GroupClientPrivate.h"
 #include "Events.h"
+
 #include "ScenarioLoginClient.h"
 #include "ScenarioLoginSlave.h"
 #include "ScenarioLoginMaster.h"
 #include "ScenarioFlow.h"
 #include "ScenarioRecommutationClient.h"
 #include "ScenarioSynchroSlave.h"
+#include "ScenarioDisconnectSlave.h"
 
 
 using namespace std;
@@ -47,8 +49,8 @@ bool TMaster::TryCreateGroup(list<unsigned int>& l_id_client, unsigned int& id_g
     if(pClient->GetGroupID()!=-1)
     {
       // генераци€ ошибки
-      GetLogger()->Get(STR_NAME_MELISSA)->
-        WriteF_time("TMaster::TryCreateGroup() клиент(%u) уже находитс€ в группе id=%u.\n",
+      GetLogger(STR_NAME_MELISSA)->
+        WriteF_time("TMaster::TryCreateGroup() Client(%u) is entered in group id=%u.\n",
                     id,pClient->GetGroupID());
       return false;
     }
@@ -56,8 +58,8 @@ bool TMaster::TryCreateGroup(list<unsigned int>& l_id_client, unsigned int& id_g
     if(pClient->GetState()==TClientForMasterPrivate::eLogin)
     {
       // генераци€ ошибки
-      GetLogger()->Get(STR_NAME_MELISSA)->
-        WriteF_time("TMaster::TryCreateGroup() клиент(%u) находитс€ в процессе авторизации.\n",id);
+      GetLogger(STR_NAME_MELISSA)->
+        WriteF_time("TMaster::TryCreateGroup() Client(%u) is been authorized.\n",id);
       return false;
     }
   }
@@ -74,7 +76,7 @@ void TMaster::DestroyGroup(unsigned int id_group)
   BOOST_FOREACH(TClientForMasterPrivate* pClient, pGroup->GetClient())
   {
     pClient->SetGroupID(-1);
-    pClient->GetSlave()->AddFreeClient(1);
+    pClient->GetSlave()->AddDeltaFreeClient(1);
   }
 
   mMapIDGroupClient.erase(id_group);
@@ -93,11 +95,11 @@ void TMaster::LeaveGroup(unsigned int id_client)
   unsigned int id_group = pClient->GetGroupID();
   if(id_group==-1)
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TMaster::LeaveGroup() клиент id=%u не состоит в группе.\n",id_client);
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TMaster::LeaveGroup() Client(%u) don't belong to group.\n",id_client);
     return;
   }
-  pClient->GetSlave()->AddFreeClient(1);
+  pClient->GetSlave()->AddDeltaFreeClient(1);
   pClient->SetGroupID(-1);// не состоит ни в одной группе
 
   TGroupClientPrivate* pGroup = GetGroupByKey(id_group);
@@ -136,8 +138,8 @@ void TMaster::SetResultLogin(bool res, unsigned int id_session,
   if(GetClientByKey(id_client))
   {
     // генераци€ ошибки
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TMaster::SetResultLogin() регистраци€ клиента по уже заданному ключу=%u.\n",id_client);
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TMaster::SetResultLogin() register Client by busy key=%u.\n",id_client);
     return;
   }
   mMapID_SessionClientWait.erase(id_session);
@@ -156,26 +158,12 @@ unsigned int TMaster::GetSlaveSessionByGroup(unsigned int id_group)
     return -1;
   if(pGroup->GetClient().size()==0)
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TMaster::GetSlaveSessionByGroup() пуста€ группа id=%u.\n",id_group);
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TMaster::GetSlaveSessionByGroup() empty group id=%u.\n",id_group);
     return -1;
   }
   TClientForMasterPrivate* pClient = *(pGroup->GetClient().begin());
   return pClient->GetSlave()->GetID_Session();
-}
-//-------------------------------------------------------------------------
-void TMaster::SendToClient(unsigned int id_client, void* data, int size, bool check )
-{
-  TClientForMasterPrivate* pClient = GetClientByKey(id_client);
-  if(pClient==NULL)
-    return;
-
-  if(pClient->GetSlave()==NULL)
-  {
-    BL_FIX_BUG();
-    return;
-  }
-  pClient->GetSlave()->SendToClient(id_client, data, size, check);
 }
 //-------------------------------------------------------------------------
 void TMaster::DisconnectInherit(unsigned int id_session)
@@ -203,8 +191,8 @@ void TMaster::DisconnectInherit(unsigned int id_session)
     DisconnectSlave(pSlave);
     return;
   }
-  GetLogger()->Get(STR_NAME_MELISSA)->
-    WriteF_time("TMaster::DisconnectInherit() нет такой сессии id=%u.\n",id_session);
+  GetLogger(STR_NAME_MELISSA)->
+    WriteF_time("TMaster::DisconnectInherit() session not exist id=%u.\n",id_session);
   BL_FIX_BUG();
 }
 //-------------------------------------------------------------------------
@@ -217,14 +205,14 @@ bool TMaster::GetDescDown(int index, void* pDesc, int& sizeDesc)
 {
   if(sizeDesc<sizeof(TDescDownMaster))
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TMaster::GetDescDown() размер буфера меньше размера структуры.\n");
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TMaster::GetDescDown() size of buffer less then size of structure.\n");
     return false;
   }
   if(index>=GetCountDown())
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TMaster::GetDescDown() индекс вне массива.\n");
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TMaster::GetDescDown() index is out of band.\n");
     return false;
   }
   TMapUintSlavePtrIt it = mMapID_SessionSlave.begin();
@@ -283,8 +271,8 @@ TClientForMasterPrivate* TMaster::GetClientByIDSessionWait(unsigned int id)
   TMapUintUintIt fit = mIDSessionKey.find(id);
   if(fit==mIDSessionKey.end())
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TMaster::GetClientByIDSessionWait() клиент id=%u не найден.\n",id);
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TMaster::GetClientByIDSessionWait() Client id=%u is not founded.\n",id);
     return NULL;
   }
   return GetClientByID(mMapID_SessionClientWait, fit->second);
@@ -300,8 +288,8 @@ TClientForMasterPrivate* TMaster::GetClientByID(TMapUintClientPtr& m, unsigned i
   TMapUintClientPtrIt fit = m.find(id);
   if(fit!=m.end())
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TMaster::GetClientByID() клиент id=%u не найден.\n",id);
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TMaster::GetClientByID() Client id=%u is not founded.\n",id);
     return fit->second;
   }
   return NULL;
@@ -354,8 +342,8 @@ TGroupClientPrivate* TMaster::GetGroupByKey(unsigned int key)
   TMapUintGroupClientPtrIt fit = mMapIDGroupClient.find(key);
   if(mMapIDGroupClient.end()==fit)
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TMaster::GetGroupByKey() группа key=%u не найдена.\n",key);
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TMaster::GetGroupByKey() group key=%u is not founded.\n",key);
     return NULL;
   }
   return fit->second;
@@ -366,8 +354,8 @@ TSlavePrivate* TMaster::GetSlaveByIDSession(unsigned int id)
   TMapUintSlavePtrIt fit = mMapID_SessionSlave.find(id);
   if(mMapID_SessionSlave.end()==fit)
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TMaster::GetSlaveByIDSession() Slave id=%u не найден.\n",id);
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TMaster::GetSlaveByIDSession() Slave id=%u is not founded.\n",id);
     return NULL;
   }
   return fit->second;
@@ -380,12 +368,12 @@ void TMaster::Done()
 //-------------------------------------------------------------------------
 void TMaster::DisconnectSuperServer()
 {
+  mID_SessionUp = INVALID_HANDLE_SESSION;
+  flgConnectUp  = false;
+
   TEventDisconnectUp event;
   event.id_session = mID_SessionUp;
   AddEventCopy(&event, sizeof(event));
-
-  mID_SessionUp = INVALID_HANDLE_SESSION;
-  flgConnectUp  = false;
 }
 //-------------------------------------------------------------------------
 void TMaster::DisconnectClientWait(TClientForMasterPrivate* pClient)
@@ -400,13 +388,19 @@ void TMaster::DisconnectClient(TClientForMasterPrivate* pClient)
 //-------------------------------------------------------------------------
 void TMaster::DisconnectSlave(TSlavePrivate* pSlave)
 {
-  // все кто сид€т на Slave или будут туда перекоммутированы
-  TEventDisconnectDown event;
-  event.id_session = pSlave->GetID_Session();
-  AddEventCopy(&event, sizeof(event));
+  // составить список клиентов, которые сидели на Slave
+  std::vector<unsigned int> vID_client;
+  pSlave->GetVectorID_client(vID_client);
+  mControlSc->mDisSlave->SendFromMasterToSuperServer(vID_client);
+
+  unsigned int id_slave = pSlave->GetC()->GetID_Session();
 
   mMapID_SessionSlave.erase(pSlave->GetID_Session());
   delete pSlave;
+  // все кто сид€т на Slave или будут туда перекоммутированы
+  TEventDisconnectDown event;
+  event.id_session = id_slave;
+  AddEventCopy(&event, sizeof(event));
 }
 //-------------------------------------------------------------------------
 bool TMaster::EvalCreateGroupNow(list<unsigned int>& l_id_client, unsigned int& id_group)
@@ -504,8 +498,8 @@ void TMaster::NeedContextLoginClient(unsigned int id_session)
   if(GetClientByIDSessionWait(id_session))
   {
     // внутренн€€ ошибка
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TMaster::LoginClient() повторна€ попытка авторизации.\n");
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TMaster::LoginClient() against try authorized.\n");
     return;
   }
   TClientForMasterPrivate* pClient = new TClientForMasterPrivate;
@@ -523,8 +517,8 @@ void TMaster::NeedContextLoginSlave(unsigned int id_session)
   if(GetSlaveByIDSession(id_session))
   {
     // внутренн€€ ошибка
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TMaster::LoginSlave() повторна€ попытка авторизации.\n");
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TMaster::LoginSlave() against try authorized.\n");
     return;
   }
   TSlavePrivate* pSlave = new TSlavePrivate;

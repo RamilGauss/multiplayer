@@ -95,7 +95,7 @@ TManagerResourceDX::TypeResource TManagerResourceDX::DefType(const wchar_t* sPat
 
   USES_CONVERSION;
   
-  GetLogger()->Get(STR_NAME_GE)->WriteF_time("Загрузчик ресурсов. Неопределенное расширение. %s\n",W2A(sPath));
+  GetLogger(STR_NAME_GE)->WriteF_time("Загрузчик ресурсов. Неопределенное расширение. %s\n",W2A(sPath));
   return eUndef;
 }
 //--------------------------------------------------------------------

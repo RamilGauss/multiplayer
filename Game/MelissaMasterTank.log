@@ -1,0 +1,4 @@
+2013_10_03 11:46:45.390
+	TMaster::GetSlaveByIDSession() Slave id=1 is not founded.
+2013_10_03 11:46:58.984
+	TMaster::GetClientByIDSessionWait() Client id=1 is not founded.

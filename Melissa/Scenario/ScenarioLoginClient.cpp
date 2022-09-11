@@ -37,8 +37,8 @@ void TScenarioLoginClient::Connect(unsigned int ip, unsigned short port,
   if(Begin()==false)
   {
     // генерация ошибки
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TScenarioLoginClient::Connect() сценарий неактивен.\n");
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TScenarioLoginClient::Connect() scenario is not active.\n");
     BL_FIX_BUG();
     return;
   }
@@ -81,8 +81,8 @@ void TScenarioLoginClient::Start()
   if(Begin()==false)
   {
     // генерация ошибки
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TScenarioLoginClientByMaster1::Start() сценарий неактивен.\n");
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TScenarioLoginClientByMaster1::Start() scenario is not active.\n");
 
     BL_FIX_BUG();
     return;
@@ -100,7 +100,7 @@ void TScenarioLoginClient::Reject(void* resForClient, int sizeResClient)
   TBreakPacket bp;
   THeaderRejectFromMaster h;
   //h.Set(resForClient, sizeResClient);
-  bp.PushBack((char*)&h, sizeof(h));
+  bp.PushFront((char*)&h, sizeof(h));
   Context()->GetMS()->Send(Context()->GetID_Session(), bp);
 }
 //--------------------------------------------------------------
@@ -113,7 +113,7 @@ void TScenarioLoginClient::Accept(unsigned int key, void* resForClient, int size
   h.key = key;
   //h.Set(resForClient, sizeResClient);
   TBreakPacket bp;
-  bp.PushBack((char*)&h, sizeof(h));
+  bp.PushFront((char*)&h, sizeof(h));
   Context()->GetMS()->Send(Context()->GetID_Session(), bp);
 }
 //--------------------------------------------------------------

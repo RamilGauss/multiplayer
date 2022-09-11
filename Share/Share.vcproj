@@ -122,12 +122,13 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EI=__declspec(dllexport);SHARE_EXPORTS;_WIN32_WINNT=0x0501"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EI=__declspec(dllexport);SHARE_EXPORTS;_WIN32_WINNT=0x0501"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4996;4251"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

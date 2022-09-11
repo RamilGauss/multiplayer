@@ -11,7 +11,7 @@
 			<DebugSettings
 				Command="$(TargetPath)"
 				WorkingDirectory=""
-				CommandArguments="-v 0 -r s -d ..\\DeveloperToolDLL\\DeveloperDLL.dll -p &quot;ip=192.168.23.226, port=1000&quot;"
+				CommandArguments="-c -v 0 -r m -d ..\\DeveloperToolDLL\\DeveloperDLL.dll"
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"
@@ -39,7 +39,7 @@
 			<DebugSettings
 				Command="$(TargetPath)"
 				WorkingDirectory=""
-				CommandArguments="-v 0 -r c -d ..\\DeveloperToolDLL\\DeveloperDLL.dll -p &quot;ip=192.168.23.226, port=1000&quot;"
+				CommandArguments="-v 0 -r s -d ..\\DeveloperToolDLL\\DeveloperDLL.dll -p &quot;ip=192.168.23.226, port=1000&quot;"
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"

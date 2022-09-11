@@ -37,7 +37,7 @@ TManagerModelDX::~TManagerModelDX()
 //--------------------------------------------------------------------------------------
 TModelDX* TManagerModelDX::Load(unsigned int id)
 {
-  GetLogger()->Get(STR_NAME_GE)->WriteF_time("Начало загрузки модели ID=%u\n",id);
+  GetLogger(STR_NAME_GE)->WriteF_time("Начало загрузки модели ID=%u\n",id);
 
   string sPath = mMapPathModel[id];
   TModelDX* pModel = NULL;
@@ -48,7 +48,7 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
     USES_CONVERSION;
     if(pModel->Init(mD3dDevice,A2W(sPath.data()))==false)
     {
-      GetLogger()->Get(STR_NAME_GE)->WriteF_time("Не удалось загрузить модель sPath=%s, id=%u\n",sPath.data(),id);
+      GetLogger(STR_NAME_GE)->WriteF_time("Не удалось загрузить модель sPath=%s, id=%u\n",sPath.data(),id);
       delete pModel;
       return NULL;
     }
@@ -58,11 +58,11 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
   }
   else
   {
-    GetLogger()->Get(STR_NAME_GE)->WriteF_time("Не удалось найти модель sPath=%s, id=%u\n",sPath.data(),id);
+    GetLogger(STR_NAME_GE)->WriteF_time("Не удалось найти модель sPath=%s, id=%u\n",sPath.data(),id);
     BL_FIX_BUG();
   }
   
-  GetLogger()->Get(STR_NAME_GE)->WriteF_time("Конец загрузки модели ID=%u\n",id);
+  GetLogger(STR_NAME_GE)->WriteF_time("Конец загрузки модели ID=%u\n",id);
   return pModel;
 }
 //--------------------------------------------------------------------------------------
@@ -102,14 +102,14 @@ bool TManagerModelDX::LoadListPath()
   FindAbsPath((char*)GetStorePathResources()->GetSecond("model"),sAbsPath,sizeof(sAbsPath));
   if(loader.Load(sAbsPath,&mMapPathModel)==false)
   {
-    GetLogger()->Get(STR_NAME_GE)->WriteF_time("Не удалось загрузить список моделей.\n");
+    GetLogger(STR_NAME_GE)->WriteF_time("Не удалось загрузить список моделей.\n");
     BL_FIX_BUG();
     return false;
   }
   
   PrepareForDX();
 
-  GetLogger()->Get(STR_NAME_GE)->WriteF_time("Список моделей загружен успешно.\n");
+  GetLogger(STR_NAME_GE)->WriteF_time("Список моделей загружен успешно.\n");
   return true;
 }
 //--------------------------------------------------------------------------------------

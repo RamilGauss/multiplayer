@@ -41,7 +41,7 @@ using namespace nsEvent;
 
 TClientGame::TClientGame()
 {
-
+  mType = eClient;
 }
 //------------------------------------------------------------------------
 TClientGame::~TClientGame()
@@ -64,11 +64,11 @@ bool TClientGame::Work()
   return true;
 }
 //------------------------------------------------------------------------
-bool TClientGame::Init(int variant_use, const char* sNameDLL, const char* arg)
+bool TClientGame::Init(int variant_use, const char* sNameDLL, vector<string>& arg)
 {
   // загрузка DLL
   RET_FALSE(LoadDLL(variant_use, sNameDLL))
-  if(mGetClientDeveloperTool==NULL)// политика: нет DLL - нет движка.
+  if(mClientDeveloperTool==NULL)// политика: нет DLL - нет движка.
     return false;
   
   // подготовить пути для ресурсов

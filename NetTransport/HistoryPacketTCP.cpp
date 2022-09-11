@@ -53,7 +53,7 @@ int THistoryPacketTCP::SearchBegin(int readSize, char* buffer, int beginPos)
   THeaderTCP* pHeader = (THeaderTCP*)&buffer[beginPos];
   if(pHeader->header!=header.header)
   {
-    GetLogger()->Get(STR_NAME_NET_TRANSPORT)->
+    GetLogger(STR_NAME_NET_TRANSPORT)->
       WriteF_time("THistoryPacketTCP::SearchBegin FAIL.\n");
   }
 
@@ -79,7 +79,7 @@ int THistoryPacketTCP::SearchSize(int readSize, char* buffer, int beginPos)
   THeaderTCP* pHeader = (THeaderTCP*)c.GetPtr();
   if(pHeader->header!=header.header)
   {
-    GetLogger()->Get(STR_NAME_NET_TRANSPORT)->
+    GetLogger(STR_NAME_NET_TRANSPORT)->
       WriteF_time("THistoryPacketTCP::SearchSize FAIL.\n");
   }
 

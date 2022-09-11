@@ -43,8 +43,8 @@ void TSlave::SaveContext(unsigned int id_session, void* data, int size)
     mControlSc->mRcm->SaveContext(data, size);// это уже вызов функции сценария
   }
   else
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TSlave::SaveContext(%u) запись не найдена.\n", id_session);
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TSlave::SaveContext(%u) node is not founded.\n", id_session);
 }
 //-------------------------------------------------------------------------
 unsigned int TSlave::GetClientKeyBySession(unsigned int id_session)
@@ -95,14 +95,14 @@ bool TSlave::GetDescDown(int index, void* pDesc, int& sizeDesc)
 {
   if(sizeDesc<sizeof(TDescDownSlave))
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TSlave::GetDescDown() размер буфера меньше размера структуры.\n");
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TSlave::GetDescDown() size of buffer less then size of structure.\n");
     return false;
   }
   if(index>=GetCountDown())
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TSlave::GetDescDown() индекс вне массива.\n");
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TSlave::GetDescDown() index is out of band.\n");
     return false;
   }
   TDescDownSlave* pDescDownSlave = (TDescDownSlave*)pDesc;
@@ -167,8 +167,8 @@ void TSlave::RemoveClientPrivate(unsigned int id_session)
   TClientPrivate* pClient = GetClientByID_Session(id_session);
   if(pClient==NULL)
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TSlave::RemoveClientPrivate(%u) запись не найдена.\n", id_session);
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TSlave::RemoveClientPrivate(%u) node was not founded.\n", id_session);
     return;
   }
   mMapID_SessionClient.erase(pClient->GetID_SessionDown());
@@ -182,8 +182,8 @@ TClientPrivate* TSlave::GetClientByUint(TMapUintPtr& m, unsigned int k)
   TMapUintPtrIt fit = m.find(k);
   if(m.end()==fit)
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TSlave::GetClientByUint(%u) запись не найдена.\n", k);
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TSlave::GetClientByUint(%u) node was not founded.\n", k);
     return NULL;
   }
   return fit->second;
@@ -208,8 +208,8 @@ void TSlave::SendDown(unsigned int id_session, TBreakPacket bp, bool check)
     mControlSc->mFlow->SendDown(bp, check);
   }
   else
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TSlave::SendDown(%u) запись не найдена.\n", id_session);
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TSlave::SendDown(%u) node was not founded.\n", id_session);
 }
 //-------------------------------------------------------------------------
 void TSlave::EndLoginClient(IScenario*)

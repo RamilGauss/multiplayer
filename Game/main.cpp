@@ -116,7 +116,7 @@ int main(int argc, char** argv)
   if(pGame)
 	  pGame->Work(inputTornado.variant_use, 
                 inputTornado.libName.data(), 
-                inputTornado.param.data());
+                inputTornado.param);
   delete pGame;
   pGame = NULL;
   return 0;
@@ -177,11 +177,11 @@ void ViewHowUse()
     "Ключ -v вариант, который будет использован из библиотеки,\n"
     "по-умолчанию используется 0, (см. GetXXXDeveloperTool(int variant).\n"
     "\n"
-    "Ключ -c показывает консоль. Актуально только для Windows.\n"
+    "Ключ -c показывает консоль. Ключ актуален только для Windows.\n"
     "\n"
     "Ключи -d и -r являются обязательными.\n"
     "\n"
     "Например:\n"
-    "Tornado.exe -v 0 -r c -d ..\\DeveloperToolDLL\\ViewerModel.dll -p \"ip=192.168.23.226 port=1000\"\n");
+    "Tornado.exe -v 0 -r c -d ..\\DeveloperToolDLL\\ViewerModel.dll -p ip 192.168.23.226 port 1000\n");
 }
 //-------------------------------------------------------------------------------

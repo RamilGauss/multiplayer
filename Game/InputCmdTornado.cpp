@@ -52,8 +52,12 @@ bool TInputCmdTornado::SetArg(vector<string>& vecArgv)
 	}
 	//-------------------------------------------------
 	int cP = mCmdParam.GetCountValueByKey(KEY_PARAM);
-	if(cP==1)
-		mCmdParam.GetByKey(KEY_PARAM, 0, mInput.param);
+	for(int i = 0 ; i < cP ; i++ )
+  {
+    string sParam;
+    mCmdParam.GetByKey(KEY_PARAM, i, sParam);
+    mInput.param.push_back(sParam);
+  }
   //-------------------------------------------------
   if(mCmdParam.IsKey(KEY_CONSOLE))
     mInput.useConsole = true;

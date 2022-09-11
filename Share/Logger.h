@@ -30,7 +30,7 @@ protected:
   TLogger():                            // запрет на создание
          TOnly_N_Object(1,NAME_CLASS)
          {
-           flgPrintf = false;
+           flgPrintf = true;
            flgEnable = true;
            flgBuffer = true;
          }// только один объект
@@ -58,6 +58,7 @@ protected:
 };
 
 extern SHARE_EI TLogger* GetLogger();
+extern SHARE_EI TSaveOnHDD* GetLogger(const char* nameLog);
 
 
 #endif 

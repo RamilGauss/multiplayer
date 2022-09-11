@@ -24,12 +24,20 @@ TContainerContextSc::TContainerContextSc()
   mListContext.push_back(&mRcm         );
   mListContext.push_back(&mSynchroSlave);
   mListContext.push_back(&mSendToClient);
+
+  mID_Session = 0;
 }
 //------------------------------------------------------------
 void TContainerContextSc::SetID_Session(unsigned int id_session)
 {
+  mID_Session = id_session;
   BOOST_FOREACH(IContextScenario* p,mListContext)
     p->SetID_Session(id_session);
+}
+//------------------------------------------------------------
+unsigned int TContainerContextSc::GetID_Session()
+{
+  return mID_Session;
 }
 //------------------------------------------------------------
 void TContainerContextSc::SetMCSc(TManagerContextSc* pMCSc)

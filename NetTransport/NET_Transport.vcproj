@@ -120,7 +120,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="..\Share;.\Boost_Implementation;.\TCP_UDP_Implementation;.\UDP_Implementation;.\"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;NET_TRANSPORT_EI=__declspec(dllexport);NET_TRANSPORT_EXPORTS;FAST_NET_TRANSPORT;_WIN32_WINNT=0x0501"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;NET_TRANSPORT_EI=__declspec(dllexport);NET_TRANSPORT_EXPORTS;FAST_NET_TRANSPORT;_WIN32_WINNT=0x0501"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"

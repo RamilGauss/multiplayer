@@ -46,7 +46,7 @@ namespace nsMelissa
 		};
 		virtual int  GetCountDown();
 		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);// pDesc имеет тип TDescDownSlave
-    virtual void SendDown(unsigned int id_session, TBreakPacket bp, bool check);
+    virtual void SendDown(unsigned int id_session, TBreakPacket bp, bool check = true);
     // ActiveServer      
     virtual void ConnectUp(unsigned int ip, unsigned short port);
   protected:

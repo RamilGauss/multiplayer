@@ -22,7 +22,9 @@ See for more information License.h.
 #include "Logger.h"
 #include "Base.h"
 #include "NameSrcEventID.h"
+#include "IQtLib.h"
 
+using namespace std;
 using namespace nsEvent;
 
 IGame::IGame()
@@ -58,31 +60,24 @@ bool IGame::LoadDLL(int variant_use, const char* sNameDLL)
   if(mClientDeveloperTool!=NULL||
      mServerDeveloperTool!=NULL)
   {
-    GetLogger()->Get(STR_GAME)->WriteF_time("LoadDLL() warning, object was loaded.\n");
+    GetLogger(STR_GAME)->WriteF_time("LoadDLL() warning, object was loaded.\n");
     BL_FIX_BUG();
     return true;
   }
   if(mLoaderDLL->Init(sNameDLL)==false)
   {
-    GetLogger()->Get(STR_GAME)->WriteF_time("LoadDLL() FAIL init.\n");
+    GetLogger(STR_GAME)->WriteF_time("LoadDLL() FAIL init.\n");
     BL_FIX_BUG();
     return false;
   }
   mFreeDeveloperTool = (FuncFreeDeveloperTool)mLoaderDLL->Get(StrFreeDeveloperTool);
   if(mFreeDeveloperTool==NULL)
   {
-    GetLogger()->Get(STR_GAME)->WriteF_time("LoadDLL() FAIL load FuncFree.\n");
+    GetLogger(STR_GAME)->WriteF_time("LoadDLL() FAIL load FuncFree.\n");
     BL_FIX_BUG();
     return false;
   }
-  mGetClientDeveloperTool = (FuncGetClientDeveloperTool)mLoaderDLL->Get(StrGetClientDeveloperTool);
-  mGetServerDeveloperTool = (FuncGetServerDeveloperTool)mLoaderDLL->Get(StrGetServerDeveloperTool);
-
-  if(mGetClientDeveloperTool)
-    mClientDeveloperTool = mGetClientDeveloperTool(variant_use);
-  if(mGetServerDeveloperTool)
-    mServerDeveloperTool = mGetServerDeveloperTool(variant_use);
-
+  SetupFuncAndDevToolByType(variant_use);
   // в конструкторе вызывать нельзя, надо вызвать здесь
   MakeVectorModule();
   return true;
@@ -92,7 +87,7 @@ void IGame::Init()
 {
   if(ns_Init()==false)
   {
-    GetLogger()->Get(STR_GAME)->WriteF_time("Error ns_Init().\n");
+    GetLogger(STR_GAME)->WriteF_time("Error ns_Init().\n");
     BL_FIX_BUG();
   }
 }
@@ -107,9 +102,10 @@ void IGame::InitLog()
 	GetLogger()->Register(STR_NAME_MELISSA);
 	GetLogger()->Register(STR_NAME_ROBERT);
 	GetLogger()->Register(STR_NAME_MOC);
+  GetLogger()->Register(STR_NAME_QT_LIB);
 }
 //------------------------------------------------------------------------
-void IGame::Work(int variant_use, const char* sNameDLL, const char* arg)// начало работы
+void IGame::Work(int variant_use, const char* sNameDLL, vector<string>& arg)// начало работы
 {
   if(Init(variant_use,sNameDLL,arg)==false)
     return;
@@ -165,6 +161,35 @@ void IGame::HandleEventByDeveloper()
     delete pEvent;
     pEvent = GetEvent();
   }
+}
+//------------------------------------------------------------------------
+void IGame::SetupFuncAndDevToolByType(int variant_use)
+{
+  // определить адрес функции
+  switch(mType)
+  {
+    case eClient:
+      mGetClientDeveloperTool = 
+        (FuncGetClientDeveloperTool)mLoaderDLL->Get(StrGetClientDeveloperTool);
+      break;
+    case eSlave:
+      mGetServerDeveloperTool = 
+        (FuncGetServerDeveloperTool)mLoaderDLL->Get(StrGetSlaveDeveloperTool);
+      break;
+    case eMaster:
+      mGetServerDeveloperTool = 
+        (FuncGetServerDeveloperTool)mLoaderDLL->Get(StrGetMasterDeveloperTool);
+      break;
+    case eSuperServer:
+      mGetServerDeveloperTool = 
+        (FuncGetServerDeveloperTool)mLoaderDLL->Get(StrGetSuperServerDeveloperTool);
+      break;
+  }
+  // если адрес существует, то создать объект
+  if(mGetClientDeveloperTool)
+    mClientDeveloperTool = mGetClientDeveloperTool(variant_use);
+  if(mGetServerDeveloperTool)
+    mServerDeveloperTool = mGetServerDeveloperTool(variant_use);
 }
 //------------------------------------------------------------------------
 void TDescThread::Work()

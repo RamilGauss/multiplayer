@@ -22,7 +22,7 @@ namespace nsMelissa
 		// всегда с гарантией доставки, т.к. тогда не имеет смысла так долго пересылать (слишком много затрат сил, а гарантии нет?)
     virtual void SendByClientKey(std::list<unsigned int>& l, TBreakPacket bp) = 0;
 
-    virtual void SendDown(unsigned int id_session, TBreakPacket bp, bool check ) = 0;
+    virtual void SendDown(unsigned int id_session, TBreakPacket bp, bool check = true) = 0;
     virtual int  GetCountDown() = 0;
     virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc) = 0;
 

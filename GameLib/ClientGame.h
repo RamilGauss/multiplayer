@@ -41,7 +41,7 @@ public:
 protected:
   virtual bool Init(int variant_use, 
                     const char* sNameDLL, 
-                    const char* arg = NULL);
+                    std::vector<std::string>& arg);
   virtual void Done();
   virtual bool Work();
 

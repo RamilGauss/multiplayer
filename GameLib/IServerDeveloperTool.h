@@ -18,11 +18,12 @@ class IManagerStateMachine;
 class IManagerScene;
 class IManagerObjectCommon;
 class IManagerConnectClient;
+class IQtLib;
 
 class IServerDeveloperTool : public IDeveloperTool
 {
 public:
-	struct TComponentServer : public TComponent
+	struct TComponentServer
 	{
 		union
 		{ // Melissa
@@ -33,11 +34,13 @@ public:
 		}mNet;
 		IManagerScene*             mManagerScene;  // только для Slave
     IManagerConnectClient*     mManagerCClient;// клиенты, которые подсоединились
+    IQtLib*                    mQtGUI;
 		TComponentServer()
 		{
 			mNet.Base       = NULL; // Melissa
 			mManagerScene   = NULL; 
       mManagerCClient = NULL;
+      mQtGUI          = NULL;
 		}
 	};
 protected:
@@ -48,7 +51,7 @@ public:
   IServerDeveloperTool();
   virtual ~IServerDeveloperTool();
   
-	virtual void Init(TComponentServer* pComponent, const char* arg = NULL) = 0;
+	virtual void Init(TComponentServer* pComponent, std::vector<std::string>& arg) = 0;
 	// как часто происходит вызов Refresh(), временной интервал работы сервера
   virtual int GetTimeRefreshMS() = 0;
   // вызов не более одного раз в GetTimeRefreshMS

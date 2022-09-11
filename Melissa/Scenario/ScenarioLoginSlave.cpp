@@ -27,8 +27,8 @@ void TScenarioLoginSlave::ConnectToMaster( unsigned int ip, unsigned short port 
   {
     // верхнее соединение занято выполнением другого сценария - такого не должно быть
     // генерация ошибки
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TScenarioLoginSlave::ConnectToMaster() сценарий неактивен.\n");
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TScenarioLoginSlave::ConnectToMaster() scenario is not active.\n");
     BL_FIX_BUG();
     return;
   }
@@ -36,7 +36,7 @@ void TScenarioLoginSlave::ConnectToMaster( unsigned int ip, unsigned short port 
   Context()->GetMS()->CloseSession(Context()->GetID_Session());
   TBreakPacket bp;
   THeaderFromSlave h;
-  bp.PushBack((char*)&h, sizeof(h));
+  bp.PushFront((char*)&h, sizeof(h));
   Context()->SetID_Session( Context()->GetMS()->Send(ip, port, bp) );
   if(Context()->GetID_Session()==INVALID_HANDLE_SESSION)
   {
@@ -73,7 +73,7 @@ void TScenarioLoginSlave::RecvFromSlave()
 {
   TBreakPacket bp;
   THeaderAnswerMaster h;
-  bp.PushBack((char*)&h, sizeof(h));
+  bp.PushFront((char*)&h, sizeof(h));
   Context()->GetMS()->Send(Context()->GetID_Session(), bp);
 }
 //--------------------------------------------------------------------------

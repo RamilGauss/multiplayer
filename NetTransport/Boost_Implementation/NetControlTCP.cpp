@@ -75,7 +75,7 @@ void TNetControlTCP::RecvEvent(const boost::system::error_code& error,size_t byt
 {
   if(error||bytes_transferred<=0)
   {
-    GetLogger()->Get(STR_NAME_NET_TRANSPORT)->
+    GetLogger(STR_NAME_NET_TRANSPORT)->
       WriteF_time("RecvEvent TCP disconnect error=%s.\n",error.message().data());
 
     NotifyDisconnect(mDevice.GetIP_Port());
@@ -106,7 +106,7 @@ void TNetControlTCP::RecvEvent(const boost::system::error_code& error,size_t byt
 void TNetControlTCP::SendEvent(const boost::system::error_code& error,size_t bytes_transferred)
 {
   if(error)
-    GetLogger()->Get(STR_NAME_NET_TRANSPORT)->
+    GetLogger(STR_NAME_NET_TRANSPORT)->
       WriteF_time("SendEvent TCP error=%s.\n",error.message().data());
 }
 //----------------------------------------------------------------------------------
@@ -116,7 +116,7 @@ void TNetControlTCP::ConnectEvent(const boost::system::error_code& error)
   flgWaitConnect = false;
 
   if(error)
-    GetLogger()->Get(STR_NAME_NET_TRANSPORT)->
+    GetLogger(STR_NAME_NET_TRANSPORT)->
       WriteF_time("ConnectEvent TCP error=%s.\n",error.message().data());
 }
 //----------------------------------------------------------------------------------
@@ -131,7 +131,7 @@ void TNetControlTCP::ReadyRecv()
   }
   catch(std::exception& e)
   {
-    GetLogger()->Get(STR_NAME_NET_TRANSPORT)->
+    GetLogger(STR_NAME_NET_TRANSPORT)->
       WriteF_time("ReadyRecv TCP error=%s.\n",e.what());
   }
 }
@@ -144,7 +144,7 @@ l_repeat:
   int resSend = mDevice.GetSocket()->send(boost::asio::buffer(data, size), flags, ec);
   if(ec)
 	{
-		GetLogger()->Get(STR_NAME_NET_TRANSPORT)->
+		GetLogger(STR_NAME_NET_TRANSPORT)->
 			WriteF_time("RequestSend TCP error=%s.\n",ec.message().data());
 		return;
 	}
@@ -161,22 +161,15 @@ void TNetControlTCP::RequestConnect(TIP_Port& ip_port)
 {
   try
   {
-    //###
     mConnectEndpoint = boost::asio::ip::tcp::endpoint
       (boost::asio::ip::address_v4(ip_port.ip),ip_port.port);
     mDevice.GetSocket()->connect(mConnectEndpoint);
     flgWaitConnect = false;  
     flgResConnect  = true;
-    //###
-
-    //mConnectEndpoint = boost::asio::ip::tcp::endpoint
-    //  (boost::asio::ip::address_v4(ip_port.ip),ip_port.port);
-    //mDevice.GetSocket()->async_connect(mConnectEndpoint,
-    //  boost::bind(&TNetControlTCP::ConnectEvent, this,boost::asio::placeholders::error));
   }
   catch(std::exception& e)
   {
-    GetLogger()->Get(STR_NAME_NET_TRANSPORT)->
+    GetLogger(STR_NAME_NET_TRANSPORT)->
       WriteF_time("RequestConnect TCP error=%s.\n",e.what());
 
     flgWaitConnect = false;  

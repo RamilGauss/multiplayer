@@ -5,6 +5,9 @@ Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
 See for more information License.h.
 */
 
+#ifndef CMD_PARAM_H
+#define CMD_PARAM_H
+
 #include <map>
 #include <string>
 #include <vector>
@@ -40,3 +43,6 @@ public:
 protected:
   bool FindInDefKey( std::string& sKey );
 };
+
+
+#endif

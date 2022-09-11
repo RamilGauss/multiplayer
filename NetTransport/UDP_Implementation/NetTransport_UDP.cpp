@@ -57,9 +57,9 @@ TNetTransport_UDP::TNetTransport_UDP()
 {
   flgActive = false;
 
-	GetLogger()->Get(STR_NAME_NET_TRANSPORT)->SetPrintf(false);
+	GetLogger(STR_NAME_NET_TRANSPORT)->SetPrintf(false);
 #ifndef FULL_DEBUG_TRANSPORT
-  GetLogger()->Get(STR_NAME_NET_TRANSPORT)->SetEnable(false);
+  GetLogger(STR_NAME_NET_TRANSPORT)->SetEnable(false);
 #endif
 }
 //----------------------------------------------------------------------------------
@@ -243,7 +243,7 @@ void TNetTransport_UDP::FindAndCheck(THeader* prefix, unsigned int ip, unsigned 
   TMultiMapIP_Ptr_It fit = mMultiMapWaitCheck.lower_bound(ip_port);
   if(fit==mMultiMapWaitCheck.end())
   {
-    GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF("FindAndCheck: index==-1\n");
+    GetLogger(STR_NAME_NET_TRANSPORT)->WriteF("FindAndCheck: index==-1\n");
     return;
   }
   //-------------------------------------------------------------------------------------
@@ -256,7 +256,7 @@ void TNetTransport_UDP::FindAndCheck(THeader* prefix, unsigned int ip, unsigned 
     }
     fit++;
   }
-  GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF("FindAndCheck() prefix->cn_out=%u\n",prefix->cn_out);
+  GetLogger(STR_NAME_NET_TRANSPORT)->WriteF("FindAndCheck() prefix->cn_out=%u\n",prefix->cn_out);
 }
 //----------------------------------------------------------------------------------
 int TNetTransport_UDP::GetTimeout()
@@ -356,9 +356,9 @@ void TNetTransport_UDP::WriteLog(void *p, int size, unsigned int ip, unsigned sh
 	DEBUG_LOG
 	char * sIP = ns_str_addr(ip);
 	if(sIP==NULL) {BL_FIX_BUG();return;}
-	GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF("Send Packet to ip=%s, port=%u\n",sIP,port);
+	GetLogger(STR_NAME_NET_TRANSPORT)->WriteF("Send Packet to ip=%s, port=%u\n",sIP,port);
 	LogTransportInfo((THeader*)p,size);
-	GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF("\n");
+	GetLogger(STR_NAME_NET_TRANSPORT)->WriteF("\n");
 }
 //----------------------------------------------------------------------------------
 void TNetTransport_UDP::ReadLog(int size, unsigned int ip, unsigned short port)
@@ -368,9 +368,9 @@ void TNetTransport_UDP::ReadLog(int size, unsigned int ip, unsigned short port)
   DEBUG_LOG
 	char * sIP = ns_str_addr(ip);
 	if(sIP==NULL) {BL_FIX_BUG();return;}
-	GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF("Recive Packet from ip=%s, port=%u\n",sIP,port);
+	GetLogger(STR_NAME_NET_TRANSPORT)->WriteF("Recive Packet from ip=%s, port=%u\n",sIP,port);
 	LogTransportInfo((THeader*)mBuffer,size);
-	GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF("\n");
+	GetLogger(STR_NAME_NET_TRANSPORT)->WriteF("\n");
 }
 //----------------------------------------------------------------------------------
 void TNetTransport_UDP::LogTransportInfo(THeader* p, int size)
@@ -393,7 +393,7 @@ void TNetTransport_UDP::LogTransportInfo(THeader* p, int size)
   strcpy(sIP_dst,ns_str_addr(p->ip_port_dst.ip));
   strcpy(sIP_src,ns_str_addr(p->ip_port_src.ip));
 
-	GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF("TransportInfo: \n\t type=%s,\n\t cn_in=%u,\n\t cn_out=%u,\n\t time=%u:%u:%u.%03u,\n\t localTime=%u:%u:%u.%03u,\n\t cntTry=%u,\n\t DST=%s:%u,\n\t SRC=%s:%u\n",
+	GetLogger(STR_NAME_NET_TRANSPORT)->WriteF("TransportInfo: \n\t type=%s,\n\t cn_in=%u,\n\t cn_out=%u,\n\t time=%u:%u:%u.%03u,\n\t localTime=%u:%u:%u.%03u,\n\t cntTry=%u,\n\t DST=%s:%u,\n\t SRC=%s:%u\n",
 							sType,   // K - квитанция, S - нет гарантии доставки, P - гарантия доставки
 							p->cn_in,     // циклический номер
 							p->cn_out,     // циклический номер
@@ -404,12 +404,12 @@ void TNetTransport_UDP::LogTransportInfo(THeader* p, int size)
 							p->ip_port_dst.port,  //
 							sIP_src,  //
 							p->ip_port_src.port);
-	GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF("Contain packet:\n");
+	GetLogger(STR_NAME_NET_TRANSPORT)->WriteF("Contain packet:\n");
 	unsigned char* data   = (unsigned char*)p+sizeof(THeader);
 	int sizeData = size-sizeof(THeader);
 	for(int i = 0 ; i < sizeData ; i++)
-		GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF("0x%X ",data[i]);
-	GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF("\n");
+		GetLogger(STR_NAME_NET_TRANSPORT)->WriteF("0x%X ",data[i]);
+	GetLogger(STR_NAME_NET_TRANSPORT)->WriteF("\n");
 }
 //----------------------------------------------------------------------------------
 bool TNetTransport_UDP::IsPacketFresh()

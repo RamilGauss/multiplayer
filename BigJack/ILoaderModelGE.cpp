@@ -114,7 +114,7 @@ bool ILoaderModelGE::Load(wchar_t* strFilenameData)
 
   if(LoadMainFile()==false) 
   {
-    GetLogger()->Get(STR_NAME_GE)->WriteF_time("Ќе удалось загрузить ресурсы дл€ модели.\n");
+    GetLogger(STR_NAME_GE)->WriteF_time("Ќе удалось загрузить ресурсы дл€ модели.\n");
     return false;
   }
   return true;

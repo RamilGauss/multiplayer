@@ -8,8 +8,6 @@ See for more information License.h.
 #ifndef _TYPE_DEF_H_
 #define _TYPE_DEF_H_
 
-#define GBASELIB_VER      40  // Версия библиотеки GBaseLib
-
 //------------------------------------------------------------------------------
 // Определяем FALSE и TRUE, так как они "нестандартно" определены в gtypes.h
 #ifndef	FALSE
@@ -50,20 +48,23 @@ See for more information License.h.
 #if defined(TD_WINDOWS)
 
   #ifndef SHARE_EI
-    #define SHARE_EI __declspec( dllimport )
+    #define SHARE_EI         __declspec( dllimport )
   #endif
   #ifndef MELISSA_EI
-    #define MELISSA_EI __declspec( dllimport )
+    #define MELISSA_EI       __declspec( dllimport )
   #endif
 	#ifndef NET_TRANSPORT_EI
 		#define NET_TRANSPORT_EI __declspec( dllimport )
 	#endif
-
+  #ifndef QTLIB_EI
+    #define QTLIB_EI         __declspec( dllimport )
+  #endif
 #else //TD_WINDOWS
   
   #define   SHARE_EI
   #define   MELISSA_EI
   #define   NET_TRANSPORT_EI
+  #define   QTLIB_EI
 
 #endif //TD_WINDOWS
 

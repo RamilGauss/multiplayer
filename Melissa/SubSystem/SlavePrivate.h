@@ -11,6 +11,7 @@ See for more information License.h.
 #include <set>
 
 #include "ContainerContextSc.h"
+#include <vector>
 
 namespace nsMelissa
 {
@@ -38,8 +39,6 @@ namespace nsMelissa
 
 		TSlavePrivate();
 
-    void SendToClient(unsigned int id_client, void* data, int size, bool check );
-
     void SetID_Session(unsigned int v);
     unsigned int GetID_Session();
 
@@ -49,11 +48,13 @@ namespace nsMelissa
     tState GetState();
     void SetState(tState state);
   
+    void GetVectorID_client(std::vector<unsigned int>& vID_client);
+
     void AddClient(std::list<unsigned int>& l_id_client);
     void RemoveClient(std::list<unsigned int>& l_id_client);
     // для Add и Remove ( count = -10, например)
-    void AddGroupClient(int count);
-    void AddFreeClient(int count);
+    void AddDeltaGroupClient(int count);
+    void AddDeltaFreeClient(int count);
 
     // расчет возможного кол-ва клиентов, которое сможет выдержать Slave
     int CalcCountClientForEmpty();

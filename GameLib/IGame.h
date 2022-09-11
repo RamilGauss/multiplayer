@@ -9,6 +9,7 @@ See for more information License.h.
 #define IGameH
 
 #include <boost/function.hpp>
+#include <vector>
 
 #include "IClientDeveloperTool.h"
 #include "IServerDeveloperTool.h"
@@ -23,7 +24,7 @@ class IGame : public TDstEvent
 {
   ILoaderDLL* mLoaderDLL;
 
-  FuncFreeDeveloperTool      mFreeDeveloperTool;
+  FuncFreeDeveloperTool mFreeDeveloperTool;
 public:  
   typedef boost::function<bool ()> FuncHandleEvent;
 protected:  
@@ -45,23 +46,29 @@ protected:
   enum{eWaitFeedBack = 30, // мс
   };
 public:
+  typedef enum{
+    eClient,eSlave,eMaster,eSuperServer,
+  }eTypeRealize;
 
   IGame();
   virtual ~IGame();
 
-  void Work(int variant_use, const char* sNameDLL, const char* arg = NULL);// начало работы
+  void Work(int variant_use, const char* sNameDLL, std::vector<std::string>& arg);// начало работы
 
   void Stop();
   bool LoadDLL(int variant_use, const char* sNameDLL);
 protected:
+	eTypeRealize mType;
+protected:
   void Init();
   void InitLog();
-	void SetupNetComponent(nsMelissa::TBase* pBase);
+  void SetupFuncAndDevToolByType(int variant_use);
+  void SetupNetComponent(nsMelissa::TBase* pBase);
 
   virtual bool Work() = 0;
   virtual bool Init(int variant_use, 
                     const char* sNameDLL, 
-                    const char* arg = NULL) = 0;
+                    std::vector<std::string>& arg) = 0;
   virtual void Done() = 0;
 
  	virtual void MakeVectorModule() = 0;

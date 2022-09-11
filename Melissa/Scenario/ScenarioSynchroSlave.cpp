@@ -25,7 +25,7 @@ void TScenarioSynchroSlave::SendSynchro(int loadProcent)
   TBreakPacket bp;
   THeaderSynchroSlave h;
   h.loadProcent = loadProcent;
-  bp.PushBack((char*)&h, sizeof(h));
+  bp.PushFront((char*)&h, sizeof(h));
   Context()->GetMS()->Send(Context()->GetID_Session(), bp);
 }
 //---------------------------------------------------------------------

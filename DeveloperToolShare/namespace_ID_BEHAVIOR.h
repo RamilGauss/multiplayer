@@ -5,6 +5,9 @@ Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
 See for more information License.h.
 */
 
+#ifndef NAMESPACE_ID_BEHAVIOR_H
+#define NAMESPACE_ID_BEHAVIOR_H
+
 namespace nsID_BEHAVIOR
 {
   enum{
@@ -33,3 +36,5 @@ namespace nsID_BEHAVIOR
   
 
 }
+
+#endif

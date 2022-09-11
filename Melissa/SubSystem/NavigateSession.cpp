@@ -23,8 +23,7 @@ TNavigateSession::TNavigateSession()
 //--------------------------------------------------------------
 TNavigateSession::~TNavigateSession()
 {
-  BOOST_FOREACH(TSession* pSession,mSetSession)
-    delete pSession;
+  Clear();
 }
 //--------------------------------------------------------------
 void TNavigateSession::Add(TSession* pSession)
@@ -83,5 +82,12 @@ void TNavigateSession::Work()
 {
   BOOST_FOREACH(TSession* pSession, mSetSession)
     pSession->Work();
+}
+//--------------------------------------------------------------
+void TNavigateSession::Clear()
+{
+  BOOST_FOREACH(TSession* pSession,mSetSession)
+    delete pSession;
+  mSetSession.clear();
 }
 //--------------------------------------------------------------

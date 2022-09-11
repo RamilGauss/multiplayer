@@ -9,6 +9,7 @@ See for more information License.h.
 #define IClientDeveloperToolH
 
 #include <string>
+#include <vector>
 
 #include "IDeveloperTool.h"
 #include "DstEvent.h"
@@ -24,8 +25,11 @@ class IManagerTime;
 class IClientDeveloperTool : public IDeveloperTool
 {
 public:
-  struct TComponentClient : public TComponent
+  struct TComponentClient
   {
+    IControlCamera*         mControlCamera; // Camera
+    IGUI*                   mGUI;           // GUI, MyGUI!
+    IGraphicEngine*         mGraphicEngine; // BigJack отрисовка сцены
     IManagerStateMachine*   mMStateMachine; // конечный автомат, для HotKeys, Net (обработка пакетов)
     nsMelissa::TClient*     mNetClient;     // Melissa
     IPhysicEngine*          mPhysicEngine;  // Robert
@@ -33,6 +37,9 @@ public:
     IManagerTime*           mMTime;         // GameLib
     TComponentClient()
     {
+      mControlCamera = NULL; // Camera
+      mGraphicEngine = NULL; // BigJack отрисовка сцены
+      mGUI           = NULL; // MyGUI
       mMStateMachine = NULL; // конечный автомат, для HotKeys
       mNetClient     = NULL; // Melissa
       mPhysicEngine  = NULL; // Robert
@@ -49,7 +56,7 @@ public:
   IClientDeveloperTool();
   virtual ~IClientDeveloperTool();
 
-  virtual void Init(TComponentClient* pComponent, const char* arg = NULL) = 0;
+  virtual void Init(TComponentClient* pComponent, std::vector<std::string>& arg) = 0;
   virtual std::string GetTitleWindow() = 0;
 
   virtual void PrepareForRender() = 0;

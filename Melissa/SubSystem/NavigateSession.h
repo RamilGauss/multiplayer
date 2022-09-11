@@ -49,6 +49,7 @@ namespace nsMelissa
 
     void Work();
 
+    void Clear();
   protected:
   };
 }

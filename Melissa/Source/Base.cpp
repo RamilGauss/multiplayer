@@ -82,7 +82,7 @@ void TBase::Init(IMakerTransport* pMakerTransport)
 {
   if(pMakerTransport==NULL)
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->WriteF_time("TBase::Init() pMakerTransport==NULL.\n");
+    GetLogger(STR_NAME_MELISSA)->WriteF_time("TBase::Init() pMakerTransport==NULL.\n");
     BL_FIX_BUG();
     return;
   }
@@ -213,5 +213,10 @@ void TBase::SetupScForContext(TContainerContextSc* pCCSc)
   pCCSc->mRcm.         SetSc(mControlSc->mRcm);
   pCCSc->mSendToClient.SetSc(mControlSc->mSendToClient);
   pCCSc->mSynchroSlave.SetSc(mControlSc->mSynchroSlave);
+}
+//-------------------------------------------------------------------------
+bool TBase::GetInfoSession(unsigned int id_session, TIP_Port& ip_port)
+{
+  return mManagerSession->GetInfo(id_session, ip_port);
 }
 //-------------------------------------------------------------------------

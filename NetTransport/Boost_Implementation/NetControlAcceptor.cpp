@@ -61,7 +61,7 @@ void TNetControlAcceptor::AcceptEvent(const boost::system::error_code& error)
 	{
 		delete pNewControlTCP;
 		pNewControlTCP = NULL;
-		GetLogger()->Get(STR_NAME_NET_TRANSPORT)->
+		GetLogger(STR_NAME_NET_TRANSPORT)->
       WriteF_time("Acceptor AcceptEvent FAIL: %s.\n", error.message().data());
 		return;
 	}

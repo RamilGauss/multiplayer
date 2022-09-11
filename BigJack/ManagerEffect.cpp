@@ -48,7 +48,7 @@ void* TManagerEffect::Load(const wchar_t* sPath)
 			int sizeError = ppBufferError->GetBufferSize();
 			if(sizeError)
 			{
-				GetLogger()->Get(STR_NAME_GE)->Write(sError,sizeError);
+				GetLogger(STR_NAME_GE)->Write(sError,sizeError);
 			}
 
 			SAFE_RELEASE(ppBufferError);

@@ -14,13 +14,19 @@ See for more information License.h.
 
 namespace nsMelissa
 {
+  class TMasterPrivate;
   class MELISSA_EI TSuperServer : public TBaseServer
   {
+    // DOWN
+    // Master
+    typedef std::map<unsigned int,TMasterPrivate*> TMapUintMasterPtr;
+    typedef TMapUintMasterPtr::iterator TMapUintMasterPtrIt;
+    TMapUintMasterPtr mMapID_SessionMaster;
+    // для поиск мастера по клиенту
     typedef std::map<unsigned int,unsigned int> TMapUintUint;
     typedef TMapUintUint::iterator TMapUintUintIt;
-
     TMapUintUint mMapIDClientIDSessionMaster;
-  
+
   public:
     TSuperServer();
     virtual ~TSuperServer();
@@ -35,14 +41,15 @@ namespace nsMelissa
 		};
 		virtual int  GetCountDown();
 		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);
-    virtual void SendDown(unsigned int id_session, TBreakPacket bp, bool check);
+    virtual void SendDown(unsigned int id_session, TBreakPacket bp, bool check = true);
 
 	protected:
     // Base
     virtual void DisconnectInherit(unsigned int id_session);
 
+    virtual void NeedContextLoginMaster(unsigned int id_session);
 	private:
-
+    TMasterPrivate* GetMasterByIDSession(unsigned int id);
   };
 }
 

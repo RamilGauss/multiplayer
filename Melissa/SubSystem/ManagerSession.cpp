@@ -24,11 +24,13 @@ TManagerSession::TManagerSession()
 TManagerSession::~TManagerSession()
 {
   Stop();
+  
+  // удалить сессии
+  mNavigateSession.Clear();
 
   mMakerTransport->Delete(mTransport);
   mTransport = NULL;
   mMakerTransport = NULL;
-  // удалить сессии
 }
 //--------------------------------------------------------------------------------------------
 void TManagerSession::SetMakerTransport(IMakerTransport* pMakerTransport)
@@ -44,13 +46,13 @@ bool TManagerSession::Start(unsigned short port, unsigned char subNet)
 {
   if(mTransport==NULL)
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->WriteF_time("TManagerSession::Start() mTransport==NULL.\n");
+    GetLogger(STR_NAME_MELISSA)->WriteF_time("TManagerSession::Start() mTransport==NULL.\n");
     BL_FIX_BUG();
     return false;
   }
   if(mTransport->IsActive())
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->WriteF_time("TManagerSession::Start() Повторный вызов.\n");
+    GetLogger(STR_NAME_MELISSA)->WriteF_time("TManagerSession::Start() recall.\n");
     BL_FIX_BUG();
     return false;
   }
@@ -58,7 +60,7 @@ bool TManagerSession::Start(unsigned short port, unsigned char subNet)
   bool resOpen = mTransport->Open(port,subNet);
   if(resOpen==false) 
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->WriteF_time("TManagerSession::Start() Не удалось открыть порт %u.\n", port);
+    GetLogger(STR_NAME_MELISSA)->WriteF_time("TManagerSession::Start() open port %u FAIL.\n", port);
     BL_FIX_BUG();
     return false;
   }
@@ -108,8 +110,8 @@ unsigned int TManagerSession::Send(unsigned int ip, unsigned short port, TBreakP
     pSession = NewSession(ip_port);
   else
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TManagerSession::Send(0x%X,%u) отправка на IP при наличии Сессии.\n", ip, port);
+    GetLogger(STR_NAME_MELISSA)->
+      WriteF_time("TManagerSession::Send(0x%X,%u) sending to IP with exist session.\n", ip, port);
     BL_FIX_BUG();
   }
   unsigned int id_session = pSession->GetID();

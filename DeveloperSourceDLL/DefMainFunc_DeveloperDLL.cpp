@@ -6,7 +6,7 @@ See for more information License.h.
 */
 
 #include "../GameLib/DeveloperTool_DLL.h"
-#include <stddef.h>
+
 #include "ClientDeveloperTool_ViewerModel.h"
 
 #include "ServerDeveloperTool_SlaveTank.h"
@@ -20,22 +20,38 @@ DllExport IClientDeveloperTool* GetClientDeveloperTool(int variant_use)
   switch(variant_use)
   {
     case 0:
-      return new TClientDeveloperTool_ViewerModel;
-    case 1:
       return new TClientDeveloperTool_ClientTank;
+    case 1:
+      return new TClientDeveloperTool_ViewerModel;
   }
   return NULL;
 }
 //-------------------------------------------------------------------
-DllExport IServerDeveloperTool* GetServerDeveloperTool(int variant_use)
+DllExport IServerDeveloperTool* GetSlaveDeveloperTool(int variant_use)
 {
   switch(variant_use)
   {
     case 0:
       return new TServerDeveloperTool_SlaveTank;
-    case 1:
+  }
+  return NULL;
+}
+//-------------------------------------------------------------------
+DllExport IServerDeveloperTool* GetMasterDeveloperTool(int variant_use)
+{
+  switch(variant_use)
+  {
+    case 0:
       return new TServerDeveloperTool_MasterTank;
-    case 2:
+  }
+  return NULL;
+}
+//-------------------------------------------------------------------
+DllExport IServerDeveloperTool* GetSuperServerDeveloperTool(int variant_use)
+{
+  switch(variant_use)
+  {
+    case 0:
       return new TServerDeveloperTool_SuperServerTank;
   }
   return NULL;

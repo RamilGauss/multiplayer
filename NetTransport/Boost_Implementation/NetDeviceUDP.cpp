@@ -49,7 +49,7 @@ bool TNetDeviceUDP::Open( unsigned short port, unsigned char numNetWork )
   }
   catch(std::exception& e)
   {
-    GetLogger()->Get(STR_NAME_NET_TRANSPORT)->
+    GetLogger(STR_NAME_NET_TRANSPORT)->
       WriteF_time("Open UDP (%d,%d) FAIL: %s.\n", port, numNetWork, e.what());
   }
   return res;
@@ -65,7 +65,7 @@ void TNetDeviceUDP::Close()
 	}
 	catch(std::exception& e)
 	{
-		GetLogger()->Get(STR_NAME_NET_TRANSPORT)->
+		GetLogger(STR_NAME_NET_TRANSPORT)->
 			WriteF_time("Close UDP FAIL: %s.\n", e.what());
 	}
 }

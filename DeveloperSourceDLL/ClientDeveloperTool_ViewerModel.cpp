@@ -196,12 +196,12 @@ string TClientDeveloperTool_ViewerModel::GetTitleWindow()
   return "Просмоторщик моделей";
 }
 //------------------------------------------------------------------------------------
-void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent, const char* arg )
+void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent, vector<string>& arg )
 {
   InitLog();
   mComponent = *pComponent; 
 
-  int cnt[3] = {3,3,3};
+  int cnt[3] = {8,8,8};
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
   unsigned int start = ht_GetMSCount();
 #endif 

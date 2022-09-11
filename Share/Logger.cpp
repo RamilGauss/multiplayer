@@ -20,6 +20,11 @@ TLogger* GetLogger()
   return (TLogger*)&g_Logger;
 }
 //-----------------------------------------------------------------------
+TSaveOnHDD* GetLogger(const char* nameLog)
+{
+  return g_Logger.Get(nameLog);
+}
+//-----------------------------------------------------------------------
 void TLogger::InitLogger(TSaveOnHDD* saver, const char* sName)
 {
   if(saver->IsOpen()) return;

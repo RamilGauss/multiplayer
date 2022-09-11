@@ -18,16 +18,20 @@ class IServerDeveloperTool;
   #define DllExport extern "C"
 #endif
 
-#define StrGetClientDeveloperTool "GetClientDeveloperTool"
-#define StrGetServerDeveloperTool "GetServerDeveloperTool"
-#define StrFreeDeveloperTool      "FreeDeveloperTool"
+#define StrGetClientDeveloperTool      "GetClientDeveloperTool"
+#define StrGetSlaveDeveloperTool       "GetSlaveDeveloperTool"
+#define StrGetMasterDeveloperTool      "GetMasterDeveloperTool"
+#define StrGetSuperServerDeveloperTool "GetSuperServerDeveloperTool"
+#define StrFreeDeveloperTool           "FreeDeveloperTool"
 
 typedef IClientDeveloperTool* (*FuncGetClientDeveloperTool)(int);
 typedef IServerDeveloperTool* (*FuncGetServerDeveloperTool)(int);
 typedef void (*FuncFreeDeveloperTool)(IDeveloperTool*);
 
-DllExport IClientDeveloperTool* GetClientDeveloperTool( int variant_use);
-DllExport IServerDeveloperTool* GetServerDeveloperTool( int variant_use);
+DllExport IClientDeveloperTool* GetClientDeveloperTool(int variant_use);
+DllExport IServerDeveloperTool* GetSlaveDeveloperTool(int variant_use);
+DllExport IServerDeveloperTool* GetMasterDeveloperTool(int variant_use);
+DllExport IServerDeveloperTool* GetSuperServerDeveloperTool(int variant_use);
 
 DllExport void FreeDeveloperTool(IDeveloperTool* p);
 

@@ -24,7 +24,7 @@ public:
   TClientDeveloperTool_ViewerModel();
   virtual ~TClientDeveloperTool_ViewerModel();
 
-  virtual void Init(TComponentClient* pComponent, const char* arg = NULL);
+  virtual void Init(TComponentClient* pComponent, std::vector<std::string>& arg);
 
   virtual std::string GetTitleWindow();
   

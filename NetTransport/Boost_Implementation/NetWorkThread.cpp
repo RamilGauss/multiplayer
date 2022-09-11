@@ -37,7 +37,7 @@ void TNetWorkThread::Engine()
     boost::system::error_code ec;
     mIO_Service.run(ec);
     if(ec)
-      GetLogger()->Get(STR_NAME_NET_TRANSPORT)->
+      GetLogger(STR_NAME_NET_TRANSPORT)->
         WriteF_time("TNetWorkThread::Engine FAIL %d\n",ec.value());
   }
   flgActive = false;

@@ -15,9 +15,7 @@ See for more information License.h.
 #include "IManagerObjectCommon.h"
 #include "IManagerScene.h"
 #include "IXML.h"
-#include "IControlCamera.h"
-#include "IGraphicEngine.h"
-#include "IGUI.h"
+#include "IQtLib.h"
 
 #include "MakerPhysicEngine.h"
 #include "MakerManagerObjectCommon.h"
@@ -25,9 +23,7 @@ See for more information License.h.
 #include "MakerManagerStateMachine.h"
 #include "MakerManagerScene.h"
 #include "MakerManagerConnectClient.h"
-#include "MakerControlCamera.h"
-#include "MakerGraphicEngine.h"
-#include "MakerGUI.h"
+#include "MakerQtLib.h"
 
 #include "common_defs.h"
 #include "BL_Debug.h"
@@ -63,7 +59,6 @@ bool TServerGame::Work()
   HandleEventByDeveloper();
 	mServerDeveloperTool->Refresh();
   
-  Render();
   if(mServerDeveloperTool->NeedExit())
     return false;
 	// расчет нагрузки
@@ -71,11 +66,11 @@ bool TServerGame::Work()
   return true;
 }
 //------------------------------------------------------------------------
-bool TServerGame::Init(int variant_use, const char* sNameDLL, const char* arg)
+bool TServerGame::Init(int variant_use, const char* sNameDLL, vector<string>& arg)
 {
   // загрузка DLL
   RET_FALSE(LoadDLL(variant_use,sNameDLL))
-  if(mGetServerDeveloperTool==NULL)// политика: нет DLL - нет движка.
+  if(mServerDeveloperTool==NULL)// политика: нет DLL - нет движка.
     return false;
   // подготовить пути для ресурсов
   string sRelPathXML = mServerDeveloperTool->GetPathXMLFile();
@@ -84,18 +79,11 @@ bool TServerGame::Init(int variant_use, const char* sNameDLL, const char* arg)
   if(GetStorePathResources()->Load(sAbsPath)==false)
     return false;
   //------------------------------------------
-  TMakerControlCamera makerControlCamera;
-  mCServer.mControlCamera = makerControlCamera.New();
-  //------------------------------------------
-  TMakerGraphicEngine makerGraphicEngine;
-  mCServer.mGraphicEngine = makerGraphicEngine.New(mCServer.mControlCamera);
-  mCServer.mGraphicEngine->Init();// создали окно
-  mCServer.mGraphicEngine->SetSelfID(ID_SRC_EVENT_GRAPHIC_ENGINE);
-  mCServer.mGraphicEngine->SetDstObject(this);
-  //------------------------------------------
-  TMakerGUI makerGUI;
-  mCServer.mGUI = makerGUI.New();
-  mCServer.mGraphicEngine->SetGUI(mCServer.mGUI);
+  TMakerQtLib makerQtLib;
+  mCServer.mQtGUI = makerQtLib.New();
+  mCServer.mQtGUI->Init(0,NULL);
+  mCServer.mQtGUI->SetSelfID(ID_SRC_EVENT_QT_LIB);
+  mCServer.mQtGUI->SetDstObject(this);
   //------------------------------------------
   TMakerManagerScene makerManagerScene;
   mCServer.mManagerScene = makerManagerScene.New();
@@ -103,24 +91,19 @@ bool TServerGame::Init(int variant_use, const char* sNameDLL, const char* arg)
   TMakerManagerConnectClient makerManagerConnectClient;
   mCServer.mManagerCClient = makerManagerConnectClient.New();
   //------------------------------------------
-  string sTitle;
 	switch(mType)
 	{
 		case eSlave:
 			mCServer.mNet.Base = new nsMelissa::TSlave;
-      sTitle = "Slave";
 			break;
 		case eMaster:
 			mCServer.mNet.Base = new nsMelissa::TMaster;
-      sTitle = "Master";
 			break;
 		case eSuperServer:
 			mCServer.mNet.Base = new nsMelissa::TSuperServer;
-      sTitle = "SuperServer";
 			break;
 	}	
 	SetupNetComponent(mCServer.mNet.Base);
-  mCServer.mGraphicEngine->SetTitleWindow(sTitle.data());
   //------------------------------------------
   mServerDeveloperTool->SetInitLogFunc(::GetLogger);
   mServerDeveloperTool->Init(&mCServer,arg);
@@ -132,18 +115,13 @@ void TServerGame::Done()
 {
   mServerDeveloperTool->Done();// освободить ресурсы DevTool
   // а теперь модули
-  TMakerGUI makerGUI;
-  makerGUI.Delete(mCServer.mGUI);
-  mCServer.mGUI = NULL;
-  mCServer.mGraphicEngine->ZeroGUI();
-
-  TMakerGraphicEngine makerGE;
-  makerGE.Delete(mCServer.mGraphicEngine);
-  mCServer.mGraphicEngine = NULL;
-
   delete mCServer.mNet.Base;
   mCServer.mNet.Base = NULL;
-
+  //------------------------------------------
+  TMakerQtLib makerQtLib;
+  makerQtLib.Delete(mCServer.mQtGUI);
+  mCServer.mQtGUI = NULL;
+  //------------------------------------------
   TMakerManagerScene makerManagerScene;
   makerManagerScene.Delete(mCServer.mManagerScene);
   mCServer.mManagerScene = NULL;
@@ -151,22 +129,12 @@ void TServerGame::Done()
   TMakerManagerConnectClient makerManagerConnectClient;
   makerManagerConnectClient.Delete(mCServer.mManagerCClient);
   mCServer.mManagerCClient = NULL;
-
-  // камера
-  TMakerControlCamera makerControlCamera;
-  makerControlCamera.Delete(mCServer.mControlCamera);
-  mCServer.mControlCamera = NULL;
 }
 //------------------------------------------------------------------------
 bool TServerGame::HandleNetEngineEvent()
 {
   mCServer.mNet.Base->Work();
   return true;
-}
-//------------------------------------------------------------------------
-bool TServerGame::HandleGraphicEngineEvent()
-{
-  return mCServer.mGraphicEngine->HandleInternalEvent();
 }
 //------------------------------------------------------------------------
 bool TServerGame::HandleSceneEvent()
@@ -187,9 +155,6 @@ void TServerGame::HandleEvent(TEvent* pEvent)
 //------------------------------------------------------------------------
 void TServerGame::MakeVectorModule()
 {
-  // обработать события графического ядра - Key+Mouse, GUI, внутренние события GE.
-  FuncHandleEvent fGraphicEngineEvent = boost::bind(&TServerGame::HandleGraphicEngineEvent, this);
-  mMainThreadVecModule.push_back(fGraphicEngineEvent);
   // сетевой движок
   FuncHandleEvent fNetEngineEvent = boost::bind(&TServerGame::HandleNetEngineEvent, this);
   mMainThreadVecModule.push_back(fNetEngineEvent);
@@ -228,10 +193,5 @@ void TServerGame::CalcAndWaitRestTime()
 	if(now>refresh_time+mStartTime) return;
 	unsigned int time_sleep = mStartTime + refresh_time - now;
 	ht_msleep(time_sleep);
-}
-//------------------------------------------------------------------------
-void TServerGame::Render()
-{
-  mCServer.mGraphicEngine->Work(0);
 }
 //------------------------------------------------------------------------

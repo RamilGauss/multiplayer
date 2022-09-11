@@ -29,6 +29,7 @@ namespace nsMelissa
     typedef std::list<IContextScenario*> TListPtr;
     TListPtr mListContext;
   
+    unsigned int mID_Session;
   protected:
     TManagerContextSc* mManagerContextSc;
 	public:
@@ -46,6 +47,7 @@ namespace nsMelissa
 
     void SetMCSc(TManagerContextSc* pMCSc);
     void SetID_Session(unsigned int id_session);
+    unsigned int GetID_Session();
     void SetMS(TManagerSession* pMS);
     void SetSE(TSrcEvent* pSE);
     void SetUserPtr(void* p);

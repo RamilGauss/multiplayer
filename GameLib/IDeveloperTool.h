@@ -28,20 +28,6 @@ protected:
 
 	typedef TLogger* (*TInitLogFunc)(); 
 	TInitLogFunc mFuncGetLogger;
-
-public:
-  struct TComponent
-  {
-    IControlCamera* mControlCamera; // Camera
-    IGUI*           mGUI;           // GUI, MyGUI!
-    IGraphicEngine* mGraphicEngine; // BigJack отрисовка сцены
-    TComponent()
-    {
-      mControlCamera = NULL; // Camera
-      mGraphicEngine = NULL; // BigJack отрисовка сцены
-      mGUI           = NULL; // MyGUI
-    }
-  };
 public:
   IDeveloperTool(){flgExit=false;}
   virtual ~IDeveloperTool(){};

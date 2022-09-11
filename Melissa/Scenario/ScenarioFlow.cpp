@@ -24,14 +24,14 @@ TScenarioFlow::~TScenarioFlow()
 void TScenarioFlow::SendUp(TBreakPacket bp, bool check)
 {
   THeaderSendUp h;
-  bp.PushBack((char*)&h, sizeof(h));
+  bp.PushFront((char*)&h, sizeof(h));
   HandlePacket( bp, check);
 }
 //-------------------------------------------------------------------------
 void TScenarioFlow::SendDown(TBreakPacket bp, bool check)
 {
   THeaderSendDown h;
-  bp.PushBack((char*)&h, sizeof(h));
+  bp.PushFront((char*)&h, sizeof(h));
   HandlePacket( bp, check);
 }
 //-------------------------------------------------------------------------

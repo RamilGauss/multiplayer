@@ -25,6 +25,7 @@ See for more information License.h.
 #include "Client.h"
 #include "GlobalParam.h"
 #include "ShareMisc.h"
+#include "NetSystem.h"
 
 using namespace std;
 using namespace nsStruct3D;
@@ -195,13 +196,18 @@ IMakerObjectCommon* TClientDeveloperTool_ClientTank::GetMakerObjectCommon()
 //------------------------------------------------------------------------------------
 string TClientDeveloperTool_ClientTank::GetTitleWindow()
 {
-  return "Просмоторщик моделей";
+  return "Клиент танков";
 }
 //------------------------------------------------------------------------------------
-void TClientDeveloperTool_ClientTank::Init(TComponentClient* pComponent, const char* arg )
+void TClientDeveloperTool_ClientTank::Init(TComponentClient* pComponent, vector<string>& arg )
 {
   InitLog();
   mComponent = *pComponent; 
+
+  ParseCmd(arg);
+
+  TInputCmdDevTool::TInput input;
+  mInputCmd.Get(input);
   // GUI
   mComponent.mGUI->Add(string("mClientMain"),mClientMain);
   mComponent.mGUI->Add(string("mGameRoomPrepare"),mGameRoomPrepare);
@@ -301,6 +307,16 @@ void TClientDeveloperTool_ClientTank::HandleFromMelissa(nsMelissa::TBaseEvent* p
       sEvent = "DestroyGroup";
       break;
   }
-  GetLogger()->Get("Inner")->WriteF_time("Melissa: %s.\n",sEvent.data());
+  GetLogger("Inner")->WriteF_time("Melissa: %s.\n",sEvent.data());
+}
+//---------------------------------------------------------------------------------------------
+void TClientDeveloperTool_ClientTank::ParseCmd(std::vector<std::string>& arg)
+{
+  TInputCmdDevTool::TInput input;
+  input.ip = boost::asio::ip::address_v4::from_string(ns_getSelfIP(0)).to_ulong();
+  input.port = CLIENT_PORT;
+
+  mInputCmd.SetDefParam(input);
+  mInputCmd.SetArg(arg);
 }
 //---------------------------------------------------------------------------------------------

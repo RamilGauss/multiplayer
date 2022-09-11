@@ -14,6 +14,8 @@ See for more information License.h.
 #include "NetSystem.h"
 #include "GlobalParam.h"
 #include "../GameLib/NameSrcEventID.h"
+#include "../QtLib/IQtLib.h"
+#include "SlaveForm.h"
 
 using namespace std;
 using namespace nsMelissa;
@@ -21,6 +23,7 @@ using namespace nsMelissa;
 TServerDeveloperTool_SlaveTank::TServerDeveloperTool_SlaveTank()
 {
 	mMakerObjectCommon = new TMakerObjectCommon;
+  mSlaveForm = NULL;
 }
 //---------------------------------------------------------------------------------
 TServerDeveloperTool_SlaveTank::~TServerDeveloperTool_SlaveTank()
@@ -28,16 +31,21 @@ TServerDeveloperTool_SlaveTank::~TServerDeveloperTool_SlaveTank()
   delete mMakerObjectCommon;
 }
 //---------------------------------------------------------------------------------
-void TServerDeveloperTool_SlaveTank::Init(TComponentServer* pComponent, const char* arg)
+void TServerDeveloperTool_SlaveTank::Init(TComponentServer* pComponent, vector<string>& arg)
 {
   InitLog();
   mComponent = *pComponent;
 
-  unsigned int ip = boost::asio::ip::address_v4::from_string(ns_getSelfIP(0)).to_ulong();
+  ParseCmd(arg);
 
-  bool resOpen = mComponent.mNet.Slave->Open(SLAVE_PORT);
+  TInputCmdDevTool::TInput input;
+  mInputCmd.Get(input);
+
+  bool resOpen = mComponent.mNet.Slave->Open(input.port);
   BL_ASSERT(resOpen);
-  mComponent.mNet.Slave->ConnectUp( ip, MASTER_PORT);
+  mComponent.mNet.Slave->ConnectUp( input.ip, MASTER_PORT);
+
+  mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_SlaveTank::InitQtForm,this);
 }
 //---------------------------------------------------------------------------------
 int TServerDeveloperTool_SlaveTank::GetTimeRefreshMS()// как часто происходит вызов Refresh()
@@ -76,6 +84,9 @@ void TServerDeveloperTool_SlaveTank::Event(nsEvent::TEvent* pEvent)
       break;
     case ID_SRC_EVENT_MANAGER_OBJECT_COMMON:
       break;
+    case ID_SRC_EVENT_QT_LIB:
+      HandleFromQt(pEvent);
+      break;
   }
 }
 //---------------------------------------------------------------------------------------------
@@ -92,9 +103,11 @@ void TServerDeveloperTool_SlaveTank::HandleFromMelissa(TBaseEvent* pBE)
       break;
     case TBase::eConnectUp:
       sEvent = "ConnectUp";
+      ConnectUp((TEventConnectUp*)pBE);
       break;
     case TBase::eDisconnectUp:
       sEvent = "DisconnectUp";
+      DisconnectUp((TEventDisconnectUp*)pBE);
       break;
     case TBase::eError:
       sEvent = "Error";
@@ -127,7 +140,7 @@ void TServerDeveloperTool_SlaveTank::HandleFromMelissa(TBaseEvent* pBE)
       sEvent = "DestroyGroup";
       break;
   }
-  GetLogger()->Get("Inner")->WriteF_time("Melissa: %s.\n",sEvent.data());
+  GetLogger("Inner")->WriteF_time("Melissa: %s.\n",sEvent.data());
 }
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_SlaveTank::InitLog()
@@ -137,5 +150,58 @@ void TServerDeveloperTool_SlaveTank::InitLog()
     mFuncGetLogger()->Register("Inner");// для логирования внутренних событий
     mFuncGetLogger()->Init("SlaveTank");
   }
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::InitQtForm()
+{
+  mSlaveForm = new SlaveForm;
+  mSlaveForm->show();
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::HandleFromQt(nsEvent::TEvent* pEvent)
+{
+  int type = *((int*)pEvent->container.GetPtr());
+  switch(type)
+  {
+    case 0:
+      Exit();
+      break;
+    default:;
+  }
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::ParseCmd(std::vector<std::string>& arg)
+{
+  TInputCmdDevTool::TInput input;
+  input.ip = boost::asio::ip::address_v4::from_string(ns_getSelfIP(0)).to_ulong();
+  input.port = SLAVE_PORT;
+
+  mInputCmd.SetDefParam(input);
+  mInputCmd.SetArg(arg);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::ConnectUp(TEventConnectUp* pBE)
+{
+  mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_SlaveTank::ConnectUpQt,this);
+  // ###
+  //char s = 'm';
+  //TBreakPacket bp;
+  //bp.PushBack(&s, sizeof(s));
+  //mComponent.mNet.Master->SendUp(bp);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::DisconnectUp(TEventDisconnectUp* pBE)
+{
+  mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_SlaveTank::DisconnectUpQt,this);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::ConnectUpQt()
+{
+  mSlaveForm->SetConnect(true);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::DisconnectUpQt()
+{
+  mSlaveForm->SetConnect(false);
 }
 //---------------------------------------------------------------------------------------------
