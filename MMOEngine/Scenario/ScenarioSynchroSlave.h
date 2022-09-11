@@ -30,7 +30,7 @@ namespace nsMMOEngine
     
     void SendSynchro(int loadProcent);
   protected:
-    void RecvFromSlave(THeaderSynchroSlave* pPacket);
+    void RecvFromSlave(TDescRecvSession* pDesc);
 
     TContextScSynchroSlave* Context(){return (TContextScSynchroSlave*)mCurContext;}
   };

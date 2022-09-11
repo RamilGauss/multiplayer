@@ -23,7 +23,7 @@ namespace nsMMOEngine
   class TManagerSession
   {
     enum{
-      eDefTimeLive = 30*1000,// мс
+      eDefTimeLive = 5*1000,// мс
     };
 
     unsigned int mTimeLiveSession;

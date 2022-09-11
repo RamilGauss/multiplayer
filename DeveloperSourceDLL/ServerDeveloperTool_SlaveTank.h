@@ -17,6 +17,9 @@ class SlaveForm;
 
 class TServerDeveloperTool_SlaveTank : public IServerDeveloperTool
 {
+  TListMultiThread<unsigned int> mListID_SessionAdd;
+  TListMultiThread<unsigned int> mListID_SessionDelete;
+
   SlaveForm* mSlaveForm;
 
   TInputCmdDevTool mInputCmd;
@@ -26,7 +29,6 @@ public:
 
 	virtual void Init(TComponentServer* pComponent, std::vector<std::string>& arg);
 	virtual int GetTimeRefreshMS();
-	//virtual void Refresh();
 
 	virtual void Done();
 	virtual void Event(nsEvent::TEvent* pEvent);
@@ -44,10 +46,14 @@ protected:
   void InitQtForm();
   void ConnectUpQt();
   void DisconnectUpQt();
+  void AddClientQt();
+  void DeleteClientQt();
 
   void ConnectUp(nsMMOEngine::TEventConnectUp* pBE);
   void DisconnectUp(nsMMOEngine::TEventDisconnectUp* pBE);
 
+  void ConnectDown(nsMMOEngine::TEventConnectDown* pEvent);
+  void DisconnectDown(nsMMOEngine::TEventDisconnectDown* pEvent);
 };
 
 #endif

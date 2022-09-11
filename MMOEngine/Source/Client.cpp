@@ -35,7 +35,15 @@ void TClient::Login(unsigned int ip, unsigned short port, void* data, int size)
 //-------------------------------------------------------------------------
 void TClient::DisconnectInherit(unsigned int id_session)
 {
-
+  // тут проблема в том, что бы различить дисконнект со стороны Мастера при 
+  // отработке сценария LoginClient от других
+  IContextScenario* pContext = mContainerUp->GetMCSc()->GetActive();
+  if(pContext)// есть вообще активные сценарии
+  if(pContext==mControlSc->mLoginClient->GetContext())// активен сценарий LoginClient
+    // возможно это продолжение сценария
+    mControlSc->mLoginClient->DisconnectFromClient();
+	else
+		mID_SessionUp = INVALID_HANDLE_SESSION;
 }
 //-------------------------------------------------------------------------
 void TClient::EndLoginClient(IScenario* pSc)
@@ -57,7 +65,7 @@ void TClient::LeaveQueue()
 
 }
 //-------------------------------------------------------------------------
-void TClient::SetIDClient(unsigned int id_client)
+void TClient::EventSetClientKeyLoginClient(unsigned int id_client)
 {
   mID = id_client;
 }

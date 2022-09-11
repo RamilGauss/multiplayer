@@ -9,9 +9,14 @@ See for more information License.h.
 
 #include "Precompiled.h"
 #include <atlconv.h>
-#include "../GameLib/IClientDeveloperTool.h"
 #include <boost/asio/ip/impl/address_v4.ipp>
+
+#include <QString>
+#include <QSettings>
+
 #include "GlobalParam.h"
+#include "../GameLib/IClientDeveloperTool.h"
+#include "NetSystem.h"
 
 TClientMain::TClientMain()
 {
@@ -34,6 +39,8 @@ void TClientMain::Activate()
 
   bEnter->eventMouseButtonClick += MyGUI::newDelegate(this, &TClientMain::sl_Enter);
   bExit ->eventMouseButtonClick += MyGUI::newDelegate(this, &TClientMain::sl_Exit);
+
+  LoadInputParam();
 }
 //-------------------------------------------------------------------------------------
 void TClientMain::sl_Enter(MyGUI::Widget* _sender)
@@ -53,6 +60,8 @@ void TClientMain::sl_Enter(MyGUI::Widget* _sender)
   if(IsOpen==false)
     IsOpen = pComponent->mNetClient->Open(port);
 
+  SaveInputParam(ip,port,sLogin.data());
+
   BL_ASSERT(IsOpen);
   pComponent->mNetClient->Login( ip, MASTER_PORT, (void*)sLogin.data(), sLogin.length());
 }
@@ -60,7 +69,6 @@ void TClientMain::sl_Enter(MyGUI::Widget* _sender)
 void TClientMain::sl_Exit(MyGUI::Widget* _sender)
 {
   IClientDeveloperTool::Singleton()->Exit();
-  //Hide();
 }
 //-------------------------------------------------------------------------------------
 const char* TClientMain::GetNameLayout()
@@ -89,5 +97,37 @@ void TClientMain::KeyEvent(MyGUI::Widget* _sender, MyGUI::KeyCode _key, MyGUI::C
       break;
     default:;
   }
+}
+//-------------------------------------------------------------------------------------
+void TClientMain::SaveInputParam(unsigned int ip, unsigned int port, const char* sLogin)
+{
+  QSettings settings("RUSSIA","ClientMain");
+  settings.setValue("ip",   ip);
+  settings.setValue("port", port);
+  settings.setValue("Login",QString(sLogin));
+}
+//-------------------------------------------------------------------------------------
+void TClientMain::LoadInputParam()
+{
+  QSettings settings("RUSSIA","ClientMain");
+  bool ok = false;
+  unsigned char sIP4[4];
+  *(unsigned int*)(&sIP4[0]) = settings.value("ip", 0).toUInt(&ok);
+  if(ok==false) return;
+  unsigned int port = settings.value("port",0).toUInt(&ok);
+  if(ok==false) return;
+  QString sLogin    = settings.value("Login",QString()).toString();
+
+  char sIP[100];
+  sprintf(sIP, "%u.%u.%u.%u", 
+     sIP4[3], sIP4[2], sIP4[1], sIP4[0]);
+  ebIP->setOnlyText(sIP);
+
+  char sPort[100];
+  sprintf(sPort,"%u",port);
+  ebPort->setOnlyText(sPort);
+
+  QByteArray ba = sLogin.toLocal8Bit();
+  ebLogin->setOnlyText(ba.data());
 }
 //-------------------------------------------------------------------------------------

@@ -50,6 +50,13 @@ namespace nsMMOEngine
 
     void SetUserPtr(void* p);
     void* GetUserPtr();
+
+    // можно ли сейчас удалить
+    bool CanDelete();
+    // удалить контекст позже, после дезактивации
+    void DeleteLater();
+    // поставили ли на удаление позже
+    bool IsSetDeleteLater();
   protected:
   };
 }

@@ -24,8 +24,9 @@ namespace nsMMOEngine
     LoginClientClientMasterNotReady,
     LoginClientClientNoAnswer,
     LoginClientClientNotExistSlave,
-    LoginClientSuperServerNoAnswer,
+    LoginClientSlaveNoAnswer,
     LoginClientMasterClientNotActive,
+    LoginClientSuperServerNoAnswer,
   }ErrorCode;
 }
 #endif

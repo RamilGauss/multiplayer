@@ -18,13 +18,11 @@ namespace nsMMOEngine
   class TManagerContextClient_slave;
   class MMO_ENGINE_EI TSlave : public TActiveServer
   {
-
     enum{
-      eDeltaSynchro = 3000,// мс
+      eDeltaSynchro = 300,// мс
     };
 
     unsigned int mTimeNeedSendSynchro;
-
     boost::scoped_ptr<TManagerContextClient_slave> mMngContextClient;
 
   public:
@@ -53,8 +51,9 @@ namespace nsMMOEngine
     virtual void DisconnectInherit(unsigned int id_session);
     
 	protected:
-    virtual void NeedContextLoginClientByClientKey(unsigned int id_key_client);
-    virtual void NeedIsExistClientID(unsigned int id_client);
+    virtual void NeedContextLoginClientByClientKey(unsigned int id_client);
+    virtual void NeedContextLoginClientByClientSessionByKeyClient(unsigned int id_session_client,
+                                                                  unsigned int id_client);
     //-----------------------------------------------------------------
     virtual void NeedContextRcm(unsigned int id_session);
     virtual void NeedContextSendToClient(unsigned int id_session);

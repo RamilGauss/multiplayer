@@ -10,9 +10,11 @@ See for more information License.h.
 #include "BL_Debug.h"
 #include "Logger.h"
 
-#include "Client_master.h"
-#include "Slave_master.h"
-#include "GroupClient_master.h"
+#include "ManagerContextMoreDownClientConnection.h"
+#include "ManagerContextDownConnection_Slave.h"
+#include "ManagerContextClientLogining.h"
+#include "ManagerGroupClient.h"
+#include "SetOrderElement.h"
 
 #include "Events.h"
 
@@ -22,15 +24,20 @@ See for more information License.h.
 #include "ScenarioFlow.h"
 #include "ScenarioRecommutationClient.h"
 #include "ScenarioSynchroSlave.h"
-#include "ScenarioDisconnectSlave.h"
+#include "ScenarioDisconnectClient.h"
 
+#include "ContainerContextSc.h"
 
 using namespace std;
 using namespace nsMMOEngine;
 
-TMaster::TMaster()
+TMaster::TMaster():
+mMngContextClient(new TManagerContextMoreDownClientConnection),
+mMngContextSlave (new TManagerContextDownConnection_Slave),
+mMngContextClientLogining(new TManagerContextClientLogining),
+mMngGroup(new TManagerGroupClient),
+mSetClientKeyInQueue(new TSetOrderElement)
 {
-  mCurCounterGroup = 0;
   mControlSc->mLoginClient->SetBehavior(TScenarioLoginClient::eMaster);
 }
 //-------------------------------------------------------------------------
@@ -42,26 +49,17 @@ TMaster::~TMaster()
 bool TMaster::TryCreateGroup(list<unsigned int>& l_id_client, unsigned int& id_group)
 {
   // проверка на существование всех клиентов
-  BOOST_FOREACH(unsigned int id, l_id_client)
+  BOOST_FOREACH(unsigned int id_client, l_id_client)
   {
-    TClient_master* pClient = FindClientByKey(id);
-    if(pClient==NULL)
+    if(mMngContextClient->FindContextByClientKey(id_client)==NULL)
       return false;
     // если клиент существует, то спросить состоит ли он в группе
-    if(pClient->GetGroupID()!=-1)
+    if(mMngGroup->FindIDByClientKey(id_client,id_group))
     {
       // генерация ошибки
       GetLogger(STR_NAME_MMO_ENGINE)->
-        WriteF_time("TMaster::TryCreateGroup() Client(%u) is entered in group id=%u.\n",
-                    id,pClient->GetGroupID());
-      return false;
-    }
-    // нельзя объединять в группу если клиент авторизуется
-    if(pClient->GetState()==TClient_master::eLogin)
-    {
-      // генерация ошибки
-      GetLogger(STR_NAME_MMO_ENGINE)->
-        WriteF_time("TMaster::TryCreateGroup() Client(%u) is been authorized.\n",id);
+        WriteF_time("TMaster::TryCreateGroup() Client(%u) was entered in group id=%u.\n",
+                    id_client,id_group);
       return false;
     }
   }
@@ -71,18 +69,7 @@ bool TMaster::TryCreateGroup(list<unsigned int>& l_id_client, unsigned int& id_g
 //-------------------------------------------------------------------------
 void TMaster::DestroyGroup(unsigned int id_group)
 {
-  TGroupClient_master* pGroup = FindGroupByKey(id_group);
-  if(pGroup==NULL)
-    return;
-  
-  BOOST_FOREACH(TClient_master* pClient, pGroup->GetClient())
-  {
-    pClient->SetGroupID(-1);
-    pClient->GetSlave()->AddDeltaFreeClient(1);
-  }
-
-  mMapIDGroupClient.erase(id_group);
-  delete pGroup;
+  mMngGroup->DeleteByID(id_group);
   // генерация события
   TEventDestroyGroup event;
   event.id_group = id_group;
@@ -91,120 +78,107 @@ void TMaster::DestroyGroup(unsigned int id_group)
 //-------------------------------------------------------------------------
 void TMaster::LeaveGroup(unsigned int id_client)
 {
-  TClient_master* pClient = FindClientByKey(id_client);
-  if(pClient==NULL)
+  unsigned int id_group;
+  if(mMngGroup->FindIDByClientKey(id_client,id_group)==false)
     return;
-  unsigned int id_group = pClient->GetGroupID();
-  if(id_group==-1)
-  {
-    GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TMaster::LeaveGroup() Client(%u) don't belong to group.\n",id_client);
-    return;
-  }
-  pClient->GetSlave()->AddDeltaFreeClient(1);
-  pClient->SetGroupID(-1);// не состоит ни в одной группе
 
-  TGroupClient_master* pGroup = FindGroupByKey(id_group);
-  if(pGroup==NULL)
-    return;
-  pGroup->GetClient().erase(pClient);
+  mMngGroup->DeleteClientKey(id_client);
 
   TEventLeaveGroup event;
-  event.id_client = id_group;
+  event.id_client = id_client;
+  event.id_group  = id_group;
   AddEventCopy(&event,sizeof(event)); 
 }
 //-------------------------------------------------------------------------
-void TMaster::GetListForGroup(unsigned int id_group, std::list<unsigned int>& l)
+void TMaster::GetListForGroup(unsigned int id_group, std::list<unsigned int>& lClientKey)
 {
-  TGroupClient_master* pGroup = FindGroupByKey(id_group);
-  if(pGroup==NULL)
-    return;
+  int countClient = mMngGroup->GetCountClientKey(id_group);
 
-  BOOST_FOREACH(TClient_master* pClient, pGroup->GetClient())
-    l.push_back(pClient->GetKey());
+  for( int i = 0 ; i < countClient ; i++)
+  {
+    unsigned int id_client;
+    mMngGroup->GetClientKeyByIndex(id_group, i, id_client);
+    lClientKey.push_back(id_client);
+  }
 }
 //-------------------------------------------------------------------------
 void TMaster::SetResultLogin(bool res, unsigned int id_session, 
                              unsigned int id_client, 
                              void* resForClient, int sizeResClient)
 {
-  TClient_master* pClient = FindClientByIDSession(id_session);
-  if(pClient==NULL)
+  TContainerContextSc* pC = mMngContextClientLogining->FindContextBySession(id_session);
+  if(pC==NULL)
     return;
-  mControlSc->mLoginClient->SetContext(&pClient->GetC()->mLoginClient);
+
+  mControlSc->mLoginClient->SetContext(&pC->mLoginClient);
   if(res==false)
   {
+		// отказ
     mControlSc->mLoginClient->Reject(resForClient, sizeResClient);
     return;
   }
-  if(FindClientByKey(id_client))
+  // проверка на существование ключа в кластере
+  unsigned int id_session_temp;
+  if((mMngContextClient->FindContextByClientKey(id_client))||
+     (mMngContextClientLogining->FindSessionByClientKey(id_client,id_session_temp)))
   {
     // генерация ошибки
     GetLogger(STR_NAME_MMO_ENGINE)->
       WriteF_time("TMaster::SetResultLogin() register Client by busy key=%u.\n",id_client);
     return;
   }
-  mMapID_SessionClientWait.erase(id_session);
-  mMapKeyClient.insert(TMapUintClientPtr::value_type(id_client,pClient));
-  mIDSessionKey.insert(TMapUintUint::value_type(id_session,id_client));
-  pClient->SetState(TClient_master::eLogin);
-
+  mMngContextClientLogining->AddKeyBySession(id_session, id_client);
   // решить на какой Slave закинуть клиента
-  unsigned int id_session_slave = 0;
-  mControlSc->mLoginClient->Accept(id_client,resForClient,sizeResClient,
-                                   id_session_slave,mID_SessionUp);
+  unsigned int id_session_slave;
+	unsigned char load_procent;
+	if(mMngContextSlave->FindMinimumLoad(id_session_slave,load_procent)==false)
+	{
+		// генерация ошибки
+		GetLogger(STR_NAME_MMO_ENGINE)->
+			WriteF_time("TMaster::SetResultLogin() count slave = 0.\n");
+		BL_FIX_BUG();
+		return;
+	}
+	if(load_procent<eLimitLoadProcentOnSlaveForAdd)
+	{
+		// начали процесс авторизации
+		mMngContextSlave->AddClientKey(id_session_slave, id_client);
+		mControlSc->mLoginClient->Accept(id_client,resForClient,sizeResClient,
+			id_session_slave,mID_SessionUp);
+	}
+	else
+	{
+		// в очередь на ожидание свободного места
+		mSetClientKeyInQueue->AddKeyAtEnd(id_client);
+		int index;
+		if(mSetClientKeyInQueue->FindIndexByClientKey(id_client,index))
+			mControlSc->mLoginClient->Queue(index,resForClient,sizeResClient);
+	}
 }
 //-------------------------------------------------------------------------
 bool TMaster::FindSlaveSessionByGroup(unsigned int id_group, 
                                       unsigned int& id_session)
 {
-  TGroupClient_master* pGroup = FindGroupByKey(id_group);
-  if(pGroup==NULL)
-    return false;
-  if(pGroup->GetClient().size()==0)
-  {
-    GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TMaster::FindSlaveSessionByGroup() empty group id=%u.\n",id_group);
-    return false;
-  }
-  TClient_master* pClient = *(pGroup->GetClient().begin());
-  id_session = pClient->GetSlave()->GetID_Session();
-  return true;
+  return mMngGroup->FindSessionByID(id_group,id_session);
 }
 //-------------------------------------------------------------------------
 void TMaster::DisconnectInherit(unsigned int id_session)
 {
-  if(id_session==mID_SessionUp)
-  {
-    DisconnectSuperServer(); 
+  if(DisconnectSuperServer(id_session))
     return;
-  }
-  TClient_master* pClient = FindClientByIDSessionWait(id_session);
-  if(pClient)
-  {
-    DisconnectClientWait(pClient);
+  if(DisconnectClientWait(id_session))
     return;
-  }
-  pClient = FindClientByIDSession(id_session);
-  if(pClient)
-  {
-    DisconnectClient(pClient);
+  if(DisconnectSlave(id_session))
     return;
-  }
-  TSlave_master* pSlave = FindSlaveByIDSession(id_session);
-  if(pSlave)
-  {
-    DisconnectSlave(pSlave);
-    return;
-  }
-  GetLogger(STR_NAME_MMO_ENGINE)->
-    WriteF_time("TMaster::DisconnectInherit() session not exist id=%u.\n",id_session);
-  BL_FIX_BUG();
+
+  //GetLogger(STR_NAME_MMO_ENGINE)->
+    //WriteF_time("TMaster::DisconnectInherit() session not exist id=%u.\n",id_session);
+  //BL_FIX_BUG();
 }
 //-------------------------------------------------------------------------
 int TMaster::GetCountDown()
 {
-	return mMapID_SessionSlave.size();
+	return mMngContextSlave->GetCountSession();
 }
 //-------------------------------------------------------------------------
 bool TMaster::GetDescDown(int index, void* pDesc, int& sizeDesc)
@@ -215,17 +189,12 @@ bool TMaster::GetDescDown(int index, void* pDesc, int& sizeDesc)
       WriteF_time("TMaster::GetDescDown() size of buffer less then size of structure.\n");
     return false;
   }
-  if(index>=GetCountDown())
-  {
-    GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TMaster::GetDescDown() index is out of band.\n");
+  unsigned int id_session;
+  if(mMngContextSlave->GetSessionByIndex(index, id_session)==false)
     return false;
-  }
-  TMapUintSlavePtrIt it = mMapID_SessionSlave.begin();
-  for(int i = 0 ; i < index ; i++)
-    it++;
-  TDescDownMaster* pD = (TDescDownMaster*)pDesc;
-  pD->id_session = it->second->GetID_Session();
+
+  TDescDownMaster* pDescDownSlave = (TDescDownMaster*)pDesc;
+  pDescDownSlave->id_session = id_session;
   sizeDesc = sizeof(TDescDownMaster);
   return true;
 }
@@ -260,45 +229,11 @@ void TMaster::EndLoginSlave(IScenario* pSc)
 //-------------------------------------------------------------------------
 void TMaster::SendDown(unsigned int id_session, TBreakPacket bp, bool check)
 {
-  TSlave_master* pSlave = FindSlaveByIDSession(id_session);
-  if(pSlave==NULL)
+  TContainerContextSc* pC = mMngContextSlave->FindContextBySession(id_session);
+  if(pC==NULL)
     return;
-  mControlSc->mFlow->SetContext(&pSlave->GetC()->mFlow);
+  mControlSc->mFlow->SetContext(&pC->mFlow);
   mControlSc->mFlow->SendDown(bp,check);
-}
-//-------------------------------------------------------------------------
-TClient_master* TMaster::FindClientByIDSession(unsigned int id)
-{
-  return FindClientByID(mMapID_SessionClientWait,id);
-}
-//-------------------------------------------------------------------------
-TClient_master* TMaster::FindClientByIDSessionWait(unsigned int id)
-{
-  TMapUintUintIt fit = mIDSessionKey.find(id);
-  if(fit==mIDSessionKey.end())
-  {
-    GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TMaster::FindClientByIDSessionWait() Client id=%u is not founded.\n",id);
-    return NULL;
-  }
-  return FindClientByID(mMapID_SessionClientWait, fit->second);
-}
-//-------------------------------------------------------------------------
-TClient_master* TMaster::FindClientByKey(unsigned int key)
-{
-  return FindClientByID(mMapKeyClient,key);
-}
-//-------------------------------------------------------------------------
-TClient_master* TMaster::FindClientByID(TMapUintClientPtr& m, unsigned int id)
-{
-  TMapUintClientPtrIt fit = m.find(id);
-  if(fit!=m.end())
-  {
-    GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TMaster::FindClientByID() Client id=%u is not founded.\n",id);
-    return fit->second;
-  }
-  return NULL;
 }
 //-------------------------------------------------------------------------
 void TMaster::WorkInherit()
@@ -307,21 +242,28 @@ void TMaster::WorkInherit()
 //-------------------------------------------------------------------------
 void TMaster::EndLoginClient(IScenario* pSc)
 {
-  unsigned int id_session = pSc->GetContext()->GetID_Session();
-
-  //if(((TContextScLoginClient*)pSc->GetContext())->IsReject())
-  //{
-  //  // удалить 
-  //  TClientForMasterPrivate* pClient = FindClientByIDSessionWait(id_session);
-  //  if(pClient==NULL)
-  //    return;
-  //  mMapID_SessionClientWait.erase(id_session);
-  //  delete pClient;
-  //}
+  // получить контекст
+  TContextScLoginClient* pContextLoginClient = (TContextScLoginClient*)pSc->GetContext();
+  // переместить информацию из mMngContextClientLogining в mMngContextClient
+  // либо по сессии 
+  unsigned int id_session_client = pContextLoginClient->GetID_SessionClientMaster();
+  // удалить из списка авторизующихся
+  mMngContextClientLogining->DeleteBySession(id_session_client);
+  if(pContextLoginClient->IsReject())
+    return;
+  // тут если авторизация закончилась удачно
+  if(pContextLoginClient->IsAccept())
+  {
+    // ID Клиента
+    unsigned int id_client = pContextLoginClient->GetIDClient();
+    // найти сессию Slave
+    unsigned int id_session_slave = pContextLoginClient->GetID_SessionMasterSlave();
+    TContainerContextSc* pC = mMngContextClient->AddContext(id_client,id_session_slave);
+  }
 }
 //-------------------------------------------------------------------------
-void TMaster::EndLoginClientBySlave(IScenario* pSc)
-{
+//void TMaster::EndLoginClientBySlave(IScenario* pSc)
+//{
   //TScenarioLoginClientByMaster1* pLCM1 = (TScenarioLoginClientByMaster1*)pSc;
   //unsigned int id_session = pLCM1->GetID_Session();
   //if(pLCM1->IsReject())
@@ -341,158 +283,168 @@ void TMaster::EndLoginClientBySlave(IScenario* pSc)
   //  pClient->SetState(TClientForMasterPrivate::eReady);
   //  mIDSessionKey.erase(id_session);
   //}
-}
-//-------------------------------------------------------------------------
-TGroupClient_master* TMaster::FindGroupByKey(unsigned int key)
-{
-  TMapUintGroupClientPtrIt fit = mMapIDGroupClient.find(key);
-  if(mMapIDGroupClient.end()==fit)
-  {
-    GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TMaster::FindGroupByKey() group key=%u is not founded.\n",key);
-    return NULL;
-  }
-  return fit->second;
-}
-//-------------------------------------------------------------------------
-TSlave_master* TMaster::FindSlaveByIDSession(unsigned int id)
-{
-  TMapUintSlavePtrIt fit = mMapID_SessionSlave.find(id);
-  if(mMapID_SessionSlave.end()==fit)
-  {
-    GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TMaster::FindSlaveByIDSession() Slave id=%u is not founded.\n",id);
-    return NULL;
-  }
-  return fit->second;
-}
+//}
 //-------------------------------------------------------------------------
 void TMaster::Done()
 {
   
 }
 //-------------------------------------------------------------------------
-void TMaster::DisconnectSuperServer()
+bool TMaster::DisconnectSuperServer(unsigned int id_session)
 {
+  if(id_session!=mID_SessionUp)
+    return false;
+
   mID_SessionUp = INVALID_HANDLE_SESSION;
   flgConnectUp  = false;
 
   TEventDisconnectUp event;
   event.id_session = mID_SessionUp;
   AddEventCopy(&event, sizeof(event));
+  return true;
 }
 //-------------------------------------------------------------------------
-void TMaster::DisconnectClientWait(TClient_master* pClient)
+bool TMaster::DisconnectClientWait(unsigned int id_session)
 {
+  TContainerContextSc* pC = mMngContextClientLogining->FindContextBySession(id_session);
+  if(pC==NULL)
+    return false;
+  
+  unsigned int id_client;
+  if(mMngContextClientLogining->FindClientKeyBySession(id_session,id_client))
+  {
+		// возможно клиент в очереди, удалим на всякий случай
+		mSetClientKeyInQueue->DeleteKey(id_client);
+    // закончить с Клиентом на Slave
+    mControlSc->mLoginClient->SetContext(&pC->mLoginClient);
+    mControlSc->mLoginClient->DisconnectFromMaster();
+    // отослать SuperServer информацию о дисконнекте Клиента
+    mControlSc->mDisClient->SetContext(&pC->mDisClient);
+    vector<unsigned int> vecID;
+    vecID.push_back(id_client);
+    mControlSc->mDisClient->DisconnectFromMaster(vecID);
+  }
 
+  mMngContextClientLogining->DeleteBySession(id_session);
+  return true;
 }
 //-------------------------------------------------------------------------
-void TMaster::DisconnectClient(TClient_master* pClient)
+bool TMaster::DisconnectSlave(unsigned int id_session)
 {
-
-}
-//-------------------------------------------------------------------------
-void TMaster::DisconnectSlave(TSlave_master* pSlave)
-{
+  TContainerContextSc* pC = mMngContextSlave->FindContextBySession(id_session);
+  if(pC==NULL)
+    return false;
   // составить список клиентов, которые сидели на Slave
-  std::vector<unsigned int> vID_client;
-  pSlave->GetVectorID_client(vID_client);
-  mControlSc->mDisSlave->SendFromMasterToSuperServer(vID_client);
+  int countClient = mMngContextSlave->GetCountClientKey(id_session);
+  vector<unsigned int> vID_client;  
+  for(int i = 0 ; i < countClient ; i++)
+  {
+    unsigned int id_client;
+    mMngContextSlave->GetClientKeyByIndex(id_session, i, id_client);
+    vID_client.push_back(id_client);
+  }
+  BOOST_FOREACH(unsigned int id_client, vID_client)
+  {
+    mMngContextClient->DeleteByKey(id_client);
+    mMngGroup->DeleteClientKey(id_client);
+  }
 
-  unsigned int id_slave = pSlave->GetC()->GetID_Session();
+  // отослать SuperServer список клиентов
+  mControlSc->mDisClient->DisconnectFromMaster(vID_client);
 
-  mMapID_SessionSlave.erase(pSlave->GetID_Session());
-  delete pSlave;
-  // все кто сидят на Slave или будут туда перекоммутированы
+  // удалить Slave
+  mMngContextSlave->DeleteContextBySession(id_session);
+  // уведомить о разрыве
   TEventDisconnectDown event;
-  event.id_session = id_slave;
+  event.id_session = id_session;
   AddEventCopy(&event, sizeof(event));
+  return true;
 }
 //-------------------------------------------------------------------------
 bool TMaster::EvalCreateGroupNow(list<unsigned int>& l_id_client, unsigned int& id_group)
 {
-  TListSlavePrior listSlavePrior;  // составить список по приоритету
-  BOOST_FOREACH(TMapUintSlavePtr::value_type& bit,mMapID_SessionSlave)
-  {
-    TSlave_master* pSlave = bit.second;
-    if(pSlave->GetState()==TSlave_master::eConnect)
-      continue;
-    int loadFree  = pSlave->GetLoadProcentFreeClient();
-    int loadGroup = pSlave->GetLoadProcentGroupClient();
-    TDescChoiseSlave desc;
-    desc.pSlave = pSlave;
-    if(pSlave->GetLoadProcent()<eLimitMoreEmpty)
-      desc.type = TDescChoiseSlave::eEmpty;
-    else if(pSlave->GetLoadProcent()<eLimitMoreHalf)
-    {
-      if( loadFree > loadGroup )
-        desc.type = TDescChoiseSlave::eFree;
-      else
-        desc.type = TDescChoiseSlave::eGroup;
-    }
-    else
-    {
-      float delFG = float(loadFree)/loadGroup;// соотношения групповых к свободным
-      if( delFG < 0.5f )// групповых намного меньше
-        desc.type = TDescChoiseSlave::eMFree; 
-      else if( delFG > 2.0f)// групповых намного больше
-        desc.type = TDescChoiseSlave::eMGroup;
-      else // примерно поровну
-        desc.type = TDescChoiseSlave::eGroupFree;
-    }
-  }
-  TSlave_master* pFindSlave = AnalizListSlaveForGroup(listSlavePrior);
-  if(pFindSlave==NULL)
-    return false;
-  id_group = CreateGroup(pFindSlave,l_id_client);
+  //TListSlavePrior listSlavePrior;  // составить список по приоритету
+  //BOOST_FOREACH(TMapUintSlavePtr::value_type& bit,mMapID_SessionSlave)
+  //{
+  //  TSlave_master* pSlave = bit.second;
+  //  if(pSlave->GetState()==TSlave_master::eConnect)
+  //    continue;
+  //  int loadFree  = pSlave->GetLoadProcentFreeClient();
+  //  int loadGroup = pSlave->GetLoadProcentGroupClient();
+  //  TDescChoiseSlave desc;
+  //  desc.pSlave = pSlave;
+  //  if(pSlave->GetLoadProcent()<eLimitMoreEmpty)
+  //    desc.type = TDescChoiseSlave::eEmpty;
+  //  else if(pSlave->GetLoadProcent()<eLimitMoreHalf)
+  //  {
+  //    if( loadFree > loadGroup )
+  //      desc.type = TDescChoiseSlave::eFree;
+  //    else
+  //      desc.type = TDescChoiseSlave::eGroup;
+  //  }
+  //  else
+  //  {
+  //    float delFG = float(loadFree)/loadGroup;// соотношения групповых к свободным
+  //    if( delFG < 0.5f )// групповых намного меньше
+  //      desc.type = TDescChoiseSlave::eMFree; 
+  //    else if( delFG > 2.0f)// групповых намного больше
+  //      desc.type = TDescChoiseSlave::eMGroup;
+  //    else // примерно поровну
+  //      desc.type = TDescChoiseSlave::eGroupFree;
+  //  }
+  //}
+  //TSlave_master* pFindSlave = AnalizListSlaveForGroup(listSlavePrior);
+  //if(pFindSlave==NULL)
+  //  return false;
+  //id_group = CreateGroup(pFindSlave,l_id_client);
   return true;
 }
 //-------------------------------------------------------------------------
-TSlave_master* TMaster::AnalizListSlaveForGroup(TListSlavePrior& l_slave_prior)
-{
-  BOOST_FOREACH(TDescChoiseSlave desc,l_slave_prior)
-  {
-    switch(desc.type)
-    {   
-      case TDescChoiseSlave::eEmpty:
-        break;
-      case TDescChoiseSlave::eFree:
-        break;
-      case TDescChoiseSlave::eMFree:
-        break;
-      case TDescChoiseSlave::eGroup:
-        break;
-      case TDescChoiseSlave::eMGroup:
-        break;
-      case TDescChoiseSlave::eGroupFree:
-        break;
-    }
-  }
-  return NULL;
-}
+//TSlave_master* TMaster::AnalizListSlaveForGroup(TListSlavePrior& l_slave_prior)
+//{
+//  BOOST_FOREACH(TDescChoiseSlave desc,l_slave_prior)
+//  {
+//    switch(desc.type)
+//    {   
+//      case TDescChoiseSlave::eEmpty:
+//        break;
+//      case TDescChoiseSlave::eFree:
+//        break;
+//      case TDescChoiseSlave::eMFree:
+//        break;
+//      case TDescChoiseSlave::eGroup:
+//        break;
+//      case TDescChoiseSlave::eMGroup:
+//        break;
+//      case TDescChoiseSlave::eGroupFree:
+//        break;
+//    }
+//  }
+//  return NULL;
+//}
 //-------------------------------------------------------------------------
-unsigned int TMaster::CreateGroup(TSlave_master* pSlave,
-                                  list<unsigned int>& l_id_client)
-{
-  mCurCounterGroup++;
-  set<TClient_master*> setClient;
-  BOOST_FOREACH(unsigned int id, l_id_client)
-  {
-    TClient_master* pClient = FindClientByKey(id);
-    if(pClient)
-    {
-      pClient->SetGroupID(mCurCounterGroup);
-      mControlSc->mRcm->SetContext(&pClient->GetC()->mRcm);
-      mControlSc->mRcm->Start(pSlave->GetID_Session(), pClient);
-      setClient.insert(set<TClient_master*>::value_type(pClient));
-    }
-  }
-  TGroupClient_master* pGroup = new TGroupClient_master;
-  pGroup->SetID(mCurCounterGroup);
-  pGroup->SetClient(setClient);
-  mMapIDGroupClient.insert(TMapUintGroupClientPtr::value_type(mCurCounterGroup,pGroup));
-  return mCurCounterGroup;
-}
+//unsigned int TMaster::CreateGroup(TSlave_master* pSlave,
+//                                  list<unsigned int>& l_id_client)
+//{
+//  mCurCounterGroup++;
+//  set<TClient_master*> setClient;
+//  BOOST_FOREACH(unsigned int id, l_id_client)
+//  {
+//    TClient_master* pClient = FindClientByKey(id);
+//    if(pClient)
+//    {
+//      pClient->SetGroupID(mCurCounterGroup);
+//      mControlSc->mRcm->SetContext(&pClient->GetC()->mRcm);
+//      mControlSc->mRcm->Start(pSlave->GetID_Session(), pClient);
+//      setClient.insert(set<TClient_master*>::value_type(pClient));
+//    }
+//  }
+//  TGroupClient_master* pGroup = new TGroupClient_master;
+//  pGroup->SetID(mCurCounterGroup);
+//  pGroup->SetClient(setClient);
+//  mMapIDGroupClient.insert(TMapUintGroupClientPtr::value_type(mCurCounterGroup,pGroup));
+//  return mCurCounterGroup;
+//}
 //-------------------------------------------------------------------------
 void TMaster::EndRcm(IScenario* pSc)
 {
@@ -501,20 +453,16 @@ void TMaster::EndRcm(IScenario* pSc)
 //-------------------------------------------------------------------------
 void TMaster::NeedContextLoginSlave(unsigned int id_session)
 {
-  if(FindSlaveByIDSession(id_session))
+  TContainerContextSc* pC = mMngContextSlave->FindContextBySession(id_session);
+  if(pC)
   {
     // внутренняя ошибка
     GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TMaster::LoginSlave() against try authorized.\n");
+      WriteF_time("TMaster::NeedContextLoginSlave() against try authorized.\n");
     return;
   }
-  TSlave_master* pSlave = new TSlave_master;
-  SetupScForContext(pSlave->GetC());
-  pSlave->GetC()->SetID_Session(id_session);
-  pSlave->GetC()->SetUserPtr(pSlave);
-  mMapID_SessionSlave.insert(TMapUintSlavePtr::value_type(id_session,pSlave));
-
-  mControlSc->mLoginSlave->SetContext(&pSlave->GetC()->mLoginSlave);
+  pC = mMngContextSlave->AddContext(id_session);
+  mControlSc->mLoginSlave->SetContext(&pC->mLoginSlave);
   // событие наружу
   TEventConnectDown event;
   event.id_session = id_session;
@@ -528,18 +476,17 @@ void TMaster::NeedContextRcm(unsigned int id_session)
 //-------------------------------------------------------------------------
 void TMaster::NeedContextSynchroSlave(unsigned int id_session)
 {
-  TSlave_master* pSlave = FindSlaveByIDSession(id_session);
-  if(pSlave==NULL)
+	TContainerContextSc* pC = mMngContextSlave->FindContextBySession(id_session);
+  if(pC==NULL)
     return;
-  mControlSc->mSynchroSlave->SetContext(&pSlave->GetC()->mSynchroSlave);
+  mControlSc->mSynchroSlave->SetContext(&pC->mSynchroSlave);
 }
 //-------------------------------------------------------------------------
 void TMaster::EndSynchroSlave(IScenario* pSc)
 {
   TContextScSynchroSlave* pContextSynchroSlave = (TContextScSynchroSlave*)pSc->GetContext();
-  TSlave_master* pSlave = (TSlave_master*)pContextSynchroSlave->GetUserPtr();
-  BL_ASSERT(pSlave);
-  pSlave->SetLoadProcent(pContextSynchroSlave->GetLoadProcent());
+	mMngContextSlave->SetLoadBySession(pContextSynchroSlave->GetID_Session(), 
+		                                 pContextSynchroSlave->GetLoadProcent());
 }
 //-------------------------------------------------------------------------
 void TMaster::SendByClientKey(list<unsigned int>& lKey, TBreakPacket bp)
@@ -547,42 +494,120 @@ void TMaster::SendByClientKey(list<unsigned int>& lKey, TBreakPacket bp)
 
 }
 //-------------------------------------------------------------------------
-void TMaster::NeedContextLoginClient(unsigned int id_session)
+void TMaster::NeedContextLoginClientBySession(unsigned int id_session)
 {
   // если это повторная авторизация, то Begin по данному контексту клиента
   // вернет false и в сценарии обработка пакета не продолжится
-  TClient_master* pClient = FindClientByIDSessionWait(id_session);
-  if(pClient)
+	TContainerContextSc* pC = mMngContextClientLogining->FindContextBySession(id_session);
+  if(pC)
   {
     // внутренняя ошибка
     GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TMaster::NeedContextLoginClient() against try authorized.\n");
+      WriteF_time("TMaster::NeedContextLoginClientBySession() against try authorized.\n");
   }
   else
   {
-    pClient = new TClient_master;
-    SetupScForContext(pClient->GetC());
-    pClient->GetC()->SetID_Session(id_session);
-    pClient->GetC()->SetUserPtr(pClient);
+		pC = mMngContextClientLogining->AddContext(id_session);
   }
-
-  mMapID_SessionClientWait.insert(TMapUintClientPtr::value_type(id_session,pClient));
   // назначить контекст
-  mControlSc->mLoginClient->SetContext(&pClient->GetC()->mLoginClient);
+  mControlSc->mLoginClient->SetContext(&pC->mLoginClient);
 }
 //-------------------------------------------------------------------------
 void TMaster::NeedContextLoginClientByClientKey(unsigned int id_key_client)
 {
-
+  unsigned int id_session_client;
+  if(mMngContextClientLogining->FindSessionByClientKey(id_key_client,id_session_client))
+  {
+    TContainerContextSc* pC = mMngContextClientLogining->FindContextBySession(id_session_client);
+    if(pC)
+      mControlSc->mLoginClient->SetContext(&pC->mLoginClient);
+    else
+      BL_FIX_BUG();
+  }
+  else
+    BL_FIX_BUG();
 }
 //-------------------------------------------------------------------------
-void TMaster::NeedLeaveFromQueue(unsigned int id_session)
+void TMaster::NeedNumInQueueLoginClient(unsigned int id_session)
 {
 
 }
 //-------------------------------------------------------------------------
-void TMaster::NeedNumInQueue(unsigned int id_session)
+void TMaster::NeedContextDisconnectClient(unsigned int id_client)
+{
+  bool client_is_logining = false;
+  unsigned int id_session_client;
+  // проверить есть ли вообще такой клиент
+  TContainerContextSc* pC = mMngContextClient->FindContextByClientKey(id_client);
+  if(pC==NULL)
+  {
+    if(mMngContextClientLogining->FindSessionByClientKey(id_client,id_session_client)==false)
+      return;
+    TContainerContextSc* pC = mMngContextClientLogining->FindContextBySession(id_session_client);
+    if(pC==NULL)
+      return;
+    client_is_logining = true;
+  }
+  // переслать дальше SuperServer
+  if(mID_SessionUp!=INVALID_HANDLE_SESSION)
+  {
+    vector<unsigned int> vecID;
+    vecID.push_back(id_client);
+    mControlSc->mDisClient->SetContext(&pC->mDisClient);
+    pC->mDisClient.SetID_Session(mID_SessionUp);
+    mControlSc->mDisClient->DisconnectFromMaster(vecID);
+  }
+  // удалить из кластера
+  if(client_is_logining)
+    mMngContextClientLogining->DeleteBySession(id_session_client);
+  else
+    mMngContextClient->DeleteByKey(id_client);
+
+	TryAddClientFromQueue();
+}
+//-------------------------------------------------------------------------
+void TMaster::EndDisconnectClient(IScenario* pSc)
 {
 
+}
+//-------------------------------------------------------------------------
+void TMaster::TryAddClientFromQueue()
+{
+	// решить на какой Slave закинуть клиента
+	unsigned int id_session_slave;
+	unsigned char load_procent;
+	if(mMngContextSlave->FindMinimumLoad(id_session_slave,load_procent)==false)
+	{
+		// генерация ошибки
+		GetLogger(STR_NAME_MMO_ENGINE)->
+			WriteF_time("TMaster::SetResultLogin() count slave = 0.\n");
+		BL_FIX_BUG();
+		return;
+	}
+	if(load_procent<eLimitLoadProcentOnSlaveForAdd)
+	{
+		unsigned int id_client;
+		unsigned int id_session_client;
+		TContainerContextSc* pC;
+		while(1)
+		{
+			// ищем до тех пора не закончатся клиента в очереди
+			if(mSetClientKeyInQueue->DeleteFirst(id_client)==false)
+				return;// пусто
+	  	if(mMngContextClientLogining->FindSessionByClientKey(id_client, id_session_client))
+			{
+				pC = mMngContextClientLogining->FindContextBySession(id_session_client);
+				if(pC)
+					break;// нашли
+			}
+		}
+		
+		void* resForClient = pC->mLoginClient.GetSaveQueueDataPtr();
+  	int sizeResClient  = pC->mLoginClient.GetSaveQueueDataSize();
+		// начали процесс авторизации
+		mMngContextSlave->AddClientKey(id_session_slave, id_client);
+		mControlSc->mLoginClient->Accept(id_client,resForClient,sizeResClient,
+			id_session_slave,mID_SessionUp);
+	}
 }
 //-------------------------------------------------------------------------

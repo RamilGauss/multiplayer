@@ -45,11 +45,6 @@ THeaderLeaveQueueC2M::THeaderLeaveQueueC2M()
 {
   subType = eLeaveQueueC2M;
 }
-//--------------------------------------------------------------
-THeaderCheckLeaveM2C::THeaderCheckLeaveM2C()
-{
-  subType = eCheckLeaveQueueM2C;
-}
 //------------------------------------------------------------------------------------------------
 THeaderInfoClientM2S::THeaderInfoClientM2S()
 {
@@ -64,6 +59,11 @@ THeaderCheckInfoClientS2M::THeaderCheckInfoClientS2M()
 THeaderInfoSlaveM2C::THeaderInfoSlaveM2C()
 {
   subType = eInfoSlaveM2C;
+}
+//--------------------------------------------------------------
+THeaderCheckInfoSlaveC2M::THeaderCheckInfoSlaveC2M()
+{
+  subType = eCheckInfoSlaveC2M;
 }
 //--------------------------------------------------------------
 THeaderConnectToSlaveC2S::THeaderConnectToSlaveC2S()
@@ -84,5 +84,10 @@ THeaderCheckClientConnectM2S::THeaderCheckClientConnectM2S()
 THeaderCheckConnectToSlaveS2C::THeaderCheckConnectToSlaveS2C()
 {
   subType = eCheckConnectToSlaveS2C;
+}
+//--------------------------------------------------------------
+THeaderDisconnectClientM2S::THeaderDisconnectClientM2S()
+{
+  subType = eDisconnectClientM2S;
 }
 //--------------------------------------------------------------

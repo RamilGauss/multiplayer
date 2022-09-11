@@ -6,7 +6,6 @@ See for more information License.h.
 */
 
 #include "ScenarioRecommutationClient.h"
-#include "Client_master.h"
 #include "ManagerSession.h"
 
 using namespace nsMMOEngine;
@@ -49,7 +48,7 @@ void TScenarioRecommutationClient::DelayBegin()
 //--------------------------------------------------------------
 void TScenarioRecommutationClient::SendFirstPacket()
 {
-  mClient->SetState(TClient_master::eRcm);
+  //mClient->SetState(TClient_master::eRcm);
 
   TBreakPacket bp;
   //THeaderSendFirstpacketRcmM h;

@@ -34,6 +34,8 @@ namespace nsMMOEngine
     bool Activate(IContextScenario* pCSc);
     void Disactivate();
 
+    IContextScenario* GetActive();
+
   protected:
     friend class TManagerManagerContextSc;
 

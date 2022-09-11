@@ -26,9 +26,11 @@ mNetWorkThread(),
 mUDP(*(mNetWorkThread.GetIO_Service())),
 mAcceptor(*(mNetWorkThread.GetIO_Service()))
 {
-  INetControl::SetNetBoost(this);
+  mLocalPort  = 0;
+  mNumNetWork = 0;
 
-  pTCP_Up = new TNetControlTCP(*(mNetWorkThread.GetIO_Service()));
+  INetControl::SetNetBoost(this);
+  CreateControlTcpUp();
 }
 //----------------------------------------------------------------------------------
 TNetTransport_Boost::~TNetTransport_Boost()
@@ -43,8 +45,10 @@ void TNetTransport_Boost::Done()
 //----------------------------------------------------------------------------------
 bool TNetTransport_Boost::Open(unsigned short port, unsigned char numNetWork)
 {
+  mLocalPort  = port;
+  mNumNetWork = numNetWork;
+
   bool res = true;
-  res &= pTCP_Up->Open(port, numNetWork);
   res &= mUDP.Open(port, numNetWork);
   if(res) mUDP.Init();
   res &= mAcceptor.Open(port, numNetWork);
@@ -93,7 +97,13 @@ bool TNetTransport_Boost::IsActive()
 //--------------------------------------------------------------------------
 bool TNetTransport_Boost::Connect(unsigned int ip, unsigned short port)
 {
-  bool res = pTCP_Up->Connect(ip, port);
+  if(pTCP_Up==NULL)
+    CreateControlTcpUp();
+
+  bool res = true;
+  res &= pTCP_Up->Open(mLocalPort, mNumNetWork);
+  if(res)
+    res &= pTCP_Up->Connect(ip, port);
   if(res)
   {
     TIP_Port ip_port(ip, port);
@@ -112,6 +122,8 @@ void TNetTransport_Boost::Close(unsigned int ip, unsigned short port)
   TNetControlTCP* pControl = GetTCP_ByIP(TIP_Port(ip,port));
   if(pControl)
     pControl->Close();
+  if(pTCP_Up==pControl)
+    pTCP_Up = NULL;
   //---------------------
   mMutexMapIP_TCP.unlock();
 }
@@ -138,7 +150,7 @@ void TNetTransport_Boost::RemoveFromMapTCP(TIP_Port* ip_port, TNetControlTCP* pC
   mMutexMapIP_TCP.lock();
   //---------------------
     mMapIP_TCP.erase(*ip_port);
-    delete pControl;
+    DeleteControlTCP(pControl);
   //---------------------
   mMutexMapIP_TCP.unlock();
 }
@@ -159,8 +171,21 @@ void TNetTransport_Boost::CloseAll()
 void TNetTransport_Boost::DeleteMapControlTCP()
 {
   BOOST_FOREACH( TMapIP_Ptr::value_type &bit, mMapIP_TCP )
-    delete bit.second;
+    DeleteControlTCP(bit.second);
   
   mMapIP_TCP.clear();
 }
 //----------------------------------------------------------------------------------
+void TNetTransport_Boost::CreateControlTcpUp()
+{
+  pTCP_Up = new TNetControlTCP(*(mNetWorkThread.GetIO_Service()));
+}
+//----------------------------------------------------------------------------------
+void TNetTransport_Boost::DeleteControlTCP(TNetControlTCP* pControl)
+{
+  delete pControl;
+  if(pTCP_Up==pControl)
+    pTCP_Up = NULL;
+}
+//----------------------------------------------------------------------------------
+

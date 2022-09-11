@@ -37,6 +37,9 @@ protected:
   MyGUI::EditBox* ebIP;
   MyGUI::EditBox* ebPort; 
   MyGUI::EditBox* ebLogin;
+private:
+  void SaveInputParam(unsigned int ip, unsigned int port, const char* sLogin);
+  void LoadInputParam();
 
 };
 

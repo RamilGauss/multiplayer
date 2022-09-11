@@ -63,18 +63,32 @@ void TScenarioLoginSlave::Work()
   }
 }
 //-------------------------------------------------------------------------------------
-void TScenarioLoginSlave::RecvFromMaster()
+void TScenarioLoginSlave::RecvFromMaster(TDescRecvSession* pDesc)
 {
   Context()->SetConnect(true);
   End();
 }
 //-------------------------------------------------------------------------------------
-void TScenarioLoginSlave::RecvFromSlave()
+void TScenarioLoginSlave::RecvFromSlave(TDescRecvSession* pDesc)
 {
+  if(Begin()==false)
+  {
+    End();
+    // верхнее соединение занято выполнением другого сценария - такого не должно быть
+    // внутренняя ошибка
+    GetLogger(STR_NAME_MMO_ENGINE)->
+      WriteF_time("TScenarioLoginSlave::RecvFromSlave() scenario is not active.\n");
+    BL_FIX_BUG();
+    return;
+  }
+  Context()->SetID_Session(pDesc->id_session);
+
   TBreakPacket bp;
   THeaderAnswerMaster h;
   bp.PushFront((char*)&h, sizeof(h));
   Context()->GetMS()->Send(Context()->GetID_Session(), bp);
+
+  End();
 }
 //--------------------------------------------------------------------------
 void TScenarioLoginSlave::Recv(TDescRecvSession* pDesc)
@@ -84,10 +98,10 @@ void TScenarioLoginSlave::Recv(TDescRecvSession* pDesc)
   switch(pPacket->subType)
   {
     case eFromSlave:
-      RecvFromSlave();
+      RecvFromSlave(pDesc);
       break;
     case eAnswerMaster:
-      RecvFromMaster();
+      RecvFromMaster(pDesc);
       break;
     default:BL_FIX_BUG();
   }

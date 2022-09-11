@@ -92,9 +92,11 @@ void TServerDeveloperTool_SlaveTank::HandleFromMMOEngine(TBaseEvent* pBE)
   {
     case TBase::eConnectDown:
       sEvent = "ConnectDown";
+      ConnectDown((TEventConnectDown*)pBE);
       break;
     case TBase::eDisconnectDown:
       sEvent = "DisconnectDown";
+      DisconnectDown((TEventDisconnectDown*)pBE);
       break;
     case TBase::eConnectUp:
       sEvent = "ConnectUp";
@@ -179,7 +181,7 @@ void TServerDeveloperTool_SlaveTank::ConnectUp(TEventConnectUp* pBE)
   //char s = 'm';
   //TBreakPacket bp;
   //bp.PushBack(&s, sizeof(s));
-  //mComponent.mNet.Master->SendUp(bp);
+  //mComponent.mNet.Slave->SendUp(bp);
 }
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_SlaveTank::DisconnectUp(TEventDisconnectUp* pBE)
@@ -195,5 +197,53 @@ void TServerDeveloperTool_SlaveTank::ConnectUpQt()
 void TServerDeveloperTool_SlaveTank::DisconnectUpQt()
 {
   mSlaveForm->SetConnect(false);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::ConnectDown(TEventConnectDown* pEvent)
+{
+  unsigned int* pID = new unsigned int(pEvent->id_session);
+  mListID_SessionAdd.Add(pID);
+
+  mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_SlaveTank::AddClientQt,this);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::DisconnectDown(TEventDisconnectDown* pEvent)
+{
+  unsigned int* pID = new unsigned int(pEvent->id_session);
+  mListID_SessionDelete.Add(pID);
+
+  mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_SlaveTank::DeleteClientQt,this);
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::AddClientQt()
+{
+  unsigned int** ppFirst = mListID_SessionAdd.GetFirst();
+  while(ppFirst)
+  {
+    unsigned int ID = *(*ppFirst);
+
+    SlaveForm::TDesc desc;
+    desc.id_session = ID;
+    bool resInfoSession = mComponent.mNet.Slave->GetInfoSession(ID, desc.ip_port);
+    BL_ASSERT(resInfoSession);
+    mSlaveForm->Add(desc);
+    // следующий ID
+    mListID_SessionAdd.Remove(ppFirst);
+    ppFirst = mListID_SessionAdd.GetFirst();
+  }
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::DeleteClientQt()
+{
+  unsigned int** ppFirst = mListID_SessionDelete.GetFirst();
+  while(ppFirst)
+  {
+    unsigned int ID = *(*ppFirst);
+
+    mSlaveForm->Delete(ID);
+    // следующий ID
+    mListID_SessionDelete.Remove(ppFirst);
+    ppFirst = mListID_SessionDelete.GetFirst();
+  }
 }
 //---------------------------------------------------------------------------------------------

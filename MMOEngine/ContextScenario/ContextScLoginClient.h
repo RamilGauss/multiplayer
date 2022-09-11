@@ -13,6 +13,7 @@ See for more information License.h.
 #include <map>
 
 #include "BreakPacket.h"
+#include "ShareMisc.h"
 
 namespace nsMMOEngine
 {
@@ -27,6 +28,9 @@ namespace nsMMOEngine
       eAccept,
     }tStateResult;
   private:
+    
+    bool flgNeedLeaveQueue;
+
     tStateResult mState;
 
     int mNumInQueue;
@@ -38,8 +42,13 @@ namespace nsMMOEngine
     TMapStrUint mMapStrID_Session;
 
     TContainer mAcceptData;
+    TContainer mQueueData;
 
     unsigned int mIDClient;
+
+    TIP_Port mIP_Port_slave;
+
+    bool flgFakeClient;
 	public:
 		TContextScLoginClient();
     virtual ~TContextScLoginClient();
@@ -72,6 +81,19 @@ namespace nsMMOEngine
     void* GetSaveAcceptDataPtr();
     int   GetSaveAcceptDataSize();
 
+		void SaveQueueData(void* resForClient, int sizeResClient);
+		void* GetSaveQueueDataPtr();
+		int   GetSaveQueueDataSize();
+
+    void SetNeedLeaveQueue(bool val);
+    bool NeedLeaveQueue();
+
+    TIP_Port GetSlaveIP_Port(); 
+    void SetSlaveIP_Port(TIP_Port& ip_port);
+    
+    // только для SuperServer
+    bool GetFakeClient();
+    void SetFakeClient(bool val);
   private:
     void SetID_Session(std::string& name, unsigned int id);
     unsigned int GetID_Session(std::string& name);

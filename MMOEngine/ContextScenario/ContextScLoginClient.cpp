@@ -29,6 +29,8 @@ TContextScLoginClient::TContextScLoginClient()
   mState = eUndef;
 
   mIDClient = (unsigned int)-1;
+
+  flgNeedLeaveQueue = true;
 }
 //------------------------------------------------------------------
 TContextScLoginClient::~TContextScLoginClient()
@@ -144,6 +146,21 @@ int TContextScLoginClient::GetSaveAcceptDataSize()
   return mAcceptData.GetSize();
 }
 //--------------------------------------------------------------
+void TContextScLoginClient::SaveQueueData(void* resForClient, int sizeResClient)
+{
+	mQueueData.SetData((char*)resForClient, sizeResClient);
+}
+//--------------------------------------------------------------
+void* TContextScLoginClient::GetSaveQueueDataPtr()
+{
+	return mQueueData.GetPtr();
+}
+//--------------------------------------------------------------
+int TContextScLoginClient::GetSaveQueueDataSize()
+{
+	return mQueueData.GetSize();
+}
+//--------------------------------------------------------------
 unsigned int TContextScLoginClient::GetIDClient()
 {
   return mIDClient;
@@ -154,3 +171,35 @@ void TContextScLoginClient::SetIDClient(unsigned int id)
   mIDClient = id;
 }
 //--------------------------------------------------------------
+void TContextScLoginClient::SetNeedLeaveQueue(bool val)
+{
+  flgNeedLeaveQueue = val;
+}
+//--------------------------------------------------------------
+bool TContextScLoginClient::NeedLeaveQueue()
+{
+  return flgNeedLeaveQueue;
+}
+//--------------------------------------------------------------
+TIP_Port TContextScLoginClient::GetSlaveIP_Port()
+{
+  return mIP_Port_slave;
+}
+//--------------------------------------------------------------
+void TContextScLoginClient::SetSlaveIP_Port(TIP_Port& ip_port)
+{
+  mIP_Port_slave = ip_port;
+}
+//--------------------------------------------------------------
+bool TContextScLoginClient::GetFakeClient()
+{
+  return flgFakeClient;
+}
+//--------------------------------------------------------------
+void TContextScLoginClient::SetFakeClient(bool val)
+{
+  flgFakeClient = val;
+}
+//--------------------------------------------------------------
+
+

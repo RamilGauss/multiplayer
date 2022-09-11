@@ -11,6 +11,8 @@ See for more information License.h.
 #include "IScenario.h"
 #include "DescRecvSession.h"
 #include "BaseScLoginClient_Struct.h"
+#include "DescCallBack.h"
+#include "MapCallBack.h"
 
 namespace nsMMOEngine
 {
@@ -19,28 +21,11 @@ namespace nsMMOEngine
   {
   protected:
 	  IScenario* mScenario;
-    // запрос на контекст по ключу клиента
-    TCallBackRegistrator1<unsigned int> mCallBackNeedContextForKeyClient;
-    // запрос на контекст по ключу клиента
-    TCallBackRegistrator1<unsigned int> mCallBackNeedIsExistClientID;
-    
-    TCallBackRegistrator2<unsigned int,unsigned int> mCallBackNeedContextIDclientIDmaster;
   public:
-
 	  TBaseScLoginClient(IScenario* pSc);
     virtual ~TBaseScLoginClient();
 
-    template <typename F, class C>
-    void RegisterOnNeedContextByKeyClient(F f, C pObject);
-
-    template <typename F, class C>
-    void RegisterOnNeedIsExistClientID(F f, C pObject);
-
-    template <typename F, class C>
-    void RegisterOnNeedContextIDclientIDmaster(F f, C pObject);
-
     void Recv(TDescRecvSession* pDesc);
-    
     virtual void Work(unsigned int time_ms) = 0;
 
   protected:
@@ -55,8 +40,6 @@ namespace nsMMOEngine
     unsigned int GetID_SessionMasterSS();
     void SetID_SessionMasterSS(unsigned int id);
   protected:
-    void SetupContext(nsLoginClientStruct::THeader* pPacket, unsigned int id_session);
-
     virtual void RecvInherit(TDescRecvSession* pDesc) = 0;
   protected:
     void SetTimeWaitForNow();
@@ -67,30 +50,11 @@ namespace nsMMOEngine
   protected:
     // запрос на новую сессию, кто зарегистрировался выставит контекст с помощью SetContext()
     void NeedContext(unsigned int id_session);
-    void NeedContextByKeyClient(unsigned int key);
-    void NeedIsExistClientID( unsigned int id_client);
-    void NeedContextIDclientIDmaster(unsigned int id_client,unsigned int id_session);
+    void NeedContextByClientKey(unsigned int id_client);
+    void NeedContextByMasterSessionByClientKey(unsigned int id_session_master,unsigned int id_client);
+    void NeedNumInQueueByClientKey(unsigned int id_client);
+    void EventSetClientKey(unsigned int id_client);
+    void NeedContextByClientSessionByClientKey(unsigned int id_session_client,unsigned int id_client);
   };
-  //----------------------------------------------------------------------------------
-  //----------------------------------------------------------------------------------
-  template <typename F, class C>
-  void TBaseScLoginClient::RegisterOnNeedContextByKeyClient(F f, C pObject)
-  {
-    mCallBackNeedContextForKeyClient.Register(f,pObject);
-  }
-  //----------------------------------------------------------------------------------
-  template <typename F, class C>
-  void TBaseScLoginClient::RegisterOnNeedIsExistClientID(F f, C pObject)
-  {
-    mCallBackNeedIsExistClientID.Register(f,pObject);
-  }
-  //---------------------------------------------------------------------------------
-  template <typename F, class C>
-  void TBaseScLoginClient::RegisterOnNeedContextIDclientIDmaster(F f, C pObject)
-  {
-    mCallBackNeedContextIDclientIDmaster.Register(f,pObject);
-  }
-  //---------------------------------------------------------------------------
-
 }
 #endif

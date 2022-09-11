@@ -16,7 +16,6 @@ See for more information License.h.
 #include "ContainerContextSc.h"
 
 #include "ScenarioDisconnectClient.h"
-#include "ScenarioDisconnectSlave.h"
 #include "ScenarioFlow.h"
 #include "ScenarioLoginClient.h"
 #include "ScenarioLoginSlave.h"
@@ -24,6 +23,8 @@ See for more information License.h.
 #include "ScenarioRecommutationClient.h"
 #include "ScenarioSendToClient.h"
 #include "ScenarioSynchroSlave.h"
+
+#include "DelegateManagerContextSc.h"
 
 using namespace std;
 using namespace nsMMOEngine;
@@ -33,8 +34,9 @@ TBase::TBase():
 mManagerSession(new TManagerSession),
 mControlSc(new TControlScenario),
 mContainerUp(new TContainerContextSc),
-mMgrMgrContextSc(new TManagerManagerContextSc)
+mMngMngContextSc(new TManagerManagerContextSc)
 {
+	TDelegateManagerContextSc::SetBase(this);
   mLoadProcent     = 0;
 
   flgConnectUp  = false;
@@ -42,31 +44,9 @@ mMgrMgrContextSc(new TManagerManagerContextSc)
 
   SetupScForContext(mContainerUp.get());
   // задать контекст по-умолчанию
-  mControlSc->mDisClient   ->SetContext(&mContainerUp->mDisClient);
-  mControlSc->mDisSlave    ->SetContext(&mContainerUp->mDisSlave);
-  mControlSc->mFlow        ->SetContext(&mContainerUp->mFlow);        
-  mControlSc->mLoginClient ->SetContext(&mContainerUp->mLoginClient); // client
-  mControlSc->mLoginSlave  ->SetContext(&mContainerUp->mLoginSlave);  // slave
-  mControlSc->mLoginMaster ->SetContext(&mContainerUp->mLoginMaster); // master
-  mControlSc->mRcm         ->SetContext(&mContainerUp->mRcm);         // client
-  mControlSc->mSynchroSlave->SetContext(&mContainerUp->mSynchroSlave);// slave
-
-  mControlSc->mDisClient   ->RegisterOnNeedContext(&TBase::NeedContextDisconnectClient, this);
-  mControlSc->mDisSlave    ->RegisterOnNeedContext(&TBase::NeedContextDisconnectSlave, this);
-  RegisterNeedForLoginClient();
-  mControlSc->mLoginSlave  ->RegisterOnNeedContext(&TBase::NeedContextLoginSlave,  this);
-  mControlSc->mLoginMaster ->RegisterOnNeedContext(&TBase::NeedContextLoginMaster, this);
-  mControlSc->mRcm         ->RegisterOnNeedContext(&TBase::NeedContextRcm,         this);
-  mControlSc->mSendToClient->RegisterOnNeedContext(&TBase::NeedContextSendToClient,this);
-  mControlSc->mSynchroSlave->RegisterOnNeedContext(&TBase::NeedContextSynchroSlave,this);
-
-  mControlSc->mDisClient   ->RegisterOnEnd(&TBase::EndDisconnectClient,this);
-  mControlSc->mDisSlave    ->RegisterOnEnd(&TBase::EndDisconnectSlave, this);
-  mControlSc->mLoginClient ->RegisterOnEnd(&TBase::EndLoginClient, this);
-  mControlSc->mLoginSlave  ->RegisterOnEnd(&TBase::EndLoginSlave,  this);
-  mControlSc->mLoginMaster ->RegisterOnEnd(&TBase::EndLoginMaster, this);
-  mControlSc->mRcm         ->RegisterOnEnd(&TBase::EndRcm,         this);
-  mControlSc->mSynchroSlave->RegisterOnEnd(&TBase::EndSynchroSlave,this);
+  SetDefualtContextForScenario();
+  // регистрация на события сценариев
+  RegisterOnScenarioEvent();
 }
 //-------------------------------------------------------------------------
 TBase::~TBase()
@@ -142,7 +122,9 @@ void TBase::Work()
 	HandleListDisconnect();
   // дать отработать всем сценариям по своим задачам 
   // порядок вызовов здесь не случаен, сначала должен быть вызов HandleListRecv
-  mMgrMgrContextSc->Work();
+  mMngMngContextSc->Work();
+  // те сценарии которые должны были быть удалены, но были активны (нельзя было явно удалять)
+  DeleteContainerScenario();
 	// например, Slave должен отсылать отчет по своей нагрузке CPU на Master
 	WorkInherit();
 }
@@ -183,12 +165,12 @@ void TBase::HandleListRecv()
 //-------------------------------------------------------------------------
 TManagerContextSc* TBase::AddManagerContextSc()
 {
-  return mMgrMgrContextSc->Add();
+  return mMngMngContextSc->Add();
 }
 //-------------------------------------------------------------------------
 void TBase::RemoveManagerContextSc(TManagerContextSc* pMСSc)
 {
-  return mMgrMgrContextSc->Remove(pMСSc);
+  return mMngMngContextSc->Remove(pMСSc);
 }
 //-------------------------------------------------------------------------
 void TBase::SetupScForContext(TContainerContextSc* pCCSc)
@@ -198,7 +180,6 @@ void TBase::SetupScForContext(TContainerContextSc* pCCSc)
   pCCSc->SetSE(this);
 
   pCCSc->mDisClient.   SetSc(mControlSc->mDisClient);
-  pCCSc->mDisSlave.    SetSc(mControlSc->mDisSlave);
   pCCSc->mFlow.        SetSc(mControlSc->mFlow);
   pCCSc->mLoginClient. SetSc(mControlSc->mLoginClient);
   pCCSc->mLoginSlave.  SetSc(mControlSc->mLoginSlave);
@@ -208,6 +189,12 @@ void TBase::SetupScForContext(TContainerContextSc* pCCSc)
   pCCSc->mSynchroSlave.SetSc(mControlSc->mSynchroSlave);
 }
 //-------------------------------------------------------------------------
+void TBase::DelayDeleteContainerScenario(TContainerContextSc* pCCSc)
+{
+  // добавить в список на удаление
+  mListDelayDeleteContainerSc.push_back(pCCSc);
+}
+//-------------------------------------------------------------------------
 bool TBase::GetInfoSession(unsigned int id_session, TIP_Port& ip_port)
 {
   return mManagerSession->GetInfo(id_session, ip_port);
@@ -215,18 +202,64 @@ bool TBase::GetInfoSession(unsigned int id_session, TIP_Port& ip_port)
 //-------------------------------------------------------------------------
 void TBase::RegisterNeedForLoginClient()
 {
-  mControlSc->mLoginClient->
-    RegisterOnNeedContext(&TBase::NeedContextLoginClient,            this);
-  mControlSc->mLoginClient->
-    RegisterOnNeedContextByKeyClient(&TBase::NeedContextLoginClientByClientKey, this);
-
-  mControlSc->mLoginClient->RegisterOnNeedIsExistClientID(&TBase::NeedIsExistClientID,this);
-  mControlSc->mLoginClient->RegisterOnNeedLeaveFromQueue( &TBase::NeedLeaveFromQueue, this);
-  mControlSc->mLoginClient->RegisterOnNeedNumInQueue(     &TBase::NeedNumInQueue,     this);
-  
-  mControlSc->mLoginClient->
-    RegisterOnNeedContextIDclientIDmaster(&TBase::NeedContextIDclientIDmaster,this);
-  
-  mControlSc->mLoginClient->RegisterSetIDClient(&TBase::SetIDClient,this);
+  mControlSc->mLoginClient->Register<unsigned int>(
+                                      IScenario::eContextBySession, 
+                                      &TBase::NeedContextLoginClientBySession, this);
+  mControlSc->mLoginClient->Register<unsigned int>(
+                                      TScenarioLoginClient::eContextByClientKey, 
+                                      &TBase::NeedContextLoginClientByClientKey, this);
+  mControlSc->mLoginClient->Register<unsigned int>(
+                                      TScenarioLoginClient::eNumInQueueByClientKey,
+                                      &TBase::NeedNumInQueueLoginClient,this);
+  mControlSc->mLoginClient->Register<unsigned int,unsigned int>(
+                                      TScenarioLoginClient::eContextByMasterSessionByClientKey,
+                                      &TBase::NeedContextByMasterSessionByClientKey,this);
+  mControlSc->mLoginClient->Register<unsigned int>(
+                                      TScenarioLoginClient::eSetClientKey,
+                                      &TBase::EventSetClientKeyLoginClient,this);
+  mControlSc->mLoginClient->Register<unsigned int,unsigned int>(
+                                      TScenarioLoginClient::eContextByClientSessionByClientKey,
+                                      &TBase::NeedContextLoginClientByClientSessionByKeyClient, this);
 }
 //-------------------------------------------------------------------------
+void TBase::DeleteContainerScenario()
+{
+  BOOST_FOREACH(TContainerContextSc* pCCSc, mListDelayDeleteContainerSc)
+  {
+    RemoveManagerContextSc(pCCSc->GetMCSc());
+    delete pCCSc;
+  }
+  mListDelayDeleteContainerSc.clear();
+}
+//-------------------------------------------------------------------------
+void TBase::SetDefualtContextForScenario()
+{
+  mControlSc->mDisClient   ->SetContext(&mContainerUp->mDisClient);
+  mControlSc->mFlow        ->SetContext(&mContainerUp->mFlow);        
+  mControlSc->mLoginClient ->SetContext(&mContainerUp->mLoginClient); // client
+  mControlSc->mLoginSlave  ->SetContext(&mContainerUp->mLoginSlave);  // slave
+  mControlSc->mLoginMaster ->SetContext(&mContainerUp->mLoginMaster); // master
+  mControlSc->mRcm         ->SetContext(&mContainerUp->mRcm);         // client
+  mControlSc->mSynchroSlave->SetContext(&mContainerUp->mSynchroSlave);// slave
+}
+//-------------------------------------------------------------------------
+void TBase::RegisterOnScenarioEvent()
+{
+  mControlSc->mDisClient->Register<unsigned int>(IScenario::eContextByClientKey,
+                                                 &TBase::NeedContextDisconnectClient, this);
+  RegisterNeedForLoginClient();
+  mControlSc->mLoginSlave  ->Register<unsigned int>(IScenario::eContextBySession,&TBase::NeedContextLoginSlave,  this);
+  mControlSc->mLoginMaster ->Register<unsigned int>(IScenario::eContextBySession,&TBase::NeedContextLoginMaster, this);
+  mControlSc->mRcm         ->Register<unsigned int>(IScenario::eContextBySession,&TBase::NeedContextRcm,         this);
+  mControlSc->mSendToClient->Register<unsigned int>(IScenario::eContextBySession,&TBase::NeedContextSendToClient,this);
+  mControlSc->mSynchroSlave->Register<unsigned int>(IScenario::eContextBySession,&TBase::NeedContextSynchroSlave,this);
+
+  mControlSc->mDisClient   ->Register<IScenario*>(IScenario::eEnd,&TBase::EndDisconnectClient,this);
+  mControlSc->mLoginClient ->Register<IScenario*>(IScenario::eEnd,&TBase::EndLoginClient, this);
+  mControlSc->mLoginSlave  ->Register<IScenario*>(IScenario::eEnd,&TBase::EndLoginSlave,  this);
+  mControlSc->mLoginMaster ->Register<IScenario*>(IScenario::eEnd,&TBase::EndLoginMaster, this);
+  mControlSc->mRcm         ->Register<IScenario*>(IScenario::eEnd,&TBase::EndRcm,         this);
+  mControlSc->mSynchroSlave->Register<IScenario*>(IScenario::eEnd,&TBase::EndSynchroSlave,this);
+}
+//-------------------------------------------------------------------------
+

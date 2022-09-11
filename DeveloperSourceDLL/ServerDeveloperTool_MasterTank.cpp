@@ -58,11 +58,6 @@ int TServerDeveloperTool_MasterTank::GetTimeRefreshMS()
 	return 100;
 }
 //---------------------------------------------------------------------------------
-//void TServerDeveloperTool_MasterTank::Refresh()
-//{
-//
-//}
-////---------------------------------------------------------------------------------
 IMakerObjectCommon* TServerDeveloperTool_MasterTank::GetMakerObjectCommon()
 {
 	return mMakerObjectCommon;
@@ -175,16 +170,12 @@ void TServerDeveloperTool_MasterTank::DisconnectDown(TEventDisconnectDown* pEven
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_MasterTank::TryLogin(TEventTryLogin* pEvent)
 {
-  return;//###
-
   mCounterClient++;
-  char s[100];
-  sprintf(s,"hello, Client %u",mCounterClient);
-  string result = s;
+  char result[100];
+  sprintf(result,"hello, Client %u",mCounterClient);
   mComponent.mNet.Master->SetResultLogin(true, 
-    pEvent->id_session, 
-    mCounterClient,
-    (void*)result.data(),result.length());
+    pEvent->id_session, mCounterClient,
+    (void*)&result[0], strlen(result));
 }
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_MasterTank::InitQtForm()

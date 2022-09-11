@@ -98,13 +98,15 @@ void TManagerSession::Send(unsigned int ID_Session, TBreakPacket bp, bool check)
 //--------------------------------------------------------------------------------------------
 unsigned int TManagerSession::Send(unsigned int ip, unsigned short port, TBreakPacket bp, bool check)
 {
+  lockAccessSession();
   // соединиться с сервером
   if(mTransport->Connect(ip, port)==false) 
+  {
+    unlockAccessSession();
     return INVALID_HANDLE_SESSION;// нет такого прослушивающего порта
+  }
   TIP_Port ip_port(ip,port);
-
-  lockAccessSession();
-  
+ 
   TSession* pSession = mNavigateSession.FindSessionByIP(ip_port);
   if(pSession==NULL)
     pSession = NewSession(ip_port);
@@ -177,9 +179,12 @@ void TManagerSession::Disconnect(TIP_Port* ip_port)
 {
   lockAccessSession();
   TSession* pSession = mNavigateSession.FindSessionByIP(*ip_port);
-  unsigned int id = pSession->GetID();
-  mCallBackDiconnect.Notify(id);
-  mNavigateSession.Delete(pSession);
+  if(pSession)
+  {
+    unsigned int id = pSession->GetID();
+    mCallBackDiconnect.Notify(id);
+    mNavigateSession.Delete(pSession);
+  }
   unlockAccessSession();
 }
 //--------------------------------------------------------------------------------------------

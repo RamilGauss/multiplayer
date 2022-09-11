@@ -68,13 +68,13 @@ void TScenarioLoginMaster::Work()
   }
 }
 //--------------------------------------------------------------
-void TScenarioLoginMaster::RecvFromSuperServer()
+void TScenarioLoginMaster::RecvFromSuperServer(TDescRecvSession* pDesc)
 {
   Context()->SetConnect(true);
   End();
 }
 //-------------------------------------------------------------------------------------
-void TScenarioLoginMaster::RecvFromMaster()
+void TScenarioLoginMaster::RecvFromMaster(TDescRecvSession* pDesc)
 {
   if(Begin()==false)
   {
@@ -86,6 +86,8 @@ void TScenarioLoginMaster::RecvFromMaster()
     BL_FIX_BUG();
     return;
   }
+  Context()->SetID_Session(pDesc->id_session);
+
   TBreakPacket bp;
   THeaderAnswerFromSS h;
   bp.PushFront((char*)&h, sizeof(h));
@@ -100,10 +102,10 @@ void TScenarioLoginMaster::Recv(TDescRecvSession* pDesc)
   switch(pPacket->subType)
   {
     case eFromMaster:
-      RecvFromMaster();
+      RecvFromMaster(pDesc);
       break;
     case eAnswerFromSS:
-      RecvFromSuperServer();
+      RecvFromSuperServer(pDesc);
       break;
     default:BL_FIX_BUG();
   }

@@ -21,7 +21,6 @@ namespace nsMMOEngine
     enum
     {
       eDisconnectClient,
-      eDisconnectSlave,
       eFlow,
       eLoginClient,
       eLoginMaster,

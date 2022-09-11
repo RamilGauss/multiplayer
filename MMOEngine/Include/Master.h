@@ -10,16 +10,14 @@ See for more information License.h.
 
 #include "ActiveServer.h"
 
-#include <list>
-#include <map>
-#include <set>
-
+class TSetOrderElement;
 namespace nsMMOEngine
 {
   class IScenario;
-  class TClient_master;
-  class TSlave_master;
-  class TGroupClient_master;
+  class TManagerContextMoreDownClientConnection;
+  class TManagerContextDownConnection_Slave;
+  class TManagerContextClientLogining;
+  class TManagerGroupClient;
   class MMO_ENGINE_EI TMaster : public TActiveServer
   {
     // для анализа, при создании группы
@@ -34,7 +32,7 @@ namespace nsMMOEngine
         eMFree,
       } eType;
       eType type;
-      TSlave_master* pSlave;
+      //TSlave_master* pSlave;
     };
     typedef std::list<TDescChoiseSlave> TListSlavePrior;
 
@@ -43,35 +41,23 @@ namespace nsMMOEngine
       eLimitMoreEmpty = 10,// %
       eLimitMoreHalf  = 50,// %
 
-      eLimitLoadProcentOnSlaveForAdd = 90,
+      eLimitLoadProcentOnSlaveForAdd = 75,
+      eLimitLoadProcentOnSlaveForAdd_ClientInGroup = 70, // для Клиента, состоящего в Группе процент другой
+
       eLimitCountClientWaitFreeSpace = 2000,// максимальный размер очереди ожидающих
     };
 
     // DOWN
-    // Slave
-    typedef std::map<unsigned int,TSlave_master*> TMapUintSlavePtr;
-    typedef TMapUintSlavePtr::iterator TMapUintSlavePtrIt;
-    TMapUintSlavePtr mMapID_SessionSlave;
-
-    // GroupClient
-    typedef std::map<unsigned int,TGroupClient_master*> TMapUintGroupClientPtr;
-    typedef TMapUintGroupClientPtr::iterator TMapUintGroupClientPtrIt;
-    TMapUintGroupClientPtr mMapIDGroupClient;
-    unsigned int mCurCounterGroup;
-    
-    // Client
-    typedef std::map<unsigned int,TClient_master*> TMapUintClientPtr;
-    typedef TMapUintClientPtr::iterator TMapUintClientPtrIt;
-    TMapUintClientPtr mMapKeyClient;
-    
-    typedef std::map<unsigned int,unsigned int> TMapUintUint;
-    typedef TMapUintUint::iterator TMapUintUintIt;
-    // когда клиент в процессе соединения, то найти его по id_session можно так
-    // находим ключ, по нему ищем клиента
-    TMapUintUint mIDSessionKey;
-    // когда клиент пытается авторизоваться, то идентифицировать его можно по сессии
-    // ждет вызова SetResultLogin, тогда ему присвоят ключ
-    TMapUintClientPtr mMapID_SessionClientWait;
+    //клиенты, которые уже в системе
+    boost::scoped_ptr<TManagerContextMoreDownClientConnection> mMngContextClient;
+    // Slaves
+    boost::scoped_ptr<TManagerContextDownConnection_Slave>     mMngContextSlave;
+    // клиенты, которые находятся в процессе авторизации
+    boost::scoped_ptr<TManagerContextClientLogining>           mMngContextClientLogining;
+    // группы клиентов
+    boost::scoped_ptr<TManagerGroupClient>                     mMngGroup;
+    // ID клиентов, которые ожидают в очереди, по причине загруженности Slave
+    boost::scoped_ptr<TSetOrderElement>                        mSetClientKeyInQueue;
   public:
     typedef enum
     {
@@ -110,47 +96,35 @@ namespace nsMMOEngine
 		virtual void WorkInherit();
 
 	protected:// like slots
-    virtual void NeedContextLoginClient(unsigned int id_session);
+    virtual void NeedContextDisconnectClient(unsigned int id_client);
+    virtual void NeedContextLoginClientBySession(unsigned int id_session);
     virtual void NeedContextLoginClientByClientKey(unsigned int id_key_client);
-    virtual void NeedLeaveFromQueue(unsigned int id_session);
-    virtual void NeedNumInQueue(unsigned int id_session);
+    virtual void NeedNumInQueueLoginClient(unsigned int id_session);
     //--------------------------------------------------------------------------
     virtual void NeedContextLoginSlave(unsigned int id_session);
     virtual void NeedContextRcm(unsigned int id_session);
     virtual void NeedContextSynchroSlave(unsigned int id_session);
-
+	protected:
+    virtual void EndDisconnectClient(IScenario*);
     virtual void EndLoginMaster(IScenario* pSc);
     virtual void EndLoginSlave(IScenario* pSc);
     virtual void EndLoginClient(IScenario* pSc);
     virtual void EndRcm(IScenario* pSc);
     virtual void EndSynchroSlave(IScenario* pSc);
-
-    void EndLoginClientBySlave(IScenario* pSc);
-  private:
-    //unsigned int    FindIDClientByIDSession(unsigned int id);
-    //TClient_master* FindClientByIDSession( unsigned int id);
-    //TClient_master* FindClientByIDClient( unsigned int id);
-
-
-    TClient_master* FindClientByIDSession(unsigned int id);
-    TClient_master* FindClientByIDSessionWait(unsigned int id);
-    TClient_master* FindClientByKey(unsigned int key);
-    TClient_master* FindClientByID(TMapUintClientPtr& m, unsigned int id);
-
-    TSlave_master* FindSlaveByIDSession(unsigned int id);
-    
-    TGroupClient_master* FindGroupByKey(unsigned int key);
   private:
     bool EvalCreateGroupNow(std::list<unsigned int>& l_id_client, 
                             unsigned int& id_group);
-    TSlave_master* AnalizListSlaveForGroup(TListSlavePrior& l_slave_prior);
-    unsigned int CreateGroup(TSlave_master* pSlave,std::list<unsigned int>& l_id_client);
 
-    void DisconnectSuperServer(); 
-    void DisconnectClientWait(TClient_master* pClient);
-    void DisconnectClient(TClient_master* pClient);
-    void DisconnectSlave(TSlave_master* pSlave);
+		//###
+		//TSlave_master* AnalizListSlaveForGroup(TListSlavePrior& l_slave_prior);
+  //  unsigned int CreateGroup(TSlave_master* pSlave,std::list<unsigned int>& l_id_client);
+	//###
+    bool DisconnectSuperServer(unsigned int id_session); 
+    bool DisconnectClientWait(unsigned int id_session);
+    bool DisconnectSlave(unsigned int id_session);
 
+		// при освобождении места на Slave попытаться добавить Клиента, который ждет в очереди
+		void TryAddClientFromQueue();
     void Done();
   };
 }

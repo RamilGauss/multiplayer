@@ -11,7 +11,6 @@ See for more information License.h.
 #include "DescRecvSession.h"
 
 #include "ScenarioDisconnectClient.h"
-#include "ScenarioDisconnectSlave.h"
 #include "ScenarioFlow.h"
 #include "ScenarioLoginClient.h"
 #include "ScenarioLoginSlave.h"
@@ -25,7 +24,6 @@ using namespace nsMMOEngine;
 TControlScenario::TControlScenario()
 {
   mDisClient    = (TScenarioDisconnectClient*   )mMakerScenario.New(TMakerScenario::eDisconnectClient);
-  mDisSlave     = (TScenarioDisconnectSlave*    )mMakerScenario.New(TMakerScenario::eDisconnectSlave);
   mFlow         = (TScenarioFlow*               )mMakerScenario.New(TMakerScenario::eFlow);
   mLoginClient  = (TScenarioLoginClient*        )mMakerScenario.New(TMakerScenario::eLoginClient);
   mLoginSlave   = (TScenarioLoginSlave*         )mMakerScenario.New(TMakerScenario::eLoginSlave);
@@ -35,7 +33,6 @@ TControlScenario::TControlScenario()
   mSynchroSlave = (TScenarioSynchroSlave*       )mMakerScenario.New(TMakerScenario::eSynchroSlave);
 
   Add(mDisClient   );
-  Add(mDisSlave    );
   Add(mFlow        );
   Add(mLoginClient );
   Add(mLoginSlave  );

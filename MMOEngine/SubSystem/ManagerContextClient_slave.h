@@ -9,11 +9,12 @@ See for more information License.h.
 #define MANAGER_CONTEXT_CLIENT_SLAVE_H
 
 #include <map>
+#include "DelegateManagerContextSc.h"
 
 namespace nsMMOEngine
 {
   class TContainerContextSc;
-  class TManagerContextClient_slave
+  class TManagerContextClient_slave : public TDelegateManagerContextSc
   {
     typedef std::map<unsigned int, TContainerContextSc*> TMapUintPtr;
     typedef TMapUintPtr::iterator TMapUintPtrIt;

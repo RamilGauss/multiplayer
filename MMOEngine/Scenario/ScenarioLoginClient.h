@@ -23,12 +23,31 @@ namespace nsMMOEngine
 {
   class TScenarioLoginClient : public IScenario
   {
+    // выдать контекст по сессии Мастера и ключу Клиента
+    TCallBackRegistrator2<unsigned int,unsigned int> mCBContextByMasterSessionByClientKey;
+    // запрос к мастеру о номере клиента в очереди
+    TCallBackRegistrator1<unsigned int>              mCBNumInQueueByClientKey;
+    // уведомить о назначении клиенту ключа Мастером
+    TCallBackRegistrator1<unsigned int>              mCBSetClientKey;
+    // запрос на контекст по сессии и ключу клиента
+    TCallBackRegistrator2<unsigned int,unsigned int> mCBContextByClientSessionByClientKey;
+
     TScLoginClient_ClientImpl      mClient;
     TScLoginClient_SlaveImpl       mSlave;
     TScLoginClient_MasterImpl      mMaster;
     TScLoginClient_SuperServerImpl mSS;
 
     TBaseScLoginClient* mCurBehavior;
+
+  public:
+    typedef enum
+    {
+      eContextByMasterSessionByClientKey = IScenario::eCountCallBack,
+      eNumInQueueByClientKey,
+      eSetClientKey,
+      eContextByClientSessionByClientKey,
+      eCountCallBack,
+    }eTypeCallBack;
   public:
     typedef enum
     {
@@ -43,25 +62,6 @@ namespace nsMMOEngine
     
     void SetBehavior(eBehavior v);
     virtual void Recv(TDescRecvSession* pDesc);
-
-    template <typename F, class C>
-    void RegisterSetIDClient(F f, C pObject);
-
-    template <typename F, class C>
-    void RegisterOnNeedLeaveFromQueue(F f, C pObject);
-
-    template <typename F, class C>
-    void RegisterOnNeedIsExistClientID(F f, C pObject);
-
-    template <typename F, class C>
-    void RegisterOnNeedContextByKeyClient(F f, C pObject);
-
-    template <typename F, class C>
-    void RegisterOnNeedContextIDclientIDmaster(F f, C pObject);
-
-    template <typename F, class C>
-    void RegisterOnNeedNumInQueue(F f, C pObject);
-
   public:
     // от клиента, попытка авторизации
     void TryLogin(unsigned int ip, unsigned short port, 
@@ -71,55 +71,14 @@ namespace nsMMOEngine
     void Reject(void* resForClient, int sizeResClient);
     void Accept(unsigned int key, void* resForClient, int sizeResClient, 
                 unsigned int id_session_slave, unsigned int id_superserver);
-    void Queue(int num);
+    void Queue(int num,void* resForClient, int sizeResClient);
     
-    // решение Slave
-    void SetIsExistClientID_slave(bool isExist, unsigned int id_client);
+    void DisconnectFromMaster();
+    void DisconnectFromClient();
 
-    // решение SuperServer
-    void SetIsExistClientID_ss(bool isExist);
+    void SetFakeClient(bool val);
   protected:
     virtual void Work();
   };
-  //--------------------------------------------------------------------------------
-  //--------------------------------------------------------------------------------
-  template <typename F, class C>
-  void TScenarioLoginClient::RegisterOnNeedLeaveFromQueue(F f, C pObject)
-  {
-    mMaster.RegisterOnNeedLeaveFromQueue(f,pObject);
-  }
-  //------------------------------------------------------------
-  template <typename F, class C>
-  void TScenarioLoginClient::RegisterOnNeedIsExistClientID(F f, C pObject)
-  {
-    mSlave.RegisterOnNeedIsExistClientID(f,pObject);
-    mSS.   RegisterOnNeedIsExistClientID(f,pObject);
-  }
-  //------------------------------------------------------------
-  template <typename F, class C>
-  void TScenarioLoginClient::RegisterOnNeedContextByKeyClient(F f, C pObject)
-  {
-    mSlave. RegisterOnNeedContextByKeyClient(f,pObject);
-    mMaster.RegisterOnNeedContextByKeyClient(f,pObject);
-  }
-  //------------------------------------------------------------
-  template <typename F, class C>
-  void TScenarioLoginClient::RegisterOnNeedContextIDclientIDmaster(F f, C pObject)
-  {
-    mSS.RegisterOnNeedContextIDclientIDmaster(f,pObject);
-  }
-  //------------------------------------------------------------
-  template <typename F, class C>
-  void TScenarioLoginClient::RegisterOnNeedNumInQueue(F f, C pObject)
-  {
-    mMaster.RegisterOnNeedNumInQueue(f,pObject);
-  }
-  //------------------------------------------------------------
-  template <typename F, class C>
-  void TScenarioLoginClient::RegisterSetIDClient(F f, C pObject)
-  {
-    mClient.RegisterSetIDClient(f,pObject);
-  }
-  //------------------------------------------------------------
 }
 #endif

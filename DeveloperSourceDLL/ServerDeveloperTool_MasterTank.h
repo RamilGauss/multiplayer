@@ -32,7 +32,6 @@ public:
 
 	virtual void Init(TComponentServer* pComponent, std::vector<std::string>& arg);
 	virtual int GetTimeRefreshMS();
-	//virtual void Refresh();
 
 	virtual void Done();
 	virtual void Event(nsEvent::TEvent* pEvent);

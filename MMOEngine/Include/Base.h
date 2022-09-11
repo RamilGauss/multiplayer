@@ -10,15 +10,13 @@ See for more information License.h.
 
 #include "TypeDef.h"
 
-#include <map>
-#include <set>
-
 #include "SrcEvent.h"
 #include "IMakerTransport.h"
 #include "BreakPacket.h"
 #include "ListMultiThread.h"
 
 #include <boost/smart_ptr/scoped_ptr.hpp>
+#include <list>
 
 #define STR_NAME_MMO_ENGINE "MMOEngine"
 #define INVALID_HANDLE_SESSION 0
@@ -31,10 +29,11 @@ namespace nsMMOEngine
   class TContainerContextSc;
   class TControlScenario;
   class IScenario;
-  struct TDescRecvSession;
+	class TDelegateManagerContextSc;
+	struct TDescRecvSession;
   class MMO_ENGINE_EI TBase : public TSrcEvent
   {
-    boost::scoped_ptr<TManagerManagerContextSc> mMgrMgrContextSc;
+    boost::scoped_ptr<TManagerManagerContextSc> mMngMngContextSc;
   protected:
     boost::scoped_ptr<TControlScenario>    mControlSc;
     boost::scoped_ptr<TContainerContextSc> mContainerUp;
@@ -53,6 +52,10 @@ namespace nsMMOEngine
 
     unsigned int mID_SessionUp;
     bool         flgConnectUp;
+
+    typedef std::list<TContainerContextSc*> TListPtr;
+
+    TListPtr mListDelayDeleteContainerSc;
   public:
     typedef enum
     {
@@ -96,16 +99,16 @@ namespace nsMMOEngine
     virtual void DisconnectInherit(unsigned int id) = 0;
 		virtual void WorkInherit(){};
     // события сценариев
-    virtual void NeedContextDisconnectClient(unsigned int id_session){}
-    virtual void NeedContextDisconnectSlave(unsigned int id_session){}
+    virtual void NeedContextDisconnectClient(unsigned int id_client){}
     //----------------------------------------------------
-    virtual void NeedContextIDclientIDmaster(unsigned int id_client,unsigned int id_session){}//SS
-    virtual void NeedContextLoginClient(unsigned int id_session){}// S,M
-    virtual void NeedContextLoginClientByClientKey(unsigned int id_key_client){}//S,M,SS
-    virtual void NeedIsExistClientID(unsigned int id_client){}// S,SS
-    virtual void NeedLeaveFromQueue(unsigned int id_session){}// M
-    virtual void NeedNumInQueue(unsigned int id_session){}// M
-    virtual void SetIDClient(unsigned int id_client){};//C
+    virtual void NeedContextByMasterSessionByClientKey(unsigned int id_session,
+                                                       unsigned int id_client){}//SS
+    virtual void NeedContextLoginClientBySession(unsigned int id_session){}// S,M
+    virtual void NeedContextLoginClientByClientKey(unsigned int id_client){}//S,M,SS
+    virtual void NeedNumInQueueLoginClient(unsigned int id_session){}// M
+    virtual void EventSetClientKeyLoginClient(unsigned int id_client){};//C
+    virtual void NeedContextLoginClientByClientSessionByKeyClient(unsigned int id_session_client,
+                                                                  unsigned int id_client){}//S
     //----------------------------------------------------
     virtual void NeedContextLoginSlave(unsigned int id_session){}
     virtual void NeedContextLoginMaster(unsigned int id_session){}
@@ -120,15 +123,21 @@ namespace nsMMOEngine
     virtual void EndLoginMaster(IScenario*){}
     virtual void EndRcm(IScenario*){}
     virtual void EndSynchroSlave(IScenario*){}
-    
-  protected:
-    TManagerContextSc* AddManagerContextSc();
-    void RemoveManagerContextSc(TManagerContextSc* pMSc);
+	private:    
+		TManagerContextSc* AddManagerContextSc();
+		void RemoveManagerContextSc(TManagerContextSc* pMSc);
+	protected:
+		friend class TDelegateManagerContextSc;
     void SetupScForContext(TContainerContextSc* pCCSc);
+    void DelayDeleteContainerScenario(TContainerContextSc* pCCSc);
 	private:
     void HandleListDisconnect();
     void HandleListRecv();
+
+    void DeleteContainerScenario();
   private:
+    void SetDefualtContextForScenario();
+    void RegisterOnScenarioEvent();
     void RegisterNeedForLoginClient();
   };
 }

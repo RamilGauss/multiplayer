@@ -22,16 +22,18 @@ namespace nsMMOEngine
       eCheckRequestSS2M,
       eResultLoginM2C,
       eLeaveQueueC2M,
-      eCheckLeaveQueueM2C,
       //-------------------------------
       // прямолинейный обмен пакетами
       eInfoClientM2S,
       eCheckInfoClientS2M,
       eInfoSlaveM2C,
+      eCheckInfoSlaveC2M,
       eConnectToSlaveC2S,
       eClientConnectS2M,
       eCheckClientConnectM2S,
       eCheckConnectToSlaveS2C,
+
+      eDisconnectClientM2S,
     };
     enum
     {
@@ -86,11 +88,6 @@ namespace nsMMOEngine
 	  {
       THeaderLeaveQueueC2M();
 	  };
-	  //-------------------------------------------------
-	  struct THeaderCheckLeaveM2C : public THeaderM
-	  {
-      THeaderCheckLeaveM2C();
-	  };
 	  //------------------------------------------------------------------------------------------------
 	  //------------------------------------------------------------------------------------------------
 	  struct THeaderInfoClientM2S : public THeaderM
@@ -109,6 +106,11 @@ namespace nsMMOEngine
       TIP_Port ip_port_slave;
 	  };
 	  //-------------------------------------------------
+    struct THeaderCheckInfoSlaveC2M : public THeaderC
+    {
+      THeaderCheckInfoSlaveC2M();
+    };
+    //-------------------------------------------------
 	  struct THeaderConnectToSlaveC2S : public THeaderC
 	  {
       THeaderConnectToSlaveC2S();
@@ -129,6 +131,11 @@ namespace nsMMOEngine
       THeaderCheckConnectToSlaveS2C();
 	  };
 	  //-------------------------------------------------
+    struct THeaderDisconnectClientM2S : public THeaderM
+    {
+      THeaderDisconnectClientM2S();
+    };
+    //-------------------------------------------------
 #ifdef WIN32
 #pragma pack(pop)
 #endif

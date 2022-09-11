@@ -13,7 +13,6 @@ See for more information License.h.
 #include "BL_Debug.h"
 
 #include "ScenarioDisconnectClient.h"
-#include "ScenarioDisconnectSlave.h"
 #include "ScenarioFlow.h"
 #include "ScenarioLoginClient.h"
 #include "ScenarioLoginMaster.h"
@@ -42,9 +41,6 @@ IScenario* TMakerScenario::New(unsigned int ID_Implementation)
   {
     case eDisconnectClient:
       pSc = new TScenarioDisconnectClient; 
-      break;
-    case eDisconnectSlave:
-      pSc = new TScenarioDisconnectSlave; 
       break;
     case eFlow:                     
       pSc = new TScenarioFlow; 

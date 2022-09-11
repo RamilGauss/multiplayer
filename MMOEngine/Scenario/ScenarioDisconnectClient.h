@@ -11,24 +11,50 @@ See for more information License.h.
 #include "IScenario.h"
 #include "ContextScDisconnectClient.h"
 #include "MakerScenario.h"
+#include "CallBackRegistrator.h"
+
+#include <vector>
 
 namespace nsMMOEngine
 {
   class TScenarioDisconnectClient : public IScenario
   {
+    enum{
+      eFromMaster,
+      eFromSlave,
+    };
+
     struct THeaderDisconnectClient : public IScenario::TBaseHeader
     {
       THeaderDisconnectClient(){type=TMakerScenario::eDisconnectClient;} 
     };
     //-------------------------------------------------
-
+    struct THeaderFromMaster : public THeaderDisconnectClient
+    {
+      THeaderFromMaster(){subType=eFromMaster;}
+      int countID;// далее массив unsigned int
+    };
+    //-------------------------------------------------
+    struct THeaderFromSlave : public THeaderDisconnectClient
+    {
+      THeaderFromSlave(){subType=eFromSlave;}
+      unsigned int id_client;
+    };
+    //-------------------------------------------------
   public:
     TScenarioDisconnectClient();
 
     virtual void Recv(TDescRecvSession* pDesc);
 
+    void DisconnectFromSlave(unsigned int id_client);
+    void DisconnectFromMaster(std::vector<unsigned int>& vecID_client);
+
   protected:
     virtual void Work();
+  private:
+    void RecvFromMaster(TDescRecvSession* pDesc);
+    void RecvFromSlave(TDescRecvSession* pDesc);
+
   private:
     TContextScDisconnectClient* Context(){return (TContextScDisconnectClient*)mCurContext;}
   };

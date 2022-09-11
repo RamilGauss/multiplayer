@@ -13,18 +13,32 @@ See for more information License.h.
 #include "DescRecvSession.h"
 #include "CallBackRegistrator.h"
 
+#include "MapCallBack.h"
+
 namespace nsMMOEngine
 {
   class IContextScenario;
 	class TManagerSession;
-  class IScenario
+  class IScenario : public TMapCallBack
   {
-		TCallBackRegistrator1<unsigned int> mCallBackNeedContext;
-    TCallBackRegistrator1<IScenario*> mCallBackEnd;
+		TCallBackRegistrator1<unsigned int> mCBNeedContext;
+    TCallBackRegistrator1<IScenario*>   mCBEnd;
+    // запрос на контекст по ключу клиента
+    TCallBackRegistrator1<unsigned int>              mCBContextByClientKey;
+
     unsigned char mType;
   protected:
     IContextScenario* mCurContext;
   public:
+    // типы CallBack
+    enum
+    {
+      eContextBySession = 0,
+      eEnd,
+      eContextByClientKey,
+      eCountCallBack,
+    };
+
 #if defined( WIN32 )
 #pragma pack(push, 1)
 #endif
@@ -42,13 +56,6 @@ namespace nsMMOEngine
 		void SetType(unsigned char type);
 
 		virtual void Recv(TDescRecvSession* pDesc) = 0;
-		// прототип F: void C::Func(IScenario* pSc);
-    template <typename F, class C>
-    void RegisterOnNeedContext(F f, C pObject)// получить событие получения пакета
-    {mCallBackNeedContext.Register(f,pObject);}
-    template <typename F, class C>
-		void RegisterOnEnd(F f, C pObject)// получить событие окончания сценария (вызовется до полного окончания)
-		{mCallBackEnd.Register(f,pObject);}
   protected:
     friend class IContextScenario;
     // если нельзя было начать сценарий сразу, то когда будет такая возможность произойдет этот вызов
@@ -60,6 +67,7 @@ namespace nsMMOEngine
     void End();
     // запрос на новую сессию, кто зарегистрировался выставит контекст с помощью SetContext()
     void NeedContext(unsigned int id_session);
+    void NeedContextByClientKey(unsigned int id_client);
   };
 }
 

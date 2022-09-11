@@ -228,6 +228,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DescCallBack.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DstEvent.cpp"
 				>
 			</File>
@@ -304,6 +308,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MapCallBack.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MapXML_Field.cpp"
 				>
 			</File>
@@ -333,6 +341,10 @@
 			</File>
 			<File
 				RelativePath=".\SaveOnHDD.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SetOrderElement.cpp"
 				>
 			</File>
 			<File
@@ -450,6 +462,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DescCallBack.h"
+				>
+			</File>
+			<File
 				RelativePath=".\DescEvent.h"
 				>
 			</File>
@@ -562,6 +578,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MapCallBack.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MapXML_Field.h"
 				>
 			</File>
@@ -595,6 +615,10 @@
 			</File>
 			<File
 				RelativePath=".\SaveOnHDD.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SetOrderElement.h"
 				>
 			</File>
 			<File

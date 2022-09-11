@@ -16,6 +16,10 @@ using namespace nsMMOEngine;
 IScenario::IScenario()
 {
   mCurContext = NULL;
+
+  AddCallBack(eContextBySession,   &mCBNeedContext);
+  AddCallBack(eEnd,                &mCBEnd);
+  AddCallBack(eContextByClientKey, &mCBContextByClientKey);
 }
 //---------------------------------------------------------------------
 IScenario::~IScenario()
@@ -31,7 +35,8 @@ bool IScenario::Begin()
 void IScenario::End()
 {
 	// уведомить об окончании сценария
-	mCallBackEnd.Notify(this);
+  //mCBEnd.Notify(this);
+  Notify<IScenario*>(eEnd, this);
 	// сценарий закончен
   mCurContext->Disactivate();
 }
@@ -58,7 +63,7 @@ IContextScenario* IScenario::GetContext()
 //---------------------------------------------------------------------
 void IScenario::NeedContext(unsigned int id_session)
 {
-  mCallBackNeedContext.Notify(id_session);
+  Notify<unsigned int>(eContextBySession, id_session);
 }
 //---------------------------------------------------------------------
 unsigned char IScenario::GetType()
@@ -69,5 +74,10 @@ unsigned char IScenario::GetType()
 void IScenario::SetType(unsigned char type)
 {
   mType = type;
+}
+//---------------------------------------------------------------------
+void IScenario::NeedContextByClientKey(unsigned int id_client)
+{
+  Notify<unsigned int>(eContextByClientKey, id_client);
 }
 //---------------------------------------------------------------------

@@ -20,6 +20,9 @@ See for more information License.h.
 
 class TNetTransport_Boost : public INetTransport
 {
+  unsigned short mLocalPort;
+  unsigned char  mNumNetWork;
+
   GCS mMutexSend;
   GCS mMutexMapIP_TCP;
 
@@ -63,6 +66,9 @@ public:
 protected:
   void CloseAll();
   void DeleteMapControlTCP();
+
+  void CreateControlTcpUp();
+  void DeleteControlTCP(TNetControlTCP* pControl);
 
   TNetControlTCP* GetTCP_ByIP(TIP_Port &ip_port);
   void Done();

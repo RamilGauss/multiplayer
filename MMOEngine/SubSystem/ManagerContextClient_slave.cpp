@@ -101,7 +101,7 @@ TContainerContextSc* TManagerContextClient_slave::AddContextByKey(unsigned int i
     BL_FIX_BUG();
     return pC;
   }
-  pC = new TContainerContextSc;
+  pC = AddContainer();
 
   mMapKeyContext.insert(TMapUintPtr::value_type(id,pC));
   mMapKeySession.insert(TMapUintUint::value_type(id,INVALID_HANDLE_SESSION));
@@ -134,11 +134,11 @@ void TManagerContextClient_slave::AddSessionByKey(unsigned int id, unsigned int 
 //-------------------------------------------------------------------------
 void TManagerContextClient_slave::DeleteByKey(unsigned int key)
 {
-  TContainerContextSc* pContainer = FindContextByKey(key);
-  if(pContainer==NULL)
+  TContainerContextSc* pC = FindContextByKey(key);
+  if(pC==NULL)
     return;
 
-  delete pContainer;
+  DeleteContainer(pC);
   mMapKeyContext.erase(key);
   mMapKeySession.erase(key);
 
@@ -152,7 +152,7 @@ void TManagerContextClient_slave::DeleteByKey(unsigned int key)
 void TManagerContextClient_slave::Clear()
 {
   BOOST_FOREACH(TMapUintPtr::value_type& bit,mMapKeyContext)
-    delete bit.second;
+    DeleteContainer(bit.second);
 
   mMapKeyContext.clear();
   mMapKeySession.clear();

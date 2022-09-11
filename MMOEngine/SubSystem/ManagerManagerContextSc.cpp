@@ -40,7 +40,8 @@ void TManagerManagerContextSc::Remove(TManagerContextSc* pMСSc)
 //-----------------------------------------------------------------------------
 void TManagerManagerContextSc::Work()
 {
-  BOOST_FOREACH( TManagerContextSc* pMSc, mSetActiveManagerContextSc )
+  TSetPtr copySetActiveManagerContextSc = mSetActiveManagerContextSc;
+  BOOST_FOREACH( TManagerContextSc* pMSc, copySetActiveManagerContextSc )
     pMSc->Work();// работает только активный сценарий
 }
 //-----------------------------------------------------------------------------

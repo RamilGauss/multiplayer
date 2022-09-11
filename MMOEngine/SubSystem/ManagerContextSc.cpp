@@ -91,4 +91,8 @@ void TManagerContextSc::NotifyDisactiveEvent()
   mCallBackDisactivateEvent.Notify(this);
 }
 //---------------------------------------------------------------------
-
+IContextScenario* TManagerContextSc::GetActive()
+{
+  return pActiveContextSc;
+}
+//---------------------------------------------------------------------

@@ -16,7 +16,6 @@ TContainerContextSc::TContainerContextSc()
   mManagerContextSc = NULL;
 
   mListContext.push_back(&mDisClient   );
-  mListContext.push_back(&mDisSlave    );
   mListContext.push_back(&mFlow        );
   mListContext.push_back(&mLoginClient );
   mListContext.push_back(&mLoginSlave  );
@@ -64,5 +63,10 @@ void TContainerContextSc::SetUserPtr(void* p)
 {
   BOOST_FOREACH(IContextScenario* p,mListContext)
     p->SetUserPtr(p);
+}
+//------------------------------------------------------------
+TManagerContextSc* TContainerContextSc::GetMCSc()
+{
+  return mManagerContextSc;
 }
 //------------------------------------------------------------

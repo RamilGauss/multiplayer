@@ -39,7 +39,15 @@ void TScLoginClient_SlaveImpl::RecvInherit(TDescRecvSession* pDesc)
 //-----------------------------------------------------------------------------
 void TScLoginClient_SlaveImpl::Work(unsigned int time_ms)
 {
-
+  if(Context()->GetTimeWait() + eTimeWait < ht_GetMSCount())
+  {
+    // ошибка на той стороне
+    // непонятно в чем дело, но клиент сдох
+    TEventError event;
+    event.code = LoginClientSlaveNoAnswer;
+    Context()->GetSE()->AddEventCopy(&event, sizeof(event));
+    End();
+  }
 }
 //-----------------------------------------------------------------------------
 void TScLoginClient_SlaveImpl::RecvFromClient(TDescRecvSession* pDesc)
@@ -65,6 +73,9 @@ void TScLoginClient_SlaveImpl::RecvFromMaster(TDescRecvSession* pDesc)
     case eCheckClientConnectM2S:
       CheckClientConnectM2S(pDesc);
       break;
+    case eDisconnectClientM2S:
+      DisconnectClientM2S(pDesc);
+      break;
     default:BL_FIX_BUG();
   }
 }
@@ -72,14 +83,13 @@ void TScLoginClient_SlaveImpl::RecvFromMaster(TDescRecvSession* pDesc)
 void TScLoginClient_SlaveImpl::ConnectToSlaveC2S(TDescRecvSession* pDesc)
 {
   THeaderConnectToSlaveC2S* pHeader = (THeaderConnectToSlaveC2S*)pDesc->data;
-  // существует ли вообще клиент с данным ID,
-  // то есть был ли добавлен на ожидание от Мастера данный ID
-  NeedIsExistClientID(pHeader->id_client);
-}
-//--------------------------------------------------------------
-void TScLoginClient_SlaveImpl::SetIsExistClientID(bool isExist, unsigned int id_client)
-{
-  if(isExist==false)
+  // существует ли вообще клиент с данным ключом,
+  // то есть был ли добавлен на ожидание от Мастера данный Клиент
+  // загрузить контекст для работы
+  NeedContextByClientSessionByClientKey(pDesc->id_session,
+                                        pHeader->id_client);
+
+  if(Context()==NULL)
   {
     // генерация ошибки
     GetLogger(STR_NAME_MMO_ENGINE)->
@@ -87,12 +97,12 @@ void TScLoginClient_SlaveImpl::SetIsExistClientID(bool isExist, unsigned int id_
     BL_FIX_BUG();
     return;
   }
-  // загрузить контекст для работы
-  NeedContextByKeyClient(id_client);
+  // запомнить сессию Клиента
+  SetID_SessionClientSlave(pDesc->id_session);
 
   // уведомить Мастера о запросе от клиента
   THeaderClientConnectS2M h;
-  h.id_client = id_client;// указать какой клиент захотел соединиться
+  h.id_client = Context()->GetIDClient();// указать какой клиент захотел соединиться
   TBreakPacket bp;
   bp.PushFront((char*)&h, sizeof(h));
 
@@ -101,6 +111,14 @@ void TScLoginClient_SlaveImpl::SetIsExistClientID(bool isExist, unsigned int id_
 //--------------------------------------------------------------
 void TScLoginClient_SlaveImpl::InfoClientM2S(TDescRecvSession* pDesc)
 {
+  THeaderInfoClientM2S* pHeader = (THeaderInfoClientM2S*)pDesc->data;
+  NeedContextByClientKey(pHeader->id_client);
+  if(Context()==NULL)
+  {
+    BL_FIX_BUG();
+    return;
+  }
+  //--------------------------------------------
   // начало сценария
   if(Begin()==false)
   {
@@ -110,14 +128,15 @@ void TScLoginClient_SlaveImpl::InfoClientM2S(TDescRecvSession* pDesc)
     BL_FIX_BUG();
     return;
   }
-  // запомнить сессию
+	SetTimeWaitForNow();
+	// запомнить сессию
   SetID_SessionMasterSlave(pDesc->id_session);
   
-  THeaderInfoClientM2S* pHeader = (THeaderInfoClientM2S*)pDesc->data;
+	Context()->SetIDClient(pHeader->id_client);
   // сформировать квитанцию
   TBreakPacket bp;
   THeaderCheckInfoClientS2M h;
-  h.id_client = pHeader->id_client;
+  h.id_client = Context()->GetIDClient();
   bp.PushFront((char*)&h, sizeof(h));
 
   Context()->GetMS()->Send(GetID_SessionMasterSlave(), bp);
@@ -125,9 +144,17 @@ void TScLoginClient_SlaveImpl::InfoClientM2S(TDescRecvSession* pDesc)
 //--------------------------------------------------------------
 void TScLoginClient_SlaveImpl::CheckClientConnectM2S(TDescRecvSession* pDesc)
 {
-  // отсылка уведомления Developer Slave события Connect
-  TEventDisconnectDown event;
-  event.id_session = pDesc->id_session;
+  THeaderCheckClientConnectM2S* pHeader = (THeaderCheckClientConnectM2S*)pDesc->data;
+  NeedContextByClientKey(pHeader->id_client);
+  if(Context()==NULL)
+  {
+    BL_FIX_BUG();
+    return;
+  }
+  //--------------------------------------------
+	// отсылка уведомления Developer Slave события Connect
+  TEventConnectDown event;
+  event.id_session = GetID_SessionClientSlave();
   Context()->GetSE()->AddEventCopy(&event, sizeof(event));
   // отослать клиенту уведомление
   THeaderCheckConnectToSlaveS2C h;
@@ -135,6 +162,22 @@ void TScLoginClient_SlaveImpl::CheckClientConnectM2S(TDescRecvSession* pDesc)
   bp.PushFront((char*)&h, sizeof(h));
 
   Context()->GetMS()->Send(GetID_SessionClientSlave(),bp);
+  Context()->Accept();
   End();
+}
+//--------------------------------------------------------------
+void TScLoginClient_SlaveImpl::DisconnectClientM2S(TDescRecvSession* pDesc)
+{
+  THeaderDisconnectClientM2S* pH = (THeaderDisconnectClientM2S*)pDesc->data;
+  NeedContextByClientKey(pH->id_client);
+  
+  if(Context()==NULL)
+  {
+    BL_FIX_BUG();
+    return;
+  }
+  Context()->Reject();
+  Context()->GetMS()->CloseSession(Context()->GetID_SessionClientSlave());
+  End();  
 }
 //--------------------------------------------------------------

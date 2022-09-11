@@ -63,6 +63,7 @@ namespace nsMMOEngine
   {
     TEventLeaveGroup();
     unsigned int id_client;
+    unsigned int id_group;
   };
   //-------------------------------------------------------------
   struct MMO_ENGINE_EI TEventDestroyGroup : public TBaseEvent

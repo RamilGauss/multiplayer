@@ -11,11 +11,21 @@ using namespace nsMMOEngine;
 
 TContextScDisconnectClient::TContextScDisconnectClient()
 {
-
+  mIDClient = (unsigned int)-1;
 }
 //-----------------------------------------------------------------
 TContextScDisconnectClient::~TContextScDisconnectClient()
 {
 
+}
+//-----------------------------------------------------------------
+unsigned int TContextScDisconnectClient::GetIDClient()
+{
+  return mIDClient;
+}
+//-----------------------------------------------------------------
+void TContextScDisconnectClient::SetIDClient(unsigned int val)
+{
+  mIDClient = val;
 }
 //-----------------------------------------------------------------

@@ -22,6 +22,11 @@ TScenarioLoginClient::TScenarioLoginClient():
 mClient(this),mSlave(this),mMaster(this),mSS(this)
 {
   mCurBehavior = NULL;
+
+  AddCallBack(eSetClientKey,                     &mCBSetClientKey);
+  AddCallBack(eContextByMasterSessionByClientKey,&mCBContextByMasterSessionByClientKey);
+  AddCallBack(eNumInQueueByClientKey,            &mCBNumInQueueByClientKey);
+  AddCallBack(eContextByClientSessionByClientKey,&mCBContextByClientSessionByClientKey);
 }
 //--------------------------------------------------------------
 TScenarioLoginClient::~TScenarioLoginClient()
@@ -39,7 +44,7 @@ void TScenarioLoginClient::Work()
 }
 //--------------------------------------------------------------
 void TScenarioLoginClient::TryLogin(unsigned int ip, unsigned short port, 
-                                   void* data, int size)
+                                    void* data, int size)
 {
   mClient.TryLogin(ip, port, data, size);
 }
@@ -60,9 +65,9 @@ void TScenarioLoginClient::Accept(unsigned int key, void* resForClient, int size
   mMaster.Accept(key, resForClient, sizeResClient, id_session_slave, id_superserver);
 }
 //--------------------------------------------------------------
-void TScenarioLoginClient::Queue(int num)
+void TScenarioLoginClient::Queue(int num,void* resForClient, int sizeResClient)
 {
-  mMaster.Queue(num);
+  mMaster.Queue(num, resForClient, sizeResClient);
 }
 //--------------------------------------------------------------
 void TScenarioLoginClient::SetBehavior(eBehavior v)
@@ -84,18 +89,23 @@ void TScenarioLoginClient::SetBehavior(eBehavior v)
   }
 }
 //---------------------------------------------------------------------
-void TScenarioLoginClient::SetIsExistClientID_ss(bool isExist)
-{
-  mSS.SetIsExistClientID(isExist);
-}
-//---------------------------------------------------------------------
 void TScenarioLoginClient::LeaveQueue()
 {
   mClient.LeaveQueue();
 }
 //---------------------------------------------------------------------
-void TScenarioLoginClient::SetIsExistClientID_slave(bool isExist, unsigned int id_client)
+void TScenarioLoginClient::DisconnectFromClient()
 {
-  mSlave.SetIsExistClientID(isExist, id_client);
+  mClient.Disconnect();
+}
+//---------------------------------------------------------------------
+void TScenarioLoginClient::DisconnectFromMaster()
+{
+  mMaster.Disconnect();
+}
+//---------------------------------------------------------------------
+void TScenarioLoginClient::SetFakeClient(bool val)
+{
+  mSS.SetFakeClient(val);
 }
 //---------------------------------------------------------------------

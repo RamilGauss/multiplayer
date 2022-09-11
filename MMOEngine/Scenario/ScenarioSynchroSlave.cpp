@@ -36,16 +36,18 @@ void TScenarioSynchroSlave::Recv(TDescRecvSession* pDesc)
   switch(pPacket->subType)
   {
     case eFromSlave:
-      RecvFromSlave(pPacket);
+      RecvFromSlave(pDesc);
       break;
     default:BL_FIX_BUG();
   }
 }
 //---------------------------------------------------------------------
-void TScenarioSynchroSlave::RecvFromSlave(THeaderSynchroSlave* pPacket)
+void TScenarioSynchroSlave::RecvFromSlave(TDescRecvSession* pDesc)
 {
+  THeaderSynchroSlave* pPacket = (THeaderSynchroSlave*)pDesc->data;
   bool res = Begin();
   BL_ASSERT(res);
+  Context()->SetID_Session(pDesc->id_session);
   Context()->SetLoadProcent(pPacket->loadProcent);
   End();
 }

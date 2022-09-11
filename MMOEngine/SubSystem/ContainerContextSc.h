@@ -12,7 +12,6 @@ See for more information License.h.
 #include <list>
 
 #include "ContextScDisconnectClient.h"
-#include "ContextScDisconnectSlave.h"
 #include "ContextScFlow.h"
 #include "ContextScLoginClient.h"
 #include "ContextScLoginSlave.h"
@@ -34,7 +33,6 @@ namespace nsMMOEngine
     TManagerContextSc* mManagerContextSc;
 	public:
     TContextScDisconnectClient    mDisClient;
-    TContextScDisconnectSlave     mDisSlave;
     TContextScFlow                mFlow;
     TContextScLoginClient         mLoginClient;
     TContextScLoginSlave          mLoginSlave;
@@ -46,6 +44,8 @@ namespace nsMMOEngine
 		TContainerContextSc();
 
     void SetMCSc(TManagerContextSc* pMCSc);
+    TManagerContextSc* GetMCSc();
+
     void SetID_Session(unsigned int id_session);
     unsigned int GetID_Session();
     void SetMS(TManagerSession* pMS);

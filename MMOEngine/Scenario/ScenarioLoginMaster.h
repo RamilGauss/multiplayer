@@ -45,8 +45,8 @@ namespace nsMMOEngine
   protected:
     virtual void Work();
 
-    void RecvFromSuperServer();
-    void RecvFromMaster();
+    void RecvFromSuperServer(TDescRecvSession* pDesc);
+    void RecvFromMaster(TDescRecvSession* pDesc);
 
     TContextScLoginMaster* Context(){return (TContextScLoginMaster*)mCurContext;}
   };

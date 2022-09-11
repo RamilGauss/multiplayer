@@ -60,6 +60,7 @@ void TScLoginClient_ClientImpl::TryLogin(unsigned int ip, unsigned short port,
     BL_FIX_BUG();
     return;
   }
+  Context()->SetNeedLeaveQueue(false);
   // формирование пакета
   TBreakPacket bp;// контейнер для всего пакета
   bp.PushFront((char*)data,size);
@@ -100,9 +101,6 @@ void TScLoginClient_ClientImpl::RecvFromMaster(TDescRecvSession* pDesc)
     case eResultLoginM2C:
       ResultLoginM2C(pDesc);
       break;
-    case eCheckLeaveQueueM2C:
-      CheckLeaveQueueM2C(pDesc);
-      break;
     case eInfoSlaveM2C:
       InfoSlaveM2C(pDesc);
       break;
@@ -130,7 +128,7 @@ void TScLoginClient_ClientImpl::ResultLoginM2C(TDescRecvSession* pDesc)
     case THeaderResultLoginM2C::eAccept:
       // сохранить свой ключ
       Context()->SetIDClient(pH->id_client);
-      SetIDClient(pH->id_client);
+      EventSetClientKey(pH->id_client);
       break;
     case THeaderResultLoginM2C::eReject:
     {
@@ -148,7 +146,7 @@ void TScLoginClient_ClientImpl::ResultLoginM2C(TDescRecvSession* pDesc)
     case THeaderResultLoginM2C::eQueue:
     {
       Context()->SetIDClient(pH->id_client);
-      SetIDClient(pH->id_client);
+      EventSetClientKey(pH->id_client);
 
       Context()->SetNumInQueue(pH->numInQueue);
 
@@ -173,37 +171,22 @@ void TScLoginClient_ClientImpl::CheckLeaveQueueM2C(TDescRecvSession* pDesc)
 //--------------------------------------------------------------
 void TScLoginClient_ClientImpl::InfoSlaveM2C(TDescRecvSession* pDesc)
 {
-  // пере подключить транспорт с мастера на Slave
-  CloseSessionMaster();
+  Context()->SetNeedLeaveQueue(false);
   // смотрим что нам прислали
   THeaderInfoSlaveM2C* pInfoSlave = (THeaderInfoSlaveM2C*)pDesc->data;
-  // формируем пакет для Slave
-  TBreakPacket bp;
-  THeaderConnectToSlaveC2S h;
-  h.id_client = pInfoSlave->id_client;// для Slave отдать свой ID, он по нему нас зарегистрирует
-  bp.PushFront((char*)&h, sizeof(h));
-  // открыть сессию по IP:port
-  unsigned int id_slave = 
-    Context()->GetMS()->Send(pInfoSlave->ip_port_slave.ip,
-                             pInfoSlave->ip_port_slave.port,
-                             bp);
-  // проверка на наличие готовности Slave
-  if(id_slave==INVALID_HANDLE_SESSION)
-  {
-    // Генерация ошибки
-    TEventError event;
-    event.code = LoginClientClientNotExistSlave;
-    Context()->GetSE()->AddEventCopy(&event, sizeof(event));
-    End();
-    return;
-  }
-  SetID_SessionClientSlave(id_slave);
-  SetTimeWaitForNow();
-  
+  Context()->SetSlaveIP_Port(pInfoSlave->ip_port_slave);
   // чисто для отладки, что бы удостовериться что назначили
   // в будущем можно будет удалить
   Context()->SetIDClient(pInfoSlave->id_client);
-  SetIDClient(pInfoSlave->id_client);
+  EventSetClientKey(pInfoSlave->id_client);
+
+  // формируем пакет для Master
+  TBreakPacket bp;
+  THeaderCheckInfoSlaveC2M h;
+  h.id_client = Context()->GetIDClient();// равнозначно - pInfoSlave->id_client;
+  bp.PushFront((char*)&h, sizeof(h));
+
+  Context()->GetMS()->Send(GetID_SessionClientMaster(),bp);
 }
 //--------------------------------------------------------------
 void TScLoginClient_ClientImpl::LeaveQueue()
@@ -220,6 +203,7 @@ void TScLoginClient_ClientImpl::LeaveQueue()
   if(id_master==INVALID_HANDLE_SESSION)
     return;
 
+  Context()->SetNeedLeaveQueue(true);
   Context()->GetMS()->Send(id_master,bp);
 }
 //--------------------------------------------------------------
@@ -229,8 +213,38 @@ void TScLoginClient_ClientImpl::CloseSessionMaster()
   SetID_SessionClientMaster(INVALID_HANDLE_SESSION);
 }
 //--------------------------------------------------------------
-void TScLoginClient_ClientImpl::SetIDClient(unsigned int id_client)
+void TScLoginClient_ClientImpl::Disconnect()
 {
-  mCallBackSetIDClient.Notify(id_client);
+  // ждет ли в очереди и хочет ли выйти из нее
+  if(Context()->NeedLeaveQueue())
+  {
+    End();
+    return;
+  }
+  // пере подключить транспорт с мастера на Slave
+  // формируем пакет для Slave
+  TBreakPacket bp;
+  THeaderConnectToSlaveC2S h;
+  // для Slave отдать свой ID, он по нему нас зарегистрирует  
+  h.id_client = Context()->GetIDClient();
+  bp.PushFront((char*)&h, sizeof(h));
+  // открыть сессию по IP:port
+  TIP_Port ip_port_slave = Context()->GetSlaveIP_Port();
+  unsigned int id_slave = 
+    Context()->GetMS()->Send(ip_port_slave.ip,
+                             ip_port_slave.port,
+                             bp);
+  // проверка на наличие готовности Slave
+  if(id_slave==INVALID_HANDLE_SESSION)
+  {
+    // Генерация ошибки
+    TEventError event;
+    event.code = LoginClientClientNotExistSlave;
+    Context()->GetSE()->AddEventCopy(&event, sizeof(event));
+    End();
+    return;
+  }
+  SetID_SessionClientSlave(id_slave);
+  SetTimeWaitForNow();
 }
 //--------------------------------------------------------------

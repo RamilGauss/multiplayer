@@ -15,7 +15,6 @@ namespace nsMMOEngine
 {
 	class IScenario;
   class TScenarioDisconnectClient;
-  class TScenarioDisconnectSlave;
   class TScenarioFlow;
   class TScenarioLoginClient;
   class TScenarioLoginSlave;
@@ -40,7 +39,6 @@ namespace nsMMOEngine
     void Work(TDescRecvSession* pDesc);
 
     TScenarioDisconnectClient*    mDisClient;
-    TScenarioDisconnectSlave*     mDisSlave;
     TScenarioFlow*                mFlow;
     TScenarioLoginClient*         mLoginClient;
     TScenarioLoginSlave*          mLoginSlave;

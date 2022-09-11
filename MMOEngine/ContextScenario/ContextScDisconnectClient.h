@@ -16,9 +16,13 @@ namespace nsMMOEngine
 {
   class TContextScDisconnectClient : public IContextScenario
 	{
+    unsigned int mIDClient;
 	public:
 		TContextScDisconnectClient();
     virtual ~TContextScDisconnectClient();
+
+    unsigned int GetIDClient();
+    void SetIDClient(unsigned int val);
   private:
 	};
 }  

@@ -11,7 +11,7 @@
 			<DebugSettings
 				Command="$(TargetPath)"
 				WorkingDirectory=""
-				CommandArguments="-v 0 -r c -d ..\\DeveloperToolDLL\\DeveloperDLL.dll"
+				CommandArguments="-v 0 -r ss -d ..\\DeveloperToolDLL\\DeveloperDLL.dll"
 				Attach="false"
 				DebuggerType="3"
 				Remote="1"

@@ -6,8 +6,8 @@ See for more information License.h.
 */
 
 #include "SuperServer.h"
-#include "Master_ss.h"
-#include "Client_ss.h"
+#include "ManagerContextMoreDownClientConnection.h"
+#include "ManagerContextDownConnection.h"
 
 #include "Logger.h"
 #include "IScenario.h"
@@ -19,19 +19,23 @@ See for more information License.h.
 #include "ScenarioFlow.h"
 #include "ScenarioSendToClient.h"
 #include "ScenarioLoginClient.h"
+#include "ScenarioDisconnectClient.h"
 
 using namespace nsMMOEngine;
 
-TSuperServer::TSuperServer()
+TSuperServer::TSuperServer():
+mMngContextClient(new TManagerContextMoreDownClientConnection),
+mMngContextMaster(new TManagerContextDownConnection),
+mContainer_SecondLogin(new TContainerContextSc)
 {
   mControlSc->mLoginClient->SetBehavior(TScenarioLoginClient::eSuperServer);
+
+  SetupScForContext(mContainer_SecondLogin.get());
 }
 //-------------------------------------------------------------------------
 TSuperServer::~TSuperServer()
 {
-  BOOST_FOREACH(TMapUintMasterPtr::value_type& bit, mMapID_SessionMaster)
-    delete bit.second;
-  mMapID_SessionMaster.clear();
+
 }
 //-------------------------------------------------------------------------
 void TSuperServer::SendByClientKey(std::list<unsigned int>& lKey, TBreakPacket bp)
@@ -39,19 +43,32 @@ void TSuperServer::SendByClientKey(std::list<unsigned int>& lKey, TBreakPacket b
   BOOST_FOREACH(unsigned int id_client, lKey)
   {
     // поиск мастера, у которого есть клиенты, ассоциированные с этими ключами
-    TMaster_ss* pMaster = FindMasterByClient(id_client);
-    mControlSc->mSendToClient->SetContext(&pMaster->GetC()->mSendToClient);
-    mControlSc->mSendToClient->SendFromSuperServerToMaster(id_client,bp);
+    unsigned int id_session_master;
+    if(mMngContextClient->FindSessionByClientKey(id_client,id_session_master))
+    {
+      TContainerContextSc* pC = 
+        mMngContextMaster->FindContextBySession(id_session_master);
+      mControlSc->mSendToClient->SetContext(&pC->mSendToClient);
+      mControlSc->mSendToClient->SendFromSuperServerToMaster(id_client,bp);
+    }
   }
 }
 //-------------------------------------------------------------------------
 void TSuperServer::DisconnectInherit(unsigned int id_session)
 {
-  TMaster_ss* pMaster = FindMaster(id_session);
-  if(pMaster==NULL)
+  if(mMngContextMaster->FindContextBySession(id_session)==NULL)
     return;
+  
+  // перечислить всех клиентов, которые сидят на этом мастере и их удаление
+  int cClient = mMngContextMaster->GetCountClientKey(id_session);
+  for( int i = 0 ; i < cClient ; i++)
+  {
+    unsigned int id_client;
+    if(mMngContextMaster->GetClientKeyByIndex(id_session, i, id_client))
+      mMngContextClient->DeleteByKey(id_client);
+  }
 
-  DeleteMaster(id_session);
+  mMngContextMaster->DeleteContextBySession(id_session);
 
   TEventDisconnectDown event;
   event.id_session = id_session;
@@ -60,7 +77,7 @@ void TSuperServer::DisconnectInherit(unsigned int id_session)
 //-------------------------------------------------------------------------
 int TSuperServer::GetCountDown()
 {
-	return mMapID_SessionMaster.size();
+	return mMngContextMaster->GetCountSession();
 }
 //-------------------------------------------------------------------------
 bool TSuperServer::GetDescDown(int index, void* pDesc, int& sizeDesc)
@@ -71,166 +88,88 @@ bool TSuperServer::GetDescDown(int index, void* pDesc, int& sizeDesc)
       WriteF_time("TSuperServer::GetDescDown() size of buffer less then size of structure.\n");
     return false;
   }
-  if(index>=GetCountDown())
-  {
-    GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TSuperServer::GetDescDown() index is out of band.\n");
+
+  unsigned int id_session;
+  if(mMngContextMaster->GetSessionByIndex(index, id_session)==false)
     return false;
-  }
-  TMapUintMasterPtrIt it = mMapID_SessionMaster.begin();
-  for(int i = 0 ; i < index ; i++)
-    it++;
+  // кол-во клиентов на дднном мастере
+  int countClient = mMngContextMaster->GetCountClientKey(id_session);
+
   TDescDownSuperServer* pD = (TDescDownSuperServer*)pDesc;
-  pD->id_session  = it->second->GetC()->GetID_Session();
-  pD->countClient = it->second->GetCountClient();
+  pD->id_session  = id_session;
+  pD->countClient = countClient;
   sizeDesc = sizeof(TDescDownSuperServer);
   return true;
 }
 //-------------------------------------------------------------------------
 void TSuperServer::SendDown(unsigned int id_session, TBreakPacket bp, bool check)
 {
-  TMaster_ss* pMaster = FindMaster(id_session);
-  if(pMaster==NULL)
+  TContainerContextSc* pC = mMngContextMaster->FindContextBySession(id_session);
+  if(pC==NULL)
     return;
-  mControlSc->mFlow->SetContext(&pMaster->GetC()->mFlow);
+  mControlSc->mFlow->SetContext(&pC->mFlow);
   mControlSc->mFlow->SendDown(bp,check);
 }
 //-------------------------------------------------------------------------
 void TSuperServer::NeedContextLoginMaster(unsigned int id_session)
 {
-  if(FindMaster(id_session))
+  TContainerContextSc* pC = mMngContextMaster->FindContextBySession(id_session);
+  if(pC)
   {
     // внутренняя ошибка
     GetLogger(STR_NAME_MMO_ENGINE)->
       WriteF_time("TSuperServer::LoginMaster() against try authorized.\n");
     return;
   }
-  TMaster_ss* pMaster = AddMaster(id_session);
+  pC = mMngContextMaster->AddContext(id_session);
   // назначить контекст для сценария
-  mControlSc->mLoginMaster->SetContext(&pMaster->GetC()->mLoginMaster);
+  mControlSc->mLoginMaster->SetContext(&pC->mLoginMaster);
   // событие наружу
   TEventConnectDown event;
   event.id_session = id_session;
   AddEventCopy(&event, sizeof(event));
 }
 //-------------------------------------------------------------------------
-void TSuperServer::NeedContextIDclientIDmaster(unsigned int id_client,
-                                               unsigned int id_session)//SS
+void TSuperServer::NeedContextByMasterSessionByClientKey(unsigned int id_session,
+                                                         unsigned int id_client)
 {
-  TMaster_ss* pMaster = FindMaster(id_session);
-  if(pMaster==NULL)
+  // проверка на существование мастера
+  if(mMngContextMaster->FindContextBySession(id_session)==NULL)
   {
     BL_FIX_BUG();
     return;
   }
-
-  TClient_ss* pClient = pMaster->FindClient(id_client);
-  if(pClient==NULL)
-    pClient = AddClient(id_client,id_session);
-
-  mControlSc->mSendToClient->SetContext(&pClient->GetC()->mLoginClient);
-}
-//-------------------------------------------------------------------------
-void TSuperServer::NeedIsExistClientID(unsigned int id_client)
-{
-  bool isExist = false;
-  if(FindClient(id_client))
-    isExist = true;
-
-  mControlSc->mLoginClient->SetIsExistClientID_ss(isExist);
-}
-//-------------------------------------------------------------------------
-TClient_ss* TSuperServer::FindClient(unsigned int id_client)
-{
-  TMaster_ss* pMaster = FindMasterByClient(id_client);
-  if(pMaster==NULL)
+  TContainerContextSc* pC = mMngContextClient->FindContextByClientKey(id_client);
+  bool fakeClient = false;
+  if(pC==NULL)
   {
-    // внутренняя ошибка
-    GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TSuperServer::FindClient() client not found.\n");
-    return NULL;
+    // первый заход
+    mMngContextMaster->AddClientKey(id_session,id_client);
+    pC = mMngContextClient->AddContext(id_client,id_session);
+    fakeClient = false;
   }
-  return pMaster->FindClient(id_client);
-}
-//-------------------------------------------------------------------------
-TClient_ss* TSuperServer::AddClient(unsigned int id_client, unsigned int id_session_master)
-{
-  TClient_ss* pClient = FindClient(id_client);
-  // проверить есть ли клиент
-  if(pClient)
-    return pClient;
-  // есть ли мастер
-  TMaster_ss* pMaster = FindMaster(id_session_master);
-  if(pMaster==NULL)
-    return NULL;
-  // а теперь добавить
-  pClient = new TClient_ss;
-  pClient->SetID_SessionMaster(id_session_master);
-  SetupScForContext(pClient->GetC());
-  pClient->GetC()->SetID_Session(id_session_master);
-  pClient->GetC()->SetUserPtr(pClient);
-
-  pMaster->AddClient(pClient);
-
-  mMapIDClientIDSessionMaster.insert(TMapUintUint::value_type(id_client,id_session_master));
-  return pClient;
-}
-//-------------------------------------------------------------------------
-TMaster_ss* TSuperServer::FindMasterByClient(unsigned int id_client)
-{
-  TMapUintUintIt fit = mMapIDClientIDSessionMaster.find(id_client);
-  if(fit==mMapIDClientIDSessionMaster.end())
+  else
   {
-    // внутренняя ошибка
-    GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TSuperServer::FindMasterByClient() master not found.\n");
-    return NULL;
+    // повторная авторизация
+    pC = mContainer_SecondLogin.get();
+    fakeClient = true;
   }
+  mControlSc->mLoginClient->SetContext(&pC->mLoginClient);
+  mControlSc->mLoginClient->SetFakeClient(fakeClient);
+}
+//-------------------------------------------------------------------------
+void TSuperServer::NeedContextDisconnectClient(unsigned int id_client)
+{
+  unsigned int id_session_master;
+  // удалить запись в Мастере
+  if(mMngContextClient->FindSessionByClientKey(id_client,id_session_master))
+    mMngContextMaster->DeleteByClientKey(id_session_master, id_client);
+  // и сам клиент
+  mMngContextClient->DeleteByKey(id_client);
+}
+//-------------------------------------------------------------------------
+void TSuperServer::EndDisconnectClient(IScenario* pSc)
+{
 
-  return FindMaster(fit->second);
-}
-//-------------------------------------------------------------------------
-TMaster_ss* TSuperServer::FindMaster(unsigned int id_session_master)
-{
-  TMapUintMasterPtrIt fit = mMapID_SessionMaster.find(id_session_master);
-  if(fit==mMapID_SessionMaster.end())
-  {
-    // внутренняя ошибка
-    GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TSuperServer::FindMaster() master not found.\n");
-    return NULL;
-  }
-  return fit->second;
-}
-//-------------------------------------------------------------------------
-TMaster_ss* TSuperServer::AddMaster(unsigned int id_session_master)
-{
-  TMaster_ss* pMaster = FindMaster(id_session_master);
-  if(pMaster)
-    return pMaster;
-  pMaster = new TMaster_ss;
-
-  SetupScForContext(pMaster->GetC());
-  pMaster->SetID_Session(id_session_master);
-  pMaster->GetC()->SetID_Session(id_session_master);
-  pMaster->GetC()->SetUserPtr(pMaster);
-  mMapID_SessionMaster.insert(TMapUintMasterPtr::value_type(id_session_master,pMaster));
-
-  return pMaster;
-}
-//-------------------------------------------------------------------------
-void TSuperServer::DeleteMaster(unsigned int id_session_master)
-{
-  TMaster_ss* pMaster = FindMaster(id_session_master);
-  mMapID_SessionMaster.erase(id_session_master);
-  delete pMaster;
-}
-//-------------------------------------------------------------------------
-void TSuperServer::DeleteClient(unsigned int id_client)
-{
-  TMaster_ss* pMaster = FindMasterByClient(id_client);
-  if(pMaster==NULL)
-    return;
-	pMaster->DeleteClient(id_client);
 }
 //-------------------------------------------------------------------------

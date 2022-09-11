@@ -273,23 +273,55 @@
 			<Filter
 				Name="MappingDownConnection"
 				>
+				<File
+					RelativePath=".\SubSystem\DelegateManagerContextSc.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\DelegateManagerContextSc.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerContextDownConnection.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerContextDownConnection.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerContextMoreDownClientConnection.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerContextMoreDownClientConnection.h"
+					>
+				</File>
 				<Filter
 					Name="Master"
 					>
 					<File
-						RelativePath=".\SubSystem\Client_master.cpp"
+						RelativePath=".\SubSystem\ManagerContextClientLogining.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\SubSystem\Client_master.h"
+						RelativePath=".\SubSystem\ManagerContextClientLogining.h"
 						>
 					</File>
 					<File
-						RelativePath=".\SubSystem\GroupClient_master.cpp"
+						RelativePath=".\SubSystem\ManagerContextDownConnection_Slave.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\SubSystem\GroupClient_master.h"
+						RelativePath=".\SubSystem\ManagerContextDownConnection_Slave.h"
+						>
+					</File>
+					<File
+						RelativePath=".\SubSystem\ManagerGroupClient.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SubSystem\ManagerGroupClient.h"
 						>
 					</File>
 					<File
@@ -305,39 +337,11 @@
 					Name="Slave"
 					>
 					<File
-						RelativePath=".\SubSystem\Client_slave.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\SubSystem\Client_slave.h"
-						>
-					</File>
-					<File
 						RelativePath=".\SubSystem\ManagerContextClient_slave.cpp"
 						>
 					</File>
 					<File
 						RelativePath=".\SubSystem\ManagerContextClient_slave.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="SuperServer"
-					>
-					<File
-						RelativePath=".\SubSystem\Client_ss.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\SubSystem\Client_ss.h"
-						>
-					</File>
-					<File
-						RelativePath=".\SubSystem\Master_ss.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\SubSystem\Master_ss.h"
 						>
 					</File>
 				</Filter>
@@ -446,10 +450,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\MMOEngine\Scenario\ScenarioDisconnectSlave.h"
-					>
-				</File>
-				<File
 					RelativePath="..\MMOEngine\Scenario\ScenarioFlow.h"
 					>
 				</File>
@@ -483,10 +483,6 @@
 				>
 				<File
 					RelativePath="..\MMOEngine\Scenario\ScenarioDisconnectClient.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\MMOEngine\Scenario\ScenarioDisconnectSlave.cpp"
 					>
 				</File>
 				<File
@@ -590,10 +586,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\MMOEngine\ContextScenario\ContextScDisconnectSlave.h"
-					>
-				</File>
-				<File
 					RelativePath="..\MMOEngine\ContextScenario\ContextScFlow.h"
 					>
 				</File>
@@ -627,10 +619,6 @@
 				>
 				<File
 					RelativePath="..\MMOEngine\ContextScenario\ContextScDisconnectClient.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\MMOEngine\ContextScenario\ContextScDisconnectSlave.cpp"
 					>
 				</File>
 				<File
