@@ -279,6 +279,9 @@ void TClientDeveloperTool_ClientTank::Event(nsEvent::TEvent* pEvent)
       break;
     case ID_SRC_EVENT_TIMER_LAST_EVENT:
       break;
+    case ID_SRC_EVENT_DEV:
+      HandleFromDev((nsDevProtocol::TBase*)pEvent->container.GetPtr());
+      break;
   }
 }
 //---------------------------------------------------------------------------------------------
@@ -301,17 +304,22 @@ void TClientDeveloperTool_ClientTank::HandleFromMMOEngine(nsMMOEngine::TBaseEven
       DisconnectUp();
       break;
     case TBase::eError:
-      sEvent = "Error";
+		{
+			char sError[300];
+			TEventError* pEr = (TEventError*)pBE;
+			sprintf(sError, "Error code=%u", pEr->code);
+			sEvent = sError;
+		}
       break;
     case TBase::eRecvFromDown:
       sEvent = "RecvFromDown";
       break;
     case TBase::eRecvFromUp:
-			{
-				sEvent = "RecvFromUp";
-				TEventRecvFromUp* pRU = (TEventRecvFromUp*)pBE;
-				mTestControlTank.Recv(pRU->data, pRU->sizeData);
-			}
+	  {
+		  sEvent = "RecvFromUp";
+		  TEventRecvFromUp* pRU = (TEventRecvFromUp*)pBE;
+		  mTestControlTank.Recv(pRU->data, pRU->sizeData);
+	  }
       break;
     case TBase::eSaveContext:
       sEvent = "SaveContext";
@@ -442,5 +450,15 @@ void TClientDeveloperTool_ClientTank::CreateTank()
   mTank->SetShow(false);
 
 	mTestControlTank.SetTank((TTankTower*)mTank);
+}
+//---------------------------------------------------------------------------------------------
+void TClientDeveloperTool_ClientTank::HandleFromDev(nsDevProtocol::TBase* pData)
+{
+  switch(pData->type)
+  {
+    case nsDevProtocol::DisconnectUp_Client:
+      DisconnectUp();
+      break;
+  }
 }
 //---------------------------------------------------------------------------------------------

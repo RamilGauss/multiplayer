@@ -11,14 +11,17 @@ See for more information License.h.
 
 
 #include <stdio.h>
+#include <string>
+
 #include "TypeDef.h"
+#include "Container.h"
 /*
   Загрузка из файла
 */
 
 class SHARE_EI TLoadFromHDD
 {
-  char sPath[260];
+  std::string sPath;
   FILE* pFile;
 
 public:
@@ -32,6 +35,8 @@ public:
 	unsigned int Size();
 
   int Read(void* buffer, int size, int offset = 0);
+  
+  int ReadSmall(TContainer& c);
 
  	void Close();
 

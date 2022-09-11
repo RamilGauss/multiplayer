@@ -173,10 +173,10 @@ void TShareTest::Recv(INetTransport::TDescRecv* p)
 {
 	switch(p->type)
 	{
-		case INetTransport::ePacket:
+		case INetTransport::eTcp:
 			RecvPacket(p);
 			break;
-		case INetTransport::eStream:
+		case INetTransport::eUdp:
 			RecvStream(p);
 			break;
 	}

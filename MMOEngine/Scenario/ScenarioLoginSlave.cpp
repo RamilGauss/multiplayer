@@ -93,7 +93,7 @@ void TScenarioLoginSlave::RecvFromSlave(TDescRecvSession* pDesc)
 //--------------------------------------------------------------------------
 void TScenarioLoginSlave::Recv(TDescRecvSession* pDesc)
 {
-  NeedContext(pDesc->id_session);
+  NeedContextBySession(pDesc->id_session);
   THeaderLoginSlave* pPacket = (THeaderLoginSlave*)pDesc->data;
   switch(pPacket->subType)
   {

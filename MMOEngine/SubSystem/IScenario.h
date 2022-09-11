@@ -21,10 +21,10 @@ namespace nsMMOEngine
 	class TManagerSession;
   class IScenario : public TMapCallBack
   {
-		TCallBackRegistrator1<unsigned int> mCBNeedContext;
+		TCallBackRegistrator1<unsigned int> mCBNeedContextBySession;
     TCallBackRegistrator1<IScenario*>   mCBEnd;
     // запрос на контекст по ключу клиента
-    TCallBackRegistrator1<unsigned int>              mCBContextByClientKey;
+    TCallBackRegistrator1<unsigned int> mCBContextByClientKey;
 
     unsigned char mType;
   protected:
@@ -66,7 +66,7 @@ namespace nsMMOEngine
     bool Begin();
     void End();
     // запрос на новую сессию, кто зарегистрировался выставит контекст с помощью SetContext()
-    void NeedContext(unsigned int id_session);
+    void NeedContextBySession(unsigned int id_session);
     void NeedContextByClientKey(unsigned int id_client);
   };
 }

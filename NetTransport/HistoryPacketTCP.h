@@ -25,7 +25,8 @@ public:
     int size;
   };
 
-  typedef enum{
+  typedef enum
+  {
     eSearchBegin,
     eSearchSize,
     eSearchEnd,
@@ -43,6 +44,10 @@ protected:
   int SearchSize(int readSize, char* buffer, int beginPos);
   int SearchEnd(int readSize, char* buffer, TResult& res, int beginPos);
 
+  enum
+  {
+    eMaxSize = 100000, // пакета большего размера быть не может
+  };
 };
 
 

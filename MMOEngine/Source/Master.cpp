@@ -433,11 +433,6 @@ void TMaster::NeedContextLoginSlave(unsigned int id_session)
   AddEventCopy(&event, sizeof(event));
 }
 //-------------------------------------------------------------------------
-void TMaster::NeedContextRcm(unsigned int id_session)
-{
-
-}
-//-------------------------------------------------------------------------
 void TMaster::NeedContextSynchroSlave(unsigned int id_session)
 {
 	TContainerContextSc* pC = mMngContextSlave->FindContextBySession(id_session);
@@ -486,10 +481,16 @@ void TMaster::NeedContextLoginClientByClientKey(unsigned int id_key_client)
     if(pC)
       mControlSc->mLoginClient->SetContext(&pC->mLoginClient);
     else
+    {
+      mControlSc->mLoginClient->SetContext(NULL);
       BL_FIX_BUG();
+    }
   }
   else
-    BL_FIX_BUG();
+  {
+    mControlSc->mLoginClient->SetContext(NULL);
+    //BL_FIX_BUG();
+  }
 }
 //-------------------------------------------------------------------------
 void TMaster::NeedNumInQueueLoginClient(unsigned int id_session)
@@ -822,16 +823,6 @@ void TMaster::NeedContextSendToClient(unsigned int id_client)
 		mControlSc->mSendToClient->SetContext(NULL);
 }
 //-------------------------------------------------------------------------
-void TMaster::ActivateRcmClient(IScenario* pSc)
-{
-  TContextScRecommutationClient* pContext = (TContextScRecommutationClient*)pSc->GetContext();
-  unsigned int key = pContext->GetClientKey();
-  unsigned int id_session_donor     = pContext->GetSessionDonor(),
-               id_session_recipient = pContext->GetSessionRecipient();
-
-  mMngRcm->AddClientKey(key,id_session_donor, id_session_recipient);
-}
-//-------------------------------------------------------------------------
 void TMaster::EndRcm(IScenario* pSc)
 {
   TContextScRecommutationClient* pContext = (TContextScRecommutationClient*)pSc->GetContext();
@@ -844,7 +835,16 @@ void TMaster::EndRcm(IScenario* pSc)
   BL_ASSERT(res);
 }
 //-------------------------------------------------------------------------
-void TMaster::NeedSlaveSessionDonor(IScenario* pSc)
+void TMaster::NeedContextByClientKeyRcm(unsigned int key)
+{
+  TContainerContextSc* pC = mMngContextClient->FindContextByClientKey(key);
+  if(pC)
+    mControlSc->mRcm->SetContext(&pC->mRcm);
+  else
+    mControlSc->mRcm->SetContext(NULL);
+}
+//-------------------------------------------------------------------------
+void TMaster::NeedSlaveSessionDonorRcm(IScenario* pSc)
 {
   TContextScRecommutationClient* pContext = (TContextScRecommutationClient*)pSc->GetContext();
   unsigned int key = pContext->GetClientKey();
@@ -857,5 +857,15 @@ void TMaster::NeedSlaveSessionDonor(IScenario* pSc)
       WriteF_time("TMaster::NeedSlaveSessionDonor() key = %u not found donor.\n", key);
     BL_FIX_BUG();
   }
+}
+//-------------------------------------------------------------------------
+void TMaster::ActivateRcm(IScenario* pSc)
+{
+  TContextScRecommutationClient* pContext = (TContextScRecommutationClient*)pSc->GetContext();
+  unsigned int key = pContext->GetClientKey();
+  unsigned int id_session_donor     = pContext->GetSessionDonor(),
+    id_session_recipient = pContext->GetSessionRecipient();
+
+  mMngRcm->AddClientKey(key,id_session_donor, id_session_recipient);
 }
 //-------------------------------------------------------------------------

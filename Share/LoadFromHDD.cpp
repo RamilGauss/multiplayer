@@ -17,7 +17,6 @@ using namespace std;
 TLoadFromHDD::TLoadFromHDD(char* path)
 {
   pFile = NULL;
-  sPath[0] = '\0';
 
 	ReOpen(path);
 }
@@ -32,11 +31,12 @@ bool TLoadFromHDD::ReOpen(char* path)
   Close();
 
 	if(path!=NULL)
-    strcpy(sPath, path);
+    sPath = path;
 
-	if(sPath[0] == '\0') return false;
+	if(sPath.size()==0) 
+    return false;
 
-	pFile = fopen(sPath,"rb");
+	pFile = fopen(sPath.data(), "rb");
 	if(pFile!=NULL) return true;
 
 	return false;
@@ -70,6 +70,12 @@ unsigned int TLoadFromHDD::Size()
 
   return buffer.st_size;
 #endif
+}
+//---------------------------------------------------------------
+int TLoadFromHDD::ReadSmall(TContainer& c)
+{
+  c.SetData(NULL, Size());
+  return Read( c.GetPtr(), c.GetSize(), 0);
 }
 //---------------------------------------------------------------
 int TLoadFromHDD::Read(void* buffer, int size, int offset)

@@ -57,7 +57,14 @@ void TControlScenario::Work(TDescRecvSession* pDesc)
   IScenario::TBaseHeader* pPacket = (IScenario::TBaseHeader*)pDesc->data;
   TMapIntPtrIt fit = mMapTypeSc.find(pPacket->type);
   if(fit!=mMapTypeSc.end())
+  {
+    // защита от получения незащищенных UDP пакетов
+    if(pDesc->type==INetTransport::eUdp)
+      if(fit->second!=mFlow)// только Flow использует UDP, остальным нельзя
+        return;
+
     fit->second->Recv(pDesc);
+  }
   else
     BL_FIX_BUG();
 }

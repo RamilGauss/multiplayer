@@ -17,7 +17,7 @@ IScenario::IScenario()
 {
   mCurContext = NULL;
 
-  AddCallBack(eContextBySession,   &mCBNeedContext);
+  AddCallBack(eContextBySession,   &mCBNeedContextBySession);
   AddCallBack(eEnd,                &mCBEnd);
   AddCallBack(eContextByClientKey, &mCBContextByClientKey);
 }
@@ -60,7 +60,7 @@ IContextScenario* IScenario::GetContext()
   return mCurContext;
 }
 //---------------------------------------------------------------------
-void IScenario::NeedContext(unsigned int id_session)
+void IScenario::NeedContextBySession(unsigned int id_session)
 {
   Notify<unsigned int>(eContextBySession, id_session);
 }

@@ -24,6 +24,10 @@ TBaseScLoginClient(pSc)
 //-----------------------------------------------------------------------------
 void TScLoginClient_SlaveImpl::RecvInherit(TDescRecvSession* pDesc)
 {
+  // защита от хака
+  if(pDesc->sizeData<sizeof(THeader))
+    return;
+  //=======================================
   THeader* pHeader = (THeader*)pDesc->data;
   switch(pHeader->from)
   {
@@ -82,6 +86,10 @@ void TScLoginClient_SlaveImpl::RecvFromMaster(TDescRecvSession* pDesc)
 //--------------------------------------------------------------
 void TScLoginClient_SlaveImpl::ConnectToSlaveC2S(TDescRecvSession* pDesc)
 {
+  // защита от хака
+  if(pDesc->sizeData!=sizeof(THeaderConnectToSlaveC2S))
+    return;
+  
   THeaderConnectToSlaveC2S* pHeader = (THeaderConnectToSlaveC2S*)pDesc->data;
   // существует ли вообще клиент с данным ключом,
   // то есть был ли добавлен на ожидание от Мастера данный Клиент

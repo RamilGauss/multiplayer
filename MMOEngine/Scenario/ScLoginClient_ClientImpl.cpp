@@ -39,7 +39,8 @@ void TScLoginClient_ClientImpl::RecvInherit(TDescRecvSession* pDesc)
 //-----------------------------------------------------------------------------
 void TScLoginClient_ClientImpl::Work(unsigned int time_ms)
 {
-  if( Context()->GetTimeWait() + eTimeWait < time_ms)
+	unsigned int time_end_ms = Context()->GetTimeWait() + eTimeWait;
+	if(time_end_ms < time_ms)
   {
     // ошибка на той стороне
     TEventError event;
@@ -52,7 +53,7 @@ void TScLoginClient_ClientImpl::Work(unsigned int time_ms)
 void TScLoginClient_ClientImpl::TryLogin(unsigned int ip, unsigned short port, 
                                          void* data, int size, unsigned char subNet)
 {
-  if(Begin()==false)
+	if(Begin()==false)
   {
     // генерация ошибки
     GetLogger(STR_NAME_MMO_ENGINE)->
@@ -65,7 +66,6 @@ void TScLoginClient_ClientImpl::TryLogin(unsigned int ip, unsigned short port,
   TBreakPacket bp;// контейнер для всего пакета
   bp.PushFront((char*)data,size);
   THeaderTryLoginC2M h;
-  h.sizeData = size;
   bp.PushFront((char*)&h, sizeof(h));
   // отослать пакет для попытки авторизации
 	Context()->SetSubNet(subNet);
@@ -79,7 +79,9 @@ void TScLoginClient_ClientImpl::TryLogin(unsigned int ip, unsigned short port,
     End();
   }
   else
+	{
     SetTimeWaitForNow();
+	}
 }
 //-----------------------------------------------------------------------------
 void TScLoginClient_ClientImpl::RecvFromSlave(TDescRecvSession* pDesc)

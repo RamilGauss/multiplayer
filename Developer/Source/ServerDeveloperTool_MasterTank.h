@@ -13,6 +13,7 @@ See for more information License.h.
 #include "Events.h"
 #include "InputCmdDevTool.h"
 #include "ListMultiThread.h"
+#include <list>
 
 class MasterForm;
 
@@ -26,6 +27,10 @@ class TServerDeveloperTool_MasterTank : public IServerDeveloperTool
   MasterForm* mMasterForm;
 
   TInputCmdDevTool mInputCmd;
+
+	typedef std::list<unsigned int> TListUint;
+	TListUint mListKeyAllClient;
+
 public:
   TServerDeveloperTool_MasterTank();
   virtual ~TServerDeveloperTool_MasterTank();
@@ -51,6 +56,8 @@ protected:
   void DisconnectUpQt();
   void AddSlaveQt();
   void DeleteSlaveQt();
+
+  void CreateGroup();
 
   void TryLogin(nsMMOEngine::TEventTryLogin* pEvent);
   void ConnectDown(nsMMOEngine::TEventConnectDown* pEvent);

@@ -57,7 +57,6 @@ public:
   virtual bool Connect(unsigned int ip, unsigned short port); // вызов только для клиента
 
 	virtual void Close(unsigned int ip, unsigned short port);
-
 public:
 
   void AddInMapTCP(TIP_Port& ip_port, TNetControlTCP* pNetControl);
@@ -72,6 +71,8 @@ protected:
 
   TNetControlTCP* GetTCP_ByIP(TIP_Port &ip_port);
   void Done();
+
+  void ScenarioExchangeCryptKey(TIP_Port& ip_port, TNetControlTCP* pNetControl);// synchro
 };
 
 

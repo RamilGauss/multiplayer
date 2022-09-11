@@ -86,6 +86,9 @@ bool TClientGame::Init(int variant_use, const char* sNameDLL, vector<string>& ar
   // создатель объектов
   IMakerObjectCommon* pMakerObjectCommon = mClientDeveloperTool->GetMakerObjectCommon();
 
+  // для внутреннего обмена
+  mCClient.mDev.SetDstObject(this);
+  mCClient.mDev.SetSelfID(ID_SRC_EVENT_DEV);
   // создать двигатели и проинициализировать менеджеры
   TMakerGraphicEngine makerGraphicEngine;
   mCClient.mGraphicEngine = makerGraphicEngine.New(mCClient.mControlCamera);
@@ -131,7 +134,6 @@ bool TClientGame::Init(int variant_use, const char* sNameDLL, vector<string>& ar
   // запустить потоки, в которых будут работать модули
   StartThreadModule();
   //------------------------------------------
-  //mClientDeveloperTool->SetInitLogFunc(::GetLogger);
   mClientDeveloperTool->Init(&mCClient,arg);
 
   return true;
@@ -215,15 +217,17 @@ void TClientGame::MakeVectorModule()
   mMainThreadVecModule.push_back(fGraphicEngineEvent);
   // сетевой движок
   FuncHandleEvent fNetEngineEvent = boost::bind(&TClientGame::HandleNetEngineEvent, this);
-  if(countCore==1)
-    mMainThreadVecModule.push_back(fNetEngineEvent);
-  else
-  {
-    TDescThread dt;
-    dt.pFunc       = fNetEngineEvent;
-    dt.sleep_ms    = eSleepNE;
-    mOtherThreadVecModule.push_back(dt);
-  }
+  mMainThreadVecModule.push_back(fNetEngineEvent);
+	// эксперимент с несколькими потоками
+  //if(countCore==1)
+    //mMainThreadVecModule.push_back(fNetEngineEvent);
+  //else
+  //{
+    //TDescThread dt;
+    //dt.pFunc       = fNetEngineEvent;
+    //dt.sleep_ms    = eSleepNE;
+    //mOtherThreadVecModule.push_back(dt);
+  //}
   // физика
   // звук
   //------------------------------------------------------------------------------

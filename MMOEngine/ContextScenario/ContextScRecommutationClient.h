@@ -31,6 +31,8 @@ namespace nsMMOEngine
 			eRecipient,
 		}TypeSlave;
 		TypeSlave mTypeSlave;
+
+    unsigned int mTimeWaitAnswer;
 	public:
 		TContextScRecommutationClient();
     virtual ~TContextScRecommutationClient();
@@ -61,6 +63,9 @@ namespace nsMMOEngine
 		bool IsDonor();
 		void SetRecipient();
 		bool IsRecipient();
+
+    void SetTimeWait(unsigned int v);
+    unsigned int GetTimeWait();
 
   private:
 	};

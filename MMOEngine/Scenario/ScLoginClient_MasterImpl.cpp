@@ -25,6 +25,10 @@ TBaseScLoginClient(pSc)
 //-----------------------------------------------------------------------------
 void TScLoginClient_MasterImpl::RecvInherit(TDescRecvSession* pDesc)
 {
+  // защита от хака
+  if(pDesc->sizeData<sizeof(THeader))
+    return;
+  //=======================================
   THeader* pHeader = (THeader*)pDesc->data;
   switch(pHeader->from)
   {
@@ -70,6 +74,8 @@ void TScLoginClient_MasterImpl::Work(unsigned int now_ms)
     Context()->Reject();
     Context()->SetTimeWaitElapsed();
     End();
+		
+		BL_FIX_BUG();
   }
 }
 //-----------------------------------------------------------------------------
@@ -224,7 +230,11 @@ void TScLoginClient_MasterImpl::CheckRequestSS2M(TDescRecvSession* pDesc)
 //--------------------------------------------------------------
 void TScLoginClient_MasterImpl::TryLoginC2M(TDescRecvSession* pDesc)
 {
-  NeedContext(pDesc->id_session);
+  // защита от хака
+  if(pDesc->sizeData<sizeof(THeaderTryLoginC2M))
+    return;
+  //=====================================
+  NeedContextBySession(pDesc->id_session);
   if(Context()==NULL)
   {
     BL_FIX_BUG();
@@ -245,17 +255,20 @@ void TScLoginClient_MasterImpl::TryLoginC2M(TDescRecvSession* pDesc)
   // в буфере, который передали, содержится заголовок и блок
   // размер блока прописан в заголовке
   THeaderTryLoginC2M* pPacket = (THeaderTryLoginC2M*)pDesc->data;
-  char* data = pDesc->data + sizeof(THeaderTryLoginC2M);
+  char* data   = pDesc->data     + sizeof(THeaderTryLoginC2M);
+  int sizeData = pDesc->sizeData - sizeof(THeaderTryLoginC2M);
   // генерация события о попытке авторизации
   TEventTryLogin event;
   event.id_session = GetID_SessionClientMaster();
-  event.c.SetData(data,pPacket->sizeData);
+  event.c.SetData(data,sizeData);
   Context()->GetSE()->AddEventCopy(&event,sizeof(event));
 }
 //--------------------------------------------------------------
 void TScLoginClient_MasterImpl::LeaveQueueC2M(TDescRecvSession* pDesc)
 {
-  NeedContext(pDesc->id_session);
+  // защита от хака не нужна, данные пакета не используются
+  //=====================================
+  NeedContextBySession(pDesc->id_session);
   if(Context()==NULL)
   {
     End();
@@ -349,6 +362,10 @@ void TScLoginClient_MasterImpl::Disconnect()
 //--------------------------------------------------------------
 void TScLoginClient_MasterImpl::CheckInfoSlaveC2M(TDescRecvSession* pDesc)
 {
+  // защита от хака
+  if(pDesc->sizeData!=sizeof(THeaderCheckInfoSlaveC2M))
+    return;
+  //=====================================
   THeaderCheckInfoSlaveC2M* pHeader = (THeaderCheckInfoSlaveC2M*)pDesc->data;
   NeedContextByClientKey(pHeader->id_client);
   if(Context()==NULL)

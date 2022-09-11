@@ -54,7 +54,7 @@ bool TNetControlTCP::Connect(unsigned int ip, unsigned short port)
 //----------------------------------------------------------------------------------
 void TNetControlTCP::Send(unsigned int ip, unsigned short port, TBreakPacket bp)
 {
-  // добавить заголовки в начало  - 2 байт под начало + 4 байта - размер данных
+  // добавить заголовки в начало  - 2 байт под заголовок + 4 байта - размер данных
   THeaderTCP header;
   header.size = bp.GetSize();
   bp.PushFront((char*)&header, sizeof(header));
@@ -94,7 +94,7 @@ void TNetControlTCP::RecvEvent(const boost::system::error_code& error,size_t byt
     {
       INetTransport::TDescRecv descRecv;
       descRecv.ip_port      = *(mDevice.GetIP_Port());
-      descRecv.type					= INetTransport::ePacket;
+      descRecv.type					= INetTransport::eTcp;
       descRecv.data         = res.buffer;
       descRecv.sizeData     = res.size;
       NotifyRecv(&descRecv);

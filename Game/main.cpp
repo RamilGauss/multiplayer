@@ -152,9 +152,9 @@ bool GetArgvArgcWin(TVectorStr& vec_argv)
 #else
 bool GetArgvArgcConsole(int argc, char** argv, TVectorStr& vec_argv)
 {
-  for(int i = 0 ; i < argv ; i++)
+  for(int i = 0 ; i < argc ; i++)
     vec_argv.push_back(string(argv[i]));
-  return bool(argv>0);
+  return bool(argc>0);
 }
 #endif
 //-------------------------------------------------------------------------------

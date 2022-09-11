@@ -20,7 +20,6 @@ THeader::THeader()
 THeaderTryLoginC2M::THeaderTryLoginC2M()
 {
   subType  = eTryLoginC2M;
-  sizeData = 0;
 }
 //--------------------------------------------------------------
 THeaderRequestM2SS::THeaderRequestM2SS()

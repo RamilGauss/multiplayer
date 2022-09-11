@@ -17,6 +17,7 @@ See for more information License.h.
 #include "../GUI/IGUI.h"
 #include "MasterForm.h"
 #include "../QtLib/IQtLib.h"
+#include "DevProtocol.h"
 
 using namespace std;
 using namespace nsMMOEngine;
@@ -112,7 +113,12 @@ void TServerDeveloperTool_MasterTank::HandleFromMMOEngine(TBaseEvent* pBE)
       DisconnectUp((TEventDisconnectUp*)pBE);
       break;
     case TBase::eError:
-      sEvent = "Error";
+    {
+      char sError[300];
+      TEventError* pEr = (TEventError*)pBE;
+      sprintf(sError, "Error code=%u", pEr->code);
+      sEvent = sError;
+    }
       break;
     case TBase::eRecvFromDown:
       sEvent = "RecvFromDown";
@@ -133,12 +139,6 @@ void TServerDeveloperTool_MasterTank::HandleFromMMOEngine(TBaseEvent* pBE)
     case TBase::eResultLogin:
       sEvent = "ResultLogin";
       break;
-    //case TBase::eCreateGroup:
-    //  sEvent = "CreateGroup";
-    //  break;
-    //case TBase::eLeaveGroup:
-    //  sEvent = "LeaveGroup";
-    //  break;
     case TBase::eDestroyGroup:
       sEvent = "DestroyGroup";
       break;
@@ -177,6 +177,8 @@ void TServerDeveloperTool_MasterTank::TryLogin(TEventTryLogin* pEvent)
   mComponent.mNet.Master->SetResultLogin(resAccept, 
     pEvent->id_session, mCounterClient,
     (void*)&result[0], strlen(result));
+
+	mListKeyAllClient.push_back(mCounterClient);
 }
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_MasterTank::InitQtForm()
@@ -187,11 +189,14 @@ void TServerDeveloperTool_MasterTank::InitQtForm()
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_MasterTank::HandleFromQt(nsEvent::TEvent* pEvent)
 {
-  int type = *((int*)pEvent->container.GetPtr());
-  switch(type)
+  nsDevProtocol::TBase* pH = (nsDevProtocol::TBase*)pEvent->container.GetPtr();
+  switch(pH->type)
   {
-    case 0:
+    case nsDevProtocol::Exit:
       Exit();
+      break;
+    case nsDevProtocol::CreateGroup:
+      CreateGroup();
       break;
     default:;
   }
@@ -200,11 +205,6 @@ void TServerDeveloperTool_MasterTank::HandleFromQt(nsEvent::TEvent* pEvent)
 void TServerDeveloperTool_MasterTank::ConnectUp(TEventConnectUp* pBE)
 {
   mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_MasterTank::ConnectUpQt,this);
-  // ###
-  //char s = 'm';
-  //TBreakPacket bp;
-  //bp.PushBack(&s, sizeof(s));
-  //mComponent.mNet.Master->SendUp(bp);
 }
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_MasterTank::DisconnectUp(TEventDisconnectUp* pBE)
@@ -262,5 +262,12 @@ void TServerDeveloperTool_MasterTank::DeleteSlaveQt()
     mListID_SessionDelete.Remove(ppFirst);
     ppFirst = mListID_SessionDelete.GetFirst();
   }
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_MasterTank::CreateGroup()
+{
+  unsigned int id_group;
+  bool res = mComponent.mNet.Master->TryCreateGroup(mListKeyAllClient, id_group);
+  BL_ASSERT(res);
 }
 //---------------------------------------------------------------------------------------------

@@ -246,6 +246,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\Share\DevProtocol.h"
+					>
+				</File>
+				<File
 					RelativePath="..\Share\GlobalParam.h"
 					>
 				</File>
@@ -287,6 +291,10 @@
 				>
 				<File
 					RelativePath="..\Share\ControlLight.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\Share\DevProtocol.cpp"
 					>
 				</File>
 				<File

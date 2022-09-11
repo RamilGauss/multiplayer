@@ -17,13 +17,17 @@ See for more information License.h.
 #include "CallBackRegistrator.h"
 #include "DescRecvSession.h"
 #include "ManagerTransport.h"
+#include "ManagerContextCrypto.h"
 
 namespace nsMMOEngine
 {
   class TManagerSession
   {
-    enum{
-      eDefTimeLive = 5*1000,// мс
+    enum
+    {
+      eDefTimeLive               = 5*1000,// мс
+      eSleepForWaitUp            = 40,  // мс
+      eLimitWaitTimeAnswerFromUp = 2000,// мс
     };
 
     unsigned int mTimeLiveSession;
@@ -32,7 +36,15 @@ namespace nsMMOEngine
     // должен быть как указатель, что бы контролировать порядок уничтожения объектов
 		TNavigateSession  *mNavigateSession;
     TManagerTransport *mMngTransport;
-		bool flgStart;
+    bool flgStart;
+
+    bool flgUseCryptTCP;
+    TManagerContextCrypto mMngCtxCrypto;
+
+    // один менеджер - одно верхнее соединение
+    bool flgNeedAnswerFromUp;
+    bool flgGetAnswerFromUp;
+    TIP_Port mIP_PortUp;
 
     TCallBackRegistrator1<int>               mCallBackDiconnect;
     TCallBackRegistrator1<TDescRecvSession*> mCallBackRecv;
@@ -40,6 +52,11 @@ namespace nsMMOEngine
     GCS mMutexAccessMapSession;
     void lockAccessSession(){mMutexAccessMapSession.lock();}
     void unlockAccessSession(){mMutexAccessMapSession.unlock();}
+
+    // запрет на попытку соединиться наверх более чем один раз
+    GCS mMutexConnectUp;
+    void lockConnectUp(){mMutexConnectUp.lock();}
+    void unlockConnectUp(){mMutexConnectUp.unlock();}
   public:
     TManagerSession();
     ~TManagerSession();
@@ -47,7 +64,7 @@ namespace nsMMOEngine
     void SetMakerTransport(IMakerTransport* pMakerTransport);
 
     TCallBackRegistrator1<TDescRecvSession*>* GetCallbackRecv(){return &mCallBackRecv;}
-    TCallBackRegistrator1<int >* GetCallbackDisconnect(){return &mCallBackDiconnect;}
+    TCallBackRegistrator1<int>* GetCallbackDisconnect(){return &mCallBackDiconnect;}
     
 		bool Start(TDescOpen* pDesc, int count = 1);
     void Work();
@@ -69,6 +86,23 @@ namespace nsMMOEngine
     void Disconnect(TIP_Port* ip_port);
 
     TSession* NewSession(TIP_Port& ip_port, INetTransport* pTransport);
+
+    void RecvPacket(TDescRecvSession& descRecvSession, TSession* pSession);
+    void RecvKeyRSA(TDescRecvSession& descRecvSession, TSession* pSession);
+    void RecvKeyAES(TDescRecvSession& descRecvSession);
+
+    bool WaitAnswerFromUp();
+    void SetupFlagsForWaitUp();
+    void CleanFlagsForWaitUp();
+    void SendKeyRSA_Up(TSession* pSession);
+
+    void Send(TSession* pSession, TBreakPacket bp, bool check);
+
+    void FixHack(char* sMsg);
+
+    // использовать шифрование для передачи TCP
+    void SetUseCryptTCP(bool v);
+    bool GetUseCryptTCP();
   };
 }
 

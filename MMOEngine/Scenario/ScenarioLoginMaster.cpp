@@ -97,7 +97,7 @@ void TScenarioLoginMaster::RecvFromMaster(TDescRecvSession* pDesc)
 //-------------------------------------------------------------------------------------
 void TScenarioLoginMaster::Recv(TDescRecvSession* pDesc)
 {
-  NeedContext(pDesc->id_session);
+  NeedContextBySession(pDesc->id_session);
   THeaderLoginMaster* pPacket = (THeaderLoginMaster*)pDesc->data;
   switch(pPacket->subType)
   {

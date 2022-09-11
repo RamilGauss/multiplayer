@@ -51,12 +51,23 @@ int THistoryPacketTCP::SearchBegin(int readSize, char* buffer, int beginPos)
   // ищем в буфере начало
   THeaderTCP header;
   THeaderTCP* pHeader = (THeaderTCP*)&buffer[beginPos];
+  // в случае хака, ¬зломанный  лиент, может прислать некорректный пакет
   if(pHeader->header!=header.header)
   {
     GetLogger(STR_NAME_NET_TRANSPORT)->
-      WriteF_time("THistoryPacketTCP::SearchBegin FAIL.\n");
+      WriteF_time("THistoryPacketTCP::SearchBegin header don't have correct preambula.\n");
+    return sizeof(char);// сдвиг на 1 байт и поиск дальше
   }
-
+  // проверка корректности предполагаемого размера пакета
+  if(pHeader->size > eMaxSize)
+  {
+    GetLogger(STR_NAME_NET_TRANSPORT)->
+      WriteF_time("THistoryPacketTCP::SearchBegin expect very large size of packet.\n");
+    // сдвиг на 1 байт и поиск дальше, но фактически обмен нарушен
+    // канал скоро умрет, админ, провер€€ логи, забанит "хака".
+    // ну, по крайней мере так должно быть.
+    return sizeof(char);
+  }
   state      = THistoryPacketTCP::eSearchEnd;
   sizePacket = pHeader->size;
 
@@ -77,10 +88,26 @@ int THistoryPacketTCP::SearchSize(int readSize, char* buffer, int beginPos)
 
   THeaderTCP header;
   THeaderTCP* pHeader = (THeaderTCP*)c.GetPtr();
+  // в случае хака, ¬зломанный  лиент, может прислать некорректный пакет
   if(pHeader->header!=header.header)
   {
     GetLogger(STR_NAME_NET_TRANSPORT)->
-      WriteF_time("THistoryPacketTCP::SearchSize FAIL.\n");
+      WriteF_time("THistoryPacketTCP::SearchSize expect very large size of packet.\n");
+    state = THistoryPacketTCP::eSearchBegin;
+    c.SetData(NULL,0);
+    return 0; // не надо делать сдвиг, его уже сделали
+  }
+  // проверка корректности предполагаемого размера пакета
+  if(pHeader->size > eMaxSize)
+  {
+    GetLogger(STR_NAME_NET_TRANSPORT)->
+      WriteF_time("THistoryPacketTCP::SearchBegin expect very large size of packet.\n");
+    // сдвиг на 1 байт и поиск дальше, но фактически обмен нарушен
+    // канал скоро умрет, админ, провер€€ логи, забанит "хака".
+    // ну, по крайней мере так должно быть.
+    state = THistoryPacketTCP::eSearchBegin;
+    c.SetData(NULL,0);
+    return 0; // не надо делать сдвиг, его уже сделали
   }
 
   state      = THistoryPacketTCP::eSearchEnd;

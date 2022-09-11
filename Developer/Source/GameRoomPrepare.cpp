@@ -12,6 +12,7 @@ See for more information License.h.
 
 #include "../GameLib/IClientDeveloperTool.h"
 #include "Base.h"
+#include "DevProtocol.h"
 
 TGameRoomPrepare::TGameRoomPrepare()
 {
@@ -39,8 +40,10 @@ void TGameRoomPrepare::sl_Fight(MyGUI::Widget* _sender)
 //-------------------------------------------------------------------------------------
 void TGameRoomPrepare::sl_Exit(MyGUI::Widget* _sender)
 {
-  //IClientDeveloperTool::Singleton()->Exit();
 	IClientDeveloperTool::Singleton()->GetComponent()->mNetClient->DisconnectUp();
+
+  nsDevProtocol::TDisconnectUp_Client h;
+  IClientDeveloperTool::Singleton()->GetComponent()->mDev.AddEventCopy(&h, sizeof(h));
 }
 //-------------------------------------------------------------------------------------
 const char* TGameRoomPrepare::GetNameLayout()

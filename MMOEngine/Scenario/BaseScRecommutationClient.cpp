@@ -63,42 +63,35 @@ void TBaseScRecommutationClient::End()
   mScenario->End();
 }
 //---------------------------------------------------------------------
-//void TBaseScRecommutationClient::NeedContextByClientKey(unsigned int id_client)
-//{
-//  mScenario->NeedContextByClientKey(id_client);
-//}
-////---------------------------------------------------------------------
-//void TBaseScLoginClient::NeedNumInQueueByClientKey(unsigned int id_client)
-//{
-  //mScenario->Notify<unsigned int>(TScenarioLoginClient::eNumInQueueByClientKey,id_client);
-//}
-////---------------------------------------------------------------------
-//void TBaseScLoginClient::NeedContextByMasterSessionByClientKey(unsigned int id_session_master,unsigned int id_client)
-//{
-//  mScenario->Notify<unsigned int,unsigned int>(TScenarioLoginClient::eContextByMasterSessionByClientKey,
-//                                               id_session_master,
-//                                               id_client);
-//}
-////---------------------------------------------------------------------
-//void TBaseScLoginClient::EventSetClientKey(unsigned int id_client)
-//{
-//  mScenario->Notify<unsigned int>(TScenarioLoginClient::eSetClientKey,id_client);
-//}
-////---------------------------------------------------------------------
-//void TBaseScLoginClient::NeedContext(unsigned int id_session)
-//{
-//  mScenario->NeedContext(id_session);
-//}
-////---------------------------------------------------------------------
-//void TBaseScLoginClient::NeedContextByClientSessionByClientKey(unsigned int id_session_client,
-//                                                               unsigned int id_client)
-//{
-//  mScenario->Notify<unsigned int,unsigned int>(TScenarioLoginClient::eContextByClientSessionByClientKey,
-//                                               id_session_client, id_client);
-//}
-//---------------------------------------------------------------------
 void TBaseScRecommutationClient::SetTimeWaitForNow()
 {
-  //Context()->SetTimeWait(ht_GetMSCount());
+  Context()->SetTimeWait(ht_GetMSCount());
 }
 //--------------------------------------------------------------
+void TBaseScRecommutationClient::NeedContextByClientKeyForSlave(unsigned int key, bool donor)
+{
+  mScenario->Notify<unsigned int,bool>(
+    TScenarioRecommutationClient::eNeedContextByClientKeyForSlave,
+    key,donor);
+}
+//--------------------------------------------------------------
+void TBaseScRecommutationClient::NeedSessionDonorByClientKey(unsigned int key)
+{
+  mScenario->Notify<unsigned int>(
+    TScenarioRecommutationClient::eNeedSessionDonor,
+    key);
+}
+//--------------------------------------------------------------
+void TBaseScRecommutationClient::EventActivate()
+{
+  mScenario->Notify<IScenario*>(
+    TScenarioRecommutationClient::eEventActivate, mScenario);
+}
+//--------------------------------------------------------------
+void TBaseScRecommutationClient::EventDisconnectClient(unsigned int key)
+{
+  mScenario->Notify<unsigned int>(
+    TScenarioRecommutationClient::eEventDisconnectClient, key);
+}
+//--------------------------------------------------------------
+

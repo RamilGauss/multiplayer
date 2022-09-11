@@ -143,7 +143,6 @@ void TGraphicEngine::Render(IDirect3DDevice9* pd3dDevice)
 	V( pd3dDevice->SetRenderTarget( 0, pSurf ) );
 	SAFE_RELEASE(pSurf);
 	//-----------------------------------------------------------------------------------------------
-	ZBufferOn();
   // Clear the render target and the zbuffer 
   V( pd3dDevice->Clear( 0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, ColorForClear, 1.0f, 0 ) );
 
@@ -269,6 +268,8 @@ bool TGraphicEngine::ModifyDeviceSettings( DXUTDeviceSettings* pDeviceSettings, 
     if( pDeviceSettings->d3d9.DeviceType == D3DDEVTYPE_REF )
       DXUTDisplaySwitchingToREFWarning( pDeviceSettings->ver );
   }
+
+  //pDeviceSettings->d3d9.pp.Flags = 0;//###
   return true;
 }
 //--------------------------------------------------------------------------------------
@@ -276,6 +277,11 @@ HRESULT TGraphicEngine::OnCreateDevice( IDirect3DDevice9* pd3dDevice, const D3DS
                                   void* pUserContext )
 {
 	HRESULT hr;
+  
+  V_RETURN(pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, true));
+  V_RETURN(pd3dDevice->SetRenderState(D3DRS_ZENABLE,      true));
+
+
   mManagerModelDX.Setup(pd3dDevice);
   mManagerResourceDX.Setup(pd3dDevice);
   mViewerFPS.CreateDevice(pd3dDevice);
@@ -302,12 +308,17 @@ HRESULT TGraphicEngine::OnResetDevice( IDirect3DDevice9* pd3dDevice,
 {
 	HRESULT hr;
   // для прозрачности текстур
-  pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE );
-  pd3dDevice->SetRenderState( D3DRS_SRCBLEND,  D3DBLEND_SRCALPHA );
-  pd3dDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
-  pd3dDevice->SetRenderState( D3DRS_LIGHTING,  true);
-  pd3dDevice->SetRenderState( D3DRS_ZENABLE,  true);
-	pd3dDevice->SetRenderState( D3DRS_ZFUNC,    D3DCMP_LESSEQUAL );
+  V_RETURN(pd3dDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE));
+  V_RETURN(pd3dDevice->SetRenderState( D3DRS_SRCBLEND,  D3DBLEND_SRCALPHA));
+  V_RETURN(pd3dDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA));
+  V_RETURN(pd3dDevice->SetRenderState( D3DRS_LIGHTING,  true));
+
+  V_RETURN(pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, true));
+  V_RETURN(pd3dDevice->SetRenderState(D3DRS_ZENABLE,      true));
+  V_RETURN(pd3dDevice->SetRenderState(D3DRS_ZFUNC,    D3DCMP_LESSEQUAL));
+  V_RETURN(pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW));
+
+  V_RETURN(pd3dDevice->SetRenderState(D3DRS_ALPHATESTENABLE, true));
   //---------------------------------------------------------------
   mManagerModelDX.ResetDevice();
   mManagerResourceDX.Reset();
@@ -352,6 +363,16 @@ HRESULT TGraphicEngine::OnResetDevice( IDirect3DDevice9* pd3dDevice,
 																						&mTextureSecondRender,
 																						NULL ) );
 	//--------------------------------------------------------------
+  V( pd3dDevice->CreateDepthStencilSurface(pBackBufferSurfaceDesc->Width,
+                                           pBackBufferSurfaceDesc->Height,    
+                                           D3DFMT_D24S8,
+                                           D3DMULTISAMPLE_NONE,
+                                           1,
+                                           false,
+                                           &mDepthSurfaceForMainRender,
+                                           NULL) );
+  V( pd3dDevice->SetDepthStencilSurface(mDepthSurfaceForMainRender) );
+  //--------------------------------------------------------------
   BOOST_FOREACH(TEffectDX* pEffect,mListPtrEffect)
     ResetShader(pEffect->GetEffect(),pBackBufferSurfaceDesc->Width,
                                      pBackBufferSurfaceDesc->Height);
@@ -392,8 +413,9 @@ void TGraphicEngine::OnLostDevice( void* pUserContext )
   mViewerFPS.Lost();
 
   LostDeviceGUI();
-
-	SAFE_RELEASE( mSurfaceDepthStencilCube );
+  
+  SAFE_RELEASE(mDepthSurfaceForMainRender);
+	SAFE_RELEASE(mSurfaceDepthStencilCube );
   LostEventForSurfacePestEffect();
 	SAFE_RELEASE(mTextureMainRender);
 	SAFE_RELEASE(mTextureSecondRender);
@@ -767,7 +789,7 @@ void TGraphicEngine::RenderCubeMap(IDirect3DDevice9* pd3dDevice)
 				V( pd3dDevice->SetRenderTarget( 0, pSurf ) );
 				SAFE_RELEASE(pSurf);
 				//-----------------------------------------------------------------------------------------------
-				ZBufferOn();
+				//ZBufferOn();
 				//-----------------------------------------------------------------------------------------------
 				V( pd3dDevice->Clear( 0L, NULL, D3DCLEAR_ZBUFFER|D3DCLEAR_TARGET,ColorForClear, 1.0f, 0L ) );
 				if( SUCCEEDED( pd3dDevice->BeginScene() ) )
@@ -1251,7 +1273,8 @@ void TGraphicEngine::RenderByEffect(ID3DXEffect* g_pEffect)
 	};
 	V( pd3dDevice->SetVertexDeclaration( mVertDeclPP ) );
 	UINT cPasses,p;
-	V( g_pEffect->Begin( &cPasses, 0 ) );
+  // не менять главный RenderState в эффекте
+	V( g_pEffect->Begin( &cPasses, D3DXFX_DONOTSAVESHADERSTATE ) );
 	for( p = 0; p < cPasses; ++p )
 	{
 		V( g_pEffect->BeginPass( p ) );
@@ -1285,15 +1308,15 @@ void TGraphicEngine::SetPostEffectMirror(bool v)
 	flgViewPostEffectInMirror = v;
 }
 //---------------------------------------------------------------------------------------------------------
-void TGraphicEngine::ZBufferOn()
-{
-	mDXUT->GetD3D9Device()->SetRenderState(D3DRS_ZENABLE, true);
-}
-//---------------------------------------------------------------------------------------------------------
-void TGraphicEngine::ZBufferOff()
-{
-	mDXUT->GetD3D9Device()->SetRenderState(D3DRS_ZENABLE, false);
-}
-//---------------------------------------------------------------------------------------------------------
+//void TGraphicEngine::ZBufferOn()
+//{
+//	mDXUT->GetD3D9Device()->SetRenderState(D3DRS_ZENABLE, true);
+//}
+////---------------------------------------------------------------------------------------------------------
+//void TGraphicEngine::ZBufferOff()
+//{
+//	mDXUT->GetD3D9Device()->SetRenderState(D3DRS_ZENABLE, false);
+//}
+////---------------------------------------------------------------------------------------------------------
 
 #endif

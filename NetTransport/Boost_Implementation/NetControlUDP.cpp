@@ -137,7 +137,7 @@ void TNetControlUDP::RecvFromEvent(const boost::system::error_code& error,size_t
     {
       INetTransport::TDescRecv descRecv;
       descRecv.ip_port      = ip_port;
-      descRecv.type					= INetTransport::eStream;
+      descRecv.type					= INetTransport::eUdp;
       descRecv.data         = mBuffer   + sizeof(unsigned short);
       descRecv.sizeData     = mReadSize - sizeof(unsigned short);
       NotifyRecv(&descRecv);

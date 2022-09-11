@@ -13,7 +13,6 @@ See for more information License.h.
 #include "TypeDef.h"
 
 MACRO_MAKER_H_EXPORT_USE(NET_TRANSPORT_EI,NetTransport,NetTransport_Boost)
-MACRO_MAKER_H_EXPORT_USE(NET_TRANSPORT_EI,NetTransport,NetTransport_UDP)
 
 #endif
 

@@ -64,7 +64,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib Share.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
+				AdditionalLibraryDirectories="..\Lib;&quot;..\Lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				ImportLibrary="..\Lib\$(ConfigurationName)\$(TargetName).lib"
@@ -467,6 +467,26 @@
 				</File>
 				<File
 					RelativePath="..\MMOEngine\SubSystem\ManagerManagerContextSc.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Crypto"
+				>
+				<File
+					RelativePath=".\SubSystem\ContextCrypto.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ContextCrypto.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerContextCrypto.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerContextCrypto.h"
 					>
 				</File>
 			</Filter>

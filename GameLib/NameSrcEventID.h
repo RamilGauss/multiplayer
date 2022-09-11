@@ -17,5 +17,8 @@ See for more information License.h.
 #define ID_SRC_EVENT_TIMER_FIRST_EVENT     5
 #define ID_SRC_EVENT_TIMER_LAST_EVENT      6
 
+// внутренние события 
+#define ID_SRC_EVENT_DEV                   100
+
 #endif
 

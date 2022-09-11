@@ -18,6 +18,8 @@ See for more information License.h.
 #include "SlaveForm.h"
 #include "../../GameLib/ITimer.h"
 
+#include "DevProtocol.h"
+
 using namespace std;
 using namespace nsMMOEngine;
 
@@ -113,7 +115,12 @@ void TServerDeveloperTool_SlaveTank::HandleFromMMOEngine(TBaseEvent* pBE)
       DisconnectUp((TEventDisconnectUp*)pBE);
       break;
     case TBase::eError:
-      sEvent = "Error";
+    {
+      char sError[300];
+      TEventError* pEr = (TEventError*)pBE;
+      sprintf(sError, "Error code=%u", pEr->code);
+      sEvent = sError;
+    }
       break;
     case TBase::eRecvFromDown:
       sEvent = "RecvFromDown";
@@ -156,10 +163,10 @@ void TServerDeveloperTool_SlaveTank::InitQtForm()
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_SlaveTank::HandleFromQt(nsEvent::TEvent* pEvent)
 {
-  int type = *((int*)pEvent->container.GetPtr());
-  switch(type)
+  nsDevProtocol::TBase* pH = (nsDevProtocol::TBase*)pEvent->container.GetPtr();
+  switch(pH->type)
   {
-    case 0:
+    case nsDevProtocol::Exit:
       Exit();
       break;
     default:;

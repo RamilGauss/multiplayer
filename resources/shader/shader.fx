@@ -71,7 +71,7 @@ technique TexturedSpecular
     pass P0
     {
         VertexShader = compile vs_2_0 Projection();
-        PixelShader = compile ps_2_0 Lighting();    
+        PixelShader  = compile ps_2_0 Lighting();    
     }
 }
 

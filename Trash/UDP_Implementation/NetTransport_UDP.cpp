@@ -39,10 +39,10 @@ using namespace nsNetTransportStruct;
 #else
 // не логировать стрим
   #define DEBUG_PACKET_ONLY_WRITE \
-  if(((THeader*)p)->type==eStream) return;
+  if(((THeader*)p)->type==eUdp) return;
 
   #define DEBUG_PACKET_ONLY_READ \
-  if(((THeader*)mBuffer)->type==eStream) return;
+  if(((THeader*)mBuffer)->type==eUdp) return;
 
 #endif
 
@@ -113,7 +113,7 @@ void TNetTransport_UDP::Send(unsigned int ip, unsigned short port,
   TInfoConnect* pInfoConnect = GetInfoConnect(data.ip_port_dst);
   if(check)
   {
-		pPacket->SetType(ePacket);
+		pPacket->SetType(eTcp);
 
     pInfoConnect->cn_out_p++;
 		pPacket->SetCnOut(pInfoConnect->cn_out_p);
@@ -132,7 +132,7 @@ void TNetTransport_UDP::Send(unsigned int ip, unsigned short port,
 
   unlockSendRcv();
   //-------------------------------------------------
-	pPacket->SetType(eStream);
+	pPacket->SetType(eUdp);
   bool resSend = Send(pPacket);
   BL_ASSERT(resSend);
 
@@ -213,23 +213,23 @@ void TNetTransport_UDP::AnalizPacket(unsigned int ip,unsigned short port,int siz
 				FindAndCheck(prefix,ip,port);
 			unlockSendRcv();
       break;
-    case ePacket:// пакет, требующий подтверждения
+    case eTcp:// пакет, требующий подтверждения
     {
       SendCheck(prefix,ip,port);
       lockSendRcv();
         bool resFresh = IsPacketFresh();
       unlockSendRcv();
       if(resFresh)
-        NotifyRecv(INetTransport::ePacket, size);
+        NotifyRecv(INetTransport::eTcp, size);
     }
       break;
-    case eStream:// пакет, не требующий подтверждения
+    case eUdp:// пакет, не требующий подтверждения
     {
       lockSendRcv();
         bool resFresh = IsStreamFresh();
       unlockSendRcv();
       if(resFresh)
-        NotifyRecv(INetTransport::eStream, size);
+        NotifyRecv(INetTransport::eUdp, size);
     }
       break;
     default:BL_FIX_BUG();;

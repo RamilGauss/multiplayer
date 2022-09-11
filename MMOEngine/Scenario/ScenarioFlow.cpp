@@ -37,7 +37,7 @@ void TScenarioFlow::SendDown(TBreakPacket bp, bool check)
 //-------------------------------------------------------------------------
 void TScenarioFlow::Recv(TDescRecvSession* pDesc)
 {
-  NeedContext(pDesc->id_session);
+  NeedContextBySession(pDesc->id_session);
 
   THeaderFlow* pPacket = (THeaderFlow*)pDesc->data;
   switch(pPacket->subType)

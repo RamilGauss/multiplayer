@@ -91,11 +91,11 @@ namespace nsMMOEngine
     virtual void NeedNumInQueueLoginClient(unsigned int id_session);
     //--------------------------------------------------------------------------
 		// RCM
-		virtual void ActivateRcmClient(IScenario* pSc);//M
-    virtual void NeedSlaveSessionDonor(IScenario* pSc);
+    virtual void NeedContextByClientKeyRcm(unsigned int key);
+    virtual void NeedSlaveSessionDonorRcm(IScenario* pSc);//M
+    virtual void ActivateRcm(IScenario* pSc);//M
 		//----------------------------------------------------
     virtual void NeedContextLoginSlave(unsigned int id_session);
-    virtual void NeedContextRcm(unsigned int id_session);
     virtual void NeedContextSynchroSlave(unsigned int id_session);
     virtual void NeedContextSendToClient(unsigned int id_client);
 	protected:

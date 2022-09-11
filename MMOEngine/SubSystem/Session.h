@@ -15,6 +15,19 @@ namespace nsMMOEngine
 {
   class TSession
   {
+    // для предотвращения подсовывания пакетов внутри серверных каналов 
+    unsigned int mCounterIn;
+    unsigned int mCounterOut;
+    //----------------------------------------------------------------
+    // Recv
+    // if(packet->cIn <= mCounterIn)
+      //return; // ignore packet
+    // mCounterIn = packet->cIn;
+    //----------------------------------------------------------------
+    // Send
+    // mCounterOut++;
+    // Send(...);
+
     unsigned int mTimeLive;// мс
     unsigned int mID;
     TIP_Port mIP_Port;
@@ -26,16 +39,21 @@ namespace nsMMOEngine
     enum{
       eEcho   = 'e',
       ePacket = 'p',
+      // для процедуры обмена ключами шифрования
+      eKeyRSA = 'r',
+      eKeyAES = 'a',
     };
 #if defined( WIN32 )
 #pragma pack(push, 1)
 #endif
     struct THeader
     {
-      char type;
-      THeader(char t = ePacket)
+      unsigned char type      : 7;
+      unsigned char use_crypt : 1;
+      THeader(unsigned char t = ePacket)
       {
-        type = t;
+        type      = t;
+        use_crypt = 0;
       }
     };
 #if defined( WIN32 )
@@ -47,7 +65,7 @@ namespace nsMMOEngine
     ~TSession();
     
     void Work();
-    void Send(TBreakPacket bp, bool check = true);
+    void Send(TBreakPacket bp, bool check = true, bool use_crypt = false);
     void SetTransport(INetTransport* pTransport);
     void GetInfo(TIP_Port& pDesc);
     void SetInfo(TIP_Port& pDesc);
@@ -55,10 +73,20 @@ namespace nsMMOEngine
     unsigned int GetID(){return mID;}
     void SetID(unsigned int id){mID=id;}
     void Close();
+
+    void SendKeyRSA(TContainer& c_keyRSA);
+    void SendKeyAES(TContainer& c_keyAES);
+
+    void SendEncrypt(TBreakPacket bp);
+
+    unsigned int GetCounterIn();
+
+    unsigned int GetCounterOut();
+    void IncrementCounterOut(); 
   protected:
     void SendEcho();
     void RefreshLastTime();
-    void SendData(char type, TBreakPacket& bp, bool check = true);
+    void SendData(char type, TBreakPacket& bp, bool check = true, bool use_crypt = false);
   };
 }
 

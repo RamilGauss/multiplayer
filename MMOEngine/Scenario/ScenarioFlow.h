@@ -50,6 +50,9 @@ namespace nsMMOEngine
     template <class TypeSrc>
     void Recv(TDescRecvSession* pDesc)
     {
+      // защита от хака, могут прислать пакет меньшего размера, сервер выйдет за границы памяти и упадет
+      if(pDesc->sizeData < sizeof(THeaderFlow))
+        return;
       // создать событие
       TypeSrc* pEvent = new TypeSrc;
       // отцепиться от памяти, в которой содержится пакет

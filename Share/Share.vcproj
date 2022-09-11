@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="..\3rdParty\SSL\include\"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EI=__declspec(dllexport);SHARE_EXPORTS;_WIN32_WINNT=0x0501"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
@@ -63,9 +63,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib"
+				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib libeay32.lib ssleay32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
+				AdditionalLibraryDirectories="..\Lib;&quot;..\Lib\$(ConfigurationName)&quot;;..\Lib\SSL;..\Lib\SSL\engines"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				SubSystem="2"
@@ -121,7 +121,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="..\3rdParty\SSL\include\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EI=__declspec(dllexport);SHARE_EXPORTS;_WIN32_WINNT=0x0501"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -141,9 +141,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib d3dx10.lib d3dx9.lib d3d9.lib ws2_32.lib dxerr.lib"
+				AdditionalDependencies="shlwapi.lib d3dx10.lib d3dx9.lib d3d9.lib ws2_32.lib dxerr.lib libeay32.lib ssleay32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
+				AdditionalLibraryDirectories="..\Lib;&quot;..\Lib\$(ConfigurationName)&quot;;..\Lib\SSL;..\Lib\SSL\engines"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -225,6 +225,18 @@
 			</File>
 			<File
 				RelativePath=".\ControlCamera.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CRC8.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CryptoAES_Impl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\CryptoRSA_Impl.cpp"
 				>
 			</File>
 			<File
@@ -455,6 +467,18 @@
 			</File>
 			<File
 				RelativePath=".\ControlCamera.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CRC8.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CryptoAES_Impl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CryptoRSA_Impl.h"
 				>
 			</File>
 			<File

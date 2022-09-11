@@ -21,17 +21,19 @@ namespace nsMMOEngine
 
     unsigned int time_ms;
 		unsigned int id_session;
+    char use_crypt;
 		TDescRecvSession()
 		{
       id_session = INVALID_HANDLE_SESSION;
-			time_ms  = ht_GetMSCount();
+			time_ms    = ht_GetMSCount();
+      use_crypt  = false;
 		}
     void Assign(TDescRecvSession* p)
     {
-			time_ms  = p->time_ms;
-      id_session       = p->id_session;
-      ip_port  = p->ip_port;
-      type     = p->type;
+			time_ms    = p->time_ms;
+      id_session = p->id_session;
+      ip_port    = p->ip_port;
+      type       = p->type;
       // копирование данных
       c.SetData(p->data, p->sizeData);
       sizeData = p->sizeData;

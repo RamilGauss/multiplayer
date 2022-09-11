@@ -37,6 +37,10 @@ protected:
 	virtual void closeEvent(QCloseEvent * event );
 
   void Refresh();
+
+protected slots:
+  void sl_CreateGroup();
+
 private:
   typedef std::map<unsigned int,TDesc> TMapUintDesc;
   typedef TMapUintDesc::iterator TMapUintDescIt;

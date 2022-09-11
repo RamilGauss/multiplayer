@@ -21,8 +21,8 @@ class SHARE_EI INetTransport
 public:
   //типы callback вызовов
 	typedef enum{
-		ePacket  = 0,		   
-		eStream  = 1,
+		eTcp  = 0,		   
+		eUdp  = 1,
 	}eTypeRecv;
   // callback вернет данную структуру
   struct TDescRecv

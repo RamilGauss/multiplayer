@@ -65,8 +65,8 @@ protected:
 	};
 	typedef enum
 	{
-		ePacket  = 'P',
-		eStream  = 'S',
+		eTcp  = 'P',
+		eUdp  = 'S',
 		eSynchro = 'C',
 		eCheck   = 'K',
 	}eTypeHeadPacket;

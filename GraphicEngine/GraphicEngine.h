@@ -95,6 +95,8 @@ protected:
 //-------------------------------------------------------
 	IDirect3DVertexDeclaration9* mVertDeclPP;
 
+  IDirect3DSurface9 *mDepthSurfaceForMainRender;
+
 	IDirect3DTexture9* mTextureMainRender;
 	IDirect3DTexture9* mTextureSecondRender;
 
@@ -245,8 +247,8 @@ protected:
 
   void HandleGUI();
 
-	void ZBufferOn();
-	void ZBufferOff();
+	//void ZBufferOn();
+	//void ZBufferOff();
 
 protected:
 	void SaveTexture(const char* name,IDirect3DTexture9* pTexture);

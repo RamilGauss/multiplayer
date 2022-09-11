@@ -44,13 +44,10 @@ namespace nsMMOEngine
     bool Begin();
     void End();
   protected:
-    // запрос на новую сессию, кто зарегистрировался выставит контекст с помощью SetContext()
-    //void NeedContext(unsigned int id_session);
-    //void NeedContextByClientKey(unsigned int id_client);
-    //void NeedContextByMasterSessionByClientKey(unsigned int id_session_master,unsigned int id_client);
-    //void NeedNumInQueueByClientKey(unsigned int id_client);
-    //void EventSetClientKey(unsigned int id_client);
-    //void NeedContextByClientSessionByClientKey(unsigned int id_session_client,unsigned int id_client);
+    void NeedContextByClientKeyForSlave(unsigned int key, bool donor);
+    void NeedSessionDonorByClientKey(unsigned int key);
+    void EventActivate();
+    void EventDisconnectClient(unsigned int key);
   };
 }
 #endif

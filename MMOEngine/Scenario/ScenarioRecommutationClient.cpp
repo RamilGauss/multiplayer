@@ -17,7 +17,10 @@ mClient(this),mSlave(this),mMaster(this)
 {
   mCurBehavior = NULL; 
 
-  //AddCallBack(eSetClientKey,                     &mCBSetClientKey);
+  AddCallBack(eNeedContextByClientKeyForSlave, &mCBNeedContextByClientKeyForSlave);
+  AddCallBack(eNeedSessionDonor,     &mCBNeedSessionDonorByClientKey);
+  AddCallBack(eEventActivate,        &mCBActivate);
+  AddCallBack(eEventDisconnectClient,&mCBDisconnectByClientKey);
 }
 //--------------------------------------------------------------
 TScenarioRecommutationClient::~TScenarioRecommutationClient()
@@ -27,7 +30,11 @@ TScenarioRecommutationClient::~TScenarioRecommutationClient()
 //--------------------------------------------------------------
 void TScenarioRecommutationClient::Work()
 {
-
+  if(mCurBehavior)
+  {
+    unsigned int time_ms = ht_GetMSCount();
+    mCurBehavior->Work(time_ms);
+  }
 }
 //--------------------------------------------------------------
 void TScenarioRecommutationClient::Start(unsigned int id_session_recipient,
@@ -38,30 +45,17 @@ void TScenarioRecommutationClient::Start(unsigned int id_session_recipient,
 //--------------------------------------------------------------
 void TScenarioRecommutationClient::DelayBegin()
 {
-  //unsigned int new_id_session = mListNextID_SessionSlave.front();
-  //mListNextID_SessionSlave.pop_front();
-  //Context()->SetID_Session(new_id_session);
-  //SendFirstPacket();
-}
-//--------------------------------------------------------------
-void TScenarioRecommutationClient::SendFirstPacket()
-{
-  //mClient->SetState(TClient_master::eRcm);
-
-  TBreakPacket bp;
-  //THeaderSendFirstpacketRcmM h;
-  //bp.PushBack((char*)&h, sizeof(h));
-  //Context()->GetMS()->Send(Context()->GetID_Session(),bp);
+  mMaster.DelayBegin();
 }
 //--------------------------------------------------------------
 void TScenarioRecommutationClient::SaveContext(void* data, int size)
 {
-
+  mSlave.SaveContext(data, size);
 }
 //---------------------------------------------------------------------
 void TScenarioRecommutationClient::Recv(TDescRecvSession* pDesc)
 {
-
+  mCurBehavior->Recv(pDesc);
 }
 //---------------------------------------------------------------------
 void TScenarioRecommutationClient::SetBehavior(eBehavior v)
@@ -78,5 +72,10 @@ void TScenarioRecommutationClient::SetBehavior(eBehavior v)
       mCurBehavior = &mMaster;
       break;
   }
+}
+//---------------------------------------------------------------------
+void TScenarioRecommutationClient::DisconnectClient()
+{
+  mMaster.DisconnectClient();
 }
 //---------------------------------------------------------------------

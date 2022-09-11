@@ -105,9 +105,9 @@ void TBaseScLoginClient::EventSetClientKey(unsigned int id_client)
   mScenario->Notify<unsigned int>(TScenarioLoginClient::eSetClientKey,id_client);
 }
 //---------------------------------------------------------------------
-void TBaseScLoginClient::NeedContext(unsigned int id_session)
+void TBaseScLoginClient::NeedContextBySession(unsigned int id_session)
 {
-  mScenario->NeedContext(id_session);
+  mScenario->NeedContextBySession(id_session);
 }
 //---------------------------------------------------------------------
 void TBaseScLoginClient::NeedContextByClientSessionByClientKey(unsigned int id_session_client,

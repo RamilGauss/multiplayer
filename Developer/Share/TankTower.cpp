@@ -140,7 +140,7 @@ void TTankTower::EventSetModelGE()
 const nsStruct3D::TMatrix16* TTankTower::GetMatrixForCamera()
 {
   mMatrixForCamera = mWorld;
-  //mMatrixForCamera._43 -= 100.0f;
+  mMatrixForCamera._43 += 2.0f;
   return &mMatrixForCamera;
 }
 //------------------------------------------------------------------------------------------------

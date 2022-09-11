@@ -32,6 +32,10 @@ namespace nsMMOEngine
     void RecvFromSlaveDonor(TDescRecvSession* pDesc);
     void RecvFromSlaveRecipient(TDescRecvSession* pDesc);
   private:
+    void BeginClient(TDescRecvSession* pDesc);
+    void InfoRecipientToClient(TDescRecvSession* pDesc);
+    void RequestConnect(TDescRecvSession* pDesc);
+  private:
   };
 }
 #endif

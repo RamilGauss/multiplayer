@@ -13,6 +13,7 @@ See for more information License.h.
 #include "DescEvent.h"
 #include "IMakerObjectCommon.h"
 #include "Logger.h"
+#include "SrcEvent.h"
 
 class ITimer;
 
@@ -24,6 +25,7 @@ class IDeveloperTool
 protected:
   struct TComponent
   {
+    TSrcEvent mDev;
     ITimer* mTimerFirstEvent;
     ITimer* mTimerLastEvent;
     TComponent()

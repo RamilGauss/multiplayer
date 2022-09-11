@@ -110,12 +110,14 @@ namespace nsMMOEngine
                                                                   unsigned int id_client){}//S
     //----------------------------------------------------
     // RCM
-    virtual void ActivateRcmClient(IScenario* pSc){}//M
-    virtual void NeedSlaveSessionDonor(IScenario* pSc){}//M
+    virtual void NeedContextByClientForSlaveKeyRcm(unsigned int key, bool donor){}
+    virtual void NeedContextByClientKeyRcm(unsigned int key){}
+    virtual void NeedSlaveSessionDonorRcm(IScenario* pSc){}//M
+    virtual void ActivateRcm(IScenario* pSc){}//M
+    virtual void DisconnectClientRcm(unsigned int key){}
     //----------------------------------------------------
     virtual void NeedContextLoginSlave(unsigned int id_session){}
     virtual void NeedContextLoginMaster(unsigned int id_session){}
-    virtual void NeedContextRcm(unsigned int id_session){}
     virtual void NeedContextSendToClient(unsigned int id_client){}
     virtual void NeedContextSynchroSlave(unsigned int id_session){}
 

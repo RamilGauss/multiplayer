@@ -13,6 +13,10 @@ See for more information License.h.
 #include "../QtLib/IQtLib.h"
 #include "../GameLib/IServerDeveloperTool.h"
 
+#include "DevProtocol.h"
+
+using namespace nsDevProtocol;
+
 MasterForm::MasterForm(QWidget *parent)
 {
   ui.setupUi(this);
@@ -21,6 +25,8 @@ MasterForm::MasterForm(QWidget *parent)
   SetConnect(false);
   
   Refresh();
+
+  connect(ui.bCreateGroup, SIGNAL(clicked()), this, SLOT(sl_CreateGroup()));
 }
 //-----------------------------------------------------------
 MasterForm::~MasterForm()
@@ -35,8 +41,8 @@ void MasterForm::customEvent( QEvent * event)
 //-----------------------------------------------------------
 void MasterForm::closeEvent(QCloseEvent * event)
 {
-  int type = 0;
-  IServerDeveloperTool::Singleton()->GetComponent()->mQtGUI->AddEventCopy(&type,sizeof(type));
+  TExit h;
+  IServerDeveloperTool::Singleton()->GetComponent()->mQtGUI->AddEventCopy(&h,sizeof(h));
 
   delete this;
 }
@@ -96,5 +102,11 @@ void MasterForm::Refresh()
     iRow++;
   }
   ui.table->resizeColumnsToContents();
+}
+//-----------------------------------------------------------
+void MasterForm::sl_CreateGroup()
+{
+  TCreateGroup h;
+  IServerDeveloperTool::Singleton()->GetComponent()->mQtGUI->AddEventCopy(&h,sizeof(h));
 }
 //-----------------------------------------------------------

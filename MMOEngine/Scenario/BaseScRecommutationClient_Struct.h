@@ -17,6 +17,20 @@ namespace nsMMOEngine
   {
     enum
     {
+      eBeginDonor,
+      eBeginClient,
+      eCheckBeginClient,
+      eCheckBeginDonor,
+      eBeginRecipient,
+      eCheckBeginRecipient,
+      eInfoRecipientToDonor,
+      eInfoRecipientToClient,
+      eCheckInfoRecipient,
+      eRequestConnect,
+      eCheckRequestConnect,
+      eClientConnect,
+      //-------------------------
+      eDisconnectClient,
     };
     enum
     {
@@ -41,84 +55,77 @@ namespace nsMMOEngine
     struct THeaderSD : public THeader{ THeaderSD (){from=eSlaveDonor;}};
     struct THeaderSR : public THeader{ THeaderSR (){from=eSlaveRecipient;}};
     //-------------------------------------------------
-	  //struct THeaderTryLoginC2M : THeaderC
-	  //{
-   //   THeaderTryLoginC2M();
-		 // int sizeData;
-	  //};
-	  ////-------------------------------------------------
-	  //struct THeaderRequestM2SS : THeaderM
-	  //{
-		 // THeaderRequestM2SS();
-	  //};
-	  ////-------------------------------------------------
-   // struct THeaderCheckRequestSS2M : THeaderSS
-   // {
-   //   THeaderCheckRequestSS2M();
-   //   char isExistInSystem;// данный клиент присутствует в составе
-   // };
-   // //-------------------------------------------------
-   // struct THeaderResultLoginM2C : THeaderM
-   // {
-   //   enum{eAccept,eReject,eQueue};
-   //   THeaderResultLoginM2C();
-   //   char result;
-   //   int numInQueue;
-   //   int sizeResClient;
-   // };
-   // //-------------------------------------------------
-	  //struct THeaderLeaveQueueC2M : public THeaderC
-	  //{
-   //   THeaderLeaveQueueC2M();
-	  //};
-	  ////------------------------------------------------------------------------------------------------
-	  ////------------------------------------------------------------------------------------------------
-	  //struct THeaderInfoClientM2S : public THeaderM
-	  //{
-   //   THeaderInfoClientM2S();
-	  //};
-	  ////-------------------------------------------------
-   // struct THeaderCheckInfoClientS2M : public THeaderS
-   // {
-   //   THeaderCheckInfoClientS2M();
-   // };
-	  ////-------------------------------------------------
-	  //struct THeaderInfoSlaveM2C : public THeaderM
-	  //{
-   //   THeaderInfoSlaveM2C();
-   //   TIP_Port ip_port_slave;
-	  //};
-	  ////-------------------------------------------------
-   // struct THeaderCheckInfoSlaveC2M : public THeaderC
-   // {
-   //   THeaderCheckInfoSlaveC2M();
-   // };
-   // //-------------------------------------------------
-	  //struct THeaderConnectToSlaveC2S : public THeaderC
-	  //{
-   //   THeaderConnectToSlaveC2S();
-	  //};
-	  ////-------------------------------------------------
-	  //struct THeaderClientConnectS2M : public THeaderS
-	  //{
-   //   THeaderClientConnectS2M();
-	  //};
-	  ////-------------------------------------------------
-	  //struct THeaderCheckClientConnectM2S : public THeaderM
-	  //{
-   //   THeaderCheckClientConnectM2S();
-	  //};
-	  ////-------------------------------------------------
-	  //struct THeaderCheckConnectToSlaveS2C : public THeaderS
-	  //{
-   //   THeaderCheckConnectToSlaveS2C();
-	  //};
-	  ////-------------------------------------------------
-   // struct THeaderDisconnectClientM2S : public THeaderM
-   // {
-   //   THeaderDisconnectClientM2S();
-   // };
+	  struct THeaderBeginDonor : THeaderM
+	  {
+      THeaderBeginDonor();
+	  };
+	  //-------------------------------------------------
+    struct THeaderBeginClient : THeaderSD
+    {
+      THeaderBeginClient();
+    };
     //-------------------------------------------------
+    struct THeaderCheckBeginClient : THeaderC
+    {
+      THeaderCheckBeginClient();
+    };
+    //-------------------------------------------------
+    struct THeaderCheckBeginDonor : THeaderSD
+    {
+      THeaderCheckBeginDonor();
+      int sizeContext;
+    };
+    //-------------------------------------------------
+    struct THeaderBeginRecipient : THeaderM
+    {
+      THeaderBeginRecipient();
+      int sizeContext;
+    };
+    //-------------------------------------------------
+    struct THeaderCheckBeginRecipient : THeaderSR
+    {
+      THeaderCheckBeginRecipient();
+    };
+    //-------------------------------------------------
+    struct THeaderInfoRecipientToDonor : THeaderM
+    {
+      THeaderInfoRecipientToDonor();
+      TIP_Port ip_port_recipient;
+    };
+    //-------------------------------------------------
+    struct THeaderInfoRecipientToClient : THeaderSD
+    {
+      THeaderInfoRecipientToClient();
+      TIP_Port ip_port_recipient;
+    };
+    //-------------------------------------------------
+    struct THeaderCheckInfoRecipient : THeaderC
+    {
+      THeaderCheckInfoRecipient();
+    };
+    //-------------------------------------------------
+    struct THeaderRequestConnect : THeaderC
+    {
+      THeaderRequestConnect();
+    };
+    //-------------------------------------------------
+    struct THeaderCheckRequestConnect : THeaderSR
+    {
+      THeaderCheckRequestConnect();
+    };
+    //-------------------------------------------------
+    struct THeaderClientConnect : THeaderSR
+    {
+      THeaderClientConnect();
+    };
+    //-------------------------------------------------
+    //-------------------------------------------------
+    struct THeaderDisconnectClient : THeaderM
+    {
+      THeaderDisconnectClient();
+    };
+    //-------------------------------------------------
+
 #ifdef WIN32
 #pragma pack(pop)
 #endif

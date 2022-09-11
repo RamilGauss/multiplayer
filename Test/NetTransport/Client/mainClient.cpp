@@ -41,7 +41,6 @@ void GetByArg(int argc, char** argv, TArgData &d);
 //-------------------------------------------------------------------
 int main(int argc, char** argv)
 {
-  //###
 #if 0
   // внутри MMOEngine
   nsMMOEngine::TEventTryLogin erfd;
@@ -63,8 +62,7 @@ int main(int argc, char** argv)
   }
   delete pC;
 #endif
-  //###
-  g_ShareTest->Init("Client");
+    g_ShareTest->Init("Client");
 
 	TArgData d;
 	GetByArg(argc,argv,d);

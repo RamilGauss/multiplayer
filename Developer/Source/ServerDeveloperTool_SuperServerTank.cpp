@@ -18,6 +18,8 @@ See for more information License.h.
 #include "BL_Debug.h"
 #include "../GameLib/ITimer.h"
 
+#include "DevProtocol.h"
+
 using namespace std;
 using namespace nsMMOEngine;
 
@@ -107,10 +109,10 @@ void TServerDeveloperTool_SuperServerTank::InitQtForm()
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_SuperServerTank::HandleFromQt(nsEvent::TEvent* pEvent)
 {
-  int type = *((int*)pEvent->container.GetPtr());
-  switch(type)
+  nsDevProtocol::TBase* pH = (nsDevProtocol::TBase*)pEvent->container.GetPtr();
+  switch(pH->type)
   {
-    case 0:
+    case nsDevProtocol::Exit:
       Exit();
       break;
     default:;
@@ -137,7 +139,12 @@ void TServerDeveloperTool_SuperServerTank::HandleFromMMOEngine(TBaseEvent* pBE)
       sEvent = "DisconnectUp";
       break;
     case TBase::eError:
-      sEvent = "Error";
+    {
+      char sError[300];
+      TEventError* pEr = (TEventError*)pBE;
+      sprintf(sError, "Error code=%u", pEr->code);
+      sEvent = sError;
+    }
       break;
     case TBase::eRecvFromDown:
       sEvent = "RecvFromDown";
@@ -165,12 +172,6 @@ void TServerDeveloperTool_SuperServerTank::HandleFromMMOEngine(TBaseEvent* pBE)
     case TBase::eResultLogin:
       sEvent = "ResultLogin";
       break;
-    //case TBase::eCreateGroup:
-    //  sEvent = "CreateGroup";
-    //  break;
-    //case TBase::eLeaveGroup:
-    //  sEvent = "LeaveGroup";
-    //  break;
     case TBase::eDestroyGroup:
       sEvent = "DestroyGroup";
       break;

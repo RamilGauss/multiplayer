@@ -33,7 +33,7 @@ mMngContextClient(new TManagerContextClient_slave)
 {
   mTimeNeedSendSynchro = 0;
   mControlSc->mLoginClient->SetBehavior(TScenarioLoginClient::eSlave);
-	//mControlSc->mRcm->SetBehavior(TScenarioRecommutationClient::eSla);
+	mControlSc->mRcm->SetBehavior(TScenarioRecommutationClient::eSlave);
 }
 //-------------------------------------------------------------------------
 TSlave::~TSlave()
@@ -44,7 +44,7 @@ TSlave::~TSlave()
 void TSlave::SaveContext(unsigned int id_session, void* data, int size)
 {
   TContainerContextSc* pC = mMngContextClient->FindContextBySession(id_session);
-  if(pC) // передать контекст в сценарий
+  if(pC && pC->IsRcmActive()) // передать контекст в сценарий
   {
     mControlSc->mRcm->SetContext(&pC->mRcm);
     mControlSc->mRcm->SaveContext(data, size);// это уже вызов функции сценария
@@ -206,14 +206,29 @@ void TSlave::EndLoginSlave(IScenario* pSc)
   }
 }
 //-------------------------------------------------------------------------
-void TSlave::EndRcm(IScenario*)
+void TSlave::EndRcm(IScenario* pSc)
 {
+  TContextScRecommutationClient* pContext = (TContextScRecommutationClient*)pSc->GetContext();
+  unsigned int key = pContext->GetClientKey();
+  if(pContext->IsDonor())
+  {
+    // просто удалить  
+    mMngContextClient->DeleteByKey(key);
+    return;
+  }
+  if(pContext->IsRecipient()==false)
+  {
+    GetLogger(STR_NAME_MMO_ENGINE)->
+      WriteF_time("TSlave::EndRcm() Undef state.\n");
+    BL_FIX_BUG();
+    return;
+  }
+  // переместить из временного хранилища в постоянное
+  mMngContextClientSlaveRecipient->DeleteByKey(key);
 
-}
-//-------------------------------------------------------------------------
-void TSlave::NeedContextRcm(unsigned int id_session)
-{
-
+  unsigned int id_session = pContext->GetID_SessionClientSlave();
+  mMngContextClient->AddContextByKey(key);
+  mMngContextClient->AddSessionByKey(key,id_session);
 }
 //-------------------------------------------------------------------------
 void TSlave::NeedContextSendToClient(unsigned int id_client)
@@ -254,3 +269,28 @@ void TSlave::NeedContextLoginClientByClientKey(unsigned int id_client)
   mControlSc->mLoginClient->SetContext(&pC->mLoginClient);
 }
 //-------------------------------------------------------------------------
+void TSlave::NeedContextByClientForSlaveKeyRcm(unsigned int key, bool donor)
+{
+  if(donor)
+  {
+    TContainerContextSc* pC = mMngContextClient->FindContextByKey(key);
+    if(pC)
+      mControlSc->mRcm->SetContext(&pC->mRcm);
+    else
+      mControlSc->mRcm->SetContext(NULL);
+  }
+  else
+  {
+    TContainerContextSc* pC = mMngContextClientSlaveRecipient->FindContextByKey(key);
+    if(pC==NULL)
+      pC = mMngContextClientSlaveRecipient->AddContextByKey(key);
+    mControlSc->mRcm->SetContext(&pC->mRcm);
+  }
+}
+//-------------------------------------------------------------------------
+void TSlave::DisconnectClientRcm(unsigned int key)
+{
+
+}
+//-------------------------------------------------------------------------
+

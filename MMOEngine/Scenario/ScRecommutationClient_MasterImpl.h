@@ -28,11 +28,17 @@ namespace nsMMOEngine
                unsigned int id_client);
 		void DelayBegin();
 
+    void DisconnectClient();
+
   protected:
     virtual void RecvInherit(TDescRecvSession* pDesc);
   private:
     void RecvFromSlaveDonor(TDescRecvSession* pDesc);
     void RecvFromSlaveRecipient(TDescRecvSession* pDesc);
+  private:
+    void CheckBeginDonor(TDescRecvSession* pDesc);
+    void CheckBeginRecipient(TDescRecvSession* pDesc);
+    void ClientConnect(TDescRecvSession* pDesc);
   private:
 		void SendFirstPacket();
   };

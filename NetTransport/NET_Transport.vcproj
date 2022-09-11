@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Share;.\Boost_Implementation;.\TCP_UDP_Implementation;.\UDP_Implementation;.\"
+				AdditionalIncludeDirectories="..\Share;.\Boost_Implementation;.\"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;TD_CROSSPLATFORM;NET_TRANSPORT_EI=__declspec(dllexport);NET_TRANSPORT_EXPORTS;FAST_NET_TRANSPORT;_WIN32_WINNT=0x0501"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -119,7 +119,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\Share;.\Boost_Implementation;.\TCP_UDP_Implementation;.\UDP_Implementation;.\"
+				AdditionalIncludeDirectories="..\Share;.\Boost_Implementation;.\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;NET_TRANSPORT_EI=__declspec(dllexport);NET_TRANSPORT_EXPORTS;FAST_NET_TRANSPORT;_WIN32_WINNT=0x0501"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -176,7 +176,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Source Files"
+			Name="Source"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
@@ -212,7 +212,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Header Files"
+			Name="Header"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
@@ -228,38 +228,6 @@
 				RelativePath=".\MakerNetTransport.h"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="UDP_Implementation"
-			>
-			<Filter
-				Name="Header"
-				>
-				<File
-					RelativePath=".\UDP_Implementation\BasePacketNetTransport.h"
-					>
-				</File>
-				<File
-					RelativePath=".\UDP_Implementation\NetTransport_UDP.h"
-					>
-				</File>
-				<File
-					RelativePath=".\UDP_Implementation\TransportProtocolPacket.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Source"
-				>
-				<File
-					RelativePath=".\UDP_Implementation\BasePacketNetTransport.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\UDP_Implementation\NetTransport_UDP.cpp"
-					>
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Boost_Implementation"

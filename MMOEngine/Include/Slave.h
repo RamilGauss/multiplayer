@@ -56,7 +56,9 @@ namespace nsMMOEngine
     virtual void NeedContextLoginClientByClientSessionByKeyClient(unsigned int id_session_client,
                                                                   unsigned int id_client);
     //-----------------------------------------------------------------
-    virtual void NeedContextRcm(unsigned int id_session);
+    virtual void NeedContextByClientForSlaveKeyRcm(unsigned int key, bool donor);
+    virtual void DisconnectClientRcm(unsigned int key);
+    //-----------------------------------------------------------------
     virtual void NeedContextSendToClient(unsigned int id_session);
 
     virtual void EndLoginClient(IScenario*);

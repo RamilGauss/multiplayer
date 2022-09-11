@@ -61,7 +61,6 @@ namespace nsMMOEngine
 	  struct THeaderTryLoginC2M : THeaderC
 	  {
       THeaderTryLoginC2M();
-		  int sizeData;
 	  };
 	  //-------------------------------------------------
 	  struct THeaderRequestM2SS : THeaderM

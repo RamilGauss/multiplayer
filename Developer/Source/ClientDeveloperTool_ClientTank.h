@@ -18,6 +18,7 @@ See for more information License.h.
 #include "../MMOEngine/Include/BaseEvent.h"
 #include "InputCmdDevTool.h"
 #include "TestControlTank.h"
+#include "DevProtocol.h"
 
 class TClientMain;
 class TGameRoomPrepare;
@@ -69,6 +70,7 @@ protected:
   void InitLog();
   void HandleFromMMOEngine(nsMMOEngine::TBaseEvent* pBE);
   void HandleFromGUI(nsEvent::TBaseEvent* pData);
+  void HandleFromDev(nsDevProtocol::TBase* pData);
 
 	void MouseEvent(nsEvent::TMouseEvent* pEvent);
 	void KeyEvent(nsEvent::TKeyEvent* pEvent);

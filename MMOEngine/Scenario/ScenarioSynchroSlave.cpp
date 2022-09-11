@@ -31,7 +31,7 @@ void TScenarioSynchroSlave::SendSynchro(int loadProcent)
 //---------------------------------------------------------------------
 void TScenarioSynchroSlave::Recv(TDescRecvSession* pDesc)
 {
-  NeedContext(pDesc->id_session);
+  NeedContextBySession(pDesc->id_session);
   THeaderSynchroSlave* pPacket = (THeaderSynchroSlave*)pDesc->data;
   switch(pPacket->subType)
   {
