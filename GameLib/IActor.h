@@ -37,55 +37,38 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@mail
 #ifndef IActorH
 #define IActorH
 
-#include "IBaseObjectCommon.h"
 #include <string>
+#include "IBaseObjectCommon.h"
 
-class TClient;
-class TRoom;
+class IRoom;
 
 //------------------------------------------------------------------------------
 /*
-  Активный участник сцены. Единственный доступ для доступа к БД.
+  Активный участник сцены.
 */
 class IActor : public IBaseObjectCommon
 {
+  unsigned int mID_Client;
+  IRoom* pRoom;
 
 public:
   IActor();
   virtual ~IActor();
-//--------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------
   // от IBaseObjectCommon
   virtual bool GetMirror(char** pData, int& size){return false;}
   virtual void SetMirror(char* pData, int size){}
 
-  //virtual int GetSizeProperty();
-  //virtual char* GetProperty();
-  //virtual void SetProperty(char* pData,int size);
-//--------------------------------------------------------------------------------
   // IActor интерфейс
   void SetType(unsigned int id);
   unsigned int GetType();
 //--------------------------------------------------------------------------------
 public:
-  // интерфейс для сервера
-  TRoom* pRoom;
 
-  void SetMasterClient(TClient* _pClient);
-  TClient* GetMasterClient();
-
-  // для Room, в бою
-  unsigned char mGroup;// номер команды в комнате. или 0 или 1.
+  void SetID_Client(unsigned int id);
+  unsigned int GetID_Client();
 
 protected:
-  TClient* pMasterClient;
-//--------------------------------------------------------------------------------
-  // для Клиента
-  std::string sClientName;
-public:
-  const char* GetClientName(){return sClientName.data();}
-  void        SetClientName(char* str){sClientName.insert(0,str);}
-//--------------------------------------------------------------------------------
-
 };
 //-----------------------------------------------------------------------------
 

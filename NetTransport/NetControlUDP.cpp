@@ -39,13 +39,19 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "common_defs.h"
 #include "INetMakerEvent.h"
 
+#include "Logger.h"
+
+#define PRINTF(X,F) GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF_time(X,F)
+#define PRINTF_0(X) PRINTF(X,0)
+
+#define GET_ERROR WSAGetLastError()
+
 using namespace std;
 
 TNetControlUDP::TNetControlUDP()
 {
 	mSocketLocal = -1;
 
-	mArrConnect.Sort(SortFreshInfoConnect);
 	mReadSize = 0;
 }
 //------------------------------------------------------------------------------
@@ -87,28 +93,34 @@ bool TNetControlUDP::Open( unsigned short port, unsigned char numNetWork )
 	Close();
   mSocketLocal = mDevice.Open(false, port, numNetWork);
 
+	bool res = mDevice.SetRecvBuffer(mSocketLocal, eSystemSizeForRecvBuffer_Socket);
+  res = mDevice.SetSendBuffer(mSocketLocal, eSystemSizeForSendBuffer_Socket);
+
 	GetMakerEvent()->Remove(mSocketLocal);
 	GetMakerEvent()->Add(mSocketLocal, this);
 	list<INetControl::eTypeEvent> lEvent;
 	lEvent.push_back(INetControl::eRead);
+	lEvent.push_back(INetControl::eWrite);
 	GetMakerEvent()->SetTypeEvent(mSocketLocal, lEvent);
   return (mSocketLocal!=-1);
 }
 //------------------------------------------------------------------------------
 bool TNetControlUDP::Connect(unsigned int ip, unsigned short port)
 {
-	BL_MessageBug("Try connect on UDP!");
+  PRINTF_0("Try connect on UDP.\n");
   return false;// нельзя, только TCP
 }
 //------------------------------------------------------------------------------
 void TNetControlUDP::Send(unsigned int ip, unsigned short port, TBreakPacket& bp)
 {
 	// формируем заголовок
-	TInfoConnect* pConnect = GetInfoConnect(TIP_Port(ip,port));
-	unsigned short count_out = pConnect->cnt_out++;
-  bp.PushFront( (char*)&count_out, sizeof(count_out));
-	bp.Collect();
-	mDevice.Send(mSocketLocal, (char*)bp.GetCollectPtr(), bp.GetSize(), ip, port);
+	TInfoConnect infoConnect;
+	GetInfoConnect(TIP_Port(ip,port),infoConnect);
+	unsigned short count_out = infoConnect.cnt_out++;
+	TBreakPacket bp_out = bp;
+	bp_out.PushFront( (char*)&count_out, sizeof(count_out));
+	bp_out.Collect();
+	mDevice.Send(mSocketLocal, (char*)bp_out.GetCollectPtr(), bp_out.GetSize(), ip, port);
 }
 //------------------------------------------------------------------------------
 void TNetControlUDP::Close()
@@ -117,33 +129,15 @@ void TNetControlUDP::Close()
 	mSocketLocal = -1;
 }
 //------------------------------------------------------------------------------
-int TNetControlUDP::SortFreshInfoConnect(const void* p1, const void* p2)
-{
-	const TInfoConnect *s1 = *( const TInfoConnect **)p1;
-	const TInfoConnect *s2 = *( const TInfoConnect **)p2;
-
-	if(s1->ip>s2->ip)
-		return -1;
-	else 
-		if(s1->ip==s2->ip)
-		{
-			if(s1->port>s2->port)
-				return -1;
-			else 
-				if(s1->port==s2->port)
-					return 0;
-		}
-		return 1;
-}
-//----------------------------------------------------------------------------------
 bool TNetControlUDP::IsStreamFresh( TIP_Port& ip_port)
 {
-	TInfoConnect* pFoundFresh = GetInfoConnect(ip_port);
+	TInfoConnect infoConnect;
+	GetInfoConnect(ip_port, infoConnect);
 
 	unsigned short cnt_in = ((unsigned short*)mBuffer)[0];
-	if(A_more_B( cnt_in, pFoundFresh->cnt_in))
+	if(A_more_B( cnt_in, infoConnect.cnt_in))
 	{
-		pFoundFresh->cnt_in = cnt_in;
+		SetCntInByIP_Port(ip_port, cnt_in);
 		return true;
 	}
 	return false;
@@ -165,10 +159,14 @@ void TNetControlUDP::ReadEvent()
 		INetTransport::TDescRecv descRecv;
 		descRecv.ip_port      = ip_port;
 		descRecv.type					= INetTransport::eStream;
-		descRecv.data         = mBuffer;
-		descRecv.sizeData     = mReadSize;
+		descRecv.data         = mBuffer   + sizeof(unsigned short);
+		descRecv.sizeData     = mReadSize - sizeof(unsigned short);
 		NotifyRecv((char*)&descRecv, sizeof(descRecv));
 	}
+	else
+  {
+    PRINTF_0("ReadEvent UDP recv not fresh packet.\n");
+  }
 }
 //----------------------------------------------------------------------------------
 void TNetControlUDP::WriteEvent()
@@ -191,28 +189,34 @@ void TNetControlUDP::CloseEvent()
 	// пусто
 }
 //----------------------------------------------------------------------------------
-TNetControlUDP::TInfoConnect* TNetControlUDP::GetInfoConnect(TIP_Port& v)
+void TNetControlUDP::GetInfoConnect(TIP_Port& ip_port, TInfoConnect& info_out)
 {
-	TInfoConnect fresh;
-	TInfoConnect* pFresh = &fresh;
-	pFresh->ip    = v.ip;
-	pFresh->port  = v.port;
-
 	lockSendRcv();
-	TInfoConnect* pFoundFresh = (TInfoConnect*)mArrConnect.Get(mArrConnect.FastSearch(&pFresh,NULL,SortFreshInfoConnect));
-	unlockSendRcv();
-	if(pFoundFresh==NULL)
+
+	TMapIP_ICIt fit = mMapInfoConnect.find(ip_port);
+	if(fit==mMapInfoConnect.end())
 	{
-		pFresh = new TInfoConnect;
-		pFresh->ip    = v.ip;
-		pFresh->port  = v.port;
-
-		lockSendRcv();
-		mArrConnect.Add(pFresh);
-		unlockSendRcv();
-		return pFresh;
+		mMapInfoConnect.insert(TMapIP_IC::value_type(ip_port,TInfoConnect()));
+		fit = mMapInfoConnect.find(ip_port);
 	}
+	info_out = fit->second;
 
-	return pFoundFresh;
+	unlockSendRcv();
+}
+//----------------------------------------------------------------------------------
+void TNetControlUDP::SetCntInByIP_Port(TIP_Port& ip_port, unsigned short cnt_in)
+{
+	lockSendRcv();
+
+	TMapIP_ICIt fit = mMapInfoConnect.find(ip_port);
+	if(fit==mMapInfoConnect.end())
+	{
+		PRINTF_0("SetCntInByIP_Port not found info connect.\n");
+		unlockSendRcv();
+		return;
+	}
+	fit->second.cnt_in = cnt_in;
+
+	unlockSendRcv();
 }
 //----------------------------------------------------------------------------------

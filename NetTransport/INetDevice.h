@@ -40,6 +40,17 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 class INetDevice
 {
 public:
+  typedef 
+    enum{eTypeTCP,
+         eTypeUDP,
+         eUndefType,
+  }
+  eTypeSocket;
+  
+  enum{
+      eWaitCanWrite = 18,
+  };
+
   INetDevice(){};
   virtual ~INetDevice(){};
 
@@ -52,6 +63,12 @@ public:
                     unsigned int &ip, unsigned short &port) = 0;
   virtual bool Send(int sock, char* buffer, int  size, 
                     unsigned int ip, unsigned short port) = 0;
+
+	static bool SetRecvBuffer(int sock, unsigned int size);
+	static bool SetSendBuffer(int sock, unsigned int size);
+	static unsigned int GetMaxSizeBufferForSocket(int sock);
+
+  static eTypeSocket GetType(int sock);
 };
 
 

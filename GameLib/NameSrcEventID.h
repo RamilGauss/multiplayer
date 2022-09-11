@@ -39,7 +39,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define ID_SRC_EVENT_GRAPHIC_ENGINE        0
 #define ID_SRC_EVENT_PHYSIC_ENGINE         1
 #define ID_SRC_EVENT_MANAGER_OBJECT_COMMON 2
-
+#define ID_SRC_EVENT_NETWORK_ENGINE        3
 
 #endif
 

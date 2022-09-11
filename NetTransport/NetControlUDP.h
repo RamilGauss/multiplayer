@@ -37,54 +37,44 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef NetControlUDPH
 #define NetControlUDPH
 
+#include <map>
+
 #include "INetControl.h"
 #include "NetDeviceUDP.h"
-#include "hArray.h"
 #include "GCS.h"
 
 class TNetControlUDP : public INetControl
 {
 	enum{
-		eSizeBuffer=64000,
+		eSizeBuffer = 64000,
 	};
+
 	int mReadSize;
 	char mBuffer[eSizeBuffer];
 
-
   TNetDeviceUDP mDevice;
-
 	int mSocketLocal;
-
-	TArrayObject mArrConnect;
-
-#if defined( WIN32 )
-#pragma pack(push, 1)
-#endif
-
-	struct TInfoConnect : public TObject
-	{
-	public:
-		TInfoConnect(){Init();}
-		unsigned int   ip;
-		unsigned short port;
-		// для Stream
-		unsigned short cnt_in; // определить свежесть пакета по входным данным
-		unsigned short cnt_out;// посылать наружу
-		void Init()
-		{
-			cnt_in  = 0;
-			cnt_out = 0;
-		}
-	};
 	//-----------------------------------------------------------------------------
-#if defined( WIN32 )
-#pragma pack(pop)
-#endif
-
 	GCS gcsSendRcv;
 	void lockSendRcv()  {gcsSendRcv.lock();};
 	void unlockSendRcv(){gcsSendRcv.unlock();};
+	//-----------------------------------------------------------------------------
+  struct TInfoConnect
+  {
+    unsigned short cnt_in; // определить свежесть пакета по входным данным
+    unsigned short cnt_out;// посылать наружу
+    TInfoConnect()
+    {
+      cnt_in  = -1;
+      cnt_out = 0;
+    }
+  };
+	//TArrayObject mArrConnect;
 
+	typedef std::map<TIP_Port, TInfoConnect> TMapIP_IC;
+	typedef TMapIP_IC::iterator TMapIP_ICIt;
+
+	TMapIP_IC mMapInfoConnect;
 public:
 
   TNetControlUDP();
@@ -99,11 +89,8 @@ public:
 
 protected:
 
-	static int SortFreshInfoConnect(const void* p1, const void* p2);
-
 	bool IsStreamFresh(TIP_Port& ip_port);
 	bool A_more_B(unsigned short A, unsigned short B);
-
 
 	void ReadEvent();
 	void WriteEvent();
@@ -111,7 +98,8 @@ protected:
 	void AcceptEvent();				
 	void CloseEvent();
 
-	TInfoConnect* GetInfoConnect(TIP_Port& v);
+	void GetInfoConnect(TIP_Port& v, TInfoConnect& info_out);
+	void SetCntInByIP_Port(TIP_Port& ip_port, unsigned short cnt_in);
 };
 
 

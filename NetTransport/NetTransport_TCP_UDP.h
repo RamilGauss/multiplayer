@@ -41,24 +41,19 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "NetMakerEventWSA.h"
 #include "NetControlTCP.h"
 #include "NetControlUDP.h"
-#include "SaveOnHDD.h"
 
 // Thread safe - Send поддерживает.
 
 class TNetTransport_TCP_UDP : public INetTransport
 {
-	TSaveOnHDD mLogEvent;
-
   INetMakerEvent* mNetMakerEvent;
 
   INetControl* mTCP;
   INetControl* mUDP;
 
 public:
-
-	TNetTransport_TCP_UDP(char* pPathLog=NULL);
+	TNetTransport_TCP_UDP();
 	virtual ~TNetTransport_TCP_UDP();
-	virtual void InitLog(char* pPathLog);
 
   virtual bool Open(unsigned short port, unsigned char numNetWork = 0);
 

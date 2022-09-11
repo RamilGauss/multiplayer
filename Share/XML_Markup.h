@@ -67,6 +67,8 @@ public:
   virtual bool EnterSection(const char* name, int num);
   virtual bool LeaveSection();
   // изменение кол-ва
+  virtual bool AddSectionAndEnter(const char* name);
+  virtual bool AddSectionAndEnter(const char *name, int numAttr, TAttrInfo *pAttribs);
   virtual bool AddSection(const char* name);
   virtual bool AddSection(const char *name, int numAttr, TAttrInfo *pAttribs);
   virtual bool RemoveSection(const char* name, int num);

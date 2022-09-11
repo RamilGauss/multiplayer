@@ -38,6 +38,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MakerXML.h"
 #include "Logger.h"
 #include <atlconv.h>
+#include "IGraphicEngine.h"
 
 using namespace nsStruct3D;
 using namespace std;
@@ -142,7 +143,7 @@ bool ILoaderModelGE::Load(wchar_t* strFilenameData)
 
   if(LoadMainFile()==false) 
   {
-    GetLogger()->Get("GE")->WriteF_time("Ќе удалось загрузить ресурсы дл€ модели.\n");
+    GetLogger()->Get(STR_NAME_GE)->WriteF_time("Ќе удалось загрузить ресурсы дл€ модели.\n");
     return false;
   }
   return true;

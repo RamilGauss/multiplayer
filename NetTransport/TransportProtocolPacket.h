@@ -78,13 +78,13 @@ struct TShortDescPacket
 	~TShortDescPacket(){}
 };
 //-----------------------------------------------------------------------------
-class TInfoConnect : public TObject
+class TInfoConnect //: public TObject
 {
 	// информация по сокету
 public:
 	TInfoConnect(){init();}
-	unsigned int   ip;
-	unsigned short port;
+	//unsigned int   ip;
+	//unsigned short port;
 	// для Stream
 	unsigned short cn_in_s;     // циклический номер для определения свежести при Rcv
 	unsigned short cn_out_s;    // циклический номер при Send

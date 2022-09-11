@@ -52,12 +52,12 @@ IClientDeveloperTool::~IClientDeveloperTool()
   g_ClientDeveloperTool = NULL;
 }
 //-----------------------------------------------------------------------
-IClientDeveloperTool* IClientDeveloperTool::GetSingleton()
+IClientDeveloperTool* IClientDeveloperTool::Singleton()
 {
   return g_ClientDeveloperTool;
 }
 //-----------------------------------------------------------------------
-bool IClientDeveloperTool::HandleEvent(TEvent* pEvent)// если необходимо прервать работу движка - вернуть false
+void IClientDeveloperTool::HandleEvent(TEvent* pEvent)// если необходимо прервать работу движка - вернуть false
 {
   switch(pEvent->from)
   {
@@ -70,20 +70,18 @@ bool IClientDeveloperTool::HandleEvent(TEvent* pEvent)// если необходимо прерват
         case eKeyBoard:
         {
           TKeyEvent* pKey = (TKeyEvent*)pData;
-          if(KeyEvent(pKey)==false)
-            return false;
+          KeyEvent(pKey);
           break;
         }
         case eMouse:
         {
           TMouseEvent* pMouse = (TMouseEvent*)pData;
-          if(MouseEvent(pMouse)==false)
-            return false;
+          MouseEvent(pMouse);
           break;
         }
       }
     }
   }
-  return Event(pEvent);
+  Event(pEvent);
 }
 //-----------------------------------------------------------------------

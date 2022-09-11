@@ -84,6 +84,16 @@ void TContainerRise::SetData(char* p, int size)
 		Alloc(size);
 	else
 		mSizeUse = size;
-	memcpy(mC.GetPtr(), p, mSizeUse);
+  if(p)
+	  memcpy(mC.GetPtr(), p, mSizeUse);
+}
+//----------------------------------------------------------
+void TContainerRise::AddData(char*p, int size)
+{
+  int oldSize = GetSize();
+  int newSize = oldSize + size;
+  Realloc(newSize);
+  char* pBound = GetPtr();
+  memcpy(pBound + oldSize, p, size);
 }
 //----------------------------------------------------------

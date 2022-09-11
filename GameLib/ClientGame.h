@@ -36,9 +36,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef ClientGameH
 #define ClientGameH
 
-#include "IClientDeveloperTool.h"
-#include "DstEvent.h"
+#include <vector>
+#include <string>
+#include <map>
+
 #include "IGame.h"
+#include "WrapperMakerTransport.h"
 
 /*
 1. Должен содержать строгое кол-во компонентов (в соответствии со своим предназначением).
@@ -46,36 +49,71 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 3. Вводится понятие "Источник событий" SrcEvent и "Поглотитель" DstEvent.
 
 */
+struct TDescThread;
 
-class TClientGame : public IGame, public TDstEvent
+class TClientGame : public IGame
 {
 protected:
-  volatile bool flgNeedStop;
-  volatile bool flgActive;
+  friend struct TDescThread;
 
   IClientDeveloperTool::TComponentClient mCClient;
 
+  friend void* ThreadModule(void* p);
+	
+	typedef bool(TClientGame::*FuncHandleEvent)();
+
+  typedef std::vector<FuncHandleEvent> TVectorFunc;
+  typedef std::vector<TDescThread>     TVectorDT;
+  TVectorFunc mMainThreadVecModule;
+  TVectorDT   mOtherThreadVecModule;
+
+  enum{
+    eSleepNE      = 30,
+    eWaitFeedBack = 30,
+  };
 public:
   TClientGame();
   virtual ~TClientGame();
 
-  virtual void Work(const char* sNameDLL, const char* arg = NULL);// начало работы
+  virtual void Work(int variant_use, const char* sNameDLL, const char* arg = NULL);// начало работы
   
 protected:
-  bool Init(const char* sNameDLL, const char* arg = NULL);
-
+  bool Init(int variant_use, const char* sNameDLL, const char* arg = NULL);
   void Done();
 
+  void MakeVectorModule();
+  bool MakeEventFromModule();
+  
   bool HandleGraphicEngineEvent();
-  bool HandleExternalEvent();
+  bool HandleNetEngineEvent();
+
+  void HandleEventByDeveloper();
   void CollectEvent();
+
   void PrepareForRender();
   void Render();
 
-  bool HandleEvent(nsEvent::TEvent* pEvent);
+  void HandleEvent(nsEvent::TEvent* pEvent);
 
-
-  void InitLog();
+  void StartThreadModule();
+  void StopThreadModule();
 };
-
+//---------------------------------------------------------
+struct TDescThread
+{
+  TClientGame*                 pClientGame;
+  TClientGame::FuncHandleEvent pFunc;
+  int             sleep_ms;
+  volatile bool   flgActive;
+  volatile bool   flgNeedStop;
+  TDescThread()
+  {
+    pClientGame = NULL;
+    pFunc       = NULL;
+    sleep_ms    = 20;
+    flgActive   = false;
+    flgNeedStop = false;
+  }
+  void Work();
+};
 #endif

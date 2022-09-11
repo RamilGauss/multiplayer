@@ -67,6 +67,9 @@ public:
   virtual bool AddChildSection(const char* childName, int num, const char* name);
   virtual bool RemoveChildSection(const char* childName, int numChild, const char* name, int num);
 
+  virtual bool AddSectionAndEnter(const char* name) = 0;
+  virtual bool AddSectionAndEnter(const char *name, int numAttr, TAttrInfo *pAttribs) = 0;
+
   virtual bool AddSection(const char* name) = 0;
   virtual bool AddSection(const char *name, int attrCount, TAttrInfo *pAttribs) = 0;
   virtual bool RemoveSection(const char* name, int num) = 0;

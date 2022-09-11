@@ -36,19 +36,17 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@mail
 #ifndef IClientDeveloperToolH
 #define IClientDeveloperToolH
 
+#include <string>
+
 #include "IDeveloperTool.h"
 #include "DstEvent.h"
-#include <string>
-#include "..\Melissa\Client.h"
+#include "Client.h"
 
 class TLogger;
-
 class IMakerObjectCommon;
-
 class IControlCamera;
 class IManagerStateMachine;
 class IGUI;
-class IClient;
 class IPhysicEngine;
 class IGraphicEngine; // отрисовка сцены
 class IManagerObjectCommon;
@@ -56,29 +54,23 @@ class IManagerTime;
 
 class IClientDeveloperTool : public IDeveloperTool
 {
-protected:
-  IMakerObjectCommon* mMakerObjectCommon;
 public:
   struct TComponentClient
   {
-    //IReplay*              mReplay;        // HDD
-    //ISoundEngine*         mSound;         // Sound 
     IControlCamera*         mControlCamera; // Camera
     IManagerStateMachine*   mMStateMachine; // конечный автомат, для HotKeys, Net (обработка пакетов)
     IGUI*                   mGUI;           // GUI, MyGUI!
-    nsMelissa::TClient*     mClient;           // Melissa
+    nsMelissa::TClient*     mNetClient;     // Melissa
     IPhysicEngine*          mPhysicEngine;  // Robert
     IGraphicEngine*         mGraphicEngine; // BigJack отрисовка сцены
     IManagerObjectCommon*   mMOC;           // GameLib
     IManagerTime*           mMTime;         // GameLib
     TComponentClient()
     {
-      //mReplay = NULL;      // HDD
-      //mSound = NULL;       // Sound 
       mControlCamera = NULL; // Camera
       mMStateMachine = NULL; // конечный автомат, для HotKeys
       mGUI           = NULL; // MyGUI
-      mClient        = NULL; // Melissa
+      mNetClient     = NULL; // Melissa
       mPhysicEngine  = NULL; // Robert
       mGraphicEngine = NULL; // BigJack отрисовка сцены
       mMOC           = NULL; // GameLib
@@ -88,32 +80,26 @@ public:
 protected:
   // компоненты
   TComponentClient mComponent;
-  
-  typedef TLogger* (*TInitLogFunc)(); 
-  TInitLogFunc mFuncGetLogger;
+ 
 public:
 
   IClientDeveloperTool();
   virtual ~IClientDeveloperTool();
 
   virtual void Init(TComponentClient* pComponent, const char* arg = NULL) = 0;
-
   virtual std::string GetTitleWindow() = 0;
 
   virtual void PrepareForRender() = 0;
-  virtual IMakerObjectCommon* GetMakerObjectCommon() = 0;
 
-  virtual bool Event(nsEvent::TEvent* pEvent){return true;};// если необходимо прервать работу движка - вернуть false
-  virtual bool MouseEvent(nsEvent::TMouseEvent* pEvent){return true;};// если необходимо прервать работу движка - вернуть false
-  virtual bool KeyEvent(nsEvent::TKeyEvent* pEvent){return true;};// если необходимо прервать работу движка - вернуть false
+	virtual void MouseEvent(nsEvent::TMouseEvent* pEvent){}
+	virtual void KeyEvent(nsEvent::TKeyEvent* pEvent){}
 
-  virtual void SetInitLogFunc(TInitLogFunc pFunc){mFuncGetLogger=pFunc;}
-  bool HandleEvent(nsEvent::TEvent* pEvent);// если необходимо прервать работу движка - вернуть false
+  void HandleEvent(nsEvent::TEvent* pEvent);
 
   // доступ к компонентам
   TComponentClient* GetComponent(){return &mComponent;}
 
-  static IClientDeveloperTool* GetSingleton();
+  static IClientDeveloperTool* Singleton();
 };
 
 

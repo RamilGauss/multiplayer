@@ -39,9 +39,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "INetDevice.h"
 #include "UdpDevice.h"
-#include "TypeDef.h"
 
-class NET_TRANSPORT_EI TNetDeviceUDP : public INetDevice
+class TNetDeviceUDP : public INetDevice
 {
 
   UdpDevice mUDP;

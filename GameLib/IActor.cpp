@@ -37,13 +37,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <cmath>
 
 #include "IActor.h"
-//#include "TypeTank.h"
 
 
 IActor::IActor()
 {
-  pRoom = NULL;
-
+  pRoom      = NULL;
+  mID_Client = -1;
 }
 //------------------------------------------------------------------------
 IActor::~IActor()
@@ -53,51 +52,11 @@ IActor::~IActor()
 //------------------------------------------------------------------------
 void IActor::SetType(unsigned int id)
 {
-  //mProperty.mID_tank = id;
 
-  //switch(mProperty.mID_tank)
-  //{
-  //  case nsTank_ID::eID_KingTiger:
-  //    ID_model = 0;
-  //    break;
-  //}
 }
 //------------------------------------------------------------------------
 unsigned int IActor::GetType()
 {
-  return 0;//mProperty.mID_tank;
+  return 0;
 }
 //------------------------------------------------------------------------
-TClient* IActor::GetMasterClient()
-{
-  return pMasterClient;
-}
-//------------------------------------------------------------------------
-void IActor::SetMasterClient(TClient* _pClient)
-{
-  pMasterClient = _pClient;
-}
-//------------------------------------------------------------------------
-//int IActor::GetSizeProperty()
-//{
-//  int size = sizeof(TProperty)+sClientName.length();
-//  return size;
-//}
-////------------------------------------------------------------------------
-//char* IActor::GetProperty()
-//{
-//  int size = GetSizeProperty();
-//  char* pData = new char[size];
-//  // заполнить данными
-//  *((TProperty*)pData) = mProperty;
-//  memcpy(pData+sizeof(TProperty),sClientName.data(),size-sizeof(TProperty));
-//  return pData;
-//}
-////------------------------------------------------------------------------
-//void IActor::SetProperty(char* pData,int size)
-//{
-//  mProperty = *((TProperty*)pData);
-//  sClientName.insert(0,pData+sizeof(TProperty),size-sizeof(TProperty));
-//}
-////------------------------------------------------------------------------
-

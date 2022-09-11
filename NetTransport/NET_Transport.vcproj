@@ -49,6 +49,7 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4251"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -179,6 +180,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\BasePacketNetTransport.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\dllmain.cpp"
 				>
 				<FileConfiguration
@@ -202,6 +207,10 @@
 			</File>
 			<File
 				RelativePath=".\INetControl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\INetDevice.cpp"
 				>
 			</File>
 			<File
@@ -232,12 +241,20 @@
 				RelativePath=".\NetTransport_TCP_UDP.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\NetTransport_UDP.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\BasePacketNetTransport.h"
+				>
+			</File>
 			<File
 				RelativePath=".\INetControl.h"
 				>
@@ -276,6 +293,14 @@
 			</File>
 			<File
 				RelativePath=".\NetTransport_TCP_UDP.h"
+				>
+			</File>
+			<File
+				RelativePath=".\NetTransport_UDP.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TransportProtocolPacket.h"
 				>
 			</File>
 		</Filter>

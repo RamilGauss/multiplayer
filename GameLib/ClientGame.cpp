@@ -38,6 +38,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <string>
 #include <glib/gthread.h>
 
+#include "IControlCamera.h"
 #include "IGraphicEngine.h"
 #include "IPhysicEngine.h"
 #include "IManagerTime.h"
@@ -51,34 +52,24 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MakerManagerTime.h"
 #include "MakerGUI.h"
 #include "MakerControlCamera.h"
+#include "MakerManagerStateMachine.h"
 
 #include "common_defs.h"
 #include "BL_Debug.h"
 #include "HiTimer.h"
-#include "NetSystem.h"
-#include "ErrorReg.h"
-
 #include "Logger.h"
 #include "NameSrcEventID.h"
-
-#include "IControlCamera.h"
 #include "file_operation.h"
 #include "StorePathResources.h"
 #include "MapXML_Field.h"
-#include "MakerManagerStateMachine.h"
+#include "ShareMisc.h"
 
 using namespace std;
 using namespace nsEvent;
 
 TClientGame::TClientGame()
 {
-  g_thread_init( NULL );
-  err_Init();
-  errSTR_Init();
-  errSTD_Init();
-  errSDK_Init();
-  ht_Init();
-  ns_Init();
+	MakeVectorModule();
 }
 //------------------------------------------------------------------------
 TClientGame::~TClientGame()
@@ -86,9 +77,12 @@ TClientGame::~TClientGame()
 
 }
 //------------------------------------------------------------------------
-void TClientGame::Work(const char* sNameDLL, const char* arg)// начало работы
+/*
+  Для клиента кол-во потоков определяется кол-вом ядер CPU
+*/
+void TClientGame::Work(int variant_use, const char* sNameDLL, const char* arg)// начало работы
 {
-  if(Init(sNameDLL,arg)==false)
+  if(Init(variant_use,sNameDLL,arg)==false)
     return;
 
   flgNeedStop = false;
@@ -96,18 +90,16 @@ void TClientGame::Work(const char* sNameDLL, const char* arg)// начало работы
   //------------------------------------------------------
   while(flgNeedStop==false)
   {
-    // обработать события графического ядра - Key+Mouse, GUI, внутренние события GE.
-    if(HandleGraphicEngineEvent()==false)
+    // опросить модули движка для генерации событий
+    if(MakeEventFromModule()==false)
       break;
-    // опросить объекты на наличие событий
-    CollectEvent();
-
     // обработать события
-    if(HandleExternalEvent()==false)
-      break;
+    HandleEventByDeveloper();
     // расчеты, необходимые для рендера, в зависимости от времени предыдущего расчета
     PrepareForRender();
     Render();
+    if(mClientDeveloperTool->NeedExit())
+      break;
   }
   //------------------------------------------------------
   flgActive = false;
@@ -115,11 +107,10 @@ void TClientGame::Work(const char* sNameDLL, const char* arg)// начало работы
   Done();
 }
 //------------------------------------------------------------------------
-bool TClientGame::Init(const char* sNameDLL, const char* arg)
+bool TClientGame::Init(int variant_use, const char* sNameDLL, const char* arg)
 {
-  InitLog();
   // загрузка DLL
-  CHECK_RET(LoadDLL(sNameDLL))
+  CHECK_RET(LoadDLL(variant_use, sNameDLL))
   if(mGetClientDeveloperTool==NULL)// политика: нет DLL - нет движка.
     return false;
   
@@ -153,11 +144,8 @@ bool TClientGame::Init(const char* sNameDLL, const char* arg)
   TMakerManagerStateMachine makerMStateManager;
   mCClient.mMStateMachine = makerMStateManager.New();
   //------------------------------------------
-  //TMakerNET_Engine makerNET;
-  //mNET = makerNET.New();
-  //mNET->Init();// создали окно
-  //mNET->SetSelfID(STR_SRC_EVENT_GRAPHIC_ENGINE);
-  //mNET->SetDstObject(this);
+  mCClient.mNetClient = new nsMelissa::TClient;
+	SetupNetComponent(mCClient.mNetClient);
   //------------------------------------------
   TMakerManagerObjectCommon makerMOC;
   mCClient.mMOC = makerMOC.New();
@@ -173,15 +161,19 @@ bool TClientGame::Init(const char* sNameDLL, const char* arg)
   mCClient.mGraphicEngine->SetGUI(mCClient.mGUI);
   //------------------------------------------
   //------------------------------------------
+  // запустить потоки, в которых будут работать модули
+  StartThreadModule();
+  //------------------------------------------
   mClientDeveloperTool->SetInitLogFunc(::GetLogger);
   mClientDeveloperTool->Init(&mCClient,arg);
+
   return true;
 }
 //------------------------------------------------------------------------
 void TClientGame::Done()
 {
   mClientDeveloperTool->Done();// освободить ресурсы DevTool
-
+  StopThreadModule();
   // а теперь модули
   TMakerManagerStateMachine makerMStateManager;
   makerMStateManager.Delete(mCClient.mMStateMachine);
@@ -200,6 +192,9 @@ void TClientGame::Done()
   makerPE.Delete(mCClient.mPhysicEngine);
   mCClient.mPhysicEngine = NULL;
 
+  delete mCClient.mNetClient;
+  mCClient.mNetClient = NULL;
+
   TMakerManagerObjectCommon makerMOC;
   makerMOC.Delete(mCClient.mMOC);
   mCClient.mMOC = NULL;
@@ -209,21 +204,16 @@ void TClientGame::Done()
   mCClient.mMTime = NULL;
 }
 //------------------------------------------------------------------------
-bool TClientGame::HandleExternalEvent()
+void TClientGame::HandleEventByDeveloper()
 {
   TEvent* pEvent = GetEvent();
   while(pEvent)
   {
     // обработка события
-    if(HandleEvent(pEvent)==false)
-    {
-      delete pEvent;
-      return false;
-    }
+    HandleEvent(pEvent);
     delete pEvent;
     pEvent = GetEvent();
   }
-  return true;
 }
 //------------------------------------------------------------------------
 void TClientGame::PrepareForRender()
@@ -241,22 +231,96 @@ bool TClientGame::HandleGraphicEngineEvent()
   return mCClient.mGraphicEngine->HandleInternalEvent();
 }
 //------------------------------------------------------------------------
+bool TClientGame::HandleNetEngineEvent()
+{
+  mCClient.mNetClient->Work();
+  return true;
+}
+//------------------------------------------------------------------------
 void TClientGame::CollectEvent()
 {
-  // опросить интерфейсы, у которых нет своего потока
+  // опросить интерфейсы, которые не наследуются от TSrcEvent
 }
 //------------------------------------------------------------------------
-bool TClientGame::HandleEvent(TEvent* pEvent)
+void TClientGame::HandleEvent(TEvent* pEvent)
 {
-  return mClientDeveloperTool->HandleEvent(pEvent);
+  mClientDeveloperTool->HandleEvent(pEvent);
 }
 //------------------------------------------------------------------------
-void TClientGame::InitLog()
+bool TClientGame::MakeEventFromModule()
 {
-  GetLogger()->Done();
-  GetLogger()->Register("GE");
-  GetLogger()->Register("PE");
-  GetLogger()->Register("MOC");
-  GetLogger()->Register("Form");
+  int cnt = mMainThreadVecModule.size();
+  for( int i = 0 ; i < cnt ; i++ )
+  {
+    if(mMainThreadVecModule[i])
+      CHECK_RET((this->*mMainThreadVecModule[i])())
+  }
+  // опросить объекты на наличие событий
+  CollectEvent();
+  return true;
+}
+//------------------------------------------------------------------------
+void TClientGame::MakeVectorModule()
+{
+  int countCore = GetCountCoreCPU();
+  // обработать события графического ядра - Key+Mouse, GUI, внутренние события GE.
+  mMainThreadVecModule.push_back(&TClientGame::HandleGraphicEngineEvent);
+  // сетевой движок
+  if(countCore==1)
+    mMainThreadVecModule.push_back(&TClientGame::HandleNetEngineEvent);
+  else
+  {
+    TDescThread dt;
+    dt.pClientGame = this;
+    dt.pFunc       = &TClientGame::HandleNetEngineEvent;
+    dt.sleep_ms    = eSleepNE;
+    mOtherThreadVecModule.push_back(dt);
+  }
+  // физика
+  // звук
+}
+//------------------------------------------------------------------------
+void* ThreadModule(void* p)
+{
+  TDescThread* pDesc = (TDescThread*)p;
+  pDesc->Work();
+  return NULL;
+}
+//------------------------------------------------------------------------
+void TClientGame::StartThreadModule()
+{
+  int cnt = mOtherThreadVecModule.size();
+  for( int i = 0 ; i < cnt ; i++ )
+  {
+    GThread* thread = g_thread_create(ThreadModule, 
+                      (gpointer)&mOtherThreadVecModule[i],
+                      true, NULL);
+    while(mOtherThreadVecModule[i].flgActive==false)
+      ht_msleep(eWaitFeedBack);
+  }
+}
+//------------------------------------------------------------------------
+void TClientGame::StopThreadModule()
+{
+  int cnt = mOtherThreadVecModule.size();
+  for( int i = 0 ; i < cnt ; i++ )
+  {
+    mOtherThreadVecModule[i].flgNeedStop = true;
+    while(mOtherThreadVecModule[i].flgActive==true)
+      ht_msleep(eWaitFeedBack);
+  }
+}
+//------------------------------------------------------------------------
+void TDescThread::Work()
+{
+  flgNeedStop = false;
+  flgActive   = true;
+  while(flgNeedStop==false)
+  {
+    if((pClientGame->*pFunc)()==false)
+      break;
+    ht_msleep(sleep_ms);
+  }
+  flgActive = false;
 }
 //------------------------------------------------------------------------

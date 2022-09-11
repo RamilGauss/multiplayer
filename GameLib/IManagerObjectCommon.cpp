@@ -51,7 +51,8 @@ void IManagerObjectCommon::AddObject(IBaseObjectCommon* pObject)
   mVectorObject.push_back(pObject);
 }
 //--------------------------------------------------------
-IBaseObjectCommon* IManagerObjectCommon::Get(int index)// отдать объект на изменение свойств объекта
+// отдать объект на изменение свойств объекта
+IBaseObjectCommon* IManagerObjectCommon::Get(int index)
 {
   BL_ASSERT(mVectorObject.size() > (unsigned int)index);
   IBaseObjectCommon* pObject = mVectorObject.at(index);

@@ -41,7 +41,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 using namespace std;
 
 //----------------------------------------------------------------------------
-TNetTransport_TCP_UDP::TNetTransport_TCP_UDP(char* pPathLog) : INetTransport(pPathLog)
+TNetTransport_TCP_UDP::TNetTransport_TCP_UDP()
 {
   mNetMakerEvent = new TNetMakerEventWSA;
   mTCP = new TNetControlTCP;
@@ -67,7 +67,7 @@ void TNetTransport_TCP_UDP::Done()
 //----------------------------------------------------------------------------------
 bool TNetTransport_TCP_UDP::Open(unsigned short port, unsigned char numNetWork)
 {
-  bool res = false;
+  bool res = true;
   res &= mTCP->Open(port, numNetWork);
   res &= mUDP->Open(port, numNetWork);
   return res;
@@ -104,22 +104,11 @@ void TNetTransport_TCP_UDP::Register(TCallBackRegistrator::TCallBackFunc pFunc, 
 //----------------------------------------------------------------------------------
 void TNetTransport_TCP_UDP::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type)
 {
-  INetControl::Register(pFunc, type);
+  INetControl::Unregister(pFunc, type);
 }
 //----------------------------------------------------------------------------------
 bool TNetTransport_TCP_UDP::Connect(unsigned int ip, unsigned short port)
 {
   return mTCP->Connect(ip, port);
-}
-//----------------------------------------------------------------------------------
-void TNetTransport_TCP_UDP::InitLog(char* pPathLog)
-{  
-	if(pPathLog)
-	{		
-		char pPathLogEvent[400];
-		sprintf(pPathLogEvent,"%sEvent",pPathLog);
-
-  	mLogEvent.ReOpen(pPathLogEvent);
-	}
 }
 //----------------------------------------------------------------------------------

@@ -38,19 +38,34 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "classTools.h"
 #include <string>
+#include "DescEvent.h"
+#include "IMakerObjectCommon.h"
+#include "Logger.h"
 
 class IDeveloperTool
 {
   NO_COPY_OBJECT(IDeveloperTool)
+
+  bool flgExit;
+protected:
+	IMakerObjectCommon* mMakerObjectCommon;
+
+	typedef TLogger* (*TInitLogFunc)(); 
+	TInitLogFunc mFuncGetLogger;
+
 public:
 
-  IDeveloperTool(){};
+  IDeveloperTool(){flgExit=false;}
   virtual ~IDeveloperTool(){};
-
-  virtual void Done(){};
-
+  virtual IMakerObjectCommon* GetMakerObjectCommon() = 0;
   virtual std::string GetPathXMLFile() = 0;
 
+  virtual void Done() = 0;
+  virtual void Event(nsEvent::TEvent* pEvent) = 0;
+
+	void Exit(){flgExit = true;}// закончить работу с движком
+	bool NeedExit(){return flgExit;}
+  void SetInitLogFunc(TInitLogFunc pFunc){mFuncGetLogger=pFunc;}
 };
 
 #endif

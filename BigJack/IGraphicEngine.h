@@ -42,6 +42,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "SrcEvent.h"
 #include <list>
 
+#define STR_NAME_GE "GE"
+
 class IBaseObjectGE;
 class IGUI_Core;
 class ICamera;

@@ -51,6 +51,8 @@ public:
 	void SetData(char* p, int size);// установит размер и скопирует внутрь
 	// для частичного копирования используй memcpy
 
+  void AddData(char*p, int size);
+
 	char* GetPtr();
 	int GetSize();
 

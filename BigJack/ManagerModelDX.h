@@ -37,9 +37,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef ManagerModelH
 #define ManagerModelH
 
-#include "hArray.h"
-#include "DXUT.h"
 #include <map>
+
+#include "DXUT.h"
 
 class TModelDX;
 class TManagerResourceDX;

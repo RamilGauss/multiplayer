@@ -169,6 +169,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IConnectClient.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\IGame.cpp"
 				>
 			</File>
@@ -177,7 +181,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IManagerConnectClient.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\IManagerObjectCommon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IManagerScene.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IServerDeveloperTool.cpp"
 				>
 			</File>
 			<File
@@ -185,7 +201,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MakerManagerConnectClient.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MakerManagerObjectCommon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerManagerScene.cpp"
 				>
 			</File>
 			<File
@@ -197,7 +221,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ManagerConnectClient.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerObjectCommon.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerScene.cpp"
 				>
 			</File>
 			<File
@@ -206,6 +238,10 @@
 			</File>
 			<File
 				RelativePath=".\ManagerTime.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ServerGame.cpp"
 				>
 			</File>
 			<File
@@ -239,6 +275,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IConnectClient.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IDeveloperTool.h"
 				>
 			</File>
@@ -251,7 +291,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IManagerConnectClient.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IManagerObjectCommon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IManagerScene.h"
 				>
 			</File>
 			<File
@@ -263,6 +311,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IScene.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IServerDeveloperTool.h"
 				>
 			</File>
@@ -271,7 +323,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MakerManagerConnectClient.h"
+				>
+			</File>
+			<File
 				RelativePath=".\MakerManagerObjectCommon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerManagerScene.h"
 				>
 			</File>
 			<File
@@ -283,7 +343,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ManagerConnectClient.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerObjectCommon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerScene.h"
 				>
 			</File>
 			<File
@@ -296,6 +364,10 @@
 			</File>
 			<File
 				RelativePath=".\NameSrcEventID.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ServerGame.h"
 				>
 			</File>
 			<File

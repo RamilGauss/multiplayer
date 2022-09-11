@@ -35,8 +35,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "BaseServer.h"
 
-namespace nsMelissa
-{
+using namespace nsMelissa;
+
 
 TBaseServer::TBaseServer()
 {
@@ -64,4 +64,4 @@ bool TBaseServer::GetDescDown(int index, void* pDesc, int& sizeDesc)
 }
 //-------------------------------------------------------------------------
 
-}
+

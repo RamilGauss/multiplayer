@@ -38,17 +38,17 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define NetMakerEventWSAH
 
 #include <list>
+#include <map>
+#include <vector>
 
 #include "glib/gthread.h"
 
 #include "INetMakerEvent.h"
-#include "ContainerRise.h"
 
 class INetControl;
 
 class TNetMakerEventWSA : public INetMakerEvent
 {
-
   volatile bool flgActive;
   volatile bool flgNeedStop;
 
@@ -56,11 +56,27 @@ class TNetMakerEventWSA : public INetMakerEvent
 
   enum
   {
-    eTimeRefreshEngine = 60,  // частота обновления движка, мс
-    eWaitFeedBack    = 20,// ждать пока активизируется двигатель, мс
+    eTimeRefreshEngine    = 100, // частота обновления движка, мс
+    eWaitFeedBack         = 50, // ждать пока активизируется двигатель, мс
+    eDefReserveSizeVector = 100,
   };
 
-  TContainerRise mArrEvent;
+  typedef std::map<int,int> TMapIntInt;
+  typedef TMapIntInt::iterator TMapII_It;
+
+  TMapIntInt mMapSockEvent;
+
+  struct TDescSocket
+  {
+    int sock;
+    INetControl* pControl;
+  };
+
+  typedef std::vector<int>         TVecInt;
+  typedef std::vector<TDescSocket> TVecDS;
+
+  TVecInt mVecEvent;
+  TVecDS  mVecSocket;
 
 public:
 	TNetMakerEventWSA();
@@ -75,7 +91,6 @@ public:
   virtual void Remove(int sock);
 
   virtual void SetTypeEvent( int sock, std::list<INetControl::eTypeEvent>& lEvent);
-
 protected:
 
   friend void* ThreadMakerEventWSA(void*p);
@@ -84,6 +99,8 @@ protected:
   void Work();
   void WSA_Event2Control( int event, std::list<INetControl::eTypeEvent>& lEvent);
   void Control2WSA_Event( std::list<INetControl::eTypeEvent>& lEvent, int& event );
+
+  void Done();
 };
 
 

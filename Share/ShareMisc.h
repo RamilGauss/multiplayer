@@ -36,6 +36,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef ShareMiscH
 #define ShareMiscH
 
+#include "TypeDef.h"
 
 #define CHECK_RET(f) \
   if(f==false) \
@@ -60,11 +61,26 @@ struct TIP_Port
     ip   = _ip;
     port = _port;
   }
+  bool operator < (const TIP_Port& right) const
+  {
+    if(ip < right.ip)
+      return true;
+    else
+      if(ip == right.ip)
+        if(port < right.port)
+          return true;
+    return false;
+  }
 };
 
 #if defined( WIN32 )
 #pragma pack(pop)
 #endif
+
+
+
+extern int SHARE_EI GetCountCoreCPU();
+
 //--------------------------------------------------
 
 #endif

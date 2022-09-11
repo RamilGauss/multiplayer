@@ -39,33 +39,44 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "IClientDeveloperTool.h"
 #include "IServerDeveloperTool.h"
 #include "LoaderDLL.h"
+#include "WrapperMakerTransport.h"
+#include "DstEvent.h"
+#include "DeveloperTool_DLL.h"
 
-class IGame
+#define STR_GAME "GameEngine"
+
+class IGame : public TDstEvent
 {
   ILoaderDLL* mLoaderDLL;
 
-  typedef IClientDeveloperTool* (*GetClientDeveloperTool)();
-  typedef IServerDeveloperTool* (*GetServerDeveloperTool)();
-  typedef void (*FreeDeveloperTool)(IDeveloperTool*);
-
-  FreeDeveloperTool      mFreeDeveloperTool;
+  FuncFreeDeveloperTool      mFreeDeveloperTool;
 protected:  
-  GetClientDeveloperTool mGetClientDeveloperTool;
-  GetServerDeveloperTool mGetServerDeveloperTool;
+  FuncGetClientDeveloperTool mGetClientDeveloperTool;
+  FuncGetServerDeveloperTool mGetServerDeveloperTool;
+
+	volatile bool flgNeedStop;
+	volatile bool flgActive;
+	TWrapperMakerTransport mWrapperMakerTransport;
+
 protected:  
   IClientDeveloperTool* mClientDeveloperTool;
   IServerDeveloperTool* mServerDeveloperTool;
-
+  
+  enum{eWaitFeedBack = 30, // мс
+  };
 public:
 
   IGame();
   virtual ~IGame();
 
-  virtual void Work(const char* sNameDLL, const char* arg = NULL) = 0;// начало работы
+  virtual void Work(int variant_use, const char* sNameDLL, const char* arg = NULL) = 0;// начало работы
 
-  bool LoadDLL(const char* sNameDLL);
-
-  
+  void Stop();
+  bool LoadDLL(int variant_use, const char* sNameDLL);
+protected:
+  void Init();
+  void InitLog();
+	void SetupNetComponent(nsMelissa::TBase* pBase);
 };
 
 #endif

@@ -73,8 +73,8 @@ void TControlLight::Done()
 //----------------------------------------------------------------------------------
 void TControlLight::Init()
 {
-  pGE  = IClientDeveloperTool::GetSingleton()->GetComponent()->mGraphicEngine;
-  pMOC = IClientDeveloperTool::GetSingleton()->GetComponent()->mMOC;
+  pGE  = IClientDeveloperTool::Singleton()->GetComponent()->mGraphicEngine;
+  pMOC = IClientDeveloperTool::Singleton()->GetComponent()->mMOC;
   // загрузка объектов
   int cnt = GetCountAllLight(); 
   for(int i = 0 ; i < cnt ; i++ )

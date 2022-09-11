@@ -81,3 +81,8 @@ void INetControl::NotifyRecv(char* p, int size)
 	mCallBackRecv.Notify(p, size);
 }
 //------------------------------------------------------------------------------
+void INetControl::NotifyDisconnect(char* p, int size)
+{
+	mCallBackDisconnect.Notify(p, size);
+}
+//------------------------------------------------------------------------------

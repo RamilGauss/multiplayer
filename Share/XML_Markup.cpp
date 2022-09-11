@@ -97,11 +97,35 @@ bool TXML_Markup::LeaveSection()
   return false;
 }
 //------------------------------------------------------------------
+bool TXML_Markup::AddSectionAndEnter(const char* name)
+{
+  mMarkup.SavePos();
+  bool res = mMarkup.AddElem(name, " ");
+  //вызов mMarkup.RestorePos(); не делать что бы остаться тут же
+  return res;
+}
+//------------------------------------------------------------------
+bool TXML_Markup::AddSectionAndEnter(const char *name, int numAttr, TAttrInfo *pAttribs)
+{
+  mMarkup.SavePos();
+
+  bool res = mMarkup.AddElem(name, " ");
+  for(int iAttr = 0; iAttr < numAttr; iAttr++)
+  {
+    res &= mMarkup.SetAttrib(pAttribs[iAttr].Name.data(), pAttribs[iAttr].Value.data());
+    if (!res) 
+      break;
+  }
+
+  //вызов mMarkup.RestorePos(); не делать что бы остаться тут же
+  return res;
+}
+//------------------------------------------------------------------
 // изменение кол-ва
 bool TXML_Markup::AddSection(const char* name)
 {
   mMarkup.SavePos();
-    bool res = mMarkup.AddElem(name, " ");
+  bool res = mMarkup.AddElem(name, " ");
   mMarkup.RestorePos();
   return res;
 }

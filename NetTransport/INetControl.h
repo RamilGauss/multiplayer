@@ -55,6 +55,10 @@ public:
     eWrite,     // теперь можно писать
     eClose,     // закрытие соединения
   } eTypeEvent;
+  enum{
+    eSystemSizeForRecvBuffer_Socket = 3000000, // байт
+    eSystemSizeForSendBuffer_Socket = 3000000, // байт
+  };
 
   INetControl(){};
   virtual ~INetControl(){};
@@ -76,6 +80,7 @@ protected:
   INetMakerEvent* GetMakerEvent();
 
 	void NotifyRecv(char* p, int size);
+	void NotifyDisconnect(char* p, int size);
 };
 
 

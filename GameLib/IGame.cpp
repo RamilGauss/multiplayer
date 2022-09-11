@@ -33,12 +33,26 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "IGame.h"
 #include <stddef.h>
-#include "DeveloperTool_DLL.h"
+#include "glib\gthread.h"
+
+#include "IGame.h"
+
+#include "IPhysicEngine.h"
+#include "IManagerObjectCommon.h"
+#include "IGraphicEngine.h"
+#include "INetTransport.h"
+
+//#include "DeveloperTool_DLL.h"
 #include "MakerLoaderDLL.h"
 #include "BL_Debug.h"
 #include "ShareMisc.h"
+#include "ErrorReg.h"
+#include "HiTimer.h"
+#include "NetSystem.h"
+#include "Logger.h"
+#include "Base.h"
+#include "NameSrcEventID.h"
 
 
 IGame::IGame()
@@ -52,6 +66,9 @@ IGame::IGame()
 
   mClientDeveloperTool = NULL;
   mServerDeveloperTool = NULL;
+
+  Init();
+  InitLog();
 }
 //----------------------------------------------------------------------
 IGame::~IGame()
@@ -68,31 +85,83 @@ IGame::~IGame()
   maker.Delete(mLoaderDLL);
 }
 //----------------------------------------------------------------------
-bool IGame::LoadDLL(const char* sNameDLL)
+bool IGame::LoadDLL(int variant_use, const char* sNameDLL)
 {
   if(mClientDeveloperTool!=NULL||
      mServerDeveloperTool!=NULL)
   {
-    BL_FIX_BUG();// пока так, потом нужно ввести логирование
+    GetLogger()->Get(STR_GAME)->WriteF_time("LoadDLL() warning, object was loaded.\n");
+    BL_FIX_BUG();
     return true;
   }
-
-  CHECK_RET(mLoaderDLL->Init(sNameDLL))
- 
-  mFreeDeveloperTool = (FreeDeveloperTool)mLoaderDLL->Get(StrFreeDeveloperTool);//GetProcAddress(hModule, StrFreeDeveloperTool);
-  if(mFreeDeveloperTool==NULL)
+  if(mLoaderDLL->Init(sNameDLL)==false)
   {
+    GetLogger()->Get(STR_GAME)->WriteF_time("LoadDLL() FAIL init.\n");
     BL_FIX_BUG();
     return false;
   }
-  mGetClientDeveloperTool = (GetClientDeveloperTool)mLoaderDLL->Get(StrGetClientDeveloperTool);//GetProcAddress(hModule, StrGetClientDeveloperTool);
-  mGetServerDeveloperTool = (GetServerDeveloperTool)mLoaderDLL->Get(StrGetServerDeveloperTool);//GetProcAddress(hModule, StrGetServerDeveloperTool);
+  mFreeDeveloperTool = (FuncFreeDeveloperTool)mLoaderDLL->Get(StrFreeDeveloperTool);
+  if(mFreeDeveloperTool==NULL)
+  {
+    GetLogger()->Get(STR_GAME)->WriteF_time("LoadDLL() FAIL load FuncFree.\n");
+    BL_FIX_BUG();
+    return false;
+  }
+  mGetClientDeveloperTool = (FuncGetClientDeveloperTool)mLoaderDLL->Get(StrGetClientDeveloperTool);
+  mGetServerDeveloperTool = (FuncGetServerDeveloperTool)mLoaderDLL->Get(StrGetServerDeveloperTool);
 
   if(mGetClientDeveloperTool)
-    mClientDeveloperTool = mGetClientDeveloperTool();
+    mClientDeveloperTool = mGetClientDeveloperTool(variant_use);
   if(mGetServerDeveloperTool)
-    mServerDeveloperTool = mGetServerDeveloperTool();
+    mServerDeveloperTool = mGetServerDeveloperTool(variant_use);
 
   return true;
 }
 //----------------------------------------------------------------------
+void IGame::Init()
+{
+  g_thread_init( NULL );
+  err_Init();
+  errSTR_Init();
+  errSTD_Init();
+  errSDK_Init();
+  if(ht_Init()==false)
+  {
+    GetLogger()->Get(STR_GAME)->WriteF_time("Error ht_Init().\n");
+    BL_FIX_BUG();
+  }
+  if(ns_Init()==false)
+  {
+    GetLogger()->Get(STR_GAME)->WriteF_time("Error ns_Init().\n");
+    BL_FIX_BUG();
+  }
+}
+//----------------------------------------------------------------------
+void IGame::InitLog()
+{
+	GetLogger()->Done();
+	GetLogger()->Register(STR_GAME);
+
+	GetLogger()->Register(STR_NAME_GE);
+	GetLogger()->Register(STR_NAME_NET_TRANSPORT);
+	GetLogger()->Register(STR_NAME_MELISSA);
+	GetLogger()->Register(STR_NAME_ROBERT);
+	GetLogger()->Register(STR_NAME_MOC);
+}
+//------------------------------------------------------------------------
+void IGame::SetupNetComponent(nsMelissa::TBase* pBase)
+{
+	pBase->SetSelfID(ID_SRC_EVENT_NETWORK_ENGINE);
+	pBase->SetDstObject(this);
+	// отдать создателя транспорта
+	pBase->Init(&mWrapperMakerTransport);
+	// далее разработчик обязан настроить сетевой интерфейс (назначить порты и подсистему, авторизоваться)
+}
+//------------------------------------------------------------------------
+void IGame::Stop()
+{
+  flgNeedStop = true;
+  while(flgActive)
+    ht_msleep(eWaitFeedBack);
+}
+//------------------------------------------------------------------------

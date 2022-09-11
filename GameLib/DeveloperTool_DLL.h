@@ -50,8 +50,12 @@ class IServerDeveloperTool;
 #define StrGetServerDeveloperTool "GetServerDeveloperTool"
 #define StrFreeDeveloperTool      "FreeDeveloperTool"
 
-DllExport IClientDeveloperTool* GetClientDeveloperTool();
-DllExport IServerDeveloperTool* GetServerDeveloperTool();
+typedef IClientDeveloperTool* (*FuncGetClientDeveloperTool)(int);
+typedef IServerDeveloperTool* (*FuncGetServerDeveloperTool)(int);
+typedef void (*FuncFreeDeveloperTool)(IDeveloperTool*);
+
+DllExport IClientDeveloperTool* GetClientDeveloperTool( int variant_use);
+DllExport IServerDeveloperTool* GetServerDeveloperTool( int variant_use);
 
 DllExport void FreeDeveloperTool(IDeveloperTool* p);
 

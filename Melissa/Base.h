@@ -38,6 +38,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "SrcEvent.h"
 #include "TypeDef.h"
+#include "IMakerTransport.h"
+
+#define STR_NAME_MELISSA "Melissa"
 
 namespace nsMelissa
 {
@@ -45,8 +48,9 @@ namespace nsMelissa
 
   class MELISSA_EI TBase : public TSrcEvent
   {
+    IMakerTransport* mMakerTransport;
+    INetTransport*   mTransport;
   public:
-
     typedef enum
     {
       eAccept,
@@ -74,12 +78,14 @@ namespace nsMelissa
     TBase();
     virtual ~TBase();
 
-    virtual void Init(unsigned char subNet, unsigned short port);
+    virtual void Init(IMakerTransport* pMakerTransport);
+    virtual bool Open(unsigned short port, unsigned char subNet = 0);
     virtual void DisconnectUp();
     virtual void SendUp(void* data, int size, bool check = true);
     virtual void Work();
     virtual bool IsConnectUp();
     virtual bool IsConnect(ISession* pSession);
+		virtual void SetLoad(int procent);
 
 	protected:
 

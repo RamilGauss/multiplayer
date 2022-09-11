@@ -33,10 +33,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "ManagerResourceDX.h"
 #include <atlconv.h>
-#include "Logger.h"
 #include <algorithm>
+
+#include "ManagerResourceDX.h"
+#include "Logger.h"
+#include "IGraphicEngine.h"
 
 using namespace std;
 
@@ -121,7 +123,7 @@ TManagerResourceDX::TypeResource TManagerResourceDX::DefType(const wchar_t* sPat
 
   USES_CONVERSION;
   
-  GetLogger()->Get("GE")->WriteF_time("Загрузчик ресурсов. Неопределенное расширение. %s\n",W2A(sPath));
+  GetLogger()->Get(STR_NAME_GE)->WriteF_time("Загрузчик ресурсов. Неопределенное расширение. %s\n",W2A(sPath));
   return eUndef;
 }
 //--------------------------------------------------------------------

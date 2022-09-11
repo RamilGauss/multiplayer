@@ -46,6 +46,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "file_operation.h"
 #include "StorePathResources.h"
 #include "MapXML_Field.h"
+#include "IGraphicEngine.h"
 
 using namespace std;
 
@@ -63,7 +64,7 @@ TManagerModelDX::~TManagerModelDX()
 //--------------------------------------------------------------------------------------
 TModelDX* TManagerModelDX::Load(unsigned int id)
 {
-  GetLogger()->Get("GE")->WriteF_time("Начало загрузки модели ID=%u\n",id);
+  GetLogger()->Get(STR_NAME_GE)->WriteF_time("Начало загрузки модели ID=%u\n",id);
 
   string sPath = mMapPathModel[id];
   TModelDX* pModel = NULL;
@@ -74,7 +75,7 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
     USES_CONVERSION;
     if(pModel->Init(mD3dDevice,A2W(sPath.data()))==false)
     {
-      GetLogger()->Get("GE")->WriteF_time("Не удалось загрузить модель sPath=%s, id=%u\n",sPath.data(),id);
+      GetLogger()->Get(STR_NAME_GE)->WriteF_time("Не удалось загрузить модель sPath=%s, id=%u\n",sPath.data(),id);
       delete pModel;
       return NULL;
     }
@@ -84,11 +85,11 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
   }
   else
   {
-    GetLogger()->Get("GE")->WriteF_time("Не удалось найти модель sPath=%s, id=%u\n",sPath.data(),id);
+    GetLogger()->Get(STR_NAME_GE)->WriteF_time("Не удалось найти модель sPath=%s, id=%u\n",sPath.data(),id);
     BL_FIX_BUG();
   }
   
-  GetLogger()->Get("GE")->WriteF_time("Конец загрузки модели ID=%u\n",id);
+  GetLogger()->Get(STR_NAME_GE)->WriteF_time("Конец загрузки модели ID=%u\n",id);
   return pModel;
 }
 //--------------------------------------------------------------------------------------
@@ -140,14 +141,14 @@ bool TManagerModelDX::LoadListPath()
   FindAbsPath((char*)GetStorePathResources()->GetSecond("model"),sAbsPath,sizeof(sAbsPath));
   if(loader.Load(sAbsPath,&mMapPathModel)==false)
   {
-    GetLogger()->Get("GE")->WriteF_time("Не удалось загрузить список моделей.\n");
+    GetLogger()->Get(STR_NAME_GE)->WriteF_time("Не удалось загрузить список моделей.\n");
     BL_FIX_BUG();
     return false;
   }
   
   PrepareForDX();
 
-  GetLogger()->Get("GE")->WriteF_time("Список моделей загружен успешно.\n");
+  GetLogger()->Get(STR_NAME_GE)->WriteF_time("Список моделей загружен успешно.\n");
   return true;
 }
 //--------------------------------------------------------------------------------------

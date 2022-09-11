@@ -65,6 +65,18 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "NetDeviceUDP.h"
 #include "BL_Debug.h"
+#include "HiTimer.h"
+#include "Logger.h"
+#include "INetTransport.h"
+
+#ifdef WIN32
+  #define GET_ERROR WSAGetLastError()
+#else
+  #define GET_ERROR errno
+#endif
+
+#define PRINTF(X,F) GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF_time(X,F)
+#define PRINTF_0(X) PRINTF(X,0)
 
 
 TNetDeviceUDP::TNetDeviceUDP()
@@ -97,15 +109,23 @@ int TNetDeviceUDP::Open( bool flgListen, unsigned short port, unsigned char numN
     localAddr.sin_port = ns_htons( port );
     localAddr.sin_addr.s_addr = ip;
 
-    if(! bind( sock, (sockaddr*)&localAddr, sizeof(localAddr) ) == 0 )
+    if(!bind( sock, (sockaddr*)&localAddr, sizeof(localAddr) ) == 0 )
+    {
       Close(sock);
+      PRINTF("Open UDP bind FAIL %u.\n",GET_ERROR);
+    }
   } 
+  else
+  {
+    PRINTF("Open UDP socket FAIL %u.\n",GET_ERROR);
+  }
+
   return sock;
 }
 //--------------------------------------------------------------------------------
 bool TNetDeviceUDP::Connect(int sock_local, unsigned int ip, unsigned short port)
 {
-  BL_MessageBug("Try connect on UDP!");
+  PRINTF_0("Try connect on UDP.\n");
   return false;
 }
 //--------------------------------------------------------------------------------
@@ -134,7 +154,10 @@ int TNetDeviceUDP::Read(int sock, char* buffer, int len,
   unsigned long szMsg;
 l_checkQueue:
   if( ioctl( sock, FIONREAD, &szMsg ) == -1 )
+  {
+    PRINTF("Read UDP FAIL %u.\n", GET_ERROR);
     return RR_ERROR;
+  }
 
   if( !szMsg )
   {
@@ -156,6 +179,8 @@ l_repeatRead:
     {
       if( errno == EINTR ) 
         goto l_repeatRead;
+
+      PRINTF("Read UDP FAIL %u.\n", GET_ERROR);
       return RR_ERROR;
     }
     else goto l_checkQueue;
@@ -171,7 +196,10 @@ l_repeatRead:
   ip   = SenderAddr.sin_addr.s_addr;
   port = ns_ntohs(SenderAddr.sin_port);
   if( res == -1 ) // == 
+  {
+    PRINTF("Read UDP FAIL %u.\n", GET_ERROR);
     return RR_ERROR;
+  }
 
   return res;
 }
@@ -179,20 +207,28 @@ l_repeatRead:
 bool TNetDeviceUDP::Send(int sock, char* buffer, int  size, unsigned int ip, unsigned short port)
 {
   if( !size ) return true;
-  // запись в закрытое устройство невозможна
   sockaddr_in remoteAddr;
   remoteAddr.sin_family = AF_INET;
   remoteAddr.sin_port = ns_htons( port );
   remoteAddr.sin_addr.s_addr = ip;
 
-  int res = sendto( sock, (const char*)buffer, size, 0, (struct sockaddr*)&remoteAddr, sizeof(remoteAddr) );
-
-  return (res == (int)size);
+l_repeat:
+  int resSend = sendto( sock, (const char*)buffer, size, 0, (struct sockaddr*)&remoteAddr, sizeof(remoteAddr) );
+  if(resSend==SOCKET_ERROR)
+  {
+    DWORD err = WSAGetLastError();
+    if(err==WSAEWOULDBLOCK)
+    {
+      ht_msleep(eWaitCanWrite);// ждать когда канал даст возможность писать в него
+      goto l_repeat;
+    }
+  }
+  return (resSend == (int)size);
 }
 //--------------------------------------------------------------------------------
 int TNetDeviceUDP::Accept(int sock_local, unsigned int& ip, unsigned short& port)
 {
-  BL_MessageBug("Try accept on UDP!");
+  PRINTF_0("Try accept on UDP FAIL %u.\n");
   return false;
 }
 //--------------------------------------------------------------------------------

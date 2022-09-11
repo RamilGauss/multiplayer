@@ -36,8 +36,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef MELISSA_MASTER_H
 #define MELISSA_MASTER_H
 
-#include "ActiveServer.h"
 #include <list>
+#include "ActiveServer.h"
 
 namespace nsMelissa
 {
@@ -55,8 +55,8 @@ namespace nsMelissa
     virtual void SetResultLogin(bool res, ISession* pSession, 
                                 unsigned int id_client, 
                                 void* resForClient, int sizeResClient);
-    virtual ISession* GetSlaveByClient(unsigned int id_client);
     virtual ISession* GetSlaveByGroup(unsigned int id_group);
+    virtual void SendToClient(unsigned int id_client, void* data, int size, bool check = true);
 
 	protected:
 

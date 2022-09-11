@@ -34,23 +34,37 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 #include "Base.h"
+#include "Logger.h"
 
-namespace nsMelissa
-{
+using namespace nsMelissa;
 
 TBase::TBase()
 {
-
+  mMakerTransport = NULL;
+  mTransport      = NULL;
 }
 //-------------------------------------------------------------------------
 TBase::~TBase()
 {
-
+  mMakerTransport->Delete(mTransport);
+  mTransport = NULL;
+  mMakerTransport = NULL;
 }
 //-------------------------------------------------------------------------
-void TBase::Init(unsigned char subNet, unsigned short port)
+void TBase::Init(IMakerTransport* pMakerTransport)
 {
+  if(pMakerTransport==NULL)
+  {
+    GetLogger()->Get(STR_NAME_MELISSA)->WriteF_time("TBase::Init() pMakerTransport=NULL.\n");
+  }
 
+  mMakerTransport = pMakerTransport;
+  mTransport      = mMakerTransport->New();
+}
+//-------------------------------------------------------------------------
+bool TBase::Open(unsigned short port, unsigned char subNet)
+{
+  return mTransport->Open(port,subNet);
 }
 //-------------------------------------------------------------------------
 void TBase::DisconnectUp()
@@ -78,5 +92,8 @@ bool TBase::IsConnect(ISession* pSession)
 	return true;
 }
 //-------------------------------------------------------------------------
-}
+void TBase::SetLoad(int procent)
+{
 
+}
+//-------------------------------------------------------------------------

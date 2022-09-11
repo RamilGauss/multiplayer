@@ -35,8 +35,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "Slave.h"
 
-namespace nsMelissa
-{
+using namespace nsMelissa;
+
 TSlave::TSlave()
 {
 
@@ -62,4 +62,3 @@ ISession* TSlave::GetSessionByClientKey(unsigned int key)
 	return NULL;
 }
 //-------------------------------------------------------------------------
-}

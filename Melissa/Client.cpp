@@ -35,8 +35,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "Client.h"
 
-namespace nsMelissa
-{
+using namespace nsMelissa;
+
 TClient::TClient()
 {
 
@@ -52,4 +52,4 @@ void TClient::Login(unsigned int ip, unsigned short port, void* data, int size)
 
 }
 //-------------------------------------------------------------------------
-}
+

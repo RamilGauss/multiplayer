@@ -35,8 +35,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "ActiveServer.h"
 
-namespace nsMelissa
-{
+using namespace nsMelissa;
+
 TActiveServer::TActiveServer()
 {
 
@@ -52,4 +52,4 @@ void TActiveServer::ConnectUp(unsigned int ip, unsigned short port)
 
 }
 //-------------------------------------------------------------------------
-}
+

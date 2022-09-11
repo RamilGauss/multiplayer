@@ -37,15 +37,57 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@mail
 #define IServerDeveloperToolH
 
 #include "IDeveloperTool.h"
+#include "Slave.h"
+#include "SuperServer.h"
+#include "Master.h"
 
+class IMakerObjectCommon;
+class IControlCamera;
+class IManagerStateMachine;
+class IGUI;
+class IManagerScene;
+class IGraphicEngine; // отрисовка сцены
+class IManagerObjectCommon;
+class IManagerConnectClient;
 
 class IServerDeveloperTool : public IDeveloperTool
 {
+public:
+	struct TComponentServer
+	{
+		union
+		{
+			nsMelissa::TSlave*       Slave;      // Melissa
+			nsMelissa::TMaster*      Master;     // Melissa
+			nsMelissa::TSuperServer* SuperServer;// Melissa
+			nsMelissa::TBase*        Base;
+		}mNet;
+		IManagerScene*             mManagerScene;  // только для Slave
+    IManagerConnectClient*     mManagerCClient;// клиенты, которые подсоединились
+		TComponentServer()
+		{
+			mNet.Base       = NULL; // Melissa
+			mManagerScene   = NULL; 
+      mManagerCClient = NULL;
+		}
+	};
+protected:
+	// компоненты
+	TComponentServer mComponent;
 
 public:
-  IServerDeveloperTool(){};
-  virtual ~IServerDeveloperTool(){};
+  IServerDeveloperTool();
+  virtual ~IServerDeveloperTool();
+  
+	virtual void Init(TComponentServer* pComponent, const char* arg = NULL) = 0;
+	// как часто происходит вызов Refresh(), временной интервал работы сервера
+  virtual int GetTimeRefreshMS() = 0;
+  // вызов не более одного раз в GetTimeRefreshMS
+	virtual void Refresh() = 0;
+	// доступ к компонентам
+	TComponentServer* GetComponent(){return &mComponent;}
 
+	static IServerDeveloperTool* Singleton();
 };
 
 #endif

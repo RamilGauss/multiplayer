@@ -39,6 +39,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "SrcEvent.h"
 #include <vector>
 
+#define STR_NAME_MOC "MOC"
+
 class IBaseObjectCommon;
 class IMakerObjectCommon;
 

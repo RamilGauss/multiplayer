@@ -37,6 +37,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "HiTimer.h"
 #include "Logger.h"
 #include "SaveOnHDD.h"
+#include "IGraphicEngine.h"
 
 using namespace std;
 
@@ -73,7 +74,7 @@ void* TManagerEffect::Load(const wchar_t* sPath)
 			int sizeError = ppBufferError->GetBufferSize();
 			if(sizeError)
 			{
-				GetLogger()->Get("GE")->Write(sError,sizeError);
+				GetLogger()->Get(STR_NAME_GE)->Write(sError,sizeError);
 			}
 
 			SAFE_RELEASE(ppBufferError);

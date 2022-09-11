@@ -207,6 +207,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CmdParam.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Container.cpp"
 				>
 			</File>
@@ -327,6 +331,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ShareMisc.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SortByAlphabetic.cpp"
 				>
 			</File>
@@ -390,6 +398,10 @@
 			</File>
 			<File
 				RelativePath=".\classTools.h"
+				>
+			</File>
+			<File
+				RelativePath=".\CmdParam.h"
 				>
 			</File>
 			<File

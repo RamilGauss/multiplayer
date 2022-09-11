@@ -176,11 +176,11 @@ bool TModelDX::Init(IDirect3DDevice9* pd3dDevice, LPCWSTR strAbsPath/*путь к фай
   Done();
   m_pd3dDevice = pd3dDevice;
   // загрузка данных примитивов, текстур и индексов.
-  GetLogger()->Get("GE")->WriteF_time("Загрузка Mesh, ID=%u\n",mID);
+  GetLogger()->Get(STR_NAME_GE)->WriteF_time("Загрузка Mesh, ID=%u\n",mID);
   if(Load(strAbsPath)==false) 
     return false;
 
-  GetLogger()->Get("GE")->WriteF_time("Конец загрузки Mesh, ID=%u\n",mID);
+  GetLogger()->Get(STR_NAME_GE)->WriteF_time("Конец загрузки Mesh, ID=%u\n",mID);
 
   int cnt = mVectorAllEffect.size();
   // структурировать данные
@@ -228,7 +228,7 @@ bool TModelDX::Load(LPCWSTR strFilenameData)
   if(pLoadModel->Load((wchar_t*)strFilenameData)==false)
   {
     USES_CONVERSION;
-    GetLogger()->Get("GE")->WriteF_time("Не удалось загрузить модель: %s.\n",W2A(strFilenameData));
+    GetLogger()->Get(STR_NAME_GE)->WriteF_time("Не удалось загрузить модель: %s.\n",W2A(strFilenameData));
     delete pLoadModel;
     return false;
   }
@@ -296,7 +296,7 @@ unsigned int TModelDX::GetIndexVisualGroupByName(char* sName, int num)
       iFound++;
     }
   }
-  GetLogger()->Get("GE")->WriteF_time("Не найден эффект модели имя %s номер %d\n",sName,num);
+  GetLogger()->Get(STR_NAME_GE)->WriteF_time("Не найден эффект модели имя %s номер %d\n",sName,num);
   return 0;
 }
 //----------------------------------------------------------------------------------------------------

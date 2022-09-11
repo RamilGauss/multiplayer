@@ -35,11 +35,18 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include <winsock2.h>
 
+#include <algorithm>
+
 #include "NetMakerEventWSA.h"
 #include "HiTimer.h"
 #include "INetControl.h"
-//#include <winsock.h>
+#include "BL_Debug.h"
+#include "Logger.h"
 
+#define PRINTF(X,F) GetLogger()->Get(STR_NAME_NET_TRANSPORT)->WriteF_time(X,F)
+#define PRINTF_0(X) PRINTF(X,0)
+
+#define GET_ERROR WSAGetLastError()
 
 using namespace std;
 
@@ -51,17 +58,65 @@ TNetMakerEventWSA::TNetMakerEventWSA()
 //-----------------------------------------------------------------
 TNetMakerEventWSA::~TNetMakerEventWSA()
 {
-
+  Done();
 }
 //-----------------------------------------------------------------
 void TNetMakerEventWSA::Add(int sock, INetControl* pControl)
 {
-  //ahEvents[0] = WSACreateEvent(); 
+  // подстраховка
+  TMapII_It fit = mMapSockEvent.find(sock);
+  if(fit!=mMapSockEvent.end()) 
+    return;
+  //-------------------------------------------------
+  int reserveSize = mVecEvent.size() ? mVecEvent.size()*2 : eDefReserveSizeVector;
+  int maxSize = mVecEvent.capacity();
+  if( maxSize < reserveSize )
+  {
+    mVecEvent.reserve(reserveSize);
+    mVecSocket.reserve(reserveSize);
+  }
+  //-------------------------------------------------
+  int event = (int)WSACreateEvent();
+  if((HANDLE)event==WSA_INVALID_EVENT)
+  {
+    PRINTF("WSA: create event FAIL %u.\n", GET_ERROR);
+    return;
+  }
+  //-------------------------------------------------
+  mMapSockEvent.insert(TMapII_It::value_type(sock, event));
+
+  TDescSocket ds;
+  ds.sock     = sock;
+  ds.pControl = pControl;
+  mVecSocket.push_back(ds);
+  mVecEvent.push_back(event);
 }
 //-----------------------------------------------------------------
 void TNetMakerEventWSA::Remove(int sock)
 {
-
+  // удалить из map
+  TMapII_It fit = mMapSockEvent.find(sock);
+  if(fit==mMapSockEvent.end()) 
+    return;
+  
+  TVecInt::iterator fit_event = find(mVecEvent.begin(), mVecEvent.end(), fit->second);
+  if(fit_event==mVecEvent.end())
+  {
+    PRINTF_0("Remove from Vec event. Not found event.\n");
+    //BL_FIX_BUG();
+    return;
+  }
+  int index = fit_event - mVecEvent.begin();
+  
+  BOOL resClose = WSACloseEvent((WSAEVENT)*fit_event);
+  if(resClose==FALSE)
+  {
+    PRINTF("Remove from Vec event. Close event FAIL %u.\n", GET_ERROR);
+    //BL_FIX_BUG();
+  }
+  mVecEvent.erase(fit_event);
+  mVecSocket.erase(mVecSocket.begin()+index);
+  mMapSockEvent.erase(fit);
 }
 //-----------------------------------------------------------------
 void* ThreadMakerEventWSA(void*p)
@@ -102,13 +157,30 @@ void TNetMakerEventWSA::Stop()
 //----------------------------------------------------------------------------------
 void TNetMakerEventWSA::Work()
 {
-  WSAEVENT ahEvents[1]; 
-  DWORD dwEvent = WSAWaitForMultipleEvents( 2, ahEvents, FALSE, eTimeRefreshEngine, FALSE); 
-  //if(SOCKET_ERROR == WSAEnumNetworkEvents(ahSocket[dwEvent], ahEvents[dwEvent], &NetworkEvents)) 
-
-  //WSAEVENT ahEvents[1]; 
-  //DWORD dwEvent; 
-  //WSANETWORKEVENTS NetworkEvents; 
+  WSAEVENT* pEvents = (WSAEVENT*)&mVecEvent[0]; 
+  int cEvents = mVecEvent.size();
+  DWORD dwEvent = WSAWaitForMultipleEvents( cEvents, pEvents, FALSE, eTimeRefreshEngine, FALSE); 
+  switch (dwEvent) 
+  { 
+    case WSA_WAIT_FAILED: 
+      PRINTF("Work() WSAWaitForMultipleEvents FAIL %u.\n", GET_ERROR);
+      break; 
+    case WAIT_IO_COMPLETION: 
+    case WSA_WAIT_TIMEOUT: 
+      break; 
+    default: 
+    {
+      dwEvent -= WSA_WAIT_EVENT_0; 
+      int sock = mVecSocket[dwEvent].sock;
+      WSANETWORKEVENTS NetworkEvents;
+      int res = WSAEnumNetworkEvents( sock, pEvents[dwEvent], &NetworkEvents);
+      // формируем список событий
+      list<INetControl::eTypeEvent> lEvent;
+      WSA_Event2Control( NetworkEvents.lNetworkEvents, lEvent);
+      // отдать на обработку
+      mVecSocket[dwEvent].pControl->Work(sock, lEvent);
+    }
+  }
 }
 //----------------------------------------------------------------------------------
 void TNetMakerEventWSA::WSA_Event2Control( int event, list<INetControl::eTypeEvent>& lEvent)
@@ -157,6 +229,32 @@ void TNetMakerEventWSA::Control2WSA_Event( list<INetControl::eTypeEvent>& lEvent
 //----------------------------------------------------------------------------------
 void TNetMakerEventWSA::SetTypeEvent( int sock, list<INetControl::eTypeEvent>& lEvent)
 {
-  //int rc = WSAEventSelect(ahSocket[0], ahEvents[0], FD_CONNECT  ); 
+  // найти по сокету соответствующее ему событие
+  TMapII_It fit = mMapSockEvent.find(sock);
+  if(fit==mMapSockEvent.end()) 
+  {
+    PRINTF_0("SetTypeEvent not found in mapSockEvent.\n");
+    return;
+  }
+  WSAEVENT Events = (WSAEVENT)fit->second;
+
+  // формируем маску событий
+  int event;
+  Control2WSA_Event(lEvent, event);
+
+  int rc = WSAEventSelect( sock, Events, event ); 
+  if(rc!=0)
+  {
+    PRINTF("SetTypeEvent WSAEventSelect FAIL %u.\n", GET_ERROR);
+  }
+}
+//----------------------------------------------------------------------------------
+void TNetMakerEventWSA::Done()
+{
+  while(mVecSocket.size())
+  {
+    int sock = mVecSocket.begin()->sock;
+    Remove(sock);
+  }
 }
 //----------------------------------------------------------------------------------

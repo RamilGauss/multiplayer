@@ -37,6 +37,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef INetTransportH
 #define INetTransportH
 
+#define STR_NAME_NET_TRANSPORT "NT"
+
 #include "CallBackRegistrator.h"
 #include "TypeDef.h"
 #include "ShareMisc.h"
@@ -64,9 +66,8 @@ public:
 		eTypeRecv type;
   };
 
-  INetTransport(char* pPathLog = NULL);
+  INetTransport();
   virtual ~INetTransport();
-	virtual void InitLog(char* pPathLog) = 0;
   virtual bool Open(unsigned short port, unsigned char numNetWork = 0) = 0;
 
   // в качестве передаваемых данных выступает объект, который

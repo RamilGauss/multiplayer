@@ -35,8 +35,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "SuperServer.h"
 
-namespace nsMelissa
-{
+using namespace nsMelissa;
+
+
 TSuperServer::TSuperServer()
 {
 
@@ -52,5 +53,4 @@ void TSuperServer::SendByClientKey(std::list<unsigned int>& l, void* data, int s
 
 }
 //-------------------------------------------------------------------------
-}
 

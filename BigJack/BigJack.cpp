@@ -220,7 +220,7 @@ void TBigJack::AddObject(IBaseObjectGE* pObject)
     }
     else
     {
-      GetLogger()->Get("GE")->WriteF_time("Повторная инициализация объекта сцены, PTR_OBJECT=0x%X\n",pObject);
+      GetLogger()->Get(STR_NAME_GE)->WriteF_time("Повторная инициализация объекта сцены, PTR_OBJECT=0x%X\n",pObject);
       BL_FIX_BUG();
     }
   }
@@ -453,7 +453,7 @@ void TBigJack::Init()
   HRESULT hr = mDXUT->Init();
   if(hr!=S_OK)
   {
-    GetLogger()->Get("GE")->WriteF_time("Init fail. hr=0x%X\n",hr);
+    GetLogger()->Get(STR_NAME_GE)->WriteF_time("Init fail. hr=0x%X\n",hr);
   }
   SetIsCreateWindow(true);
   if(mGUI)
@@ -577,7 +577,6 @@ bool TBigJack::HandleInternalEvent()
   while( WM_QUIT != msg.message )
   {
     bGotMsg = ( PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) != 0 );
-
     if( bGotMsg )
     {
       if(0 == TranslateAccelerator( hWnd, NULL, &msg ) )

@@ -35,8 +35,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "Master.h"
 
-namespace nsMelissa
-{
+using namespace nsMelissa;
+
 
 TMaster::TMaster()
 {
@@ -75,15 +75,13 @@ void TMaster::SetResultLogin(bool res, ISession* pSession,
 
 }
 //-------------------------------------------------------------------------
-ISession* TMaster::GetSlaveByClient(unsigned int id_client)
-{
-	return NULL;
-}
-//-------------------------------------------------------------------------
 ISession* TMaster::GetSlaveByGroup(unsigned int id_group)
 {
 	return NULL;
 }
 //-------------------------------------------------------------------------
-}
+void TMaster::SendToClient(unsigned int id_client, void* data, int size, bool check )
+{
 
+}
+//-------------------------------------------------------------------------

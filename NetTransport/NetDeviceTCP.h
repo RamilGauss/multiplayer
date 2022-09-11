@@ -38,14 +38,11 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define NetDeviceTCPH
 
 #include "INetDevice.h"
-#include "TypeDef.h"
 
-
-class NET_TRANSPORT_EI TNetDeviceTCP : public INetDevice
+class TNetDeviceTCP : public INetDevice
 {
-
   enum{
-    eCountListen = 100,
+    eCountListen = 1000,
   };
 
 public:
@@ -53,8 +50,8 @@ public:
   virtual ~TNetDeviceTCP();
 
   virtual int Open(bool flgListen, unsigned short port, unsigned char numNetWork = 0 );// ret local sock
-  virtual bool Connect(int sock_local, unsigned int ip, unsigned short port);// ret remote sock
-  virtual int  Accept(int sock_local, unsigned int& ip, unsigned short& port);
+  virtual bool Connect(int sock_local, unsigned int ip, unsigned short port);
+  virtual int  Accept(int sock_local, unsigned int& ip, unsigned short& port);// ret remote socket
   
   virtual void Close(int sock);
 
@@ -62,6 +59,10 @@ public:
     unsigned int &ip, unsigned short &port);
   virtual bool Send(int sock, char* buffer, int  size, 
     unsigned int ip, unsigned short port);
+
+protected:
+  void OffNagl( int sock );
+  void SetReUse( int sock);
 };
 
 

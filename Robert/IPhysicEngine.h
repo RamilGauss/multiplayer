@@ -37,9 +37,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef IPhysicEngineH
 #define IPhysicEngineH
 
-#include "IBaseObjectPrediction.h"
 #include <list>
+
+#include "IBaseObjectPrediction.h"
 #include "SrcEvent.h"
+
+#define STR_NAME_ROBERT "PE"
 
 // предсказатель
 // Robert - физический движок
