@@ -12,11 +12,11 @@ See for more information License.h.
 
 #include "ShareMisc.h"
 #include "Session.h"
-#include "IMakerTransport.h"
 #include "GCS.h"
 #include "NavigateSession.h"
 #include "CallBackRegistrator.h"
 #include "DescRecvSession.h"
+#include "ManagerTransport.h"
 
 namespace nsMMOEngine
 {
@@ -27,15 +27,14 @@ namespace nsMMOEngine
     };
 
     unsigned int mTimeLiveSession;
-
-		TNavigateSession mNavigateSession;
-
     unsigned int mLastID_Session;
    
-    IMakerTransport* mMakerTransport;
-    INetTransport*   mTransport;
+    // должен быть как указатель, что бы контролировать порядок уничтожения объектов
+		TNavigateSession  *mNavigateSession;
+    TManagerTransport *mMngTransport;
+		bool flgStart;
 
-    TCallBackRegistrator1<int>         mCallBackDiconnect;
+    TCallBackRegistrator1<int>               mCallBackDiconnect;
     TCallBackRegistrator1<TDescRecvSession*> mCallBackRecv;
 
     GCS mMutexAccessMapSession;
@@ -50,28 +49,26 @@ namespace nsMMOEngine
     TCallBackRegistrator1<TDescRecvSession*>* GetCallbackRecv(){return &mCallBackRecv;}
     TCallBackRegistrator1<int >* GetCallbackDisconnect(){return &mCallBackDiconnect;}
     
-    bool Start(unsigned short port, unsigned char subNet = 0);
+		bool Start(TDescOpen* pDesc, int count = 1);
     void Work();
 		// для работы с сетью
-    unsigned int Send(unsigned int ip, unsigned short port, TBreakPacket bp, bool check = true);// только если не установлено соединение
-		void Send(unsigned int ID_Session, TBreakPacket bp, bool check = true);
+    unsigned int Send(unsigned int ip, unsigned short port, TBreakPacket bp, unsigned char subNet, bool check = true);// только если не установлено соединение
+		void Send(unsigned int id_session, TBreakPacket bp, bool check = true);
     unsigned int GetSessionID(unsigned int ip, unsigned short port);
-    bool GetInfo(unsigned int ID_Session, TIP_Port& ip_port_out);
-    void CloseSession(unsigned int ID_Session);
-    bool IsExist(unsigned int ID_Session);
+    bool GetInfo(unsigned int id_session, TIP_Port& ip_port_out);
+    void CloseSession(unsigned int id_session);
+    bool IsExist(unsigned int id_session);
     // настройка
     void SetTimeLiveSession(unsigned int time_ms);
 
   protected:
-    friend void FuncRecvFromTransport( void* p, int size);
-    friend void FuncDisconnectFromTransport( void* p, int size);
-    
-    void Stop();
+    friend class TReciverTransport;
 
-    void Recv( INetTransport::TDescRecv* pDescRecv );
+		bool StartTransport(unsigned short port, unsigned char subNet);
+    void Recv( INetTransport::TDescRecv* pDescRecv, INetTransport* pTransport);
     void Disconnect(TIP_Port* ip_port);
 
-    TSession* NewSession(TIP_Port& ip_port);
+    TSession* NewSession(TIP_Port& ip_port, INetTransport* pTransport);
   };
 }
 

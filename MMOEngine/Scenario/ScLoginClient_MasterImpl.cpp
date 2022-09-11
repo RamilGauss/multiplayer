@@ -46,7 +46,7 @@ void TScLoginClient_MasterImpl::Work(unsigned int now_ms)
   // если клиент в очереди, обновить номер
   if(Context()->GetNumInQueue())
   {
-    if(now_ms > Context()->GetTimeLastNeedNumInQueue() + eDeltaTimeNumInQueue)
+    if(now_ms > Context()->GetTimeLastNeedNumInQueue() + eDeltaTimeNumInQueue_ms)
     {
       NeedNumInQueueByClientKey(Context()->GetID_SessionClientMaster());
       Context()->SetTimeLastNeedNumInQueue(now_ms);
@@ -61,13 +61,14 @@ void TScLoginClient_MasterImpl::Work(unsigned int now_ms)
     return;
   }
   // 
-  if(Context()->GetTimeWait() + eTimeWait < now_ms)
+  if(Context()->GetTimeWait() + Context()->GetDeltaTimeWaitMS() < now_ms)
   {
     // ошибка на той стороне
-    // непонятно в чем дело, но клиент сдох
     TEventError event;
     event.code = LoginClientMasterClientNotActive;
     Context()->GetSE()->AddEventCopy(&event, sizeof(event));
+    Context()->Reject();
+    Context()->SetTimeWaitElapsed();
     End();
   }
 }
@@ -120,6 +121,8 @@ void TScLoginClient_MasterImpl::Accept(unsigned int key, void* resForClient, int
   h.id_client = key;
   bp.PushFront((char*)&h, sizeof(h));
   Context()->GetMS()->Send(GetID_SessionMasterSS(), bp);
+  // ждем ответ от SuperServer
+  SetWaitSS();
 }
 //--------------------------------------------------------------
 void TScLoginClient_MasterImpl::Queue(int num, void* resForClient, int sizeResClient)
@@ -329,6 +332,9 @@ void TScLoginClient_MasterImpl::SendResultAccept2ClientAndSlave(unsigned int key
   hForSlave.id_client = key;
   bp.PushFront((char*)&hForSlave, sizeof(hForSlave));
   Context()->GetMS()->Send(GetID_SessionMasterSlave(), bp);
+
+  // ждем ответ от Slave
+  SetWaitSlave();
 }
 //--------------------------------------------------------------
 void TScLoginClient_MasterImpl::Disconnect()
@@ -353,5 +359,23 @@ void TScLoginClient_MasterImpl::CheckInfoSlaveC2M(TDescRecvSession* pDesc)
   //------------------------------------------------------------
   // Мастер сам рвет соединение и клиент получает событие дисконнект,
   Context()->GetMS()->CloseSession(pDesc->id_session);
+
+  // и ждем ответа от Slave о том, что Клиент подцепился к Slave
+  SetWaitClient();
+}
+//--------------------------------------------------------------
+void TScLoginClient_MasterImpl::SetWaitSS()
+{
+  Context()->SetDeltaTimeWaitMS(eTimeWaitSS_ms);
+}
+//--------------------------------------------------------------
+void TScLoginClient_MasterImpl::SetWaitSlave()
+{
+  Context()->SetDeltaTimeWaitMS(eTimeWaitSlave_ms);
+}
+//--------------------------------------------------------------
+void TScLoginClient_MasterImpl::SetWaitClient()
+{
+  Context()->SetDeltaTimeWaitMS(eTimeWaitClient_ms);
 }
 //--------------------------------------------------------------

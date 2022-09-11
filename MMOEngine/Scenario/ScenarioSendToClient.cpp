@@ -7,6 +7,7 @@ See for more information License.h.
 
 #include "ScenarioSendToClient.h"
 #include "ManagerSession.h"
+#include "Events.h"
 
 using namespace nsMMOEngine;
 
@@ -22,34 +23,84 @@ TScenarioSendToClient::~TScenarioSendToClient()
 //-------------------------------------------------------------------
 void TScenarioSendToClient::Recv(TDescRecvSession* pDesc)
 {
-  NeedContext(pDesc->id_session);
-
-  THeaderSendToClient* pPacket = (THeaderSendToClient*)pDesc->data;
+  THeader* pPacket = (THeader*)pDesc->data;
   switch(pPacket->subType)
   {
-  case eFromSuperServerToMaster:
-    RecvFromSuperServerToMaster(pDesc);
-    break;
+		case eSuperServer:
+			RecvFromSuperServer(pDesc);
+			break;
+		case eMaster:
+			RecvFromMaster(pDesc);
+			break;
+		case eSlave:
+			RecvFromSlave(pDesc);
+			break;
   }
 }
 //-------------------------------------------------------------------
-void TScenarioSendToClient::SendFromSuperServerToMaster(unsigned int id_client, TBreakPacket bp)
+void TScenarioSendToClient::SendFromSuperServer(std::list<unsigned int>& lKey, TBreakPacket bp)
 {
-  THeaderFromSuperServerToMaster h;
-  h.id_client = id_client;
-  bp.PushFront((char*)&h, sizeof(h));
-
-  unsigned int id_session = Context()->GetID_Session();
-  Context()->GetMS()->Send(id_session, bp);
+	SendAll<THeaderSuperServer>(lKey, bp);
 }
 //-------------------------------------------------------------------
-void TScenarioSendToClient::RecvFromSuperServerToMaster(TDescRecvSession* pDesc)
+void TScenarioSendToClient::SendFromMaster(std::list<unsigned int>& lKey, TBreakPacket bp)
 {
-  //THeaderFromMasterToSlave h;
-  //h.id_client = id_client;
-  //bp.PushFront((char*)&h, sizeof(h));
+	SendAll<THeaderMaster>(lKey, bp);
+}
+//-------------------------------------------------------------------
+void TScenarioSendToClient::SendFromSlave(std::list<unsigned int>& lKey, TBreakPacket bp)
+{
+	SendAll<THeaderSlave>(lKey, bp);
+}
+//-------------------------------------------------------------------
+void TScenarioSendToClient::RecvFromSuperServer(TDescRecvSession* pDesc)
+{
+	THeaderSuperServer* pH = (THeaderSuperServer*)pDesc->data;
+	NeedContextByClientKey(pH->id_client);
+	if(Context())
+	{
+		TBreakPacket bp;
+		bp.PushFront(pDesc->data + sizeof(THeaderSuperServer), 
+			           pDesc->sizeData - sizeof(THeaderSuperServer) );
 
-  //unsigned int id_session = Context()->GetID_Session();
-  //Context()->GetMS()->Send(id_session, bp);
+		Send<THeaderMaster>(pH->id_client, bp);
+	}
+}
+//-------------------------------------------------------------------
+void TScenarioSendToClient::RecvFromMaster(TDescRecvSession* pDesc)
+{
+	THeaderMaster* pH = (THeaderMaster*)pDesc->data;
+	NeedContextByClientKey(pH->id_client);
+	if(Context())
+	{
+		TBreakPacket bp;
+		bp.PushFront(pDesc->data + sizeof(THeaderMaster), 
+			           pDesc->sizeData - sizeof(THeaderMaster) );
+		
+		Send<THeaderSlave>(pH->id_client, bp);
+	}
+}
+//-------------------------------------------------------------------
+void TScenarioSendToClient::RecvFromSlave(TDescRecvSession* pDesc)
+{
+	THeaderSlave* pH = (THeaderSlave*)pDesc->data;
+
+	TEventRecvFromUp* pEvent = new TEventRecvFromUp;
+	// отцепиться от памяти, в которой содержится пакет
+	pDesc->c.Unlink();
+	// отдать память под контроль события
+	pEvent->c.Entrust(pDesc->data, pDesc->sizeData);
+	pEvent->data     = pDesc->data     + sizeof(THeaderSlave);
+	pEvent->sizeData = pDesc->sizeData - sizeof(THeaderSlave);
+	// откуда пришел пакет - сессия
+	pEvent->id_session = pDesc->id_session;
+	// добавить событие без копирования и указать истинное время создания события в транспорте
+	Context()->GetSE()->AddEventWithoutCopy(pEvent, sizeof(TEventRecvFromUp), pDesc->time_ms);
+}
+//-------------------------------------------------------------------
+void TScenarioSendToClient::DelayBegin()
+{
+	Context()->SendAndRemoveFirst();
+	End();
 }
 //-------------------------------------------------------------------

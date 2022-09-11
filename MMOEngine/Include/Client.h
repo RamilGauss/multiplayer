@@ -16,10 +16,14 @@ namespace nsMMOEngine
   class MMO_ENGINE_EI TClient : public TBase
   {
     
-    unsigned int mID;// назанченный Мастером
+		unsigned char mSubNet;
+
+    unsigned int mID;// назначенный Мастером
   public:
     TClient();
     virtual ~TClient();
+    
+		virtual bool Open(TDescOpen* pDesc, int count = 1);
 
     void Login(unsigned int ip, unsigned short port, void* data, int size);
     void LeaveQueue();

@@ -9,6 +9,7 @@ See for more information License.h.
 #define CONTEXT_SC_RECOMMUTATION_CLIENT_H
 
 #include "IContextScenario.h"
+#include "Container.h"
 
 namespace nsMMOEngine
 {
@@ -16,6 +17,20 @@ namespace nsMMOEngine
 	{
     unsigned int mID_SessionMasterSlave;
 
+    unsigned int mClientKey;
+    unsigned int mSessionDonor;
+    unsigned int mSessionRecipient;
+
+    TContainer mContextData;
+
+		// для самоопределения на Slave
+		typedef enum
+		{
+			eUndef,
+			eDonor,
+			eRecipient,
+		}TypeSlave;
+		TypeSlave mTypeSlave;
 	public:
 		TContextScRecommutationClient();
     virtual ~TContextScRecommutationClient();
@@ -26,6 +41,26 @@ namespace nsMMOEngine
 
     unsigned int GetID_SessionMasterSlave();
     void SetID_SessionMasterSlave(unsigned int id_session);
+
+    void SetClientKey(unsigned int v);
+    unsigned int GetClientKey();
+
+    void SetSessionDonor(unsigned int v);
+    unsigned int GetSessionDonor();
+    
+    void SetSessionRecipient(unsigned int v);
+    unsigned int GetSessionRecipient();
+
+    void  SaveContextData(char* p, int size);
+    char* GetContextDataPtr();
+    int   GetContextDataSize();
+    void  CleanContextData();
+
+		// необходимо для определения поведения при Дисконнекте Клиента
+		void SetDonor();
+		bool IsDonor();
+		void SetRecipient();
+		bool IsRecipient();
 
   private:
 	};

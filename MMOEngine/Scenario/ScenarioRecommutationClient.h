@@ -11,19 +11,33 @@ See for more information License.h.
 #include "IScenario.h"
 #include "ContextScRecommutationClient.h"
 
+#include "ScRecommutationClient_ClientImpl.h"
+#include "ScRecommutationClient_MasterImpl.h"
+#include "ScRecommutationClient_SlaveImpl.h"
+
 namespace nsMMOEngine
 {
   class TScenarioRecommutationClient : public IScenario
   {
-    typedef std::list<unsigned int> TListUint;
-    TListUint mListNextID_SessionSlave;
+    TScRecommutationClient_ClientImpl mClient;
+		TScRecommutationClient_SlaveImpl  mSlave;// Donor/Recipient
+    TScRecommutationClient_MasterImpl mMaster;
 
+    TBaseScRecommutationClient*       mCurBehavior;
   public:
+    typedef enum
+    {
+      eClient,
+      eSlave,
+      eMaster,
+    }eBehavior;
+
     TScenarioRecommutationClient();
     virtual ~TScenarioRecommutationClient();
 
+    void SetBehavior(eBehavior v);
     virtual void Recv(TDescRecvSession* pDesc);
-
+  public:
     void Start(unsigned int id_session_recipient,
                unsigned int id_client);
     
@@ -35,7 +49,6 @@ namespace nsMMOEngine
   protected:
     void SendFirstPacket();
 
-    TContextScRecommutationClient* Context(){return (TContextScRecommutationClient*)mCurContext;}
   };
 }
 #endif

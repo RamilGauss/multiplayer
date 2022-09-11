@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\Share"
+				AdditionalIncludeDirectories="..\..\Share;..\..\MMOEngine\SubSystem"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib winmm.lib comctl32.lib Imm32.lib Version.lib Share.lib"
+				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib winmm.lib comctl32.lib Imm32.lib Version.lib Share.lib MMOEngine.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\Lib;&quot;..\..\Lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"

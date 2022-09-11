@@ -39,8 +39,8 @@ namespace nsMMOEngine
     int GetCountSession();
     bool GetSessionByIndex( int index, unsigned int& id_session);
 
-    int GetCountClientKey(unsigned int id_session_master);
-    bool GetClientKeyByIndex(unsigned int id_session_master, 
+    bool GetCountClientKey(unsigned int id_session, int &count);
+    bool GetClientKeyByIndex(unsigned int id_session, 
                              int index, 
                              unsigned int& id_client);
 

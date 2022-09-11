@@ -5,8 +5,8 @@ Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
 See for more information License.h.
 */
 
-#ifndef BASE_SC_LOGIN_CLIENT_SUPER_SERVER_IMPL_H
-#define BASE_SC_LOGIN_CLIENT_SUPER_SERVER_IMPL_H
+#ifndef SC_LOGIN_CLIENT_SUPER_SERVER_IMPL_H
+#define SC_LOGIN_CLIENT_SUPER_SERVER_IMPL_H
 
 #include "BaseScLoginClient.h"
 #include "CallBackRegistrator.h"

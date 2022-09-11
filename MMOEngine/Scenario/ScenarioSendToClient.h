@@ -12,41 +12,103 @@ See for more information License.h.
 #include "ContextScSendToClient.h"
 #include "MakerScenario.h"
 
+#include <boost/foreach.hpp>
+
 namespace nsMMOEngine
 {
   class TScenarioSendToClient : public IScenario
   {
-    enum{eFromSuperServerToMaster,eFromMasterToSlave};
-    struct THeaderSendToClient : public IScenario::TBaseHeader
+    enum
+		{
+			eSuperServer,
+			eMaster,
+			eSlave,
+		};
+		//-------------------------------------------------
+    struct THeader : public IScenario::TBaseHeader
     {
-      THeaderSendToClient(){type = TMakerScenario::eSendToClient;}
-    };
-    //-------------------------------------------------
-    struct THeaderFromSuperServerToMaster : public THeaderSendToClient
-    {
-      THeaderFromSuperServerToMaster(){subType = eFromSuperServerToMaster;}
+      THeader(){type = TMakerScenario::eSendToClient;id_client=0;}
       unsigned int id_client;
     };
-    //-------------------------------------------------
-    struct THeaderFromMasterToSlave : public THeaderSendToClient
+    //==================================================================
+    struct THeaderSuperServer : public THeader
     {
-      THeaderFromMasterToSlave(){subType = eFromMasterToSlave;}
-      unsigned int id_client;
+      THeaderSuperServer(){subType = eSuperServer;}
     };
     //-------------------------------------------------
+    struct THeaderMaster : public THeader
+    {
+      THeaderMaster(){subType = eMaster;}
+    };
+    //-------------------------------------------------
+		struct THeaderSlave : public THeader
+		{
+			THeaderSlave(){subType = eSlave;}
+		};
+		//-------------------------------------------------
   public:
     TScenarioSendToClient();
     virtual ~TScenarioSendToClient();
     
     virtual void Recv(TDescRecvSession* pDesc);
-
-    void SendFromSuperServerToMaster(unsigned int id_client, TBreakPacket bp);
+  public:
+    void SendFromSuperServer(std::list<unsigned int>& lKey, TBreakPacket bp);
+    void SendFromMaster(std::list<unsigned int>& lKey, TBreakPacket bp);
+    void SendFromSlave(std::list<unsigned int>& lKey, TBreakPacket bp);
   protected:
 
-    void RecvFromSuperServerToMaster(TDescRecvSession* pDesc);
+    void RecvFromSuperServer(TDescRecvSession* pDesc);
+    void RecvFromMaster(TDescRecvSession* pDesc);
+    void RecvFromSlave(TDescRecvSession* pDesc);
 
   protected:
     TContextScSendToClient* Context(){return (TContextScSendToClient*)mCurContext;}
+    virtual void DelayBegin();		
+	private:
+		template <class T>
+		void SendAll(std::list<unsigned int>& lKey, TBreakPacket& bp);
+
+		template <class T>
+		void Send(unsigned int id_client, TBreakPacket bp);
   };
+	//------------------------------------------------------------------------------
+	template <class T>
+	void TScenarioSendToClient::Send(unsigned int id_client, TBreakPacket bp)
+	{
+		T h;
+		h.id_client = id_client;
+		bp.PushFront((char*)&h, sizeof(h));
+
+		unsigned int id_session = Context()->GetID_Session();
+		Context()->GetMS()->Send(id_session, bp);
+	}
+	//------------------------------------------------------------------------------
+	template <class T>
+	void TScenarioSendToClient::SendAll(std::list<unsigned int>& lKey, TBreakPacket& bp)
+	{
+		if(bp.GetSize()==0)
+			return;// нельзя передавать нулевые пакеты
+		BOOST_FOREACH(unsigned int id_client, lKey)
+		{
+			NeedContextByClientKey(id_client);
+			if(Context())
+			{
+				if(Begin()==false)
+				{
+          TBreakPacket bpForSave;
+          bpForSave = bp;
+					T h;
+					h.id_client = id_client;
+					bpForSave.PushFront((char*)&h, sizeof(h));
+					// пока отослать нельзя, сохранить пакет до момента возможности
+					Context()->SaveBreakPacket(bpForSave);
+					continue;
+				}
+				Send<T>(id_client, bp);
+				End();
+			}
+		}
+	}
+	//-------------------------------------------------------------------
 }
 #endif

@@ -24,7 +24,7 @@ TScenarioLoginMaster::~TScenarioLoginMaster()
 
 }
 //--------------------------------------------------------------
-void TScenarioLoginMaster::ConnectToSuperServer(unsigned int ip, unsigned short port)
+void TScenarioLoginMaster::ConnectToSuperServer(unsigned int ip, unsigned short port, unsigned char subNet)
 {
   Context()->SetConnect(false);
   if(Begin()==false)
@@ -42,7 +42,7 @@ void TScenarioLoginMaster::ConnectToSuperServer(unsigned int ip, unsigned short 
   TBreakPacket bp;
   THeaderFromMaster h;
   bp.PushFront((char*)&h, sizeof(h));
-  Context()->SetID_Session( Context()->GetMS()->Send(ip, port, bp));
+  Context()->SetID_Session( Context()->GetMS()->Send(ip, port, bp, subNet));
   if(Context()->GetID_Session()==INVALID_HANDLE_SESSION)
   {
     // Генерация ошибки

@@ -8,6 +8,7 @@ See for more information License.h.
 #include "ManagerSession.h"
 #include "Logger.h"
 #include "Base.h"
+
 #include <boost/foreach.hpp>
 
 using namespace std;
@@ -15,49 +16,50 @@ using namespace nsMMOEngine;
 
 TManagerSession::TManagerSession()
 {
+  mNavigateSession = new TNavigateSession;
+  mMngTransport = new TManagerTransport(this);
+
+	flgStart = false;
   mTimeLiveSession  = eDefTimeLive;
   mLastID_Session   = 0;
-  mMakerTransport   = NULL;
-  mTransport        = NULL;
 }
 //--------------------------------------------------------------------------------------------
 TManagerSession::~TManagerSession()
 {
-  Stop();
-  
-  // удалить сессии
-  mNavigateSession.Clear();
+  // сначала уничтожить сессии, важно вызвать до уничтожения Менеджера транспорта
+  lockAccessSession();
+  delete mNavigateSession;
+  mNavigateSession = NULL;// не готов к приему пакетов
+  unlockAccessSession();
 
-  mMakerTransport->Delete(mTransport);
-  mTransport = NULL;
-  mMakerTransport = NULL;
+  delete mMngTransport;
 }
 //--------------------------------------------------------------------------------------------
 void TManagerSession::SetMakerTransport(IMakerTransport* pMakerTransport)
 {
-  mMakerTransport = pMakerTransport;
-  mTransport      = mMakerTransport->New();
-  
-  mTransport->GetCallbackRecv()->Register(&TManagerSession::Recv,this);
-  mTransport->GetCallbackDisconnect()->Register(&TManagerSession::Disconnect,this);
+	mMngTransport->SetTransport(pMakerTransport);
 }
 //--------------------------------------------------------------------------------------------
-bool TManagerSession::Start(unsigned short port, unsigned char subNet)
+bool TManagerSession::Start(TDescOpen* pDesc, int count)
 {
-  if(mTransport==NULL)
-  {
-    GetLogger(STR_NAME_MMO_ENGINE)->WriteF_time("TManagerSession::Start() mTransport==NULL.\n");
-    BL_FIX_BUG();
-    return false;
-  }
-  if(mTransport->IsActive())
-  {
-    GetLogger(STR_NAME_MMO_ENGINE)->WriteF_time("TManagerSession::Start() recall.\n");
-    BL_FIX_BUG();
-    return false;
-  }
-  //-------------------------------------------------------------
-  bool resOpen = mTransport->Open(port,subNet);
+	if(flgStart)
+	{
+		GetLogger(STR_NAME_MMO_ENGINE)->WriteF_time("TManagerSession::Start() restart.\n");
+		BL_FIX_BUG();
+		return false;
+	}
+	flgStart = true;
+
+	for(int i = 0 ; i < count ; i++ )
+		if(StartTransport(pDesc[i].port, pDesc[i].subNet)==false)
+			return false;
+	return true;
+}
+//--------------------------------------------------------------------------------------------
+bool TManagerSession::StartTransport(unsigned short port, unsigned char subNet)
+{
+	INetTransport* pTransport = mMngTransport->Add(subNet);
+  bool resOpen = pTransport->Open(port,subNet);
   if(resOpen==false) 
   {
     GetLogger(STR_NAME_MMO_ENGINE)->WriteF_time("TManagerSession::Start() open port %u FAIL.\n", port);
@@ -65,51 +67,63 @@ bool TManagerSession::Start(unsigned short port, unsigned char subNet)
     return false;
   }
   // старт потока чтения
-  mTransport->Start();
+  pTransport->Start();
   return resOpen;
-}
-//--------------------------------------------------------------------------------------------
-void TManagerSession::Stop()
-{
-  if(mTransport==NULL) return;
-
-  mTransport->Stop();
-  mTransport->GetCallbackRecv()->Unregister(this);
-  mTransport->GetCallbackDisconnect()->Unregister(this);
 }
 //--------------------------------------------------------------------------------------------
 void TManagerSession::Work()
 {
   lockAccessSession();
-  mNavigateSession.Work();
+  if(mNavigateSession==NULL)
+  {
+    unlockAccessSession();
+    return;
+  }
+  //===================================================================
+  mNavigateSession->Work();
   unlockAccessSession();
 }
 //--------------------------------------------------------------------------------------------
-void TManagerSession::Send(unsigned int ID_Session, TBreakPacket bp, bool check)
+void TManagerSession::Send(unsigned int id_session, TBreakPacket bp, bool check)
 {
   lockAccessSession();
-
-  TSession* pSession = mNavigateSession.FindSessionByID(ID_Session);
+  if(mNavigateSession==NULL)
+  {
+    unlockAccessSession();
+    return;
+  }
+  //===================================================================
+  TSession* pSession = mNavigateSession->FindSessionByID(id_session);
   if(pSession) 
     pSession->Send(bp,check);
   
   unlockAccessSession();
 }
 //--------------------------------------------------------------------------------------------
-unsigned int TManagerSession::Send(unsigned int ip, unsigned short port, TBreakPacket bp, bool check)
+unsigned int TManagerSession::Send(unsigned int ip, unsigned short port, TBreakPacket bp, unsigned char subNet, bool check)
 {
+	INetTransport* pTransport = mMngTransport->FindBySubNet(subNet);
+	if(pTransport==NULL)
+		return INVALID_HANDLE_SESSION;
+
   lockAccessSession();
+  if(mNavigateSession==NULL)
+  {
+    unlockAccessSession();
+    return INVALID_HANDLE_SESSION;
+  }
+  //===================================================================
   // соединиться с сервером
-  if(mTransport->Connect(ip, port)==false) 
+  if(pTransport->Connect(ip, port)==false) 
   {
     unlockAccessSession();
     return INVALID_HANDLE_SESSION;// нет такого прослушивающего порта
   }
   TIP_Port ip_port(ip,port);
  
-  TSession* pSession = mNavigateSession.FindSessionByIP(ip_port);
+  TSession* pSession = mNavigateSession->FindSessionByIP(ip_port);
   if(pSession==NULL)
-    pSession = NewSession(ip_port);
+    pSession = NewSession(ip_port, pTransport);
   else
   {
     GetLogger(STR_NAME_MMO_ENGINE)->
@@ -127,7 +141,13 @@ unsigned int TManagerSession::GetSessionID(unsigned int ip, unsigned short port)
 {
   unsigned int id = INVALID_HANDLE_SESSION;
   lockAccessSession();
-  TSession* pSession = mNavigateSession.FindSessionByIP(TIP_Port(ip,port));
+  if(mNavigateSession==NULL)
+  {
+    unlockAccessSession();
+    return id;
+  }
+  //===================================================================
+  TSession* pSession = mNavigateSession->FindSessionByIP(TIP_Port(ip,port));
   if(pSession)
     id = pSession->GetID();
   unlockAccessSession();
@@ -140,19 +160,31 @@ void TManagerSession::CloseSession(unsigned int ID_Session)
     return;
 
   lockAccessSession();
-  TSession* pSession = mNavigateSession.FindSessionByID(ID_Session);
+  if(mNavigateSession==NULL)
+  {
+    unlockAccessSession();
+    return;
+  }
+  //===================================================================
+  TSession* pSession = mNavigateSession->FindSessionByID(ID_Session);
   if(pSession)
-    mNavigateSession.Delete(pSession);
+    mNavigateSession->Delete(pSession);
   unlockAccessSession();
 }
 //--------------------------------------------------------------------------------------------
-void TManagerSession::Recv( INetTransport::TDescRecv* pDescRecv )
+void TManagerSession::Recv( INetTransport::TDescRecv* pDescRecv, INetTransport* pTransport)
 {
   lockAccessSession();
+  if(mNavigateSession==NULL)
+  {
+    unlockAccessSession();
+    return;
+  }
+  //===================================================================
   // определить новая сессия или нет
-  TSession* pSession = mNavigateSession.FindSessionByIP(pDescRecv->ip_port);
+  TSession* pSession = mNavigateSession->FindSessionByIP(pDescRecv->ip_port);
   if(pSession==NULL)
-    pSession = NewSession(pDescRecv->ip_port);
+    pSession = NewSession(pDescRecv->ip_port, pTransport);
   else
     pSession->Recv();// уведомить сессию о приеме
   unsigned int id = pSession->GetID();
@@ -178,32 +210,44 @@ void TManagerSession::Recv( INetTransport::TDescRecv* pDescRecv )
 void TManagerSession::Disconnect(TIP_Port* ip_port)
 {
   lockAccessSession();
-  TSession* pSession = mNavigateSession.FindSessionByIP(*ip_port);
+  if(mNavigateSession==NULL)
+  {
+    unlockAccessSession();
+    return;
+  }
+  //===================================================================
+  TSession* pSession = mNavigateSession->FindSessionByIP(*ip_port);
   if(pSession)
   {
     unsigned int id = pSession->GetID();
     mCallBackDiconnect.Notify(id);
-    mNavigateSession.Delete(pSession);
+    mNavigateSession->Delete(pSession);
   }
   unlockAccessSession();
 }
 //--------------------------------------------------------------------------------------------
-TSession* TManagerSession::NewSession(TIP_Port& ip_port)
+TSession* TManagerSession::NewSession(TIP_Port& ip_port, INetTransport* pTransport)
 {
   mLastID_Session++;// нет проверки на совпадение, unsigned int 4 млрд - слишком много
   TSession* pSession = new TSession(mTimeLiveSession);
-  pSession->SetTransport(mTransport);
+  pSession->SetTransport(pTransport);
   pSession->SetInfo(ip_port);
   pSession->SetID(mLastID_Session);
 
-  mNavigateSession.Add(pSession);
+  mNavigateSession->Add(pSession);
   return pSession;
 }
 //--------------------------------------------------------------------------------------------
 bool TManagerSession::IsExist(unsigned int ID_Session)
 {
   lockAccessSession();
-  TSession* pSession = mNavigateSession.FindSessionByID(ID_Session);
+  if(mNavigateSession==NULL)
+  {
+    unlockAccessSession();
+    return false;
+  }
+  //===================================================================
+  TSession* pSession = mNavigateSession->FindSessionByID(ID_Session);
   unlockAccessSession();
   return (pSession!=NULL);
 }
@@ -217,7 +261,13 @@ bool TManagerSession::GetInfo(unsigned int ID_Session, TIP_Port& ip_port_out)
 {
   bool res = false;
   lockAccessSession();
-  TSession* pSession = mNavigateSession.FindSessionByID(ID_Session);
+  if(mNavigateSession==NULL)
+  {
+    unlockAccessSession();
+    return false;
+  }
+  //===================================================================
+  TSession* pSession = mNavigateSession->FindSessionByID(ID_Session);
   if(pSession)
   {
     res = true;

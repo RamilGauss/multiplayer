@@ -69,9 +69,9 @@ void TBase::Init(IMakerTransport* pMakerTransport)
   mManagerSession->GetCallbackDisconnect()->Register(&TBase::Disconnect, this);
 }
 //-------------------------------------------------------------------------
-bool TBase::Open(unsigned short port, unsigned char subNet)
+bool TBase::Open(TDescOpen* pDesc, int count)
 {
-  return mManagerSession->Start(port, subNet);
+  return mManagerSession->Start(pDesc, count);
 }
 //-------------------------------------------------------------------------
 void TBase::SetLoad(int procent)
@@ -251,6 +251,12 @@ void TBase::SetDefualtContextForScenario()
   mControlSc->mLoginMaster ->SetContext(&mContainerUp->mLoginMaster); // master
   mControlSc->mRcm         ->SetContext(&mContainerUp->mRcm);         // client
   mControlSc->mSynchroSlave->SetContext(&mContainerUp->mSynchroSlave);// slave
+  mControlSc->mSendToClient->SetContext(&mContainerUp->mSendToClient);// 
+}
+//-------------------------------------------------------------------------
+void TBase::RegisterNeedForRcmClient()
+{
+
 }
 //-------------------------------------------------------------------------
 void TBase::RegisterOnScenarioEvent()
@@ -258,11 +264,12 @@ void TBase::RegisterOnScenarioEvent()
   mControlSc->mDisClient->Register<unsigned int>(IScenario::eContextByClientKey,
                                                  &TBase::NeedContextDisconnectClient, this);
   RegisterNeedForLoginClient();
-  mControlSc->mLoginSlave  ->Register<unsigned int>(IScenario::eContextBySession,&TBase::NeedContextLoginSlave,  this);
-  mControlSc->mLoginMaster ->Register<unsigned int>(IScenario::eContextBySession,&TBase::NeedContextLoginMaster, this);
-  mControlSc->mRcm         ->Register<unsigned int>(IScenario::eContextBySession,&TBase::NeedContextRcm,         this);
-  mControlSc->mSendToClient->Register<unsigned int>(IScenario::eContextBySession,&TBase::NeedContextSendToClient,this);
-  mControlSc->mSynchroSlave->Register<unsigned int>(IScenario::eContextBySession,&TBase::NeedContextSynchroSlave,this);
+  RegisterNeedForRcmClient();
+  mControlSc->mLoginSlave  ->Register<unsigned int>(IScenario::eContextBySession,  &TBase::NeedContextLoginSlave,  this);
+  mControlSc->mLoginMaster ->Register<unsigned int>(IScenario::eContextBySession,  &TBase::NeedContextLoginMaster, this);
+  mControlSc->mRcm         ->Register<unsigned int>(IScenario::eContextBySession,  &TBase::NeedContextRcm,         this);
+  mControlSc->mSendToClient->Register<unsigned int>(IScenario::eContextByClientKey,&TBase::NeedContextSendToClient,this);
+  mControlSc->mSynchroSlave->Register<unsigned int>(IScenario::eContextBySession,  &TBase::NeedContextSynchroSlave,this);
 
   mControlSc->mDisClient   ->Register<IScenario*>(IScenario::eEnd,&TBase::EndDisconnectClient,this);
   mControlSc->mLoginClient ->Register<IScenario*>(IScenario::eEnd,&TBase::EndLoginClient, this);
@@ -272,4 +279,3 @@ void TBase::RegisterOnScenarioEvent()
   mControlSc->mSynchroSlave->Register<IScenario*>(IScenario::eEnd,&TBase::EndSynchroSlave,this);
 }
 //-------------------------------------------------------------------------
-

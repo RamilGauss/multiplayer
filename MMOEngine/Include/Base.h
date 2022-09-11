@@ -9,6 +9,7 @@ See for more information License.h.
 #define BASE_H
 
 #include "TypeDef.h"
+#include "Structs.h"
 
 #include "SrcEvent.h"
 #include "IMakerTransport.h"
@@ -70,8 +71,6 @@ namespace nsMMOEngine
       eRestoreContext,
       eTryLogin, 
       eResultLogin,
-      eCreateGroup,
-      eLeaveGroup, 
       eDestroyGroup,
       eEnterInQueue,
     }tTypeEvent;
@@ -80,7 +79,7 @@ namespace nsMMOEngine
     virtual ~TBase();
 
     virtual void Init(IMakerTransport* pMakerTransport);
-    virtual bool Open(unsigned short port, unsigned char subNet = 0);
+    virtual bool Open(TDescOpen* pDesc, int count = 1);
     virtual void DisconnectUp();
     virtual void SendUp(TBreakPacket bp, bool check = true);
     void Work();
@@ -100,6 +99,7 @@ namespace nsMMOEngine
     // события сценариев
     virtual void NeedContextDisconnectClient(unsigned int id_client){}
     //----------------------------------------------------
+    // LoginClient
     virtual void NeedContextByMasterSessionByClientKey(unsigned int id_session,
                                                        unsigned int id_client){}//SS
     virtual void NeedContextLoginClientBySession(unsigned int id_session){}// S,M
@@ -109,10 +109,14 @@ namespace nsMMOEngine
     virtual void NeedContextLoginClientByClientSessionByKeyClient(unsigned int id_session_client,
                                                                   unsigned int id_client){}//S
     //----------------------------------------------------
+    // RCM
+    virtual void ActivateRcmClient(IScenario* pSc){}//M
+    virtual void NeedSlaveSessionDonor(IScenario* pSc){}//M
+    //----------------------------------------------------
     virtual void NeedContextLoginSlave(unsigned int id_session){}
     virtual void NeedContextLoginMaster(unsigned int id_session){}
     virtual void NeedContextRcm(unsigned int id_session){}
-    virtual void NeedContextSendToClient(unsigned int id_session){}
+    virtual void NeedContextSendToClient(unsigned int id_client){}
     virtual void NeedContextSynchroSlave(unsigned int id_session){}
 
     virtual void EndDisconnectClient(IScenario*){}
@@ -138,6 +142,7 @@ namespace nsMMOEngine
     void SetDefualtContextForScenario();
     void RegisterOnScenarioEvent();
     void RegisterNeedForLoginClient();
+    void RegisterNeedForRcmClient();
   };
 }
 

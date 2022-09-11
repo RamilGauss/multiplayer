@@ -40,18 +40,7 @@ TSuperServer::~TSuperServer()
 //-------------------------------------------------------------------------
 void TSuperServer::SendByClientKey(std::list<unsigned int>& lKey, TBreakPacket bp)
 {
-  BOOST_FOREACH(unsigned int id_client, lKey)
-  {
-    // поиск мастера, у которого есть клиенты, ассоциированные с этими ключами
-    unsigned int id_session_master;
-    if(mMngContextClient->FindSessionByClientKey(id_client,id_session_master))
-    {
-      TContainerContextSc* pC = 
-        mMngContextMaster->FindContextBySession(id_session_master);
-      mControlSc->mSendToClient->SetContext(&pC->mSendToClient);
-      mControlSc->mSendToClient->SendFromSuperServerToMaster(id_client,bp);
-    }
-  }
+	mControlSc->mSendToClient->SendFromSuperServer(lKey, bp);
 }
 //-------------------------------------------------------------------------
 void TSuperServer::DisconnectInherit(unsigned int id_session)
@@ -60,7 +49,9 @@ void TSuperServer::DisconnectInherit(unsigned int id_session)
     return;
   
   // перечислить всех клиентов, которые сидят на этом мастере и их удаление
-  int cClient = mMngContextMaster->GetCountClientKey(id_session);
+  int cClient ;
+  if(mMngContextMaster->GetCountClientKey(id_session, cClient)==false)
+    return;
   for( int i = 0 ; i < cClient ; i++)
   {
     unsigned int id_client;
@@ -93,7 +84,9 @@ bool TSuperServer::GetDescDown(int index, void* pDesc, int& sizeDesc)
   if(mMngContextMaster->GetSessionByIndex(index, id_session)==false)
     return false;
   // кол-во клиентов на дднном мастере
-  int countClient = mMngContextMaster->GetCountClientKey(id_session);
+  int countClient;
+  if(mMngContextMaster->GetCountClientKey(id_session, countClient)==false)
+    return false;
 
   TDescDownSuperServer* pD = (TDescDownSuperServer*)pDesc;
   pD->id_session  = id_session;
@@ -171,5 +164,14 @@ void TSuperServer::NeedContextDisconnectClient(unsigned int id_client)
 void TSuperServer::EndDisconnectClient(IScenario* pSc)
 {
 
+}
+//-------------------------------------------------------------------------
+void TSuperServer::NeedContextSendToClient(unsigned int id_client)
+{
+	TContainerContextSc* pContext = mMngContextClient->FindContextByClientKey(id_client);
+	if(pContext)
+		mControlSc->mSendToClient->SetContext(&pContext->mSendToClient);
+	else
+		mControlSc->mSendToClient->SetContext(NULL);
 }
 //-------------------------------------------------------------------------

@@ -35,7 +35,6 @@ bool IScenario::Begin()
 void IScenario::End()
 {
 	// уведомить об окончании сценария
-  //mCBEnd.Notify(this);
   Notify<IScenario*>(eEnd, this);
 	// сценарий закончен
   mCurContext->Disactivate();

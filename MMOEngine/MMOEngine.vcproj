@@ -213,6 +213,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Source\Structs.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\MMOEngine\Source\SuperServer.cpp"
 				>
 			</File>
@@ -260,6 +264,10 @@
 			</File>
 			<File
 				RelativePath="..\MMOEngine\Include\Slave.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Include\Structs.h"
 				>
 			</File>
 			<File
@@ -325,6 +333,14 @@
 						>
 					</File>
 					<File
+						RelativePath=".\SubSystem\ManagerRecommutation.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\SubSystem\ManagerRecommutation.h"
+						>
+					</File>
+					<File
 						RelativePath=".\SubSystem\StatisticaClientInGroup.cpp"
 						>
 					</File>
@@ -362,11 +378,27 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SubSystem\ManagerTransport.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerTransport.h"
+					>
+				</File>
+				<File
 					RelativePath="..\MMOEngine\SubSystem\NavigateSession.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\MMOEngine\SubSystem\NavigateSession.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ReciverTransport.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ReciverTransport.h"
 					>
 				</File>
 				<File
@@ -597,11 +629,7 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Scenario\ScRecommutationClient_SlaveDonorImpl.h"
-						>
-					</File>
-					<File
-						RelativePath=".\Scenario\ScRecommutationClient_SlaveRecipientImpl.h"
+						RelativePath=".\Scenario\ScRecommutationClient_SlaveImpl.h"
 						>
 					</File>
 				</Filter>
@@ -625,11 +653,7 @@
 						>
 					</File>
 					<File
-						RelativePath=".\Scenario\ScRecommutationClient_SlaveDonorImpl.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\Scenario\ScRecommutationClient_SlaveRecipientImpl.cpp"
+						RelativePath=".\Scenario\ScRecommutationClient_SlaveImpl.cpp"
 						>
 					</File>
 				</Filter>

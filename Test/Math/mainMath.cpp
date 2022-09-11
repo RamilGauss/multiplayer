@@ -13,6 +13,7 @@
 #include <queue>
 #include "SetOrderElement.h"
 #include "MapCallBack.h"
+#include "ManagerRecommutation.h"
 
 using namespace nsStruct3D;
 
@@ -85,7 +86,39 @@ int main(int argc, char** argv)
 	//TMatrix16 matrix;
 	//TMatrix16* pResMatrix = SetMatrixIdentity(&matrix);
 
-  TB b;
+  //TB b;
+  nsMMOEngine::TManagerRecommutation mrcm;
+  mrcm.AddClientKey(1, 2, 3);
+  mrcm.AddClientKey(2, 3, 2);
+  mrcm.AddClientKey(3, 1, 2);
+  mrcm.AddClientKey(4, 2, 1);
+  mrcm.AddClientKey(5, 2, 3);
+  mrcm.AddClientKey(6, 3, 2);
 
-	return 0;
+  unsigned int donor, recipient;
+  bool res = mrcm.FindSessionByClientKey(2,donor, recipient);
+
+  int count = mrcm.GetCountClientBySessionSlave(donor);
+  for( int i = 0 ; i < count ; i++ )
+  {
+    unsigned int key;
+    bool resGet = mrcm.GetClientKeyByIndex(donor,i,key);
+    key = 0;
+  }
+
+  mrcm.DeleteByClientKey(1);
+  mrcm.DeleteByClientKey(2);
+  mrcm.DeleteByClientKey(3);
+  mrcm.DeleteByClientKey(4);
+
+  mrcm.AddClientKey(1, 3, 2);
+  mrcm.AddClientKey(2, 2, 3);
+  mrcm.AddClientKey(3, 2, 1);
+  mrcm.AddClientKey(4, 1, 2);
+
+  mrcm.DeleteByClientKey(1);
+  mrcm.DeleteByClientKey(2);
+  mrcm.DeleteByClientKey(3);
+  mrcm.DeleteByClientKey(4);
+  return 0;
 }

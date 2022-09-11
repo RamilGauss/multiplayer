@@ -5,8 +5,8 @@ Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
 See for more information License.h.
 */
 
-#ifndef BASE_SC_LOGIN_CLIENT_CLIENT_IMPL_H
-#define BASE_SC_LOGIN_CLIENT_CLIENT_IMPL_H
+#ifndef SC_LOGIN_CLIENT_CLIENT_IMPL_H
+#define SC_LOGIN_CLIENT_CLIENT_IMPL_H
 
 #include "BaseScLoginClient.h"
 
@@ -23,7 +23,7 @@ namespace nsMMOEngine
 
     virtual void Work(unsigned int time_ms);
 
-    void TryLogin(unsigned int ip, unsigned short port, void* data, int size);
+    void TryLogin(unsigned int ip, unsigned short port, void* data, int size, unsigned char subNet);
     void LeaveQueue();
 
     void Disconnect();

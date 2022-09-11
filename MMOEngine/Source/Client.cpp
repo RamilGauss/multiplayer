@@ -21,12 +21,28 @@ using namespace nsMMOEngine;
 
 TClient::TClient()
 {
+	mSubNet = 0;
   mControlSc->mLoginClient->SetBehavior(TScenarioLoginClient::eClient);
+	mControlSc->mRcm->SetBehavior(TScenarioRecommutationClient::eClient);
 }
 //-------------------------------------------------------------------------
 TClient::~TClient()
 {
 
+}
+//-------------------------------------------------------------------------
+bool TClient::Open(TDescOpen* pDesc, int count)
+{
+	if(count!=1)
+	{
+		TEventError event;
+		event.code = OpenClient_MoreThenOneSubNet;
+		AddEventCopy(&event, sizeof(event));
+		BL_FIX_BUG();
+		return false;
+	}
+	mSubNet = pDesc[0].subNet;
+	return mManagerSession->Start(pDesc, 1);
 }
 //-------------------------------------------------------------------------
 void TClient::Login(unsigned int ip, unsigned short port, void* data, int size)
@@ -39,16 +55,14 @@ void TClient::Login(unsigned int ip, unsigned short port, void* data, int size)
     return;
   }
 
-  mControlSc->mLoginClient->TryLogin(ip, port, data, size);
+  mControlSc->mLoginClient->TryLogin(ip, port, data, size, mSubNet);
 }
 //-------------------------------------------------------------------------
 void TClient::DisconnectInherit(unsigned int id_session)
 {
   // тут проблема в том, что бы различить дисконнект со стороны Мастера при 
   // отработке сценария LoginClient от других
-  IContextScenario* pContext = mContainerUp->GetMCSc()->GetActive();
-  if((pContext)&&// есть вообще активные сценарии
-     (pContext==mControlSc->mLoginClient->GetContext()))// активен сценарий LoginClient
+  if(mContainerUp->IsLoginClientActive())// активен сценарий LoginClient
     // возможно это продолжение сценария
     mControlSc->mLoginClient->DisconnectFromClient();
 	else
@@ -76,7 +90,7 @@ void TClient::EndRcm(IScenario* pSc)
 //-------------------------------------------------------------------------
 void TClient::LeaveQueue()
 {
-  if(mContainerUp->GetMCSc()->GetActive()==&mContainerUp->mLoginClient)
+  if(mContainerUp->IsLoginClientActive())
     mControlSc->mLoginClient->LeaveQueue();
 }
 //-------------------------------------------------------------------------

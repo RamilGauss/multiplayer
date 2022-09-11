@@ -70,3 +70,17 @@ TManagerContextSc* TContainerContextSc::GetMCSc()
   return mManagerContextSc;
 }
 //------------------------------------------------------------
+bool TContainerContextSc::IsRcmActive()
+{
+  if(GetMCSc()->GetActive()==&mRcm)
+    return true;
+  return false;
+}
+//------------------------------------------------------------
+bool TContainerContextSc::IsLoginClientActive()
+{
+  if(GetMCSc()->GetActive()==&mLoginClient)
+    return true;
+  return false;
+}
+//------------------------------------------------------------

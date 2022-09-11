@@ -11,28 +11,30 @@ See for more information License.h.
 #include "BaseEvent.h"
 #include "Master.h"
 
+// только Асинхронные события
+
 namespace nsMMOEngine
 {
 #if defined( WIN32 )
 #pragma pack(push, 1)
 #endif
 
-  struct MMO_ENGINE_EI TEventRecvFromDown : public TBaseEvent
+  struct MMO_ENGINE_EI TEventRecv : public TBaseEvent
+	{
+		TEventRecv();
+		unsigned int id_session;
+		void* data;
+		int sizeData;
+	};
+	//-------------------------------------------------------------
+  struct MMO_ENGINE_EI TEventRecvFromDown : public TEventRecv
   {
     TEventRecvFromDown();
-    unsigned int id_session;
   };
   //-------------------------------------------------------------
-  struct MMO_ENGINE_EI TEventRecvFromUp : public TBaseEvent
+  struct MMO_ENGINE_EI TEventRecvFromUp : public TEventRecv
   {
     TEventRecvFromUp();
-    unsigned int id_session;
-  };
-  //-------------------------------------------------------------
-  struct MMO_ENGINE_EI TEventCreateGroup : public TBaseEvent
-  {
-    TEventCreateGroup();
-    unsigned int id_group;
   };
   //-------------------------------------------------------------
   struct MMO_ENGINE_EI TEventDisconnectUp : public TBaseEvent
@@ -57,13 +59,6 @@ namespace nsMMOEngine
   {
     TEventConnectDown();
     unsigned int id_session;
-  };
-  //-------------------------------------------------------------
-  struct MMO_ENGINE_EI TEventLeaveGroup: public TBaseEvent
-  {
-    TEventLeaveGroup();
-    unsigned int id_client;
-    unsigned int id_group;
   };
   //-------------------------------------------------------------
   struct MMO_ENGINE_EI TEventDestroyGroup : public TBaseEvent

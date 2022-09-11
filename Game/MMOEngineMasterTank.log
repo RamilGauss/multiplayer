@@ -1,18 +1,16 @@
-2013_11_14 19:17:03.843
+2013_11_25 15:08:59.765
 	TManagerContextDownConnection::FindContextBySession(id_session=2) not found.
-2013_11_14 19:17:03.843
+2013_11_25 15:08:59.765
 	TManagerContextDownConnection::FindContextBySession(id_session=2) not found.
-2013_11_14 19:17:06.968
+2013_11_25 15:09:06.015
 	TManagerContextClientLogining::FindContextBySession(session=3) not found.
-2013_11_14 19:17:06.968
+2013_11_25 15:09:06.015
 	TManagerContextClientLogining::FindContextBySession(session=3) not found.
-2013_11_14 19:17:06.968
+2013_11_25 15:09:06.015
 	TManagerContextMoreDownClientConnection::FindContextByClientKey(key=1) not found.
-2013_11_14 19:17:06.968
+2013_11_25 15:09:06.015
 	TManagerContextClientLogining::FindSessionByClientKey(id=1) not found.
-2013_11_14 19:17:08.859
+2013_11_25 15:09:06.015
 	TManagerGroupClient::FindIDByClientKey(id_client=1) not found.
-2013_11_14 19:17:08.859
+2013_11_25 15:09:06.015
 	TManagerGroupClient::FindIDByClientKey(id_client=1) not found.
-2013_11_14 19:17:51.375
-	TMaster::NeedContextLoginClientBySession() against try authorized.

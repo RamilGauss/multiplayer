@@ -38,6 +38,8 @@ namespace nsMMOEngine
     unsigned int mTimeWaitAnswer;
     unsigned int mTimeLastNeedNumInQueue;
 
+    unsigned int mDeltaTimeWait_ms;
+
     typedef std::map<std::string, unsigned int> TMapStrUint;
     typedef TMapStrUint::iterator TMapStrUintIt;
     TMapStrUint mMapStrID_Session;
@@ -50,15 +52,31 @@ namespace nsMMOEngine
     TIP_Port mIP_Port_slave;
 
     bool flgFakeClient;
+
+    bool flgTimeWaitElapsed;
+
+		unsigned char mSubNet;
+
+		// используется на стороне Slave для определения стартовал ли контекст
+		bool flgWasBegin;
 	public:
 		TContextScLoginClient();
     virtual ~TContextScLoginClient();
+
+		bool WasBegin();
+		void SetWasBegin();
 
     unsigned int GetIDClient();
     void SetIDClient(unsigned int id);
 
     void SetTimeWait(unsigned int v);
     unsigned int GetTimeWait();
+
+    unsigned int GetDeltaTimeWaitMS();
+    void SetDeltaTimeWaitMS(unsigned int delta);
+
+    bool IsTimeWaitElapsed();
+    void SetTimeWaitElapsed();
 
     void SetTimeLastNeedNumInQueue(unsigned int v);
     unsigned int GetTimeLastNeedNumInQueue();
@@ -98,6 +116,9 @@ namespace nsMMOEngine
     // только для SuperServer
     bool GetFakeClient();
     void SetFakeClient(bool val);
+
+		void SetSubNet(unsigned char v);
+		unsigned char GetSubNet();
   private:
     void SetID_Session(std::string& name, unsigned int id);
     unsigned int GetID_Session(std::string& name);

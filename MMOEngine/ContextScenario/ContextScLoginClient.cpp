@@ -27,11 +27,16 @@ TContextScLoginClient::TContextScLoginClient()
   mNumInQueue             = 0;
   mTimeWaitAnswer         = 0;
   mTimeLastNeedNumInQueue = 0;
+  mDeltaTimeWait_ms       = 0;
   mState                  = eUndef;
 
   mIDClient = (unsigned int)-1;
 
   flgNeedLeaveQueue = true;
+
+  flgTimeWaitElapsed = false;
+
+	flgWasBegin = false;
 }
 //------------------------------------------------------------------
 TContextScLoginClient::~TContextScLoginClient()
@@ -216,5 +221,44 @@ void TContextScLoginClient::SetFakeClient(bool val)
   flgFakeClient = val;
 }
 //--------------------------------------------------------------
-
+void TContextScLoginClient::SetSubNet(unsigned char v)
+{
+	mSubNet = v;
+}
+//--------------------------------------------------------------
+unsigned char TContextScLoginClient::GetSubNet()
+{
+	return mSubNet;
+}
+//--------------------------------------------------------------
+unsigned int TContextScLoginClient::GetDeltaTimeWaitMS()
+{
+  return mDeltaTimeWait_ms;
+}
+//--------------------------------------------------------------
+void TContextScLoginClient::SetDeltaTimeWaitMS(unsigned int v)
+{
+  mDeltaTimeWait_ms = v;
+}
+//--------------------------------------------------------------
+bool TContextScLoginClient::IsTimeWaitElapsed()
+{
+  return flgTimeWaitElapsed;
+}
+//--------------------------------------------------------------
+void TContextScLoginClient::SetTimeWaitElapsed()
+{
+  flgTimeWaitElapsed = true;
+}
+//--------------------------------------------------------------
+bool TContextScLoginClient::WasBegin()
+{
+	return flgWasBegin;
+}
+//--------------------------------------------------------------
+void TContextScLoginClient::SetWasBegin()
+{
+	flgWasBegin = true;
+}
+//--------------------------------------------------------------
 

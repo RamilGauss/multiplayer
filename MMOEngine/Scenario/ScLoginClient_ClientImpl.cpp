@@ -50,7 +50,7 @@ void TScLoginClient_ClientImpl::Work(unsigned int time_ms)
 }
 //-----------------------------------------------------------------------------
 void TScLoginClient_ClientImpl::TryLogin(unsigned int ip, unsigned short port, 
-                                         void* data, int size)
+                                         void* data, int size, unsigned char subNet)
 {
   if(Begin()==false)
   {
@@ -68,7 +68,8 @@ void TScLoginClient_ClientImpl::TryLogin(unsigned int ip, unsigned short port,
   h.sizeData = size;
   bp.PushFront((char*)&h, sizeof(h));
   // отослать пакет дл€ попытки авторизации
-  SetID_SessionClientMaster(Context()->GetMS()->Send(ip, port, bp));
+	Context()->SetSubNet(subNet);
+  SetID_SessionClientMaster(Context()->GetMS()->Send(ip, port, bp, subNet));
   if(GetID_SessionClientMaster()==INVALID_HANDLE_SESSION)
   {
     // √енераци€ ошибки
@@ -225,7 +226,7 @@ void TScLoginClient_ClientImpl::Disconnect()
   unsigned int id_slave = 
     Context()->GetMS()->Send(ip_port_slave.ip,
                              ip_port_slave.port,
-                             bp);
+                             bp, Context()->GetSubNet());
   // проверка на наличие готовности Slave
   if(id_slave==INVALID_HANDLE_SESSION)
   {

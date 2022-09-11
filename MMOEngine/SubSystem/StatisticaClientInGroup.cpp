@@ -24,7 +24,7 @@ TStatisticaClientInGroup::~TStatisticaClientInGroup()
 
 }
 //---------------------------------------------------------------------------------------------------
-bool TStatisticaClientInGroup::FindSlaveSessionByMinimumClient(unsigned int &id_session)
+bool TStatisticaClientInGroup::FindSlaveSessionByMinimumClient(unsigned int &id_session_slave)
 {
 	if(mMapSlaveSessionClientKey.size()==0)
 		return false;
@@ -34,13 +34,13 @@ bool TStatisticaClientInGroup::FindSlaveSessionByMinimumClient(unsigned int &id_
 		mVecDesc.push_back(TDesc(it.second.size(),it.first));
 
 	sort(mVecDesc.begin(), mVecDesc.end());
-	id_session   = mVecDesc[0].id_session;
+	id_session_slave = mVecDesc[0].id_session;
 	return true;
 }
 //---------------------------------------------------------------------------------------------------
-void TStatisticaClientInGroup::AddSlave(unsigned int id_session)
+void TStatisticaClientInGroup::AddSlave(unsigned int id_session_slave)
 {
-	mMapSlaveSessionClientKey.insert(TMapUintSetUint::value_type(id_session, TSetUint()));
+	mMapSlaveSessionClientKey.insert(TMapUintSetUint::value_type(id_session_slave, TSetUint()));
 }
 //---------------------------------------------------------------------------------------------------
 void TStatisticaClientInGroup::AddBySlaveSessionClientKey(unsigned int id_session_slave, 
@@ -66,4 +66,14 @@ void TStatisticaClientInGroup::DeleteByClientKey(unsigned int id_session_slave, 
 	fit->second.erase(key);
 }
 //---------------------------------------------------------------------------------------------------
+bool TStatisticaClientInGroup::FindCountClientBySlaveSession(unsigned int id_session_slave, 
+                                                             int& countClient)
+{
+  TMapUintSetUintIt fit = mMapSlaveSessionClientKey.find(id_session_slave);
+  if(fit==mMapSlaveSessionClientKey.end())
+    return false;
 
+  countClient = fit->second.size();
+  return true;  
+}
+//---------------------------------------------------------------------------------------------------

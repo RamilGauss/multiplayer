@@ -51,6 +51,9 @@ namespace nsMMOEngine
     void SetMS(TManagerSession* pMS);
     void SetSE(TSrcEvent* pSE);
     void SetUserPtr(void* p);
+
+    bool IsRcmActive();
+    bool IsLoginClientActive();
 	};
 }  
 #endif

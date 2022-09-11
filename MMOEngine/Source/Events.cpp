@@ -8,25 +8,23 @@ See for more information License.h.
 #include "Events.h"
 #include "ManagerSession.h"
 
-namespace nsMMOEngine
-{
+using namespace nsMMOEngine;
 
+TEventRecv::TEventRecv()
+{
+  id_session = INVALID_HANDLE_SESSION;
+	data = NULL;
+	sizeData = 0;
+}
+//-------------------------------------------------------------
 TEventRecvFromDown::TEventRecvFromDown()
 {
   mType = TBase::eRecvFromDown;
-  id_session = INVALID_HANDLE_SESSION;
 }
 //-------------------------------------------------------------
 TEventRecvFromUp::TEventRecvFromUp()
 {
   mType = TBase::eRecvFromUp;
-  id_session = INVALID_HANDLE_SESSION;
-}
-//-------------------------------------------------------------
-TEventCreateGroup::TEventCreateGroup()
-{
-  mType = TBase::eCreateGroup;
-  id_group = 0;
 }
 //-------------------------------------------------------------
 TEventDisconnectUp::TEventDisconnectUp()
@@ -53,12 +51,12 @@ TEventConnectDown::TEventConnectDown()
   id_session = INVALID_HANDLE_SESSION;
 }
 //-------------------------------------------------------------
-TEventLeaveGroup::TEventLeaveGroup()
-{
-  mType = TBase::eLeaveGroup;
-  id_client = 0;
-}
-//-------------------------------------------------------------
+//TEventLeaveGroup::TEventLeaveGroup()
+//{
+//  mType = TBase::eLeaveGroup;
+//  id_client = 0;
+//}
+////-------------------------------------------------------------
 TEventDestroyGroup::TEventDestroyGroup()
 {
   mType = TBase::eDestroyGroup;
@@ -100,4 +98,3 @@ TEventEnterInQueue::TEventEnterInQueue()
   numInQueue = 0;
 }
 //-------------------------------------------------------------
-}

@@ -44,10 +44,9 @@ namespace nsMMOEngine
     virtual void DisconnectInherit(unsigned int id_session);
 	protected:
     virtual void NeedContextDisconnectClient(unsigned int id_client);
-
     virtual void NeedContextLoginMaster(unsigned int id_session);
-
     virtual void NeedContextByMasterSessionByClientKey(unsigned int id_session,unsigned int id_client);//SS
+		virtual void NeedContextSendToClient(unsigned int id_client);
 	protected:
     virtual void EndDisconnectClient(IScenario*);
   };

@@ -65,7 +65,7 @@ namespace nsMMOEngine
   public:
     // от клиента, попытка авторизации
     void TryLogin(unsigned int ip, unsigned short port, 
-                  void* data, int size);
+                  void* data, int size, unsigned char subNet);
     void LeaveQueue();
     // решение ћастера
     void Reject(void* resForClient, int sizeResClient);

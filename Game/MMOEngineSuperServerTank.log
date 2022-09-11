@@ -1,0 +1,8 @@
+2013_11_25 15:11:27.000
+	TManagerContextDownConnection::FindContextBySession(id_session=1) not found.
+2013_11_25 15:11:27.000
+	TManagerContextDownConnection::FindContextBySession(id_session=1) not found.
+2013_11_25 15:11:33.546
+	TManagerContextMoreDownClientConnection::FindContextByClientKey(key=1) not found.
+2013_11_25 15:11:33.546
+	TManagerContextMoreDownClientConnection::FindContextByClientKey(key=1) not found.

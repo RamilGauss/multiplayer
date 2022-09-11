@@ -5,8 +5,8 @@ Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
 See for more information License.h.
 */
 
-#ifndef BASE_SC_LOGIN_CLIENT_MASTER_IMPL_H
-#define BASE_SC_LOGIN_CLIENT_MASTER_IMPL_H
+#ifndef SC_LOGIN_CLIENT_MASTER_IMPL_H
+#define SC_LOGIN_CLIENT_MASTER_IMPL_H
 
 #include "BaseScLoginClient.h"
 
@@ -16,10 +16,12 @@ namespace nsMMOEngine
   {
   protected:
     enum{
-      eTimeWait = 20000,
-      eDeltaTimeNumInQueue = 1000,
-    };
+      eTimeWaitSS_ms    = 20000,
+      eTimeWaitSlave_ms = 20000,
+      eTimeWaitClient_ms    = 5000,
 
+      eDeltaTimeNumInQueue_ms = 1000,
+    };
   public:
 	  TScLoginClient_MasterImpl(IScenario* pSc);
 
@@ -51,20 +53,10 @@ namespace nsMMOEngine
   private:
     void SendResultAccept2ClientAndSlave(unsigned int key, 
                                          void* resForClient, int sizeResClient);
+
+    void SetWaitSS();
+    void SetWaitSlave();
+    void SetWaitClient();
   };
-  //---------------------------------------------------------------------------------
-  //---------------------------------------------------------------------------------
-  //template <typename F, class C>
-  //void TScLoginClient_MasterImpl::RegisterOnNeedNumInQueue(F f, C pObject)
-  //{
-  //  mCallBackNeedNumInQueue.Register(f,pObject);
-  //}
-  ////---------------------------------------------------------------------------------
-  //template <typename F, class C>
-  //void TScLoginClient_MasterImpl::RegisterOnNeedLeaveFromQueue(F f, C pObject)
-  //{
-  //  mCallBackNeedLeaveFromQueue.Register(f,pObject);
-  //}
-  ////---------------------------------------------------------------------------------
 }
 #endif

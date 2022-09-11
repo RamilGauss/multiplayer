@@ -19,29 +19,11 @@ namespace nsMMOEngine
   class TManagerContextClientLogining;
   class TManagerGroupClient;
 	class TStatisticaClientInGroup;
+  class TContextScRecommutationClient;
+  class TManagerRecommutation;
   class MMO_ENGINE_EI TMaster : public TActiveServer
   {
-    // для анализа, при создании группы
-    struct TDescChoiseSlave
-    {
-      typedef enum{
-        eEmpty,
-        eGroup,
-        eMGroup,
-        eFree,
-        eGroupFree,
-        eMFree,
-      } eType;
-      eType type;
-      //TSlave_master* pSlave;
-    };
-    typedef std::list<TDescChoiseSlave> TListSlavePrior;
-
     enum{
-      // по степени нагрузки CPU Slave
-      eLimitMoreEmpty = 10,// %
-      eLimitMoreHalf  = 50,// %
-
       eLimitLoadProcentOnSlaveForAdd = 70,
       eLimitLoadProcentOnSlaveForAdd_ClientInGroup = 75, // для Клиента, состоящего в Группе процент другой
 
@@ -61,6 +43,10 @@ namespace nsMMOEngine
     boost::scoped_ptr<TSetOrderElement>                        mSetClientKeyInQueue;
 		// для создания группы, нужна статистика по клиентам, которые уже в группе
 		boost::scoped_ptr<TStatisticaClientInGroup>                mStatisticaClientInGroup;
+    // какой клиент с какими Slave связан в процессе перекоммутации
+    // необходимо знать если произошел Дисконнект с Клиентом, Донором или Реципиентом, что бы 
+    // уведомить оставшихся на связи об этом Дисконнекте.
+    boost::scoped_ptr<TManagerRecommutation>                   mMngRcm;
   public:
     typedef enum
     {
@@ -92,7 +78,7 @@ namespace nsMMOEngine
     virtual void SendDown(unsigned int id_session, TBreakPacket bp, bool check = true);
 
     // ActiveServer      
-    virtual void ConnectUp(unsigned int ip, unsigned short port);
+    virtual void ConnectUp(unsigned int ip, unsigned short port, unsigned char subNet = 0);
 	protected:
     // Base
     virtual void DisconnectInherit(unsigned int id_session);
@@ -104,9 +90,14 @@ namespace nsMMOEngine
     virtual void NeedContextLoginClientByClientKey(unsigned int id_key_client);
     virtual void NeedNumInQueueLoginClient(unsigned int id_session);
     //--------------------------------------------------------------------------
+		// RCM
+		virtual void ActivateRcmClient(IScenario* pSc);//M
+    virtual void NeedSlaveSessionDonor(IScenario* pSc);
+		//----------------------------------------------------
     virtual void NeedContextLoginSlave(unsigned int id_session);
     virtual void NeedContextRcm(unsigned int id_session);
     virtual void NeedContextSynchroSlave(unsigned int id_session);
+    virtual void NeedContextSendToClient(unsigned int id_client);
 	protected:
     virtual void EndDisconnectClient(IScenario*);
     virtual void EndLoginMaster(IScenario* pSc);
@@ -119,11 +110,16 @@ namespace nsMMOEngine
 
     bool EvalCreateGroupNow(std::list<unsigned int>& l_id_client, 
                             unsigned int& id_group);
+    bool LoadInFutureLessLimit(unsigned int id_session_slave,
+                               std::list<unsigned int>& l_id_client);
+    void SolveExchangeClient(unsigned int id_client, 
+                             TContainerContextSc* pC_ClientInGroup, 
+                             unsigned int id_session_slave_recipient);
+    void RcmByClientKeyContextSlaveSessionRecipient(unsigned int id_client,
+                                                    TContextScRecommutationClient* pCRCM, 
+                                                    unsigned int id_session_slave_recipient);
 
-		//###
-		//TSlave_master* AnalizListSlaveForGroup(TListSlavePrior& l_slave_prior);
-  //  unsigned int CreateGroup(TSlave_master* pSlave,std::list<unsigned int>& l_id_client);
-	//###
+  private:
     bool DisconnectSuperServer(unsigned int id_session); 
     bool DisconnectClientWait(unsigned int id_session);
     bool DisconnectSlave(unsigned int id_session);
@@ -141,7 +137,7 @@ namespace nsMMOEngine
 		void TryAddClientFromQueue();
     void Done();
 
-    // находится ли Клиент в процессе перекомутации
+    // находится ли Клиент в процессе перекоммутации
     bool IsClientRecommutation(unsigned int id_client);
   };
 }

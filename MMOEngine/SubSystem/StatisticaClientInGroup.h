@@ -52,14 +52,15 @@ namespace nsMMOEngine
     ~TStatisticaClientInGroup();
     
     // навигация
-    bool FindSlaveSessionByMinimumClient(unsigned int &id_session);
+    bool FindSlaveSessionByMinimumClient(unsigned int &id_session_slave);
+    bool FindCountClientBySlaveSession(unsigned int id_session_slave, int& countClient);
     // добавление
     void AddSlave(unsigned int id_session);
     // добавить в группу клиента
     void AddBySlaveSessionClientKey(unsigned int id_session_slave, unsigned int id_client);
 
     // удаление
-    void DeleteBySlaveSession(unsigned int id_session);
+    void DeleteBySlaveSession(unsigned int id_session_slave);
 		void DeleteByClientKey(unsigned int id_session_slave, unsigned int key);
   private:
   };

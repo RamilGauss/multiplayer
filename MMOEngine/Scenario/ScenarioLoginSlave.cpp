@@ -20,7 +20,7 @@ TScenarioLoginSlave::TScenarioLoginSlave()
 
 }
 //-------------------------------------------------------------------------------------
-void TScenarioLoginSlave::ConnectToMaster( unsigned int ip, unsigned short port )
+void TScenarioLoginSlave::ConnectToMaster( unsigned int ip, unsigned short port, unsigned char subNet )
 {
   Context()->SetConnect(false);
   if(Begin()==false)
@@ -37,7 +37,7 @@ void TScenarioLoginSlave::ConnectToMaster( unsigned int ip, unsigned short port 
   TBreakPacket bp;
   THeaderFromSlave h;
   bp.PushFront((char*)&h, sizeof(h));
-  Context()->SetID_Session( Context()->GetMS()->Send(ip, port, bp) );
+  Context()->SetID_Session( Context()->GetMS()->Send(ip, port, bp, subNet) );
   if(Context()->GetID_Session()==INVALID_HANDLE_SESSION)
   {
     // Генерация ошибки

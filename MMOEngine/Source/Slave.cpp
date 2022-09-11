@@ -33,6 +33,7 @@ mMngContextClient(new TManagerContextClient_slave)
 {
   mTimeNeedSendSynchro = 0;
   mControlSc->mLoginClient->SetBehavior(TScenarioLoginClient::eSlave);
+	//mControlSc->mRcm->SetBehavior(TScenarioRecommutationClient::eSla);
 }
 //-------------------------------------------------------------------------
 TSlave::~TSlave()
@@ -117,13 +118,13 @@ bool TSlave::GetDescDown(int index, void* pDesc, int& sizeDesc)
 	return true;
 }
 //-------------------------------------------------------------------------
-void TSlave::ConnectUp(unsigned int ip, unsigned short port)
+void TSlave::ConnectUp(unsigned int ip, unsigned short port, unsigned char subNet)
 {
   // если сессия жива, то значит либо соединились, либо соединяемся
   if(mID_SessionUp!=INVALID_HANDLE_SESSION)
     return;
 
-  mControlSc->mLoginSlave->ConnectToMaster(ip, port);
+  mControlSc->mLoginSlave->ConnectToMaster(ip, port, subNet);
   // тут же опросить на созданную сессию
   mID_SessionUp = mContainerUp->mLoginSlave.GetID_Session();
 }
@@ -215,17 +216,19 @@ void TSlave::NeedContextRcm(unsigned int id_session)
 
 }
 //-------------------------------------------------------------------------
-void TSlave::NeedContextSendToClient(unsigned int id_session_client)
+void TSlave::NeedContextSendToClient(unsigned int id_client)
 {
   // запрос на отправку какому-то клиенту
-  TContainerContextSc* pC = mMngContextClient->FindContextBySession(id_session_client);
-  if(pC)
-    mControlSc->mSendToClient->SetContext(&pC->mSendToClient);
+  TContainerContextSc* pContext = mMngContextClient->FindContextByKey(id_client);
+	if(pContext)
+		mControlSc->mSendToClient->SetContext(&pContext->mSendToClient);
+	else
+		mControlSc->mSendToClient->SetContext(NULL);
 }
 //-------------------------------------------------------------------------
 void TSlave::SendByClientKey(list<unsigned int>& lKey, TBreakPacket bp)
 {
-
+	mControlSc->mSendToClient->SendFromSlave(lKey, bp);
 }
 //-------------------------------------------------------------------------
 void TSlave::NeedContextLoginClientByClientSessionByKeyClient(unsigned int id_session_client,

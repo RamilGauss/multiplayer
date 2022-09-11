@@ -8,11 +8,16 @@ See for more information License.h.
 #include "ScenarioRecommutationClient.h"
 #include "ManagerSession.h"
 
+#pragma warning(disable:4355)
+
 using namespace nsMMOEngine;
 
-TScenarioRecommutationClient::TScenarioRecommutationClient()
+TScenarioRecommutationClient::TScenarioRecommutationClient():
+mClient(this),mSlave(this),mMaster(this)
 {
+  mCurBehavior = NULL; 
 
+  //AddCallBack(eSetClientKey,                     &mCBSetClientKey);
 }
 //--------------------------------------------------------------
 TScenarioRecommutationClient::~TScenarioRecommutationClient()
@@ -28,23 +33,15 @@ void TScenarioRecommutationClient::Work()
 void TScenarioRecommutationClient::Start(unsigned int id_session_recipient,
                                          unsigned int id_client)
 {
-  //Context()->SetClient(id_client);
-
-  //if(Begin()==false)
-  //{
-  //  mListNextID_SessionSlave.push_back(new_id_session);
-  //  return;
-  //}
-  //Context()->SetID_Session(new_id_session);
-  //SendFirstPacket();
+  mMaster.Start(id_session_recipient, id_client);
 }
 //--------------------------------------------------------------
 void TScenarioRecommutationClient::DelayBegin()
 {
-  unsigned int new_id_session = mListNextID_SessionSlave.front();
-  mListNextID_SessionSlave.pop_front();
-  Context()->SetID_Session(new_id_session);
-  SendFirstPacket();
+  //unsigned int new_id_session = mListNextID_SessionSlave.front();
+  //mListNextID_SessionSlave.pop_front();
+  //Context()->SetID_Session(new_id_session);
+  //SendFirstPacket();
 }
 //--------------------------------------------------------------
 void TScenarioRecommutationClient::SendFirstPacket()
@@ -54,7 +51,7 @@ void TScenarioRecommutationClient::SendFirstPacket()
   TBreakPacket bp;
   //THeaderSendFirstpacketRcmM h;
   //bp.PushBack((char*)&h, sizeof(h));
-  Context()->GetMS()->Send(Context()->GetID_Session(),bp);
+  //Context()->GetMS()->Send(Context()->GetID_Session(),bp);
 }
 //--------------------------------------------------------------
 void TScenarioRecommutationClient::SaveContext(void* data, int size)
@@ -65,5 +62,21 @@ void TScenarioRecommutationClient::SaveContext(void* data, int size)
 void TScenarioRecommutationClient::Recv(TDescRecvSession* pDesc)
 {
 
+}
+//---------------------------------------------------------------------
+void TScenarioRecommutationClient::SetBehavior(eBehavior v)
+{
+  switch(v)
+  {
+    case eClient:
+      mCurBehavior = &mClient;
+      break;
+    case eSlave:
+      mCurBehavior = &mSlave;
+      break;
+    case eMaster:
+      mCurBehavior = &mMaster;
+      break;
+  }
 }
 //---------------------------------------------------------------------

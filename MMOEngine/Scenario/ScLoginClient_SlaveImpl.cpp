@@ -120,14 +120,23 @@ void TScLoginClient_SlaveImpl::InfoClientM2S(TDescRecvSession* pDesc)
   }
   //--------------------------------------------
   // начало сценария
-  if(Begin()==false)
-  {
-    // генерация ошибки
-    GetLogger(STR_NAME_MMO_ENGINE)->
-      WriteF_time("TScLoginClient_SlaveImpl::InfoClientM2S() scenario is not active.\n");
-    BL_FIX_BUG();
-    return;
-  }
+	if(Context()->WasBegin()==false)
+	{
+		// стартовали впервые
+		Context()->SetWasBegin();
+		if(Begin()==false)
+		{
+			// генерация ошибки
+			GetLogger(STR_NAME_MMO_ENGINE)->
+				WriteF_time("TScLoginClient_SlaveImpl::InfoClientM2S() scenario is not active.\n");
+			BL_FIX_BUG();
+			return;
+		}
+	}
+	// Если WasBegin==true - старт уже был, Мастер не дождался Клиент, остановил у себя сценарий
+	// потом Клиент еще раз попытался авторизоваться, а Salve еще его ждет, т.е. это уже
+	// вторая попытка войти. Что ж продолжим авторизацию.
+
 	SetTimeWaitForNow();
 	// запомнить сессию
   SetID_SessionMasterSlave(pDesc->id_session);

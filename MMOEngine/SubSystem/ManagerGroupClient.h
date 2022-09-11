@@ -10,7 +10,6 @@ See for more information License.h.
 
 #include <map>
 #include <set>
-#include "Base.h"
 
 namespace nsMMOEngine
 {
@@ -48,7 +47,7 @@ namespace nsMMOEngine
                              unsigned int& id_client);
 
     // добавление/удаление
-    unsigned int AddGroup(unsigned int id_session = INVALID_HANDLE_SESSION);
+    unsigned int AddGroup(unsigned int id_session);
     // добавить в группу клиента
     bool AddClientKey(unsigned int id_group, unsigned int id_client);
     // для данной группы установить сессию
@@ -59,7 +58,7 @@ namespace nsMMOEngine
     void DeleteByID(unsigned int id_group);
   private:
     // добавление/удаление
-    void AddGroup(unsigned int id_group, unsigned int id_session = INVALID_HANDLE_SESSION);
+    void AddGroup(unsigned int id_group, unsigned int id_session);
   };
 }
 

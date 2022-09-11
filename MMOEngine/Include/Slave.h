@@ -24,7 +24,8 @@ namespace nsMMOEngine
 
     unsigned int mTimeNeedSendSynchro;
     boost::scoped_ptr<TManagerContextClient_slave> mMngContextClient;
-
+		// только для Клиентов, которые считают текущий Slave реципиентом
+    boost::scoped_ptr<TManagerContextClient_slave> mMngContextClientSlaveRecipient;
   public:
     TSlave();
     virtual ~TSlave();
@@ -44,7 +45,7 @@ namespace nsMMOEngine
 		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);// pDesc имеет тип TDescDownSlave
     virtual void SendDown(unsigned int id_session, TBreakPacket bp, bool check = true);
     // ActiveServer      
-    virtual void ConnectUp(unsigned int ip, unsigned short port);
+    virtual void ConnectUp(unsigned int ip, unsigned short port, unsigned char subNet = 0);
   protected:
     // Base
 		virtual void WorkInherit();

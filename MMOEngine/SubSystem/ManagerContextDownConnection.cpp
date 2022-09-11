@@ -53,12 +53,14 @@ bool TManagerContextDownConnection::GetSessionByIndex( int index, unsigned int& 
   return true; 
 }
 //-----------------------------------------------------------------------------------
-int TManagerContextDownConnection::GetCountClientKey(unsigned int id_session)
+bool TManagerContextDownConnection::GetCountClientKey(unsigned int id_session, 
+                                                      int &count)
 {
   TMapUintSetUintIt fit = mMapSessionKey.find(id_session);
   if(fit==mMapSessionKey.end())
-    return 0;
-  return fit->second.size();
+    return false;
+  count = fit->second.size();
+  return true;
 }
 //-----------------------------------------------------------------------------------
 bool TManagerContextDownConnection::GetClientKeyByIndex(unsigned int id_session, 
@@ -70,7 +72,10 @@ bool TManagerContextDownConnection::GetClientKeyByIndex(unsigned int id_session,
     return false;
 
   TSetUintIt it = fit->second.begin();
-  if(GetCountClientKey(id_session)<=index)
+  int count;
+  if(GetCountClientKey(id_session, count)==false)
+    return false;
+  if(count<=index)
     return false;
   for(int i = 0 ; i < index ; i++)
     it++;

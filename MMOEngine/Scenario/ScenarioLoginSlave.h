@@ -41,7 +41,7 @@ namespace nsMMOEngine
 
     virtual void Recv(TDescRecvSession* pDesc);
 
-    void ConnectToMaster( unsigned int ip, unsigned short port );
+    void ConnectToMaster( unsigned int ip, unsigned short port, unsigned char subNet);
   protected:
     virtual void Work();
 
