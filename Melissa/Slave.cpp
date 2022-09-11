@@ -35,7 +35,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "Slave.h"
 
-using namespace nsMelissa;
+namespace nsMelissa
+{
 
 TSlave::TSlave()
 {
@@ -47,18 +48,50 @@ TSlave::~TSlave()
 
 }
 //-------------------------------------------------------------------------
-void TSlave::SaveContext(void* data, int size)
+void TSlave::SaveContext(unsigned int id_session, void* data, int size)
 {
 
 }
 //-------------------------------------------------------------------------
-unsigned int TSlave::GetClientKeyBySession(ISession* pSession)
+unsigned int TSlave::GetClientKeyBySession(unsigned int id_session)
 {
 	return (unsigned int)(-1);
 }
 //-------------------------------------------------------------------------
-ISession* TSlave::GetSessionByClientKey(unsigned int key)
+unsigned int TSlave::GetSessionByClientKey(unsigned int key)
 {
-	return NULL;
+  return INVALID_HANDLE_SESSION;
 }
 //-------------------------------------------------------------------------
+void TSlave::Work()
+{
+
+}
+//-------------------------------------------------------------------------
+void TSlave::Disconnect(unsigned int id_session)
+{
+
+}
+//-------------------------------------------------------------------------
+int TSlave::GetCountDown()
+{
+	return 0;
+}
+//-------------------------------------------------------------------------
+bool TSlave::GetDescDown(int index, void* pDesc, int& sizeDesc)
+{
+	return false;
+}
+//-------------------------------------------------------------------------
+void TSlave::RecvFromClient(TDescRecvSession* pDesc)
+{
+
+}
+//-------------------------------------------------------------------------
+void TSlave::RecvFromMaster(TDescRecvSession* pDesc)
+{
+
+}
+//-------------------------------------------------------------------------
+
+}

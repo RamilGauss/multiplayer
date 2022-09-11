@@ -58,7 +58,7 @@ public:
   virtual bool Open(unsigned short port, unsigned char numNetWork = 0);
 
 	virtual void Send(unsigned int ip, unsigned short port, 
-                    TBreakPacket& packet,
+                    TBreakPacket packet,
                     bool check = true);
 
 	// чтение - зарегистрируйся
@@ -71,6 +71,8 @@ public:
 
   // синхронная функция
   virtual bool Connect(unsigned int ip, unsigned short port); // вызов только для клиента
+
+	virtual void Close(unsigned int ip, unsigned short port);
 protected:
   void Done();
 };

@@ -101,14 +101,9 @@ class TNetControlTCP : public INetControl
   typedef std::map<int,TDescHistoryRead> TMapIntDH;
   typedef TMapIntDH::iterator TMapIntDHIt;
 
-  //typedef std::map<TIP_Port,int> TMapIPInt;
-  //typedef TMapIPInt::iterator TMapIPIntIt;
-
 	typedef TMapDual<TIP_Port,int> TMapD_IPInt;
 
   TMapIntDH mMapHistory;
-  //TMapIPInt mMapIPSock;
-
 	TMapD_IPInt mMapDIPSock;
 
   GCS gcsSendAccept;
@@ -123,9 +118,9 @@ public:
   // TNetTransport_XXX
   virtual bool Open( unsigned short port, unsigned char numNetWork = 0);
   virtual bool Connect(unsigned int ip, unsigned short port);
-  virtual void Send(unsigned int ip, unsigned short port, TBreakPacket& bp);
+  virtual void Send(unsigned int ip, unsigned short port, TBreakPacket bp);
 
-	virtual void Close();
+	virtual void Close(unsigned int ip, unsigned short port);
 
 protected:
 	void ReadEvent();

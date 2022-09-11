@@ -28,7 +28,8 @@ int main(int argc, char** argv)
   pClient->SetSelfID(0);
   pClient->SetDstObject(&dst);
 
-  pClient->Init(pMT,1234);
+  pClient->Init(pMT);
+  pClient->Open(1234);
   pClient->Login(0, 0, NULL, 0);
 
   pClient->Work();// #0

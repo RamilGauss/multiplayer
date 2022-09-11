@@ -48,10 +48,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "../GameLib/IManagerStateMachine.h"
 #include "IControlCamera.h"
 #include "IXML.h"
+#include "Client.h"
 
 using namespace std;
 using namespace nsStruct3D;
 using namespace nsEvent;
+using namespace nsMelissa;
 
 using namespace nsKey;
 
@@ -241,7 +243,7 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent, const 
   float v = start/float(cnt[0]*cnt[1]*cnt[2]);
   mFuncGetLogger()->Get("Form")->WriteF_time("ViewerModel: Время загрузки объектов t=%u мс,v=%f мс/об.\n",start,v);
 #endif
-
+  // GUI
   mClientMain      = new TClientMain;
   mGameRoomPrepare = new TGameRoomPrepare;
   mWaitForm        = new TWaitForm;
@@ -255,7 +257,7 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent, const 
   //mWaitForm->Show();
   // подстроиться
   mComponent.mGUI->Resize();
-
+  // HotKey
   bool resLoadMSM = mComponent.mMStateMachine->Load("../game_param/ViewerModel.xml", mIDkey);
   BL_ASSERT(resLoadMSM);
 }

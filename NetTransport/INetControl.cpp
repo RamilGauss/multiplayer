@@ -42,28 +42,12 @@ static INetMakerEvent* pNetMakerEvent = NULL;
 
 void INetControl::Register(TCallBackRegistrator::TCallBackFunc pFunc, INetTransport::eTypeCallback type)
 {
-  switch(type)
-  {
-    case INetTransport::eRecv:
-      mCallBackRecv.Register(pFunc);
-      break;
-    case INetTransport::eDisconnect:
-      mCallBackDisconnect.Register(pFunc);
-      break;
-  }
+  GetCallBackByType(type)->Register(pFunc);
 }
 //------------------------------------------------------------------------------
 void INetControl::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, INetTransport::eTypeCallback type)
 {
-  switch(type)
-  {
-    case INetTransport::eRecv:
-      mCallBackRecv.Unregister(pFunc);
-      break;
-    case INetTransport::eDisconnect:
-      mCallBackDisconnect.Unregister(pFunc);
-      break;
-  }
+  GetCallBackByType(type)->Unregister(pFunc);
 }
 //------------------------------------------------------------------------------
 void INetControl::SetMakerEvent(INetMakerEvent* pME)
@@ -84,5 +68,20 @@ void INetControl::NotifyRecv(char* p, int size)
 void INetControl::NotifyDisconnect(char* p, int size)
 {
 	mCallBackDisconnect.Notify(p, size);
+}
+//------------------------------------------------------------------------------
+TCallBackRegistrator* INetControl::GetCallBackByType(INetTransport::eTypeCallback type)
+{
+  TCallBackRegistrator* pCallBack = NULL;
+  switch(type)
+  {
+    case INetTransport::eRecv:
+      pCallBack = &mCallBackRecv;
+      break;
+    case INetTransport::eDisconnect:
+      pCallBack = &mCallBackDisconnect;
+      break;
+  }
+  return pCallBack;
 }
 //------------------------------------------------------------------------------

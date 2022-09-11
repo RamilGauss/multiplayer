@@ -33,25 +33,21 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "ActiveServer.h"
+#ifndef MELISSA_DESC_RECV_SESSION_H
+#define MELISSA_DESC_RECV_SESSION_H
+
+#include "INetTransport.h"
 
 namespace nsMelissa
 {
-
-TActiveServer::TActiveServer()
-{
-
+  class TSession;
+	struct TDescRecvSession : public INetTransport::TDescRecv
+	{
+		unsigned int id;
+		TDescRecvSession()
+		{
+      id = INVALID_HANDLE_SESSION;
+		}
+	};
 }
-//-------------------------------------------------------------------------
-TActiveServer::~TActiveServer()
-{
-
-}
-//-------------------------------------------------------------------------
-void TActiveServer::ConnectUp(unsigned int ip, unsigned short port)
-{
-
-}
-//-------------------------------------------------------------------------
-
-}
+#endif

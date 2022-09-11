@@ -45,12 +45,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 //#define SERVER_NUMBER_OF_NETWORK 0 // ??  выбор подсети (в случае наличия нескольких сетевых адаптеров)
 
 // версии
-#define VER_GAME_ENGINE           ((unsigned short)41)
-#define COUNT_GAME_ENGINE_MODULES ((unsigned short)2)
+#define VER_GAME_ENGINE           ((unsigned short)42)
+#define COUNT_GAME_ENGINE_MODULES ((unsigned short)3)
 
 #define VER_GRAPHIC_ENGINE ((unsigned short)56)
 #define VER_PHYSIC_ENGINE  ((unsigned short)0)
-#define VER_NET_ENGINE     ((unsigned short)21)
+#define VER_NET_ENGINE     ((unsigned short)22)
 
 extern char strVerGameEngine[260];
 extern char strVerGraphicEngine[260];

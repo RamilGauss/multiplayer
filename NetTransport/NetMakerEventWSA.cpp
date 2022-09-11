@@ -142,6 +142,7 @@ void TNetMakerEventWSA::Start()
     (gpointer)this,
     true,
     NULL);
+
   while(IsActive()==false)
     ht_msleep(eWaitFeedBack);
 }
@@ -150,9 +151,7 @@ void TNetMakerEventWSA::Stop()
 {
   flgNeedStop = true;
   while(IsActive())
-  {
     ht_msleep(eWaitFeedBack);
-  }
 }
 //----------------------------------------------------------------------------------
 void TNetMakerEventWSA::Work()

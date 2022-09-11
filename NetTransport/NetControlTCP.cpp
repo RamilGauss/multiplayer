@@ -120,7 +120,7 @@ bool TNetControlTCP::Connect(unsigned int ip, unsigned short port)
   return res;
 }
 //------------------------------------------------------------------------------
-void TNetControlTCP::Send(unsigned int ip, unsigned short port, TBreakPacket& bp)
+void TNetControlTCP::Send(unsigned int ip, unsigned short port, TBreakPacket bp)
 {
   // найти сокет, ассоциированный с ip:port
   TIP_Port ip_port(ip, port);
@@ -130,17 +130,18 @@ void TNetControlTCP::Send(unsigned int ip, unsigned short port, TBreakPacket& bp
   unlockSA();
 
 	// добавить заголовки в начало  - 2 байт под начало + 4 байта - размер данных
-	TBreakPacket bp_out = bp;
 	THeader header;
-	header.size = bp_out.GetSize();
-	bp_out.PushFront((char*)&header, sizeof(header));
-	bp_out.Collect();
+	header.size = bp.GetSize();
+	bp.PushFront((char*)&header, sizeof(header));
+	bp.Collect();
 
-	mDevice.Send(sock, (char*)bp_out.GetCollectPtr(), bp_out.GetSize(), 0, 0);
+	mDevice.Send(sock, (char*)bp.GetCollectPtr(), bp.GetSize(), 0, 0);
 }
 //------------------------------------------------------------------------------
-void TNetControlTCP::Close()
+void TNetControlTCP::Close(unsigned int ip, unsigned short port)
 {
+	int sock = GetSocketByIpPort(TIP_Port(ip,port));
+	mDevice.Close(sock);
 }
 //------------------------------------------------------------------------------
 void TNetControlTCP::ReadEvent()

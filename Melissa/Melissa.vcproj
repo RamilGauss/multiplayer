@@ -217,7 +217,23 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\Events.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ManagerSession.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Master.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NavigateSession.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Session.cpp"
 				>
 			</File>
 			<File
@@ -243,6 +259,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BaseEvent.h"
+				>
+			</File>
+			<File
 				RelativePath=".\BaseServer.h"
 				>
 			</File>
@@ -251,19 +271,35 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DescRecvSession.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Events.h"
+				>
+			</File>
+			<File
+				RelativePath=".\HeaderSubSystem.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IMakerTransport.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IManagerSession.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ISession.h"
+				RelativePath=".\ManagerSession.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Master.h"
+				>
+			</File>
+			<File
+				RelativePath=".\NavigateSession.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Session.h"
 				>
 			</File>
 			<File
@@ -272,6 +308,10 @@
 			</File>
 			<File
 				RelativePath=".\SuperServer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TypePacket.h"
 				>
 			</File>
 		</Filter>

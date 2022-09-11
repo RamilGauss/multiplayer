@@ -34,12 +34,19 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 #include "Client.h"
+//#include "BasePacket_Private.h"
+#include "ManagerSession.h"
+#include "TypePacket.h"
+#include "HeaderSubSystem.h"
 
-using namespace nsMelissa;
+using namespace nsMelissaSubSystem;
+
+namespace nsMelissa
+{
 
 TClient::TClient()
 {
-
+  mMasterSession = NULL;
 }
 //-------------------------------------------------------------------------
 TClient::~TClient()
@@ -49,7 +56,36 @@ TClient::~TClient()
 //-------------------------------------------------------------------------
 void TClient::Login(unsigned int ip, unsigned short port, void* data, int size)
 {
+  TBreakPacket bp;
+  bp.PushFront((char*)data,size);
+  TBaseHeader h;
+  h.type = C_TRY_LOGIN;
+  h.from = eFromClient;
+  bp.PushFront((char*)&h, sizeof(h));
+  // отослать пакет для попытки авторизации
+  mMasterSession = mManagerSession->Send(ip, port, bp, true);
+  //if(mMasterSession==NULL)
+}
+//-------------------------------------------------------------------------
+void TClient::Work()
+{
+  
+}
+//-------------------------------------------------------------------------
+void TClient::Disconnect(unsigned int id_session)
+{
+
+}
+//-------------------------------------------------------------------------
+void TClient::RecvFromSlave(TDescRecvSession* pDesc)
+{
+
+}
+//-------------------------------------------------------------------------
+void TClient::RecvFromMaster(TDescRecvSession* pDesc)
+{
 
 }
 //-------------------------------------------------------------------------
 
+}

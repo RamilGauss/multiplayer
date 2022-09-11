@@ -74,7 +74,7 @@ bool TNetTransport_TCP_UDP::Open(unsigned short port, unsigned char numNetWork)
 }
 //----------------------------------------------------------------------------------
 void TNetTransport_TCP_UDP::Send(unsigned int ip, unsigned short port, 
-							                   TBreakPacket& packet, bool check)
+							                   TBreakPacket packet, bool check)
 {
   if(check)
     mTCP->Send(ip, port, packet);
@@ -110,5 +110,10 @@ void TNetTransport_TCP_UDP::Unregister(TCallBackRegistrator::TCallBackFunc pFunc
 bool TNetTransport_TCP_UDP::Connect(unsigned int ip, unsigned short port)
 {
   return mTCP->Connect(ip, port);
+}
+//----------------------------------------------------------------------------------
+void TNetTransport_TCP_UDP::Close(unsigned int ip, unsigned short port)
+{
+	mTCP->Close(ip, port);
 }
 //----------------------------------------------------------------------------------

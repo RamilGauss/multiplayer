@@ -20,6 +20,7 @@
 #include "BreakPacket.h"
 
 #include "share_test.h"
+#include "Events.h"//###
 
 #define TIMER_LOG_ENABLE
 
@@ -44,8 +45,50 @@ struct TArgData
 //-------------------------------------------------------------------
 void GetByArg(int argc, char** argv, TArgData &d);
 //-------------------------------------------------------------------
+class TA
+{
+public:
+  TA()
+  {
+    int a = 0;
+  }
+  ~TA()
+  {
+    int a = 0;
+  }
+};
 int main(int argc, char** argv)
 {
+  //###
+  TA** pInt = new TA*;
+  TListMultiThread<TA*> list;
+  list.Add(pInt);
+  TA*** pFirst = list.GetFirst();
+  //list.ZeroPointerElement(pFirst);
+  list.Clear();
+
+#if 0
+  // внутри Melissa
+  nsMelissa::TEventTryLogin erfd;
+  erfd.pSession = (nsMelissa::ISession*)1;
+  erfd.sizeData = 100;
+  TContainer* pC = new TContainer;
+  pC->SetData(NULL, sizeof(nsMelissa::TEventTryLogin) + erfd.sizeData);
+  memcpy(pC->GetPtr(), &erfd, sizeof(nsMelissa::TEventTryLogin));
+  // внутри DeveloperDLL
+  nsMelissa::TBaseEvent* pBE = (nsMelissa::TBaseEvent*)pC->GetPtr();
+  switch(pBE->mType)
+  {
+    case nsMelissa::TBase::eTryLogin:
+    {
+      nsMelissa::TEventTryLogin* pERFD = (nsMelissa::TEventTryLogin*)pBE;
+      break;
+    }
+    default:;
+  }
+  delete pC;
+#endif
+  //###
   Init("Client");
 
 	TArgData d;
@@ -60,11 +103,11 @@ int main(int argc, char** argv)
   pNetTransport->Register(Recv,       INetTransport::eRecv);
   pNetTransport->Register(Disconnect, INetTransport::eDisconnect);
 
+	pNetTransport->Start(); TL_POINT("Start");
+
   TBreakPacket packetForSend;
 	if(pNetTransport->Connect(d.ip, PORT_SERVER))
 	{
-		pNetTransport->Start(); TL_POINT("Start");
-
 		TL_POINT("Before send");
 		unsigned int start = ht_GetMSCount();
 
@@ -89,8 +132,8 @@ int main(int argc, char** argv)
 		printf("time=%d ms, v=%f \n",start,float(sizeof(packet)*CNT_RECV_PACKET)/(start*1000));
 		_getch();
 
-		pNetTransport->Stop();
 	}
+	pNetTransport->Stop();
 
   pNetTransport->Unregister(Recv,       INetTransport::eRecv);
   pNetTransport->Unregister(Disconnect, INetTransport::eDisconnect);

@@ -43,7 +43,6 @@ namespace nsMelissa
 {
   class MELISSA_EI TMaster : public TActiveServer
   {
-
   public:
     TMaster();
     virtual ~TMaster();
@@ -52,14 +51,28 @@ namespace nsMelissa
     virtual void DestroyGroup(unsigned int id_group);
     virtual void LeaveGroup(unsigned int id_client);
     virtual void GetListForGroup(unsigned int id_group, std::list<unsigned int>& l);
-    virtual void SetResultLogin(bool res, ISession* pSession, 
+    virtual void SetResultLogin(bool res, unsigned int id_session, 
                                 unsigned int id_client, 
                                 void* resForClient, int sizeResClient);
-    virtual ISession* GetSlaveByGroup(unsigned int id_group);
+    virtual unsigned int GetSlaveSessionByGroup(unsigned int id_group);
     virtual void SendToClient(unsigned int id_client, void* data, int size, bool check = true);
+   
+    // Base
+    virtual void Work();
+		// BaseServer
+		struct TDescDownMaster
+		{
+			unsigned int id_session;
+		};
+		virtual int  GetCountDown();
+		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);
 
 	protected:
+    virtual void Disconnect(unsigned int id_session);
 
+    virtual void RecvFromClient(TDescRecvSession* pDesc);
+    virtual void RecvFromSlave(TDescRecvSession* pDesc);
+    virtual void RecvFromSuperServer(TDescRecvSession* pDesc);
 	private:
 
   };

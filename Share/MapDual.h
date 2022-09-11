@@ -49,12 +49,21 @@ class TMapDual
   TMapValueKey mMapValueKey;
 
 public:
+  
+  typedef typename std::map<Key,Value>::iterator TKV_It;
+  typedef typename std::map<Value,Key>::iterator TVK_It;
 
   TMapDual(){}
   virtual ~TMapDual(){Clear();}
 
   // добавление
   void Add(Key& k, Value& v);
+  // навигация
+  TKV_It Begin();
+  TKV_It End();
+
+  TVK_It BeginR();
+  TVK_It EndR();
 
   // поиск
   bool GetValueByKey(Key& k, Value& v);
@@ -171,6 +180,30 @@ bool TMapDual<Key,Value>::SetKeyByValue(Key& k, Value& v)
     return true;
   }
   return false;
+}
+//-------------------------------------------------------------------
+template <class Key, class Value>
+typename std::map<Key,Value>::iterator TMapDual<Key,Value>::Begin()
+{
+  return mMapKeyValue.begin();
+}
+//-------------------------------------------------------------------
+template <class Key, class Value>
+typename std::map<Key,Value>::iterator TMapDual<Key,Value>::End()
+{
+  return mMapKeyValue.end();
+}
+//-------------------------------------------------------------------
+template <class Key, class Value>
+typename std::map<Value,Key>::iterator TMapDual<Key,Value>::BeginR()
+{
+  return mMapValueKey.begin();
+}
+//-------------------------------------------------------------------
+template <class Key, class Value>
+typename std::map<Value,Key>::iterator TMapDual<Key,Value>::EndR()
+{
+  return mMapValueKey.begin();
 }
 //-------------------------------------------------------------------
 

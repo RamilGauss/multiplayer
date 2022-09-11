@@ -47,11 +47,24 @@ namespace nsMelissa
     TSlave();
     virtual ~TSlave();
     
-    virtual void SaveContext(void* data, int size);
-    virtual unsigned int GetClientKeyBySession(ISession* pSession);
-    virtual ISession* GetSessionByClientKey(unsigned int key);
+    virtual void SaveContext(unsigned int id_session, void* data, int size);
+    virtual unsigned int GetClientKeyBySession(unsigned int id_session);
+    virtual unsigned int GetSessionByClientKey(unsigned int key);
 
+    // Base
+    virtual void Work();
+		// BaseServer
+		struct TDescDownSlave
+		{
+			unsigned int id_session;
+		};
+		virtual int  GetCountDown();
+		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);
 	protected:
+    virtual void Disconnect(unsigned int id_session);
+    
+    virtual void RecvFromClient(TDescRecvSession* pDesc);
+    virtual void RecvFromMaster(TDescRecvSession* pDesc);
 
 	private:
 

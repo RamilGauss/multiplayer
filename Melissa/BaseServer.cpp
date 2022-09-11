@@ -35,8 +35,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "BaseServer.h"
 
-using namespace nsMelissa;
-
+namespace nsMelissa
+{
 
 TBaseServer::TBaseServer()
 {
@@ -48,14 +48,9 @@ TBaseServer::~TBaseServer()
 
 }
 //-------------------------------------------------------------------------
-void TBaseServer::SendDown(ISession* pSession, void* data, int size)
+void TBaseServer::SendDown(unsigned int id_session, TBreakPacket bp)
 {
 
-}
-//-------------------------------------------------------------------------
-int TBaseServer::GetCountDown()
-{
-	return 0;
 }
 //-------------------------------------------------------------------------
 bool TBaseServer::GetDescDown(int index, void* pDesc, int& sizeDesc)
@@ -64,4 +59,4 @@ bool TBaseServer::GetDescDown(int index, void* pDesc, int& sizeDesc)
 }
 //-------------------------------------------------------------------------
 
-
+}

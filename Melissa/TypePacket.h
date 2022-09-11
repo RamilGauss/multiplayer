@@ -33,33 +33,26 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_ISESSION_H
-#define MELISSA_ISESSION_H
+#ifndef MELISSA_TYPE_PACKET_H
+#define MELISSA_TYPE_PACKET_H
 
 namespace nsMelissa
 {
-  class ISession
-  {
 
-  public:
+  #define BASE_FROM_CLIENT      0
+  #define C_TRY_LOGIN           (BASE_FROM_CLIENT + 1)
+  
+  //--------------------------------------------------------
+  #define BASE_FROM_SLAVE       (BASE_FROM_CLIENT + 100)
+  
+  //--------------------------------------------------------
+  #define BASE_FROM_MASTER      (BASE_FROM_SLAVE  + 100)
+  
+  //--------------------------------------------------------
+  #define BASE_FROM_SUPERSERVER (BASE_FROM_MASTER + 100)
+  
+  //--------------------------------------------------------
 
-    struct TDescConnect
-    {
-      unsigned int ip_src;
-      unsigned short port_src;
-      unsigned int ip_dst;
-      unsigned short port_dst;
-    };
-
-    ISession(){}
-    virtual ~ISession(){}
-    
-    virtual void Work()  = 0;
-    virtual void Send(void* data, int size, bool check = true) = 0;
-    virtual void SetTransport(ITransport* pTransport) = 0;
-    virtual bool GetInfo(TDescConnect* pDesc) = 0;
-    virtual void Recv()  = 0;
-  };
 }
 
 #endif

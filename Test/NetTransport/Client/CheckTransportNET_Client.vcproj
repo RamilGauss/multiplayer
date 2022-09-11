@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib winmm.lib comctl32.lib Imm32.lib Version.lib GBaseLib.lib Share.lib NetTransport.lib"
+				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib winmm.lib comctl32.lib Imm32.lib Version.lib GBaseLib.lib Share.lib NetTransport.lib Melissa.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\..\Lib;&quot;..\..\..\Lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"

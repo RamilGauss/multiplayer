@@ -35,8 +35,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "Master.h"
 
-using namespace nsMelissa;
-
+namespace nsMelissa
+{
 
 TMaster::TMaster()
 {
@@ -68,16 +68,16 @@ void TMaster::GetListForGroup(unsigned int id_group, std::list<unsigned int>& l)
 
 }
 //-------------------------------------------------------------------------
-void TMaster::SetResultLogin(bool res, ISession* pSession, 
+void TMaster::SetResultLogin(bool res, unsigned int id_session, 
                     unsigned int id_client, 
                     void* resForClient, int sizeResClient)
 {
 
 }
 //-------------------------------------------------------------------------
-ISession* TMaster::GetSlaveByGroup(unsigned int id_group)
+unsigned int TMaster::GetSlaveSessionByGroup(unsigned int id_group)
 {
-	return NULL;
+	return INVALID_HANDLE_SESSION;
 }
 //-------------------------------------------------------------------------
 void TMaster::SendToClient(unsigned int id_client, void* data, int size, bool check )
@@ -85,3 +85,40 @@ void TMaster::SendToClient(unsigned int id_client, void* data, int size, bool ch
 
 }
 //-------------------------------------------------------------------------
+void TMaster::Work()
+{
+
+}
+//-------------------------------------------------------------------------
+void TMaster::Disconnect(unsigned int id_session)
+{
+
+}
+//-------------------------------------------------------------------------
+int TMaster::GetCountDown()
+{
+	return 0;
+}
+//-------------------------------------------------------------------------
+bool TMaster::GetDescDown(int index, void* pDesc, int& sizeDesc)
+{
+	return false;
+}
+//-------------------------------------------------------------------------
+void TMaster::RecvFromClient(TDescRecvSession* pDesc)
+{
+  
+}
+//-------------------------------------------------------------------------
+void TMaster::RecvFromSlave(TDescRecvSession* pDesc)
+{
+  
+}
+//-------------------------------------------------------------------------
+void TMaster::RecvFromSuperServer(TDescRecvSession* pDesc)
+{
+  
+}
+//-------------------------------------------------------------------------
+
+}

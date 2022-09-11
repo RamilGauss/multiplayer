@@ -38,6 +38,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "TypeDef.h"
 #include "Container.h"
+#include "HiTimer.h"
 
 namespace nsEvent
 {
@@ -48,8 +49,13 @@ namespace nsEvent
 
 struct SHARE_EI TEvent
 {
+	unsigned int time_ms;
   int from;
   TContainer container;
+	TEvent()
+	{
+		time_ms = ht_GetMSCount();
+	}
 };
 
 typedef enum

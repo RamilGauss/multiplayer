@@ -90,7 +90,7 @@ void TNetControlUDP::Work(int sock, list<eTypeEvent>& event)
 //------------------------------------------------------------------------------
 bool TNetControlUDP::Open( unsigned short port, unsigned char numNetWork )
 {
-	Close();
+	Close(0,0);
   mSocketLocal = mDevice.Open(false, port, numNetWork);
 
 	bool res = mDevice.SetRecvBuffer(mSocketLocal, eSystemSizeForRecvBuffer_Socket);
@@ -111,19 +111,18 @@ bool TNetControlUDP::Connect(unsigned int ip, unsigned short port)
   return false;// нельзя, только TCP
 }
 //------------------------------------------------------------------------------
-void TNetControlUDP::Send(unsigned int ip, unsigned short port, TBreakPacket& bp)
+void TNetControlUDP::Send(unsigned int ip, unsigned short port, TBreakPacket bp)
 {
 	// формируем заголовок
 	TInfoConnect infoConnect;
 	GetInfoConnect(TIP_Port(ip,port),infoConnect);
 	unsigned short count_out = infoConnect.cnt_out++;
-	TBreakPacket bp_out = bp;
-	bp_out.PushFront( (char*)&count_out, sizeof(count_out));
-	bp_out.Collect();
-	mDevice.Send(mSocketLocal, (char*)bp_out.GetCollectPtr(), bp_out.GetSize(), ip, port);
+	bp.PushFront( (char*)&count_out, sizeof(count_out));
+	bp.Collect();
+	mDevice.Send(mSocketLocal, (char*)bp.GetCollectPtr(), bp.GetSize(), ip, port);
 }
 //------------------------------------------------------------------------------
-void TNetControlUDP::Close()
+void TNetControlUDP::Close(unsigned int ip, unsigned short port)
 {
 	mDevice.Close(mSocketLocal);
 	mSocketLocal = -1;

@@ -35,8 +35,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "SuperServer.h"
 
-using namespace nsMelissa;
-
+namespace nsMelissa
+{
 
 TSuperServer::TSuperServer()
 {
@@ -48,9 +48,35 @@ TSuperServer::~TSuperServer()
 
 }
 //-------------------------------------------------------------------------
-void TSuperServer::SendByClientKey(std::list<unsigned int>& l, void* data, int size)
+void TSuperServer::SendByClientKey(std::list<unsigned int>& l, TBreakPacket bp)
+{
+
+}
+//-------------------------------------------------------------------------
+void TSuperServer::Work()
+{
+
+}
+//-------------------------------------------------------------------------
+void TSuperServer::Disconnect(unsigned int id_session)
+{
+
+}
+//-------------------------------------------------------------------------
+int TSuperServer::GetCountDown()
+{
+	return 0;
+}
+//-------------------------------------------------------------------------
+bool TSuperServer::GetDescDown(int index, void* pDesc, int& sizeDesc)
+{
+	return false;
+}
+//-------------------------------------------------------------------------
+void TSuperServer::RecvFromMaster(TDescRecvSession* pDesc)
 {
 
 }
 //-------------------------------------------------------------------------
 
+}

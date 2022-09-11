@@ -33,25 +33,25 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "ActiveServer.h"
+#ifndef MELISSA_BASE_EVENT_H
+#define MELISSA_BASE_EVENT_H
+
+#include "Base.h"
 
 namespace nsMelissa
 {
-
-TActiveServer::TActiveServer()
-{
-
-}
-//-------------------------------------------------------------------------
-TActiveServer::~TActiveServer()
-{
-
-}
-//-------------------------------------------------------------------------
-void TActiveServer::ConnectUp(unsigned int ip, unsigned short port)
-{
+#if defined( WIN32 )
+#pragma pack(push, 1)
+#endif
+  struct MELISSA_EI TBaseEvent
+  {
+    // переназначить в наследуемом классе
+    TBase::tTypeEvent mType;
+  };
+#if defined( WIN32 )
+#pragma pack(pop)
+#endif
 
 }
-//-------------------------------------------------------------------------
 
-}
+#endif

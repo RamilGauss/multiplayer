@@ -47,9 +47,9 @@ namespace nsMelissa
     TBaseServer();
     virtual ~TBaseServer();
     
-    virtual void SendDown(ISession* pSession, void* data, int size);
-    virtual int  GetCountDown();
-    virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);
+    virtual void SendDown(unsigned int id_session, TBreakPacket bp );
+    virtual int  GetCountDown() = 0;
+    virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc) = 0;
 
 	protected:
 

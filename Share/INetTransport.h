@@ -73,7 +73,7 @@ public:
   // в качестве передаваемых данных выступает объект, который
   // содержит цепочку данных
 	virtual void Send(unsigned int ip, unsigned short port,
-                    TBreakPacket& packet, bool check = true) = 0;
+                    TBreakPacket packet, bool check = true) = 0;
 
 	// чтение - зарегистрируйся
   virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type) = 0;
@@ -87,6 +87,8 @@ public:
   // синхронная функция
 	// вызывать до вызова Start()
   virtual bool Connect(unsigned int ip, unsigned short port) = 0; // вызов только для клиента
+
+	virtual void Close(unsigned int ip, unsigned short port) = 0;
 };
 
 

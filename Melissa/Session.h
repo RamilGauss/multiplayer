@@ -33,37 +33,52 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_IMANAGER_SESSION_H
-#define MELISSA_IMANAGER_SESSION_H
+#ifndef MELISSA_SESSION_H
+#define MELISSA_SESSION_H
 
-#include "ISession.h"
+#include "BreakPacket.h"
+#include "INetTransport.h"
 
 namespace nsMelissa
 {
-  class IManagerSession
+  class TSession
   {
+    unsigned int mTimeLive;// мс
+    unsigned int mID;
+    TIP_Port mIP_Port;
+    unsigned int mLastTimeActive;
+    INetTransport* mTransport;
+  protected:
+    friend class TManagerSession;
 
-  public:
-    typedef enum
+    enum{
+      eEcho   = 'e',
+      ePacket = 'p',
+    };
+    struct THeader
     {
-      eDisconnect,
-      eRecv,
-      eTryConnect,
-    }tEventManagerSession;
-
-    IManagerSession(){}
-    virtual ~IManagerSession(){}
+      char type;
+      THeader(char t = ePacket)
+      {
+        type = t;
+      }
+    };
+  public:
+    TSession(unsigned int time_live_ms);
+    ~TSession();
     
-    virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, tEventManagerSession type) = 0;
-    virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, tEventManagerSession type) = 0;
-    virtual void Start() = 0;
-    virtual void Stop()  = 0;
-    virtual void Work()  = 0;
-
-    virtual void Send(unsigned int ip, unsigned short port, void* data, int size, bool check = true)  = 0;
-    virtual ISession* AddSession(unsigned int ip, unsigned short port)  = 0;
-    virtual ISession* GetSession(unsigned int ip, unsigned short port)  = 0;
-    virtual void DeleteSession(ISession* pSession)  = 0;
+    void Work();
+    void Send(TBreakPacket bp, bool check = true);
+    void SetTransport(INetTransport* pTransport);
+    void GetInfo(TIP_Port& pDesc);
+    void SetInfo(TIP_Port& pDesc);
+    unsigned int GetID(){return mID;}
+    void SetID(unsigned int id){mID=id;}
+    void Recv();
+  protected:
+    void SendEcho();
+    void RefreshLastTime();
+    void SendData(char type, TBreakPacket& bp, bool check = true);
   };
 }
 

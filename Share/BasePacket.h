@@ -96,7 +96,7 @@ void Get##NameParam(TypeElem& v, TypeCnt index) \
 // в Init с помощью макросов и mC размечаем структуру пакета.
 
 // наследуется от TObject для возможности использования в hArray
-class SHARE_EI TBasePacket : public TObject
+class SHARE_EI TBasePacket// : public TObject
 {
 protected:
 

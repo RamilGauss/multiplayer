@@ -38,19 +38,39 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "BaseServer.h"
 #include <list>
+#include <map>
 
 namespace nsMelissa
 {
   class MELISSA_EI TSuperServer : public TBaseServer
   {
+    typedef std::map<unsigned int,unsigned int> TMapUintUint;
+    typedef TMapUintUint::iterator TMapUintUintIt;
+
+    TMapUintUint mMapIDClientIDSessionMaster;
 
   public:
     TSuperServer();
     virtual ~TSuperServer();
     
-    virtual void SendByClientKey(std::list<unsigned int>& l, void* data, int size);
+    virtual void SendByClientKey(std::list<unsigned int>& l, TBreakPacket bp);
+    
+    // Base
+    virtual void Work();
+		// BaseServer
+		struct TDescDownSuperServer
+		{
+			unsigned int id_session;
+			int countClient;
+			int countSlave;
+		};
+		virtual int  GetCountDown();
+		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);
 
 	protected:
+    virtual void Disconnect(unsigned int id_session);
+
+    virtual void RecvFromMaster(TDescRecvSession* pDesc);
 
 	private:
 

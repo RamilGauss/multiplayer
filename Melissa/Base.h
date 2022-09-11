@@ -39,17 +39,35 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "SrcEvent.h"
 #include "TypeDef.h"
 #include "IMakerTransport.h"
+#include "BreakPacket.h"
+#include "ListMultiThread.h"
+#include <map>
 
 #define STR_NAME_MELISSA "Melissa"
+#define INVALID_HANDLE_SESSION 0
 
 namespace nsMelissa
 {
-  class ISession;
-
+  class TManagerSession;
+  struct TDescRecvSession;
   class MELISSA_EI TBase : public TSrcEvent
   {
-    IMakerTransport* mMakerTransport;
-    INetTransport*   mTransport;
+  protected:
+    struct TStateConnect
+    {
+      //std::list<TPacket*> listWaitPacket;
+      bool flg;
+    };
+
+    typedef std::map<unsigned int,TStateConnect*> TMapUintPtr;
+    typedef TMapUintPtr::iterator TMapUintPtrIt;
+    TMapUintPtr mMapStateConnect;
+
+    typedef TListMultiThread<unsigned int> TListUint;
+    TListUint mIDSessionNeedDisconnect;
+
+    TManagerSession* mManagerSession;
+    int mLoadProcent;
   public:
     typedef enum
     {
@@ -81,14 +99,27 @@ namespace nsMelissa
     virtual void Init(IMakerTransport* pMakerTransport);
     virtual bool Open(unsigned short port, unsigned char subNet = 0);
     virtual void DisconnectUp();
-    virtual void SendUp(void* data, int size, bool check = true);
-    virtual void Work();
+    virtual void SendUp(TBreakPacket bp, bool check = true);
+    virtual void Work() = 0;
     virtual bool IsConnectUp();
-    virtual bool IsConnect(ISession* pSession);
+    virtual bool IsConnect(unsigned int id);
 		virtual void SetLoad(int procent);
+
+    virtual void SetTimeLiveSession(unsigned int time_ms);
 
 	protected:
 
+    friend void FuncRecvFromMS( void* p, int size);
+    friend void FuncDisconnectFromMS( void* p, int size);
+
+    void Recv( TDescRecvSession* pDescRecvSession );
+    
+    virtual void RecvFromClient(TDescRecvSession* pDesc);
+    virtual void RecvFromSlave(TDescRecvSession* pDesc);
+    virtual void RecvFromMaster(TDescRecvSession* pDesc);
+    virtual void RecvFromSuperServer(TDescRecvSession* pDesc);
+
+    virtual void Disconnect(unsigned int id);
 	private:
 
   };

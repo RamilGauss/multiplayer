@@ -35,36 +35,67 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "Base.h"
 #include "Logger.h"
+#include "ManagerSession.h"
+//#include "BasePacket_Private.h"
+#include "DescRecvSession.h"
+#include "HeaderSubSystem.h"
 
-using namespace nsMelissa;
+using namespace nsMelissaSubSystem;
 
+namespace nsMelissa
+{
+
+TBase* g_pBase = NULL;
+//-------------------------------------------------------------------------
+void FuncRecvFromMS( void* p, int size)
+{
+  g_pBase->Recv( (TDescRecvSession*)p );
+}
+//-------------------------------------------------------------------------
+void FuncDisconnectFromMS( void* p, int size)
+{
+  g_pBase->Disconnect( *((unsigned int*)p) );
+}
+//-------------------------------------------------------------------------
 TBase::TBase()
 {
-  mMakerTransport = NULL;
-  mTransport      = NULL;
+  g_pBase = this;
+  mManagerSession = new TManagerSession;
+  mLoadProcent    = 0;
 }
 //-------------------------------------------------------------------------
 TBase::~TBase()
 {
-  mMakerTransport->Delete(mTransport);
-  mTransport = NULL;
-  mMakerTransport = NULL;
+  mManagerSession->Unregister(FuncRecvFromMS,       TManagerSession::eRecv);
+  mManagerSession->Unregister(FuncDisconnectFromMS, TManagerSession::eDisconnect);
+
+  delete mManagerSession;
+  mManagerSession = NULL;
+
+  g_pBase = NULL;
 }
 //-------------------------------------------------------------------------
 void TBase::Init(IMakerTransport* pMakerTransport)
 {
   if(pMakerTransport==NULL)
   {
-    GetLogger()->Get(STR_NAME_MELISSA)->WriteF_time("TBase::Init() pMakerTransport=NULL.\n");
+    GetLogger()->Get(STR_NAME_MELISSA)->WriteF_time("TBase::Init() pMakerTransport==NULL.\n");
+    BL_FIX_BUG();
+    return;
   }
-
-  mMakerTransport = pMakerTransport;
-  mTransport      = mMakerTransport->New();
+  mManagerSession->SetMakerTransport(pMakerTransport);
+  mManagerSession->Register(FuncRecvFromMS,       TManagerSession::eRecv);
+  mManagerSession->Register(FuncDisconnectFromMS, TManagerSession::eDisconnect);
 }
 //-------------------------------------------------------------------------
 bool TBase::Open(unsigned short port, unsigned char subNet)
 {
-  return mTransport->Open(port,subNet);
+  return mManagerSession->Start(port, subNet);
+}
+//-------------------------------------------------------------------------
+void TBase::SetLoad(int procent)
+{
+  mLoadProcent = procent;
 }
 //-------------------------------------------------------------------------
 void TBase::DisconnectUp()
@@ -72,12 +103,7 @@ void TBase::DisconnectUp()
 
 }
 //-------------------------------------------------------------------------
-void TBase::SendUp(void* data, int size, bool check)
-{
-
-}
-//-------------------------------------------------------------------------
-void TBase::Work()
+void TBase::SendUp(TBreakPacket bp, bool check)
 {
 
 }
@@ -87,13 +113,68 @@ bool TBase::IsConnectUp()
 	return true;
 }
 //-------------------------------------------------------------------------
-bool TBase::IsConnect(ISession* pSession)
+bool TBase::IsConnect(unsigned int id)
 {
-	return true;
+  return mManagerSession->IsExist(id);
 }
 //-------------------------------------------------------------------------
-void TBase::SetLoad(int procent)
+void TBase::Recv( TDescRecvSession* pDesc )
 {
+  TBaseHeader* pPacket = (TBaseHeader*)pDesc->data;
+
+  switch(pPacket->from)
+  {
+    case eFromClient:
+      RecvFromClient(pDesc);
+      break;
+    case eFromSlave:
+      RecvFromSlave(pDesc);
+      break;
+    case eFromMaster:
+      RecvFromMaster(pDesc);
+      break;
+    case eFromSuperServer:
+      RecvFromSuperServer(pDesc);
+      break;
+    default:BL_FIX_BUG();
+  }
+}
+//-------------------------------------------------------------------------
+void TBase::RecvFromClient(TDescRecvSession* pDesc)
+{
+  BL_FIX_BUG();// если не переопределили, значит не ожидали
+}
+//-------------------------------------------------------------------------
+void TBase::RecvFromSlave(TDescRecvSession* pDesc)
+{
+  BL_FIX_BUG();
+}
+//-------------------------------------------------------------------------
+void TBase::RecvFromMaster(TDescRecvSession* pDesc)
+{
+  BL_FIX_BUG();
+}
+//-------------------------------------------------------------------------
+void TBase::RecvFromSuperServer(TDescRecvSession* pDesc)
+{
+  BL_FIX_BUG();
+}
+//-------------------------------------------------------------------------
+void TBase::Disconnect(unsigned int id)
+{
+  unsigned int* pID = new unsigned int(id);
+  mIDSessionNeedDisconnect.Add(pID);
+}
+//-------------------------------------------------------------------------
+void TBase::Work()
+{
+  //пробежка по ожидающим разъединения и удаление сессий
 
 }
 //-------------------------------------------------------------------------
+void TBase::SetTimeLiveSession(unsigned int time_ms)
+{
+  mManagerSession->SetTimeLiveSession(time_ms);
+}
+//-------------------------------------------------------------------------
+}

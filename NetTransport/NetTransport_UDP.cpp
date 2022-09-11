@@ -116,8 +116,7 @@ bool TNetTransport_UDP::Open(unsigned short port, unsigned char numNetWork)
 //----------------------------------------------------------------------------------
 // Gauss 04.05.2013
 void TNetTransport_UDP::Send(unsigned int ip, unsigned short port, 
-                         TBreakPacket& packet, 
-                         bool check)
+                             TBreakPacket packet, bool check)
 {
   // собрать все части пакета, которые образовались при проходе через уровни
   // здесь идет отправка, то есть необходимо копировать в системную память

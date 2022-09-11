@@ -211,58 +211,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="GameLibInclude"
-			>
-			<File
-				RelativePath="..\Share\Container.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GameLib\DeveloperTool_DLL.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GameLib\IActor.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GameLib\IBaseObjectCommon.h"
-				>
-			</File>
-			<File
-				RelativePath="..\BigJack\IBaseObjectGE.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Robert\IBaseObjectPrediction.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GameLib\IClientDeveloperTool.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GameLib\IMakerObjectCommon.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GameLib\IManagerObjectCommon.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\GameLib\IServerDeveloperTool.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Share\Struct3D.h"
-				>
-			</File>
-			<File
-				RelativePath="..\GBaseLib\TObject.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="DeveloperToolShare"
 			>
 			<Filter

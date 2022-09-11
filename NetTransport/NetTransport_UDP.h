@@ -43,7 +43,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "CallBackRegistrator.h"
 #include "UdpDevice.h"
-#include "hArray.h"
 #include "GCS.h"
 #include "BL_Debug.h"
 #include "INetTransport.h"
@@ -75,19 +74,14 @@ protected:
 	volatile bool flgActive;
 	volatile bool flgNeedStop;
 
-	// пакеты, ожидающие квитанцию
-	//TArrayObject mArrWaitCheck;
-	// информация по сокету, какой текущий номер пакета идет на прием и на отправку
-	//TArrayObject mArrConnect;
-
   typedef std::map<TIP_Port,nsNetTransportStruct::TInfoConnect*> TMapIP_Ptr;
   typedef TMapIP_Ptr::iterator TMapIP_Ptr_It;
-
+	// информация по сокету, какой текущий номер пакета идет на прием и на отправку
   TMapIP_Ptr mMapInfoConnect;
 
   typedef std::multimap<TIP_Port,TBasePacketNetTransport*> TMultiMapIP_Ptr;
   typedef TMultiMapIP_Ptr::iterator TMultiMapIP_Ptr_It;
-
+	// пакеты, ожидающие квитанцию
   TMultiMapIP_Ptr mMultiMapWaitCheck;
 
 	enum
@@ -125,7 +119,7 @@ public:
 
   virtual bool Open(unsigned short port, unsigned char numNetWork = 0);
 	virtual void Send(unsigned int ip, unsigned short port, 
-                    TBreakPacket& packet,
+                    TBreakPacket packet,
                     bool check = true);
 
 	// чтение - зарегистрируйся
@@ -138,7 +132,8 @@ public:
 
   // синхронизирующая функция
   virtual bool Connect(unsigned int ip, unsigned short port); // вызов только для клиента
-
+	
+	virtual void Close(unsigned int ip, unsigned short port){};
 protected:
   bool SendSynchro(unsigned int ip, unsigned short port, int cntTry);
 

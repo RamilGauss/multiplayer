@@ -67,9 +67,9 @@ public:
   // TNetTransport_XXX
   virtual bool Open( unsigned short port, unsigned char numNetWork = 0) = 0;
   virtual bool Connect(unsigned int ip, unsigned short port) = 0;
-  virtual void Send(unsigned int ip, unsigned short port, TBreakPacket& bp) = 0;
+  virtual void Send(unsigned int ip, unsigned short port, TBreakPacket bp) = 0;
 
-	virtual void Close() = 0;
+	virtual void Close(unsigned int ip, unsigned short port) = 0;
 
   static void SetMakerEvent(INetMakerEvent* pME);
 
@@ -81,6 +81,8 @@ protected:
 
 	void NotifyRecv(char* p, int size);
 	void NotifyDisconnect(char* p, int size);
+
+  static TCallBackRegistrator* GetCallBackByType(INetTransport::eTypeCallback type);
 };
 
 
