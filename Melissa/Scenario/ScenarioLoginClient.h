@@ -1,52 +1,82 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
-
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
 #ifndef MELISSA_SCENARIO_LOGIN_CLIENT_H
 #define MELISSA_SCENARIO_LOGIN_CLIENT_H
 
 #include "IScenario.h"
+#include "ContextScLoginClient.h"
+#include "MakerScenario.h"
+#include "ShareMisc.h"
+#include "CallBackRegistrator.h"
 
 namespace nsMelissa
 {
   class TScenarioLoginClient : public IScenario
   {
+    enum{eToMaster,
+         eAcceptFromMaster,
+         eRejectFromMaster,
+
+    };
+    struct THeaderLoginClient : public IScenario::TBaseHeader
+    {
+      THeaderLoginClient(){type=TMakerScenario::eLoginClient;}
+    };
+    //-------------------------------------------------
+    struct THeaderToMaster : public THeaderLoginClient
+    {
+      THeaderToMaster(){subType=eToMaster;}
+    };
+    //-------------------------------------------------
+    struct THeaderResultFromMaster : public THeaderLoginClient
+    {
+      THeaderResultFromMaster(){lenRes=0;}
+      unsigned char lenRes;
+    };
+    //-------------------------------------------------
+    struct THeaderAcceptFromMaster : public THeaderResultFromMaster
+    {
+      THeaderAcceptFromMaster(){subType=eAcceptFromMaster;}
+      unsigned int key;
+    };
+    //-------------------------------------------------
+    struct THeaderRejectFromMaster : public THeaderResultFromMaster
+    {
+      THeaderRejectFromMaster(){subType=eRejectFromMaster;}
+    };
+    //-------------------------------------------------
+    enum{eTimeWait=20000,// мс
+    };
+
+    TCallBackRegistrator1<unsigned int> mCallBackChangeSession;
   public:
     TScenarioLoginClient();
-    ~TScenarioLoginClient();
+    virtual ~TScenarioLoginClient();
+    
+    virtual void Recv(TDescRecvSession* pDesc);
+
+    template <typename F, class C>
+    void RegisterOnChangeSession(F f, C pObject)// когда сценарий будет общаться со Slave, а не с Client
+    {mCallBackChangeSession.Register(f,pObject);}
+
+    void Start();
+    // начало авторизации Клиентом
+    void Connect(unsigned int ip, unsigned short port, 
+                 void* data, int size);
+    // решение Мастера
+    void Reject(void* resForClient, int sizeResClient);
+    void Accept(unsigned int key, void* resForClient, int sizeResClient, 
+                TIP_Port& ip_port_Slave);
+    //void Queue();
   protected:
     virtual void Work();
+  protected:
+    TContextScLoginClient* Context(){return (TContextScLoginClient*)mCurContext;}
   };
 }
 #endif

@@ -1,37 +1,9 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
-
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
 #include "ClientGame.h"
 
@@ -69,7 +41,7 @@ using namespace nsEvent;
 
 TClientGame::TClientGame()
 {
-	MakeVectorModule();
+
 }
 //------------------------------------------------------------------------
 TClientGame::~TClientGame()
@@ -77,40 +49,25 @@ TClientGame::~TClientGame()
 
 }
 //------------------------------------------------------------------------
-/*
-  Для клиента кол-во потоков определяется кол-вом ядер CPU
-*/
-void TClientGame::Work(int variant_use, const char* sNameDLL, const char* arg)// начало работы
+bool TClientGame::Work()
 {
-  if(Init(variant_use,sNameDLL,arg)==false)
-    return;
+  // опросить модули движка для генерации событий
+  RET_FALSE(MakeEventFromModule())
+  // обработать события
+  HandleEventByDeveloper();
+  // расчеты, необходимые для рендера, в зависимости от времени предыдущего расчета
+  PrepareForRender();
+  Render();
+  if(mClientDeveloperTool->NeedExit())
+    return false;
 
-  flgNeedStop = false;
-  flgActive   = true;
-  //------------------------------------------------------
-  while(flgNeedStop==false)
-  {
-    // опросить модули движка для генерации событий
-    if(MakeEventFromModule()==false)
-      break;
-    // обработать события
-    HandleEventByDeveloper();
-    // расчеты, необходимые для рендера, в зависимости от времени предыдущего расчета
-    PrepareForRender();
-    Render();
-    if(mClientDeveloperTool->NeedExit())
-      break;
-  }
-  //------------------------------------------------------
-  flgActive = false;
-
-  Done();
+  return true;
 }
 //------------------------------------------------------------------------
 bool TClientGame::Init(int variant_use, const char* sNameDLL, const char* arg)
 {
   // загрузка DLL
-  CHECK_RET(LoadDLL(variant_use, sNameDLL))
+  RET_FALSE(LoadDLL(variant_use, sNameDLL))
   if(mGetClientDeveloperTool==NULL)// политика: нет DLL - нет движка.
     return false;
   
@@ -202,18 +159,10 @@ void TClientGame::Done()
   TMakerManagerTime makerMTimer;
   makerMTimer.Delete(mCClient.mMTime);
   mCClient.mMTime = NULL;
-}
-//------------------------------------------------------------------------
-void TClientGame::HandleEventByDeveloper()
-{
-  TEvent* pEvent = GetEvent();
-  while(pEvent)
-  {
-    // обработка события
-    HandleEvent(pEvent);
-    delete pEvent;
-    pEvent = GetEvent();
-  }
+  // камера
+  TMakerControlCamera makerControlCamera;
+  makerControlCamera.Delete(mCClient.mControlCamera);
+  mCClient.mControlCamera = NULL;
 }
 //------------------------------------------------------------------------
 void TClientGame::PrepareForRender()
@@ -239,7 +188,7 @@ bool TClientGame::HandleNetEngineEvent()
 //------------------------------------------------------------------------
 void TClientGame::CollectEvent()
 {
-  // опросить интерфейсы, которые не наследуются от TSrcEvent
+
 }
 //------------------------------------------------------------------------
 void TClientGame::HandleEvent(TEvent* pEvent)
@@ -247,32 +196,21 @@ void TClientGame::HandleEvent(TEvent* pEvent)
   mClientDeveloperTool->HandleEvent(pEvent);
 }
 //------------------------------------------------------------------------
-bool TClientGame::MakeEventFromModule()
-{
-  int cnt = mMainThreadVecModule.size();
-  for( int i = 0 ; i < cnt ; i++ )
-  {
-    if(mMainThreadVecModule[i])
-      CHECK_RET((this->*mMainThreadVecModule[i])())
-  }
-  // опросить объекты на наличие событий
-  CollectEvent();
-  return true;
-}
-//------------------------------------------------------------------------
+//  Для клиента кол-во потоков определяется кол-вом ядер CPU
 void TClientGame::MakeVectorModule()
 {
   int countCore = GetCountCoreCPU();
   // обработать события графического ядра - Key+Mouse, GUI, внутренние события GE.
-  mMainThreadVecModule.push_back(&TClientGame::HandleGraphicEngineEvent);
+  FuncHandleEvent fGraphicEngineEvent = boost::bind(&TClientGame::HandleGraphicEngineEvent, this);
+  mMainThreadVecModule.push_back(fGraphicEngineEvent);
   // сетевой движок
+  FuncHandleEvent fNetEngineEvent = boost::bind(&TClientGame::HandleNetEngineEvent, this);
   if(countCore==1)
-    mMainThreadVecModule.push_back(&TClientGame::HandleNetEngineEvent);
+    mMainThreadVecModule.push_back(fNetEngineEvent);
   else
   {
     TDescThread dt;
-    dt.pClientGame = this;
-    dt.pFunc       = &TClientGame::HandleNetEngineEvent;
+    dt.pFunc       = fNetEngineEvent;
     dt.sleep_ms    = eSleepNE;
     mOtherThreadVecModule.push_back(dt);
   }
@@ -280,19 +218,12 @@ void TClientGame::MakeVectorModule()
   // звук
 }
 //------------------------------------------------------------------------
-void* ThreadModule(void* p)
-{
-  TDescThread* pDesc = (TDescThread*)p;
-  pDesc->Work();
-  return NULL;
-}
-//------------------------------------------------------------------------
 void TClientGame::StartThreadModule()
 {
   int cnt = mOtherThreadVecModule.size();
   for( int i = 0 ; i < cnt ; i++ )
   {
-    boost::thread thread_module(ThreadModule, &mOtherThreadVecModule[i]);
+    boost::thread thread_module( &TDescThread::Work, &mOtherThreadVecModule[i]);
 
     while(mOtherThreadVecModule[i].flgActive==false)
       ht_msleep(eWaitFeedBack);
@@ -308,18 +239,5 @@ void TClientGame::StopThreadModule()
     while(mOtherThreadVecModule[i].flgActive==true)
       ht_msleep(eWaitFeedBack);
   }
-}
-//------------------------------------------------------------------------
-void TDescThread::Work()
-{
-  flgNeedStop = false;
-  flgActive   = true;
-  while(flgNeedStop==false)
-  {
-    if((pClientGame->*pFunc)()==false)
-      break;
-    ht_msleep(sleep_ms);
-  }
-  flgActive = false;
 }
 //------------------------------------------------------------------------

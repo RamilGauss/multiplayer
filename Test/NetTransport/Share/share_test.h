@@ -25,8 +25,8 @@ public:
   enum{
       ePortClient    = 1234,
       ePortServer    = 1235,
-      eSizePacket    = 10,//2019123,//1350
-      eCntRecvPacket = 200,//100000
+      eSizePacket    = 1000,//2019123,//1350
+      eCntRecvPacket = 10,//100000
   };
 	typedef enum{
 		eCountRecvPacket = 0,

@@ -1,37 +1,10 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
 #include "LoaderTree.h"
 #include "MakerXML.h"
 
@@ -67,9 +40,9 @@ bool TLoaderTree::Load(char* sPath)
 {
   delete pLoadedTree;
   pLoadedTree = new TTreeJoint::TLoadedJoint;
-  CHECK_RET(mXML->Load(sPath))
+  RET_FALSE(mXML->Load(sPath))
   string sRoot = mXML->GetNameSection(0);
-  CHECK_RET(mXML->EnterSection(sRoot.data(),0))
+  RET_FALSE(mXML->EnterSection(sRoot.data(),0))
   //--------------------------------------------
   LoadMatrix4x4(SectionMatrix,0,&(pLoadedTree->world));
 
@@ -83,7 +56,7 @@ bool TLoaderTree::Load(char* sPath)
   // загрузить части
   int cntJoint = mXML->GetCountSection(SectionJoint);
   for(int i = 0 ; i < cntJoint ; i++)
-    CHECK_RET(LoadJoint(i)) 
+    RET_FALSE(LoadJoint(i)) 
 
   mXML->ResetPos();
   return true;
@@ -98,11 +71,11 @@ TTreeJoint::TLoadedJoint* TLoaderTree::TakeTree()
 //--------------------------------------------------------------------------------
 bool TLoaderTree::LoadMatrix4x4(const char* name,int num, TMatrix16* pM)
 {
-  CHECK_RET(mXML->EnterSection(name,num))
+  RET_FALSE(mXML->EnterSection(name,num))
   for(int k = 0 ; k < 4 ; k++)
   {
     float v4[4];
-    CHECK_RET(mXML->ReadFloat4(SectionRow,k,&v4[0]))
+    RET_FALSE(mXML->ReadFloat4(SectionRow,k,&v4[0]))
     for(int m = 0 ; m < 4 ; m++)
       pM->m[k][m] = v4[m];
   }
@@ -112,7 +85,7 @@ bool TLoaderTree::LoadMatrix4x4(const char* name,int num, TMatrix16* pM)
 //--------------------------------------------------------------------------------
 bool TLoaderTree::LoadJoint(int i)
 {
-  CHECK_RET(mXML->EnterSection(SectionJoint,i))
+  RET_FALSE(mXML->EnterSection(SectionJoint,i))
 
   TTreeJoint::TPart* pPart = new TTreeJoint::TPart;
   // name
@@ -122,14 +95,14 @@ bool TLoaderTree::LoadJoint(int i)
   else return false;
   // numUse
   int numUse;
-  CHECK_RET(mXML->ReadInt(SectionNumUse,0,numUse))
+  RET_FALSE(mXML->ReadInt(SectionNumUse,0,numUse))
   pPart->numUse = numUse;
   // загрузить детей
   int cntChild = mXML->GetCountSection(SectionChild);
   // 05.03.2013 if(cntChild==0) return false;
   for(int j = 0 ; j < cntChild; j++)
   {
-    CHECK_RET(mXML->EnterSection(SectionChild,j))
+    RET_FALSE(mXML->EnterSection(SectionChild,j))
     //---------------------------------------------------------
     TTreeJoint::TChild* pChild = new TTreeJoint::TChild;
     str = mXML->ReadSection(SectionName,0);
@@ -137,7 +110,7 @@ bool TLoaderTree::LoadJoint(int i)
       pChild->name = str.data();
     else return false;
     //----------------------------------------------    
-    CHECK_RET(LoadMatrix4x4(SectionMatrix,0,&(pChild->matrix)))
+    RET_FALSE(LoadMatrix4x4(SectionMatrix,0,&(pChild->matrix)))
     pPart->vectorChild.push_back(pChild);
     //--------------------------------------------------------
     mXML->LeaveSection();

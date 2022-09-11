@@ -1,38 +1,9 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
-
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
-
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
 #include "ManagerModelDX.h"
 #include <d3d9.h>
@@ -47,6 +18,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "StorePathResources.h"
 #include "MapXML_Field.h"
 #include "IGraphicEngine.h"
+
+#include <boost/foreach.hpp>
 
 using namespace std;
 
@@ -95,42 +68,30 @@ TModelDX* TManagerModelDX::Load(unsigned int id)
 //--------------------------------------------------------------------------------------
 void TManagerModelDX::DestroyModel()
 {
-  TMapUintPtr::iterator bit = mMapLoadedModel.begin();
-  TMapUintPtr::iterator eit = mMapLoadedModel.end();
-  while(bit!=eit)
+  BOOST_FOREACH(TMapUintPtr::value_type& bit,mMapLoadedModel)
   {
-    TModelDX* pModel = (*bit).second;
-    if(pModel)
-      pModel->Destroy();
-    delete pModel;
-    bit++;
+    if(bit.second)// TModelDX*
+      bit.second->Destroy();
+    delete bit.second;
   }
   mMapLoadedModel.clear();
 }
 //--------------------------------------------------------------------------------------
 void TManagerModelDX::LostDevice()
 {
-  TMapUintPtr::iterator bit = mMapLoadedModel.begin();
-  TMapUintPtr::iterator eit = mMapLoadedModel.end();
-  while(bit!=eit)
+  BOOST_FOREACH(TMapUintPtr::value_type& bit,mMapLoadedModel)
   {
-    TModelDX* pModel = (*bit).second;
-    if(pModel)
-      pModel->LostDevice();
-    bit++;
+    if(bit.second)// TModelDX*
+      bit.second->LostDevice();
   }
 }
 //--------------------------------------------------------------------------------------
 void TManagerModelDX::ResetDevice()
 {
-  TMapUintPtr::iterator bit = mMapLoadedModel.begin();
-  TMapUintPtr::iterator eit = mMapLoadedModel.end();
-  while(bit!=eit)
+  BOOST_FOREACH(TMapUintPtr::value_type& bit,mMapLoadedModel)
   {
-    TModelDX* pModel = (*bit).second;
-    if(pModel)
-      pModel->ResetDevice();
-    bit++;
+    if(bit.second)// TModelDX*
+      bit.second->ResetDevice();
   }
 }
 //--------------------------------------------------------------------------------------
@@ -171,12 +132,7 @@ TModelDX* TManagerModelDX::Find(unsigned int id)
 //--------------------------------------------------------------------------------------
 void TManagerModelDX::PrepareForDX()
 {
-  TMapUintStr::iterator bit = mMapPathModel.begin();
-  TMapUintStr::iterator eit = mMapPathModel.end();
-  while(bit!=eit)
-  {
-    (*bit).second += "DX\\main.ini";
-    bit++;
-  }
+  BOOST_FOREACH(TMapUintStr::value_type& bit,mMapPathModel)
+    bit.second += "DX\\main.ini";
 }
 //--------------------------------------------------------------------------------------

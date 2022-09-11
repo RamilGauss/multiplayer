@@ -1,37 +1,10 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-aaaaaaaYou should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
 #ifdef WIN32
 
 #define _USE_MATH_DEFINES
@@ -179,16 +152,11 @@ void TBigJack::Render(IDirect3DDevice9* pd3dDevice)
   {
     SetCommonShaderStack(mICamera->GetView(), mICamera->GetProj(), mICamera->GetEyePt());// передать общие параметры в шейдер
 
-    TListPtr::iterator bit = mListReadyRender.begin();
-    TListPtr::iterator eit = mListReadyRender.end();
-    while(bit!=eit)
-    {
-      RenderObject(*bit,mICamera->GetView());
-      bit++;
-    }
+    BOOST_FOREACH(IBaseObjectGE* pObject,mListReadyRender)
+      RenderObject(pObject,mICamera->GetView());
+
     V( pd3dDevice->EndScene() );
 	}
-	//ZBufferOff();
 	//-----------------------------------------------------------------------------------------------
 	// старое полотно
 	V( pd3dDevice->SetRenderTarget( 0, pRTOld ) );
@@ -384,15 +352,9 @@ HRESULT TBigJack::OnResetDevice( IDirect3DDevice9* pd3dDevice,
 																						&mTextureSecondRender,
 																						NULL ) );
 	//--------------------------------------------------------------
-	TListPtrEffect::iterator bit = mListPtrEffect.begin();
-	TListPtrEffect::iterator eit = mListPtrEffect.end();
-	while(bit!=eit)
-	{
-		ResetShader((*bit)->GetEffect(),
-								pBackBufferSurfaceDesc->Width,
-								pBackBufferSurfaceDesc->Height);
-		bit++;
-	}
+  BOOST_FOREACH(TEffectDX* pEffect,mListPtrEffect)
+    ResetShader(pEffect->GetEffect(),pBackBufferSurfaceDesc->Width,
+                                     pBackBufferSurfaceDesc->Height);
   return S_OK;
 }
 //--------------------------------------------------------------------------------------
@@ -476,30 +438,20 @@ void TBigJack::Work(unsigned int time_ms)
 //--------------------------------------------------------------------------------------
 void TBigJack::Animate()
 {
-  TListPtr::iterator bit = mListAnimateObject.begin();
-  TListPtr::iterator eit = mListAnimateObject.end();
-  while(bit!=eit)
+  TListPtr lFresh;
+  BOOST_FOREACH(IBaseObjectGE* pObject,mListAnimateObject)
   {
-    if((*bit)->Animate(mTime_ms)==false)
-    {
-      // уничтожить эффект
-      delete (*bit);
-      TListPtr::iterator nit = bit;
-      nit++;
-      mListAnimateObject.erase(bit);
-      bit = nit;
-    }
+    if(pObject->Animate(mTime_ms)==false)
+      delete pObject; // уничтожить эффект
     else
-      bit++;
+      lFresh.push_back(pObject);
   }
+  mListAnimateObject = lFresh;
   //---------------------------------------------------------------
-  bit = mListAllObject.begin();
-  eit = mListAllObject.end();
-  while(bit!=eit)
+  BOOST_FOREACH(IBaseObjectGE* pObject,mListAllObject)
   {
-    bool res = (*bit)->Animate(mTime_ms);
+    bool res = pObject->Animate(mTime_ms);
     BL_ASSERT(res);
-    bit++;
   }
 }
 //--------------------------------------------------------------------------------------
@@ -528,18 +480,12 @@ void TBigJack::MakeVectorOnRender()
   mListReadyRender.clear();
   mListTransparencyObject.clear();
   //--------------------------------------------------------------
-  TListPtr::iterator bit = mListAllObject.begin();
-  TListPtr::iterator eit = mListAllObject.end();
-  while(bit!=eit)
-  {
-    IBaseObjectGE* pObject = *(bit);
+  BOOST_FOREACH(IBaseObjectGE* pObject, mListAllObject)
     if(pObject->GetAlphaTransparency()==1.0f)
       mListReadyRender.push_back(pObject);
     else
       mListTransparencyObject.push_back(pObject);
-
-    bit++;
-  }
+  //--------------------------------------------------------------
   mListReadyRender.insert(mListReadyRender.end(),
                           mListTransparencyObject.begin(),
                           mListTransparencyObject.end());
@@ -929,27 +875,16 @@ void TBigJack::RenderBlendTexturePostEffect(const TMatrix16* pView,
                                             const TMatrix16* pProj,
                                             const TVector3* pPosCamera)// для данной точки обзора
 {
-	TListPtr::iterator bit = mListReadyRender.begin();
-	TListPtr::iterator eit = mListReadyRender.end();
-	// 1. Перебор все объектов - поиск тех кому нужен эффект
-  while(bit!=eit)
-  {
-    IBaseObjectGE* pObject = *bit;
+  // 1. Перебор все объектов - поиск тех кому нужен эффект
+  BOOST_FOREACH(IBaseObjectGE* pObject,mListReadyRender)
     if(pObject->IsShow())
-	    if(pObject->IsGlowEffect())
-		    RenderSrcTextureForPostEffect(pObject,pView,pProj,pPosCamera);
-    bit++;
-  }
+      if(pObject->IsGlowEffect())
+        RenderSrcTextureForPostEffect(pObject,pView,pProj,pPosCamera);
   // 2. Процесс bluring-а (только для Glow)
-	bit = mListReadyRender.begin();
-	while(bit!=eit)
-	{
-		IBaseObjectGE* pObject = *bit;
-		if(pObject->IsShow())
-			if(pObject->IsGlowEffect())
-				RenderGlow(pObject);
-		bit++;
-	}
+  BOOST_FOREACH(IBaseObjectGE* pObject,mListReadyRender)
+    if(pObject->IsShow())
+      if(pObject->IsGlowEffect())
+        RenderGlow(pObject);
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::RenderSrcTextureForPostEffect(IBaseObjectGE* pObject, 
@@ -1016,23 +951,20 @@ void TBigJack::BlendTextureFromPostEffect(IDirect3DTexture9* pTextureScreen, boo
 	bool isBlend = false;
 	// смешать все текстуры
 	// вывод результата на экран
-	TMapPtrDescTPE::iterator bit = mMapObjTexturePostEffect.begin();
-	TMapPtrDescTPE::iterator eit = mMapObjTexturePostEffect.end();
-	while(bit!=eit)
-	{
-		if(bit->first->IsShow())
-		if(bit->first->IsGlowEffect())
-		{
-			char s[50];
-			sprintf(s,"use%d",i);
-			mEffectBlend.SetBool(s,true);
-			sprintf(s,"g_Texture%d",i);
-			mEffectBlend.SetTexture(s, bit->second.pDst);  //текстура пост-эффекта
-			isBlend = true;
-			i++;
-		}
-		bit++;
-	}
+  BOOST_FOREACH(TMapPtrDescTPE::value_type& bit,mMapObjTexturePostEffect)
+  {
+    if(bit.first->IsShow())
+      if(bit.first->IsGlowEffect())
+      {
+        char s[50];
+        sprintf(s,"use%d",i);
+        mEffectBlend.SetBool(s,true);
+        sprintf(s,"g_Texture%d",i);
+        mEffectBlend.SetTexture(s, bit.second.pDst);  //текстура пост-эффекта
+        isBlend = true;
+        i++;
+      }
+  }
 	// нет объектов с glow эффектом
 	if(!UsePostEffectTexture||(isBlend==false))
 	{
@@ -1089,13 +1021,10 @@ void TBigJack::RenderObject(IBaseObjectGE* pObject, const TMatrix16* view)
 void TBigJack::ResetEventForSurfacePestEffect()
 {
   const D3DSURFACE_DESC* pBackBufferSurfaceDesc = mDXUT->GetD3D9BackBufferSurfaceDesc();
-
-  TMapPtrDescTPE::iterator bit = mMapObjTexturePostEffect.begin();
-  TMapPtrDescTPE::iterator eit = mMapObjTexturePostEffect.end();
-  while(bit!=eit)
+  BOOST_FOREACH(TMapPtrDescTPE::value_type& bit,mMapObjTexturePostEffect)
   {
     HRESULT hr;
-		TDescTexturePostEffect desc = bit->second;
+		TDescTexturePostEffect desc = bit.second;
 		// src
     V( mDXUT->GetD3D9Device()->CreateTexture( pBackBufferSurfaceDesc->Width,
                                               pBackBufferSurfaceDesc->Height,
@@ -1114,22 +1043,18 @@ void TBigJack::ResetEventForSurfacePestEffect()
 																							D3DPOOL_DEFAULT,
 																							&desc.pDst,
 																							NULL ) );
-    bit->second = desc;
-    bit++;
+    bit.second = desc;
   }
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::LostEventForSurfacePestEffect()
 {
-  TMapPtrDescTPE::iterator bit = mMapObjTexturePostEffect.begin();
-  TMapPtrDescTPE::iterator eit = mMapObjTexturePostEffect.end();
-  while(bit!=eit)
+  BOOST_FOREACH(TMapPtrDescTPE::value_type&bit,mMapObjTexturePostEffect)
   {
-    TDescTexturePostEffect desc = bit->second;
+    TDescTexturePostEffect desc = bit.second;
     SAFE_RELEASE( desc.pSrc );
     SAFE_RELEASE( desc.pDst );
-    bit->second = desc;
-    bit++;
+    bit.second = desc;
   }
 }
 //--------------------------------------------------------------------------------------
@@ -1257,13 +1182,9 @@ void TBigJack::SaveSurface(const char* name, IDirect3DSurface9* pSurfaсe)
 //--------------------------------------------------------------------------------------
 void TBigJack::DestroyEffectForGlow()
 {
-	TListPtrEffect::iterator bit = mListPtrEffect.begin();
-	TListPtrEffect::iterator eit = mListPtrEffect.end();
-	while(bit!=eit)
-	{
-		(*bit)->Destroy();
-		bit++;
-	}
+
+  BOOST_FOREACH(TEffectDX* pEffect,mListPtrEffect)
+    pEffect->Destroy();
 	mListPtrEffect.clear();
 }
 //-------------------------------------------------------------

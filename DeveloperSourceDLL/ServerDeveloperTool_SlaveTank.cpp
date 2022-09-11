@@ -1,42 +1,22 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
-
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
 #include "ServerDeveloperTool_SlaveTank.h"
+
+#include <boost/asio/ip/impl/address_v4.ipp>
+
 #include "MakerObjectCommon.h"
+#include "Slave.h"
+#include "NetSystem.h"
+#include "GlobalParam.h"
+#include "../GameLib/NameSrcEventID.h"
 
 using namespace std;
+using namespace nsMelissa;
 
 TServerDeveloperTool_SlaveTank::TServerDeveloperTool_SlaveTank()
 {
@@ -50,7 +30,14 @@ TServerDeveloperTool_SlaveTank::~TServerDeveloperTool_SlaveTank()
 //---------------------------------------------------------------------------------
 void TServerDeveloperTool_SlaveTank::Init(TComponentServer* pComponent, const char* arg)
 {
+  InitLog();
+  mComponent = *pComponent;
 
+  unsigned int ip = boost::asio::ip::address_v4::from_string(ns_getSelfIP(0)).to_ulong();
+
+  bool resOpen = mComponent.mNet.Slave->Open(SLAVE_PORT);
+  BL_ASSERT(resOpen);
+  mComponent.mNet.Slave->ConnectUp( ip, MASTER_PORT);
 }
 //---------------------------------------------------------------------------------
 int TServerDeveloperTool_SlaveTank::GetTimeRefreshMS()// как часто происходит вызов Refresh()
@@ -80,6 +67,75 @@ void TServerDeveloperTool_SlaveTank::Done()
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_SlaveTank::Event(nsEvent::TEvent* pEvent)
 {
-
+  switch(pEvent->from)
+  {
+    case ID_SRC_EVENT_NETWORK_ENGINE:
+      HandleFromMelissa((TBaseEvent*)pEvent->container.GetPtr());
+      break;
+    case ID_SRC_EVENT_PHYSIC_ENGINE:
+      break;
+    case ID_SRC_EVENT_MANAGER_OBJECT_COMMON:
+      break;
+  }
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::HandleFromMelissa(TBaseEvent* pBE)
+{
+  string sEvent;  
+  switch(pBE->mType)
+  {
+    case TBase::eConnectDown:
+      sEvent = "ConnectDown";
+      break;
+    case TBase::eDisconnectDown:
+      sEvent = "DisconnectDown";
+      break;
+    case TBase::eConnectUp:
+      sEvent = "ConnectUp";
+      break;
+    case TBase::eDisconnectUp:
+      sEvent = "DisconnectUp";
+      break;
+    case TBase::eError:
+      sEvent = "Error";
+      break;
+    case TBase::eRecvFromDown:
+      sEvent = "RecvFromDown";
+      break;
+    case TBase::eRecvFromUp:
+      sEvent = "RecvFromUp";
+      break;
+    case TBase::eSaveContext:
+      sEvent = "SaveContext";
+      break;
+    case TBase::eRestoreContext:
+      sEvent = "RestoreContext";
+      break;
+    case TBase::eTryLogin:
+      sEvent = "TryLogin";
+      break;
+    case TBase::eResultLogin:
+      sEvent = "ResultLogin";
+      break;
+    case TBase::eCreateGroup:
+      sEvent = "CreateGroup";
+      break;
+    case TBase::eLeaveGroup:
+      sEvent = "LeaveGroup";
+      break;
+    case TBase::eDestroyGroup:
+      sEvent = "DestroyGroup";
+      break;
+  }
+  GetLogger()->Get("Inner")->WriteF_time("Melissa: %s.\n",sEvent.data());
+}
+//---------------------------------------------------------------------------------------------
+void TServerDeveloperTool_SlaveTank::InitLog()
+{
+  if(mFuncGetLogger)
+  {
+    mFuncGetLogger()->Register("Inner");// для логирования внутренних событий
+    mFuncGetLogger()->Init("SlaveTank");
+  }
 }
 //---------------------------------------------------------------------------------------------

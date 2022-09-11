@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\Share;..\..\..\NetTransport;..\..\..\Melissa;..\Share"
+				AdditionalIncludeDirectories="..\..\..\Share;..\..\..\NetTransport;..\..\..\Melissa\Include;..\Share"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_WIN32_WINNT=0x0501"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

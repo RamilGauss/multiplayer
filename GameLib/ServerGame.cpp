@@ -1,47 +1,23 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 √удаков –амиль —ергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
-
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
 #include "ServerGame.h"
 
 #include <string>
+#include <functional>
 
 #include "IPhysicEngine.h"
 #include "IManagerTime.h"
 #include "IManagerObjectCommon.h"
 #include "IManagerScene.h"
 #include "IXML.h"
+#include "IControlCamera.h"
+#include "IGraphicEngine.h"
+#include "IGUI.h"
 
 #include "MakerPhysicEngine.h"
 #include "MakerManagerObjectCommon.h"
@@ -49,6 +25,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MakerManagerStateMachine.h"
 #include "MakerManagerScene.h"
 #include "MakerManagerConnectClient.h"
+#include "MakerControlCamera.h"
+#include "MakerGraphicEngine.h"
+#include "MakerGUI.h"
 
 #include "common_defs.h"
 #include "BL_Debug.h"
@@ -68,7 +47,6 @@ TServerGame::TServerGame(eTypeRealize type):mStatLoad(30)
 	mLogLoad.ReOpen(".\\serverLoad.xls");
 
 	mType = type;
-  MakeVectorModule();
 }
 //------------------------------------------------------------------------
 TServerGame::~TServerGame()
@@ -76,77 +54,73 @@ TServerGame::~TServerGame()
 
 }
 //------------------------------------------------------------------------
-void TServerGame::Work(int variant_use, const char* sNameDLL, const char* arg)// начало работы
+bool TServerGame::Work()
 {
-  if(Init(variant_use,sNameDLL,arg)==false)
-    return;
-
-  flgNeedStop = false;
-  flgActive   = true;
-  //------------------------------------------------------
-  while(flgNeedStop==false)
-  {
-		mStartTime = ht_GetMSCount();// запомнить врем€ старта
-		// опросить модули движка дл€ генерации событий
-    if(MakeEventFromModule()==false)
-      break;
-    // обработать событи€
-    HandleEventByDeveloper();
-		mServerDeveloperTool->Refresh();
-    
-    if(mServerDeveloperTool->NeedExit())
-      break;
-		// расчет нагрузки
-		CalcAndWaitRestTime();
-  }
-  //------------------------------------------------------
-  flgActive = false;
-
-  Done();
+	mStartTime = ht_GetMSCount();// запомнить врем€ старта
+	// опросить модули движка дл€ генерации событий
+  RET_FALSE(MakeEventFromModule())
+  // обработать событи€
+  HandleEventByDeveloper();
+	mServerDeveloperTool->Refresh();
+  
+  Render();
+  if(mServerDeveloperTool->NeedExit())
+    return false;
+	// расчет нагрузки
+	CalcAndWaitRestTime();
+  return true;
 }
 //------------------------------------------------------------------------
 bool TServerGame::Init(int variant_use, const char* sNameDLL, const char* arg)
 {
   // загрузка DLL
-  CHECK_RET(LoadDLL(variant_use,sNameDLL))
+  RET_FALSE(LoadDLL(variant_use,sNameDLL))
   if(mGetServerDeveloperTool==NULL)// политика: нет DLL - нет движка.
     return false;
-  
   // подготовить пути дл€ ресурсов
-  string sRelPathXML = mClientDeveloperTool->GetPathXMLFile();
+  string sRelPathXML = mServerDeveloperTool->GetPathXMLFile();
   char sAbsPath[300];
   FindAbsPath((char*)sRelPathXML.data(),sAbsPath,sizeof(sAbsPath));
   if(GetStorePathResources()->Load(sAbsPath)==false)
     return false;
   //------------------------------------------
+  TMakerControlCamera makerControlCamera;
+  mCServer.mControlCamera = makerControlCamera.New();
+  //------------------------------------------
+  TMakerGraphicEngine makerGraphicEngine;
+  mCServer.mGraphicEngine = makerGraphicEngine.New(mCServer.mControlCamera);
+  mCServer.mGraphicEngine->Init();// создали окно
+  mCServer.mGraphicEngine->SetSelfID(ID_SRC_EVENT_GRAPHIC_ENGINE);
+  mCServer.mGraphicEngine->SetDstObject(this);
+  //------------------------------------------
+  TMakerGUI makerGUI;
+  mCServer.mGUI = makerGUI.New();
+  mCServer.mGraphicEngine->SetGUI(mCServer.mGUI);
+  //------------------------------------------
   TMakerManagerScene makerManagerScene;
   mCServer.mManagerScene = makerManagerScene.New();
-  switch(mType)
-  {
-    case eSlave:
-      mMainThreadVecModule.push_back(&TServerGame::HandleSceneEvent);
-      break;
-    case eMaster:
-    case eSuperServer:
-      break;
-  }	
   //------------------------------------------
   TMakerManagerConnectClient makerManagerConnectClient;
   mCServer.mManagerCClient = makerManagerConnectClient.New();
   //------------------------------------------
+  string sTitle;
 	switch(mType)
 	{
 		case eSlave:
 			mCServer.mNet.Base = new nsMelissa::TSlave;
+      sTitle = "Slave";
 			break;
 		case eMaster:
 			mCServer.mNet.Base = new nsMelissa::TMaster;
+      sTitle = "Master";
 			break;
 		case eSuperServer:
 			mCServer.mNet.Base = new nsMelissa::TSuperServer;
+      sTitle = "SuperServer";
 			break;
 	}	
 	SetupNetComponent(mCServer.mNet.Base);
+  mCServer.mGraphicEngine->SetTitleWindow(sTitle.data());
   //------------------------------------------
   mServerDeveloperTool->SetInitLogFunc(::GetLogger);
   mServerDeveloperTool->Init(&mCServer,arg);
@@ -158,6 +132,15 @@ void TServerGame::Done()
 {
   mServerDeveloperTool->Done();// освободить ресурсы DevTool
   // а теперь модули
+  TMakerGUI makerGUI;
+  makerGUI.Delete(mCServer.mGUI);
+  mCServer.mGUI = NULL;
+  mCServer.mGraphicEngine->ZeroGUI();
+
+  TMakerGraphicEngine makerGE;
+  makerGE.Delete(mCServer.mGraphicEngine);
+  mCServer.mGraphicEngine = NULL;
+
   delete mCServer.mNet.Base;
   mCServer.mNet.Base = NULL;
 
@@ -168,24 +151,22 @@ void TServerGame::Done()
   TMakerManagerConnectClient makerManagerConnectClient;
   makerManagerConnectClient.Delete(mCServer.mManagerCClient);
   mCServer.mManagerCClient = NULL;
-}
-//------------------------------------------------------------------------
-void TServerGame::HandleEventByDeveloper()
-{
-  TEvent* pEvent = GetEvent();
-  while(pEvent)
-  {
-    // обработка событи€
-    HandleEvent(pEvent);
-    delete pEvent;
-    pEvent = GetEvent();
-  }
+
+  // камера
+  TMakerControlCamera makerControlCamera;
+  makerControlCamera.Delete(mCServer.mControlCamera);
+  mCServer.mControlCamera = NULL;
 }
 //------------------------------------------------------------------------
 bool TServerGame::HandleNetEngineEvent()
 {
   mCServer.mNet.Base->Work();
   return true;
+}
+//------------------------------------------------------------------------
+bool TServerGame::HandleGraphicEngineEvent()
+{
+  return mCServer.mGraphicEngine->HandleInternalEvent();
 }
 //------------------------------------------------------------------------
 bool TServerGame::HandleSceneEvent()
@@ -196,7 +177,7 @@ bool TServerGame::HandleSceneEvent()
 //------------------------------------------------------------------------
 void TServerGame::CollectEvent()
 {
-  // опросить интерфейсы, которые не наследуютс€ от TSrcEvent
+
 }
 //------------------------------------------------------------------------
 void TServerGame::HandleEvent(TEvent* pEvent)
@@ -204,23 +185,27 @@ void TServerGame::HandleEvent(TEvent* pEvent)
   mServerDeveloperTool->Event(pEvent);
 }
 //------------------------------------------------------------------------
-bool TServerGame::MakeEventFromModule()
-{
-  int cnt = mMainThreadVecModule.size();
-  for( int i = 0 ; i < cnt ; i++ )
-  {
-    if(mMainThreadVecModule[i])
-      CHECK_RET((this->*mMainThreadVecModule[i])())
-  }
-  // опросить объекты на наличие событий
-  CollectEvent();
-  return true;
-}
-//------------------------------------------------------------------------
 void TServerGame::MakeVectorModule()
 {
+  // обработать событи€ графического €дра - Key+Mouse, GUI, внутренние событи€ GE.
+  FuncHandleEvent fGraphicEngineEvent = boost::bind(&TServerGame::HandleGraphicEngineEvent, this);
+  mMainThreadVecModule.push_back(fGraphicEngineEvent);
   // сетевой движок
-  mMainThreadVecModule.push_back(&TServerGame::HandleNetEngineEvent);
+  FuncHandleEvent fNetEngineEvent = boost::bind(&TServerGame::HandleNetEngineEvent, this);
+  mMainThreadVecModule.push_back(fNetEngineEvent);
+  // обработка событий сцены
+  switch(mType)
+  {
+    case eSlave:
+      {
+        FuncHandleEvent fSceneEvent = boost::bind(&TServerGame::HandleSceneEvent, this);
+        mMainThreadVecModule.push_back(fSceneEvent);
+      }
+      break;
+    case eMaster:
+    case eSuperServer:
+      break;
+  }	
 }
 //------------------------------------------------------------------------
 void TServerGame::SetLoad()
@@ -243,5 +228,10 @@ void TServerGame::CalcAndWaitRestTime()
 	if(now>refresh_time+mStartTime) return;
 	unsigned int time_sleep = mStartTime + refresh_time - now;
 	ht_msleep(time_sleep);
+}
+//------------------------------------------------------------------------
+void TServerGame::Render()
+{
+  mCServer.mGraphicEngine->Work(0);
 }
 //------------------------------------------------------------------------

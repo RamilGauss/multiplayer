@@ -1,60 +1,71 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
-
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
 #include "Base.h"
+#include <boost/foreach.hpp>
+
 #include "Logger.h"
 #include "ManagerSession.h"
 #include "DescRecvSession.h"
-#include "HeaderSubSystem.h"
-#include "ManagerScenario.h"
-#include "ScenarioSendUp.h"
+#include "ManagerContextSc.h"
+#include "ControlScenario.h"
+#include "ContainerContextSc.h"
 
-#include <boost/foreach.hpp>
+#include "ScenarioDisconnectClient.h"
+#include "ScenarioDisconnectSlave.h"
+#include "ScenarioFlow.h"
+#include "ScenarioLoginClient.h"
+#include "ScenarioLoginSlave.h"
+#include "ScenarioLoginMaster.h"
+#include "ScenarioRecommutationClient.h"
+#include "ScenarioSendToClient.h"
+#include "ScenarioSynchroSlave.h"
 
 using namespace std;
 using namespace nsMelissa;
 
 //-------------------------------------------------------------------------
-TBase::TBase()
-//:sNameSendUp("SendUp")
+TBase::TBase():
+mManagerSession(new TManagerSession),
+mControlSc(new TControlScenario),
+mContainerUp(new TContainerContextSc)
 {
-  mManagerSession  = new TManagerSession;
-  //mManagerScenario = new TManagerScenario;
   mLoadProcent     = 0;
 
-  //mScenarioSendUp = (TScenarioSendUp*)mManagerScenario->Add(TMakerScenario::eSendUp, sNameSendUp );
+  flgConnectUp  = false;
+  mID_SessionUp = INVALID_HANDLE_SESSION;
+
+  SetupScForContext(mContainerUp.get());
+  // задать контекст по-умолчанию
+  mControlSc->mDisClient   ->SetContext(&mContainerUp->mDisClient);
+  mControlSc->mDisSlave    ->SetContext(&mContainerUp->mDisSlave);
+  mControlSc->mFlow        ->SetContext(&mContainerUp->mFlow);        
+  mControlSc->mLoginClient ->SetContext(&mContainerUp->mLoginClient); // client
+  mControlSc->mLoginSlave  ->SetContext(&mContainerUp->mLoginSlave);  // slave
+  mControlSc->mLoginMaster ->SetContext(&mContainerUp->mLoginMaster); // master
+  mControlSc->mRcm         ->SetContext(&mContainerUp->mRcm);         // client
+  mControlSc->mSynchroSlave->SetContext(&mContainerUp->mSynchroSlave);// slave
+
+  mControlSc->mDisClient   ->RegisterOnNeedContext(&TBase::NeedContextDisconnectClient, this);
+  mControlSc->mDisSlave    ->RegisterOnNeedContext(&TBase::NeedContextDisconnectSlave, this);
+  mControlSc->mLoginClient ->RegisterOnNeedContext(&TBase::NeedContextLoginClient, this);
+  mControlSc->mLoginSlave  ->RegisterOnNeedContext(&TBase::NeedContextLoginSlave,  this);
+  mControlSc->mLoginMaster ->RegisterOnNeedContext(&TBase::NeedContextLoginMaster, this);
+  mControlSc->mRcm         ->RegisterOnNeedContext(&TBase::NeedContextRcm,         this);
+  mControlSc->mSendToClient->RegisterOnNeedContext(&TBase::NeedContextSendToClient,this);
+  mControlSc->mSynchroSlave->RegisterOnNeedContext(&TBase::NeedContextSynchroSlave,this);
+
+  mControlSc->mDisClient   ->RegisterOnEnd(&TBase::EndDisconnectClient,this);
+  mControlSc->mDisSlave    ->RegisterOnEnd(&TBase::EndDisconnectSlave, this);
+  mControlSc->mLoginClient ->RegisterOnEnd(&TBase::EndLoginClient, this);
+  mControlSc->mLoginSlave  ->RegisterOnEnd(&TBase::EndLoginSlave,  this);
+  mControlSc->mLoginMaster ->RegisterOnEnd(&TBase::EndLoginMaster, this);
+  mControlSc->mRcm         ->RegisterOnEnd(&TBase::EndRcm,         this);
+  mControlSc->mSynchroSlave->RegisterOnEnd(&TBase::EndSynchroSlave,this);
 }
 //-------------------------------------------------------------------------
 TBase::~TBase()
@@ -62,12 +73,9 @@ TBase::~TBase()
   mManagerSession->GetCallbackRecv()->Unregister(this);
   mManagerSession->GetCallbackDisconnect()->Unregister(this);
 
-  delete mManagerSession;
-  mManagerSession = NULL;
-
-  BOOST_FOREACH( TManagerScenario* pMSc, mSetManagerScenario )
+  BOOST_FOREACH( TManagerContextSc* pMSc, mSetManagerContextSc )
     delete pMSc;
-  mSetManagerScenario.clear();
+  mSetManagerContextSc.clear();
 }
 //-------------------------------------------------------------------------
 void TBase::Init(IMakerTransport* pMakerTransport)
@@ -100,14 +108,13 @@ void TBase::DisconnectUp()
 //-------------------------------------------------------------------------
 void TBase::SendUp(TBreakPacket bp, bool check)
 {
-  // как то так:
-  //mScenarioSendUp->Begin();// активизировать, ну или попытаться
-  //mScenarioSendUp->Send(bp, check);
+  // устанавливать для сценария контекст не требуется
+  mControlSc->mFlow->SendUp(bp, check);
 }
 //-------------------------------------------------------------------------
 bool TBase::IsConnectUp()
 {
-	return true;
+	return mManagerSession->IsExist(mID_SessionUp);
 }
 //-------------------------------------------------------------------------
 bool TBase::IsConnect(unsigned int id)
@@ -120,26 +127,6 @@ void TBase::Recv( TDescRecvSession* pDesc )
   TDescRecvSession* pNewDesc = new TDescRecvSession;
   pNewDesc->Assign(pDesc);
   mRecvPacket.Add(pNewDesc);
-}
-//-------------------------------------------------------------------------
-void TBase::RecvFromClient(TDescRecvSession* pDesc)
-{
-  BL_FIX_BUG();// если не переопределили, значит не ожидали
-}
-//-------------------------------------------------------------------------
-void TBase::RecvFromSlave(TDescRecvSession* pDesc)
-{
-  BL_FIX_BUG();
-}
-//-------------------------------------------------------------------------
-void TBase::RecvFromMaster(TDescRecvSession* pDesc)
-{
-  BL_FIX_BUG();
-}
-//-------------------------------------------------------------------------
-void TBase::RecvFromSuperServer(TDescRecvSession* pDesc)
-{
-  BL_FIX_BUG();
 }
 //-------------------------------------------------------------------------
 void TBase::Disconnect(unsigned int id)
@@ -158,7 +145,7 @@ void TBase::Work()
   HandleListRecv();
   // дать отработать всем сценариям по своим задачам 
   // порядок вызовов здесь не случаен, сначала должен быть вызов HandleListRecv
-  BOOST_FOREACH( TManagerScenario* pMSc, mSetManagerScenario )
+  BOOST_FOREACH( TManagerContextSc* pMSc, mSetManagerContextSc )
     pMSc->Work();
 	// например, Slave должен отсылать отчет по своей нагрузке CPU на Master
 	WorkInherit();
@@ -191,38 +178,40 @@ void TBase::HandleListRecv()
   while(ppFirst)
   {
     TDescRecvSession* pDesc = *ppFirst;
-    TBaseHeader* pPacket = (TBaseHeader*)pDesc->data;
-    switch(pPacket->from)
-    {
-      case eFromClient:
-        RecvFromClient(pDesc);
-        break;
-      case eFromSlave:
-        RecvFromSlave(pDesc);
-        break;
-      case eFromMaster:
-        RecvFromMaster(pDesc);
-        break;
-      case eFromSuperServer:
-        RecvFromSuperServer(pDesc);
-        break;
-      default:BL_FIX_BUG();
-    }
+    // обработать через сценарий
+    mControlSc->Work(pDesc);
     mRecvPacket.Remove(ppFirst);
     ppFirst = mRecvPacket.GetFirst();
   }
 }
 //-------------------------------------------------------------------------
-TManagerScenario* TBase::AddManagerScenario()
+TManagerContextSc* TBase::AddManagerContextSc()
 {
-  TManagerScenario* pMSc = new TManagerScenario(mManagerSession);
-  mSetManagerScenario.insert(pMSc);
-  return pMSc;
+  TManagerContextSc* pMСSc = new TManagerContextSc();
+  mSetManagerContextSc.insert(pMСSc);
+  return pMСSc;
 }
 //-------------------------------------------------------------------------
-void TBase::RemoveManagerScenario(TManagerScenario* pMSc)
+void TBase::RemoveManagerContextSc(TManagerContextSc* pMСSc)
 {
-  mSetManagerScenario.erase(pMSc);
-  delete pMSc;
+  mSetManagerContextSc.erase(pMСSc);
+  delete pMСSc;
+}
+//-------------------------------------------------------------------------
+void TBase::SetupScForContext(TContainerContextSc* pCCSc)
+{
+  pCCSc->SetMCSc(AddManagerContextSc());
+  pCCSc->SetMS(mManagerSession.get());
+  pCCSc->SetSE(this);
+
+  pCCSc->mDisClient.   SetSc(mControlSc->mDisClient);
+  pCCSc->mDisSlave.    SetSc(mControlSc->mDisSlave);
+  pCCSc->mFlow.        SetSc(mControlSc->mFlow);
+  pCCSc->mLoginClient. SetSc(mControlSc->mLoginClient);
+  pCCSc->mLoginSlave.  SetSc(mControlSc->mLoginSlave);
+  pCCSc->mLoginMaster. SetSc(mControlSc->mLoginMaster);
+  pCCSc->mRcm.         SetSc(mControlSc->mRcm);
+  pCCSc->mSendToClient.SetSc(mControlSc->mSendToClient);
+  pCCSc->mSynchroSlave.SetSc(mControlSc->mSynchroSlave);
 }
 //-------------------------------------------------------------------------

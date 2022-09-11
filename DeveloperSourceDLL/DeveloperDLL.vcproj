@@ -119,7 +119,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../Share;../DeveloperToolShare;../BigJack;../Robert;../GUI;../MyGUIEngine/include;../Common;../Melissa"
+				AdditionalIncludeDirectories="../Share;../DeveloperToolShare;../BigJack;../Robert;../GUI;../MyGUIEngine/include;../Common;../Melissa/Include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;VIEWERMODEL_EXPORTS;_WIN32_WINNT=0x0501"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -180,6 +180,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\ClientDeveloperTool_ClientTank.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\DeveloperSourceDLL\ClientDeveloperTool_ViewerModel.cpp"
 				>
 			</File>
@@ -192,7 +196,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ServerDeveloperTool_MasterTank.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\DeveloperSourceDLL\ServerDeveloperTool_SlaveTank.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ServerDeveloperTool_SuperServerTank.cpp"
 				>
 			</File>
 		</Filter>
@@ -202,11 +214,23 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\ClientDeveloperTool_ClientTank.h"
+				>
+			</File>
+			<File
 				RelativePath="..\DeveloperSourceDLL\ClientDeveloperTool_ViewerModel.h"
 				>
 			</File>
 			<File
+				RelativePath=".\ServerDeveloperTool_MasterTank.h"
+				>
+			</File>
+			<File
 				RelativePath="..\DeveloperSourceDLL\ServerDeveloperTool_SlaveTank.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ServerDeveloperTool_SuperServerTank.h"
 				>
 			</File>
 		</Filter>
@@ -218,6 +242,10 @@
 				>
 				<File
 					RelativePath="..\DeveloperToolShare\ControlLight.h"
+					>
+				</File>
+				<File
+					RelativePath="..\DeveloperToolShare\GlobalParam.h"
 					>
 				</File>
 				<File

@@ -1,44 +1,17 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
-
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
 #include "ClientMain.h"
 
 #include "Precompiled.h"
 #include <atlconv.h>
-#include "..\GameLib\IClientDeveloperTool.h"
-
+#include "../GameLib/IClientDeveloperTool.h"
+#include <boost/asio/ip/impl/address_v4.ipp>
+#include "GlobalParam.h"
 
 TClientMain::TClientMain()
 {
@@ -70,32 +43,23 @@ void TClientMain::sl_Enter(MyGUI::Widget* _sender)
   int port = atoi(sPort.data());
 
   std::string sIP = W2A((LPCWSTR)ebIP->getOnlyText().data());
+  unsigned int ip = boost::asio::ip::address_v4::from_string(sIP.data()).to_ulong();
 
-  unsigned char a,b,c,d;
-  sscanf(sIP.data(),"%u.%u.%u.%u", &a, &b, &c, &d);
-  unsigned int ip;
+  std::string sLogin = W2A((LPCWSTR)ebLogin->getOnlyText().data());
 
   IClientDeveloperTool::TComponentClient* pComponent = 
     IClientDeveloperTool::Singleton()->GetComponent();
   // настройка сети
   bool resOpen = pComponent->mNetClient->Open(port);
   BL_ASSERT(resOpen);
-  const char* sLoginPass = "abc";
-  pComponent->mNetClient->Login( 1111, 1235, (void*)sLoginPass, strlen(sLoginPass));
+  pComponent->mNetClient->Login( ip, MASTER_PORT, (void*)sLogin.data(), sLogin.length());
 }
 //-------------------------------------------------------------------------------------
 void TClientMain::sl_Exit(MyGUI::Widget* _sender)
 {
-  //IClientDeveloperTool::Singleton()->Exit(1);
-  Hide();
+  IClientDeveloperTool::Singleton()->Exit();
+  //Hide();
 }
-//-------------------------------------------------------------------------------------
-//void TClientMain::sl_IP(MyGUI::EditBox* _sender)
-//{
-//  USES_CONVERSION;
-//  std::string sA = W2A((LPCWSTR)_sender->getOnlyText().data());
-//  int a = 0;
-//}
 //-------------------------------------------------------------------------------------
 const char* TClientMain::GetNameLayout()
 {

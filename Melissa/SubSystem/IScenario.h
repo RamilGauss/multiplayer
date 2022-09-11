@@ -1,62 +1,65 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 √удаков –амиль —ергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
-
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
 #ifndef MELISSA_ISCENARIO_H
 #define MELISSA_ISCENARIO_H
 
+#include "SrcEvent.h"
+
+#include "DescRecvSession.h"
+#include "CallBackRegistrator.h"
+
 namespace nsMelissa
 {
-  class TManagerScenario;
+  class IContextScenario;
 	class TManagerSession;
   class IScenario
   {
+		TCallBackRegistrator1<unsigned int> mCallBackNeedContext;
+    TCallBackRegistrator1<IScenario*> mCallBackEnd;
+    unsigned char mType;
   protected:
-    TManagerScenario* mManagerScenario;
-		TManagerSession*  mManagerSession;// почти все сценарии используют его
+    IContextScenario* mCurContext;
   public:
+#if defined( WIN32 )
+#pragma pack(push, 1)
+#endif
+    struct TBaseHeader{char type;char subType;};
+#if defined( WIN32 )
+#pragma pack(pop)
+#endif
     IScenario();
     virtual ~IScenario();
+    
+    void SetContext(IContextScenario* pCSc);
+    IContextScenario* GetContext();
 
-    void Begin();
+		unsigned char GetType();
+		void SetType(unsigned char type);
+
+		virtual void Recv(TDescRecvSession* pDesc) = 0;
+		// прототип F: void C::Func(IScenario* pSc);
+    template <typename F, class C>
+    void RegisterOnNeedContext(F f, C pObject)// получить событие получени€ пакета
+    {mCallBackNeedContext.Register(f,pObject);}
+    template <typename F, class C>
+		void RegisterOnEnd(F f, C pObject)// получить событие окончани€ сценари€ (вызоветс€ до полного окончани€)
+		{mCallBackEnd.Register(f,pObject);}
+  protected:
+    friend class IContextScenario;
+    // если нельз€ было начать сценарий сразу, то когда будет така€ возможность произойдет этот вызов
+    virtual void DelayBegin();
+    // отработка своих событий и ожиданий
+    virtual void Work();
+  protected:
+    bool Begin();
     void End();
-  protected:
-    friend class TManagerScenario;
-    void Init(TManagerScenario* pMSc, TManagerSession* pMS);
-  protected:
-    bool IsActive();
-    virtual void Work() = 0;
+    // запрос на новую сессию, кто зарегистрировалс€ выставит контекст с помощью SetContext()
+    void NeedContext(unsigned int id_session);
   };
 }
 

@@ -1,44 +1,26 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
-
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
 #include "MakerScenario.h"
 #include "IScenario.h"
 
 #include <stddef.h>
+#include <boost/foreach.hpp>
 #include "BL_Debug.h"
+
+#include "ScenarioDisconnectClient.h"
+#include "ScenarioDisconnectSlave.h"
+#include "ScenarioFlow.h"
 #include "ScenarioLoginClient.h"
+#include "ScenarioLoginMaster.h"
+#include "ScenarioLoginSlave.h"
+#include "ScenarioSendToClient.h"
+#include "ScenarioSynchroSlave.h"
+#include "ScenarioRecommutationClient.h"
 
 using namespace nsMelissa;
 
@@ -49,30 +31,55 @@ TMakerScenario::TMakerScenario()
 //----------------------------------------------------------------------
 TMakerScenario::~TMakerScenario()
 {
-
+  BOOST_FOREACH(IScenario* p, mSetMakeSc)
+    delete p;
 }
 //----------------------------------------------------------------------
 IScenario* TMakerScenario::New(unsigned int ID_Implementation)
 {
-  IScenario* pScenario = NULL;
+  IScenario* pSc = NULL;
   switch(ID_Implementation)
   {
-    case eLoginClient:
-      pScenario = new TScenarioLoginClient;
+    case eDisconnectClient:
+      pSc = new TScenarioDisconnectClient; 
       break;
-    case eSendUp:
-      //pScenario = new IScenario;
+    case eDisconnectSlave:
+      pSc = new TScenarioDisconnectSlave; 
       break;
-    case eRecommutationClient:
-      //pScenario = new IScenario;
+    case eFlow:                     
+      pSc = new TScenarioFlow; 
+      break;
+    case eLoginClient:              
+      pSc = new TScenarioLoginClient;
+      break;
+    case eLoginMaster:              
+      pSc = new TScenarioLoginMaster;
+      break;
+    case eLoginSlave:               
+      pSc = new TScenarioLoginSlave;
+      break;
+    case eRecommutationClient:      
+      pSc = new TScenarioRecommutationClient;
+      break;
+    case eSendToClient:             
+      pSc = new TScenarioSendToClient;
+      break;
+    case eSynchroSlave:            
+      pSc = new TScenarioSynchroSlave;
       break;
     default:BL_FIX_BUG();
   }
-  return pScenario;
+  if(pSc)
+  {
+    pSc->SetType(ID_Implementation);
+    mSetMakeSc.insert(pSc);
+  }
+  return pSc;
 }
 //----------------------------------------------------------------------
 void TMakerScenario::Delete(IScenario* p)
 {
+  mSetMakeSc.erase(p);
   delete p;
 }
 //----------------------------------------------------------------------

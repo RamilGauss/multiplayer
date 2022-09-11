@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Share;.\Include;.\Source;.\SubSystem;.\Scenario"
+				AdditionalIncludeDirectories="..\Share;.\Include;.\Source;.\SubSystem;.\Scenario;.\ContextScenario"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;MELISSA_EI=__declspec(dllexport);MELISSA_EXPORTS;_WIN32_WINNT=0x0501"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -119,7 +119,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\Share"
+				AdditionalIncludeDirectories="..\Share;.\Include;.\Source;.\SubSystem;.\Scenario"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;MELISSA_EI=__declspec(dllexport);MELISSA_EXPORTS;_WIN32_WINNT=0x0501"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -241,6 +241,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Include\ErrorCode.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Include\Events.h"
 				>
 			</File>
@@ -264,86 +268,302 @@
 		<Filter
 			Name="SubSystem"
 			>
-			<File
-				RelativePath=".\SubSystem\DescRecvSession.h"
+			<Filter
+				Name="MappingDownConnection"
 				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\HeaderSubSystem.h"
+				<File
+					RelativePath=".\SubSystem\ClientForMasterPrivate.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ClientForMasterPrivate.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ClientPrivate.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ClientPrivate.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\GroupClientPrivate.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\GroupClientPrivate.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\MasterPrivate.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\MasterPrivate.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\SlavePrivate.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\SlavePrivate.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Session"
 				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\IScenario.cpp"
+				<File
+					RelativePath=".\SubSystem\DescRecvSession.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerSession.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerSession.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\NavigateSession.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\NavigateSession.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\Session.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\Session.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Scenario"
 				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\IScenario.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\MakerScenario.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\MakerScenario.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\ManagerScenario.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\ManagerScenario.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\ManagerSession.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\ManagerSession.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\NavigateSession.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\NavigateSession.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\Session.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\Session.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SubSystem\TypePacket.h"
-				>
-			</File>
+				<File
+					RelativePath=".\SubSystem\ContainerContextSc.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ContainerContextSc.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ControlScenario.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ControlScenario.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\IContextScenario.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\IContextScenario.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\IScenario.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\IScenario.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\MakerScenario.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\MakerScenario.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerContextSc.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerContextSc.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Scenario"
 			>
-			<File
-				RelativePath=".\Scenario\ScenarioLoginClient.cpp"
+			<Filter
+				Name="Header Files"
 				>
-			</File>
-			<File
-				RelativePath=".\Scenario\ScenarioLoginClient.h"
+				<File
+					RelativePath=".\Scenario\ScenarioDisconnectClient.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioDisconnectSlave.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioFlow.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioLoginClient.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioLoginMaster.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioLoginSlave.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioRecommutationClient.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioSendToClient.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioSynchroSlave.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Source Files"
 				>
-			</File>
-			<File
-				RelativePath=".\Scenario\ScenarioSendUp.cpp"
+				<File
+					RelativePath=".\Scenario\ScenarioDisconnectClient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioDisconnectSlave.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioFlow.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioLoginClient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioLoginMaster.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioLoginSlave.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioRecommutationClient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioSendToClient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Scenario\ScenarioSynchroSlave.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="ContextScenario"
+			>
+			<Filter
+				Name="Header Files"
 				>
-			</File>
-			<File
-				RelativePath=".\Scenario\ScenarioSendUp.h"
+				<File
+					RelativePath=".\ContextScenario\ContextScDisconnectClient.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScDisconnectSlave.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScFlow.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScLoginClient.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScLoginMaster.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScLoginSlave.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScRecommutationClient.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScSendToClient.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScSynchroSlave.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Source Files"
 				>
-			</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScDisconnectClient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScDisconnectSlave.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScFlow.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScLoginClient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScLoginMaster.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScLoginSlave.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScRecommutationClient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScSendToClient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ContextScenario\ContextScSynchroSlave.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

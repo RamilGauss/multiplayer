@@ -100,6 +100,7 @@ int main(int argc, char** argv)
     printf("time=%d ms, v=%f \n",
       start,float(TShareTest::eSizePacket*TShareTest::eCntRecvPacket)/(start*1000));
 	}
+  pNetTransport->Close(d.ip,TShareTest::ePortServer);
 	pNetTransport->Stop();
   BL_ASSERT(pNetTransport->IsActive()==false);
   g_ShareTest->Unregister();

@@ -1,39 +1,18 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
-
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
 #include "ScenarioLoginClient.h"
+#include "HiTimer.h"
+#include "ManagerSession.h"
+#include "Logger.h"
+#include "Base.h"
+#include "Events.h"
+#include "ErrorCode.h"
+
 
 using namespace nsMelissa;
 
@@ -49,6 +28,92 @@ TScenarioLoginClient::~TScenarioLoginClient()
 //--------------------------------------------------------------
 void TScenarioLoginClient::Work()
 {
+  
+}
+//--------------------------------------------------------------
+void TScenarioLoginClient::Connect(unsigned int ip, unsigned short port, 
+                                   void* data, int size)
+{
+  if(Begin()==false)
+  {
+    // генерация ошибки
+    GetLogger()->Get(STR_NAME_MELISSA)->
+      WriteF_time("TScenarioLoginClient::Connect() сценарий неактивен.\n");
+    BL_FIX_BUG();
+    return;
+  }
+  // формирование пакета
+  TBreakPacket bp;// контейнер для всего пакета
+  bp.PushFront((char*)data,size);
+  THeaderLoginClient h;
+  bp.PushFront((char*)&h, sizeof(h));
+  // отослать пакет для попытки авторизации
+  Context()->SetID_Session(Context()->GetMS()->Send(ip, port, bp));
+  if(Context()->GetID_Session()==INVALID_HANDLE_SESSION)
+  {
+    // Генерация ошибки
+    TEventError event;
+    event.code = LoginClient_MasterNotReady;
+    Context()->GetSE()->AddEventCopy(&event, sizeof(event));
+    End();
+  }
+  else
+    Context()->SetTimeWait(ht_GetMSCount() + eTimeWait);
+}
+//--------------------------------------------------------------
+void TScenarioLoginClient::Recv(TDescRecvSession* pDesc)
+{
+  NeedContext(pDesc->id_session);
+  THeaderLoginClient* pPacket = (THeaderLoginClient*)pDesc->data;
+  switch(pPacket->subType)
+  {
+    case eToMaster:
+      break;
+    case eAcceptFromMaster:
+      break;
+    case eRejectFromMaster:
+      break;
+  }
+}
+//--------------------------------------------------------------
+void TScenarioLoginClient::Start()
+{
+  if(Begin()==false)
+  {
+    // генерация ошибки
+    GetLogger()->Get(STR_NAME_MELISSA)->
+      WriteF_time("TScenarioLoginClientByMaster1::Start() сценарий неактивен.\n");
 
+    BL_FIX_BUG();
+    return;
+  }
+  // генерация события о попытке авторизации
+  TEventTryLogin event;
+  event.id_session = Context()->GetID_Session();
+  Context()->GetSE()->AddEventCopy(&event,sizeof(event));
+}
+//--------------------------------------------------------------
+void TScenarioLoginClient::Reject(void* resForClient, int sizeResClient)
+{
+  Context()->Reject();
+
+  TBreakPacket bp;
+  THeaderRejectFromMaster h;
+  //h.Set(resForClient, sizeResClient);
+  bp.PushBack((char*)&h, sizeof(h));
+  Context()->GetMS()->Send(Context()->GetID_Session(), bp);
+}
+//--------------------------------------------------------------
+void TScenarioLoginClient::Accept(unsigned int key, void* resForClient, int sizeResClient, 
+                                  TIP_Port& ip_port_Slave)
+{
+  Context()->Accept();
+
+  THeaderAcceptFromMaster h;
+  h.key = key;
+  //h.Set(resForClient, sizeResClient);
+  TBreakPacket bp;
+  bp.PushBack((char*)&h, sizeof(h));
+  Context()->GetMS()->Send(Context()->GetID_Session(), bp);
 }
 //--------------------------------------------------------------

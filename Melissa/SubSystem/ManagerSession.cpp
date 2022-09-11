@@ -1,47 +1,17 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
-
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
 #include "ManagerSession.h"
 #include "Logger.h"
 #include "Base.h"
-#include "DescRecvSession.h"
+#include <boost/foreach.hpp>
 
 using namespace std;
-
-namespace nsMelissa
-{
+using namespace nsMelissa;
 
 TManagerSession::TManagerSession()
 {
@@ -109,13 +79,7 @@ void TManagerSession::Stop()
 void TManagerSession::Work()
 {
   lockAccessSession();
-  set<TSession*>::iterator bit = mNavigateSession.Begin();
-  set<TSession*>::iterator eit = mNavigateSession.End();
-  while(bit!=eit)
-  {
-    (*bit)->Work();
-    bit++;
-  }
+  mNavigateSession.Work();
   unlockAccessSession();
 }
 //--------------------------------------------------------------------------------------------
@@ -145,7 +109,7 @@ unsigned int TManagerSession::Send(unsigned int ip, unsigned short port, TBreakP
   else
   {
     GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TManagerSession::Send(0x%X,%u) отправка при наличии Сессии.\n", ip, port);
+      WriteF_time("TManagerSession::Send(0x%X,%u) отправка на IP при наличии Сессии.\n", ip, port);
     BL_FIX_BUG();
   }
   unsigned int id_session = pSession->GetID();
@@ -168,9 +132,13 @@ unsigned int TManagerSession::GetSessionID(unsigned int ip, unsigned short port)
 //--------------------------------------------------------------------------------------------
 void TManagerSession::CloseSession(unsigned int ID_Session)
 {
+  if(ID_Session==INVALID_HANDLE_SESSION) 
+    return;
+
   lockAccessSession();
   TSession* pSession = mNavigateSession.FindSessionByID(ID_Session);
-  mNavigateSession.Delete(pSession);
+  if(pSession)
+    mNavigateSession.Delete(pSession);
   unlockAccessSession();
 }
 //--------------------------------------------------------------------------------------------
@@ -188,7 +156,7 @@ void TManagerSession::Recv( INetTransport::TDescRecv* pDescRecv )
   //-----------------------------------------------
   TDescRecvSession descRecvSession;
   *((INetTransport::TDescRecv*)&descRecvSession) = *pDescRecv;
-  descRecvSession.id = id;
+  descRecvSession.id_session = id;
   // данные, пришедшие от сессии содержат заголовок, учесть при формировании
   TSession::THeader* pHeader = (TSession::THeader*)descRecvSession.data;
   switch(pHeader->type)
@@ -252,4 +220,3 @@ bool TManagerSession::GetInfo(unsigned int ID_Session, TIP_Port& ip_port_out)
   return res;
 }
 //-------------------------------------------------------------------------
-}

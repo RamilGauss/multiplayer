@@ -107,7 +107,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\BigJack;..\Robert;.\;..\Share;..\DXUT\Optional;..\DXUT\Core;..\QBaseLib;..\GUI;..\Melissa;..\NetTransport"
+				AdditionalIncludeDirectories="..\BigJack;..\Robert;.\;..\Share;..\DXUT\Optional;..\DXUT\Core;..\QBaseLib;..\GUI;..\Melissa\Include;..\NetTransport"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"

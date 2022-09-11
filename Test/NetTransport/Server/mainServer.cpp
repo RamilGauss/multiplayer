@@ -14,6 +14,8 @@
 #include "BL_Debug.h"
 #include <boost/asio/ip/impl/address_v4.ipp>
 
+#include <boost/smart_ptr/scoped_ptr.hpp>
+
 using namespace std;
 using namespace boost::asio::ip;
 //-----------------------------------------------------------------------

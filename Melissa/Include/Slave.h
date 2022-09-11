@@ -1,47 +1,33 @@
 /*
-===========================================================================
-Author: Gudakov Ramil Sergeevich a.k.a. Gauss
+Author: Gudakov Ramil Sergeevich a.k.a. Gauss 
 Гудаков Рамиль Сергеевич 
-2011, 2012, 2013
-===========================================================================
-                        Common Information
-"TornadoEngine" GPL Source Code
-
-This file is part of the "TornadoEngine" GPL Source Code.
-
-"TornadoEngine" Source Code is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-"TornadoEngine" Source Code is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with "TornadoEngine" Source Code.  If not, see <http://www.gnu.org/licenses/>.
-
-In addition, the "TornadoEngine" Source Code is also subject to certain additional terms. 
-You should have received a copy of these additional terms immediately following 
-the terms and conditions of the GNU General Public License which accompanied
-the "TornadoEngine" Source Code.  If not, please request a copy in writing from at the address below.
-===========================================================================
-                                  Contacts
-If you have questions concerning this license or the applicable additional terms,
-you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
-===========================================================================
-*/ 
+Contacts: [ramil2085@mail.ru, ramil2085@gmail.com]
+See for more information License.h.
+*/
 
 #ifndef MELISSA_SLAVE_H
 #define MELISSA_SLAVE_H
 
 #include "ActiveServer.h"
 
+#include <map>
+
 namespace nsMelissa
 {
+  class IScenario;
+  class TClientPrivate;
   class MELISSA_EI TSlave : public TActiveServer
   {
+
+    enum{eDeltaSynchro = 3000,// мс
+    };
+
+    unsigned int mTimeNeedSendSynchro;
+
+    typedef std::map<unsigned int, TClientPrivate*> TMapUintPtr;
+    typedef TMapUintPtr::iterator TMapUintPtrIt;
+    TMapUintPtr mMapKeyClient;
+    TMapUintPtr mMapID_SessionClient;
 
   public:
     TSlave();
@@ -52,21 +38,38 @@ namespace nsMelissa
     virtual unsigned int GetSessionByClientKey(unsigned int key);
 
 		// BaseServer
-		struct TDescDownSlave
+    virtual void SendByClientKey(std::list<unsigned int>& l, TBreakPacket bp);
+
+		struct TDescDownSlave // для GetDescDown
 		{
 			unsigned int id_session;
 		};
 		virtual int  GetCountDown();
-		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);
-	protected:
+		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);// pDesc имеет тип TDescDownSlave
+    virtual void SendDown(unsigned int id_session, TBreakPacket bp, bool check);
+    // ActiveServer      
+    virtual void ConnectUp(unsigned int ip, unsigned short port);
+  protected:
     // Base
+		virtual void WorkInherit();
     virtual void DisconnectInherit(unsigned int id_session);
     
-    virtual void RecvFromClient(TDescRecvSession* pDesc);
-    virtual void RecvFromMaster(TDescRecvSession* pDesc);
+	protected:
+    virtual void NeedContextLoginClient(unsigned int id_session);
+    virtual void NeedContextRcm(unsigned int id_session);
+    virtual void NeedContextSendToClient(unsigned int id_session);
 
-	private:
-
+    virtual void EndLoginClient(IScenario*);
+    virtual void EndLoginSlave(IScenario*);
+    virtual void EndRcm(IScenario*);
+  private:
+    TClientPrivate* GetClientByUint(TMapUintPtr& m, unsigned int k);
+    TClientPrivate* GetClientByKey(unsigned int key);
+    TClientPrivate* GetClientByID_Session(unsigned int id_session);
+    TClientPrivate* AddClientPrivate( unsigned int key, 
+                                      unsigned int id_session = INVALID_HANDLE_SESSION);
+    void RemoveClientPrivate(unsigned int id_session);
+    void ClearClientPrivate();
   };
 }
 
