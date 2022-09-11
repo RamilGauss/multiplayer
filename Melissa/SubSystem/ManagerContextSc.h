@@ -9,6 +9,7 @@ See for more information License.h.
 #define MELISSA_MANAGER_CONTEXT_SC_H
 
 #include <list>
+#include "CallBackRegistrator.h"
 
 namespace nsMelissa
 {
@@ -20,6 +21,9 @@ namespace nsMelissa
 
     TListPtr   mListWaitActivation;
     IContextScenario* pActiveContextSc;// активный на данный момент 
+
+    TCallBackRegistrator1<TManagerContextSc*> mCallBackActivateEvent;
+    TCallBackRegistrator1<TManagerContextSc*> mCallBackDisactivateEvent;
   public:
     TManagerContextSc();
     ~TManagerContextSc();
@@ -29,6 +33,16 @@ namespace nsMelissa
 
     bool Activate(IContextScenario* pCSc);
     void Disactivate();
+
+  protected:
+    friend class TManagerManagerContextSc;
+
+    bool IsActive();
+    TCallBackRegistrator1<TManagerContextSc*>* GetCallBackActivate();
+    TCallBackRegistrator1<TManagerContextSc*>* GetCallBackDisactivate();
+  private:
+    void NotifyActiveEvent();
+    void NotifyDisactiveEvent();
   };
 }
 

@@ -56,6 +56,7 @@ namespace nsMelissa
     
 	protected:
     virtual void NeedContextLoginClient(unsigned int id_session);
+    virtual void NeedContextLoginClientByClientKey(unsigned int id_key_client);
     virtual void NeedContextRcm(unsigned int id_session);
     virtual void NeedContextSendToClient(unsigned int id_session);
 

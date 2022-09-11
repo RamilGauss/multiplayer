@@ -13,6 +13,7 @@ See for more information License.h.
 #include "ScenarioFlow.h"
 #include "ScenarioLoginClient.h"
 #include "ScenarioRecommutationClient.h"
+#include "Events.h"
 
 using namespace std;
 using namespace nsMelissa;
@@ -29,7 +30,7 @@ TClient::~TClient()
 //-------------------------------------------------------------------------
 void TClient::Login(unsigned int ip, unsigned short port, void* data, int size)
 {
-  mControlSc->mLoginClient->Connect(ip, port, data, size);
+  mControlSc->mLoginClient->TryLogin(ip, port, data, size);
 }
 //-------------------------------------------------------------------------
 void TClient::DisconnectInherit(unsigned int id_session)
@@ -42,6 +43,12 @@ void TClient::EndLoginClient(IScenario* pSc)
   // взять по этому контексту, задать всем контекстам
   mID_SessionUp = pSc->GetContext()->GetID_Session();
   mContainerUp->SetID_Session(mID_SessionUp);
+
+	TEventResultLogin event;
+  event.res = mContainerUp->mLoginClient.IsReject()?
+                                  TMaster::eReject: 
+                                  TMaster::eAccept;
+	AddEventCopy(&event, sizeof(event));
 }
 //-------------------------------------------------------------------------
 void TClient::EndRcm(IScenario* pSc)
@@ -51,4 +58,8 @@ void TClient::EndRcm(IScenario* pSc)
   mContainerUp->SetID_Session(mID_SessionUp);
 }
 //-------------------------------------------------------------------------
+void TClient::LeaveQueue()
+{
 
+}
+//-------------------------------------------------------------------------

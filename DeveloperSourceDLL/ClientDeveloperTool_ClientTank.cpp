@@ -26,6 +26,7 @@ See for more information License.h.
 #include "GlobalParam.h"
 #include "ShareMisc.h"
 #include "NetSystem.h"
+#include "BaseEvent.h"
 
 using namespace std;
 using namespace nsStruct3D;
@@ -184,11 +185,6 @@ void TClientDeveloperTool_ClientTank::KeyEvent(TKeyEvent* pEvent)
   }
 }
 //--------------------------------------------------------------------
-void TClientDeveloperTool_ClientTank::PrepareForRender()
-{
-
-}
-//------------------------------------------------------------------------------------
 IMakerObjectCommon* TClientDeveloperTool_ClientTank::GetMakerObjectCommon()
 {
   return mMakerObjectCommon;
@@ -249,12 +245,19 @@ void TClientDeveloperTool_ClientTank::Event(nsEvent::TEvent* pEvent)
 {
   switch(pEvent->from)
   {
-    case ID_SRC_EVENT_NETWORK_ENGINE:
+		case ID_SRC_EVENT_GRAPHIC_ENGINE:
+      HandleFromGUI((nsEvent::TBaseEvent*)pEvent->container.GetPtr());
+      break;
+		case ID_SRC_EVENT_NETWORK_ENGINE:
       HandleFromMelissa((nsMelissa::TBaseEvent*)pEvent->container.GetPtr());
       break;
     case ID_SRC_EVENT_PHYSIC_ENGINE:
       break;
     case ID_SRC_EVENT_MANAGER_OBJECT_COMMON:
+      break;
+    case ID_SRC_EVENT_TIMER_FIRST_EVENT:
+      break;
+    case ID_SRC_EVENT_TIMER_LAST_EVENT:
       break;
   }
 }
@@ -306,6 +309,12 @@ void TClientDeveloperTool_ClientTank::HandleFromMelissa(nsMelissa::TBaseEvent* p
     case TBase::eDestroyGroup:
       sEvent = "DestroyGroup";
       break;
+    case TBase::eEnterInQueue:
+      sEvent = "InQueueLoginClient";
+      break;
+    case TBase::eLeaveQueue:
+      sEvent = "LeaveQueue";
+      break;
   }
   GetLogger("Inner")->WriteF_time("Melissa: %s.\n",sEvent.data());
 }
@@ -318,5 +327,25 @@ void TClientDeveloperTool_ClientTank::ParseCmd(std::vector<std::string>& arg)
 
   mInputCmd.SetDefParam(input);
   mInputCmd.SetArg(arg);
+}
+//---------------------------------------------------------------------------------------------
+void TClientDeveloperTool_ClientTank::HandleFromGUI(nsEvent::TBaseEvent* pData)
+{
+  switch(pData->type)
+  {
+    case eKeyBoard:
+    {
+      TKeyEvent* pKey = (TKeyEvent*)pData;
+      KeyEvent(pKey);
+      break;
+    }
+    case eMouse:
+    {
+      TMouseEvent* pMouse = (TMouseEvent*)pData;
+      MouseEvent(pMouse);
+      break;
+    }
+    default:;
+  }
 }
 //---------------------------------------------------------------------------------------------

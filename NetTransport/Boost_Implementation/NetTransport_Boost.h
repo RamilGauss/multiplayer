@@ -18,8 +18,6 @@ See for more information License.h.
 
 // Thread safe - Send поддерживает.
 
-class INetControl;
-
 class TNetTransport_Boost : public INetTransport
 {
   GCS mMutexSend;

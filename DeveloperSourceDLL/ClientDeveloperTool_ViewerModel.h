@@ -28,11 +28,8 @@ public:
 
   virtual std::string GetTitleWindow();
   
-	virtual void Event(nsEvent::TEvent* pEvent){}
-  virtual void MouseEvent(nsEvent::TMouseEvent* pEvent);
-  virtual void KeyEvent(nsEvent::TKeyEvent* pEvent);
+  virtual void Event(nsEvent::TEvent* pEvent);
 
-  virtual void PrepareForRender();
   virtual void Done();
   
 	virtual IMakerObjectCommon* GetMakerObjectCommon();
@@ -42,6 +39,9 @@ protected:
   void CreateObjects(int cntK,int cntJ,int cntI);
 
   void InitLog();
+
+	void MouseEvent(nsEvent::TMouseEvent* pEvent);
+	void KeyEvent(nsEvent::TKeyEvent* pEvent);
 };
 
 #endif

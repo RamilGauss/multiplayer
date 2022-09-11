@@ -21,11 +21,14 @@ class IManagerStateMachine;
 class IPhysicEngine;
 class IManagerObjectCommon;
 class IManagerTime;
+class IControlCamera;
+class IGUI;
+class IGraphicEngine;
 
 class IClientDeveloperTool : public IDeveloperTool
 {
 public:
-  struct TComponentClient
+  struct TComponentClient : public TComponent
   {
     IControlCamera*         mControlCamera; // Camera
     IGUI*                   mGUI;           // GUI, MyGUI!
@@ -58,13 +61,6 @@ public:
 
   virtual void Init(TComponentClient* pComponent, std::vector<std::string>& arg) = 0;
   virtual std::string GetTitleWindow() = 0;
-
-  virtual void PrepareForRender() = 0;
-
-	virtual void MouseEvent(nsEvent::TMouseEvent* pEvent){}
-	virtual void KeyEvent(nsEvent::TKeyEvent* pEvent){}
-
-  void HandleEvent(nsEvent::TEvent* pEvent);
 
   // доступ к компонентам
   TComponentClient* GetComponent(){return &mComponent;}

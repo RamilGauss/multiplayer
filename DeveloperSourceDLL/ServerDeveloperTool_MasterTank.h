@@ -31,8 +31,8 @@ public:
   virtual ~TServerDeveloperTool_MasterTank();
 
 	virtual void Init(TComponentServer* pComponent, std::vector<std::string>& arg);
-	virtual int GetTimeRefreshMS();// как часто происходит вызов Refresh()
-	virtual void Refresh();
+	virtual int GetTimeRefreshMS();
+	//virtual void Refresh();
 
 	virtual void Done();
 	virtual void Event(nsEvent::TEvent* pEvent);

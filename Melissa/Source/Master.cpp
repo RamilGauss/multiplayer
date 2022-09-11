@@ -148,7 +148,8 @@ void TMaster::SetResultLogin(bool res, unsigned int id_session,
   pClient->SetState(TClientForMasterPrivate::eLogin);
 
   // решить на какой Slave закинуть клиента
-  //mControlSc->mLoginClient->Accept(id_client,resForClient,sizeResClient);
+  unsigned int id_session_slave = 0;
+  mControlSc->mLoginClient->Accept(id_client,resForClient,sizeResClient,id_session_slave);
 }
 //-------------------------------------------------------------------------
 unsigned int TMaster::GetSlaveSessionByGroup(unsigned int id_group)
@@ -303,15 +304,15 @@ void TMaster::EndLoginClient(IScenario* pSc)
 {
   unsigned int id_session = pSc->GetContext()->GetID_Session();
 
-  if(((TContextScLoginClient*)pSc->GetContext())->IsReject())
-  {
-    // удалить 
-    TClientForMasterPrivate* pClient = GetClientByIDSessionWait(id_session);
-    if(pClient==NULL)
-      return;
-    mMapID_SessionClientWait.erase(id_session);
-    delete pClient;
-  }
+  //if(((TContextScLoginClient*)pSc->GetContext())->IsReject())
+  //{
+  //  // удалить 
+  //  TClientForMasterPrivate* pClient = GetClientByIDSessionWait(id_session);
+  //  if(pClient==NULL)
+  //    return;
+  //  mMapID_SessionClientWait.erase(id_session);
+  //  delete pClient;
+  //}
 }
 //-------------------------------------------------------------------------
 void TMaster::EndLoginClientBySlave(IScenario* pSc)
@@ -493,16 +494,22 @@ void TMaster::EndRcm(IScenario* pSc)
   
 }
 //-------------------------------------------------------------------------
+void TMaster::NeedContextLoginClientByClientKey(unsigned int id_key_client)
+{
+  
+}
+//-------------------------------------------------------------------------
 void TMaster::NeedContextLoginClient(unsigned int id_session)
 {
-  if(GetClientByIDSessionWait(id_session))
+  TClientForMasterPrivate* pClient = GetClientByIDSessionWait(id_session);
+  if(pClient)
   {
     // внутренняя ошибка
     GetLogger(STR_NAME_MELISSA)->
       WriteF_time("TMaster::LoginClient() against try authorized.\n");
     return;
   }
-  TClientForMasterPrivate* pClient = new TClientForMasterPrivate;
+  pClient = new TClientForMasterPrivate;
   SetupScForContext(pClient->GetC());
   pClient->GetC()->SetID_Session(id_session);
   pClient->GetC()->SetUserPtr(pClient);

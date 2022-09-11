@@ -271,3 +271,8 @@ void TSlave::SendByClientKey(list<unsigned int>& l, TBreakPacket bp)
 
 }
 //-------------------------------------------------------------------------
+void TSlave::NeedContextLoginClientByClientKey(unsigned int id_key_client)
+{
+
+}
+//-------------------------------------------------------------------------

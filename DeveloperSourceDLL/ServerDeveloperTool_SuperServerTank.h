@@ -29,8 +29,7 @@ public:
   virtual ~TServerDeveloperTool_SuperServerTank();
 
 	virtual void Init(TComponentServer* pComponent, std::vector<std::string>& arg);
-	virtual int GetTimeRefreshMS();// как часто происходит вызов Refresh()
-	virtual void Refresh();
+	virtual int GetTimeRefreshMS();
 
 	virtual void Done();
 	virtual void Event(nsEvent::TEvent* pEvent);

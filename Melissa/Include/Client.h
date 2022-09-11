@@ -20,12 +20,12 @@ namespace nsMelissa
     TClient();
     virtual ~TClient();
 
-    virtual void Login(unsigned int ip, unsigned short port, void* data, int size);
+    void Login(unsigned int ip, unsigned short port, void* data, int size);
+    void LeaveQueue();
 	protected:
     // Base
     virtual void DisconnectInherit(unsigned int id);
 	private:
-    // события сценариев
     virtual void EndLoginClient(IScenario*);
     virtual void EndRcm(IScenario*);
 

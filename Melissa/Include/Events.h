@@ -102,6 +102,17 @@ namespace nsMelissa
     unsigned int id_session;
   };
   //-------------------------------------------------------------
+  struct MELISSA_EI TEventEnterInQueue : public TBaseEvent
+  {
+    TEventEnterInQueue();
+    int numInQueue;
+  };
+  //-------------------------------------------------------------
+  struct MELISSA_EI TEventLeaveQueue : public TBaseEvent
+  {
+    TEventLeaveQueue();
+  };
+  //-------------------------------------------------------------
 #if defined( WIN32 )
 #pragma pack(pop)
 #endif

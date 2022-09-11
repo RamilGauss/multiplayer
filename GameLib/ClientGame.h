@@ -50,10 +50,11 @@ protected:
 
   bool HandleGraphicEngineEvent();
   bool HandleNetEngineEvent();
+  bool HandleTimerFirstEvent();
+  bool HandleTimerLastEvent();
 
   virtual void HandleEvent(nsEvent::TEvent* pEvent);
 
-  void PrepareForRender();
   void Render();
 
   void StartThreadModule();

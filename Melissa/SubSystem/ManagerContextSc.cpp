@@ -26,14 +26,21 @@ TManagerContextSc::~TManagerContextSc()
 //---------------------------------------------------------------------
 bool TManagerContextSc::Activate(IContextScenario* pCSc)
 {
+  bool res;
   if(pActiveContextSc)// если есть активный, то поместить в очередь на активацию
   {
     // даже если сейчас активен тот же сценарий, поместить в очередь
     mListWaitActivation.push_back(pCSc);
-    return false;
+    res = false;
   }
-  pActiveContextSc = pCSc;
-  return true;
+  else
+  {
+    pActiveContextSc = pCSc;
+    res = true;
+  }
+  
+  NotifyActiveEvent();
+  return res;
 }
 //---------------------------------------------------------------------
 void TManagerContextSc::Disactivate()
@@ -49,6 +56,8 @@ void TManagerContextSc::Disactivate()
   }
   else
     pActiveContextSc = NULL;
+
+  NotifyDisactiveEvent();
 }
 //---------------------------------------------------------------------
 void TManagerContextSc::Work()
@@ -57,3 +66,29 @@ void TManagerContextSc::Work()
     pActiveContextSc->Work();
 }
 //---------------------------------------------------------------------
+bool TManagerContextSc::IsActive()
+{
+  return pActiveContextSc!=NULL;
+}
+//---------------------------------------------------------------------
+TCallBackRegistrator1<TManagerContextSc*>* TManagerContextSc::GetCallBackActivate()
+{
+  return &mCallBackActivateEvent;
+}
+//---------------------------------------------------------------------
+TCallBackRegistrator1<TManagerContextSc*>* TManagerContextSc::GetCallBackDisactivate()
+{
+  return &mCallBackDisactivateEvent;
+}
+//---------------------------------------------------------------------
+void TManagerContextSc::NotifyActiveEvent()
+{
+  mCallBackActivateEvent.Notify(this);
+}
+//---------------------------------------------------------------------
+void TManagerContextSc::NotifyDisactiveEvent()
+{
+  mCallBackDisactivateEvent.Notify(this);
+}
+//---------------------------------------------------------------------
+

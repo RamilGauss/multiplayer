@@ -29,31 +29,3 @@ IClientDeveloperTool* IClientDeveloperTool::Singleton()
   return g_ClientDeveloperTool;
 }
 //-----------------------------------------------------------------------
-void IClientDeveloperTool::HandleEvent(TEvent* pEvent)// если необходимо прервать работу движка - вернуть false
-{
-  switch(pEvent->from)
-  {
-    case ID_SRC_EVENT_GRAPHIC_ENGINE:
-    {
-      int s;
-      TBaseEvent* pData = (TBaseEvent*)pEvent->container.GetData(s);
-      switch(pData->type)
-      {
-        case eKeyBoard:
-        {
-          TKeyEvent* pKey = (TKeyEvent*)pData;
-          KeyEvent(pKey);
-          break;
-        }
-        case eMouse:
-        {
-          TMouseEvent* pMouse = (TMouseEvent*)pData;
-          MouseEvent(pMouse);
-          break;
-        }
-      }
-    }
-  }
-  Event(pEvent);
-}
-//-----------------------------------------------------------------------

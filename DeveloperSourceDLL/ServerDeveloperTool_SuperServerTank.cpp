@@ -16,6 +16,7 @@ See for more information License.h.
 #include "GlobalParam.h"
 #include "NetSystem.h"
 #include "BL_Debug.h"
+#include "../GameLib/ITimer.h"
 
 using namespace std;
 using namespace nsMelissa;
@@ -45,16 +46,15 @@ void TServerDeveloperTool_SuperServerTank::Init(TComponentServer* pComponent, st
   BL_ASSERT(resOpen);
 
   mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_SuperServerTank::InitQtForm,this);
+  
+  // для вызова каждый цикл, время выставить в 0
+  mComponent.mTimerFirstEvent->New(0);
+  mComponent.mTimerLastEvent->New(0);
 }
 //---------------------------------------------------------------------------------
-int TServerDeveloperTool_SuperServerTank::GetTimeRefreshMS()// как часто происходит вызов Refresh()
+int TServerDeveloperTool_SuperServerTank::GetTimeRefreshMS()
 {
 	return 100;
-}
-//---------------------------------------------------------------------------------
-void TServerDeveloperTool_SuperServerTank::Refresh()
-{
-
 }
 //---------------------------------------------------------------------------------
 IMakerObjectCommon* TServerDeveloperTool_SuperServerTank::GetMakerObjectCommon()
@@ -85,6 +85,10 @@ void TServerDeveloperTool_SuperServerTank::Event(nsEvent::TEvent* pEvent)
       break;
     case ID_SRC_EVENT_QT_LIB:
       HandleFromQt(pEvent);
+      break;
+    case ID_SRC_EVENT_TIMER_FIRST_EVENT:
+      break;
+    case ID_SRC_EVENT_TIMER_LAST_EVENT:
       break;
   }
 }

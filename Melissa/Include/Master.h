@@ -77,8 +77,6 @@ namespace nsMelissa
     {
       eAccept,
       eReject,
-      eRejectOverLimit,
-      eQueue,
     }tResultLogin;
 
     TMaster();
@@ -113,6 +111,7 @@ namespace nsMelissa
 
 	protected:// like slots
     virtual void NeedContextLoginClient(unsigned int id_session);
+    virtual void NeedContextLoginClientByClientKey(unsigned int id_key_client);
     virtual void NeedContextLoginSlave(unsigned int id_session);
     virtual void NeedContextRcm(unsigned int id_session);
     virtual void NeedContextSynchroSlave(unsigned int id_session);

@@ -48,14 +48,9 @@ void TServerDeveloperTool_SlaveTank::Init(TComponentServer* pComponent, vector<s
   mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_SlaveTank::InitQtForm,this);
 }
 //---------------------------------------------------------------------------------
-int TServerDeveloperTool_SlaveTank::GetTimeRefreshMS()// как часто происходит вызов Refresh()
+int TServerDeveloperTool_SlaveTank::GetTimeRefreshMS()
 {
 	return 100;
-}
-//---------------------------------------------------------------------------------
-void TServerDeveloperTool_SlaveTank::Refresh()
-{
-
 }
 //---------------------------------------------------------------------------------
 IMakerObjectCommon* TServerDeveloperTool_SlaveTank::GetMakerObjectCommon()

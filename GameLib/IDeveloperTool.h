@@ -14,9 +14,7 @@ See for more information License.h.
 #include "IMakerObjectCommon.h"
 #include "Logger.h"
 
-class IControlCamera;
-class IGUI;
-class IGraphicEngine; // отрисовка сцены
+class ITimer;
 
 class IDeveloperTool
 {
@@ -24,6 +22,17 @@ class IDeveloperTool
 
   bool flgExit;
 protected:
+  struct TComponent
+  {
+    ITimer* mTimerFirstEvent;
+    ITimer* mTimerLastEvent;
+    TComponent()
+    {
+      mTimerFirstEvent = NULL;
+      mTimerLastEvent  = NULL;
+    }
+  };
+
 	IMakerObjectCommon* mMakerObjectCommon;
 
 	typedef TLogger* (*TInitLogFunc)(); 

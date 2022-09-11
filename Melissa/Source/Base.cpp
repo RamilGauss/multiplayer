@@ -11,7 +11,7 @@ See for more information License.h.
 #include "Logger.h"
 #include "ManagerSession.h"
 #include "DescRecvSession.h"
-#include "ManagerContextSc.h"
+#include "ManagerManagerContextSc.h"
 #include "ControlScenario.h"
 #include "ContainerContextSc.h"
 
@@ -32,7 +32,8 @@ using namespace nsMelissa;
 TBase::TBase():
 mManagerSession(new TManagerSession),
 mControlSc(new TControlScenario),
-mContainerUp(new TContainerContextSc)
+mContainerUp(new TContainerContextSc),
+mMgrMgrContextSc(new TManagerManagerContextSc)
 {
   mLoadProcent     = 0;
 
@@ -53,6 +54,7 @@ mContainerUp(new TContainerContextSc)
   mControlSc->mDisClient   ->RegisterOnNeedContext(&TBase::NeedContextDisconnectClient, this);
   mControlSc->mDisSlave    ->RegisterOnNeedContext(&TBase::NeedContextDisconnectSlave, this);
   mControlSc->mLoginClient ->RegisterOnNeedContext(&TBase::NeedContextLoginClient, this);
+  mControlSc->mLoginClient ->RegisterOnNeedContextByKeyClient(&TBase::NeedContextLoginClientByClientKey, this);
   mControlSc->mLoginSlave  ->RegisterOnNeedContext(&TBase::NeedContextLoginSlave,  this);
   mControlSc->mLoginMaster ->RegisterOnNeedContext(&TBase::NeedContextLoginMaster, this);
   mControlSc->mRcm         ->RegisterOnNeedContext(&TBase::NeedContextRcm,         this);
@@ -72,10 +74,6 @@ TBase::~TBase()
 {
   mManagerSession->GetCallbackRecv()->Unregister(this);
   mManagerSession->GetCallbackDisconnect()->Unregister(this);
-
-  BOOST_FOREACH( TManagerContextSc* pMSc, mSetManagerContextSc )
-    delete pMSc;
-  mSetManagerContextSc.clear();
 }
 //-------------------------------------------------------------------------
 void TBase::Init(IMakerTransport* pMakerTransport)
@@ -139,14 +137,13 @@ void TBase::Work()
 {
   //пробежка по ожидающим разъединения и удаление сессий
   mManagerSession->Work();
-  // отреагировать на событие дисконнект сессий
-  HandleListDisconnect();
-  // обработать полученные данные
+  // обработать полученные данные соответствующим сценарием
   HandleListRecv();
+	// отреагировать на событие дисконнект сессий
+	HandleListDisconnect();
   // дать отработать всем сценариям по своим задачам 
   // порядок вызовов здесь не случаен, сначала должен быть вызов HandleListRecv
-  BOOST_FOREACH( TManagerContextSc* pMSc, mSetManagerContextSc )
-    pMSc->Work();
+  mMgrMgrContextSc->Work();
 	// например, Slave должен отсылать отчет по своей нагрузке CPU на Master
 	WorkInherit();
 }
@@ -187,15 +184,12 @@ void TBase::HandleListRecv()
 //-------------------------------------------------------------------------
 TManagerContextSc* TBase::AddManagerContextSc()
 {
-  TManagerContextSc* pMСSc = new TManagerContextSc();
-  mSetManagerContextSc.insert(pMСSc);
-  return pMСSc;
+  return mMgrMgrContextSc->Add();
 }
 //-------------------------------------------------------------------------
 void TBase::RemoveManagerContextSc(TManagerContextSc* pMСSc)
 {
-  mSetManagerContextSc.erase(pMСSc);
-  delete pMСSc;
+  return mMgrMgrContextSc->Remove(pMСSc);
 }
 //-------------------------------------------------------------------------
 void TBase::SetupScForContext(TContainerContextSc* pCCSc)

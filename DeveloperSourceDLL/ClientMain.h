@@ -14,7 +14,7 @@ See for more information License.h.
 class TClientMain :
   public TBaseGUI
 {
-
+  bool IsOpen;
 public:
   TClientMain();
   virtual ~TClientMain();

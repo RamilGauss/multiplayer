@@ -15,7 +15,7 @@ See for more information License.h.
 
 TClientMain::TClientMain()
 {
-
+  IsOpen = false;
 }
 //------------------------------------------------------
 TClientMain::~TClientMain()
@@ -50,8 +50,10 @@ void TClientMain::sl_Enter(MyGUI::Widget* _sender)
   IClientDeveloperTool::TComponentClient* pComponent = 
     IClientDeveloperTool::Singleton()->GetComponent();
   // настройка сети
-  bool resOpen = pComponent->mNetClient->Open(port);
-  BL_ASSERT(resOpen);
+  if(IsOpen==false)
+    IsOpen = pComponent->mNetClient->Open(port);
+
+  BL_ASSERT(IsOpen);
   pComponent->mNetClient->Login( ip, MASTER_PORT, (void*)sLogin.data(), sLogin.length());
 }
 //-------------------------------------------------------------------------------------

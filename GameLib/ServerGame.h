@@ -43,6 +43,8 @@ protected:
 
   bool HandleNetEngineEvent();
   bool HandleSceneEvent();
+  bool HandleTimerFirstEvent();
+  bool HandleTimerLastEvent();
 
   void CalcAndWaitRestTime();
 	void SetLoad();

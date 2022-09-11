@@ -26,7 +26,6 @@ using namespace std;
 using namespace nsStruct3D;
 using namespace nsEvent;
 using namespace nsMelissa;
-
 using namespace nsKey;
 
 #define LOG_TIME_LOAD_EDITOR_MODEL
@@ -50,6 +49,43 @@ TClientDeveloperTool_ViewerModel::TClientDeveloperTool_ViewerModel()
 TClientDeveloperTool_ViewerModel::~TClientDeveloperTool_ViewerModel()
 {
   delete mMakerObjectCommon;
+}
+//------------------------------------------------------------------------------------
+void TClientDeveloperTool_ViewerModel::Event(nsEvent::TEvent* pEvent)
+{
+	switch(pEvent->from)
+	{
+		case ID_SRC_EVENT_NETWORK_ENGINE:
+			break;
+		case ID_SRC_EVENT_PHYSIC_ENGINE:
+			break;
+		case ID_SRC_EVENT_MANAGER_OBJECT_COMMON:
+			break;
+		case ID_SRC_EVENT_TIMER_FIRST_EVENT:
+			break;
+		case ID_SRC_EVENT_TIMER_LAST_EVENT:
+			break;
+		case ID_SRC_EVENT_GRAPHIC_ENGINE:
+		{
+			int s;
+			TBaseEvent* pData = (TBaseEvent*)pEvent->container.GetData(s);
+			switch(pData->type)
+			{
+				case eKeyBoard:
+				{
+					TKeyEvent* pKey = (TKeyEvent*)pData;
+					KeyEvent(pKey);
+					break;
+				}
+				case eMouse:
+				{
+					TMouseEvent* pMouse = (TMouseEvent*)pData;
+					MouseEvent(pMouse);
+					break;
+				}
+			}
+		}
+	}
 }
 //------------------------------------------------------------------------------------
 void TClientDeveloperTool_ViewerModel::MouseEvent(TMouseEvent* pEvent)
@@ -181,11 +217,6 @@ void TClientDeveloperTool_ViewerModel::KeyEvent(TKeyEvent* pEvent)
   }
 }
 //--------------------------------------------------------------------
-void TClientDeveloperTool_ViewerModel::PrepareForRender()
-{
-
-}
-//------------------------------------------------------------------------------------
 IMakerObjectCommon* TClientDeveloperTool_ViewerModel::GetMakerObjectCommon()
 {
   return mMakerObjectCommon;
@@ -201,7 +232,7 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent, vector
   InitLog();
   mComponent = *pComponent; 
 
-  int cnt[3] = {8,8,8};
+  int cnt[3] = {5,5,5};
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
   unsigned int start = ht_GetMSCount();
 #endif 

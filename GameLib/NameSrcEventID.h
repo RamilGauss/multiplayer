@@ -14,5 +14,8 @@ See for more information License.h.
 #define ID_SRC_EVENT_NETWORK_ENGINE        3
 #define ID_SRC_EVENT_QT_LIB                4
 
+#define ID_SRC_EVENT_TIMER_FIRST_EVENT     5
+#define ID_SRC_EVENT_TIMER_LAST_EVENT      6
+
 #endif
 

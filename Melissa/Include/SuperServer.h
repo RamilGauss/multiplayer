@@ -48,6 +48,8 @@ namespace nsMelissa
     virtual void DisconnectInherit(unsigned int id_session);
 
     virtual void NeedContextLoginMaster(unsigned int id_session);
+    virtual void NeedContextLoginClientByClientKey(unsigned int id_key_client);
+
 	private:
     TMasterPrivate* GetMasterByIDSession(unsigned int id);
   };

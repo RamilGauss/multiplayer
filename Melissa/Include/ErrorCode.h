@@ -17,6 +17,7 @@ namespace nsMelissa
     LoginMaster_SSNotReady,
     LoginMaster_NoAnswerFromSS,
     LoginClient_MasterNotReady,
+    LoginClientNoAnswer,
     
   }ErrorCode;
 }

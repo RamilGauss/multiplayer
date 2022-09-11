@@ -16,6 +16,7 @@ See for more information License.h.
 #include "IManagerScene.h"
 #include "IXML.h"
 #include "IQtLib.h"
+#include "ITimer.h"
 
 #include "MakerPhysicEngine.h"
 #include "MakerManagerObjectCommon.h"
@@ -24,6 +25,7 @@ See for more information License.h.
 #include "MakerManagerScene.h"
 #include "MakerManagerConnectClient.h"
 #include "MakerQtLib.h"
+#include "MakerTimer.h"
 
 #include "common_defs.h"
 #include "BL_Debug.h"
@@ -34,6 +36,7 @@ See for more information License.h.
 #include "StorePathResources.h"
 #include "MapXML_Field.h"
 #include "ShareMisc.h"
+
 
 using namespace std;
 using namespace nsEvent;
@@ -57,7 +60,6 @@ bool TServerGame::Work()
   RET_FALSE(MakeEventFromModule())
   // обработать события
   HandleEventByDeveloper();
-	mServerDeveloperTool->Refresh();
   
   if(mServerDeveloperTool->NeedExit())
     return false;
@@ -104,6 +106,16 @@ bool TServerGame::Init(int variant_use, const char* sNameDLL, vector<string>& ar
 			break;
 	}	
 	SetupNetComponent(mCServer.mNet.Base);
+  //------------------------------------------
+  TMakerTimer makerTimer;
+  mCServer.mTimerFirstEvent = makerTimer.New();
+  mCServer.mTimerFirstEvent->SetDstObject(this);
+  mCServer.mTimerFirstEvent->SetSelfID(ID_SRC_EVENT_TIMER_FIRST_EVENT);
+  //------------------------------------------
+  mCServer.mTimerLastEvent = makerTimer.New();
+  mCServer.mTimerLastEvent->SetDstObject(this);
+  mCServer.mTimerLastEvent->SetSelfID(ID_SRC_EVENT_TIMER_LAST_EVENT);
+  //------------------------------------------
   //------------------------------------------
   mServerDeveloperTool->SetInitLogFunc(::GetLogger);
   mServerDeveloperTool->Init(&mCServer,arg);
@@ -155,6 +167,10 @@ void TServerGame::HandleEvent(TEvent* pEvent)
 //------------------------------------------------------------------------
 void TServerGame::MakeVectorModule()
 {
+  // таймер перед всеми событиями - должен быть добавлен самым первым
+  FuncHandleEvent fTimerFirstEvent = boost::bind(&TServerGame::HandleTimerFirstEvent, this);
+  mMainThreadVecModule.push_back(fTimerFirstEvent);
+
   // сетевой движок
   FuncHandleEvent fNetEngineEvent = boost::bind(&TServerGame::HandleNetEngineEvent, this);
   mMainThreadVecModule.push_back(fNetEngineEvent);
@@ -171,6 +187,10 @@ void TServerGame::MakeVectorModule()
     case eSuperServer:
       break;
   }	
+  //------------------------------------------------------------------------------
+  // таймер после всех событий - должен быть добавлен самым последним
+  FuncHandleEvent fTimerLastEvent = boost::bind(&TServerGame::HandleTimerLastEvent, this);
+  mMainThreadVecModule.push_back(fTimerLastEvent);
 }
 //------------------------------------------------------------------------
 void TServerGame::SetLoad()
@@ -193,5 +213,17 @@ void TServerGame::CalcAndWaitRestTime()
 	if(now>refresh_time+mStartTime) return;
 	unsigned int time_sleep = mStartTime + refresh_time - now;
 	ht_msleep(time_sleep);
+}
+//------------------------------------------------------------------------
+bool TServerGame::HandleTimerFirstEvent()
+{
+  mCServer.mTimerFirstEvent->Work();
+  return true;
+}
+//------------------------------------------------------------------------
+bool TServerGame::HandleTimerLastEvent()
+{
+  mCServer.mTimerLastEvent->Work();
+  return true;
 }
 //------------------------------------------------------------------------

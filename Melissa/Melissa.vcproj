@@ -397,6 +397,14 @@
 					RelativePath=".\SubSystem\ManagerContextSc.h"
 					>
 				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerManagerContextSc.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SubSystem\ManagerManagerContextSc.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

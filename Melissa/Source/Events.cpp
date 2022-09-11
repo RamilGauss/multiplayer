@@ -95,5 +95,16 @@ TEventSaveContext::TEventSaveContext()
   id_session = INVALID_HANDLE_SESSION;
 }
 //-------------------------------------------------------------
+TEventEnterInQueue::TEventEnterInQueue()
+{
+  mType = TBase::eEnterInQueue;
+  numInQueue = 0;
+}
+//-------------------------------------------------------------
+TEventLeaveQueue::TEventLeaveQueue()
+{
+  mType = TBase::eLeaveQueue;
+}
+//-------------------------------------------------------------
 
 }

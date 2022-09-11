@@ -17,6 +17,7 @@ See for more information License.h.
 #include "IManagerObjectCommon.h"
 #include "IGUI.h"
 #include "IXML.h"
+#include "ITimer.h"
 
 #include "MakerPhysicEngine.h"
 #include "MakerGraphicEngine.h"
@@ -25,6 +26,7 @@ See for more information License.h.
 #include "MakerGUI.h"
 #include "MakerControlCamera.h"
 #include "MakerManagerStateMachine.h"
+#include "MakerTimer.h"
 
 #include "common_defs.h"
 #include "BL_Debug.h"
@@ -56,7 +58,6 @@ bool TClientGame::Work()
   // обработать события
   HandleEventByDeveloper();
   // расчеты, необходимые для рендера, в зависимости от времени предыдущего расчета
-  PrepareForRender();
   Render();
   if(mClientDeveloperTool->NeedExit())
     return false;
@@ -117,6 +118,15 @@ bool TClientGame::Init(int variant_use, const char* sNameDLL, vector<string>& ar
   mCClient.mGUI = makerGUI.New();
   mCClient.mGraphicEngine->SetGUI(mCClient.mGUI);
   //------------------------------------------
+  TMakerTimer makerTimer;
+  mCClient.mTimerFirstEvent = makerTimer.New();
+  mCClient.mTimerFirstEvent->SetDstObject(this);
+  mCClient.mTimerFirstEvent->SetSelfID(ID_SRC_EVENT_TIMER_FIRST_EVENT);
+  //------------------------------------------
+  mCClient.mTimerLastEvent = makerTimer.New();
+  mCClient.mTimerLastEvent->SetDstObject(this);
+  mCClient.mTimerLastEvent->SetSelfID(ID_SRC_EVENT_TIMER_LAST_EVENT);
+  //------------------------------------------
   //------------------------------------------
   // запустить потоки, в которых будут работать модули
   StartThreadModule();
@@ -165,11 +175,11 @@ void TClientGame::Done()
   mCClient.mControlCamera = NULL;
 }
 //------------------------------------------------------------------------
-void TClientGame::PrepareForRender()
-{
-  mClientDeveloperTool->PrepareForRender();
-}
-//------------------------------------------------------------------------
+//void TClientGame::PrepareForRender()
+//{
+//  mClientDeveloperTool->PrepareForRender();
+//}
+////------------------------------------------------------------------------
 void TClientGame::Render()
 {
   mCClient.mGraphicEngine->Work(mCClient.mMTime->GetTime());
@@ -193,13 +203,18 @@ void TClientGame::CollectEvent()
 //------------------------------------------------------------------------
 void TClientGame::HandleEvent(TEvent* pEvent)
 {
-  mClientDeveloperTool->HandleEvent(pEvent);
+  mClientDeveloperTool->Event(pEvent);
 }
 //------------------------------------------------------------------------
 //  Для клиента кол-во потоков определяется кол-вом ядер CPU
 void TClientGame::MakeVectorModule()
 {
   int countCore = GetCountCoreCPU();
+
+  // таймер перед всеми событиями - должен быть добавлен самым первым
+  FuncHandleEvent fTimerFirstEvent = boost::bind(&TClientGame::HandleTimerFirstEvent, this);
+  mMainThreadVecModule.push_back(fTimerFirstEvent);
+
   // обработать события графического ядра - Key+Mouse, GUI, внутренние события GE.
   FuncHandleEvent fGraphicEngineEvent = boost::bind(&TClientGame::HandleGraphicEngineEvent, this);
   mMainThreadVecModule.push_back(fGraphicEngineEvent);
@@ -216,6 +231,10 @@ void TClientGame::MakeVectorModule()
   }
   // физика
   // звук
+  //------------------------------------------------------------------------------
+  // таймер после всех событий - должен быть добавлен самым последним
+  FuncHandleEvent fTimerLastEvent = boost::bind(&TClientGame::HandleTimerLastEvent, this);
+  mMainThreadVecModule.push_back(fTimerLastEvent);
 }
 //------------------------------------------------------------------------
 void TClientGame::StartThreadModule()
@@ -239,5 +258,17 @@ void TClientGame::StopThreadModule()
     while(mOtherThreadVecModule[i].flgActive==true)
       ht_msleep(eWaitFeedBack);
   }
+}
+//------------------------------------------------------------------------
+bool TClientGame::HandleTimerFirstEvent()
+{
+  mCClient.mTimerFirstEvent->Work();
+  return true;
+}
+//------------------------------------------------------------------------
+bool TClientGame::HandleTimerLastEvent()
+{
+  mCClient.mTimerLastEvent->Work();
+  return true;
 }
 //------------------------------------------------------------------------

@@ -27,14 +27,14 @@ namespace nsMelissa
 {
   class TManagerSession;
   class TManagerContextSc;
+  class TManagerManagerContextSc;
   class TContainerContextSc;
   class TControlScenario;
   class IScenario;
   struct TDescRecvSession;
   class MELISSA_EI TBase : public TSrcEvent
   {
-    typedef std::set<TManagerContextSc*> TSetPtr;
-    TSetPtr mSetManagerContextSc;
+    boost::scoped_ptr<TManagerManagerContextSc> mMgrMgrContextSc;
   protected:
     boost::scoped_ptr<TControlScenario>    mControlSc;
     boost::scoped_ptr<TContainerContextSc> mContainerUp;
@@ -70,6 +70,8 @@ namespace nsMelissa
       eCreateGroup,
       eLeaveGroup, 
       eDestroyGroup,
+      eEnterInQueue,
+      eLeaveQueue,
     }tTypeEvent;
 
     TBase();
@@ -97,6 +99,7 @@ namespace nsMelissa
     virtual void NeedContextDisconnectClient(unsigned int id_session){}
     virtual void NeedContextDisconnectSlave(unsigned int id_session){}
     virtual void NeedContextLoginClient(unsigned int id_session){}
+    virtual void NeedContextLoginClientByClientKey(unsigned int id_key_client){}
     virtual void NeedContextLoginSlave(unsigned int id_session){}
     virtual void NeedContextLoginMaster(unsigned int id_session){}
     virtual void NeedContextRcm(unsigned int id_session){}
@@ -110,7 +113,8 @@ namespace nsMelissa
     virtual void EndLoginMaster(IScenario*){}
     virtual void EndRcm(IScenario*){}
     virtual void EndSynchroSlave(IScenario*){}
-	protected:
+    
+  protected:
     TManagerContextSc* AddManagerContextSc();
     void RemoveManagerContextSc(TManagerContextSc* pMSc);
     void SetupScForContext(TContainerContextSc* pCCSc);

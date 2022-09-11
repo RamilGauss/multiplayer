@@ -222,6 +222,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MakerTimer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ManagerConnectClient.cpp"
 				>
 			</File>
@@ -243,6 +247,10 @@
 			</File>
 			<File
 				RelativePath=".\ServerGame.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Timer.cpp"
 				>
 			</File>
 			<File
@@ -320,6 +328,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ITimer.h"
+				>
+			</File>
+			<File
 				RelativePath=".\LoaderObjectCommon.h"
 				>
 			</File>
@@ -341,6 +353,10 @@
 			</File>
 			<File
 				RelativePath=".\MakerManagerTime.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MakerTimer.h"
 				>
 			</File>
 			<File
@@ -369,6 +385,10 @@
 			</File>
 			<File
 				RelativePath=".\ServerGame.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Timer.h"
 				>
 			</File>
 			<File

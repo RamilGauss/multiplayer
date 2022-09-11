@@ -1,213 +1,162 @@
-20:56:37  |  Platform  |  Info  |  * Initialise: RenderManager  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  28
-20:56:37  |  Platform  |  Info  |  RenderManager successfully initialized  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  54
-20:56:37  |  Platform  |  Info  |  * Initialise: DataManager  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxdatamanager.cpp  |  24
-20:56:37  |  Platform  |  Info  |  DataManager successfully initialized  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxdatamanager.cpp  |  26
-20:56:37  |  Core  |  Info  |  * Initialise: Gui  |  .\src\MyGUI_Gui.cpp  |  76
-20:56:37  |  Core  |  Info  |  * MyGUI version 3.2.0  |  .\src\MyGUI_Gui.cpp  |  88
-20:56:37  |  Core  |  Info  |  * Initialise: ResourceManager  |  .\src\MyGUI_ResourceManager.cpp  |  47
-20:56:37  |  Core  |  Info  |  ResourceManager successfully initialized  |  .\src\MyGUI_ResourceManager.cpp  |  55
-20:56:37  |  Core  |  Info  |  * Initialise: LayerManager  |  .\src\MyGUI_LayerManager.cpp  |  48
-20:56:37  |  Core  |  Info  |  LayerManager successfully initialized  |  .\src\MyGUI_LayerManager.cpp  |  56
-20:56:37  |  Core  |  Info  |  * Initialise: WidgetManager  |  .\src\MyGUI_WidgetManager.cpp  |  68
-20:56:37  |  Core  |  Info  |  WidgetManager successfully initialized  |  .\src\MyGUI_WidgetManager.cpp  |  99
-20:56:37  |  Core  |  Info  |  * Initialise: InputManager  |  .\src\MyGUI_InputManager.cpp  |  59
-20:56:37  |  Core  |  Info  |  InputManager successfully initialized  |  .\src\MyGUI_InputManager.cpp  |  79
-20:56:37  |  Core  |  Info  |  * Initialise: SubWidgetManager  |  .\src\MyGUI_SubWidgetManager.cpp  |  51
-20:56:37  |  Core  |  Info  |  SubWidgetManager successfully initialized  |  .\src\MyGUI_SubWidgetManager.cpp  |  71
-20:56:37  |  Core  |  Info  |  * Initialise: SkinManager  |  .\src\MyGUI_SkinManager.cpp  |  51
-20:56:37  |  Core  |  Info  |  SkinManager successfully initialized  |  .\src\MyGUI_SkinManager.cpp  |  61
-20:56:37  |  Core  |  Info  |  * Initialise: FontManager  |  .\src\MyGUI_FontManager.cpp  |  47
-20:56:37  |  Core  |  Info  |  FontManager successfully initialized  |  .\src\MyGUI_FontManager.cpp  |  57
-20:56:37  |  Core  |  Info  |  * Initialise: ControllerManager  |  .\src\MyGUI_ControllerManager.cpp  |  47
-20:56:37  |  Core  |  Info  |  ControllerManager successfully initialized  |  .\src\MyGUI_ControllerManager.cpp  |  55
-20:56:37  |  Core  |  Info  |  * Initialise: PointerManager  |  .\src\MyGUI_PointerManager.cpp  |  58
-20:56:37  |  Core  |  Info  |  PointerManager successfully initialized  |  .\src\MyGUI_PointerManager.cpp  |  77
-20:56:37  |  Core  |  Info  |  * Initialise: ClipboardManager  |  .\src\MyGUI_ClipboardManager.cpp  |  87
-20:56:37  |  Core  |  Info  |  ClipboardManager successfully initialized  |  .\src\MyGUI_ClipboardManager.cpp  |  101
-20:56:37  |  Core  |  Info  |  * Initialise: LayoutManager  |  .\src\MyGUI_LayoutManager.cpp  |  43
-20:56:37  |  Core  |  Info  |  LayoutManager successfully initialized  |  .\src\MyGUI_LayoutManager.cpp  |  50
-20:56:37  |  Core  |  Info  |  * Initialise: DynLibManager  |  .\src\MyGUI_DynLibManager.cpp  |  41
-20:56:37  |  Core  |  Info  |  DynLibManager successfully initialized  |  .\src\MyGUI_DynLibManager.cpp  |  45
-20:56:37  |  Core  |  Info  |  * Initialise: PluginManager  |  .\src\MyGUI_PluginManager.cpp  |  45
-20:56:37  |  Core  |  Info  |  PluginManager successfully initialized  |  .\src\MyGUI_PluginManager.cpp  |  49
-20:56:37  |  Core  |  Info  |  * Initialise: LanguageManager  |  .\src\MyGUI_LanguageManager.cpp  |  45
-20:56:37  |  Core  |  Info  |  LanguageManager successfully initialized  |  .\src\MyGUI_LanguageManager.cpp  |  49
-20:56:37  |  Core  |  Info  |  * Initialise: FactoryManager  |  .\src\MyGUI_FactoryManager.cpp  |  40
-20:56:37  |  Core  |  Info  |  FactoryManager successfully initialized  |  .\src\MyGUI_FactoryManager.cpp  |  42
-20:56:37  |  Core  |  Info  |  * Initialise: ToolTipManager  |  .\src\MyGUI_ToolTipManager.cpp  |  48
-20:56:37  |  Core  |  Info  |  ToolTipManager successfully initialized  |  .\src\MyGUI_ToolTipManager.cpp  |  60
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_GeneratedFonts.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_Fonts.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Error  |  ResourceTrueTypeFont: TrueType font 'DejaVuSansFont_15' disabled. Define MYGUI_USE_FREETYE if you need TrueType fonts.  |  .\src\MyGUI_ResourceTrueTypeFont.cpp  |  72
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_CommonSkins.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Info  |  Register value : 'HCenter' = 0  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  243
-20:56:37  |  Core  |  Info  |  Register value : 'VCenter' = 0  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  244
-20:56:37  |  Core  |  Info  |  Register value : 'Center' = 0  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  245
-20:56:37  |  Core  |  Info  |  Register value : 'Left' = 2  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  246
-20:56:37  |  Core  |  Info  |  Register value : 'Right' = 4  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  247
-20:56:37  |  Core  |  Info  |  Register value : 'HStretch' = 6  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  248
-20:56:37  |  Core  |  Info  |  Register value : 'Top' = 8  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  249
-20:56:37  |  Core  |  Info  |  Register value : 'Bottom' = 16  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  250
-20:56:37  |  Core  |  Info  |  Register value : 'VStretch' = 24  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  251
-20:56:37  |  Core  |  Info  |  Register value : 'Stretch' = 30  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  252
-20:56:37  |  Core  |  Info  |  Register value : 'Default' = 10  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  253
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_BlueWhiteTheme.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_BlueWhiteImages.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_BlueWhiteSkins.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_BlueWhiteTemplates.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_PointerImages.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_Pointers.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_Layers.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_Settings.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Info  |  Gui successfully initialized  |  .\src\MyGUI_Gui.cpp  |  134
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'arrow'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'beam'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'size_left'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'size_right'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'size_horz'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'size_vert'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'hand'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'link'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Platform  |  Info  |  device D3D lost  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  260
-20:56:37  |  Platform  |  Info  |  device D3D restore  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  270
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_BlackBlueImages.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'MultiListButtonImage'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Info  |  Load ini file 'MyGUI_BlackBlueSkins.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'CheckBoxSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'RadioButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'ButtonCloseSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'ButtonDownSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'ButtonUpSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'ButtonLeftSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'ButtonRightSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'SliderTrackVSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'ScrollTrackVSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'SliderTrackHSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'ScrollTrackHSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'ButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'ButtonEmptySkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'EditBoxSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'MenuBarSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'MenuItemSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'ScrollPanelHSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'ScrollPanelVSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'ListBoxItemSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'SepDownHSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'SepUpHSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'SepDownVSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:37  |  Core  |  Warning  |  dublicate resource name 'SepUpVSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ClientDefaultSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ClientTileSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'PanelSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'WhiteSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'CaptionEmptySkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'CaptionSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'CaptionWithButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'WindowFrameSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'WindowResizeLeftDownSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'WindowResizeRightDownSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'TabHeaderButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'TabHeaderEmptySkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'TabPanelSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'MenuItemNormalSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'MenuItemPopupButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'MenuItemCheckButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ProgressBarTrackHSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'MultiListButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Info  |  Load ini file 'MyGUI_BlackBlueTemplates.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'CheckBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'RadioButton'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ScrollBarH'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ScrollBarV'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'SliderH'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'SliderV'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'SliderHEmpty'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'SliderVEmpty'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'Button'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ButtonImage'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'TextBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'EditBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'EditBoxStretch'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'EditBoxEmpty'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'WordWrapEmpty'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ComboBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'Window'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'WindowC'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'WindowCS'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'WindowCX'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'WindowCSX'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'MenuBar'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'MenuBarButton'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'MenuBarSeparator'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'PopupMenu'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'PopupMenuSeparator'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'PopupMenuNormal'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'PopupMenuPopup'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ProgressBar'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ProgressBarFill'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ListBoxItem'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ListBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ItemBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ItemBoxEmpty'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ScrollView'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'ScrollViewEmpty'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'TabHeaderButton'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'TabControl'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'MultiListBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'MultiListButton'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:38  |  Core  |  Warning  |  dublicate resource name 'MultiSubListBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
-20:56:39  |  Platform  |  Info  |  device D3D lost  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  260
-20:56:39  |  Platform  |  Info  |  device D3D restore  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  270
-20:57:01  |  Core  |  Info  |  * Shutdown: Gui  |  .\src\MyGUI_Gui.cpp  |  148
-20:57:01  |  Core  |  Info  |  * Shutdown: PointerManager  |  .\src\MyGUI_PointerManager.cpp  |  84
-20:57:01  |  Core  |  Info  |  PointerManager successfully shutdown  |  .\src\MyGUI_PointerManager.cpp  |  101
-20:57:01  |  Core  |  Info  |  * Shutdown: InputManager  |  .\src\MyGUI_InputManager.cpp  |  86
-20:57:01  |  Core  |  Info  |  InputManager successfully shutdown  |  .\src\MyGUI_InputManager.cpp  |  91
-20:57:01  |  Core  |  Info  |  * Shutdown: SkinManager  |  .\src\MyGUI_SkinManager.cpp  |  68
-20:57:01  |  Core  |  Info  |  SkinManager successfully shutdown  |  .\src\MyGUI_SkinManager.cpp  |  75
-20:57:01  |  Core  |  Info  |  * Shutdown: SubWidgetManager  |  .\src\MyGUI_SubWidgetManager.cpp  |  78
-20:57:01  |  Core  |  Info  |  SubWidgetManager successfully shutdown  |  .\src\MyGUI_SubWidgetManager.cpp  |  98
-20:57:01  |  Core  |  Info  |  * Shutdown: LayerManager  |  .\src\MyGUI_LayerManager.cpp  |  63
-20:57:01  |  Core  |  Info  |  destroy layer 'Wallpaper'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'Back'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'Overlapped'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'Middle'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'Modal'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'Main'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'Popup'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'FadeMiddle'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'Info'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'ToolTip'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'DragAndDrop'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'FadeBusy'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'Pointer'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'Fade'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  destroy layer 'Statistic'  |  .\src\MyGUI_LayerManager.cpp  |  206
-20:57:01  |  Core  |  Info  |  LayerManager successfully shutdown  |  .\src\MyGUI_LayerManager.cpp  |  74
-20:57:01  |  Core  |  Info  |  * Shutdown: FontManager  |  .\src\MyGUI_FontManager.cpp  |  64
-20:57:01  |  Core  |  Info  |  FontManager successfully shutdown  |  .\src\MyGUI_FontManager.cpp  |  72
-20:57:01  |  Core  |  Info  |  * Shutdown: ControllerManager  |  .\src\MyGUI_ControllerManager.cpp  |  62
-20:57:01  |  Core  |  Info  |  ControllerManager successfully shutdown  |  .\src\MyGUI_ControllerManager.cpp  |  71
-20:57:01  |  Core  |  Info  |  * Shutdown: ClipboardManager  |  .\src\MyGUI_ClipboardManager.cpp  |  108
-20:57:01  |  Core  |  Info  |  ClipboardManager successfully shutdown  |  .\src\MyGUI_ClipboardManager.cpp  |  110
-20:57:01  |  Core  |  Info  |  * Shutdown: LayoutManager  |  .\src\MyGUI_LayoutManager.cpp  |  57
-20:57:01  |  Core  |  Info  |  LayoutManager successfully shutdown  |  .\src\MyGUI_LayoutManager.cpp  |  64
-20:57:01  |  Core  |  Info  |  * Shutdown: PluginManager  |  .\src\MyGUI_PluginManager.cpp  |  56
-20:57:01  |  Core  |  Info  |  PluginManager successfully shutdown  |  .\src\MyGUI_PluginManager.cpp  |  61
-20:57:01  |  Core  |  Info  |  * Shutdown: DynLibManager  |  .\src\MyGUI_DynLibManager.cpp  |  52
-20:57:01  |  Core  |  Info  |  DynLibManager successfully shutdown  |  .\src\MyGUI_DynLibManager.cpp  |  59
-20:57:01  |  Core  |  Info  |  * Shutdown: LanguageManager  |  .\src\MyGUI_LanguageManager.cpp  |  56
-20:57:01  |  Core  |  Info  |  LanguageManager successfully shutdown  |  .\src\MyGUI_LanguageManager.cpp  |  60
-20:57:01  |  Core  |  Info  |  * Shutdown: ResourceManager  |  .\src\MyGUI_ResourceManager.cpp  |  62
-20:57:01  |  Core  |  Info  |  ResourceManager successfully shutdown  |  .\src\MyGUI_ResourceManager.cpp  |  72
-20:57:01  |  Core  |  Info  |  * Shutdown: FactoryManager  |  .\src\MyGUI_FactoryManager.cpp  |  49
-20:57:01  |  Core  |  Info  |  FactoryManager successfully shutdown  |  .\src\MyGUI_FactoryManager.cpp  |  51
-20:57:01  |  Core  |  Info  |  * Shutdown: ToolTipManager  |  .\src\MyGUI_ToolTipManager.cpp  |  67
-20:57:01  |  Core  |  Info  |  ToolTipManager successfully shutdown  |  .\src\MyGUI_ToolTipManager.cpp  |  72
-20:57:01  |  Core  |  Info  |  * Shutdown: WidgetManager  |  .\src\MyGUI_WidgetManager.cpp  |  106
-20:57:01  |  Core  |  Info  |  WidgetManager successfully shutdown  |  .\src\MyGUI_WidgetManager.cpp  |  115
-20:57:01  |  Core  |  Info  |  Gui successfully shutdown  |  .\src\MyGUI_Gui.cpp  |  194
-20:57:01  |  Platform  |  Info  |  * Shutdown: RenderManager  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  61
-20:57:01  |  Platform  |  Info  |  RenderManager successfully shutdown  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  66
-20:57:01  |  Platform  |  Info  |  * Shutdown: DataManager  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxdatamanager.cpp  |  33
-20:57:01  |  Platform  |  Info  |  DataManager successfully shutdown  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxdatamanager.cpp  |  35
+14:52:52  |  Platform  |  Info  |  * Initialise: RenderManager  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  28
+14:52:52  |  Platform  |  Info  |  RenderManager successfully initialized  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  54
+14:52:52  |  Platform  |  Info  |  * Initialise: DataManager  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxdatamanager.cpp  |  24
+14:52:52  |  Platform  |  Info  |  DataManager successfully initialized  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxdatamanager.cpp  |  26
+14:52:52  |  Core  |  Info  |  * Initialise: Gui  |  .\src\MyGUI_Gui.cpp  |  76
+14:52:52  |  Core  |  Info  |  * MyGUI version 3.2.0  |  .\src\MyGUI_Gui.cpp  |  88
+14:52:52  |  Core  |  Info  |  * Initialise: ResourceManager  |  .\src\MyGUI_ResourceManager.cpp  |  47
+14:52:52  |  Core  |  Info  |  ResourceManager successfully initialized  |  .\src\MyGUI_ResourceManager.cpp  |  55
+14:52:52  |  Core  |  Info  |  * Initialise: LayerManager  |  .\src\MyGUI_LayerManager.cpp  |  48
+14:52:52  |  Core  |  Info  |  LayerManager successfully initialized  |  .\src\MyGUI_LayerManager.cpp  |  56
+14:52:52  |  Core  |  Info  |  * Initialise: WidgetManager  |  .\src\MyGUI_WidgetManager.cpp  |  68
+14:52:52  |  Core  |  Info  |  WidgetManager successfully initialized  |  .\src\MyGUI_WidgetManager.cpp  |  99
+14:52:52  |  Core  |  Info  |  * Initialise: InputManager  |  .\src\MyGUI_InputManager.cpp  |  59
+14:52:52  |  Core  |  Info  |  InputManager successfully initialized  |  .\src\MyGUI_InputManager.cpp  |  79
+14:52:52  |  Core  |  Info  |  * Initialise: SubWidgetManager  |  .\src\MyGUI_SubWidgetManager.cpp  |  51
+14:52:52  |  Core  |  Info  |  SubWidgetManager successfully initialized  |  .\src\MyGUI_SubWidgetManager.cpp  |  71
+14:52:52  |  Core  |  Info  |  * Initialise: SkinManager  |  .\src\MyGUI_SkinManager.cpp  |  51
+14:52:52  |  Core  |  Info  |  SkinManager successfully initialized  |  .\src\MyGUI_SkinManager.cpp  |  61
+14:52:52  |  Core  |  Info  |  * Initialise: FontManager  |  .\src\MyGUI_FontManager.cpp  |  47
+14:52:52  |  Core  |  Info  |  FontManager successfully initialized  |  .\src\MyGUI_FontManager.cpp  |  57
+14:52:52  |  Core  |  Info  |  * Initialise: ControllerManager  |  .\src\MyGUI_ControllerManager.cpp  |  47
+14:52:52  |  Core  |  Info  |  ControllerManager successfully initialized  |  .\src\MyGUI_ControllerManager.cpp  |  55
+14:52:52  |  Core  |  Info  |  * Initialise: PointerManager  |  .\src\MyGUI_PointerManager.cpp  |  58
+14:52:52  |  Core  |  Info  |  PointerManager successfully initialized  |  .\src\MyGUI_PointerManager.cpp  |  77
+14:52:52  |  Core  |  Info  |  * Initialise: ClipboardManager  |  .\src\MyGUI_ClipboardManager.cpp  |  87
+14:52:52  |  Core  |  Info  |  ClipboardManager successfully initialized  |  .\src\MyGUI_ClipboardManager.cpp  |  101
+14:52:52  |  Core  |  Info  |  * Initialise: LayoutManager  |  .\src\MyGUI_LayoutManager.cpp  |  43
+14:52:52  |  Core  |  Info  |  LayoutManager successfully initialized  |  .\src\MyGUI_LayoutManager.cpp  |  50
+14:52:52  |  Core  |  Info  |  * Initialise: DynLibManager  |  .\src\MyGUI_DynLibManager.cpp  |  41
+14:52:52  |  Core  |  Info  |  DynLibManager successfully initialized  |  .\src\MyGUI_DynLibManager.cpp  |  45
+14:52:52  |  Core  |  Info  |  * Initialise: PluginManager  |  .\src\MyGUI_PluginManager.cpp  |  45
+14:52:52  |  Core  |  Info  |  PluginManager successfully initialized  |  .\src\MyGUI_PluginManager.cpp  |  49
+14:52:52  |  Core  |  Info  |  * Initialise: LanguageManager  |  .\src\MyGUI_LanguageManager.cpp  |  45
+14:52:52  |  Core  |  Info  |  LanguageManager successfully initialized  |  .\src\MyGUI_LanguageManager.cpp  |  49
+14:52:52  |  Core  |  Info  |  * Initialise: FactoryManager  |  .\src\MyGUI_FactoryManager.cpp  |  40
+14:52:52  |  Core  |  Info  |  FactoryManager successfully initialized  |  .\src\MyGUI_FactoryManager.cpp  |  42
+14:52:52  |  Core  |  Info  |  * Initialise: ToolTipManager  |  .\src\MyGUI_ToolTipManager.cpp  |  48
+14:52:52  |  Core  |  Info  |  ToolTipManager successfully initialized  |  .\src\MyGUI_ToolTipManager.cpp  |  60
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_GeneratedFonts.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_Fonts.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Error  |  ResourceTrueTypeFont: TrueType font 'DejaVuSansFont_15' disabled. Define MYGUI_USE_FREETYE if you need TrueType fonts.  |  .\src\MyGUI_ResourceTrueTypeFont.cpp  |  72
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_CommonSkins.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Info  |  Register value : 'HCenter' = 0  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  243
+14:52:52  |  Core  |  Info  |  Register value : 'VCenter' = 0  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  244
+14:52:52  |  Core  |  Info  |  Register value : 'Center' = 0  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  245
+14:52:52  |  Core  |  Info  |  Register value : 'Left' = 2  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  246
+14:52:52  |  Core  |  Info  |  Register value : 'Right' = 4  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  247
+14:52:52  |  Core  |  Info  |  Register value : 'HStretch' = 6  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  248
+14:52:52  |  Core  |  Info  |  Register value : 'Top' = 8  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  249
+14:52:52  |  Core  |  Info  |  Register value : 'Bottom' = 16  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  250
+14:52:52  |  Core  |  Info  |  Register value : 'VStretch' = 24  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  251
+14:52:52  |  Core  |  Info  |  Register value : 'Stretch' = 30  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  252
+14:52:52  |  Core  |  Info  |  Register value : 'Default' = 10  |  d:\myprojects\multiplayer\myguiengine\include\MyGUI_Align.h  |  253
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_BlueWhiteTheme.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_BlueWhiteImages.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_BlueWhiteSkins.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_BlueWhiteTemplates.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_PointerImages.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_Pointers.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_Layers.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_Settings.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Info  |  Gui successfully initialized  |  .\src\MyGUI_Gui.cpp  |  134
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'arrow'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'beam'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'size_left'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'size_right'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'size_horz'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'size_vert'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'hand'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'link'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Platform  |  Info  |  device D3D lost  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  260
+14:52:52  |  Platform  |  Info  |  device D3D restore  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  270
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_BlackBlueImages.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'MultiListButtonImage'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_BlackBlueSkins.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'CheckBoxSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'RadioButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ButtonCloseSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ButtonDownSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ButtonUpSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ButtonLeftSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ButtonRightSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'SliderTrackVSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ScrollTrackVSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'SliderTrackHSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ScrollTrackHSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ButtonEmptySkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'EditBoxSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'MenuBarSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'MenuItemSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ScrollPanelHSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ScrollPanelVSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ListBoxItemSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'SepDownHSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'SepUpHSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'SepDownVSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'SepUpVSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ClientDefaultSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ClientTileSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'PanelSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'WhiteSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'CaptionEmptySkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'CaptionSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'CaptionWithButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'WindowFrameSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'WindowResizeLeftDownSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'WindowResizeRightDownSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'TabHeaderButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'TabHeaderEmptySkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'TabPanelSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'MenuItemNormalSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'MenuItemPopupButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'MenuItemCheckButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'ProgressBarTrackHSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Warning  |  dublicate resource name 'MultiListButtonSkin'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:52  |  Core  |  Info  |  Load ini file 'MyGUI_BlackBlueTemplates.xml'  |  .\src\MyGUI_ResourceManager.cpp  |  129
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'CheckBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'RadioButton'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'ScrollBarH'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'ScrollBarV'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'SliderH'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'SliderV'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'SliderHEmpty'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'SliderVEmpty'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'Button'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'ButtonImage'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'TextBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'EditBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'EditBoxStretch'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'EditBoxEmpty'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'WordWrapEmpty'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'ComboBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'Window'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'WindowC'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'WindowCS'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'WindowCX'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'WindowCSX'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'MenuBar'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'MenuBarButton'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'MenuBarSeparator'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'PopupMenu'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'PopupMenuSeparator'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'PopupMenuNormal'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'PopupMenuPopup'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'ProgressBar'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'ProgressBarFill'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'ListBoxItem'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'ListBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'ItemBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'ItemBoxEmpty'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'ScrollView'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'ScrollViewEmpty'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'TabHeaderButton'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'TabControl'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'MultiListBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'MultiListButton'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Core  |  Warning  |  dublicate resource name 'MultiSubListBox'  |  .\src\MyGUI_ResourceManager.cpp  |  107
+14:52:53  |  Platform  |  Info  |  device D3D lost  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  260
+14:52:53  |  Platform  |  Info  |  device D3D restore  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  270
+14:52:53  |  Platform  |  Info  |  device D3D lost  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  260
+14:52:53  |  Platform  |  Info  |  device D3D restore  |  d:\myprojects\multiplayer\platforms\directx\directxplatform\src\mygui_directxrendermanager.cpp  |  270

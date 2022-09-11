@@ -53,16 +53,16 @@ void TServerDeveloperTool_MasterTank::Init(TComponentServer* pComponent, vector<
   mComponent.mQtGUI->CallFromQtThreadByFunc(&TServerDeveloperTool_MasterTank::InitQtForm,this);
 }
 //---------------------------------------------------------------------------------
-int TServerDeveloperTool_MasterTank::GetTimeRefreshMS()// как часто происходит вызов Refresh()
+int TServerDeveloperTool_MasterTank::GetTimeRefreshMS()
 {
 	return 100;
 }
 //---------------------------------------------------------------------------------
-void TServerDeveloperTool_MasterTank::Refresh()
-{
-
-}
-//---------------------------------------------------------------------------------
+//void TServerDeveloperTool_MasterTank::Refresh()
+//{
+//
+//}
+////---------------------------------------------------------------------------------
 IMakerObjectCommon* TServerDeveloperTool_MasterTank::GetMakerObjectCommon()
 {
 	return mMakerObjectCommon;
@@ -178,6 +178,8 @@ void TServerDeveloperTool_MasterTank::DisconnectDown(TEventDisconnectDown* pEven
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_MasterTank::TryLogin(TEventTryLogin* pEvent)
 {
+  return;//###
+
   mCounterClient++;
   char s[100];
   sprintf(s,"hello, Client %u",mCounterClient);

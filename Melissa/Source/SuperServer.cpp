@@ -133,3 +133,8 @@ TMasterPrivate* TSuperServer::GetMasterByIDSession(unsigned int id)
   return fit->second;
 }
 //-------------------------------------------------------------------------
+void TSuperServer::NeedContextLoginClientByClientKey(unsigned int id_key_client)
+{
+
+}
+//-------------------------------------------------------------------------

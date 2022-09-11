@@ -23,7 +23,7 @@ class IQtLib;
 class IServerDeveloperTool : public IDeveloperTool
 {
 public:
-	struct TComponentServer
+	struct TComponentServer : public TComponent
 	{
 		union
 		{ // Melissa
@@ -52,10 +52,10 @@ public:
   virtual ~IServerDeveloperTool();
   
 	virtual void Init(TComponentServer* pComponent, std::vector<std::string>& arg) = 0;
-	// как часто происходит вызов Refresh(), временной интервал работы сервера
+	// временной интервал работы сервера
   virtual int GetTimeRefreshMS() = 0;
   // вызов не более одного раз в GetTimeRefreshMS
-	virtual void Refresh() = 0;
+	//virtual void Refresh() = 0;
 	// доступ к компонентам
 	TComponentServer* GetComponent(){return &mComponent;}
 
