@@ -66,8 +66,8 @@ void TTankTower::SetMirror(char *pData,int size)
 //-----------------------------------------------------------------------
 bool TTankTower::Animate(unsigned int time_ms)
 {
-  RotateTurret(M_PI/4.1f);
-  RotateVerticalGun(-0.2f);
+  //RotateTurret(M_PI/4.1f);
+  //RotateVerticalGun(-0.2f);
 
   return true;
 }
@@ -135,5 +135,12 @@ void TTankTower::EventSetModelGE()
     mShaderStackMask.push_back(0);
   mShaderStackMask.at(mIndexTrackR) = 1;
   mShaderStackMask.at(mIndexTrackL) = 1;
+}
+//------------------------------------------------------------------------------------------------
+const nsStruct3D::TMatrix16* TTankTower::GetMatrixForCamera()
+{
+  mMatrixForCamera = mWorld;
+  //mMatrixForCamera._43 -= 100.0f;
+  return &mMatrixForCamera;
 }
 //------------------------------------------------------------------------------------------------

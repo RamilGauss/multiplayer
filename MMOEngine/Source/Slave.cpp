@@ -178,7 +178,13 @@ void TSlave::EndLoginClient(IScenario* pSc)
 {
   TContextScLoginClient* pContext = (TContextScLoginClient*)pSc->GetContext();
   if(pContext->IsAccept())
+  {
+    // сохранить сессию Клиента
+    TContainerContextSc* pC = mMngContextClient->FindContextByKey(pContext->GetIDClient());
+    BL_ASSERT(pC);
+    pC->SetID_Session(pContext->GetID_SessionClientSlave());
     return;
+  }
 
   mMngContextClient->DeleteByKey(pContext->GetIDClient());
 }

@@ -43,7 +43,7 @@ bool TManagerContextClientLogining::FindSessionByClientKey(unsigned int id,
 bool TManagerContextClientLogining::FindClientKeyBySession(unsigned int id_session, 
                                                            unsigned int& id)
 {
-  const bmUintUint::left_iterator fit = mMapSessionKey.left.find(id);
+  const bmUintUint::left_iterator fit = mMapSessionKey.left.find(id_session);
   if(fit==mMapSessionKey.left.end())
   {
     GetLogger(STR_NAME_MMO_ENGINE)->

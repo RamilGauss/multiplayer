@@ -37,7 +37,6 @@ namespace nsMMOEngine
 
     void CheckConnectToSlaveS2C(TDescRecvSession* pDesc);
     void ResultLoginM2C(TDescRecvSession* pDesc);
-    void CheckLeaveQueueM2C(TDescRecvSession* pDesc);
     void InfoSlaveM2C(TDescRecvSession* pDesc);
   private:
     void CloseSessionMaster();

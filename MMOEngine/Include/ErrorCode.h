@@ -17,10 +17,12 @@ namespace nsMMOEngine
     LoginSlave_NoAnswerFromMaster,
     //--------------------------------------
     // LoginMaster
+    LoginClientMaster_KeyBusy,
     LoginMaster_SSNotReady,
     LoginMaster_NoAnswerFromSS,
     //--------------------------------------
     // LoginClient
+    LoginClientClientSecondEnter,
     LoginClientClientMasterNotReady,
     LoginClientClientNoAnswer,
     LoginClientClientNotExistSlave,

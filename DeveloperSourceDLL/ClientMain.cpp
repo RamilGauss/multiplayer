@@ -68,7 +68,8 @@ void TClientMain::sl_Enter(MyGUI::Widget* _sender)
 //-------------------------------------------------------------------------------------
 void TClientMain::sl_Exit(MyGUI::Widget* _sender)
 {
-  IClientDeveloperTool::Singleton()->Exit();
+  IClientDeveloperTool::Singleton()->GetComponent()->mNetClient->LeaveQueue();
+  //IClientDeveloperTool::Singleton()->Exit();
 }
 //-------------------------------------------------------------------------------------
 const char* TClientMain::GetNameLayout()

@@ -13,11 +13,8 @@ See for more information License.h.
 
 namespace nsMMOEngine
 {
-  class TClient_master;
   class TScenarioRecommutationClient : public IScenario
   {
-    TClient_master* mClient;
-
     typedef std::list<unsigned int> TListUint;
     TListUint mListNextID_SessionSlave;
 
@@ -27,7 +24,8 @@ namespace nsMMOEngine
 
     virtual void Recv(TDescRecvSession* pDesc);
 
-    void Start(unsigned int new_id_session,TClient_master* pClient);
+    void Start(unsigned int id_session_recipient,
+               unsigned int id_client);
     
     void SaveContext(void* data, int size);
 

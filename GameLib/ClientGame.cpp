@@ -175,11 +175,6 @@ void TClientGame::Done()
   mCClient.mControlCamera = NULL;
 }
 //------------------------------------------------------------------------
-//void TClientGame::PrepareForRender()
-//{
-//  mClientDeveloperTool->PrepareForRender();
-//}
-////------------------------------------------------------------------------
 void TClientGame::Render()
 {
   mCClient.mGraphicEngine->Work(mCClient.mMTime->GetTime());

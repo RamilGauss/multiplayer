@@ -10,6 +10,8 @@ See for more information License.h.
 #include "Precompiled.h"
 #include <atlconv.h>
 
+#include "../GameLib/IClientDeveloperTool.h"
+#include "Base.h"
 
 TGameRoomPrepare::TGameRoomPrepare()
 {
@@ -23,33 +25,23 @@ TGameRoomPrepare::~TGameRoomPrepare()
 //-------------------------------------------------------------------------------------
 void TGameRoomPrepare::Activate()
 {
-  //assignWidget(bEnter,"bEnter");
-  //assignWidget(bExit, "bExit");
+  assignWidget(bFight,"bFight");
+  assignWidget(bExit, "bExit");
 
-  //assignWidget(ebIP,    "ebIP");
-  //assignWidget(ebPort,  "ebPort");
-  //assignWidget(ebLogin, "ebLogin");
-
-  //bEnter->eventMouseButtonClick += MyGUI::newDelegate(this, &TClientMain::sl_Enter);
-  //bExit ->eventMouseButtonClick += MyGUI::newDelegate(this, &TClientMain::sl_Exit);
+  bFight->eventMouseButtonClick += MyGUI::newDelegate(this, &TGameRoomPrepare::sl_Fight);
+  bExit ->eventMouseButtonClick += MyGUI::newDelegate(this, &TGameRoomPrepare::sl_Exit);
 }
 //-------------------------------------------------------------------------------------
-//void TClientMain::sl_Enter(MyGUI::Widget* _sender)
-//{
-//
-//}
-////-------------------------------------------------------------------------------------
-//void TClientMain::sl_Exit(MyGUI::Widget* _sender)
-//{
-//  Close();
-//}
+void TGameRoomPrepare::sl_Fight(MyGUI::Widget* _sender)
+{
+
+}
 //-------------------------------------------------------------------------------------
-//void TClientMain::sl_IP(MyGUI::EditBox* _sender)
-//{
-//  USES_CONVERSION;
-//  std::string sA = W2A((LPCWSTR)_sender->getOnlyText().data());
-//  int a = 0;
-//}
+void TGameRoomPrepare::sl_Exit(MyGUI::Widget* _sender)
+{
+  //IClientDeveloperTool::Singleton()->Exit();
+	IClientDeveloperTool::Singleton()->GetComponent()->mNetClient->DisconnectUp();
+}
 //-------------------------------------------------------------------------------------
 const char* TGameRoomPrepare::GetNameLayout()
 {

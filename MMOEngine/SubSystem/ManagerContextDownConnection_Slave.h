@@ -46,7 +46,8 @@ namespace nsMMOEngine
     TManagerContextDownConnection_Slave();
     virtual ~TManagerContextDownConnection_Slave();
     
-		bool FindMinimumLoad(unsigned int& id_Session,unsigned char& load_procent);
+		bool FindMinimumLoad(unsigned int& id_session, unsigned char& load_procent);
+ 		bool FindLoadBySession(unsigned int id_session, unsigned char& load_procent);
 
 		void SetLoadBySession(unsigned int id_Session,unsigned char load_procent);
 

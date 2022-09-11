@@ -25,17 +25,18 @@ void TScenarioRecommutationClient::Work()
 
 }
 //--------------------------------------------------------------
-void TScenarioRecommutationClient::Start(unsigned int new_id_session, TClient_master* pClient)
+void TScenarioRecommutationClient::Start(unsigned int id_session_recipient,
+                                         unsigned int id_client)
 {
-  Context()->SetClient(pClient);
+  //Context()->SetClient(id_client);
 
-  if(Begin()==false)
-  {
-    mListNextID_SessionSlave.push_back(new_id_session);
-    return;
-  }
-  Context()->SetID_Session(new_id_session);
-  SendFirstPacket();
+  //if(Begin()==false)
+  //{
+  //  mListNextID_SessionSlave.push_back(new_id_session);
+  //  return;
+  //}
+  //Context()->SetID_Session(new_id_session);
+  //SendFirstPacket();
 }
 //--------------------------------------------------------------
 void TScenarioRecommutationClient::DelayBegin()

@@ -14,6 +14,7 @@ See for more information License.h.
 #include "ScenarioLoginClient.h"
 #include "ScenarioRecommutationClient.h"
 #include "Events.h"
+#include "ErrorCode.h"
 
 using namespace std;
 using namespace nsMMOEngine;
@@ -30,6 +31,14 @@ TClient::~TClient()
 //-------------------------------------------------------------------------
 void TClient::Login(unsigned int ip, unsigned short port, void* data, int size)
 {
+  if(IsConnectUp())
+  {
+    TEventError event;
+    event.code = LoginClientClientSecondEnter;
+    AddEventCopy(&event, sizeof(event));
+    return;
+  }
+
   mControlSc->mLoginClient->TryLogin(ip, port, data, size);
 }
 //-------------------------------------------------------------------------
@@ -38,12 +47,17 @@ void TClient::DisconnectInherit(unsigned int id_session)
   // тут проблема в том, что бы различить дисконнект со стороны Мастера при 
   // отработке сценария LoginClient от других
   IContextScenario* pContext = mContainerUp->GetMCSc()->GetActive();
-  if(pContext)// есть вообще активные сценарии
-  if(pContext==mControlSc->mLoginClient->GetContext())// активен сценарий LoginClient
+  if((pContext)&&// есть вообще активные сценарии
+     (pContext==mControlSc->mLoginClient->GetContext()))// активен сценарий LoginClient
     // возможно это продолжение сценария
     mControlSc->mLoginClient->DisconnectFromClient();
 	else
+	{
 		mID_SessionUp = INVALID_HANDLE_SESSION;
+		TEventDisconnectUp event;
+		event.id_session = id_session;
+    AddEventCopy(&event, sizeof(event));
+	}
 }
 //-------------------------------------------------------------------------
 void TClient::EndLoginClient(IScenario* pSc)
@@ -62,7 +76,8 @@ void TClient::EndRcm(IScenario* pSc)
 //-------------------------------------------------------------------------
 void TClient::LeaveQueue()
 {
-
+  if(mContainerUp->GetMCSc()->GetActive()==&mContainerUp->mLoginClient)
+    mControlSc->mLoginClient->LeaveQueue();
 }
 //-------------------------------------------------------------------------
 void TClient::EventSetClientKeyLoginClient(unsigned int id_client)

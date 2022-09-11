@@ -28,11 +28,11 @@ protected:
   virtual void KeyEvent(MyGUI::Widget* _sender, MyGUI::KeyCode _key, MyGUI::Char _char);
 protected:
 
-  //void sl_Enter(MyGUI::Widget* _sender);
-  //void sl_Exit(MyGUI::Widget* _sender);
+  void sl_Fight(MyGUI::Widget* _sender);
+  void sl_Exit(MyGUI::Widget* _sender);
 
-  //MyGUI::Button* bEnter;
-  //MyGUI::Button* bExit;
+  MyGUI::Button* bFight;
+  MyGUI::Button* bExit;
 
   //MyGUI::EditBox* ebIP;
   //MyGUI::EditBox* ebPort; 

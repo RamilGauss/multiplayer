@@ -36,6 +36,7 @@ namespace nsMMOEngine
     int mNumInQueue;
 
     unsigned int mTimeWaitAnswer;
+    unsigned int mTimeLastNeedNumInQueue;
 
     typedef std::map<std::string, unsigned int> TMapStrUint;
     typedef TMapStrUint::iterator TMapStrUintIt;
@@ -58,6 +59,9 @@ namespace nsMMOEngine
 
     void SetTimeWait(unsigned int v);
     unsigned int GetTimeWait();
+
+    void SetTimeLastNeedNumInQueue(unsigned int v);
+    unsigned int GetTimeLastNeedNumInQueue();
 
     void Accept();
     void Reject();

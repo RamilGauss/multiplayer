@@ -114,6 +114,8 @@ void TScLoginClient_ClientImpl::CheckConnectToSlaveS2C(TDescRecvSession* pDesc)
   event.res = TMaster::eAccept;
   Context()->GetSE()->AddEventCopy(&event, sizeof(event));
   
+  ((IContextScenario*)Context())->SetID_Session(pDesc->id_session);
+
   End();
 }
 //--------------------------------------------------------------
@@ -157,16 +159,6 @@ void TScLoginClient_ClientImpl::ResultLoginM2C(TDescRecvSession* pDesc)
       break;
     default:BL_FIX_BUG();
   }
-}
-//--------------------------------------------------------------
-void TScLoginClient_ClientImpl::CheckLeaveQueueM2C(TDescRecvSession* pDesc)
-{
-  CloseSessionMaster();
-
-  TEventLeaveQueue event;
-  Context()->GetSE()->AddEventCopy(&event, sizeof(event));
-
-  End();
 }
 //--------------------------------------------------------------
 void TScLoginClient_ClientImpl::InfoSlaveM2C(TDescRecvSession* pDesc)

@@ -25,6 +25,7 @@ See for more information License.h.
 #include "ScenarioSynchroSlave.h"
 
 #include "DelegateManagerContextSc.h"
+#include "Events.h"
 
 using namespace std;
 using namespace nsMMOEngine;
@@ -80,7 +81,16 @@ void TBase::SetLoad(int procent)
 //-------------------------------------------------------------------------
 void TBase::DisconnectUp()
 {
-
+	if(mID_SessionUp==INVALID_HANDLE_SESSION)
+		return;
+	
+	mManagerSession->CloseSession(mID_SessionUp);
+	
+	TEventDisconnectUp event;
+	event.id_session = mID_SessionUp;
+	AddEventCopy(&event, sizeof(event));
+	
+	mID_SessionUp = INVALID_HANDLE_SESSION;
 }
 //-------------------------------------------------------------------------
 void TBase::SendUp(TBreakPacket bp, bool check)

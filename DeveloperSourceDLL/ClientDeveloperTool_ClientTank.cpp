@@ -30,6 +30,8 @@ See for more information License.h.
 #include "file_operation.h"
 #include "StorePathResources.h"
 #include "MapXML_Field.h"
+#include "Master.h"
+#include "Events.h"
 
 using namespace std;
 using namespace nsStruct3D;
@@ -39,8 +41,8 @@ using namespace nsKey;
 
 #define LOG_TIME_LOAD_EDITOR_MODEL
 
-#define DELTA_MOVE 0.2f //0.4f
-#define DELTA_ROTATE 0.01f
+#define DELTA_MOVE     0.2f //0.4f
+#define DELTA_ROTATE   0.01f
 #define ASPECT_MOUSE_X 0.002f
 #define ASPECT_MOUSE_Y 0.002f
 
@@ -57,6 +59,11 @@ TClientDeveloperTool_ClientTank::TClientDeveloperTool_ClientTank()
   mClientMain      = new TClientMain;
   mGameRoomPrepare = new TGameRoomPrepare;
   mWaitForm        = new TWaitForm;
+
+  mCurrentForm     = NULL;
+
+  mTank   = NULL;
+  mHangar = NULL;
 }
 //------------------------------------------------------------------------------------
 TClientDeveloperTool_ClientTank::~TClientDeveloperTool_ClientTank()
@@ -212,7 +219,7 @@ void TClientDeveloperTool_ClientTank::Init(TComponentClient* pComponent, vector<
   mComponent.mGUI->Add(string("mGameRoomPrepare"),mGameRoomPrepare);
   mComponent.mGUI->Add(string("mWaitForm"),mWaitForm);
   // показать форму
-  mClientMain->Show();
+  SetCurrentForm(mClientMain);
   // подстроиться
   mComponent.mGUI->Resize();
   // HotKey
@@ -224,6 +231,8 @@ void TClientDeveloperTool_ClientTank::Init(TComponentClient* pComponent, vector<
 	}
 	else
 		BL_FIX_BUG();
+
+  CreateObjects();
 }
 //------------------------------------------------------------------------------------
 void TClientDeveloperTool_ClientTank::Done()
@@ -284,6 +293,7 @@ void TClientDeveloperTool_ClientTank::HandleFromMMOEngine(nsMMOEngine::TBaseEven
       break;
     case TBase::eDisconnectUp:
       sEvent = "DisconnectUp";
+      DisconnectUp();
       break;
     case TBase::eError:
       sEvent = "Error";
@@ -305,6 +315,7 @@ void TClientDeveloperTool_ClientTank::HandleFromMMOEngine(nsMMOEngine::TBaseEven
       break;
     case TBase::eResultLogin:
       sEvent = "ResultLogin";
+      Connect(pBE);
       break;
     case TBase::eCreateGroup:
       sEvent = "CreateGroup";
@@ -317,9 +328,6 @@ void TClientDeveloperTool_ClientTank::HandleFromMMOEngine(nsMMOEngine::TBaseEven
       break;
     case TBase::eEnterInQueue:
       sEvent = "InQueueLoginClient";
-      break;
-    case TBase::eLeaveQueue:
-      sEvent = "LeaveQueue";
       break;
   }
   GetLogger("Inner")->WriteF_time("MMOEngine: %s.\n",sEvent.data());
@@ -353,5 +361,81 @@ void TClientDeveloperTool_ClientTank::HandleFromGUI(nsEvent::TBaseEvent* pData)
     }
     default:;
   }
+}
+//---------------------------------------------------------------------------------------------
+void TClientDeveloperTool_ClientTank::ConnectUp()
+{
+  SetCurrentForm(mGameRoomPrepare);
+  mTank  ->SetShow(true);
+  mHangar->SetShow(true);
+}
+//---------------------------------------------------------------------------------------------
+void TClientDeveloperTool_ClientTank::DisconnectUp()
+{
+  SetCurrentForm(mClientMain);
+  mTank  ->SetShow(false);
+  mHangar->SetShow(false);
+}
+//---------------------------------------------------------------------------------------------
+void TClientDeveloperTool_ClientTank::SetCurrentForm(TBaseGUI* p)
+{
+  if(mCurrentForm)
+    mCurrentForm->Hide();
+  mCurrentForm = p;
+  if(mCurrentForm)
+    mCurrentForm->Show();
+}
+//---------------------------------------------------------------------------------------------
+void TClientDeveloperTool_ClientTank::Connect(nsMMOEngine::TBaseEvent* pBE)
+{
+  nsMMOEngine::TEventResultLogin* pResult = (TEventResultLogin*)pBE;
+  switch(pResult->res)
+  {
+    case nsMMOEngine::TMaster::eAccept:
+      ConnectUp();
+      break;
+    case nsMMOEngine::TMaster::eReject:
+      break;
+  }
+}
+//---------------------------------------------------------------------------------------------
+void TClientDeveloperTool_ClientTank::CreateObjects()
+{
+  CreateHangar();
+  CreateTank();
+
+  int cntObj = mComponent.mMOC->GetCountObject();
+  for( int i = 0 ; i < cntObj ; i++ )
+  {
+    IBaseObject* pBO = mComponent.mMOC->Get(i);
+    if(pBO==mTank)
+      mIndexCurObj = i;
+  }
+  mComponent.mControlCamera->Link(mTank,IControlCamera::eCoord);
+  mComponent.mControlCamera->SetDistObj(-10.0f);
+
+  mComponent.mControlCamera->RotateRight(0.5f);
+  mComponent.mControlCamera->RotateDown(0.5f);
+}
+//------------------------------------------------------------------------------------
+void TClientDeveloperTool_ClientTank::CreateHangar()
+{
+  TMatrix16 w;
+  SetMatrixIdentity(&w);
+  w._43 -= 1.0f;
+  mHangar = mComponent.mMOC->CreateObject(1);
+  mHangar->SetWorld(&w);
+  mComponent.mGraphicEngine->AddObject(mHangar);
+  mHangar->SetShow(false);
+}
+//------------------------------------------------------------------------------------
+void TClientDeveloperTool_ClientTank::CreateTank()
+{
+  TMatrix16 w;
+  SetMatrixIdentity(&w);
+  mTank = mComponent.mMOC->CreateObject(0);
+  mTank->SetWorld(&w);
+  mComponent.mGraphicEngine->AddObject(mTank);
+  mTank->SetShow(false);
 }
 //---------------------------------------------------------------------------------------------

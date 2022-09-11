@@ -170,10 +170,11 @@ void TServerDeveloperTool_MasterTank::DisconnectDown(TEventDisconnectDown* pEven
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_MasterTank::TryLogin(TEventTryLogin* pEvent)
 {
+  bool resAccept = true;
   mCounterClient++;
   char result[100];
   sprintf(result,"hello, Client %u",mCounterClient);
-  mComponent.mNet.Master->SetResultLogin(true, 
+  mComponent.mNet.Master->SetResultLogin(resAccept, 
     pEvent->id_session, mCounterClient,
     (void*)&result[0], strlen(result));
 }

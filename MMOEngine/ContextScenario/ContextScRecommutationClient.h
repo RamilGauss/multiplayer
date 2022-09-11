@@ -9,20 +9,24 @@ See for more information License.h.
 #define CONTEXT_SC_RECOMMUTATION_CLIENT_H
 
 #include "IContextScenario.h"
-#include "BreakPacket.h"
 
 namespace nsMMOEngine
 {
-  class TClient_master;
   class TContextScRecommutationClient : public IContextScenario
 	{
-    TClient_master* mClient;
+    unsigned int mID_SessionMasterSlave;
+
 	public:
 		TContextScRecommutationClient();
     virtual ~TContextScRecommutationClient();
 
-    TClient_master* GetClient();
-    void SetClient(TClient_master* p);
+    // сессии для Slave, в остальных случаях для Мастера и Клиента использовать G(S)etID_Session
+    unsigned int GetID_SessionClientSlave();
+    void SetID_SessionClientSlave(unsigned int id_session);
+
+    unsigned int GetID_SessionMasterSlave();
+    void SetID_SessionMasterSlave(unsigned int id_session);
+
   private:
 	};
 }  

@@ -37,6 +37,7 @@ public:
 
 protected:
   void CreateObjects(int cntK,int cntJ,int cntI);
+  void CreateHangar();
 
   void InitLog();
 

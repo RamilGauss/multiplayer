@@ -41,16 +41,27 @@ void TScLoginClient_MasterImpl::RecvInherit(TDescRecvSession* pDesc)
   }
 }
 //-----------------------------------------------------------------------------
-void TScLoginClient_MasterImpl::Work(unsigned int time_ms)
+void TScLoginClient_MasterImpl::Work(unsigned int now_ms)
 {
   // если клиент в очереди, обновить номер
   if(Context()->GetNumInQueue())
   {
-    NeedNumInQueueByClientKey(Context()->GetID_SessionClientMaster());
+    if(now_ms > Context()->GetTimeLastNeedNumInQueue() + eDeltaTimeNumInQueue)
+    {
+      NeedNumInQueueByClientKey(Context()->GetID_SessionClientMaster());
+      Context()->SetTimeLastNeedNumInQueue(now_ms);
+
+      TBreakPacket bp;
+      THeaderResultLoginM2C h;
+      h.result     = THeaderResultLoginM2C::eQueue;
+      h.numInQueue = Context()->GetNumInQueue();
+      bp.PushFront((char*)&h, sizeof(h));
+      Context()->GetMS()->Send(GetID_SessionClientMaster(), bp);
+    }
     return;
   }
   // 
-  if(Context()->GetTimeWait() + eTimeWait < ht_GetMSCount())
+  if(Context()->GetTimeWait() + eTimeWait < now_ms)
   {
     // ошибка на той стороне
     // непонятно в чем дело, но клиент сдох
@@ -251,6 +262,7 @@ void TScLoginClient_MasterImpl::LeaveQueueC2M(TDescRecvSession* pDesc)
   if(Context()->GetNumInQueue()==0)
     return;
   Context()->Reject();
+  Context()->GetMS()->CloseSession(GetID_SessionClientMaster());
   End();
 }
 //--------------------------------------------------------------

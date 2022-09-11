@@ -64,3 +64,13 @@ void TManagerContextDownConnection_Slave::SetLoadBySession(unsigned int id_sessi
 	fit->second = load_procent;
 }
 //---------------------------------------------------------------------------------------
+bool TManagerContextDownConnection_Slave::FindLoadBySession(unsigned int id_session, 
+                                                           unsigned char& load_procent)
+{
+  TMapUintUcharIt fit = mMapSessionLoadProcent.find(id_session);
+  if(fit==mMapSessionLoadProcent.end())
+    return false;
+  load_procent = fit->second;
+  return true;
+}
+//---------------------------------------------------------------------------------------

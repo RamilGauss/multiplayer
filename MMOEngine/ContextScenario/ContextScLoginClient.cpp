@@ -24,9 +24,10 @@ using namespace nsContextScLoginClient;
 
 TContextScLoginClient::TContextScLoginClient()
 {
-  mNumInQueue     = 0;
-  mTimeWaitAnswer = 0;
-  mState = eUndef;
+  mNumInQueue             = 0;
+  mTimeWaitAnswer         = 0;
+  mTimeLastNeedNumInQueue = 0;
+  mState                  = eUndef;
 
   mIDClient = (unsigned int)-1;
 
@@ -48,6 +49,16 @@ unsigned int TContextScLoginClient::GetTimeWait()
   return mTimeWaitAnswer;
 }
 //------------------------------------------------------------------
+void TContextScLoginClient::SetTimeLastNeedNumInQueue(unsigned int v)
+{
+  mTimeLastNeedNumInQueue = v;
+}
+//------------------------------------------------------------------
+unsigned int TContextScLoginClient::GetTimeLastNeedNumInQueue()
+{
+  return mTimeLastNeedNumInQueue;
+}
+//------------------------------------------------------------------
 void TContextScLoginClient::Accept()
 {
   mState = eAccept;
@@ -60,7 +71,11 @@ void TContextScLoginClient::Reject()
 //------------------------------------------------------------------
 void TContextScLoginClient::SetID_Session(std::string& name, unsigned int id)
 {
-  mMapStrID_Session.insert(TMapStrUint::value_type(name,id));
+	TMapStrUintIt fit = mMapStrID_Session.find(name);
+	if(fit==mMapStrID_Session.end())
+		mMapStrID_Session.insert(TMapStrUint::value_type(name,id));
+	else
+		fit->second = id;
 }
 //--------------------------------------------------------------
 unsigned int TContextScLoginClient::GetID_Session(std::string& name)

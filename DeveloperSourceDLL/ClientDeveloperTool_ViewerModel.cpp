@@ -234,10 +234,11 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent, vector
   InitLog();
   mComponent = *pComponent; 
 
-  int cnt[3] = {5,5,5};
+  int cnt[3] = {1,1,1};
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
   unsigned int start = ht_GetMSCount();
 #endif 
+  CreateHangar();
   CreateObjects(cnt[0],cnt[1],cnt[2]);
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
   start = ht_GetMSCount() - start;
@@ -253,6 +254,16 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent, vector
 	}
 	else
 		BL_FIX_BUG();
+}
+//------------------------------------------------------------------------------------
+void TClientDeveloperTool_ViewerModel::CreateHangar()
+{
+  TMatrix16 w;
+  SetMatrixIdentity(&w);
+  w._43 -= 1.0f;
+  IBaseObjectCommon* pBOC = mComponent.mMOC->CreateObject(1);
+  pBOC->SetWorld(&w);
+  mComponent.mGraphicEngine->AddObject(pBOC);
 }
 //------------------------------------------------------------------------------------
 void TClientDeveloperTool_ViewerModel::CreateObjects(int cntK,int cntJ,int cntI)
@@ -274,11 +285,11 @@ void TClientDeveloperTool_ViewerModel::CreateObjects(int cntK,int cntJ,int cntI)
       {
         IBaseObjectCommon* pBOC = mComponent.mMOC->CreateObject(0);
 
-        pBOC->SetVelocity(0.1f);
+        //pBOC->SetVelocity(0.1f);
         w._41 += sizeI;
         pBOC->SetWorld(&w);
-        if((i==cntI-1)&&(j==cntJ-1)&&(k==cntK-1))
-          pBOC->SetAlphaTransparency(0.5f);
+        //if((i==cntI-1)&&(j==cntJ-1)&&(k==cntK-1))
+          //pBOC->SetAlphaTransparency(0.5f);
         mComponent.mGraphicEngine->AddObject(pBOC);
       }
     }

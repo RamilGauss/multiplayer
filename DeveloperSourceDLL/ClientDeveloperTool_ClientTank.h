@@ -21,11 +21,14 @@ See for more information License.h.
 class TClientMain;
 class TGameRoomPrepare;
 class TWaitForm;
+class TBaseGUI;
 
 
 class TClientDeveloperTool_ClientTank : public IClientDeveloperTool
 {
   TInputCmdDevTool mInputCmd;
+
+  TBaseGUI*         mCurrentForm;
 
   TClientMain*      mClientMain;
   TGameRoomPrepare* mGameRoomPrepare;
@@ -38,6 +41,9 @@ class TClientDeveloperTool_ClientTank : public IClientDeveloperTool
   unsigned int mIDkey;
 
   int mIndexCurObj;
+
+  IBaseObjectCommon* mTank;
+  IBaseObjectCommon* mHangar;
 
 public:
   TClientDeveloperTool_ClientTank ();
@@ -62,6 +68,18 @@ protected:
 
 	void MouseEvent(nsEvent::TMouseEvent* pEvent);
 	void KeyEvent(nsEvent::TKeyEvent* pEvent);
+
+protected:
+  void SetCurrentForm(TBaseGUI* mGameRoomPrepare);
+protected:
+  void Connect(nsMMOEngine::TBaseEvent* pBE);
+  void ConnectUp();
+  void DisconnectUp();
+protected:
+  void CreateObjects();
+  void CreateHangar();
+  void CreateTank();
+
 };
 
 #endif

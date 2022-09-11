@@ -14,10 +14,10 @@ int    g_nMaterialShininess : SpecularPower = 32;
 //--------------------------------------------------------------------------------------
 // Global variables
 //--------------------------------------------------------------------------------------
-//float3 g_vLightColor     : LightColor    = float3( 1.0f, 0.0f, 0.0f );    // Light color
-//float3 g_vLightPosition  : LightPosition = float3( 0.0f, 0.0f, 10.0f );   // Light position
-float3 g_vLightColor[MAX_NUM_LIGHTS]     : LightColor;   // = float3( 1.0f, 0.0f, 0.0f );    // Light color
-float3 g_vLightPosition[MAX_NUM_LIGHTS]  : LightPosition;// = float3( 0.0f, 0.0f, 10.0f );   // Light position
+float3 g_vLightColor     : LightColor    = float3( 1.0f, 0.0f, 0.0f );    // Light color
+float3 g_vLightPosition  : LightPosition = float3( 0.0f, 0.0f, 10.0f );   // Light position
+//###float3 g_vLightColor[MAX_NUM_LIGHTS]     : LightColor;   // = float3( 1.0f, 0.0f, 0.0f );    // Light color
+//###float3 g_vLightPosition[MAX_NUM_LIGHTS]  : LightPosition;// = float3( 0.0f, 0.0f, 10.0f );   // Light position
 
 float3 g_vCameraPosition : CameraPosition;
      

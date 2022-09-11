@@ -13,6 +13,8 @@ See for more information License.h.
 
 class TTankTower : public IActor
 {
+  nsStruct3D::TMatrix16 mMatrixForCamera;
+
 public:
   typedef enum{
     Engine          = 1>>1, // двигатель, поврежден
@@ -67,6 +69,9 @@ public:
   virtual void SetHuman(char* pData, int size);
 
   virtual bool Animate(unsigned int time_ms);
+
+  // from IBaseObject
+  virtual const nsStruct3D::TMatrix16* GetMatrixForCamera();
 
 protected:
   // debug only

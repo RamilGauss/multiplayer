@@ -76,7 +76,6 @@ namespace nsMMOEngine
   {
     TEventResultLogin();
     TMaster::tResultLogin res;
-    int numInQueue;
   };
   //-------------------------------------------------------------
   struct MMO_ENGINE_EI TEventError : public TBaseEvent
@@ -107,11 +106,6 @@ namespace nsMMOEngine
   {
     TEventEnterInQueue();
     int numInQueue;
-  };
-  //-------------------------------------------------------------
-  struct MMO_ENGINE_EI TEventLeaveQueue : public TBaseEvent
-  {
-    TEventLeaveQueue();
   };
   //-------------------------------------------------------------
 #if defined( WIN32 )

@@ -8,11 +8,15 @@ See for more information License.h.
 #ifndef MeshMakerDXH
 #define MeshMakerDXH
 
+#include "TypeDef.h"
+
 #include "DXUT.h"
 #include "MeshFileBj.h"
 #include "MeshFileObj.h"
 
-class TMeshMakerDX
+// открыть класс для использования при конвертировании меша
+
+class GRAPHIC_ENGINE_EI TMeshMakerDX
 {
   TMeshFileBj mMeshFromBj;
   TMeshFileObj mMeshFromObj;

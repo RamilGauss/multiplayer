@@ -74,7 +74,6 @@ namespace nsMMOEngine
       eLeaveGroup, 
       eDestroyGroup,
       eEnterInQueue,
-      eLeaveQueue,
     }tTypeEvent;
 
     TBase();

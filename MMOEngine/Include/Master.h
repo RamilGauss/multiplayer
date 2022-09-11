@@ -18,6 +18,7 @@ namespace nsMMOEngine
   class TManagerContextDownConnection_Slave;
   class TManagerContextClientLogining;
   class TManagerGroupClient;
+	class TStatisticaClientInGroup;
   class MMO_ENGINE_EI TMaster : public TActiveServer
   {
     // для анализа, при создании группы
@@ -41,8 +42,8 @@ namespace nsMMOEngine
       eLimitMoreEmpty = 10,// %
       eLimitMoreHalf  = 50,// %
 
-      eLimitLoadProcentOnSlaveForAdd = 75,
-      eLimitLoadProcentOnSlaveForAdd_ClientInGroup = 70, // для Клиента, состоящего в Группе процент другой
+      eLimitLoadProcentOnSlaveForAdd = 70,
+      eLimitLoadProcentOnSlaveForAdd_ClientInGroup = 75, // для Клиента, состоящего в Группе процент другой
 
       eLimitCountClientWaitFreeSpace = 2000,// максимальный размер очереди ожидающих
     };
@@ -58,6 +59,8 @@ namespace nsMMOEngine
     boost::scoped_ptr<TManagerGroupClient>                     mMngGroup;
     // ID клиентов, которые ожидают в очереди, по причине загруженности Slave
     boost::scoped_ptr<TSetOrderElement>                        mSetClientKeyInQueue;
+		// для создания группы, нужна статистика по клиентам, которые уже в группе
+		boost::scoped_ptr<TStatisticaClientInGroup>                mStatisticaClientInGroup;
   public:
     typedef enum
     {
@@ -112,6 +115,8 @@ namespace nsMMOEngine
     virtual void EndRcm(IScenario* pSc);
     virtual void EndSynchroSlave(IScenario* pSc);
   private:
+    unsigned char GetLimitLoadProcentByKey(unsigned int id_client);
+
     bool EvalCreateGroupNow(std::list<unsigned int>& l_id_client, 
                             unsigned int& id_group);
 
@@ -123,9 +128,21 @@ namespace nsMMOEngine
     bool DisconnectClientWait(unsigned int id_session);
     bool DisconnectSlave(unsigned int id_session);
 
+    bool TryAddClientByGroup(unsigned int id_client, unsigned int id_group, 
+                             unsigned int& id_session_slave);
+    bool TryAddClient(unsigned int id_client, 
+                      unsigned int& id_session_slave);
+    void AddClientBySlaveSession(unsigned int id_client,
+                                 unsigned int id_session_slave, 
+                                 void* resForClient, int sizeResClient);
+    void AddInQueue(unsigned int id_client, void* resForClient, int sizeResClient);
 		// при освобождении места на Slave попытаться добавить Клиента, который ждет в очереди
+    bool TryFindClientForAdd(unsigned int& id_client, unsigned int& id_session_slave);
 		void TryAddClientFromQueue();
     void Done();
+
+    // находится ли Клиент в процессе перекомутации
+    bool IsClientRecommutation(unsigned int id_client);
   };
 }
 

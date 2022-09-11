@@ -17,6 +17,7 @@ namespace nsMMOEngine
   protected:
     enum{
       eTimeWait = 20000,
+      eDeltaTimeNumInQueue = 1000,
     };
 
   public:

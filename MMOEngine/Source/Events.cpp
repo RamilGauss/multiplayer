@@ -68,7 +68,6 @@ TEventDestroyGroup::TEventDestroyGroup()
 TEventResultLogin::TEventResultLogin()
 {
   mType = TBase::eResultLogin;
-  numInQueue    = 0;
 }
 //-------------------------------------------------------------
 TEventError::TEventError()
@@ -101,10 +100,4 @@ TEventEnterInQueue::TEventEnterInQueue()
   numInQueue = 0;
 }
 //-------------------------------------------------------------
-TEventLeaveQueue::TEventLeaveQueue()
-{
-  mType = TBase::eLeaveQueue;
-}
-//-------------------------------------------------------------
-
 }

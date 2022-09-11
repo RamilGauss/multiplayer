@@ -325,11 +325,11 @@
 						>
 					</File>
 					<File
-						RelativePath=".\SubSystem\Slave_master.cpp"
+						RelativePath=".\SubSystem\StatisticaClientInGroup.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\SubSystem\Slave_master.h"
+						RelativePath=".\SubSystem\StatisticaClientInGroup.h"
 						>
 					</File>
 				</Filter>
@@ -570,6 +570,66 @@
 					</File>
 					<File
 						RelativePath="..\MMOEngine\Scenario\ScLoginClient_SuperServerImpl.cpp"
+						>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="RecommutationClient"
+				>
+				<Filter
+					Name="Header"
+					>
+					<File
+						RelativePath=".\Scenario\BaseScRecommutationClient.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\BaseScRecommutationClient_Struct.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScRecommutationClient_ClientImpl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScRecommutationClient_MasterImpl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScRecommutationClient_SlaveDonorImpl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScRecommutationClient_SlaveRecipientImpl.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Source"
+					>
+					<File
+						RelativePath=".\Scenario\BaseScRecommutationClient.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\BaseScRecommutationClient_Struct.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScRecommutationClient_ClientImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScRecommutationClient_MasterImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScRecommutationClient_SlaveDonorImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScRecommutationClient_SlaveRecipientImpl.cpp"
 						>
 					</File>
 				</Filter>
