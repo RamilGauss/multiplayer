@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\;..\GBaseLib;&quot;..\glib-2.0&quot;;..\Share;..\DXUT\Core;..\DXUT\Optional;..\Robert;..\GUI;..\MyGUIEngine\include;..\Common;..\MyGUIEngine\src;..\Common\Base;..\Common\Base\DirectX;..\Common\Input\Win32"
+				AdditionalIncludeDirectories=".\;..\Share;..\DXUT\Core;..\DXUT\Optional;..\Robert;..\GUI;..\MyGUIEngine\include;..\Common;..\MyGUIEngine\src;..\Common\Base;..\Common\Base\DirectX;..\Common\Input\Win32"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;PROFILE;_WINDOWS;D3DXFX_LARGEADDRESS_HANDLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

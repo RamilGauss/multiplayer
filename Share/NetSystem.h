@@ -53,13 +53,6 @@ void SHARE_EI ns_Done();
 
 SHARE_EI char* ns_getHostIP( const char* name, int numNetWork = 0 ); // получение ip-адреса по имени хоста
 SHARE_EI char* ns_getSelfIP(int numNetWork=0);                   // получение ip-адреса
-SHARE_EI char* ns_getSelfHost();                 // получение имени хоста
-
-//получение сетевой маски по ip-адресу
-char* ns_getNetMask( const char* ip_str );
-
-//получение сетевой маски свой сети
-char* ns_getSelfNetMask();
 
 // функция-обертка для inet_addr()
 SHARE_EI unsigned long ns_inet_addr( const char* addr );

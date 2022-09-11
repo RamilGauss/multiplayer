@@ -139,3 +139,8 @@ const TBreakPacket& TBreakPacket::operator =( const TBreakPacket& b )
 	return *this;
 }
 //-----------------------------------------------------------------
+void TBreakPacket::UnlinkCollect()
+{
+  mCollect.Unlink();
+}
+//-----------------------------------------------------------------

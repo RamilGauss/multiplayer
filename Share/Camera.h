@@ -66,6 +66,11 @@ class TCamera : public ICamera
   float mfNearPlane;
   float mfFarPlane;
 
+  const float defFOV;
+  const float defAspect;
+  const float defNearPlan;
+  const float defFarPlan;
+  const float defDotProductMin;
 public:
   TCamera();
   virtual ~TCamera();

@@ -184,21 +184,6 @@ void IBaseObject::SetupDefaultMapUse()
   SetMapUse();
 }
 //------------------------------------------------------------------------------------------------
-void IBaseObject::RegisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc)
-{
-  mCallBackEvent.Register(pFunc);
-}
-//------------------------------------------------------------------------------------------------
-void IBaseObject::UnregisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc)
-{
-  mCallBackEvent.Unregister(pFunc);
-}
-//------------------------------------------------------------------------------------------------
-void IBaseObject::Notify(int event)
-{
-  mCallBackEvent.Notify(&event,sizeof(event));
-}
-//------------------------------------------------------------------------------------------------
 void IBaseObject::SetWorld(TMatrix16* world)
 {
   mWorld=*world;

@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\..\..\glib-2.0&quot;;..\..\..\Share;..\..\..\NetTransport;..\..\..\Melissa;..\Share"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="..\..\..\Share;..\..\..\NetTransport;..\..\..\Melissa;..\Share"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_WIN32_WINNT=0x0501"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib winmm.lib comctl32.lib Imm32.lib Version.lib Share.lib NetTransport.lib"
+				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib winmm.lib comctl32.lib Imm32.lib Version.lib Share.lib NetTransport.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\..\Lib;&quot;..\..\..\Lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
@@ -117,8 +117,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;..\..\..\glib-2.0&quot;;..\..\..\GBaseLib;..\..\..\Share;..\..\..\NetTransport;..\..\..\Melissa;..\Share"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="..\..\..\Share;..\..\..\NetTransport;..\..\..\Melissa;..\Share"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_WIN32_WINNT=0x0501"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -136,7 +136,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib winmm.lib comctl32.lib Imm32.lib Version.lib GBaseLib.lib Share.lib NetTransport.lib"
+				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib winmm.lib comctl32.lib Imm32.lib Version.lib Share.lib NetTransport.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\..\Lib;&quot;..\..\..\Lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"

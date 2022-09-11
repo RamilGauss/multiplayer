@@ -3,25 +3,84 @@
 
 #include "INetTransport.h"
 #include "MakerNetTransport.h"
+#include "AutoCreateVar.h"
+#include <set>
 
-#define PORT_CLIENT 1234
-#define PORT_SERVER 1235
-#define SIZE_PACKET 1350
-#define CNT_RECV_PACKET 10000//100000
+class TShareTest
+{
+  TMakerNetTransport_Boost
+  //TMakerNetTransport_TCP_UDP 
+  mMakerNetTransport;
+  
+  INetTransport* pTransport;
 
-extern char packet[SIZE_PACKET];
+  float freq_printf_recv_packet;// %
+  float limit_recv_packet;// %
 
-//extern TMakerNetTransport_TCP_UDP g_MakerNetTransport;
-extern TMakerNetTransport_Boost   g_MakerNetTransport;
+  volatile bool flgDisconnect;
 
-extern void Init(char* nameLog);
+  int cntRecv;
+  int cntStream;
+public:
+  enum{
+      ePortClient    = 1234,
+      ePortServer    = 1235,
+      eSizePacket    = 10,//2019123,//1350
+      eCntRecvPacket = 200,//100000
+  };
+	typedef enum{
+		eCountRecvPacket = 0,
+		eCountActiveConnectionPerTime,
+		eTimePerActiveConnection,
+	}eType;
 
-extern void Recv(void* p, int s);
-extern void Disconnect(void* p, int s);
+  TShareTest();
+  ~TShareTest();
 
-extern bool IsDisconnect();
+	void SetParam(eType type, int param);
 
-extern int GetCountRecv();
+  INetTransport* GetTransport();
+
+  void Init(char* nameLog);
+
+  void Recv(INetTransport::TDescRecv* p);
+  void Disconnect(TIP_Port* pIP);
+
+  bool IsDisconnect();
+
+  int GetCountRecv();
+  int GetCountStream();
+
+  char* GetPacket(){return &packet[0];}
+
+  void Register();
+  void Unregister();
+protected:
+  char packet[eSizePacket];
+
+  void SetDisconnect();
+
+
+  void RecvPacket(INetTransport::TDescRecv* p);
+  void RecvStream(INetTransport::TDescRecv* p);
+
+	eType mType;
+	int   mParam;// либо кол-во активных соединений, которое нужно достичь, либо время за которое измеряется кол-во активных
+
+	typedef std::set<TIP_Port> TSetIP;
+
+	TSetIP mSetIP;
+	unsigned int mStartCollectActiveConection;// мс
+
+  void ViewCountStreamPacket(INetTransport::TDescRecv* p);
+	void ViewCountRecvPacket(INetTransport::TDescRecv* p);
+	void ViewCountActiveConnectionPerTime(INetTransport::TDescRecv* p);
+	void ViewTimePerActiveConnection(INetTransport::TDescRecv* p);
+
+	void IncreaseSetIP(INetTransport::TDescRecv*p);
+};
+
+extern TAutoCreateVarT<TShareTest> g_ShareTest;
 
 #endif
 

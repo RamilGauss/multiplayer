@@ -36,43 +36,31 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "Base.h"
 #include "Logger.h"
 #include "ManagerSession.h"
-//#include "BasePacket_Private.h"
 #include "DescRecvSession.h"
 #include "HeaderSubSystem.h"
+#include "ManagerScenario.h"
 
 using namespace nsMelissaSubSystem;
 
 namespace nsMelissa
 {
-
-TBase* g_pBase = NULL;
-//-------------------------------------------------------------------------
-void FuncRecvFromMS( void* p, int size)
-{
-  g_pBase->Recv( (TDescRecvSession*)p );
-}
-//-------------------------------------------------------------------------
-void FuncDisconnectFromMS( void* p, int size)
-{
-  g_pBase->Disconnect( *((unsigned int*)p) );
-}
 //-------------------------------------------------------------------------
 TBase::TBase()
 {
-  g_pBase = this;
   mManagerSession = new TManagerSession;
+  mManagerScenario = new TManagerScenario;
   mLoadProcent    = 0;
 }
 //-------------------------------------------------------------------------
 TBase::~TBase()
 {
-  mManagerSession->Unregister(FuncRecvFromMS,       TManagerSession::eRecv);
-  mManagerSession->Unregister(FuncDisconnectFromMS, TManagerSession::eDisconnect);
+  mManagerSession->GetCallbackRecv()->Unregister(this);
+  mManagerSession->GetCallbackDisconnect()->Unregister(this);
 
   delete mManagerSession;
   mManagerSession = NULL;
-
-  g_pBase = NULL;
+  delete mManagerScenario;
+  mManagerScenario = NULL;
 }
 //-------------------------------------------------------------------------
 void TBase::Init(IMakerTransport* pMakerTransport)
@@ -84,8 +72,8 @@ void TBase::Init(IMakerTransport* pMakerTransport)
     return;
   }
   mManagerSession->SetMakerTransport(pMakerTransport);
-  mManagerSession->Register(FuncRecvFromMS,       TManagerSession::eRecv);
-  mManagerSession->Register(FuncDisconnectFromMS, TManagerSession::eDisconnect);
+  mManagerSession->GetCallbackRecv()->Register(&TBase::Recv, this);
+  mManagerSession->GetCallbackDisconnect()->Register(&TBase::Disconnect, this);
 }
 //-------------------------------------------------------------------------
 bool TBase::Open(unsigned short port, unsigned char subNet)
@@ -169,7 +157,9 @@ void TBase::Disconnect(unsigned int id)
 void TBase::Work()
 {
   //пробежка по ожидающим разъединения и удаление сессий
+  mManagerSession->Work();
 
+  WorkInherit();
 }
 //-------------------------------------------------------------------------
 void TBase::SetTimeLiveSession(unsigned int time_ms)

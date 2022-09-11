@@ -43,23 +43,10 @@ using namespace std;
 namespace nsMelissa
 {
 
-TManagerSession* g_pManagerSession = NULL;
-
-void FuncRecvFromTransport( void* p, int size)
-{
-  g_pManagerSession->Recv( (INetTransport::TDescRecv*)p );
-}
-//-------------------------------------------------------------------------
-void FuncDisconnectFromTransport( void* p, int size)
-{
-  g_pManagerSession->Disconnect( (TIP_Port*)p );
-}
-//-------------------------------------------------------------------------
 TManagerSession::TManagerSession()
 {
   mTimeLiveSession  = eDefTimeLive;
   mLastID_Session   = 0;
-  g_pManagerSession = this;
   mMakerTransport   = NULL;
   mTransport        = NULL;
 }
@@ -71,7 +58,6 @@ TManagerSession::~TManagerSession()
   mMakerTransport->Delete(mTransport);
   mTransport = NULL;
   mMakerTransport = NULL;
-  g_pManagerSession = NULL;
   // удалить сессии
 }
 //--------------------------------------------------------------------------------------------
@@ -80,18 +66,8 @@ void TManagerSession::SetMakerTransport(IMakerTransport* pMakerTransport)
   mMakerTransport = pMakerTransport;
   mTransport      = mMakerTransport->New();
   
-  mTransport->Register( FuncRecvFromTransport,       INetTransport::eRecv);
-  mTransport->Register( FuncDisconnectFromTransport, INetTransport::eDisconnect);
-}
-//--------------------------------------------------------------------------------------------
-void TManagerSession::Register(TCallBackRegistrator::TCallBackFunc pFunc, tEventManagerSession type)
-{
-  GetCallBackByType(type)->Register(pFunc);
-}
-//--------------------------------------------------------------------------------------------
-void TManagerSession::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, tEventManagerSession type)
-{
-  GetCallBackByType(type)->Unregister(pFunc);
+  mTransport->GetCallbackRecv()->Register(&TManagerSession::Recv,this);
+  mTransport->GetCallbackDisconnect()->Register(&TManagerSession::Disconnect,this);
 }
 //--------------------------------------------------------------------------------------------
 bool TManagerSession::Start(unsigned short port, unsigned char subNet)
@@ -126,8 +102,8 @@ void TManagerSession::Stop()
   if(mTransport==NULL) return;
 
   mTransport->Stop();
-  mTransport->Unregister( FuncRecvFromTransport,       INetTransport::eRecv);
-  mTransport->Unregister( FuncDisconnectFromTransport, INetTransport::eDisconnect);
+  mTransport->GetCallbackRecv()->Unregister(this);
+  mTransport->GetCallbackDisconnect()->Unregister(this);
 }
 //--------------------------------------------------------------------------------------------
 void TManagerSession::Work()
@@ -158,7 +134,7 @@ unsigned int TManagerSession::Send(unsigned int ip, unsigned short port, TBreakP
 {
   // соединитьс€ с сервером
   if(mTransport->Connect(ip, port)==false) 
-    return NULL;// нет такого прослушивающего порта
+    return INVALID_HANDLE_SESSION;// нет такого прослушивающего порта
   TIP_Port ip_port(ip,port);
 
   lockAccessSession();
@@ -169,7 +145,7 @@ unsigned int TManagerSession::Send(unsigned int ip, unsigned short port, TBreakP
   else
   {
     GetLogger()->Get(STR_NAME_MELISSA)->
-      WriteF_time("TManagerSession::Send(ip,port) отправка при наличии —ессии.\n");
+      WriteF_time("TManagerSession::Send(0x%X,%u) отправка при наличии —ессии.\n", ip, port);
     BL_FIX_BUG();
   }
   unsigned int id_session = pSession->GetID();
@@ -198,21 +174,6 @@ void TManagerSession::CloseSession(unsigned int ID_Session)
   unlockAccessSession();
 }
 //--------------------------------------------------------------------------------------------
-TCallBackRegistrator* TManagerSession::GetCallBackByType(tEventManagerSession type)
-{
-  TCallBackRegistrator* pCallBack = NULL;
-  switch(type)
-  {
-    case eDisconnect:
-      pCallBack = &mCallBackDiconnect;
-      break;
-    case eRecv:
-      pCallBack = &mCallBackRecv;
-      break;
-  }
-  return pCallBack;
-}
-//--------------------------------------------------------------------------------------------
 void TManagerSession::Recv( INetTransport::TDescRecv* pDescRecv )
 {
   lockAccessSession();
@@ -237,7 +198,7 @@ void TManagerSession::Recv( INetTransport::TDescRecv* pDescRecv )
     case TSession::ePacket:
       descRecvSession.data     += sizeof(TSession::THeader);
       descRecvSession.sizeData -= sizeof(TSession::THeader);
-      mCallBackRecv.Notify(&descRecvSession, sizeof(TDescRecvSession));
+      mCallBackRecv.Notify(&descRecvSession);
       break;
   }
 }
@@ -247,7 +208,7 @@ void TManagerSession::Disconnect(TIP_Port* ip_port)
   lockAccessSession();
   TSession* pSession = mNavigateSession.FindSessionByIP(*ip_port);
   unsigned int id = pSession->GetID();
-  mCallBackDiconnect.Notify(&id, sizeof(unsigned int));
+  mCallBackDiconnect.Notify(id);
   mNavigateSession.Delete(pSession);
   unlockAccessSession();
 }

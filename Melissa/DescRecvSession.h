@@ -37,6 +37,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define MELISSA_DESC_RECV_SESSION_H
 
 #include "INetTransport.h"
+#include "Base.h"
 
 namespace nsMelissa
 {

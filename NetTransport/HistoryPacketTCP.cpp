@@ -56,15 +56,15 @@ void THistoryPacketTCP::Analiz(int& beginPos, TResult& res,
 {
   switch(state)
   {
-  case eSearchBegin:
-    beginPos += SearchBegin(readSize,buffer,beginPos);
-    break;
-  case eSearchSize:
-    beginPos += SearchSize(readSize,buffer,beginPos);
-    break;
-  case eSearchEnd:
-    beginPos += SearchEnd(readSize,buffer,res,beginPos);
-    break;
+    case eSearchBegin:
+      beginPos += SearchBegin(readSize,buffer,beginPos);
+      break;
+    case eSearchSize:
+      beginPos += SearchSize(readSize,buffer,beginPos);
+      break;
+    case eSearchEnd:
+      beginPos += SearchEnd(readSize,buffer,res,beginPos);
+      break;
   }
 }
 //----------------------------------------------------------------------------------

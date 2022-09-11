@@ -49,6 +49,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 namespace nsMelissa
 {
   class TManagerSession;
+  class TManagerScenario;
   struct TDescRecvSession;
   class MELISSA_EI TBase : public TSrcEvent
   {
@@ -67,6 +68,8 @@ namespace nsMelissa
     TListUint mIDSessionNeedDisconnect;
 
     TManagerSession* mManagerSession;
+    TManagerScenario* mManagerScenario;
+
     int mLoadProcent;
   public:
     typedef enum
@@ -100,7 +103,7 @@ namespace nsMelissa
     virtual bool Open(unsigned short port, unsigned char subNet = 0);
     virtual void DisconnectUp();
     virtual void SendUp(TBreakPacket bp, bool check = true);
-    virtual void Work() = 0;
+    void Work();
     virtual bool IsConnectUp();
     virtual bool IsConnect(unsigned int id);
 		virtual void SetLoad(int procent);
@@ -109,8 +112,7 @@ namespace nsMelissa
 
 	protected:
 
-    friend void FuncRecvFromMS( void* p, int size);
-    friend void FuncDisconnectFromMS( void* p, int size);
+    virtual void WorkInherit() = 0;
 
     void Recv( TDescRecvSession* pDescRecvSession );
     

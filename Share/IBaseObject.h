@@ -49,7 +49,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 class SHARE_EI IBaseObject// : public TObject Gauss comment 09.07.2013
 {
 protected:
-  TCallBackRegistrator mCallBackEvent;
+  TCallBackRegistrator1<int> mCallBackEvent;
   // свойства, характерные для физики и графики
   // ориентация, координаты, состояние
 public:
@@ -86,8 +86,10 @@ public:
   void* GetPtrInherits(){return mPtrInherits;}
 
   // регистрация на получение событий объекта
-  void RegisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc);
-  void UnregisterOnEvent(TCallBackRegistrator::TCallBackFunc pFunc);
+  template<typename F, class A1>
+  void RegisterOnEvent(F pFunc, A1 pObject){mCallBackEvent.Register(pFunc,pObject);}
+  template<typename F, class A1>
+  void UnregisterOnEvent(F pFunc, A1 pObject){mCallBackEvent.Unregister(pFunc,pObject);}
 
 protected:
   
@@ -135,7 +137,7 @@ protected:
   int GetCountPart(const char* name, std::vector<std::string>* pVec);
 
 protected:
-  void Notify(int event);
+  void Notify(int event){mCallBackEvent.Notify(event);}
 };
 
 

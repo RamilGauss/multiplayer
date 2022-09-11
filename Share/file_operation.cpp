@@ -39,17 +39,26 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <stdio.h>
 #include <string>
 
-#ifdef WIN32
-  #include <windows.h>
-#else
-#endif
+#include <boost/filesystem.hpp>
 
+using namespace boost::filesystem;
 //--------------------------------------------------------------------------------
 bool FindAbsPath(char* sRelativePath, char* sAbsPath, int lenAbs)
 {
-  char* p = _fullpath( sAbsPath, sRelativePath, lenAbs);
+  bool res = false;
+  try
+  {
+    path p = sRelativePath;
+    path canonicalPath = canonical(p);
 
-  return p!=NULL;
+    if(lenAbs<=int(canonicalPath.string().size()))
+      return false;
+    strcpy(sAbsPath, canonicalPath.string().data());
+    res = true;
+  }
+  catch(std::exception e)
+  {}
+  return res;
 }
 //--------------------------------------------------------------------------------
 void UpPath(char* path)
@@ -66,14 +75,11 @@ void UpPath(char* path)
 //--------------------------------------------------------------------------------
 bool GetCurrentPath(std::string &sPath)
 {
-#ifdef WIN32
-  char s[400];
-  DWORD ret = GetCurrentDirectory(sizeof(s)-1,s);
-  if(ret==0) return false;
-
-  sPath = s;
-#else
-#endif
+  boost::system::error_code ec;
+  path p = current_path(ec);
+  if(ec)
+    return false;
+  sPath = p.string();
   return true;
 }
 //--------------------------------------------------------------------------------

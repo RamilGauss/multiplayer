@@ -64,9 +64,6 @@ protected:
 	void lockSendRcv()  {Lock(&gcsSendRcv);};
 	void unlockSendRcv(){Unlock(&gcsSendRcv);};
 
-	TCallBackRegistrator mCallBackRecv;      // TDescRecv		
-	TCallBackRegistrator mCallBackDisconnect;// TIP_Port
-
 	UdpDevice mUDP;	
 
 	volatile bool flgActive;
@@ -108,7 +105,9 @@ protected:
   };
 
 	char mBuffer[eSizeBuffer];
-	//GThread* thread;
+
+  TCallBackRegistrator1<TDescRecv*> mCallBackEventRecieve;
+  TCallBackRegistrator1<TIP_Port*>  mCallBackEventDisconnect;
 
 public:
 
@@ -120,10 +119,6 @@ public:
                     TBreakPacket packet,
                     bool check = true);
 
-	// чтение - зарегистрируйся
-  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type);
-  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type);
-
 	virtual void Start();
 	virtual void Stop();
 	virtual bool IsActive();
@@ -132,6 +127,10 @@ public:
   virtual bool Connect(unsigned int ip, unsigned short port); // вызов только для клиента
 	
 	virtual void Close(unsigned int ip, unsigned short port){};
+
+  virtual TCallBackRegistrator1<TDescRecv*>* GetCallbackRecv()      {return &mCallBackEventRecieve;}
+  virtual TCallBackRegistrator1<TIP_Port* >* GetCallbackDisconnect(){return &mCallBackEventDisconnect;}
+
 protected:
   bool SendSynchro(unsigned int ip, unsigned short port, int cntTry);
 
@@ -140,9 +139,6 @@ protected:
   void Unlock(void* pLocker);
 
 protected:
-  void NotifyDisconnect(TIP_Port* data){mCallBackDisconnect.Notify(data,sizeof(TIP_Port));};
-
-	friend void* ThreadTransport(void*p);
 	void Engine();
 
 protected:
@@ -181,7 +177,9 @@ protected:
   void SearchAndDeleteInMapWaitCheck(std::set<TIP_Port>& setIP_port);
   void SetupBufferForSocket();
 
+  void NotifyReceive(TDescRecv* p);
+  void NotifyDisconnect(TIP_Port* p);
 };
-
+//-------------------------------------------------------------------
 
 #endif

@@ -37,10 +37,10 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef HistoryPacketTCPH
 #define HistoryPacketTCPH
 
-#include "ContainerRise.h"
-#include "TypeEvent.h"
-#include "ShareMisc.h"
 #include <map>
+
+#include "ContainerRise.h"
+#include "ShareMisc.h"
 
 
 class THistoryPacketTCP
@@ -55,14 +55,12 @@ public:
     int size;
   };
 
-
   typedef enum{
     eSearchBegin,
     eSearchSize,
     eSearchEnd,
   }eStatePacket;
 
-  //TIP_Port ip_port;
   int sizePacket;// предполагаемый размер пакета
   TContainerRise c;    
   eStatePacket   state;

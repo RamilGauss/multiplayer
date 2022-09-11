@@ -43,14 +43,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 using namespace nsStruct3D;
 
-const float defFOV      = float(M_PI) / 4.0f;
-const float defAspect   = 1.0f;
-const float defNearPlan = 1.0f;
-const float defFarPlan  = 1000.0f;
-
-const float defDotProductMin = 0.000001f;
-
-TCamera::TCamera()
+TCamera::TCamera():
+defFOV(float(M_PI) / 4.0f),
+defAspect(1.0f),
+defNearPlan(1.0f),
+defFarPlan(1000.0f),
+defDotProductMin(0.000001f)
 {
   InitVector();
   mPosition = TVector3(0.0f,0.0f,0.0f);
@@ -88,7 +86,6 @@ void TCamera::SetProj(TMatrix16* proj)
 // выдать результат манипул€ций
 const TMatrix16* TCamera::GetView()
 {
-  //UpdateView()
   return &mView;
 }
 //----------------------------------------------------------------------------------------
@@ -99,7 +96,6 @@ const TMatrix16* TCamera::GetProj()
 //----------------------------------------------------------------------------------------
 const TVector3* TCamera::GetEyePt()
 {
-  //UpdateView();
   return &mPosition;
 }
 //----------------------------------------------------------------------------------------
@@ -347,7 +343,6 @@ void TCamera::NormalByEarth()
 //----------------------------------------------------------------------------------------
 void TCamera::SetDir(TVector3* right, TVector3* up, TVector3* lookat)
 {
-  //Gauss
   mLookAt = *lookat;
   mRight  = *right;
   mUp     = *up;

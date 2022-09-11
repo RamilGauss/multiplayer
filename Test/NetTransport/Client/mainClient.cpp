@@ -3,7 +3,6 @@
 #include <map>
 #include <string>
 #include <iostream>
-#include <windows.h>
 #include <functional>
 
 #include "MakerNetTransport.h"
@@ -15,6 +14,9 @@
 #include "ListPtr.h"
 #include "BreakPacket.h"
 #include "share_test.h"
+
+#include <boost\asio\ip\impl\address_v4.ipp>
+#include "BL_Debug.h"
 
 using namespace std;
 
@@ -28,8 +30,8 @@ struct TArgData
   int time_sleep;
   TArgData()
   {
-		port_client = PORT_CLIENT;
-    ip = ns_inet_addr(ns_getSelfIP(numNetWork));
+    port_client = TShareTest::ePortClient;
+    ip = boost::asio::ip::address_v4::from_string(ns_getSelfIP(numNetWork)).to_ulong();
     cnt = 1;//190;
     time_sleep = 40;
   }
@@ -62,50 +64,47 @@ int main(int argc, char** argv)
   delete pC;
 #endif
   //###
-  Init("Client");
+  g_ShareTest->Init("Client");
 
 	TArgData d;
 	GetByArg(argc,argv,d);
 	printf("port=%u,TimeSleep=%d,cnt=%d\n",d.port_client, d.time_sleep, d.cnt);
 
-  INetTransport* pNetTransport = g_MakerNetTransport.New();
+  INetTransport* pNetTransport = g_ShareTest->GetTransport();
 
   bool res = pNetTransport->Open(d.port_client);
-  pNetTransport->Register(Recv,       INetTransport::eRecv);
-  pNetTransport->Register(Disconnect, INetTransport::eDisconnect);
+  g_ShareTest->Register();
 
 	pNetTransport->Start();
 
   TBreakPacket packetForSend;
-	if(pNetTransport->Connect(d.ip, PORT_SERVER))
+	if(pNetTransport->Connect(d.ip, TShareTest::ePortServer))
 	{
 		unsigned int start = ht_GetMSCount();
-		for(int i = 0 ; i < CNT_RECV_PACKET ;)
+		for(int i = 0 ; i < TShareTest::eCntRecvPacket ;)
 		{
 			for(int j = 0 ; j < d.cnt ; j++ )
 			{
         packetForSend.UnlinkPart();
-        packetForSend.PushFront(&packet[0], sizeof(packet));
-        pNetTransport->Send(d.ip, PORT_SERVER, packetForSend, true);
+        packetForSend.PushFront(g_ShareTest->GetPacket(), TShareTest::eSizePacket);
+        pNetTransport->Send(d.ip, TShareTest::ePortServer, packetForSend, true);
 				i++;
-				if(i==CNT_RECV_PACKET)
+				if(i==TShareTest::eCntRecvPacket)
 					break;
 			}
 			ht_msleep(d.time_sleep);
-      if(IsDisconnect())
+      if(g_ShareTest->IsDisconnect())
         break;
 		}
 		start = ht_GetMSCount() - start;
-		printf("time=%d ms, v=%f \n",start,float(sizeof(packet)*CNT_RECV_PACKET)/(start*1000));
+    printf("time=%d ms, v=%f \n",
+      start,float(TShareTest::eSizePacket*TShareTest::eCntRecvPacket)/(start*1000));
 	}
 	pNetTransport->Stop();
+  BL_ASSERT(pNetTransport->IsActive()==false);
+  g_ShareTest->Unregister();
 
-  pNetTransport->Unregister(Recv,       INetTransport::eRecv);
-  pNetTransport->Unregister(Disconnect, INetTransport::eDisconnect);
-
-  g_MakerNetTransport.Delete(pNetTransport);
-
-	//_getch();
+  //_getch();
   return 0;
 }
 //-----------------------------------------------------------------------
@@ -125,7 +124,7 @@ void GetByArg(int argc, char** argv, TArgData &d)
 				d.cnt = atoi(argv[i]);
 				break;
 			case 4:
-				d.ip = ns_inet_addr(argv[i]);
+        d.ip = boost::asio::ip::address_v4::from_string(argv[i]).to_ulong();
 				break;
 			default:;
 		}

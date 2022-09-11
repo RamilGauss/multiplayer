@@ -49,10 +49,6 @@ class SHARE_EI INetTransport
 {
 public:
   //типы callback вызовов
-  typedef enum{
-    eRecv       = 0, // TDescRecv		   
-    eDisconnect = 1, // TIP_Port
-  }eTypeCallback;
 	typedef enum{
 		ePacket  = 0,		   
 		eStream  = 1,
@@ -76,8 +72,8 @@ public:
                     TBreakPacket packet, bool check = true) = 0;
 
 	// чтение - зарегистрируйся
-  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type) = 0;
-  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type) = 0;
+  virtual TCallBackRegistrator1<TDescRecv*>* GetCallbackRecv()       = 0;
+  virtual TCallBackRegistrator1<TIP_Port* >* GetCallbackDisconnect() = 0;
 
 	// старт и стоп движка
 	virtual void Start() = 0;

@@ -42,7 +42,12 @@ namespace nsMelissa
 {
   class MELISSA_EI TClient : public TBase
   {
-    unsigned int mMasterSession;
+    unsigned int mMasterSessionID;
+    unsigned int mSlaveSessionID;
+
+    std::string sNameLogin;
+    std::string sNameRecommutation;
+
   public:
 
     TClient();
@@ -50,9 +55,10 @@ namespace nsMelissa
 
     virtual void Login(unsigned int ip, unsigned short port, void* data, int size);
 
-    // Base
-    virtual void Work();
 	protected:
+    // Base
+    virtual void WorkInherit();
+
     virtual void Disconnect(unsigned int id_session);
 
     virtual void RecvFromSlave(TDescRecvSession* pDesc);

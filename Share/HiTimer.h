@@ -44,7 +44,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 //------------------------------------------------------------------------------
 
 // Получение тиков процессора (с тактовой частотой процессора)
-unsigned __int64 SHARE_EI ht_GetTickCount();
+unsigned __int64 SHARE_EI ht_GetUSCount();
 
 // Задержка на микросекунды
 void SHARE_EI ht_usleep( unsigned int us );

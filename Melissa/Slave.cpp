@@ -63,7 +63,7 @@ unsigned int TSlave::GetSessionByClientKey(unsigned int key)
   return INVALID_HANDLE_SESSION;
 }
 //-------------------------------------------------------------------------
-void TSlave::Work()
+void TSlave::WorkInherit()
 {
 
 }

@@ -37,9 +37,11 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define WRAPPER_MAKER_TRANSPORT_H
 
 #include "IMakerTransport.h"
+#include "MakerNetTransport.h"
 
 class TWrapperMakerTransport : public nsMelissa::IMakerTransport
 {
+  TMakerNetTransport_Boost maker;
 public:
 	TWrapperMakerTransport();
 	virtual ~TWrapperMakerTransport();

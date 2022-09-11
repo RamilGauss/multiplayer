@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../Share;../DeveloperToolShare;../BigJack;../Robert;&quot;../glib-2.0&quot;;../GUI;../MyGUIEngine/include;../Common;../Melissa"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;VIEWERMODEL_EXPORTS"
+				AdditionalIncludeDirectories="../Share;../DeveloperToolShare;../BigJack;../Robert;../GUI;../MyGUIEngine/include;../Common;../Melissa"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;VIEWERMODEL_EXPORTS;_WIN32_WINNT=0x0501"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib DXGI.lib d3dx10d.lib d3dx9d.lib d3d9.lib dxerr.lib dxguid.lib winmm.lib comctl32.lib Imm32.lib Version.lib Dsound.lib BigJack.lib GameLib.lib DXUT.lib DXUTOpt.lib Share.lib Robert.lib Common.lib MyGUIEngine.lib Platforms.lib"
+				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib DXGI.lib d3dx10d.lib d3dx9d.lib d3d9.lib dxerr.lib dxguid.lib winmm.lib comctl32.lib Imm32.lib Version.lib Dsound.lib BigJack.lib GameLib.lib DXUT.lib DXUTOpt.lib Share.lib Robert.lib Common.lib MyGUIEngine.lib Platforms.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\Lib;&quot;..\Lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"
@@ -119,8 +119,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../Share;../DeveloperToolShare;../BigJack;../Robert;../GBaseLib;&quot;../glib-2.0&quot;;../GUI;../MyGUIEngine/include;../Common;../Melissa"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;VIEWERMODEL_EXPORTS"
+				AdditionalIncludeDirectories="../Share;../DeveloperToolShare;../BigJack;../Robert;../GUI;../MyGUIEngine/include;../Common;../Melissa"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;VIEWERMODEL_EXPORTS;_WIN32_WINNT=0x0501"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib glib-2.0.lib gthread-2.0.lib DXGI.lib d3dx10.lib d3dx9.lib d3d9.lib dxerr.lib dxguid.lib winmm.lib comctl32.lib Imm32.lib Version.lib Dsound.lib BigJack.lib GameLib.lib DXUT.lib DXUTOpt.lib GBaseLib.lib Share.lib Robert.lib Common.lib MyGUIEngine.lib Platforms.lib"
+				AdditionalDependencies="shlwapi.lib opengl32.lib glu32.lib ws2_32.lib DXGI.lib d3dx10.lib d3dx9.lib d3d9.lib dxerr.lib dxguid.lib winmm.lib comctl32.lib Imm32.lib Version.lib Dsound.lib BigJack.lib GameLib.lib DXUT.lib DXUTOpt.lib Share.lib Robert.lib Common.lib MyGUIEngine.lib Platforms.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\Lib;&quot;..\Lib\$(ConfigurationName)&quot;"
 				GenerateDebugInformation="true"

@@ -96,46 +96,46 @@ int main(int argc, char** argv)
 #else
   GetArgvArgcConsole(argc, argv, vec_argv);
 #endif
-	TInputCmdTornado cmdTornado;
-	if((resGet==false)||
-		 (cmdTornado.SetArg(vec_argv)==false))
+  TInputCmdTornado cmdTornado;
+  if((resGet==false)||
+	   (cmdTornado.SetArg(vec_argv)==false))
   {
     ViewHowUse();
     return -1;
   }
   //-----------------------------------------------------------------  
-	TInputCmdTornado::TInput inputTornado;
-	cmdTornado.Get(inputTornado);
+  TInputCmdTornado::TInput inputTornado;
+  cmdTornado.Get(inputTornado);
 
-	eTypeRealize typeRealize = tUndef;
+  eTypeRealize typeRealize = tUndef;
   TMapIter fit = mapTypeGame.find(inputTornado.type);
   if(fit!=mapTypeGame.end())
     typeRealize = fit->second;
   //-----------------------------------------------------------------  
-	IGame *pGame = NULL;
+  IGame *pGame = NULL;
   switch(typeRealize)
   {
     case tUndef:
-			ViewHowUse();
-			break;
-		case tC:
+		  ViewHowUse();
+		  break;
+	  case tC:
       pGame = new TClientGame;
       break;
     case tS:
-			pGame = new TServerGame(TServerGame::eSlave);
+		  pGame = new TServerGame(TServerGame::eSlave);
       break;
     case tM:
-			pGame = new TServerGame(TServerGame::eMaster);
+		  pGame = new TServerGame(TServerGame::eMaster);
       break;
     case tSS:
-			pGame = new TServerGame(TServerGame::eSuperServer);
+		  pGame = new TServerGame(TServerGame::eSuperServer);
       break;
   }
-	if(pGame)
-		pGame->Work(inputTornado.variant_use, 
+  if(pGame)
+	  pGame->Work(inputTornado.variant_use, 
                 inputTornado.libName.data(), 
                 inputTornado.param.data());
-	delete pGame;
+  delete pGame;
   pGame = NULL;
   return 0;
 }

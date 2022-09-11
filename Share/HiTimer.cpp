@@ -35,6 +35,10 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "HiTimer.h"
 
+#ifdef WIN32
+  #include <windows.h>
+#endif
+
 #include <boost/thread/thread.hpp>
 #include <boost/chrono/include.hpp>
 #include <boost/chrono/time_point.hpp>
@@ -42,7 +46,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 using namespace boost;
 
 //------------------------------------------------------------------------------
-unsigned __int64 ht_GetTickCount()
+unsigned __int64 ht_GetUSCount()
 {
   typedef chrono::process_real_cpu_clock type_clock;
 
@@ -53,8 +57,13 @@ unsigned __int64 ht_GetTickCount()
 // Задержка на миллисекунды
 void ht_msleep( unsigned int ms )
 {
-  chrono::milliseconds time_sleep(ms);
+	// в силу того что под Windows XP boost кидается ассертом (см. chrono)
+#ifdef WIN32
+	Sleep(ms);
+#else
+	chrono::milliseconds time_sleep(ms);
   this_thread::sleep_for( time_sleep );
+#endif
 }
 //------------------------------------------------------------------------------
 unsigned int ht_GetMSCount()
@@ -64,25 +73,24 @@ unsigned int ht_GetMSCount()
   type_clock::time_point t = type_clock::now();
   return (unsigned int)(t.time_since_epoch().count()/1000000);
 }
+//------------------------------------------------------------------------------
 // Задержка на микросекунды
 void ht_usleep( unsigned int us )
 {
-  unsigned __int64 start  = ht_GetTickCount();
-  unsigned __int64 finish = start + us;
-  for(; ht_GetTickCount() < finish ;)
-  {
-  }
+  bool ht_usleep( unsigned int us, THT_CheckFunc func );
+  ht_usleep( us, (THT_CheckFunc)NULL );
 }
 //------------------------------------------------------------------------------
 // Задержка на микросекунды c дополнительной проверкой состояния
 // Результат: true - выход по результату func, false - выход по таймауту
 bool ht_usleep( unsigned int us, THT_CheckFunc func )
 {
-  unsigned __int64 start  = ht_GetTickCount();
+  unsigned __int64 start  = ht_GetUSCount();
   unsigned __int64 finish = start + us;
-  for( ; ht_GetTickCount() < finish; )
-    if( func() )
-      return true;
+  for( ; ht_GetUSCount() < finish; )
+    if( func )
+      if( func() )
+        return true;
   return false;
 }
 //------------------------------------------------------------------------------

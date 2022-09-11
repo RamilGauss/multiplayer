@@ -48,35 +48,39 @@ IGUI_ManagerForm::~IGUI_ManagerForm()
 //-------------------------------------------------------------------
 void IGUI_ManagerForm::Add(std::string& name, void* pForm)
 {
-  mMapNameForm.Add(name, pForm);
+  mMapNameForm.insert( bmStrPtr::value_type(name, pForm) );
 }
 //-------------------------------------------------------------------
 void* IGUI_ManagerForm::GetFormByName(string& name)
 {
   void* p = NULL;
-  mMapNameForm.GetValueByKey(name,p);
+  const bmStrPtr::left_iterator fit = mMapNameForm.left.find(name);
+  if(fit!=mMapNameForm.left.end())
+    p = fit->second;
   return p;
 }
 //-------------------------------------------------------------------
 string IGUI_ManagerForm::GetNameForm(void* pForm)
 {
   string str;
-  mMapNameForm.GetValueByKey(str,pForm);
+  const bmStrPtr::right_iterator fit = mMapNameForm.right.find(pForm);
+  if(fit!=mMapNameForm.right.end())
+    str = fit->second;
   return str;
 }
 //-------------------------------------------------------------------
-bool IGUI_ManagerForm::RemoveFormByName(string name)
+void IGUI_ManagerForm::RemoveFormByName(string name)
 {
-  return mMapNameForm.RemoveValueByKey(name);
+  mMapNameForm.left.erase(name);
 }
 //-------------------------------------------------------------------
-bool IGUI_ManagerForm::RemoveForm(void* pForm)
+void IGUI_ManagerForm::RemoveForm(void* pForm)
 {
-  return mMapNameForm.RemoveValue(pForm);
+  mMapNameForm.right.erase(pForm);
 }
 //-------------------------------------------------------------------
 void IGUI_ManagerForm::Clear()
 {
-  mMapNameForm.Clear();
+  mMapNameForm.clear();
 }
 //-------------------------------------------------------------------

@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <map>
 #include <string>
-#include <windows.h>
 
 #include "MakerNetTransport.h"
 #include "INetTransport.h"
@@ -13,31 +12,33 @@
 
 #include "SaveOnHDD.h"
 #include "BL_Debug.h"
+#include <boost\asio\ip\impl\address_v4.ipp>
 
 using namespace std;
+using namespace boost::asio::ip;
 //-----------------------------------------------------------------------
-int numNetWork = 0;
 int main(int argc, char** argv)
 {
-  Init("Server");
+	//g_ShareTest->SetParam(TShareTest::eTimePerActiveConnection,50);
+	g_ShareTest->SetParam(TShareTest::eCountActiveConnectionPerTime,12000);
 
-  INetTransport* pNetTransport = g_MakerNetTransport.New();
+  g_ShareTest->Init("Server");
 
-  bool res = pNetTransport->Open(PORT_SERVER);
-  pNetTransport->Register(Recv,       INetTransport::eRecv);
-  pNetTransport->Register(Disconnect, INetTransport::eDisconnect);
+  INetTransport* pNetTransport = g_ShareTest->GetTransport();
+
+  bool res = pNetTransport->Open(TShareTest::ePortServer);
+  g_ShareTest->Register();
 
   pNetTransport->Start();
 
+  //pNetTransport->Close( address_v4::from_string(ns_getSelfIP(0)).to_ulong(), 9000);
   _getch();
 
   pNetTransport->Stop();
-  pNetTransport->Unregister(Recv,       INetTransport::eRecv);
-  pNetTransport->Unregister(Disconnect, INetTransport::eDisconnect);
-
-  g_MakerNetTransport.Delete(pNetTransport);
+  g_ShareTest->Unregister();
   //------------------------------------------------
-  printf("CommonCountRecv=%d\n",GetCountRecv());
+  printf("CommonCountRecv=%d\n",
+    g_ShareTest->GetCountRecv() + g_ShareTest->GetCountStream());
   _getch();
   return 0;
 }

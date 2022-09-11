@@ -53,7 +53,7 @@ void TSuperServer::SendByClientKey(std::list<unsigned int>& l, TBreakPacket bp)
 
 }
 //-------------------------------------------------------------------------
-void TSuperServer::Work()
+void TSuperServer::WorkInherit()
 {
 
 }

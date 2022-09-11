@@ -166,12 +166,6 @@ void TNetTransport_UDP::Send(unsigned int ip, unsigned short port,
 	delete pPacket;
 }
 //----------------------------------------------------------------------------------
-void* ThreadTransport(void*p)
-{
-	((TNetTransport_UDP*)p)->Engine();
-	return NULL;
-}
-//----------------------------------------------------------------------------------
 void TNetTransport_UDP::Engine()
 {
 	flgNeedStop = false;
@@ -203,7 +197,7 @@ void TNetTransport_UDP::Engine()
 //----------------------------------------------------------------------------------
 void TNetTransport_UDP::Start()
 {
-  boost::thread work_thread(ThreadTransport, this);
+  boost::thread work_thread(boost::bind(&TNetTransport_UDP::Engine, this));
 
 	while(IsActive()==false)
 		ht_msleep(eFeedBack);
@@ -213,7 +207,7 @@ void TNetTransport_UDP::Stop()
 {
 	flgNeedStop = true;
 	while(IsActive())
-		ht_msleep(eWaitThread);
+		ht_msleep(eFeedBack);
 
 	mUDP.close();
 }
@@ -294,7 +288,7 @@ void TNetTransport_UDP::FindAndCheck(THeader* prefix, unsigned int ip, unsigned 
 //----------------------------------------------------------------------------------
 int TNetTransport_UDP::GetTimeout()
 {
-	int to = eTimeRefreshEngine;//###
+	int to = eTimeRefreshEngine;
 	return to;
 }
 //----------------------------------------------------------------------------------
@@ -328,32 +322,6 @@ void TNetTransport_UDP::SendUnchecked()
   // отложенное удаление
   SearchAndDeleteInMapWaitCheck(setIP);
 	unlockSendRcv();
-}
-//----------------------------------------------------------------------------------
-void TNetTransport_UDP::Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type)
-{
-  switch(type)
-  {
-		case eRecv:
-      mCallBackRecv.Register(pFunc);
-      break;
-    case eDisconnect:
-      mCallBackDisconnect.Register(pFunc);
-      break;
-  }
-}
-//----------------------------------------------------------------------------------
-void TNetTransport_UDP::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type)
-{
-  switch(type)
-  {
-		case eRecv:
-			mCallBackRecv.Unregister(pFunc);
-			break;
-		case eDisconnect:
-			mCallBackDisconnect.Unregister(pFunc);
-			break;
-  }
 }
 //----------------------------------------------------------------------------------
 bool TNetTransport_UDP::Send(TBasePacketNetTransport* pDefPacket)
@@ -391,7 +359,7 @@ void TNetTransport_UDP::NotifyRecv(eTypeRecv type, int size)
   descRecv.sizeData = size - sizeof(THeader);
 	descRecv.type     = type;
 
-  mCallBackRecv.Notify(&descRecv,sizeof(descRecv));
+  NotifyReceive(&descRecv);
 }
 //----------------------------------------------------------------------------------
 void TNetTransport_UDP::SendCheck(THeader* prefix,unsigned int ip,unsigned short port)
@@ -641,5 +609,15 @@ void TNetTransport_UDP::SetupBufferForSocket()
   bool resSetRecv = mUDP.SetRecvBuffer(eSizeBufferForRecv);
   bool resSetSend = mUDP.SetSendBuffer(eSizeBufferForSend);
   BL_ASSERT(resSetRecv&resSetSend);
+}
+//----------------------------------------------------------------------------------
+void TNetTransport_UDP::NotifyReceive(TDescRecv* p)  
+{
+  mCallBackEventRecieve.Notify(p);
+}
+//----------------------------------------------------------------------------------
+void TNetTransport_UDP::NotifyDisconnect(TIP_Port* p)
+{
+  mCallBackEventDisconnect.Notify(p);
 }
 //----------------------------------------------------------------------------------

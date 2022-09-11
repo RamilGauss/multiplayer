@@ -34,7 +34,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 #include "WrapperMakerTransport.h"
-#include "MakerNetTransport.h"
 #include "INetTransport.h"
 
 using namespace nsMelissa;
@@ -52,13 +51,11 @@ TWrapperMakerTransport::~TWrapperMakerTransport()
 INetTransport* TWrapperMakerTransport::New()
 {
   // указать создателя интерфейса и сам интерфейс
-  TMakerNetTransport_TCP_UDP maker;
 	return maker.New();
 }
 //-------------------------------------------------------------------------
 void TWrapperMakerTransport::Delete(INetTransport* pTransport)
 {
-  TMakerNetTransport_TCP_UDP maker;
   maker.Delete(pTransport);
 }
 //-------------------------------------------------------------------------

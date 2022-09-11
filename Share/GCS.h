@@ -40,12 +40,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "TypeDef.h"
 //---------------------------------------------------------------------------
-// надстройка над рекурсивным мьютексом
+// надстройка над мьютексом
 class SHARE_EI GCS
 {
   boost::recursive_mutex m;
 
-  const char* mDbgName;
+	const char* mDbgName;
 public:
   GCS( const char * _dbgname = NULL );
   virtual ~GCS();

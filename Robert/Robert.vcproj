@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Share;..\GBaseLib;&quot;..\glib-2.0&quot;;..\BigJack;..\DXUT\Optional;..\DXUT\Core"
+				AdditionalIncludeDirectories="..\Share;..\BigJack;..\DXUT\Optional;..\DXUT\Core"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

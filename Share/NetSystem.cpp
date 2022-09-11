@@ -33,13 +33,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
-
-// Определенные проблемы может вызвать перенос программ из Unix в Windows,
-// так как там вместо read и write используются операторы recv и send,
-// вместо ioctl - ioctlsocket, а вместо close - closesocket.
-//#define FD_SETSIZE      2
-
 #if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
 
   //необходимо, т.к. #include <winsock2.h> -> #include <pshpack4.h> нарушает выравнивание
@@ -58,8 +51,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
     #include <winsock2.h>
     #include <Ws2tcpip.h>
   #endif
-
-  //#include "ErrorReg.h"
 
   #define ioctl  ioctlsocket
   #define close  closesocket
@@ -114,30 +105,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "NetSystem.h"
 #include "BL_Debug.h"
-//---------------------------------------------------------------------------
-#include <glib.h>
 #include <stdio.h>
-template <class TItem> class TThreadStorage
-{
-  GPrivate* key;
-public:
-  TThreadStorage()  { key = NULL; }
-  TItem* get()
-  {
-    if( !key ) key = g_private_new( g_free );
-    TItem* item = (TItem*)g_private_get( key );
-
-    if ( !item )
-    {
-      item = g_new( TItem, 1 );
-      g_private_set( key, item );
-    }
-    return item;
-  }
-  size_t size()
-    { return sizeof(TItem); }
-};
-//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
 static void* errSource;
@@ -158,13 +126,13 @@ bool ns_Init()
       if( WSAStartup( MAKEWORD(2,0), &data ) )
   #endif
   {
-    //errSDK_SETSOURCE( WSAGetLastError(), errSource );
+    BL_FIX_BUG();
     return false;
   }
   else
     if( LOBYTE( data.wVersion ) != 2 )
     {
-      //errStr_SETSOURCE( "WinSock2 не поддерживается системой", errSource );
+      BL_FIX_BUG();
       return false;
     }
 #endif
@@ -240,7 +208,7 @@ char* ns_getHostIP( const char* name, int numNetWork )
 					else
 						foundNet++;
       }
-      //else SET_ERR_NET( GET_ERROR() );
+      else BL_FIX_BUG();
       i++;
     }
     if( isLocalHost )
@@ -257,56 +225,7 @@ char* ns_getSelfIP(int numNetWork)
   {
     return ns_getHostIP( name, numNetWork );
   }
-  //else SET_ERR_NET( GET_ERROR() );
   return NULL;
-}
-//---------------------------------------------------------------------------
-//получение имени хоста
-char* ns_getSelfHost()
-{
-  typedef char THostName[255];
-  TThreadStorage<THostName> hostname;
-
-  if( !gethostname( (char*)hostname.get(), hostname.size() ) )
-  {
-    return (char*)hostname.get();
-  }
-  //else SET_ERR_NET( GET_ERROR() );
-  return NULL;
-}
-//---------------------------------------------------------------------------
-//получение сетевой маски
-char* ns_getNetMask( const char* ip_str )
-{
-  typedef char TIPString[16];
-  TThreadStorage<TIPString> result;
-
-  if( ip_str )
-  {
-    const char* pSrc = ip_str;
-
-    char* pDest = (char*)result.get();
-    char* pPoint = NULL;
-    int count = -1;
-    while( (unsigned int)++count <= strlen(ip_str) )
-    {
-      *pDest = *pSrc++;
-      if( *pDest++ == '.' ) pPoint = pDest;
-    }
-    if( pPoint ) // указывает на символ, следующий после '.' или NULL
-    {
-      *pPoint++ = '2';*pPoint++ = '5';*pPoint++ = '5';
-      *pPoint++ = '\0';
-      return (char*)result.get();
-    }
-  }
-  return NULL;
-}
-//---------------------------------------------------------------------------
-//получение сетевой маски свой сети
-char* ns_getSelfNetMask()
-{
-  return ns_getNetMask( ns_getSelfIP() );
 }
 //---------------------------------------------------------------------------
 unsigned long ns_inet_addr( const char* addr )

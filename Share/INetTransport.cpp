@@ -35,5 +35,13 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "INetTransport.h"
 
-INetTransport::INetTransport(){};
-INetTransport::~INetTransport(){};
+INetTransport::INetTransport()
+{
+
+}
+//---------------------------------------------------------------------------
+INetTransport::~INetTransport()
+{
+
+}
+//---------------------------------------------------------------------------

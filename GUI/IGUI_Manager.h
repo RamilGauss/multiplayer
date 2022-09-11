@@ -37,13 +37,13 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define IGUI_ManagerFormH
 
 #include <string>
-#include <map>
-#include "MapDual.h"
+#include <boost/bimap/bimap.hpp>
 
 class IGUI_ManagerForm
 {
 
-  TMapDual<std::string, void*> mMapNameForm;
+  typedef boost::bimaps::bimap< std::string, void* > bmStrPtr;
+  bmStrPtr mMapNameForm;
 
 public:
 
@@ -59,8 +59,8 @@ public:
   std::string GetNameForm(void* pForm);// если не найдет вернет NULL
 
   // удаление
-  bool RemoveFormByName(std::string name);
-  bool RemoveForm(void*);
+  void RemoveFormByName(std::string name);
+  void RemoveForm(void*);
 
   // чистка
   void Clear();

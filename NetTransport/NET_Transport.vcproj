@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\glib-2.0&quot;;..\Share;.\Boost_Implementation;.\TCP_UDP_Implementation;.\UDP_Implementation;.\"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;TD_CROSSPLATFORM;NET_TRANSPORT_EI=__declspec(dllexport);NET_TRANSPORT_EXPORTS;FAST_NET_TRANSPORT"
+				AdditionalIncludeDirectories="..\Share;.\Boost_Implementation;.\TCP_UDP_Implementation;.\UDP_Implementation;.\"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;TD_CROSSPLATFORM;NET_TRANSPORT_EI=__declspec(dllexport);NET_TRANSPORT_EXPORTS;FAST_NET_TRANSPORT;_WIN32_WINNT=0x0501"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib glib-2.0.lib gthread-2.0.lib Share.lib"
+				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib Share.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
@@ -119,8 +119,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\glib-2.0;..\GBaseLib;..\Share"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;NET_TRANSPORT_EI=__declspec(dllexport);NET_TRANSPORT_EXPORTS;FAST_NET_TRANSPORT"
+				AdditionalIncludeDirectories="..\Share;.\Boost_Implementation;.\TCP_UDP_Implementation;.\UDP_Implementation;.\"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;NET_TRANSPORT_EI=__declspec(dllexport);NET_TRANSPORT_EXPORTS;FAST_NET_TRANSPORT;_WIN32_WINNT=0x0501"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib d3dx10.lib d3dx9.lib d3d9.lib ws2_32.lib dxerr.lib glib-2.0.lib gthread-2.0.lib GBaseLib.lib Share.lib"
+				AdditionalDependencies="shlwapi.lib d3dx10.lib d3dx9.lib d3d9.lib ws2_32.lib dxerr.lib Share.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
@@ -261,117 +261,49 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="TCP_UDP_Implementation"
-			>
-			<Filter
-				Name="Header"
-				>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\INetControl.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\INetDevice.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\INetMakerEvent.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\INetMakerEventThread.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetControlTCP.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetControlUDP.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetDeviceTCP.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetDeviceUDP.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetMakerEventThreadWSA.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetMakerEventWin.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetTransport_TCP_UDP.h"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\TypeEvent.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Source"
-				>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\INetControl.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\INetDevice.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\INetMakerEvent.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\INetMakerEventThread.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetControlTCP.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetControlUDP.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetDeviceTCP.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetDeviceUDP.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetMakerEventThreadWSA.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetMakerEventWin.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TCP_UDP_Implementation\NetTransport_TCP_UDP.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
 			Name="Boost_Implementation"
 			>
 			<Filter
 				Name="Header"
 				>
 				<File
+					RelativePath=".\Boost_Implementation\INetControl.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\INetDevice.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetControlAcceptor.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetControlTCP.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetControlUDP.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetDeviceAcceptor.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetDeviceTCP.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetDeviceUDP.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Boost_Implementation\NetTransport_Boost.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetWorkThread.h"
 					>
 				</File>
 			</Filter>
@@ -379,7 +311,39 @@
 				Name="Source"
 				>
 				<File
+					RelativePath=".\Boost_Implementation\INetControl.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetControlAcceptor.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetControlTCP.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetControlUDP.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetDeviceAcceptor.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetDeviceTCP.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetDeviceUDP.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Boost_Implementation\NetTransport_Boost.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Boost_Implementation\NetWorkThread.cpp"
 					>
 				</File>
 			</Filter>

@@ -34,19 +34,25 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 #include "Client.h"
-//#include "BasePacket_Private.h"
 #include "ManagerSession.h"
 #include "TypePacket.h"
 #include "HeaderSubSystem.h"
+#include "ManagerScenario.h"
 
 using namespace nsMelissaSubSystem;
+using namespace std;
 
 namespace nsMelissa
 {
 
-TClient::TClient()
+TClient::TClient():
+sNameLogin("login"),
+sNameRecommutation("recommutation")
 {
-  mMasterSession = NULL;
+  mMasterSessionID = INVALID_HANDLE_SESSION;
+
+  mManagerScenario->Add(sNameLogin);
+  mManagerScenario->Add(sNameRecommutation);
 }
 //-------------------------------------------------------------------------
 TClient::~TClient()
@@ -64,12 +70,12 @@ void TClient::Login(unsigned int ip, unsigned short port, void* data, int size)
   h.from = eFromClient;
   bp.PushFront((char*)&h, sizeof(h));
   // отослать пакет для попытки авторизации
-  mMasterSession = mManagerSession->Send(ip, port, bp, true);
+  mMasterSessionID = mManagerSession->Send(ip, port, bp, true);
 }
 //-------------------------------------------------------------------------
-void TClient::Work()
+void TClient::WorkInherit()
 {
-  
+
 }
 //-------------------------------------------------------------------------
 void TClient::Disconnect(unsigned int id_session)

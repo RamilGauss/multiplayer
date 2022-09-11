@@ -55,8 +55,6 @@ namespace nsMelissa
     
     virtual void SendByClientKey(std::list<unsigned int>& l, TBreakPacket bp);
     
-    // Base
-    virtual void Work();
 		// BaseServer
 		struct TDescDownSuperServer
 		{
@@ -68,6 +66,9 @@ namespace nsMelissa
 		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);
 
 	protected:
+    // Base
+    virtual void WorkInherit();
+
     virtual void Disconnect(unsigned int id_session);
 
     virtual void RecvFromMaster(TDescRecvSession* pDesc);

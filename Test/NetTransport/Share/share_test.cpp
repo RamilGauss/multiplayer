@@ -3,31 +3,49 @@
 #include <stdio.h>
 #include <map>
 #include <string>
-#include <windows.h>
 
 #include "HiTimer.h"
 #include "NetSystem.h"
 #include "SaveOnHDD.h"
 #include "Logger.h"
 
+TAutoCreateVarT<TShareTest> g_ShareTest;
 
-char packet[SIZE_PACKET];
-
-float freq_printf_recv_packet = 10.0f;// %
-float limit_recv_packet = 0;// %
-
-volatile bool flgDisconnect = false;
-
-static int cntRecv   = 0;
-static int cntStream = 0;
-
-void SetDisconnect();
-
-TMakerNetTransport_Boost
-//TMakerNetTransport_TCP_UDP 
-g_MakerNetTransport;
 //-----------------------------------------------------------------------
-void Init(char* nameLog)
+TShareTest::TShareTest()
+{
+  flgDisconnect = false;
+
+  freq_printf_recv_packet = 10.0f;// %
+  limit_recv_packet = 0;          // %
+  cntRecv   = 0;
+  cntStream = 0;
+
+  pTransport = mMakerNetTransport.New();
+
+	mType  = eCountRecvPacket;
+	mParam = 100;
+}
+//-----------------------------------------------------------------------
+TShareTest::~TShareTest()
+{
+  mMakerNetTransport.Delete(pTransport);
+}
+//-----------------------------------------------------------------------
+void TShareTest::SetParam(eType type, int param)
+{
+	mType  = type;
+	mParam = param;
+
+	mStartCollectActiveConection = ht_GetMSCount();
+}
+//-----------------------------------------------------------------------
+INetTransport* TShareTest::GetTransport()
+{
+  return pTransport;
+}
+//-----------------------------------------------------------------------
+void TShareTest::Init(char* nameLog)
 {
   GetLogger()->Done();
   GetLogger()->Register(STR_NAME_NET_TRANSPORT);
@@ -39,84 +57,160 @@ void Init(char* nameLog)
 #else
   setlocale( LC_ALL, "ru_RU.koi8r" );
 #endif
-
-  g_thread_init( NULL );
   ns_Init();
 }
 //-----------------------------------------------------------------------
-void RecvPacket(void* p, int s)
+void TShareTest::RecvPacket(INetTransport::TDescRecv* p)
 {
-  static unsigned int startRecvPacket;
-  if(cntRecv==0)
-    startRecvPacket = ht_GetMSCount();
-  cntRecv++;
-  if(float(cntRecv)/CNT_RECV_PACKET*100>limit_recv_packet)
-  {
-    printf("RecvPacket, cnt=%d, size=%d\n",cntRecv, 
-      ((INetTransport::TDescRecv*)p)->sizeData);
-    limit_recv_packet += freq_printf_recv_packet;
-  }
-  if(cntRecv==CNT_RECV_PACKET)
-  {
-    unsigned int now = ht_GetMSCount();
-    unsigned int time_recv = now - startRecvPacket;
-    printf("Recv time=%u, v=%f\n", 
-      time_recv, float(sizeof(packet)*CNT_RECV_PACKET)/(time_recv*1000));
-  }
-}
-//-----------------------------------------------------------------------
-void RecvStream(void* p, int s)
-{
-  static unsigned int startRecvStream;
-  if(cntStream==0)
-    startRecvStream = ht_GetMSCount();
-  cntStream++;
-  if(float(cntStream)/CNT_RECV_PACKET*100>limit_recv_packet)
-  {
-    printf("RecvStream, cnt=%d\n",cntStream);
-    limit_recv_packet += freq_printf_recv_packet;
-  }
-  if(cntStream==CNT_RECV_PACKET)
-  {
-    unsigned int now = ht_GetMSCount();
-    unsigned int time_recv = now - startRecvStream;
-    printf("Recv time=%u, v=%f\n", time_recv, float(sizeof(packet)*CNT_RECV_PACKET)/(time_recv*1000));
-  }
-}
-//-----------------------------------------------------------------------
-void Disconnect(void* p, int s)
-{
-	TIP_Port* pIP = (TIP_Port*)p;
-  printf("Disconnect IP=0x%X port=%u\n", pIP->ip, pIP->port);
-  flgDisconnect = true;
-}
-//-----------------------------------------------------------------------
-void Recv(void* p, int s)
-{
-	INetTransport::TDescRecv* pDesc = (INetTransport::TDescRecv*)p;
-	switch(pDesc->type)
+	cntRecv++;
+	switch(mType)
 	{
-		case INetTransport::ePacket:
-			RecvPacket(pDesc,0);
+		case eCountRecvPacket:
+			ViewCountRecvPacket(p);
 			break;
-		case INetTransport::eStream:
-			RecvStream(pDesc,0);
+		case eCountActiveConnectionPerTime:
+			ViewCountActiveConnectionPerTime(p);
+			break;
+		case eTimePerActiveConnection:
+			ViewTimePerActiveConnection(p);
 			break;
 	}
 }
 //-----------------------------------------------------------------------
-void SetDisconnect()
+void TShareTest::ViewCountRecvPacket(INetTransport::TDescRecv* p)
+{
+  static unsigned int startRecvPacket;
+  if(cntRecv==0)
+    startRecvPacket = ht_GetMSCount();
+  if(float(cntRecv)/eCntRecvPacket*100>limit_recv_packet)
+  {
+    printf("RecvPacket, cnt=%d, size=%d, port=%u\n",cntRecv, 
+      p->sizeData, p->ip_port.port);
+    limit_recv_packet += freq_printf_recv_packet;
+  }
+  if(cntRecv==eCntRecvPacket)
+  {
+    unsigned int now = ht_GetMSCount();
+    unsigned int time_recv = now - startRecvPacket;
+    printf("Recv time=%u, v=%f\n", 
+      time_recv, float(sizeof(packet)*eCntRecvPacket)/(time_recv*1000));
+  }
+}
+//-----------------------------------------------------------------------
+void TShareTest::ViewCountActiveConnectionPerTime(INetTransport::TDescRecv* p)
+{
+	IncreaseSetIP(p);
+	unsigned int now = ht_GetMSCount();
+	if(mStartCollectActiveConection+mParam<now)
+	{
+		printf("Count active connection=%d, dt=%d ms\n", mSetIP.size(), mParam);
+		mStartCollectActiveConection = now;
+		mSetIP.clear();
+	}
+}
+//-----------------------------------------------------------------------
+void TShareTest::ViewTimePerActiveConnection(INetTransport::TDescRecv* p)
+{
+	IncreaseSetIP(p);
+	if(int(mSetIP.size())>=mParam)
+	{
+		// формировать строку
+		unsigned int now = ht_GetMSCount();
+		unsigned int dt = now - mStartCollectActiveConection;
+		printf("Time per connection=%d, time=%u ms\n", mParam, dt);
+		mStartCollectActiveConection = now;
+		mSetIP.clear();
+	}
+}
+//-----------------------------------------------------------------------
+void TShareTest::IncreaseSetIP(INetTransport::TDescRecv*p)
+{
+	mSetIP.insert(TSetIP::value_type(p->ip_port));
+}
+//-----------------------------------------------------------------------
+void TShareTest::RecvStream(INetTransport::TDescRecv* p)
+{
+  cntStream++;
+  switch(mType)
+  {
+    case eCountRecvPacket:
+      ViewCountRecvPacket(p);
+      break;
+    case eCountActiveConnectionPerTime:
+      ViewCountActiveConnectionPerTime(p);
+      break;
+    case eTimePerActiveConnection:
+      ViewTimePerActiveConnection(p);
+      break;
+  }
+}
+//-----------------------------------------------------------------------
+void TShareTest::ViewCountStreamPacket(INetTransport::TDescRecv* p)
+{
+  static unsigned int startRecvStream;
+  if(cntStream==0)
+    startRecvStream = ht_GetMSCount();
+  if(float(cntStream)/eCntRecvPacket*100>limit_recv_packet)
+  {
+    printf("RecvStream, cnt=%d\n",cntStream);
+    limit_recv_packet += freq_printf_recv_packet;
+  }
+  if(cntStream==eCntRecvPacket)
+  {
+    unsigned int now = ht_GetMSCount();
+    unsigned int time_recv = now - startRecvStream;
+    printf("Recv time=%u, v=%f\n", time_recv, float(sizeof(packet)*eCntRecvPacket)/(time_recv*1000));
+  }
+}
+//-----------------------------------------------------------------------
+void TShareTest::Disconnect(TIP_Port* p)
+{
+  printf("Disconnect IP=0x%X port=%u\n", p->ip, p->port);
+  flgDisconnect = true;
+}
+//-----------------------------------------------------------------------
+void TShareTest::Recv(INetTransport::TDescRecv* p)
+{
+	switch(p->type)
+	{
+		case INetTransport::ePacket:
+			RecvPacket(p);
+			break;
+		case INetTransport::eStream:
+			RecvStream(p);
+			break;
+	}
+}
+//-----------------------------------------------------------------------
+void TShareTest::SetDisconnect()
 {
   flgDisconnect = true;
 }
 //-----------------------------------------------------------------------
-bool IsDisconnect()
+bool TShareTest::IsDisconnect()
 {
   return flgDisconnect;
 }
 //-----------------------------------------------------------------------
-int GetCountRecv()
+int TShareTest::GetCountRecv()
 {
   return cntRecv;
+}
+//-----------------------------------------------------------------------
+int TShareTest::GetCountStream()
+{
+  return cntStream;
+}
+//-----------------------------------------------------------------------
+void TShareTest::Register()
+{
+  pTransport->GetCallbackRecv()->Register(   &TShareTest::Recv,       this);
+  pTransport->GetCallbackDisconnect()->Register(&TShareTest::Disconnect, this);
+}
+//-----------------------------------------------------------------------
+void TShareTest::Unregister()
+{
+  pTransport->GetCallbackRecv()->Unregister(this);
+  pTransport->GetCallbackDisconnect()->Unregister(this);
 }
 //-----------------------------------------------------------------------

@@ -57,8 +57,6 @@ namespace nsMelissa
     virtual unsigned int GetSlaveSessionByGroup(unsigned int id_group);
     virtual void SendToClient(unsigned int id_client, void* data, int size, bool check = true);
    
-    // Base
-    virtual void Work();
 		// BaseServer
 		struct TDescDownMaster
 		{
@@ -68,6 +66,9 @@ namespace nsMelissa
 		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);
 
 	protected:
+    // Base
+    virtual void WorkInherit();
+
     virtual void Disconnect(unsigned int id_session);
 
     virtual void RecvFromClient(TDescRecvSession* pDesc);

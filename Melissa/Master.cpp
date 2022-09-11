@@ -85,7 +85,7 @@ void TMaster::SendToClient(unsigned int id_client, void* data, int size, bool ch
 
 }
 //-------------------------------------------------------------------------
-void TMaster::Work()
+void TMaster::WorkInherit()
 {
 
 }

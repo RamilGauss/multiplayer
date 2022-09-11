@@ -32,10 +32,9 @@ int main(int argc, char** argv)
   pClient->Open(1234);
   pClient->Login(0, 0, NULL, 0);
 
-  pClient->Work();// #0
-
   while(pClient->IsConnectUp()==false)// #1
   {
+    pClient->Work();// #0
     ht_msleep(100);// ждем соединения
   }
   //-----------------------------------------------------

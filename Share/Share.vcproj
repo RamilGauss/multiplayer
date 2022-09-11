@@ -42,8 +42,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\glib-2.0;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EI=__declspec(dllexport);SHARE_EXPORTS"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EI=__declspec(dllexport);SHARE_EXPORTS;_WIN32_WINNT=0x0501"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="3"
@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib glib-2.0.lib gthread-2.0.lib"
+				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
@@ -121,8 +121,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\glib-2.0;..\GBaseLib"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EI=__declspec(dllexport);SHARE_EXPORTS"
+				AdditionalIncludeDirectories=""
+				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EI=__declspec(dllexport);SHARE_EXPORTS;_WIN32_WINNT=0x0501"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -140,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib d3dx10.lib d3dx9.lib d3d9.lib ws2_32.lib dxerr.lib glib-2.0.lib gthread-2.0.lib GBaseLib.lib"
+				AdditionalDependencies="shlwapi.lib d3dx10.lib d3dx9.lib d3d9.lib ws2_32.lib dxerr.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
@@ -200,10 +200,6 @@
 			</File>
 			<File
 				RelativePath=".\BreakPacket.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\CallBackRegistrator.cpp"
 				>
 			</File>
 			<File
@@ -558,10 +554,6 @@
 			</File>
 			<File
 				RelativePath=".\Map.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MapDual.h"
 				>
 			</File>
 			<File

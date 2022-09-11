@@ -80,6 +80,8 @@ public:
 
   void UnlinkPart();
 
+  void UnlinkCollect();
+
   const TBreakPacket& operator =( const TBreakPacket& b );
 
   std::list<TContainerPtr>* GetList(){return &mList;}

@@ -39,11 +39,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <map>
 
 #include "ShareMisc.h"
-#include "MapDual.h"
 #include "Session.h"
 #include "IMakerTransport.h"
 #include "GCS.h"
 #include "NavigateSession.h"
+#include "CallBackRegistrator.h"
+#include "DescRecvSession.h"
 
 namespace nsMelissa
 {
@@ -62,29 +63,25 @@ namespace nsMelissa
     IMakerTransport* mMakerTransport;
     INetTransport*   mTransport;
 
-    TCallBackRegistrator mCallBackDiconnect;
-    TCallBackRegistrator mCallBackRecv;
+    TCallBackRegistrator1<int>         mCallBackDiconnect;
+    TCallBackRegistrator1<TDescRecvSession*> mCallBackRecv;
 
     GCS mMutexAccessMapSession;
     void lockAccessSession(){mMutexAccessMapSession.lock();}
     void unlockAccessSession(){mMutexAccessMapSession.unlock();}
   public:
-		typedef enum
-		{
-			eDisconnect,
-			eRecv,
-		}tEventManagerSession;
-
     TManagerSession();
     ~TManagerSession();
 		// для поддержания работы
     void SetMakerTransport(IMakerTransport* pMakerTransport);
-    void Register(TCallBackRegistrator::TCallBackFunc pFunc, tEventManagerSession type);
-    void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, tEventManagerSession type);
+
+    TCallBackRegistrator1<TDescRecvSession*>* GetCallbackRecv(){return &mCallBackRecv;}
+    TCallBackRegistrator1<int >* GetCallbackDisconnect(){return &mCallBackDiconnect;}
+    
     bool Start(unsigned short port, unsigned char subNet = 0);
     void Work();
 		// для работы с сетью
-    unsigned int Send(unsigned int ip, unsigned short port, TBreakPacket bp, bool check = true);// только если нет сессии
+    unsigned int Send(unsigned int ip, unsigned short port, TBreakPacket bp, bool check = true);// только если не установлено соединение
 		void Send(unsigned int ID_Session, TBreakPacket bp, bool check = true);
     unsigned int GetSessionID(unsigned int ip, unsigned short port);
     bool GetInfo(unsigned int ID_Session, TIP_Port& ip_port_out);
@@ -101,8 +98,6 @@ namespace nsMelissa
 
     void Recv( INetTransport::TDescRecv* pDescRecv );
     void Disconnect(TIP_Port* ip_port);
-
-    TCallBackRegistrator* GetCallBackByType(tEventManagerSession type);
 
     TSession* NewSession(TIP_Port& ip_port);
   };
