@@ -87,6 +87,7 @@ namespace nsMelissa
     unsigned int Send(unsigned int ip, unsigned short port, TBreakPacket bp, bool check = true);// только если нет сессии
 		void Send(unsigned int ID_Session, TBreakPacket bp, bool check = true);
     unsigned int GetSessionID(unsigned int ip, unsigned short port);
+    bool GetInfo(unsigned int ID_Session, TIP_Port& ip_port_out);
     void CloseSession(unsigned int ID_Session);
     bool IsExist(unsigned int ID_Session);
     // настройка

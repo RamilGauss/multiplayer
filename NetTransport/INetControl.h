@@ -47,6 +47,10 @@ class INetMakerEvent;
 
 class INetControl
 {
+protected:
+  unsigned short mLocalPort; 
+  unsigned char  mNumNetWork;
+
 public:
   typedef enum{
     eAccept = 0,// попытка к нам соединиться
@@ -70,6 +74,7 @@ public:
   virtual void Send(unsigned int ip, unsigned short port, TBreakPacket bp) = 0;
 
 	virtual void Close(unsigned int ip, unsigned short port) = 0;
+	virtual void Close(int sock) = 0;
 
   static void SetMakerEvent(INetMakerEvent* pME);
 

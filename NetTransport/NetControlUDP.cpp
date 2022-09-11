@@ -57,7 +57,7 @@ TNetControlUDP::TNetControlUDP()
 //------------------------------------------------------------------------------
 TNetControlUDP::~TNetControlUDP()
 {
-
+  Done();
 }
 //------------------------------------------------------------------------------
 void TNetControlUDP::Work(int sock, list<eTypeEvent>& event)
@@ -97,11 +97,12 @@ bool TNetControlUDP::Open( unsigned short port, unsigned char numNetWork )
   res = mDevice.SetSendBuffer(mSocketLocal, eSystemSizeForSendBuffer_Socket);
 
 	GetMakerEvent()->Remove(mSocketLocal);
-	GetMakerEvent()->Add(mSocketLocal, this);
-	list<INetControl::eTypeEvent> lEvent;
-	lEvent.push_back(INetControl::eRead);
-	lEvent.push_back(INetControl::eWrite);
-	GetMakerEvent()->SetTypeEvent(mSocketLocal, lEvent);
+
+  list<INetControl::eTypeEvent> lEvent;
+  lEvent.push_back(INetControl::eRead);
+  lEvent.push_back(INetControl::eWrite);
+  GetMakerEvent()->Add(mSocketLocal, this, lEvent);
+	//GetMakerEvent()->SetTypeEvent(mSocketLocal, lEvent);
   return (mSocketLocal!=-1);
 }
 //------------------------------------------------------------------------------
@@ -217,5 +218,15 @@ void TNetControlUDP::SetCntInByIP_Port(TIP_Port& ip_port, unsigned short cnt_in)
 	fit->second.cnt_in = cnt_in;
 
 	unlockSendRcv();
+}
+//----------------------------------------------------------------------------------
+void TNetControlUDP::Close(int sock)
+{
+  mDevice.Close(sock);
+}
+//----------------------------------------------------------------------------------
+void TNetControlUDP::Done()
+{
+  mDevice.Close(mSocketLocal);
 }
 //----------------------------------------------------------------------------------

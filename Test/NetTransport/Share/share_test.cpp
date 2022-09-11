@@ -19,6 +19,10 @@ char packet[SIZE_PACKET];
 float freq_printf_recv_packet = 10.0f;// %
 float limit_recv_packet = 0;// %
 
+volatile bool flgDisconnect = false;
+
+void SetDisconnect();
+
 //TMakerNetTransport
 TMakerNetTransport_TCP_UDP 
 g_MakerNetTransport;
@@ -90,6 +94,7 @@ void Disconnect(void* p, int s)
 {
 	TIP_Port* pIP = (TIP_Port*)p;
   printf("Disconnect IP=0x%X port=%u\n", pIP->ip, pIP->port);
+  flgDisconnect = true;
 }
 //-----------------------------------------------------------------------
 void Recv(void* p, int s)
@@ -104,5 +109,15 @@ void Recv(void* p, int s)
 			RecvStream(NULL,0);
 			break;
 	}
+}
+//-----------------------------------------------------------------------
+void SetDisconnect()
+{
+  flgDisconnect = true;
+}
+//-----------------------------------------------------------------------
+bool IsDisconnect()
+{
+  return flgDisconnect;
 }
 //-----------------------------------------------------------------------

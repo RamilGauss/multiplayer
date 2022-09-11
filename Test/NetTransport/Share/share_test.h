@@ -7,7 +7,7 @@
 #define PORT_CLIENT 1234
 #define PORT_SERVER 1235
 #define SIZE_PACKET 1350
-#define CNT_RECV_PACKET 100000 //100000
+#define CNT_RECV_PACKET 1000 //100000
 
 extern char packet[SIZE_PACKET];
 
@@ -17,6 +17,8 @@ extern void Init(char* nameLog);
 
 extern void Recv(void* p, int s);
 extern void Disconnect(void* p, int s);
+
+extern bool IsDisconnect();
 
 #endif
 

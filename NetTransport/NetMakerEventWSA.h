@@ -87,11 +87,12 @@ public:
 
   virtual bool IsActive(){return flgActive;}
 
-  virtual void Add(int sock, INetControl* pControl);
+  virtual void Add(int sock, INetControl* pControl, 
+                   std::list<INetControl::eTypeEvent>& lEvent);
   virtual void Remove(int sock);
 
-  virtual void SetTypeEvent( int sock, std::list<INetControl::eTypeEvent>& lEvent);
 protected:
+  virtual void SetTypeEvent( int sock, std::list<INetControl::eTypeEvent>& lEvent);
 
   friend void* ThreadMakerEventWSA(void*p);
   void Engine();
@@ -101,6 +102,7 @@ protected:
   void Control2WSA_Event( std::list<INetControl::eTypeEvent>& lEvent, int& event );
 
   void Done();
+
 };
 
 

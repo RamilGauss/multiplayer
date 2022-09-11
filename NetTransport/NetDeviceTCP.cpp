@@ -104,6 +104,7 @@ int TNetDeviceTCP::Open( bool flgListen, unsigned short port, unsigned char numN
   { 
     SetReUse(sock);
     OffNagl(sock);
+    Set_HardClose(sock);
 
     struct sockaddr_in addr; 
     addr.sin_family = AF_INET ; 
@@ -146,7 +147,8 @@ bool TNetDeviceTCP::Connect(int sock_local, unsigned int ip, unsigned short port
 void TNetDeviceTCP::Close(int sock)
 {
 #ifdef WIN32
-  closesocket( sock );
+  if(closesocket( sock ))
+    PRINTF("Close TCP FAIL %u.\n",GET_ERROR);
 #else
   ::close( sock );
 #endif
@@ -213,6 +215,18 @@ void TNetDeviceTCP::SetReUse( int sock)
   if(resSet!=0)
   {
     PRINTF("SetReUse TCP FAIL %u.\n",GET_ERROR);
+  }
+}
+//--------------------------------------------------------------------------------
+void TNetDeviceTCP::Set_HardClose( int sock )
+{
+  linger linger_;
+  linger_.l_onoff  = 1;// non-zero
+  linger_.l_linger = 0;// zero
+  int resSet = setsockopt( sock, SOL_SOCKET, SO_LINGER , (const char*)&linger_, sizeof(linger));
+  if(resSet!=0)
+  {
+    PRINTF("Set_HardClose TCP FAIL %u.\n",GET_ERROR);
   }
 }
 //--------------------------------------------------------------------------------

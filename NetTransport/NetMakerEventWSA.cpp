@@ -61,7 +61,7 @@ TNetMakerEventWSA::~TNetMakerEventWSA()
   Done();
 }
 //-----------------------------------------------------------------
-void TNetMakerEventWSA::Add(int sock, INetControl* pControl)
+void TNetMakerEventWSA::Add(int sock, INetControl* pControl, list<INetControl::eTypeEvent>& lEvent)
 {
   // подстраховка
   TMapII_It fit = mMapSockEvent.find(sock);
@@ -83,13 +83,14 @@ void TNetMakerEventWSA::Add(int sock, INetControl* pControl)
     return;
   }
   //-------------------------------------------------
-  mMapSockEvent.insert(TMapII_It::value_type(sock, event));
-
   TDescSocket ds;
   ds.sock     = sock;
   ds.pControl = pControl;
   mVecSocket.push_back(ds);
   mVecEvent.push_back(event);
+  mMapSockEvent.insert(TMapIntInt::value_type(sock, event));
+
+  SetTypeEvent(sock, lEvent);
 }
 //-----------------------------------------------------------------
 void TNetMakerEventWSA::Remove(int sock)
@@ -154,12 +155,38 @@ void TNetMakerEventWSA::Stop()
     ht_msleep(eWaitFeedBack);
 }
 //----------------------------------------------------------------------------------
+// проблема - пока можно следить за событиями только 64 сокетов (по крайней мере под Windows)
+//###
+#include "MakerLoaderDLL.h"
+#include "ILoaderDLL.h"
+//###
 void TNetMakerEventWSA::Work()
 {
+  //###
+  TMakerLoaderDLL maker;
+  ILoaderDLL* loader = maker.New();
+  bool resLoad = loader->Init("C:\\Program Files\\Lua\\5.1\\lib\\lua5.1.dll");
+  void* pFunc = loader->Get("lua_load");
+  //###
+
+  OSVERSIONINFO lVersionInfo;
+  lVersionInfo.dwOSVersionInfoSize = sizeof(lVersionInfo);
+  BOOL res = GetVersionEx(&lVersionInfo);
+
+  //WSAPOLLFD fdarray[1];
+  //ULONG nfds = 1;
+  //int timeout = 10;
+
+  //fdarray[0].fd = mVecEvent[0];
+  //fdarray[0].events; 
+  //int resPoll = WSAPoll(fdarray,
+  //                      nfds,
+  //                      timeout);
+  //###
   WSAEVENT* pEvents = (WSAEVENT*)&mVecEvent[0]; 
-  int cEvents = mVecEvent.size();
+  int cEvents = min(WSA_MAXIMUM_WAIT_EVENTS, mVecEvent.size());//###
   DWORD dwEvent = WSAWaitForMultipleEvents( cEvents, pEvents, FALSE, eTimeRefreshEngine, FALSE); 
-  switch (dwEvent) 
+  switch(dwEvent)
   { 
     case WSA_WAIT_FAILED: 
       PRINTF("Work() WSAWaitForMultipleEvents FAIL %u.\n", GET_ERROR);

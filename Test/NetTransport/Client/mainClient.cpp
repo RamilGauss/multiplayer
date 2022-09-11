@@ -18,11 +18,7 @@
 #include "TimerLog.h"
 #include "ListPtr.h"
 #include "BreakPacket.h"
-
 #include "share_test.h"
-#include "Events.h"//###
-
-#define TIMER_LOG_ENABLE
 
 using namespace std;
 
@@ -38,41 +34,22 @@ struct TArgData
   {
 		port_client = PORT_CLIENT;
     ip = ns_inet_addr(ns_getSelfIP(numNetWork));
-    cnt = 700;//190;
-    time_sleep = 0;
+    cnt = 6;//190;
+    time_sleep = 20;
   }
 };
 //-------------------------------------------------------------------
 void GetByArg(int argc, char** argv, TArgData &d);
 //-------------------------------------------------------------------
-class TA
-{
-public:
-  TA()
-  {
-    int a = 0;
-  }
-  ~TA()
-  {
-    int a = 0;
-  }
-};
 int main(int argc, char** argv)
 {
   //###
-  TA** pInt = new TA*;
-  TListMultiThread<TA*> list;
-  list.Add(pInt);
-  TA*** pFirst = list.GetFirst();
-  //list.ZeroPointerElement(pFirst);
-  list.Clear();
-
 #if 0
   // внутри Melissa
   nsMelissa::TEventTryLogin erfd;
-  erfd.pSession = (nsMelissa::ISession*)1;
-  erfd.sizeData = 100;
-  TContainer* pC = new TContainer;
+  erfd.id_session = 1;
+  erfd.sizeData   = 100;
+  TContainer* pC  = new TContainer;
   pC->SetData(NULL, sizeof(nsMelissa::TEventTryLogin) + erfd.sizeData);
   memcpy(pC->GetPtr(), &erfd, sizeof(nsMelissa::TEventTryLogin));
   // внутри DeveloperDLL
@@ -95,22 +72,18 @@ int main(int argc, char** argv)
 	GetByArg(argc,argv,d);
 	printf("port=%u,TimeSleep=%d,cnt=%d\n",d.port_client, d.time_sleep, d.cnt);
 
-  TL_START(true);
+  INetTransport* pNetTransport = g_MakerNetTransport.New();
 
-  INetTransport* pNetTransport = g_MakerNetTransport.New();TL_POINT("Make Net");
-
-  bool res = pNetTransport->Open(d.port_client);TL_POINT("Open");
+  bool res = pNetTransport->Open(d.port_client);
   pNetTransport->Register(Recv,       INetTransport::eRecv);
   pNetTransport->Register(Disconnect, INetTransport::eDisconnect);
 
-	pNetTransport->Start(); TL_POINT("Start");
+	pNetTransport->Start();
 
   TBreakPacket packetForSend;
 	if(pNetTransport->Connect(d.ip, PORT_SERVER))
 	{
-		TL_POINT("Before send");
 		unsigned int start = ht_GetMSCount();
-
 		for(int i = 0 ; i < CNT_RECV_PACKET ;)
 		{
 			for(int j = 0 ; j < d.cnt ; j++ )
@@ -123,15 +96,11 @@ int main(int argc, char** argv)
 					break;
 			}
 			ht_msleep(d.time_sleep);
+      if(IsDisconnect())
+        break;
 		}
 		start = ht_GetMSCount() - start;
-
-		TL_POINT("Send");
-		TL_PRINT("end",true);
-
 		printf("time=%d ms, v=%f \n",start,float(sizeof(packet)*CNT_RECV_PACKET)/(start*1000));
-		_getch();
-
 	}
 	pNetTransport->Stop();
 
@@ -140,6 +109,7 @@ int main(int argc, char** argv)
 
   g_MakerNetTransport.Delete(pNetTransport);
 
+	//_getch();
   return 0;
 }
 //-----------------------------------------------------------------------

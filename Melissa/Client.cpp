@@ -56,15 +56,15 @@ TClient::~TClient()
 //-------------------------------------------------------------------------
 void TClient::Login(unsigned int ip, unsigned short port, void* data, int size)
 {
-  TBreakPacket bp;
+  // формирование пакета
+  TBreakPacket bp;// контейнер для всего пакета
   bp.PushFront((char*)data,size);
-  TBaseHeader h;
+  THeaderLogin h;// заголовок Мелиссы
   h.type = C_TRY_LOGIN;
   h.from = eFromClient;
   bp.PushFront((char*)&h, sizeof(h));
   // отослать пакет для попытки авторизации
   mMasterSession = mManagerSession->Send(ip, port, bp, true);
-  //if(mMasterSession==NULL)
 }
 //-------------------------------------------------------------------------
 void TClient::Work()

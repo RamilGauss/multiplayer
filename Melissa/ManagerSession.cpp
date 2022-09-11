@@ -143,11 +143,11 @@ void TManagerSession::Work()
   unlockAccessSession();
 }
 //--------------------------------------------------------------------------------------------
-void TManagerSession::Send(unsigned int id_session, TBreakPacket bp, bool check)
+void TManagerSession::Send(unsigned int ID_Session, TBreakPacket bp, bool check)
 {
   lockAccessSession();
 
-  TSession* pSession = mNavigateSession.FindSessionByID(id_session);
+  TSession* pSession = mNavigateSession.FindSessionByID(ID_Session);
   if(pSession) 
     pSession->Send(bp,check);
   
@@ -190,10 +190,10 @@ unsigned int TManagerSession::GetSessionID(unsigned int ip, unsigned short port)
   return id;
 }
 //--------------------------------------------------------------------------------------------
-void TManagerSession::CloseSession(unsigned int id_session)
+void TManagerSession::CloseSession(unsigned int ID_Session)
 {
   lockAccessSession();
-  TSession* pSession = mNavigateSession.FindSessionByID(id_session);
+  TSession* pSession = mNavigateSession.FindSessionByID(ID_Session);
   mNavigateSession.Delete(pSession);
   unlockAccessSession();
 }
@@ -264,10 +264,10 @@ TSession* TManagerSession::NewSession(TIP_Port& ip_port)
   return pSession;
 }
 //--------------------------------------------------------------------------------------------
-bool TManagerSession::IsExist(unsigned int id_session)
+bool TManagerSession::IsExist(unsigned int ID_Session)
 {
   lockAccessSession();
-  TSession* pSession = mNavigateSession.FindSessionByID(id_session);
+  TSession* pSession = mNavigateSession.FindSessionByID(ID_Session);
   unlockAccessSession();
   return (pSession!=NULL);
 }
@@ -277,5 +277,18 @@ void TManagerSession::SetTimeLiveSession(unsigned int time_ms)
   mTimeLiveSession = time_ms;
 }
 //-------------------------------------------------------------------------
-
+bool TManagerSession::GetInfo(unsigned int ID_Session, TIP_Port& ip_port_out)
+{
+  bool res = false;
+  lockAccessSession();
+  TSession* pSession = mNavigateSession.FindSessionByID(ID_Session);
+  if(pSession)
+  {
+    res = true;
+    pSession->GetInfo(ip_port_out);
+  }
+  unlockAccessSession();
+  return res;
+}
+//-------------------------------------------------------------------------
 }

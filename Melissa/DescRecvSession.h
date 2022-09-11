@@ -40,7 +40,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 namespace nsMelissa
 {
-  class TSession;
 	struct TDescRecvSession : public INetTransport::TDescRecv
 	{
 		unsigned int id;

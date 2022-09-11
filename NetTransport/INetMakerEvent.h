@@ -52,9 +52,11 @@ public:
 
   virtual bool IsActive() = 0;
 
-  virtual void Add(int sock, INetControl* pControl) = 0;
+  virtual void Add(int sock, INetControl* pControl, 
+                   std::list<INetControl::eTypeEvent>& lEvent) = 0;
   virtual void Remove(int sock) = 0;
 
+protected:
   virtual void SetTypeEvent( int sock, std::list<INetControl::eTypeEvent>& lEvent) = 0;
 };
 

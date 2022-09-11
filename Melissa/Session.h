@@ -72,9 +72,9 @@ namespace nsMelissa
     void SetTransport(INetTransport* pTransport);
     void GetInfo(TIP_Port& pDesc);
     void SetInfo(TIP_Port& pDesc);
+    void Recv();
     unsigned int GetID(){return mID;}
     void SetID(unsigned int id){mID=id;}
-    void Recv();
   protected:
     void SendEcho();
     void RefreshLastTime();

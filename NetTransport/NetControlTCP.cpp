@@ -56,7 +56,7 @@ TNetControlTCP::TNetControlTCP()
 //------------------------------------------------------------------------------
 TNetControlTCP::~TNetControlTCP()
 {
-
+  Done();
 }
 //------------------------------------------------------------------------------
 void TNetControlTCP::Work(int sock, list<eTypeEvent>& event)
@@ -96,15 +96,27 @@ void TNetControlTCP::Work(int sock, list<eTypeEvent>& event)
 //------------------------------------------------------------------------------
 bool TNetControlTCP::Open( unsigned short port, unsigned char numNetWork )
 {
-  mSocketDown = mDevice.Open(true,  port, numNetWork);// как сервер, готовы к подсоединению
-  mSocketUp   = mDevice.Open(false, port, numNetWork);// а этот как клиент
+  mLocalPort  = port; 
+  mNumNetWork = numNetWork;
+
+  mSocketDown = mDevice.Open(true,  mLocalPort, mNumNetWork);// как сервер, готовы к подсоединению
+  //mSocketUp   = mDevice.Open(false, mLocalPort, mNumNetWork);
 
 	AddToMakerEvent(mSocketDown);
-  return (mSocketUp!=INVALID_SOCKET) && (mSocketDown!=INVALID_SOCKET);
+  return /*(mSocketUp!=INVALID_SOCKET) && */(mSocketDown!=INVALID_SOCKET);
 }
 //------------------------------------------------------------------------------
 bool TNetControlTCP::Connect(unsigned int ip, unsigned short port)
 {
+  // если был дисконнект, то попытаться заново открыть порт
+  if(mSocketUp==INVALID_SOCKET)
+    mSocketUp = mDevice.Open(false, mLocalPort, mNumNetWork);
+  if(mSocketUp==INVALID_SOCKET)
+  {
+    PRINTF("TNetControlTCP::Connect Open Up FAIL %u.\n", GET_ERROR);
+    return false;
+  }
+  //--------------------------------------------------------------------
   bool res = mDevice.Connect(mSocketUp, ip, port);
   if(res)
   {
@@ -177,8 +189,20 @@ void TNetControlTCP::AcceptEvent()
 //----------------------------------------------------------------------------------
 void TNetControlTCP::CloseEvent()
 {
-	TIP_Port ip_port;
-	GetIP_PortBySocket(ip_port, mWorkSocket);
+  TIP_Port ip_port;
+  GetIP_PortBySocket(ip_port, mWorkSocket);
+
+  lockSA();
+    mMapDIPSock.RemoveValue(mWorkSocket);
+  unlockSA();
+
+  RemoveFromMakerEvent(mWorkSocket);
+  Close(mWorkSocket);
+
+  if(mSocketUp==mWorkSocket)
+    mSocketUp = INVALID_SOCKET;
+  BL_ASSERT(mSocketDown!=mWorkSocket);
+  // теперь уведомить о разрыве соединения
 	NotifyDisconnect( (char*)&ip_port, sizeof(ip_port));
 }
 //----------------------------------------------------------------------------------
@@ -290,6 +314,7 @@ int TNetControlTCP::SearchEnd(TDescHistoryRead* pH, int beginPos)
     pH->Clear();
     return mReadSize - beginPos;
   }
+  // пакет собран
   int needSize = mustSize - pH->c.GetSize();// не хватает до полного пакета
   pH->c.AddData(&mBuffer[beginPos], needSize );
   Notify( mWorkSocket, pH->c.GetPtr(), pH->c.GetSize());
@@ -312,8 +337,12 @@ void TNetControlTCP::AddToMakerEvent(int sock)
 
 	// регистрация на получение событий
 	GetMakerEvent()->Remove(sock);
-	GetMakerEvent()->Add(sock, this);
-	GetMakerEvent()->SetTypeEvent(sock, lEvent);
+	GetMakerEvent()->Add(sock, this, lEvent);
+}
+//----------------------------------------------------------------------------------
+void TNetControlTCP::RemoveFromMakerEvent(int sock)
+{
+  GetMakerEvent()->Remove(sock);
 }
 //----------------------------------------------------------------------------------
 void TNetControlTCP::Notify(int sock, char* buffer, int size)
@@ -336,5 +365,22 @@ void TNetControlTCP::GetIP_PortBySocket( TIP_Port& ip_port, int& sock )
   {
     PRINTF_0("TNetControlTCP::GetIP_PortBySocket FAIL.\n");
   }
+}
+//----------------------------------------------------------------------------------
+void TNetControlTCP::Close(int sock)
+{
+  mDevice.Close(sock);
+}
+//----------------------------------------------------------------------------------
+void TNetControlTCP::Done()
+{
+  TMapD_IPInt::TKV_It bit = mMapDIPSock.Begin();
+  TMapD_IPInt::TKV_It eit = mMapDIPSock.End();
+  while( bit != eit )
+  {
+    mDevice.Close(bit->second);
+    bit++;
+  }
+  mDevice.Close(mSocketDown);
 }
 //----------------------------------------------------------------------------------

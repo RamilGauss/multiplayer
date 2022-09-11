@@ -63,6 +63,7 @@ public:
 protected:
   void OffNagl( int sock );
   void SetReUse( int sock);
+  void Set_HardClose( int sock );
 };
 
 

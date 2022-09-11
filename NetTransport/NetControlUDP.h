@@ -86,7 +86,7 @@ public:
   virtual bool Connect(unsigned int ip, unsigned short port);
   virtual void Send(unsigned int ip, unsigned short port, TBreakPacket bp);
 	virtual void Close(unsigned int ip, unsigned short port);
-
+  virtual void Close(int sock);
 protected:
 
 	bool IsStreamFresh(TIP_Port& ip_port);
@@ -100,6 +100,8 @@ protected:
 
 	void GetInfoConnect(TIP_Port& v, TInfoConnect& info_out);
 	void SetCntInByIP_Port(TIP_Port& ip_port, unsigned short cnt_in);
+
+  void Done();
 };
 
 

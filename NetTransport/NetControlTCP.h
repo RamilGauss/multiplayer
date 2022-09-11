@@ -121,7 +121,7 @@ public:
   virtual void Send(unsigned int ip, unsigned short port, TBreakPacket bp);
 
 	virtual void Close(unsigned int ip, unsigned short port);
-
+	virtual void Close(int sock);
 protected:
 	void ReadEvent();
 	void WriteEvent();
@@ -135,12 +135,15 @@ protected:
   int SearchEnd(TDescHistoryRead* pH, int beginPos);
 
 	void AddToMakerEvent(int sock);
+  void RemoveFromMakerEvent(int sock);
 
   TDescHistoryRead* GetHistoryBuffer(int sock);
 	int GetSocketByIpPort( TIP_Port& ip_port);
 	void GetIP_PortBySocket( TIP_Port& ip_port, int& sock );
 
 	void Notify(int sock, char* buffer, int size);
+
+  void Done();
 };
 
 
