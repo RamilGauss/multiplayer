@@ -10,12 +10,16 @@ See for more information License.h.
 
 #include <MyGUI.h>
 #include "BaseLayout/BaseLayout.h"
+#include "TypeDef.h"
 
+#ifdef WIN32
+#pragma warning(disable: 4275)
+#endif
 
 #define ASSIGN_WIDGET(name) \
 assignWidget(name,#name);
 
-class TBaseGUI :
+class GUI_EI TBaseGUI :
 	public wraps::BaseLayout
 {
 protected:

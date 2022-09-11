@@ -9,11 +9,12 @@ See for more information License.h.
 #define IGUI_CoreH
 
 #include <string>
+#include "TypeDef.h"
 
 struct TGUIDescWindow;
 struct TGUIDescToggleWindow;
 
-class IGUI_Core
+class GUI_EI IGUI_Core
 {
 
 public:

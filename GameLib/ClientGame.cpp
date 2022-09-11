@@ -102,7 +102,7 @@ bool TClientGame::Init(int variant_use, const char* sNameDLL, vector<string>& ar
   TMakerManagerStateMachine makerMStateManager;
   mCClient.mMStateMachine = makerMStateManager.New();
   //------------------------------------------
-  mCClient.mNetClient = new nsMelissa::TClient;
+  mCClient.mNetClient = new nsMMOEngine::TClient;
 	SetupNetComponent(mCClient.mNetClient);
   //------------------------------------------
   TMakerManagerObjectCommon makerMOC;

@@ -43,20 +43,20 @@ int main(int argc, char** argv)
 {
   //###
 #if 0
-  // внутри Melissa
-  nsMelissa::TEventTryLogin erfd;
+  // внутри MMOEngine
+  nsMMOEngine::TEventTryLogin erfd;
   erfd.id_session = 1;
   erfd.sizeData   = 100;
   TContainer* pC  = new TContainer;
-  pC->SetData(NULL, sizeof(nsMelissa::TEventTryLogin) + erfd.sizeData);
-  memcpy(pC->GetPtr(), &erfd, sizeof(nsMelissa::TEventTryLogin));
+  pC->SetData(NULL, sizeof(nsMMOEngine::TEventTryLogin) + erfd.sizeData);
+  memcpy(pC->GetPtr(), &erfd, sizeof(nsMMOEngine::TEventTryLogin));
   // внутри DeveloperDLL
-  nsMelissa::TBaseEvent* pBE = (nsMelissa::TBaseEvent*)pC->GetPtr();
+  nsMMOEngine::TBaseEvent* pBE = (nsMMOEngine::TBaseEvent*)pC->GetPtr();
   switch(pBE->mType)
   {
-    case nsMelissa::TBase::eTryLogin:
+    case nsMMOEngine::TBase::eTryLogin:
     {
-      nsMelissa::TEventTryLogin* pERFD = (nsMelissa::TEventTryLogin*)pBE;
+      nsMMOEngine::TEventTryLogin* pERFD = (nsMMOEngine::TEventTryLogin*)pBE;
       break;
     }
     default:;

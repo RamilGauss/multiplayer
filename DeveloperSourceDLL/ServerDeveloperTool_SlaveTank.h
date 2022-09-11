@@ -38,15 +38,15 @@ protected:
   void ParseCmd(std::vector<std::string>& arg);
   void InitLog();
 
-  void HandleFromMelissa(nsMelissa::TBaseEvent* pBE);
+  void HandleFromMMOEngine(nsMMOEngine::TBaseEvent* pBE);
   void HandleFromQt(nsEvent::TEvent* pEvent);
 
   void InitQtForm();
   void ConnectUpQt();
   void DisconnectUpQt();
 
-  void ConnectUp(nsMelissa::TEventConnectUp* pBE);
-  void DisconnectUp(nsMelissa::TEventDisconnectUp* pBE);
+  void ConnectUp(nsMMOEngine::TEventConnectUp* pBE);
+  void DisconnectUp(nsMMOEngine::TEventDisconnectUp* pBE);
 
 };
 

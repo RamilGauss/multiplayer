@@ -11,7 +11,7 @@ See for more information License.h.
 #include "IMakerTransport.h"
 #include "MakerNetTransport.h"
 
-class TWrapperMakerTransport : public nsMelissa::IMakerTransport
+class TWrapperMakerTransport : public nsMMOEngine::IMakerTransport
 {
   TMakerNetTransport_Boost maker;
 public:

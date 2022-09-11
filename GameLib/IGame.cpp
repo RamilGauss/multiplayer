@@ -99,8 +99,8 @@ void IGame::InitLog()
 
 	GetLogger()->Register(STR_NAME_GE);
 	GetLogger()->Register(STR_NAME_NET_TRANSPORT);
-	GetLogger()->Register(STR_NAME_MELISSA);
-	GetLogger()->Register(STR_NAME_ROBERT);
+	GetLogger()->Register(STR_NAME_MMO_ENGINE);
+	GetLogger()->Register(STR_NAME_PHYSIC_ENGINE);
 	GetLogger()->Register(STR_NAME_MOC);
   GetLogger()->Register(STR_NAME_QT_LIB);
 }
@@ -121,7 +121,7 @@ void IGame::Work(int variant_use, const char* sNameDLL, vector<string>& arg)// í
   Done();
 }
 //------------------------------------------------------------------------
-void IGame::SetupNetComponent(nsMelissa::TBase* pBase)
+void IGame::SetupNetComponent(nsMMOEngine::TBase* pBase)
 {
 	pBase->SetSelfID(ID_SRC_EVENT_NETWORK_ENGINE);
 	pBase->SetDstObject(this);

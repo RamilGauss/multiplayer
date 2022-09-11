@@ -96,13 +96,13 @@ bool TServerGame::Init(int variant_use, const char* sNameDLL, vector<string>& ar
 	switch(mType)
 	{
 		case eSlave:
-			mCServer.mNet.Base = new nsMelissa::TSlave;
+			mCServer.mNet.Base = new nsMMOEngine::TSlave;
 			break;
 		case eMaster:
-			mCServer.mNet.Base = new nsMelissa::TMaster;
+			mCServer.mNet.Base = new nsMMOEngine::TMaster;
 			break;
 		case eSuperServer:
-			mCServer.mNet.Base = new nsMelissa::TSuperServer;
+			mCServer.mNet.Base = new nsMMOEngine::TSuperServer;
 			break;
 	}	
 	SetupNetComponent(mCServer.mNet.Base);

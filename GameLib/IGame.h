@@ -63,7 +63,7 @@ protected:
   void Init();
   void InitLog();
   void SetupFuncAndDevToolByType(int variant_use);
-  void SetupNetComponent(nsMelissa::TBase* pBase);
+  void SetupNetComponent(nsMMOEngine::TBase* pBase);
 
   virtual bool Work() = 0;
   virtual bool Init(int variant_use, 

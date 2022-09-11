@@ -19,7 +19,7 @@ See for more information License.h.
 #include "../QtLib/IQtLib.h"
 
 using namespace std;
-using namespace nsMelissa;
+using namespace nsMMOEngine;
 
 TServerDeveloperTool_MasterTank::TServerDeveloperTool_MasterTank()
 {
@@ -83,7 +83,7 @@ void TServerDeveloperTool_MasterTank::Event(nsEvent::TEvent* pEvent)
   switch(pEvent->from)
   {
     case ID_SRC_EVENT_NETWORK_ENGINE:
-      HandleFromMelissa((TBaseEvent*)pEvent->container.GetPtr());
+      HandleFromMMOEngine((TBaseEvent*)pEvent->container.GetPtr());
       break;
     case ID_SRC_EVENT_PHYSIC_ENGINE:
       break;
@@ -95,7 +95,7 @@ void TServerDeveloperTool_MasterTank::Event(nsEvent::TEvent* pEvent)
   }
 }
 //---------------------------------------------------------------------------------------------
-void TServerDeveloperTool_MasterTank::HandleFromMelissa(TBaseEvent* pBE)
+void TServerDeveloperTool_MasterTank::HandleFromMMOEngine(TBaseEvent* pBE)
 {
   string sEvent;  
   switch(pBE->mType)
@@ -148,7 +148,7 @@ void TServerDeveloperTool_MasterTank::HandleFromMelissa(TBaseEvent* pBE)
       sEvent = "DestroyGroup";
       break;
   }
-  GetLogger("Inner")->WriteF_time("Melissa: %s.\n",sEvent.data());
+  GetLogger("Inner")->WriteF_time("MMOEngine: %s.\n",sEvent.data());
 }
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_MasterTank::InitLog()

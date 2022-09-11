@@ -20,7 +20,7 @@ See for more information License.h.
 #include "../GameLib/IBaseObjectCommon.h"
 #include "../GameLib/NameSrcEventID.h"
 #include "../GameLib/IManagerStateMachine.h"
-#include "../BigJack/IGraphicEngine.h"
+#include "../GraphicEngine/IGraphicEngine.h"
 #include "../GUI/IGUI.h"
 #include "Client.h"
 #include "GlobalParam.h"
@@ -34,7 +34,7 @@ See for more information License.h.
 using namespace std;
 using namespace nsStruct3D;
 using namespace nsEvent;
-using namespace nsMelissa;
+using namespace nsMMOEngine;
 using namespace nsKey;
 
 #define LOG_TIME_LOAD_EDITOR_MODEL
@@ -255,7 +255,7 @@ void TClientDeveloperTool_ClientTank::Event(nsEvent::TEvent* pEvent)
       HandleFromGUI((nsEvent::TBaseEvent*)pEvent->container.GetPtr());
       break;
 		case ID_SRC_EVENT_NETWORK_ENGINE:
-      HandleFromMelissa((nsMelissa::TBaseEvent*)pEvent->container.GetPtr());
+      HandleFromMMOEngine((nsMMOEngine::TBaseEvent*)pEvent->container.GetPtr());
       break;
     case ID_SRC_EVENT_PHYSIC_ENGINE:
       break;
@@ -268,7 +268,7 @@ void TClientDeveloperTool_ClientTank::Event(nsEvent::TEvent* pEvent)
   }
 }
 //---------------------------------------------------------------------------------------------
-void TClientDeveloperTool_ClientTank::HandleFromMelissa(nsMelissa::TBaseEvent* pBE)
+void TClientDeveloperTool_ClientTank::HandleFromMMOEngine(nsMMOEngine::TBaseEvent* pBE)
 {
   string sEvent;  
   switch(pBE->mType)
@@ -322,7 +322,7 @@ void TClientDeveloperTool_ClientTank::HandleFromMelissa(nsMelissa::TBaseEvent* p
       sEvent = "LeaveQueue";
       break;
   }
-  GetLogger("Inner")->WriteF_time("Melissa: %s.\n",sEvent.data());
+  GetLogger("Inner")->WriteF_time("MMOEngine: %s.\n",sEvent.data());
 }
 //---------------------------------------------------------------------------------------------
 void TClientDeveloperTool_ClientTank::ParseCmd(std::vector<std::string>& arg)

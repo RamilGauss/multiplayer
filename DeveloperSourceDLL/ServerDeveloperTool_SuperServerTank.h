@@ -42,15 +42,15 @@ protected:
   
   void InitLog();
 
-  void HandleFromMelissa(nsMelissa::TBaseEvent* pBE);
+  void HandleFromMMOEngine(nsMMOEngine::TBaseEvent* pBE);
   void HandleFromQt(nsEvent::TEvent* pEvent);
 
   void InitQtForm();
   void AddMasterQt();
   void DeleteMasterQt();
 
-  void ConnectDown(nsMelissa::TEventConnectDown* pEvent);
-  void DisconnectDown(nsMelissa::TEventDisconnectDown* pEvent);
+  void ConnectDown(nsMMOEngine::TEventConnectDown* pEvent);
+  void DisconnectDown(nsMMOEngine::TEventDisconnectDown* pEvent);
 };
 
 #endif

@@ -44,7 +44,7 @@ protected:
   void ParseCmd(std::vector<std::string>& arg);
 
   void InitLog();
-  void HandleFromMelissa(nsMelissa::TBaseEvent* pBE);
+  void HandleFromMMOEngine(nsMMOEngine::TBaseEvent* pBE);
   void HandleFromQt(nsEvent::TEvent* pEvent);
 
   void InitQtForm();
@@ -53,12 +53,12 @@ protected:
   void AddSlaveQt();
   void DeleteSlaveQt();
 
-  void TryLogin(nsMelissa::TEventTryLogin* pEvent);
-  void ConnectDown(nsMelissa::TEventConnectDown* pEvent);
-  void DisconnectDown(nsMelissa::TEventDisconnectDown* pEvent);
+  void TryLogin(nsMMOEngine::TEventTryLogin* pEvent);
+  void ConnectDown(nsMMOEngine::TEventConnectDown* pEvent);
+  void DisconnectDown(nsMMOEngine::TEventDisconnectDown* pEvent);
 
-  void ConnectUp(nsMelissa::TEventConnectUp* pBE);
-  void DisconnectUp(nsMelissa::TEventDisconnectUp* pBE);
+  void ConnectUp(nsMMOEngine::TEventConnectUp* pBE);
+  void DisconnectUp(nsMMOEngine::TEventDisconnectUp* pBE);
 };
 
 #endif

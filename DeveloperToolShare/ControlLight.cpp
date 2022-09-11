@@ -6,7 +6,7 @@ See for more information License.h.
 */
 
 #include "ControlLight.h"
-#include "..\BigJack\IGraphicEngine.h"
+#include "..\GraphicEngine\IGraphicEngine.h"
 #include "..\Share\BL_Debug.h"
 #include "..\Share\MakerCamera.h"
 #include "..\GameLib\IClientDeveloperTool.h"

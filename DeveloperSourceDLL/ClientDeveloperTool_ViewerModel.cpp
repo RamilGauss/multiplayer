@@ -11,7 +11,7 @@ See for more information License.h.
 #include "MakerObjectCommon.h"
 #include "../GameLib/IClientDeveloperTool.h"
 #include "../GameLib/IManagerObjectCommon.h"
-#include "../BigJack/IGraphicEngine.h"
+#include "../GraphicEngine/IGraphicEngine.h"
 #include "../GameLib/IBaseObjectCommon.h"
 #include "../GUI/IGUI.h"
 #include "Logger.h"
@@ -27,7 +27,7 @@ See for more information License.h.
 using namespace std;
 using namespace nsStruct3D;
 using namespace nsEvent;
-using namespace nsMelissa;
+using namespace nsMMOEngine;
 using namespace nsKey;
 
 #define LOG_TIME_LOAD_EDITOR_MODEL

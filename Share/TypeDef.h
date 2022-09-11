@@ -38,23 +38,35 @@ See for more information License.h.
 #if defined(TD_WINDOWS)
 
   #ifndef SHARE_EI
-    #define SHARE_EI         __declspec( dllimport )
+    #define SHARE_EI            __declspec( dllimport )
   #endif
-  #ifndef MELISSA_EI
-    #define MELISSA_EI       __declspec( dllimport )
+  #ifndef MMO_ENGINE_EI
+    #define MMO_ENGINE_EI       __declspec( dllimport )
   #endif
 	#ifndef NET_TRANSPORT_EI
-		#define NET_TRANSPORT_EI __declspec( dllimport )
+		#define NET_TRANSPORT_EI    __declspec( dllimport )
 	#endif
   #ifndef QTLIB_EI
-    #define QTLIB_EI         __declspec( dllimport )
+    #define QTLIB_EI            __declspec( dllimport )
+  #endif
+  #ifndef GUI_EI
+    #define GUI_EI              __declspec( dllimport )
+  #endif
+  #ifndef GRAPHIC_ENGINE_EI
+    #define GRAPHIC_ENGINE_EI   __declspec( dllimport )
+  #endif
+  #ifndef PHYSIC_ENGINE_EI
+    #define PHYSIC_ENGINE_EI    __declspec( dllimport )
   #endif
 #else //TD_WINDOWS
   
   #define   SHARE_EI
-  #define   MELISSA_EI
+  #define   MMO_ENGINE_EI
   #define   NET_TRANSPORT_EI
   #define   QTLIB_EI
+  #define   GUI_EI
+  #define   GRAPHIC_ENGINE_EI
+  #define   PHYSIC_ENGINE_EI
 
 #endif //TD_WINDOWS
 

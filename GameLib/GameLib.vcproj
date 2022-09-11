@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../BigJack;../Robert;./;../Share;../DXUT/Optional;../DXUT/Core;../GUI;../Melissa/Include;../NetTransport;../QtLib"
+				AdditionalIncludeDirectories="../GraphicEngine;../PhysicEngine;./;../Share;../DXUT/Optional;../DXUT/Core;../GUI;../MMOEngine/Include;../NetTransport;../QtLib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -49,7 +49,7 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="2"
 				DebugInformationFormat="4"
-				DisableSpecificWarnings="4251"
+				DisableSpecificWarnings="4251;4275"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -107,7 +107,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../BigJack;../Robert;./;../Share;../DXUT/Optional;../DXUT/Core;../GUI;../Melissa/Include;../NetTransport;../QtLib"
+				AdditionalIncludeDirectories="../GraphicEngine;../PhysicEngine;./;../Share;../DXUT/Optional;../DXUT/Core;../GUI;../MMOEngine/Include;../NetTransport;../QtLib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"

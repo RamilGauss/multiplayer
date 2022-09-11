@@ -34,20 +34,20 @@ public:
     IGUI*                   mGUI;           // GUI, MyGUI!
     IGraphicEngine*         mGraphicEngine; // BigJack отрисовка сцены
     IManagerStateMachine*   mMStateMachine; // конечный автомат, для HotKeys, Net (обработка пакетов)
-    nsMelissa::TClient*     mNetClient;     // Melissa
-    IPhysicEngine*          mPhysicEngine;  // Robert
+    nsMMOEngine::TClient*     mNetClient;   // MMOEngine
+    IPhysicEngine*          mPhysicEngine;  // PhysicEngine
     IManagerObjectCommon*   mMOC;           // GameLib
     IManagerTime*           mMTime;         // GameLib
     TComponentClient()
     {
-      mControlCamera = NULL; // Camera
-      mGraphicEngine = NULL; // BigJack отрисовка сцены
-      mGUI           = NULL; // MyGUI
-      mMStateMachine = NULL; // конечный автомат, для HotKeys
-      mNetClient     = NULL; // Melissa
-      mPhysicEngine  = NULL; // Robert
-      mMOC           = NULL; // GameLib
-      mMTime         = NULL; // GameLib
+      mControlCamera = NULL; 
+      mGraphicEngine = NULL; 
+      mGUI           = NULL; 
+      mMStateMachine = NULL; 
+      mNetClient     = NULL; 
+      mPhysicEngine  = NULL; 
+      mMOC           = NULL; 
+      mMTime         = NULL; 
     }
   };
 protected:

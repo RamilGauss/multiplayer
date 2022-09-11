@@ -26,18 +26,18 @@ public:
 	struct TComponentServer : public TComponent
 	{
 		union
-		{ // Melissa
-			nsMelissa::TSlave*       Slave;      
-			nsMelissa::TMaster*      Master;     
-			nsMelissa::TSuperServer* SuperServer;
-			nsMelissa::TBase*        Base;
+		{ // MMOEngine
+			nsMMOEngine::TSlave*       Slave;      
+			nsMMOEngine::TMaster*      Master;     
+			nsMMOEngine::TSuperServer* SuperServer;
+			nsMMOEngine::TBase*        Base;
 		}mNet;
 		IManagerScene*             mManagerScene;  // только для Slave
     IManagerConnectClient*     mManagerCClient;// клиенты, которые подсоединились
     IQtLib*                    mQtGUI;
 		TComponentServer()
 		{
-			mNet.Base       = NULL; // Melissa
+			mNet.Base       = NULL; // MMOEngine
 			mManagerScene   = NULL; 
       mManagerCClient = NULL;
       mQtGUI          = NULL;

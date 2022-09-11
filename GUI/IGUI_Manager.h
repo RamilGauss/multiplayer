@@ -10,8 +10,9 @@ See for more information License.h.
 
 #include <string>
 #include <boost/bimap/bimap.hpp>
+#include "TypeDef.h"
 
-class IGUI_ManagerForm
+class GUI_EI IGUI_ManagerForm
 {
 
   typedef boost::bimaps::bimap< std::string, void* > bmStrPtr;

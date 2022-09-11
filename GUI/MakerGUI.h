@@ -9,7 +9,8 @@ See for more information License.h.
 #define MakerGUIH
 
 #include "MacroMaker.h"
+#include "TypeDef.h"
 
-MACRO_MAKER_H_USE_SAME(GUI)
+MACRO_MAKER_H_EXPORT_USE_SAME(GUI_EI,GUI)
 
 #endif

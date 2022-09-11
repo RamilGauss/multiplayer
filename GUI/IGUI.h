@@ -10,8 +10,9 @@ See for more information License.h.
 
 #include "IGUI_Core.h"
 #include "IGUI_Manager.h"
+#include "TypeDef.h"
 
-class IGUI : public IGUI_Core,
+class GUI_EI IGUI : public IGUI_Core,
              public IGUI_ManagerForm
 {
 public:

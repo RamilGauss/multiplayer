@@ -15,7 +15,7 @@ See for more information License.h.
 #include "ClientMain.h"
 #include "GameRoomPrepare.h"
 #include "WaitForm.h"
-#include "../Melissa/Include/BaseEvent.h"
+#include "../MMOEngine/Include/BaseEvent.h"
 #include "InputCmdDevTool.h"
 
 class TClientMain;
@@ -57,7 +57,7 @@ protected:
   void ParseCmd(std::vector<std::string>& arg);
 
   void InitLog();
-  void HandleFromMelissa(nsMelissa::TBaseEvent* pBE);
+  void HandleFromMMOEngine(nsMMOEngine::TBaseEvent* pBE);
   void HandleFromGUI(nsEvent::TBaseEvent* pData);
 
 	void MouseEvent(nsEvent::TMouseEvent* pEvent);

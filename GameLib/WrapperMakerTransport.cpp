@@ -8,7 +8,7 @@ See for more information License.h.
 #include "WrapperMakerTransport.h"
 #include "INetTransport.h"
 
-using namespace nsMelissa;
+using namespace nsMMOEngine;
 
 TWrapperMakerTransport::TWrapperMakerTransport()
 {
