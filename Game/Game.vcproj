@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;..\Share;.\;..\DXUT\Core;..\DXUT\Optional;..\DXUT;..\Melissa;..\BigJack;..\Robert;..\GameLib"
+				AdditionalIncludeDirectories=".\GeneratedFiles;&quot;.\GeneratedFiles\$(ConfigurationName)&quot;;..\Share;.\;..\DXUT\Core;..\DXUT\Optional;..\DXUT;..\Melissa\Include;..\BigJack;..\Robert;..\GameLib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_WIN32_WINNT=0x0501"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

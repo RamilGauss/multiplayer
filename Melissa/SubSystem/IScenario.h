@@ -33,33 +33,30 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_MANAGER_SCENARIO_H
-#define MELISSA_MANAGER_SCENARIO_H
-
-#include <map>
-#include <string>
+#ifndef MELISSA_ISCENARIO_H
+#define MELISSA_ISCENARIO_H
 
 namespace nsMelissa
 {
-  class TScenario;
-
-  class TManagerScenario
+  class TManagerScenario;
+	class TManagerSession;
+  class IScenario
   {
-    typedef std::map<std::string, TScenario*> TMapStrPtr;
-    typedef TMapStrPtr::iterator TMapStrPtrIt;
-
-    TMapStrPtr mMapStrScenario;
-  public:
-    TManagerScenario();
-    ~TManagerScenario();
-
-    void Add(std::string& name);
-    TScenario* Get(std::string& name);
-    void Remove(std::string& name);
-
-    int GetCountActive();
   protected:
-    void Done();
+    TManagerScenario* mManagerScenario;
+		TManagerSession*  mManagerSession;// почти все сценарии используют его
+  public:
+    IScenario();
+    virtual ~IScenario();
+
+    void Begin();
+    void End();
+  protected:
+    friend class TManagerScenario;
+    void Init(TManagerScenario* pMSc, TManagerSession* pMS);
+  protected:
+    bool IsActive();
+    virtual void Work() = 0;
   };
 }
 

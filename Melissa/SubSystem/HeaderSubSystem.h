@@ -36,7 +36,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef MELISSA_HEADER_SUB_SYSTEM_H
 #define MELISSA_HEADER_SUB_SYSTEM_H
 
-namespace nsMelissaSubSystem
+namespace nsMelissa
 {
 	typedef enum{
 		eFromClient,

@@ -33,40 +33,60 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef DstEventH
-#define DstEventH
+#include "Slave.h"
 
-#include <string>
-#include <vector>
-#include "TypeDef.h"
-#include "DescEvent.h"
-#include "ListMultiThread.h"
-
-class TSrcEvent;
-
-/*
-  поглотитель событий. работает в связке с TSrcEvent
-  пронаследоваться,
-  зарегистрировать источники с помощью функции AddSrcEvent
-  и получать события через GetEvent
-*/
-
-class SHARE_EI TDstEvent
+namespace nsMelissa
 {
-  TListMultiThread<nsEvent::TEvent>* pListEvent;
 
-public:
+TSlave::TSlave()
+{
 
-  TDstEvent();
-  virtual ~TDstEvent();
+}
+//-------------------------------------------------------------------------
+TSlave::~TSlave()
+{
 
-  void AddEventInQueue(int from, void* data, int size, bool copy, unsigned int time_create_ms);
+}
+//-------------------------------------------------------------------------
+void TSlave::SaveContext(unsigned int id_session, void* data, int size)
+{
 
-protected:
-  // забрал объект - уничтожь с помощью delete
-  nsEvent::TEvent* GetEvent();
-  
-  void AddSrcEvent(TSrcEvent* pSrcEvent);
-};
+}
+//-------------------------------------------------------------------------
+unsigned int TSlave::GetClientKeyBySession(unsigned int id_session)
+{
+	return (unsigned int)(-1);
+}
+//-------------------------------------------------------------------------
+unsigned int TSlave::GetSessionByClientKey(unsigned int key)
+{
+  return INVALID_HANDLE_SESSION;
+}
+//-------------------------------------------------------------------------
+void TSlave::DisconnectInherit(unsigned int id_session)
+{
 
-#endif
+}
+//-------------------------------------------------------------------------
+int TSlave::GetCountDown()
+{
+	return 0;
+}
+//-------------------------------------------------------------------------
+bool TSlave::GetDescDown(int index, void* pDesc, int& sizeDesc)
+{
+	return false;
+}
+//-------------------------------------------------------------------------
+void TSlave::RecvFromClient(TDescRecvSession* pDesc)
+{
+
+}
+//-------------------------------------------------------------------------
+void TSlave::RecvFromMaster(TDescRecvSession* pDesc)
+{
+
+}
+//-------------------------------------------------------------------------
+
+}

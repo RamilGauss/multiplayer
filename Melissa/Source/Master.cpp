@@ -33,138 +33,87 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "Base.h"
-#include "Logger.h"
-#include "ManagerSession.h"
-#include "DescRecvSession.h"
-#include "HeaderSubSystem.h"
-#include "ManagerScenario.h"
-
-using namespace nsMelissaSubSystem;
+#include "Master.h"
 
 namespace nsMelissa
 {
-//-------------------------------------------------------------------------
-TBase::TBase()
-{
-  mManagerSession = new TManagerSession;
-  mManagerScenario = new TManagerScenario;
-  mLoadProcent    = 0;
-}
-//-------------------------------------------------------------------------
-TBase::~TBase()
-{
-  mManagerSession->GetCallbackRecv()->Unregister(this);
-  mManagerSession->GetCallbackDisconnect()->Unregister(this);
 
-  delete mManagerSession;
-  mManagerSession = NULL;
-  delete mManagerScenario;
-  mManagerScenario = NULL;
-}
-//-------------------------------------------------------------------------
-void TBase::Init(IMakerTransport* pMakerTransport)
-{
-  if(pMakerTransport==NULL)
-  {
-    GetLogger()->Get(STR_NAME_MELISSA)->WriteF_time("TBase::Init() pMakerTransport==NULL.\n");
-    BL_FIX_BUG();
-    return;
-  }
-  mManagerSession->SetMakerTransport(pMakerTransport);
-  mManagerSession->GetCallbackRecv()->Register(&TBase::Recv, this);
-  mManagerSession->GetCallbackDisconnect()->Register(&TBase::Disconnect, this);
-}
-//-------------------------------------------------------------------------
-bool TBase::Open(unsigned short port, unsigned char subNet)
-{
-  return mManagerSession->Start(port, subNet);
-}
-//-------------------------------------------------------------------------
-void TBase::SetLoad(int procent)
-{
-  mLoadProcent = procent;
-}
-//-------------------------------------------------------------------------
-void TBase::DisconnectUp()
+TMaster::TMaster()
 {
 
 }
 //-------------------------------------------------------------------------
-void TBase::SendUp(TBreakPacket bp, bool check)
+TMaster::~TMaster()
 {
 
 }
 //-------------------------------------------------------------------------
-bool TBase::IsConnectUp()
+unsigned int TMaster::TryCreateGroup(std::list<unsigned int>& l)
 {
-	return true;
+	return (unsigned int)(-1);
 }
 //-------------------------------------------------------------------------
-bool TBase::IsConnect(unsigned int id)
+void TMaster::DestroyGroup(unsigned int id_group)
 {
-  return mManagerSession->IsExist(id);
-}
-//-------------------------------------------------------------------------
-void TBase::Recv( TDescRecvSession* pDesc )
-{
-  TBaseHeader* pPacket = (TBaseHeader*)pDesc->data;
 
-  switch(pPacket->from)
-  {
-    case eFromClient:
-      RecvFromClient(pDesc);
-      break;
-    case eFromSlave:
-      RecvFromSlave(pDesc);
-      break;
-    case eFromMaster:
-      RecvFromMaster(pDesc);
-      break;
-    case eFromSuperServer:
-      RecvFromSuperServer(pDesc);
-      break;
-    default:BL_FIX_BUG();
-  }
 }
 //-------------------------------------------------------------------------
-void TBase::RecvFromClient(TDescRecvSession* pDesc)
+void TMaster::LeaveGroup(unsigned int id_client)
 {
-  BL_FIX_BUG();// если не переопределили, значит не ожидали
-}
-//-------------------------------------------------------------------------
-void TBase::RecvFromSlave(TDescRecvSession* pDesc)
-{
-  BL_FIX_BUG();
-}
-//-------------------------------------------------------------------------
-void TBase::RecvFromMaster(TDescRecvSession* pDesc)
-{
-  BL_FIX_BUG();
-}
-//-------------------------------------------------------------------------
-void TBase::RecvFromSuperServer(TDescRecvSession* pDesc)
-{
-  BL_FIX_BUG();
-}
-//-------------------------------------------------------------------------
-void TBase::Disconnect(unsigned int id)
-{
-  unsigned int* pID = new unsigned int(id);
-  mIDSessionNeedDisconnect.Add(pID);
-}
-//-------------------------------------------------------------------------
-void TBase::Work()
-{
-  //пробежка по ожидающим разъединения и удаление сессий
-  mManagerSession->Work();
 
-  WorkInherit();
 }
 //-------------------------------------------------------------------------
-void TBase::SetTimeLiveSession(unsigned int time_ms)
+void TMaster::GetListForGroup(unsigned int id_group, std::list<unsigned int>& l)
 {
-  mManagerSession->SetTimeLiveSession(time_ms);
+
 }
 //-------------------------------------------------------------------------
+void TMaster::SetResultLogin(bool res, unsigned int id_session, 
+                    unsigned int id_client, 
+                    void* resForClient, int sizeResClient)
+{
+
+}
+//-------------------------------------------------------------------------
+unsigned int TMaster::GetSlaveSessionByGroup(unsigned int id_group)
+{
+	return INVALID_HANDLE_SESSION;
+}
+//-------------------------------------------------------------------------
+void TMaster::SendToClient(unsigned int id_client, void* data, int size, bool check )
+{
+
+}
+//-------------------------------------------------------------------------
+void TMaster::DisconnectInherit(unsigned int id_session)
+{
+
+}
+//-------------------------------------------------------------------------
+int TMaster::GetCountDown()
+{
+	return 0;
+}
+//-------------------------------------------------------------------------
+bool TMaster::GetDescDown(int index, void* pDesc, int& sizeDesc)
+{
+	return false;
+}
+//-------------------------------------------------------------------------
+void TMaster::RecvFromClient(TDescRecvSession* pDesc)
+{
+  
+}
+//-------------------------------------------------------------------------
+void TMaster::RecvFromSlave(TDescRecvSession* pDesc)
+{
+  
+}
+//-------------------------------------------------------------------------
+void TMaster::RecvFromSuperServer(TDescRecvSession* pDesc)
+{
+  
+}
+//-------------------------------------------------------------------------
+
 }

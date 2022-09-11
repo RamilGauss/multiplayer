@@ -35,6 +35,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 
 #include "Logger.h"
+#include <boost/foreach.hpp>
 
 using namespace std;
 
@@ -70,13 +71,8 @@ void TLogger::Init(char* prefix)
 {
   sPrefix = prefix;
   
-  TMapStrPtr::iterator bit = mMapNamePtr.begin();
-  TMapStrPtr::iterator eit = mMapNamePtr.end();
-  while(bit!=eit)
-  {  
-    InitLogger(bit->second,bit->first.data());
-    bit++;
-  }
+  BOOST_FOREACH( TMapStrPtr::value_type& bit, mMapNamePtr )
+    InitLogger(bit.second,bit.first.data());
 }
 //-----------------------------------------------------------------------
 TSaveOnHDD* TLogger::Get(const char* nameLog)

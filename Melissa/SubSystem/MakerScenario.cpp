@@ -33,50 +33,46 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_MASTER_H
-#define MELISSA_MASTER_H
+#include "MakerScenario.h"
+#include "IScenario.h"
 
-#include <list>
-#include "ActiveServer.h"
+#include <stddef.h>
+#include "BL_Debug.h"
+#include "ScenarioLoginClient.h"
 
-namespace nsMelissa
+using namespace nsMelissa;
+
+TMakerScenario::TMakerScenario()
 {
-  class MELISSA_EI TMaster : public TActiveServer
-  {
-  public:
-    TMaster();
-    virtual ~TMaster();
-    
-    virtual unsigned int TryCreateGroup(std::list<unsigned int>& l);
-    virtual void DestroyGroup(unsigned int id_group);
-    virtual void LeaveGroup(unsigned int id_client);
-    virtual void GetListForGroup(unsigned int id_group, std::list<unsigned int>& l);
-    virtual void SetResultLogin(bool res, unsigned int id_session, 
-                                unsigned int id_client, 
-                                void* resForClient, int sizeResClient);
-    virtual unsigned int GetSlaveSessionByGroup(unsigned int id_group);
-    virtual void SendToClient(unsigned int id_client, void* data, int size, bool check = true);
-   
-		// BaseServer
-		struct TDescDownMaster
-		{
-			unsigned int id_session;
-		};
-		virtual int  GetCountDown();
-		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);
 
-	protected:
-    // Base
-    virtual void WorkInherit();
-
-    virtual void Disconnect(unsigned int id_session);
-
-    virtual void RecvFromClient(TDescRecvSession* pDesc);
-    virtual void RecvFromSlave(TDescRecvSession* pDesc);
-    virtual void RecvFromSuperServer(TDescRecvSession* pDesc);
-	private:
-
-  };
 }
+//----------------------------------------------------------------------
+TMakerScenario::~TMakerScenario()
+{
 
-#endif
+}
+//----------------------------------------------------------------------
+IScenario* TMakerScenario::New(unsigned int ID_Implementation)
+{
+  IScenario* pScenario = NULL;
+  switch(ID_Implementation)
+  {
+    case eLoginClient:
+      pScenario = new TScenarioLoginClient;
+      break;
+    case eSendUp:
+      //pScenario = new IScenario;
+      break;
+    case eRecommutationClient:
+      //pScenario = new IScenario;
+      break;
+    default:BL_FIX_BUG();
+  }
+  return pScenario;
+}
+//----------------------------------------------------------------------
+void TMakerScenario::Delete(IScenario* p)
+{
+  delete p;
+}
+//----------------------------------------------------------------------

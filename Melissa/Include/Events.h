@@ -40,9 +40,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 namespace nsMelissa
 {
-#define GET_PTR_AFTER_HEADER \
-  char* GetPtrAfterHeader(){return (char*)(this + 1);}
-
 #if defined( WIN32 )
 #pragma pack(push, 1)
 #endif
@@ -50,25 +47,20 @@ namespace nsMelissa
   struct MELISSA_EI TEventRecvFromDown : public TBaseEvent
   {
     TEventRecvFromDown();
-    GET_PTR_AFTER_HEADER
 
     unsigned int id_session;
-    int       sizeData;
   };
   //-------------------------------------------------------------
   struct MELISSA_EI TEventRecvFromUp : public TBaseEvent
   {
     TEventRecvFromUp();
-    GET_PTR_AFTER_HEADER
 
     unsigned int id_session;
-    int       sizeData;
   };
   //-------------------------------------------------------------
   struct MELISSA_EI TEventCreateGroup : public TBaseEvent
   {
     TEventCreateGroup();
-    GET_PTR_AFTER_HEADER
     
     unsigned int id_group;
   };
@@ -76,7 +68,6 @@ namespace nsMelissa
   struct MELISSA_EI TEventDisconnectUp : public TBaseEvent
   {
     TEventDisconnectUp();
-    GET_PTR_AFTER_HEADER
 
     unsigned int id_session;
   };
@@ -84,7 +75,6 @@ namespace nsMelissa
   struct MELISSA_EI TEventDisconnectDown : public TBaseEvent
   {
     TEventDisconnectDown();
-    GET_PTR_AFTER_HEADER
 
     unsigned int id_session;
   };
@@ -92,7 +82,6 @@ namespace nsMelissa
   struct MELISSA_EI TEventConnectUp : public TBaseEvent
   {
     TEventConnectUp();
-    GET_PTR_AFTER_HEADER
   
     unsigned int id_session;
   };
@@ -100,7 +89,6 @@ namespace nsMelissa
   struct MELISSA_EI TEventConnectDown : public TBaseEvent
   {
     TEventConnectDown();
-    GET_PTR_AFTER_HEADER
 
     unsigned int id_session;
   };
@@ -108,7 +96,6 @@ namespace nsMelissa
   struct MELISSA_EI TEventLeaveGroup: public TBaseEvent
   {
     TEventLeaveGroup();
-    GET_PTR_AFTER_HEADER
 
     unsigned int id_client;
   };
@@ -116,7 +103,6 @@ namespace nsMelissa
   struct MELISSA_EI TEventDestroyGroup : public TBaseEvent
   {
     TEventDestroyGroup();
-    GET_PTR_AFTER_HEADER
     
     unsigned int id_group;
   };
@@ -124,17 +110,14 @@ namespace nsMelissa
   struct MELISSA_EI TEventResultLogin : public TBaseEvent
   {
     TEventResultLogin();
-    GET_PTR_AFTER_HEADER
 
     TBase::tResultLogin res;
     int numInQueue;
-    int sizeData;
   };
   //-------------------------------------------------------------
   struct MELISSA_EI TEventError : public TBaseEvent
   {
     TEventError();
-    GET_PTR_AFTER_HEADER
 
     unsigned int code;
   };
@@ -142,25 +125,20 @@ namespace nsMelissa
   struct MELISSA_EI TEventRestoreContext : public TBaseEvent
   {
     TEventRestoreContext();
-    GET_PTR_AFTER_HEADER
 
     unsigned int id_session;
-    int sizeData;
   };
   //-------------------------------------------------------------
   struct MELISSA_EI TEventTryLogin : public TBaseEvent
   {
     TEventTryLogin();
-    GET_PTR_AFTER_HEADER
 
     unsigned int id_session;
-    int sizeData;
   };
   //-------------------------------------------------------------
   struct MELISSA_EI TEventSaveContext : public TBaseEvent
   {
     TEventSaveContext();
-    GET_PTR_AFTER_HEADER
       
     unsigned int id_session;
   };

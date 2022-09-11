@@ -33,43 +33,37 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_SLAVE_H
-#define MELISSA_SLAVE_H
+#ifndef MELISSA_DESC_RECV_SESSION_H
+#define MELISSA_DESC_RECV_SESSION_H
 
-#include "ActiveServer.h"
+#include "INetTransport.h"
+#include "Base.h"
+#include "Container.h"
+#include "HiTimer.h"
 
 namespace nsMelissa
 {
-  class MELISSA_EI TSlave : public TActiveServer
-  {
-
-  public:
-    TSlave();
-    virtual ~TSlave();
-    
-    virtual void SaveContext(unsigned int id_session, void* data, int size);
-    virtual unsigned int GetClientKeyBySession(unsigned int id_session);
-    virtual unsigned int GetSessionByClientKey(unsigned int key);
-
-		// BaseServer
-		struct TDescDownSlave
+	struct TDescRecvSession : public INetTransport::TDescRecv
+	{
+		unsigned int time_ms;
+    TContainer c;
+		unsigned int id;
+		TDescRecvSession()
 		{
-			unsigned int id_session;
-		};
-		virtual int  GetCountDown();
-		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);
-	protected:
-    // Base
-    virtual void WorkInherit();
-
-    virtual void Disconnect(unsigned int id_session);
-    
-    virtual void RecvFromClient(TDescRecvSession* pDesc);
-    virtual void RecvFromMaster(TDescRecvSession* pDesc);
-
-	private:
-
-  };
+      id = INVALID_HANDLE_SESSION;
+			time_ms  = ht_GetMSCount();
+		}
+    void Assign(TDescRecvSession* p)
+    {
+			time_ms  = p->time_ms;
+      id       = p->id;
+      ip_port  = p->ip_port;
+      type     = p->type;
+      // копирование данных
+      c.SetData(p->data, p->sizeData);
+      sizeData = p->sizeData;
+      data     = (char*)c.GetPtr();
+    }
+	};
 }
-
 #endif

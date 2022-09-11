@@ -598,7 +598,7 @@ void TBigJack::OnKeyEvent( UINT nChar, bool bKeyDown, bool bAltDown, void* pUser
   keyEvent.key      = mMapSysytemKeys.Get(nChar);
   keyEvent.modifier = bAltDown ? eAlt : eKeyEmpty;
   keyEvent.pressed  = bKeyDown;
-  AddEvent(&keyEvent,sizeof(TKeyEvent));
+  AddEventCopy(&keyEvent,sizeof(TKeyEvent));
 
   //GetLogger()->Get("GE")->WriteF("%d,%d\n",nChar,keyEvent.key);
 }
@@ -652,7 +652,7 @@ void TBigJack::OnMouseEvent( int state, int nMouseWheelDelta,
   mouseEvent.x = xPos;
   mouseEvent.y = yPos;
 
-  AddEvent(&mouseEvent,sizeof(TMouseEvent));
+  AddEventCopy(&mouseEvent,sizeof(TMouseEvent));
 }
 //--------------------------------------------------------------------------------------
 void TBigJack::SetTitleWindow(const char* sTitle)

@@ -49,11 +49,14 @@ TDstEvent::~TDstEvent()
   delete pListEvent;
 }
 //------------------------------------------------------------
-void TDstEvent::AddEventInQueue(int from, void* data, int size)
+void TDstEvent::AddEventInQueue(int from, void* data, int size, bool copy, unsigned int time_create_ms)
 {
-  TEvent* pEvent = new TEvent;
+  TEvent* pEvent = new TEvent(time_create_ms);
   pEvent->from = from;
-  pEvent->container.SetData((char*)data,size);
+  if(copy)
+    pEvent->container.SetData((char*)data,size);
+  else
+    pEvent->container.Entrust((char*)data,size);
   pListEvent->Add(pEvent);
 }
 //------------------------------------------------------------

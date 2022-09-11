@@ -33,39 +33,27 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_CLIENT_H
-#define MELISSA_CLIENT_H
+#ifndef MELISSA_BASE_EVENT_H
+#define MELISSA_BASE_EVENT_H
 
 #include "Base.h"
+#include "Container.h"
 
 namespace nsMelissa
 {
-  class MELISSA_EI TClient : public TBase
+#if defined( WIN32 )
+#pragma pack(push, 1)
+#endif
+  struct MELISSA_EI TBaseEvent
   {
-    unsigned int mMasterSessionID;
-    unsigned int mSlaveSessionID;
-
-    std::string sNameLogin;
-    std::string sNameRecommutation;
-
-  public:
-
-    TClient();
-    virtual ~TClient();
-
-    virtual void Login(unsigned int ip, unsigned short port, void* data, int size);
-
-	protected:
-    // Base
-    virtual void WorkInherit();
-
-    virtual void Disconnect(unsigned int id_session);
-
-    virtual void RecvFromSlave(TDescRecvSession* pDesc);
-    virtual void RecvFromMaster(TDescRecvSession* pDesc);
-	private:
-
+    // переназначить в наследуемом классе
+    TBase::tTypeEvent mType;
+		TContainer c;
   };
+#if defined( WIN32 )
+#pragma pack(pop)
+#endif
+
 }
 
 #endif

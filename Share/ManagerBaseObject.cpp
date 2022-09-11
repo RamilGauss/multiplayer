@@ -42,6 +42,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "StorePathResources.h"
 #include "MapXML_Field.h"
 
+#include <boost/foreach.hpp>
+
 using namespace std;
 
 const char* NameJointFile = "joint.xml";
@@ -84,13 +86,9 @@ void TManagerBaseObject::SetTree(IBaseObject* pObject)
 //-------------------------------------------------------------------------------------------
 void TManagerBaseObject::Done()
 {
-  TMapID_Tree::iterator bit = mMapID_Tree.begin();
-  TMapID_Tree::iterator eit = mMapID_Tree.end();
-  while(bit!=eit)
-  {
-    delete bit->second;
-    bit++;
-  }
+	BOOST_FOREACH( TMapID_Tree::value_type &bit, mMapID_Tree )
+    delete bit.second;
+
   mMapID_Tree.clear();
 }
 //-------------------------------------------------------------------------------------------
@@ -113,12 +111,7 @@ bool TManagerBaseObject::LoadListPath()
 //--------------------------------------------------------------------------------------
 void TManagerBaseObject::PrepareForTreeJoint()
 {
-  TMapID_Path::iterator bit = mMapID_Path.begin();
-  TMapID_Path::iterator eit = mMapID_Path.end();
-  while(bit!=eit)
-  {
-    (*bit).second += NameJointFile;
-    bit++;
-  }
+	BOOST_FOREACH(TMapID_Path::value_type &bit, mMapID_Path)
+		bit.second += NameJointFile;
 }
 //--------------------------------------------------------------------------------------

@@ -33,40 +33,38 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef DstEventH
-#define DstEventH
+#ifndef MELISSA_CLIENT_H
+#define MELISSA_CLIENT_H
 
-#include <string>
-#include <vector>
-#include "TypeDef.h"
-#include "DescEvent.h"
-#include "ListMultiThread.h"
+#include "Base.h"
 
-class TSrcEvent;
-
-/*
-  поглотитель событий. работает в связке с TSrcEvent
-  пронаследоваться,
-  зарегистрировать источники с помощью функции AddSrcEvent
-  и получать события через GetEvent
-*/
-
-class SHARE_EI TDstEvent
+namespace nsMelissa
 {
-  TListMultiThread<nsEvent::TEvent>* pListEvent;
+  class MELISSA_EI TClient : public TBase
+  {
+    unsigned int mMasterSessionID;
+    unsigned int mSlaveSessionID;
 
-public:
+    std::string sNameLogin;
+    std::string sNameRecommutation;
+    std::string sNameSend;
 
-  TDstEvent();
-  virtual ~TDstEvent();
+  public:
 
-  void AddEventInQueue(int from, void* data, int size, bool copy, unsigned int time_create_ms);
+    TClient();
+    virtual ~TClient();
 
-protected:
-  // забрал объект - уничтожь с помощью delete
-  nsEvent::TEvent* GetEvent();
-  
-  void AddSrcEvent(TSrcEvent* pSrcEvent);
-};
+    virtual void Login(unsigned int ip, unsigned short port, void* data, int size);
+
+	protected:
+    // Base
+    virtual void DisconnectInherit(unsigned int id);
+
+    virtual void RecvFromSlave(TDescRecvSession* pDesc);
+    virtual void RecvFromMaster(TDescRecvSession* pDesc);
+	private:
+
+  };
+}
 
 #endif

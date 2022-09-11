@@ -33,32 +33,41 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "Scenario.h"
+#ifndef MELISSA_SLAVE_H
+#define MELISSA_SLAVE_H
 
-using namespace nsMelissa;
+#include "ActiveServer.h"
 
-TScenario::TScenario()
+namespace nsMelissa
 {
+  class MELISSA_EI TSlave : public TActiveServer
+  {
 
-}
-//---------------------------------------------------------------------
-TScenario::~TScenario()
-{
+  public:
+    TSlave();
+    virtual ~TSlave();
+    
+    virtual void SaveContext(unsigned int id_session, void* data, int size);
+    virtual unsigned int GetClientKeyBySession(unsigned int id_session);
+    virtual unsigned int GetSessionByClientKey(unsigned int key);
 
-}
-//---------------------------------------------------------------------
-bool TScenario::IsBegin() const
-{
-  return false;
-}
-//---------------------------------------------------------------------
-void TScenario::Begin()
-{
+		// BaseServer
+		struct TDescDownSlave
+		{
+			unsigned int id_session;
+		};
+		virtual int  GetCountDown();
+		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);
+	protected:
+    // Base
+    virtual void DisconnectInherit(unsigned int id_session);
+    
+    virtual void RecvFromClient(TDescRecvSession* pDesc);
+    virtual void RecvFromMaster(TDescRecvSession* pDesc);
 
-}
-//---------------------------------------------------------------------
-void TScenario::End()
-{
+	private:
 
+  };
 }
-//---------------------------------------------------------------------
+
+#endif

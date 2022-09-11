@@ -40,7 +40,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "TypeDef.h"
 
 /*
-   опирующий контейнер
+   опирующий или берущий под контроль пам€ть контейнер
   копировать внутрь контейнера данные,
   объект сам освободит
 */
@@ -55,6 +55,8 @@ public:
   virtual ~TContainer();
   // освободить пам€ть
   virtual void Done();
+  // отдать под контроль кусок пам€ти, пам€ть должна быть выделена new TClass[N]
+  virtual void Entrust(char* p, int s);
   // копировать внутрь данные
   virtual void SetData(char* p, int s);
   // получить доступ к данным

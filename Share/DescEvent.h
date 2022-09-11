@@ -52,9 +52,12 @@ struct SHARE_EI TEvent
 	unsigned int time_ms;
   int from;
   TContainer container;
-	TEvent()
+	TEvent(unsigned int time_create_ms)
 	{
-		time_ms = ht_GetMSCount();
+    if(time_create_ms!=-1)
+		  time_ms = ht_GetMSCount();
+    else
+      time_ms = time_create_ms;
 	}
 };
 

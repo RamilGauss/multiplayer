@@ -92,17 +92,30 @@ public:
   virtual bool Save(const char* sPath = NULL) = 0;
 
   // инвариантное чтение
-  bool ReadFloat(const char* name, int num, float & v);
-  bool ReadInt(const char* name, int num, int & v);
-  bool ReadUint(const char* name, int num, unsigned int & v);
-  bool ReadFloat3(const char* name, int num, float * v3);// разделитель ";"
-  bool ReadFloat4(const char* name, int num, float * v4);
+  bool ReadFloat(const char* name, int num, float& v);
+  bool ReadInt(const char* name, int num, int& v);
+  bool ReadUint(const char* name, int num, unsigned int& v);
+  bool ReadFloat3(const char* name, int num, float* v3);// разделитель ";"
+  bool ReadFloat4(const char* name, int num, float* v4);
 
-  bool ReadFloat(int index, float & v);
-  bool ReadInt(int index, int & v);
-  bool ReadUint(int index, unsigned int & v);
-  bool ReadFloat3(int index, float * v3);// разделитель ";"
-  bool ReadFloat4(int index, float * v4);
+  bool ReadFloat(int index, float& v);
+  bool ReadInt(int index, int& v);
+  bool ReadUint(int index, unsigned int& v);
+  bool ReadFloat3(int index, float* v3);// разделитель ";"
+  bool ReadFloat4(int index, float* v4);
+
+  // инвариантная запись
+  bool WriteFloat(const char* name, int num, float v);
+  bool WriteInt(const char* name, int num, int v);
+  bool WriteUint(const char* name, int num, unsigned int v);
+  bool WriteFloat3(const char* name, int num, float* v3);// разделитель ";"
+  bool WriteFloat4(const char* name, int num, float* v4);
+
+  bool WriteFloat(int index, float v);
+  bool WriteInt(int index, int v);
+  bool WriteUint(int index, unsigned int v);
+  bool WriteFloat3(int index, float* v3);// разделитель ";"
+  bool WriteFloat4(int index, float* v4);
 
 };
 

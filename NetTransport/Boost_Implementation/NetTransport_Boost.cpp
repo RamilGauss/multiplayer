@@ -176,10 +176,9 @@ void TNetTransport_Boost::CloseAll()
   mUDP.Close();
   mAcceptor.Close();
 
-  std::pair<TIP_Port,TNetControlTCP*> bit;
   mMutexMapIP_TCP.lock();
   //---------------------
-  BOOST_FOREACH( bit, mMapIP_TCP )
+	BOOST_FOREACH( TMapIP_Ptr::value_type &bit, mMapIP_TCP )
     bit.second->Close();
   //---------------------
   mMutexMapIP_TCP.unlock();
@@ -187,8 +186,7 @@ void TNetTransport_Boost::CloseAll()
 //----------------------------------------------------------------------------------
 void TNetTransport_Boost::DeleteMapControlTCP()
 {
-  std::pair<TIP_Port,TNetControlTCP*> bit;
-  BOOST_FOREACH( bit, mMapIP_TCP )
+  BOOST_FOREACH( TMapIP_Ptr::value_type &bit, mMapIP_TCP )
     delete bit.second;
   
   mMapIP_TCP.clear();

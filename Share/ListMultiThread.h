@@ -212,6 +212,7 @@ public:
     return dNext;
   }
   //----------------------------------------------
+  // копирует внутрь
   TClass** Add(TClass* d)
   {
     if(d==NULL) {BL_FIX_BUG();return NULL;}

@@ -36,12 +36,15 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef MELISSA_BASE_H
 #define MELISSA_BASE_H
 
-#include "SrcEvent.h"
 #include "TypeDef.h"
+
+#include <map>
+#include <set>
+
+#include "SrcEvent.h"
 #include "IMakerTransport.h"
 #include "BreakPacket.h"
 #include "ListMultiThread.h"
-#include <map>
 
 #define STR_NAME_MELISSA "Melissa"
 #define INVALID_HANDLE_SESSION 0
@@ -50,25 +53,24 @@ namespace nsMelissa
 {
   class TManagerSession;
   class TManagerScenario;
+  class TScenarioSendUp;
   struct TDescRecvSession;
   class MELISSA_EI TBase : public TSrcEvent
   {
+    typedef std::set<TManagerScenario*> TSetPtr;
+    TSetPtr mSetManagerScenario;
+
   protected:
-    struct TStateConnect
-    {
-      //std::list<TPacket*> listWaitPacket;
-      bool flg;
-    };
-
-    typedef std::map<unsigned int,TStateConnect*> TMapUintPtr;
-    typedef TMapUintPtr::iterator TMapUintPtrIt;
-    TMapUintPtr mMapStateConnect;
-
     typedef TListMultiThread<unsigned int> TListUint;
-    TListUint mIDSessionNeedDisconnect;
+    TListUint mIDSessionDisconnect;
+
+    typedef TListMultiThread<TDescRecvSession> TListRecvPacket;
+    TListRecvPacket mRecvPacket;
 
     TManagerSession* mManagerSession;
-    TManagerScenario* mManagerScenario;
+
+    //TScenarioSendUp* mScenarioSendUp;
+    //std::string sNameSendUp;
 
     int mLoadProcent;
   public:
@@ -112,18 +114,22 @@ namespace nsMelissa
 
 	protected:
 
-    virtual void WorkInherit() = 0;
-
     void Recv( TDescRecvSession* pDescRecvSession );
-    
+    void Disconnect(unsigned int id);
+
     virtual void RecvFromClient(TDescRecvSession* pDesc);
     virtual void RecvFromSlave(TDescRecvSession* pDesc);
     virtual void RecvFromMaster(TDescRecvSession* pDesc);
     virtual void RecvFromSuperServer(TDescRecvSession* pDesc);
 
-    virtual void Disconnect(unsigned int id);
-	private:
+    virtual void DisconnectInherit(unsigned int id) = 0;
+		virtual void WorkInherit(){};
 
+    TManagerScenario* AddManagerScenario();
+    void RemoveManagerScenario(TManagerScenario* pMSc);
+	private:
+    void HandleListDisconnect();
+    void HandleListRecv();
   };
 }
 

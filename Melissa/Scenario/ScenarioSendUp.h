@@ -33,21 +33,25 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_DESC_RECV_SESSION_H
-#define MELISSA_DESC_RECV_SESSION_H
+#ifndef MELISSA_SCENARIO_SENDUP_H
+#define MELISSA_SCENARIO_SENDUP_H
 
-#include "INetTransport.h"
-#include "Base.h"
+#include "IScenario.h"
+#include "BreakPacket.h"
 
 namespace nsMelissa
 {
-	struct TDescRecvSession : public INetTransport::TDescRecv
-	{
-		unsigned int id;
-		TDescRecvSession()
-		{
-      id = INVALID_HANDLE_SESSION;
-		}
-	};
+  class TScenarioSendUp : public IScenario
+  {
+  public:
+    TScenarioSendUp();
+    virtual ~TScenarioSendUp();
+    
+    void Send(TBreakPacket bp, bool check);
+
+  protected:
+    virtual void Work();
+  };
 }
+
 #endif

@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Share"
+				AdditionalIncludeDirectories="..\Share;.\Include;.\Source;.\SubSystem;.\Scenario"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;MELISSA_EI=__declspec(dllexport);MELISSA_EXPORTS;_WIN32_WINNT=0x0501"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -179,77 +179,39 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ActiveServer.cpp"
+				RelativePath=".\Source\ActiveServer.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Base.cpp"
+				RelativePath=".\Source\Base.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\BaseServer.cpp"
+				RelativePath=".\Source\BaseServer.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Client.cpp"
+				RelativePath=".\Source\Client.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\dllmain.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-						CompileAsManaged="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-						CompileAsManaged="0"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Events.cpp"
+				RelativePath=".\Source\Events.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ManagerScenario.cpp"
+				RelativePath=".\Source\Master.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ManagerSession.cpp"
+				RelativePath=".\Source\Slave.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Master.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NavigateSession.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Scenario.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Session.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Slave.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SuperServer.cpp"
+				RelativePath=".\Source\SuperServer.cpp"
 				>
 			</File>
 		</Filter>
@@ -259,75 +221,127 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\ActiveServer.h"
+				RelativePath=".\Include\ActiveServer.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Base.h"
+				RelativePath=".\Include\Base.h"
 				>
 			</File>
 			<File
-				RelativePath=".\BaseEvent.h"
+				RelativePath=".\Include\BaseEvent.h"
 				>
 			</File>
 			<File
-				RelativePath=".\BaseServer.h"
+				RelativePath=".\Include\BaseServer.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Client.h"
+				RelativePath=".\Include\Client.h"
 				>
 			</File>
 			<File
-				RelativePath=".\DescRecvSession.h"
+				RelativePath=".\Include\Events.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Events.h"
+				RelativePath=".\Include\IMakerTransport.h"
 				>
 			</File>
 			<File
-				RelativePath=".\HeaderSubSystem.h"
+				RelativePath=".\Include\Master.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IMakerTransport.h"
+				RelativePath=".\Include\Slave.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ManagerScenario.h"
+				RelativePath=".\Include\SuperServer.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="SubSystem"
+			>
+			<File
+				RelativePath=".\SubSystem\DescRecvSession.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ManagerSession.h"
+				RelativePath=".\SubSystem\HeaderSubSystem.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Master.h"
+				RelativePath=".\SubSystem\IScenario.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\NavigateSession.h"
+				RelativePath=".\SubSystem\IScenario.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Scenario.h"
+				RelativePath=".\SubSystem\MakerScenario.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Session.h"
+				RelativePath=".\SubSystem\MakerScenario.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Slave.h"
+				RelativePath=".\SubSystem\ManagerScenario.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\SuperServer.h"
+				RelativePath=".\SubSystem\ManagerScenario.h"
 				>
 			</File>
 			<File
-				RelativePath=".\TypePacket.h"
+				RelativePath=".\SubSystem\ManagerSession.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SubSystem\ManagerSession.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SubSystem\NavigateSession.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SubSystem\NavigateSession.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SubSystem\Session.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SubSystem\Session.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SubSystem\TypePacket.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Scenario"
+			>
+			<File
+				RelativePath=".\Scenario\ScenarioLoginClient.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Scenario\ScenarioLoginClient.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Scenario\ScenarioSendUp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Scenario\ScenarioSendUp.h"
 				>
 			</File>
 		</Filter>

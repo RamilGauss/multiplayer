@@ -33,40 +33,58 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef DstEventH
-#define DstEventH
+#ifndef MELISSA_MANAGER_SCENARIO_H
+#define MELISSA_MANAGER_SCENARIO_H
 
+#include <map>
 #include <string>
-#include <vector>
-#include "TypeDef.h"
-#include "DescEvent.h"
-#include "ListMultiThread.h"
+#include <list>
 
-class TSrcEvent;
+#include "MakerScenario.h"
 
-/*
-  поглотитель событий. работает в связке с TSrcEvent
-  пронаследоваться,
-  зарегистрировать источники с помощью функции AddSrcEvent
-  и получать события через GetEvent
-*/
+// Not Thread Safe! использовать в одном потоке
 
-class SHARE_EI TDstEvent
+namespace nsMelissa
 {
-  TListMultiThread<nsEvent::TEvent>* pListEvent;
+  class IScenario;
+	class TManagerSession;
+  class TManagerScenario
+  {
+    typedef std::map<std::string, IScenario*> TMapStrPtr;
+    typedef TMapStrPtr::iterator TMapStrPtrIt;
 
-public:
+    typedef std::list<IScenario*> TListPtr;
+    typedef TListPtr::iterator TListPtrIt;
 
-  TDstEvent();
-  virtual ~TDstEvent();
+    TMapStrPtr mMapStrScenario;
+    TListPtr   mListWaitActivation;
+    IScenario* pActiveScenario;// активный на данный момент 
+    
+    TMakerScenario mMakerScenario;
 
-  void AddEventInQueue(int from, void* data, int size, bool copy, unsigned int time_create_ms);
+		// только для использования в сценариях
+		TManagerSession* mManagerSession;
+  public:
+    TManagerScenario(TManagerSession* pMS);
+    ~TManagerScenario();
 
-protected:
-  // забрал объект - уничтожь с помощью delete
-  nsEvent::TEvent* GetEvent();
-  
-  void AddSrcEvent(TSrcEvent* pSrcEvent);
-};
+    IScenario* Add(unsigned int ID_Implementation, std::string& name);
+    void Remove(std::string& name);
+
+    // для обработки внутренних событий
+    void Work();
+
+    IScenario* GetActive();
+  protected:
+    friend class IScenario;
+    void Activate(IScenario* pNeedActive);
+    void Disactivate();
+  protected:
+    // есть ли активный сценарий, кол-во активных может быть либо 0 либо 1.
+    IScenario* Get(std::string& name);
+
+    void Done();
+  };
+}
 
 #endif

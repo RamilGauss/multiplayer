@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../Share;../DeveloperToolShare;../BigJack;../Robert;../GUI;../MyGUIEngine/include;../Common;../Melissa"
+				AdditionalIncludeDirectories="../Share;../DeveloperToolShare;../BigJack;../Robert;../GUI;../MyGUIEngine/include;../Common;../Melissa/Include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;VIEWERMODEL_EXPORTS;_WIN32_WINNT=0x0501"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

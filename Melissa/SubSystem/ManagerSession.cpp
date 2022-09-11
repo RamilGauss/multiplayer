@@ -189,7 +189,7 @@ void TManagerSession::Recv( INetTransport::TDescRecv* pDescRecv )
   TDescRecvSession descRecvSession;
   *((INetTransport::TDescRecv*)&descRecvSession) = *pDescRecv;
   descRecvSession.id = id;
-  // данные, пришедшие от сессии содержат заголовок
+  // данные, пришедшие от сессии содержат заголовок, учесть при формировании
   TSession::THeader* pHeader = (TSession::THeader*)descRecvSession.data;
   switch(pHeader->type)
   {

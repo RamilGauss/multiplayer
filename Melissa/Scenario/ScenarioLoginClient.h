@@ -33,47 +33,20 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_ITRANSPORT_H
-#define MELISSA_ITRANSPORT_H
+#ifndef MELISSA_SCENARIO_LOGIN_CLIENT_H
+#define MELISSA_SCENARIO_LOGIN_CLIENT_H
 
-#include "CallBackRegistrator.h"
-#include "ShareMisc.h"
-#include "TypeDef.h"
+#include "IScenario.h"
 
 namespace nsMelissa
 {
-  class MELISSA_EI ITransport
+  class TScenarioLoginClient : public IScenario
   {
-
   public:
-    //типы callback вызовов
-    typedef enum{
-      eRcvPacket  = 0,		   
-      eRcvStream  = 1,
-      eDisconnect = 2,
-    }tTypeEventTransport;
-
-    // callback вернет данную структуру
-    struct TDescRecv
-    {
-      TIP_Port ip_port;
-      char* data;
-      int   sizeData;
-    };
-
-    ITransport(){}
-    virtual ~ITransport(){}
-    
-    virtual void InitLog(char* pPathLog) = 0;
-    virtual bool Open(unsigned char subNet, unsigned short port ) = 0;
-   	virtual void Send(unsigned int ip, unsigned short port, void* packet, int size, bool check = true) = 0;
-    virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
-    virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, int type) = 0;
-    virtual void Start() = 0;
-    virtual void Stop()  = 0;
-		virtual bool IsActive() = 0;
-    virtual bool Synchro(unsigned int ip, unsigned short port) = 0; // вызов только для клиента
+    TScenarioLoginClient();
+    ~TScenarioLoginClient();
+  protected:
+    virtual void Work();
   };
 }
-
 #endif

@@ -33,65 +33,22 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "Client.h"
-#include "ManagerSession.h"
-#include "TypePacket.h"
-#include "HeaderSubSystem.h"
-#include "ManagerScenario.h"
+#include "ScenarioLoginClient.h"
 
-using namespace nsMelissaSubSystem;
-using namespace std;
+using namespace nsMelissa;
 
-namespace nsMelissa
-{
-
-TClient::TClient():
-sNameLogin("login"),
-sNameRecommutation("recommutation")
-{
-  mMasterSessionID = INVALID_HANDLE_SESSION;
-
-  mManagerScenario->Add(sNameLogin);
-  mManagerScenario->Add(sNameRecommutation);
-}
-//-------------------------------------------------------------------------
-TClient::~TClient()
+TScenarioLoginClient::TScenarioLoginClient()
 {
 
 }
-//-------------------------------------------------------------------------
-void TClient::Login(unsigned int ip, unsigned short port, void* data, int size)
-{
-  // формирование пакета
-  TBreakPacket bp;// контейнер для всего пакета
-  bp.PushFront((char*)data,size);
-  THeaderLogin h;// заголовок Мелиссы
-  h.type = C_TRY_LOGIN;
-  h.from = eFromClient;
-  bp.PushFront((char*)&h, sizeof(h));
-  // отослать пакет для попытки авторизации
-  mMasterSessionID = mManagerSession->Send(ip, port, bp, true);
-}
-//-------------------------------------------------------------------------
-void TClient::WorkInherit()
+//--------------------------------------------------------------
+TScenarioLoginClient::~TScenarioLoginClient()
 {
 
 }
-//-------------------------------------------------------------------------
-void TClient::Disconnect(unsigned int id_session)
+//--------------------------------------------------------------
+void TScenarioLoginClient::Work()
 {
 
 }
-//-------------------------------------------------------------------------
-void TClient::RecvFromSlave(TDescRecvSession* pDesc)
-{
-
-}
-//-------------------------------------------------------------------------
-void TClient::RecvFromMaster(TDescRecvSession* pDesc)
-{
-
-}
-//-------------------------------------------------------------------------
-
-}
+//--------------------------------------------------------------

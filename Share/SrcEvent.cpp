@@ -56,10 +56,28 @@ void TSrcEvent::SetDstObject(TDstEvent* p)
   pDstEvent = p;
 }
 //------------------------------------------------------------
-void TSrcEvent::AddEvent( void* data, int size)
+void TSrcEvent::AddEventCopy( void* data, int size)
 {
   BL_ASSERT(pDstEvent);
-  pDstEvent->AddEventInQueue(sSelfID,data,size);
+  pDstEvent->AddEventInQueue(sSelfID, data, size, true, -1);
+}
+//------------------------------------------------------------
+void TSrcEvent::AddEventCopy( void* data, int size, unsigned int time_create_ms)
+{
+  BL_ASSERT(pDstEvent);
+  pDstEvent->AddEventInQueue(sSelfID, data, size, true, time_create_ms);
+}
+//------------------------------------------------------------
+void TSrcEvent::AddEventWithoutCopy( void* data, int size)
+{
+  BL_ASSERT(pDstEvent);
+  pDstEvent->AddEventInQueue(sSelfID, data, size, false, -1);
+}
+//------------------------------------------------------------
+void TSrcEvent::AddEventWithoutCopy( void* data, int size, unsigned int time_create_ms)
+{
+  BL_ASSERT(pDstEvent);
+  pDstEvent->AddEventInQueue(sSelfID, data, size, false, time_create_ms);
 }
 //------------------------------------------------------------
 void TSrcEvent::SetSelfID(int selfID)

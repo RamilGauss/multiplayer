@@ -37,6 +37,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "BreakPacket.h"
 #include <algorithm>
+#include <boost/foreach.hpp>
 
 using namespace std;
 
@@ -68,37 +69,24 @@ void TBreakPacket::PushFront(char* p,int size)
 //-----------------------------------------------------------------
 void TBreakPacket::Collect()
 {
-  if(mList.size()<=1) return;// Gauss для одно пакетного не надо делать сборку (оптимизация) 03.06.2013
-
   DeleteCollect();
   int size = GetSize();
 
   mCollect.SetData(NULL, size);// выделить память
   char* pCollect = (char*)mCollect.GetPtr();
 
-  TListC_PtrIt bit = mList.begin();
-  TListC_PtrIt eit = mList.end();
-  while(bit!=eit)
+  // копируем все в одну область памяти
+  BOOST_FOREACH( TContainerPtr& c, mList )
   {
-    int sizePart  =        bit->GetSize();
-    char* ptrPart = (char*)bit->GetPtr(); 
+    int sizePart  =        c.GetSize();
+    char* ptrPart = (char*)c.GetPtr(); 
     memcpy(pCollect, ptrPart, sizePart);
     pCollect += sizePart;
-
-    bit++;
   }
 }
 //-----------------------------------------------------------------
 void* TBreakPacket::GetCollectPtr()
 {
-  if(mList.size()==1)//Gauss для одно пакетного не надо делать сборку (оптимизация) 03.06.2013
-  {
-    return mList.begin()->GetPtr();
-  }
-  else 
-    if(mList.size()==0)
-      return NULL;
-
   return mCollect.GetPtr();
 }
 //-----------------------------------------------------------------
@@ -108,13 +96,9 @@ int TBreakPacket::GetSize()
     return mCollect.GetSize();
   int size = 0;
 
-  TListC_PtrIt bit = mList.begin();
-  TListC_PtrIt eit = mList.end();
-  while(bit!=eit)
-  {
-    size += bit->GetSize();
-    bit++;
-  }
+  BOOST_FOREACH( TContainerPtr& c, mList )
+    size += c.GetSize();
+
   return size;
 }
 //-----------------------------------------------------------------

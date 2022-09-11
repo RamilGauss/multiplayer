@@ -34,16 +34,21 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 #include "ManagerScenario.h"
-#include "Scenario.h"
-#include "BL_Debug.h"
+
 #include <boost/foreach.hpp>
+
+#include "IScenario.h"
+#include "MakerScenario.h"
+
+#include "BL_Debug.h"
 
 using namespace std;
 using namespace nsMelissa;
 
-TManagerScenario::TManagerScenario()
+TManagerScenario::TManagerScenario(TManagerSession* pMS)
 {
-
+  pActiveScenario = NULL;
+	mManagerSession = pMS;
 }
 //---------------------------------------------------------------------
 TManagerScenario::~TManagerScenario()
@@ -51,17 +56,21 @@ TManagerScenario::~TManagerScenario()
   Done();
 }
 //---------------------------------------------------------------------
-void TManagerScenario::Add(string& name)
+IScenario* TManagerScenario::Add(unsigned int ID_Implementation, string& name)
 {
-  if(Get(name)) 
+  IScenario* pScenario = Get(name);
+  if(pScenario) 
   {
-    BL_FIX_BUG();
-    return;
+    BL_FIX_BUG();//???
+    return pScenario;
   }
-  mMapStrScenario.insert(TMapStrPtr::value_type(name, new TScenario));
+  pScenario = mMakerScenario.New(ID_Implementation);
+  pScenario->Init(this, mManagerSession);
+  mMapStrScenario.insert(TMapStrPtr::value_type(name, pScenario));
+  return pScenario;
 }
 //---------------------------------------------------------------------
-TScenario* TManagerScenario::Get(string& name)
+IScenario* TManagerScenario::Get(string& name)
 {
   TMapStrPtrIt fit = mMapStrScenario.find(name);
   if(fit==mMapStrScenario.end())
@@ -71,34 +80,57 @@ TScenario* TManagerScenario::Get(string& name)
 //---------------------------------------------------------------------
 void TManagerScenario::Remove(string& name)
 {
-  TScenario* pScenario = Get(name);
+  IScenario* pScenario = Get(name);
   if(pScenario)
   {
+    if(pScenario==pActiveScenario)
+      Disactivate();
+
     mMapStrScenario.erase(name);
-    delete pScenario;
+    mMakerScenario.Delete(pScenario);
   }
 }
 //---------------------------------------------------------------------
 void TManagerScenario::Done()
 {
-  pair<string, TScenario*> bit;
-  BOOST_FOREACH( bit, mMapStrScenario )
+	BOOST_FOREACH( TMapStrPtr::value_type& bit, mMapStrScenario )
     delete bit.second;
 
   mMapStrScenario.clear();
 }
 //---------------------------------------------------------------------
-int TManagerScenario::GetCountActive()
+void TManagerScenario::Activate(IScenario* pNeedActivation)
 {
-  int cntActive = 0;
-  TMapStrPtrIt bit = mMapStrScenario.begin();
-  TMapStrPtrIt eit = mMapStrScenario.end();
-  while(bit!=eit)
+  if(pActiveScenario)// если есть активный, то поместить в очередь на активацию
   {
-    if(bit->second->IsBegin())
-      cntActive++;
-    bit++;
+    // даже если сейчас активен тот же сценарий, поместить в очередь
+    mListWaitActivation.push_back(pNeedActivation);
+    return;
   }
-  return cntActive;
+  pActiveScenario = pNeedActivation;
+}
+//---------------------------------------------------------------------
+void TManagerScenario::Disactivate()
+{
+  BL_ASSERT(pActiveScenario);
+  // следующий сценарий
+  if(mListWaitActivation.size())
+  {
+    pActiveScenario = mListWaitActivation.front();
+    mListWaitActivation.pop_front();
+  }
+  else
+    pActiveScenario = NULL;
+}
+//---------------------------------------------------------------------
+void TManagerScenario::Work()
+{
+  if(pActiveScenario)
+    pActiveScenario->Work();
+}
+//---------------------------------------------------------------------
+IScenario* TManagerScenario::GetActive()
+{
+  return pActiveScenario;
 }
 //---------------------------------------------------------------------

@@ -33,91 +33,44 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "Master.h"
+#include "SuperServer.h"
 
 namespace nsMelissa
 {
 
-TMaster::TMaster()
+TSuperServer::TSuperServer()
 {
 
 }
 //-------------------------------------------------------------------------
-TMaster::~TMaster()
+TSuperServer::~TSuperServer()
 {
 
 }
 //-------------------------------------------------------------------------
-unsigned int TMaster::TryCreateGroup(std::list<unsigned int>& l)
-{
-	return (unsigned int)(-1);
-}
-//-------------------------------------------------------------------------
-void TMaster::DestroyGroup(unsigned int id_group)
+void TSuperServer::SendByClientKey(std::list<unsigned int>& l, TBreakPacket bp)
 {
 
 }
 //-------------------------------------------------------------------------
-void TMaster::LeaveGroup(unsigned int id_client)
+void TSuperServer::DisconnectInherit(unsigned int id_session)
 {
 
 }
 //-------------------------------------------------------------------------
-void TMaster::GetListForGroup(unsigned int id_group, std::list<unsigned int>& l)
-{
-
-}
-//-------------------------------------------------------------------------
-void TMaster::SetResultLogin(bool res, unsigned int id_session, 
-                    unsigned int id_client, 
-                    void* resForClient, int sizeResClient)
-{
-
-}
-//-------------------------------------------------------------------------
-unsigned int TMaster::GetSlaveSessionByGroup(unsigned int id_group)
-{
-	return INVALID_HANDLE_SESSION;
-}
-//-------------------------------------------------------------------------
-void TMaster::SendToClient(unsigned int id_client, void* data, int size, bool check )
-{
-
-}
-//-------------------------------------------------------------------------
-void TMaster::WorkInherit()
-{
-
-}
-//-------------------------------------------------------------------------
-void TMaster::Disconnect(unsigned int id_session)
-{
-
-}
-//-------------------------------------------------------------------------
-int TMaster::GetCountDown()
+int TSuperServer::GetCountDown()
 {
 	return 0;
 }
 //-------------------------------------------------------------------------
-bool TMaster::GetDescDown(int index, void* pDesc, int& sizeDesc)
+bool TSuperServer::GetDescDown(int index, void* pDesc, int& sizeDesc)
 {
 	return false;
 }
 //-------------------------------------------------------------------------
-void TMaster::RecvFromClient(TDescRecvSession* pDesc)
+void TSuperServer::RecvFromMaster(TDescRecvSession* pDesc)
 {
-  
-}
-//-------------------------------------------------------------------------
-void TMaster::RecvFromSlave(TDescRecvSession* pDesc)
-{
-  
-}
-//-------------------------------------------------------------------------
-void TMaster::RecvFromSuperServer(TDescRecvSession* pDesc)
-{
-  
+
 }
 //-------------------------------------------------------------------------
 

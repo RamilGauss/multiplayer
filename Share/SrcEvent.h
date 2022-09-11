@@ -62,8 +62,11 @@ public:
 
   void SetDstObject(TDstEvent* p);
 protected:
-  // копирует данные
-  void AddEvent(void* data, int size);
+  // добавить событие
+  void AddEventCopy(void* data, int size);
+  void AddEventCopy(void* data, int size, unsigned int time_create_ms);
+  void AddEventWithoutCopy(void* data, int size);
+  void AddEventWithoutCopy(void* data, int size, unsigned int time_create_ms);
 };
 
 #endif

@@ -33,23 +33,26 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_SCENARIO_H
-#define MELISSA_SCENARIO_H
+#ifndef MELISSA_MAKER_SCENARIO_H
+#define MELISSA_MAKER_SCENARIO_H
 
 namespace nsMelissa
 {
-  class TScenario
+  class IScenario;
+  class TMakerScenario
   {
-    volatile bool flgBegin;
   public:
-    TScenario();
-    ~TScenario();
+    enum
+    {
+      eLoginClient = 0,
+      eSendUp,
+      eRecommutationClient,
+    };
 
-    bool IsBegin() const;
-    void Begin();
-    void End();
-
+    TMakerScenario();
+    ~TMakerScenario();
+    IScenario* New(unsigned int ID_Implementation);
+    void Delete(IScenario* p);
   };
 }
-
 #endif

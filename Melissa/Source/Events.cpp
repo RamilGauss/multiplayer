@@ -43,14 +43,12 @@ TEventRecvFromDown::TEventRecvFromDown()
 {
   mType = TBase::eRecvFromDown;
   id_session = INVALID_HANDLE_SESSION;
-  sizeData = 0;
 }
 //-------------------------------------------------------------
 TEventRecvFromUp::TEventRecvFromUp()
 {
   mType = TBase::eRecvFromUp;
   id_session = INVALID_HANDLE_SESSION;
-  sizeData = 0;
 }
 //-------------------------------------------------------------
 TEventCreateGroup::TEventCreateGroup()
@@ -99,7 +97,6 @@ TEventResultLogin::TEventResultLogin()
 {
   mType = TBase::eResultLogin;
   numInQueue = 0;
-  sizeData   = 0;
 }
 //-------------------------------------------------------------
 TEventError::TEventError()
@@ -112,14 +109,12 @@ TEventRestoreContext::TEventRestoreContext()
 {
   mType = TBase::eRestoreContext;
   id_session = INVALID_HANDLE_SESSION;
-  sizeData = 0;
 }
 //-------------------------------------------------------------
 TEventTryLogin::TEventTryLogin()
 {
   mType = TBase::eTryLogin;
   id_session = INVALID_HANDLE_SESSION;
-  sizeData = 0;
 }
 //-------------------------------------------------------------
 TEventSaveContext::TEventSaveContext()

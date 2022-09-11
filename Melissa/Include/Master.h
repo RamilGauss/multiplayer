@@ -33,40 +33,48 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef DstEventH
-#define DstEventH
+#ifndef MELISSA_MASTER_H
+#define MELISSA_MASTER_H
 
-#include <string>
-#include <vector>
-#include "TypeDef.h"
-#include "DescEvent.h"
-#include "ListMultiThread.h"
+#include <list>
+#include "ActiveServer.h"
 
-class TSrcEvent;
-
-/*
-  поглотитель событий. работает в связке с TSrcEvent
-  пронаследоваться,
-  зарегистрировать источники с помощью функции AddSrcEvent
-  и получать события через GetEvent
-*/
-
-class SHARE_EI TDstEvent
+namespace nsMelissa
 {
-  TListMultiThread<nsEvent::TEvent>* pListEvent;
+  class MELISSA_EI TMaster : public TActiveServer
+  {
+  public:
+    TMaster();
+    virtual ~TMaster();
+    
+    virtual unsigned int TryCreateGroup(std::list<unsigned int>& l);
+    virtual void DestroyGroup(unsigned int id_group);
+    virtual void LeaveGroup(unsigned int id_client);
+    virtual void GetListForGroup(unsigned int id_group, std::list<unsigned int>& l);
+    virtual void SetResultLogin(bool res, unsigned int id_session, 
+                                unsigned int id_client, 
+                                void* resForClient, int sizeResClient);
+    virtual unsigned int GetSlaveSessionByGroup(unsigned int id_group);
+    virtual void SendToClient(unsigned int id_client, void* data, int size, bool check = true);
+   
+		// BaseServer
+		struct TDescDownMaster
+		{
+			unsigned int id_session;
+		};
+		virtual int  GetCountDown();
+		virtual bool GetDescDown(int index, void* pDesc, int& sizeDesc);
 
-public:
+	protected:
+    // Base
+    virtual void DisconnectInherit(unsigned int id_session);
 
-  TDstEvent();
-  virtual ~TDstEvent();
+    virtual void RecvFromClient(TDescRecvSession* pDesc);
+    virtual void RecvFromSlave(TDescRecvSession* pDesc);
+    virtual void RecvFromSuperServer(TDescRecvSession* pDesc);
+	private:
 
-  void AddEventInQueue(int from, void* data, int size, bool copy, unsigned int time_create_ms);
-
-protected:
-  // забрал объект - уничтожь с помощью delete
-  nsEvent::TEvent* GetEvent();
-  
-  void AddSrcEvent(TSrcEvent* pSrcEvent);
-};
+  };
+}
 
 #endif

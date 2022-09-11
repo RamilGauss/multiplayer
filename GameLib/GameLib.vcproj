@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\BigJack;..\Robert;.\;..\Share;..\DXUT\Optional;..\DXUT\Core;..\GUI;..\Melissa;..\NetTransport"
+				AdditionalIncludeDirectories="../BigJack;../Robert;./;../Share;../DXUT/Optional;../DXUT/Core;../GUI;../Melissa/Include;../NetTransport"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

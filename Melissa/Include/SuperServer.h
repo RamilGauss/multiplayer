@@ -67,9 +67,7 @@ namespace nsMelissa
 
 	protected:
     // Base
-    virtual void WorkInherit();
-
-    virtual void Disconnect(unsigned int id_session);
+    virtual void DisconnectInherit(unsigned int id_session);
 
     virtual void RecvFromMaster(TDescRecvSession* pDesc);
 

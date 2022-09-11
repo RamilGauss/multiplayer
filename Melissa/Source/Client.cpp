@@ -33,50 +33,56 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "SuperServer.h"
+#include "Client.h"
+#include "ManagerSession.h"
+#include "TypePacket.h"
+#include "HeaderSubSystem.h"
+#include "ManagerScenario.h"
 
-namespace nsMelissa
+using namespace std;
+using namespace nsMelissa;
+
+TClient::TClient():
+sNameLogin("login"),
+sNameRecommutation("recommutation"),
+sNameSend("send")
 {
+  mMasterSessionID = INVALID_HANDLE_SESSION;
 
-TSuperServer::TSuperServer()
+  //mManagerScenario->Add(TMakerScenario::eLoginClient, sNameLogin);
+  //mManagerScenario->Add(sNameRecommutation);
+}
+//-------------------------------------------------------------------------
+TClient::~TClient()
 {
 
 }
 //-------------------------------------------------------------------------
-TSuperServer::~TSuperServer()
+void TClient::Login(unsigned int ip, unsigned short port, void* data, int size)
+{
+  // формирование пакета
+  TBreakPacket bp;// контейнер для всего пакета
+  bp.PushFront((char*)data,size);
+  THeaderLogin h;// заголовок Мелиссы
+  h.type = C_TRY_LOGIN;
+  h.from = eFromClient;
+  bp.PushFront((char*)&h, sizeof(h));
+  // отослать пакет для попытки авторизации
+  mMasterSessionID = mManagerSession->Send(ip, port, bp, true);
+}
+//-------------------------------------------------------------------------
+void TClient::DisconnectInherit(unsigned int id_session)
 {
 
 }
 //-------------------------------------------------------------------------
-void TSuperServer::SendByClientKey(std::list<unsigned int>& l, TBreakPacket bp)
+void TClient::RecvFromSlave(TDescRecvSession* pDesc)
 {
 
 }
 //-------------------------------------------------------------------------
-void TSuperServer::WorkInherit()
+void TClient::RecvFromMaster(TDescRecvSession* pDesc)
 {
 
 }
 //-------------------------------------------------------------------------
-void TSuperServer::Disconnect(unsigned int id_session)
-{
-
-}
-//-------------------------------------------------------------------------
-int TSuperServer::GetCountDown()
-{
-	return 0;
-}
-//-------------------------------------------------------------------------
-bool TSuperServer::GetDescDown(int index, void* pDesc, int& sizeDesc)
-{
-	return false;
-}
-//-------------------------------------------------------------------------
-void TSuperServer::RecvFromMaster(TDescRecvSession* pDesc)
-{
-
-}
-//-------------------------------------------------------------------------
-
-}

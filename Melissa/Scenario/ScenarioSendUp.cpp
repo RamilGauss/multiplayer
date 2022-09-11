@@ -33,65 +33,29 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "Slave.h"
+#include "ScenarioSendUp.h"
 
-namespace nsMelissa
-{
+using namespace nsMelissa;
 
-TSlave::TSlave()
-{
-
-}
-//-------------------------------------------------------------------------
-TSlave::~TSlave()
+TScenarioSendUp::TScenarioSendUp()
 {
 
 }
-//-------------------------------------------------------------------------
-void TSlave::SaveContext(unsigned int id_session, void* data, int size)
+//------------------------------------------------------------------------------
+TScenarioSendUp::~TScenarioSendUp()
 {
 
 }
-//-------------------------------------------------------------------------
-unsigned int TSlave::GetClientKeyBySession(unsigned int id_session)
-{
-	return (unsigned int)(-1);
-}
-//-------------------------------------------------------------------------
-unsigned int TSlave::GetSessionByClientKey(unsigned int key)
-{
-  return INVALID_HANDLE_SESSION;
-}
-//-------------------------------------------------------------------------
-void TSlave::WorkInherit()
+//------------------------------------------------------------------------------
+void TScenarioSendUp::Work()
 {
 
 }
-//-------------------------------------------------------------------------
-void TSlave::Disconnect(unsigned int id_session)
+//------------------------------------------------------------------------------
+void TScenarioSendUp::Send(TBreakPacket bp, bool check)
 {
-
+  // отсылка через транспорт
+  // mTransport->Send(...);
+  End();
 }
 //-------------------------------------------------------------------------
-int TSlave::GetCountDown()
-{
-	return 0;
-}
-//-------------------------------------------------------------------------
-bool TSlave::GetDescDown(int index, void* pDesc, int& sizeDesc)
-{
-	return false;
-}
-//-------------------------------------------------------------------------
-void TSlave::RecvFromClient(TDescRecvSession* pDesc)
-{
-
-}
-//-------------------------------------------------------------------------
-void TSlave::RecvFromMaster(TDescRecvSession* pDesc)
-{
-
-}
-//-------------------------------------------------------------------------
-
-}

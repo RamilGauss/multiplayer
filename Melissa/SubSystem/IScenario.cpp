@@ -33,25 +33,45 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#ifndef MELISSA_BASE_EVENT_H
-#define MELISSA_BASE_EVENT_H
+#include "IScenario.h"
+#include <stddef.h>
+#include "ManagerScenario.h"
 
-#include "Base.h"
+using namespace nsMelissa;
 
-namespace nsMelissa
+IScenario::IScenario()
 {
-#if defined( WIN32 )
-#pragma pack(push, 1)
-#endif
-  struct MELISSA_EI TBaseEvent
-  {
-    // переназначить в наследуемом классе
-    TBase::tTypeEvent mType;
-  };
-#if defined( WIN32 )
-#pragma pack(pop)
-#endif
+  mManagerScenario = NULL;
+}
+//---------------------------------------------------------------------
+IScenario::~IScenario()
+{
 
 }
+//---------------------------------------------------------------------
+void IScenario::Init(TManagerScenario* pMSc, TManagerSession* pMS)
+{
+  mManagerScenario = pMSc;
+	mManagerSession  = pMS;
+}
+//---------------------------------------------------------------------
+void IScenario::Begin()
+{
+  mManagerScenario->Activate(this);
+}
+//---------------------------------------------------------------------
+void IScenario::End()
+{
+  mManagerScenario->Disactivate();
+}
+//---------------------------------------------------------------------
+void IScenario::Work()
+{
 
-#endif
+}
+//---------------------------------------------------------------------
+bool IScenario::IsActive()
+{
+  return (mManagerScenario->GetActive()==this);
+}
+//---------------------------------------------------------------------
