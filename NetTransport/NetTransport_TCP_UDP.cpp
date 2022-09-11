@@ -39,108 +39,77 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "NetSystem.h"
 
 using namespace std;
-using namespace nsNetTransportStruct;
 
 //----------------------------------------------------------------------------
 TNetTransport_TCP_UDP::TNetTransport_TCP_UDP(char* pPathLog) : INetTransport(pPathLog)
 {
+  mNetMakerEvent = new TNetMakerEventWSA;
+  mTCP = new TNetControlTCP;
+  mUDP = new TNetControlUDP;
 
+  INetControl::SetMakerEvent(mNetMakerEvent);
 }
 //----------------------------------------------------------------------------------
 TNetTransport_TCP_UDP::~TNetTransport_TCP_UDP()
 {
-
+  Done();
+}
+//----------------------------------------------------------------------------------
+void TNetTransport_TCP_UDP::Done()
+{
+  delete mNetMakerEvent;
+  mNetMakerEvent = NULL;
+  delete mTCP;
+  mTCP = NULL;
+  delete mUDP;
+  mUDP = NULL;
 }
 //----------------------------------------------------------------------------------
 bool TNetTransport_TCP_UDP::Open(unsigned short port, unsigned char numNetWork)
 {
-
-	return false;
+  bool res = false;
+  res &= mTCP->Open(port, numNetWork);
+  res &= mUDP->Open(port, numNetWork);
+  return res;
 }
 //----------------------------------------------------------------------------------
 void TNetTransport_TCP_UDP::Send(unsigned int ip, unsigned short port, 
 							                   TBreakPacket& packet, bool check)
 {
-
-}
-//----------------------------------------------------------------------------------
-void* ThreadTransportTU(void*p)
-{
-	((TNetTransport_TCP_UDP*)p)->Engine();
-	return NULL;
-}
-//----------------------------------------------------------------------------------
-void TNetTransport_TCP_UDP::Engine()
-{
-	flgNeedStop = false;
-	flgActive = true;
-	while(!flgNeedStop)
-	{
-
-	}
-	flgActive = false;
+  if(check)
+    mTCP->Send(ip, port, packet);
+  else
+    mUDP->Send(ip, port, packet);
 }
 //----------------------------------------------------------------------------------
 void TNetTransport_TCP_UDP::Start()
 {
-  thread = g_thread_create(ThreadTransportTU,
-    (gpointer)this,
-    true,
-    NULL);
-	while(IsActive()==false)
-		ht_msleep(eWaitActivation);
+  mNetMakerEvent->Start();
 }
 //----------------------------------------------------------------------------------
 void TNetTransport_TCP_UDP::Stop()
 {
-	flgNeedStop = true;
-	while(IsActive())
-	{
-		ht_msleep(eWaitActivation);
-	}
-	mUDP.close();
+  mNetMakerEvent->Stop();
 }
 //----------------------------------------------------------------------------------
 bool TNetTransport_TCP_UDP::IsActive()
 {
-	return flgActive;
+	return mNetMakerEvent->IsActive();
 }
 //--------------------------------------------------------------------------
 void TNetTransport_TCP_UDP::Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type)
 {
-  switch(type)
-  {
-		case eRecv:
-      mCallBackRecv.Register(pFunc);
-      break;
-		case eLostPacket:
-			mCallBackLostPacket.Register(pFunc);
-			break;
-    case eDisconnect:
-      mCallBackDisconnect.Register(pFunc);
-      break;
-  }
+  INetControl::Register(pFunc, type);
 }
 //----------------------------------------------------------------------------------
 void TNetTransport_TCP_UDP::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type)
 {
-  switch(type)
-  {
-		case eRecv:
-			mCallBackRecv.Unregister(pFunc);
-			break;
-		case eLostPacket:
-			mCallBackLostPacket.Unregister(pFunc);
-			break;
-		case eDisconnect:
-			mCallBackDisconnect.Unregister(pFunc);
-			break;
-  }
+  INetControl::Register(pFunc, type);
 }
 //----------------------------------------------------------------------------------
-bool TNetTransport_TCP_UDP::Synchro(unsigned int ip, unsigned short port)
+bool TNetTransport_TCP_UDP::Connect(unsigned int ip, unsigned short port)
 {
-  return false;
+  return mTCP->Connect(ip, port);
 }
 //----------------------------------------------------------------------------------
 void TNetTransport_TCP_UDP::InitLog(char* pPathLog)
@@ -150,8 +119,7 @@ void TNetTransport_TCP_UDP::InitLog(char* pPathLog)
 		char pPathLogEvent[400];
 		sprintf(pPathLogEvent,"%sEvent",pPathLog);
 
-		mLogRcvSend.ReOpen(pPathLog);
-		mLogEvent.ReOpen(pPathLogEvent);
+  	mLogEvent.ReOpen(pPathLogEvent);
 	}
 }
 //----------------------------------------------------------------------------------

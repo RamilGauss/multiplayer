@@ -34,55 +34,57 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 
-#ifndef NetSystemH
-#define NetSystemH
+#ifndef NetMakerEventWSAH
+#define NetMakerEventWSAH
 
-#include "TypeDef.h"
+#include <list>
 
-#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
+#include "glib/gthread.h"
 
-#else
-  #define SOCKET          int
-  #define INVALID_SOCKET  -1
-  #define SOCKET_ERROR    -1
+#include "INetMakerEvent.h"
+#include "ContainerRise.h"
 
-  #define closesocket     close  
-#endif
-bool SHARE_EI ns_Init();
-void SHARE_EI ns_Done();
+class INetControl;
 
-SHARE_EI char* ns_getHostIP( const char* name, int numNetWork = 0 ); // получение ip-адреса по имени хоста
-SHARE_EI char* ns_getSelfIP(int numNetWork=0);                   // получение ip-адреса
-SHARE_EI char* ns_getSelfHost();                 // получение имени хоста
+class TNetMakerEventWSA : public INetMakerEvent
+{
 
-//получение сетевой маски по ip-адресу
-char* ns_getNetMask( const char* ip_str );
+  volatile bool flgActive;
+  volatile bool flgNeedStop;
 
-//получение сетевой маски свой сети
-char* ns_getSelfNetMask();
+  GThread* thread;
 
-// функци€-обертка дл€ inet_addr()
-SHARE_EI unsigned long ns_inet_addr( const char* addr );
+  enum
+  {
+    eTimeRefreshEngine = 60,  // частота обновлени€ движка, мс
+    eWaitFeedBack    = 20,// ждать пока активизируетс€ двигатель, мс
+  };
 
-// функци€-обертка дл€ inet_ntoa()
-SHARE_EI char* ns_str_addr( unsigned long addr );
+  TContainerRise mArrEvent;
 
-// преобразовать им€ носта или строку с его ip-адресом в число
-// –езультат: двоичный код адреса с сетевым расположением байт или INADDR_NONE (-1)
-unsigned long ns_HostOrIPtoAddr( const char* hostOrIp );
+public:
+	TNetMakerEventWSA();
+	virtual ~TNetMakerEventWSA();
 
-//  онвертаци€ значени€ из машинного в сетевой пор€док байт
-unsigned short SHARE_EI ns_htons( unsigned short value );
-unsigned long  ns_htonl( unsigned long value );
+	virtual void Start();
+	virtual void Stop();
 
-//  онвертаци€ значени€ из сетевого в машинный пор€док байт
-unsigned short SHARE_EI ns_ntohs( unsigned short value );
-unsigned long  ns_ntohl( unsigned long value );
+  virtual bool IsActive(){return flgActive;}
 
-// получить сетевой адрес дл€ сетевого адаптера с заданным именем
-bool get_ip_for_net_interface( const char* interface_name, char* out_buf );  
+  virtual void Add(int sock, INetControl* pControl);
+  virtual void Remove(int sock);
 
-// поиск первого доступного с именем интерфейса ethN
-bool get_ip_first_eth(char* out_buf);
+  virtual void SetTypeEvent( int sock, std::list<INetControl::eTypeEvent>& lEvent);
+
+protected:
+
+  friend void* ThreadMakerEventWSA(void*p);
+  void Engine();
+
+  void Work();
+  void WSA_Event2Control( int event, std::list<INetControl::eTypeEvent>& lEvent);
+  void Control2WSA_Event( std::list<INetControl::eTypeEvent>& lEvent, int& event );
+};
+
 
 #endif

@@ -41,8 +41,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MacroMaker.h"
 #include "TypeDef.h"
 
-MACRO_MAKER_H_EXPORT_USE_P(NET_TRANSPORT_EI,NetTransport,NetDoser,char* pPathLog=NULL)
-MACRO_MAKER_H_EXPORT_USE_P_SAME(NET_TRANSPORT_EI,NetTransport,char* pPathLog=NULL)
+//MACRO_MAKER_H_EXPORT_USE_P(NET_TRANSPORT_EI,NetTransport,NetDoser,char* pPathLog=NULL)
+//MACRO_MAKER_H_EXPORT_USE_P_SAME(NET_TRANSPORT_EI,NetTransport,char* pPathLog=NULL)
+MACRO_MAKER_H_EXPORT_USE_P(NET_TRANSPORT_EI,NetTransport,NetTransport_TCP_UDP,char* pPathLog=NULL)
 
 #endif
 

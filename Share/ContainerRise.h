@@ -37,8 +37,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@mail
 #define ContainerRiseH
 
 #include "Container.h"
+#include "TypeDef.h"
 
-class TContainerRise
+class SHARE_EI TContainerRise
 {
 
 	TContainer mC;

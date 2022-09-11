@@ -53,14 +53,14 @@ TControlTraffic::~TControlTraffic()
 
 }
 //---------------------------------------------------------------------------------
-void TControlTraffic::LostPacket(INetTransport::TLostPacket* p)
-{
-	// запомнить в очереди, в Work обработается это событие
-	TEvent event;
-	event.ip_port = p->mIP_Port;
-	event.cntTry  = p->mCntTry;
-	mQEvent.Push(&event, sizeof(event));
-}
+//void TControlTraffic::LostPacket(INetTransport::TLostPacket* p)
+//{
+//	// запомнить в очереди, в Work обработается это событие
+//	TEvent event;
+//	event.ip_port = p->mIP_Port;
+//	event.cntTry  = p->mCntTry;
+//	mQEvent.Push(&event, sizeof(event));
+//}
 //---------------------------------------------------------------------------------
 void TControlTraffic::Send(TIP_Port& ip_port, list<TDescSendPacket*>* pLDSP)
 {

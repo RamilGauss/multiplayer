@@ -69,7 +69,6 @@ protected:
 	void unlockSendRcv(){Unlock(&gcsSendRcv);};
 
 	TCallBackRegistrator mCallBackRecv;      // TDescRecv		
-	TCallBackRegistrator mCallBackLostPacket;// TLostPacket
 	TCallBackRegistrator mCallBackDisconnect;// TIP_Port
 
 	UdpDevice mUDP;	
@@ -85,16 +84,12 @@ protected:
 	// информация по сокету. какой текущий номер пакета идет на прием и на отправку
 	TArrayObject mArrConnect;
 
-	typedef std::list<TLostPacket> TListLP;
-	typedef TListLP::iterator TListLPIt;
-
-	TListLP mListLostPacket;
-
 	enum
   {
     eSizeBuffer        = 65535,
-    eCntTryDef         = 10,
-    eTimeLivePacketDef = 120, //если в течение такого времени не будет квитанции, считается пакет не доставлен, мс
+    eCntTry            = 10,
+    eTimeLivePacket    = 120, //если в течение такого времени не будет квитанции, считается пакет не доставлен, мс
+    eWaitThread        = eTimeLivePacket*eCntTry,
     eTimeRefreshEngine = 60,  // частота обновления движка, мс
     
     // размер системных буферов
@@ -139,10 +134,7 @@ public:
 	virtual bool IsActive();
 
   // синхронная функция
-  virtual bool Synchro(unsigned int ip, unsigned short port); // вызов только для клиента
-
-	virtual void SetTimeOutPacket( int t_ms);
-	virtual void SetCntTry( int c);
+  virtual bool Connect(unsigned int ip, unsigned short port); // вызов только для клиента
 
 protected:
   bool SendSynchro(unsigned int ip, unsigned short port, int cntTry);
@@ -207,10 +199,6 @@ protected:
 
   void SetupBufferForSocket();
 
-	int WaitThread(){return mTimeOut*mCntTry;}
-
-	void AddEventLostPacket( TIP_Port& ip_port, unsigned char c);
-	void NotifyLostPacket();
 };
 
 

@@ -37,63 +37,22 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef NetTransport_TCP_UDPH
 #define NetTransport_TCP_UDPH
 
-#include <set>
-
-#include "glib/gthread.h"
-
-#include "CallBackRegistrator.h"
-#include "UdpDevice.h"
-#include "hArray.h"
-#include "GCS.h"
-#include "BL_Debug.h"
 #include "INetTransport.h"
-#include "BasePacketNetTransport.h"
-
-// содержит поток для проверки получения пакетов по сети
-// ограничение по максимальному размеру пакета - 1400 байт.
+#include "NetMakerEventWSA.h"
+#include "NetControlTCP.h"
+#include "NetControlUDP.h"
+#include "SaveOnHDD.h"
 
 // Thread safe - Send поддерживает.
 
 class TNetTransport_TCP_UDP : public INetTransport
 {
-	TCallBackRegistrator mCallBackRecv;      // TDescRecv		
-	TCallBackRegistrator mCallBackLostPacket;// TLostPacket
-	TCallBackRegistrator mCallBackDisconnect;// TIP_Port
-
-	UdpDevice mUDP;	
-
-	volatile bool flgActive;
-	volatile bool flgNeedStop;
-
-	enum
-  {
-    eSizeBuffer        = 65535,
-    eCntTryDef         = 10,
-    eTimeRefreshEngine = 60,  // частота обновления движка, мс
-    
-    // размер системных буферов
-    eSizeBufferForRecv = 30000000, // байт
-    eSizeBufferForSend = 30000000, // байт
-    eWaitActivation    = 20,// ждать пока активизируется двигатель, мс
-	};
-	typedef enum
-	{
-		ePacket  = 'P',
-		eStream  = 'S',
-		eSynchro = 'C',
-		eCheck   = 'K',
-	}eTypeHeadPacket;
-  enum
-  {
-    eWaitSynchro=5,// сек
-  };
-
-	char mBuffer[eSizeBuffer];
-	
-	GThread* thread;
-
-	TSaveOnHDD mLogRcvSend;
 	TSaveOnHDD mLogEvent;
+
+  INetMakerEvent* mNetMakerEvent;
+
+  INetControl* mTCP;
+  INetControl* mUDP;
 
 public:
 
@@ -116,16 +75,9 @@ public:
 	virtual bool IsActive();
 
   // синхронная функция
-  virtual bool Synchro(unsigned int ip, unsigned short port); // вызов только для клиента
-
-	virtual void SetTimeOutPacket( int t_ms){};
-	virtual void SetCntTry( int c){};
-
+  virtual bool Connect(unsigned int ip, unsigned short port); // вызов только для клиента
 protected:
-
-	friend void* ThreadTransportTU(void*p);
-	void Engine();
-
+  void Done();
 };
 
 

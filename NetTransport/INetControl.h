@@ -34,55 +34,49 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 
-#ifndef NetSystemH
-#define NetSystemH
+#ifndef INetControlH
+#define INetControlH
 
-#include "TypeDef.h"
+#include <list>
 
-#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
+#include "BreakPacket.h"
+#include "CallBackRegistrator.h"
+#include "INetTransport.h"
 
-#else
-  #define SOCKET          int
-  #define INVALID_SOCKET  -1
-  #define SOCKET_ERROR    -1
+class INetMakerEvent;
 
-  #define closesocket     close  
-#endif
-bool SHARE_EI ns_Init();
-void SHARE_EI ns_Done();
+class INetControl
+{
+public:
+  typedef enum{
+    eAccept = 0,// попытка к нам соединиться
+    eConnect,   // мы к кому-то соединились
+    eRead,      // есть что прочитать
+    eWrite,     // теперь можно писать
+    eClose,     // закрытие соединения
+  } eTypeEvent;
 
-SHARE_EI char* ns_getHostIP( const char* name, int numNetWork = 0 ); // получение ip-адреса по имени хоста
-SHARE_EI char* ns_getSelfIP(int numNetWork=0);                   // получение ip-адреса
-SHARE_EI char* ns_getSelfHost();                 // получение имени хоста
+  INetControl(){};
+  virtual ~INetControl(){};
+  // for INetMakerEvent
+  virtual void Work(int sock, std::list<eTypeEvent>& event) = 0;
+  // TNetTransport_XXX
+  virtual bool Open( unsigned short port, unsigned char numNetWork = 0) = 0;
+  virtual bool Connect(unsigned int ip, unsigned short port) = 0;
+  virtual void Send(unsigned int ip, unsigned short port, TBreakPacket& bp) = 0;
 
-//получение сетевой маски по ip-адресу
-char* ns_getNetMask( const char* ip_str );
+	virtual void Close() = 0;
 
-//получение сетевой маски свой сети
-char* ns_getSelfNetMask();
+  static void SetMakerEvent(INetMakerEvent* pME);
 
-// функция-обертка для inet_addr()
-SHARE_EI unsigned long ns_inet_addr( const char* addr );
+  static void Register(TCallBackRegistrator::TCallBackFunc pFunc,   INetTransport::eTypeCallback type);
+  static void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, INetTransport::eTypeCallback type);
 
-// функция-обертка для inet_ntoa()
-SHARE_EI char* ns_str_addr( unsigned long addr );
+protected:
+  INetMakerEvent* GetMakerEvent();
 
-// преобразовать имя носта или строку с его ip-адресом в число
-// Результат: двоичный код адреса с сетевым расположением байт или INADDR_NONE (-1)
-unsigned long ns_HostOrIPtoAddr( const char* hostOrIp );
+	void NotifyRecv(char* p, int size);
+};
 
-// Конвертация значения из машинного в сетевой порядок байт
-unsigned short SHARE_EI ns_htons( unsigned short value );
-unsigned long  ns_htonl( unsigned long value );
-
-// Конвертация значения из сетевого в машинный порядок байт
-unsigned short SHARE_EI ns_ntohs( unsigned short value );
-unsigned long  ns_ntohl( unsigned long value );
-
-// получить сетевой адрес для сетевого адаптера с заданным именем
-bool get_ip_for_net_interface( const char* interface_name, char* out_buf );  
-
-// поиск первого доступного с именем интерфейса ethN
-bool get_ip_first_eth(char* out_buf);
 
 #endif

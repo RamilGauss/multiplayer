@@ -34,55 +34,29 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 
-#ifndef NetSystemH
-#define NetSystemH
+#ifndef INetMakerEventH
+#define INetMakerEventH
 
-#include "TypeDef.h"
+#include <list>
 
-#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
+#include "INetControl.h"
 
-#else
-  #define SOCKET          int
-  #define INVALID_SOCKET  -1
-  #define SOCKET_ERROR    -1
+class INetMakerEvent
+{
+public:
+  INetMakerEvent(){};
+  virtual ~INetMakerEvent(){};
 
-  #define closesocket     close  
-#endif
-bool SHARE_EI ns_Init();
-void SHARE_EI ns_Done();
+	virtual void Start() = 0;
+	virtual void Stop() = 0;
 
-SHARE_EI char* ns_getHostIP( const char* name, int numNetWork = 0 ); // получение ip-адреса по имени хоста
-SHARE_EI char* ns_getSelfIP(int numNetWork=0);                   // получение ip-адреса
-SHARE_EI char* ns_getSelfHost();                 // получение имени хоста
+  virtual bool IsActive() = 0;
 
-//получение сетевой маски по ip-адресу
-char* ns_getNetMask( const char* ip_str );
+  virtual void Add(int sock, INetControl* pControl) = 0;
+  virtual void Remove(int sock) = 0;
 
-//получение сетевой маски свой сети
-char* ns_getSelfNetMask();
+  virtual void SetTypeEvent( int sock, std::list<INetControl::eTypeEvent>& lEvent) = 0;
+};
 
-// функци€-обертка дл€ inet_addr()
-SHARE_EI unsigned long ns_inet_addr( const char* addr );
-
-// функци€-обертка дл€ inet_ntoa()
-SHARE_EI char* ns_str_addr( unsigned long addr );
-
-// преобразовать им€ носта или строку с его ip-адресом в число
-// –езультат: двоичный код адреса с сетевым расположением байт или INADDR_NONE (-1)
-unsigned long ns_HostOrIPtoAddr( const char* hostOrIp );
-
-//  онвертаци€ значени€ из машинного в сетевой пор€док байт
-unsigned short SHARE_EI ns_htons( unsigned short value );
-unsigned long  ns_htonl( unsigned long value );
-
-//  онвертаци€ значени€ из сетевого в машинный пор€док байт
-unsigned short SHARE_EI ns_ntohs( unsigned short value );
-unsigned long  ns_ntohl( unsigned long value );
-
-// получить сетевой адрес дл€ сетевого адаптера с заданным именем
-bool get_ip_for_net_interface( const char* interface_name, char* out_buf );  
-
-// поиск первого доступного с именем интерфейса ethN
-bool get_ip_first_eth(char* out_buf);
 
 #endif

@@ -169,7 +169,6 @@ l_repeatRead:
   }   
 
   if( len > szMsg ) len = szMsg;
-  //int res = recv( mSocket, (char*)buffer, (int)len, 0 ); 
 	
 	sockaddr_in SenderAddr;
 	int SenderAddrSize = sizeof(SenderAddr);

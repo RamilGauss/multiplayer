@@ -3,38 +3,44 @@
 #include <time.h> 
 #include <stdio.h>
 #include "HiTimer.h"
+#include "NetSystem.h"
+#include "glib/gthread.h"
 
 #pragma comment(lib, "ws2_32.lib") 
 
 #define SOCKET_ERRNO   WSAGetLastError() 
-#define ADDRESS "127.0.0.1" 
-#define PORT 1234 
+#define ADDRESS "192.168.23.226"//"127.0.0.1" 
+#define PORT 1234
+
+SOCKET ahSocket[1]; 
 
 SOCKET ConnectToPort() 
 { 
-   struct sockaddr_in addr; 
-   SOCKET hSocket; 
-   u_long arg; int err; 
-
-   // Create socket 
-   hSocket = socket( PF_INET, SOCK_STREAM, 0 ); 
+   SOCKET hSocket = socket( PF_INET, SOCK_STREAM, 0 ); 
    if( hSocket == INVALID_SOCKET ) 
    { 
       printf( "socket() error %d\n", SOCKET_ERRNO ); 
       exit(1); 
    } 
    // Connexion setting for local connexion 
-   addr.sin_family = AF_INET ; 
+   struct sockaddr_in addr; 
+	 addr.sin_family = AF_INET ; 
    addr.sin_addr.s_addr = inet_addr(ADDRESS); 
-   addr.sin_port = htons (PORT); 
+   addr.sin_port = htons(6666); 
+
+	 // bind socket 
+	 if( bind( hSocket, (struct sockaddr *)&addr, sizeof(addr)) == SOCKET_ERROR ) 
+	 { 
+		 printf( "bind() error %d\n", SOCKET_ERRNO ); 
+		 exit(1); 
+	 } 
+	 addr.sin_family = AF_INET ; 
+	 addr.sin_addr.s_addr = inet_addr(ADDRESS); 
+	 addr.sin_port = htons (PORT); 
 
    // Connect 
-	 unsigned int start = ht_GetMSCount();
    if( connect( hSocket, (struct sockaddr *)&addr, sizeof(addr) ) == SOCKET_ERROR ) 
    { 
-			start = ht_GetMSCount() - start;	
-      // As we are in non-blocking mode we'll always have the error 
-      // WSAEWOULDBLOCK whichis actually not one 
       if( SOCKET_ERRNO != WSAEWOULDBLOCK ) 
       { 
          printf( "connect() error (%d)\n", SOCKET_ERRNO ); 
@@ -43,85 +49,85 @@ SOCKET ConnectToPort()
    } 
    return hSocket; 
 } 
-
-void main() 
+//-------------------------------------------------------------------------------------------
+void* ThreadTransport(void*p)
+{
+	int i = 0;
+	while(true)
+	{
+		ht_msleep(40);
+		char szBuffer[256]; int cbBuffer; 
+		// create string and return the size 
+		cbBuffer = sprintf_s( szBuffer, "Hello, World!%d", i ); 
+		// send the string with 0 at the end 
+		int resSend = send( ahSocket[0], szBuffer, cbBuffer + 1, 0 ); 
+		if(SOCKET_ERROR ==  resSend) 
+		{ 
+			printf("Send FAIL!!! 0x%X\n",  WSAGetLastError()); 
+			exit(1);
+		} 
+   	printf( "Send ok %d  %d\n", resSend, i); 
+		i++;
+	}
+	return NULL;
+}
+//-------------------------------------------------------------------------------------------
+#include "NetDeviceTCP.h"
+int main() 
 { 
-//####
-	//{
-	//	struct sockaddr_in addr; 
-	//	// Connection setting for local connexion 
-	//	addr.sin_family = PF_INET; 
-	//	addr.sin_addr.s_addr = inet_addr(ADDRESS); 
-	//	addr.sin_port = htons (PORT); 
+  // Initialize Winsock 
+  ns_Init();
+  //###
+  TNetDeviceTCP tcp;
+  int s2 = tcp.Open(true, 12345);
+  int s1 = tcp.Open(false, 12345);
+  char* sLocalHost = ns_getSelfIP(0);
+  unsigned long ip_server = ns_inet_addr(sLocalHost); 
+  unsigned short port_server = 6666;
+  bool resCon = tcp.Connect(s1, ip_server, port_server);
+  if(resCon==false) printf( "connect() error %d\n", SOCKET_ERRNO ); 
+  char buffer[1000];
+  bool resSend = tcp.Send(s1, buffer, sizeof(buffer), ip_server, port_server);
+  //###
 
-	//	SOCKET hSocketTCP = socket( PF_INET, SOCK_STREAM, IPPROTO_IP/*IPPROTO_TCP*/ ); //IPPROTO_IP
-	//	if( hSocketTCP == INVALID_SOCKET ) 
-	//	{ 
-	//		printf( "socket() error %d\n", SOCKET_ERRNO ); 
-	//		exit(1); 
-	//	} 
-	//	// bind socket 
-	//	int resBind = bind( hSocketTCP, (struct sockaddr *)&addr, sizeof(addr));
-	//  //----------------------------------------------------------------------------
-	//	SOCKET hSocketUDP = socket( PF_INET, SOCK_DGRAM, IPPROTO_IP/*IPPROTO_UDP*/ ); //IPPROTO_IP
-	//	if( hSocketUDP == INVALID_SOCKET ) 
-	//	{ 
-	//		printf( "socket() error %d\n", SOCKET_ERRNO ); 
-	//		exit(1); 
-	//	} 
-	//	// bind socket 
-	//	resBind = bind( hSocketUDP, (struct sockaddr *)&addr, sizeof(addr));
-	//	int a = 0;
-	//}
+	WSAEVENT ahEvents[1]; 
+	DWORD dwEvent; 
+	WSANETWORKEVENTS NetworkEvents; 
 
-//####
-   int initClockTime; 
-   WSADATA stack_info; 
-   SOCKET ahSocket[1]; 
-   WSAEVENT ahEvents[1]; 
-   DWORD dwEvent; 
-   WSANETWORKEVENTS NetworkEvents; 
-   int rc; 
+	// Create event 
+	ahEvents[0] = WSACreateEvent(); 
+	// Create and connect a socket on the server socket 
+	ahSocket[0] = ConnectToPort(); 
 
-   //// Initialize Winsock 
-   WSAStartup(MAKEWORD(2,0), &stack_info) ; 
-   // Create event 
-   ahEvents[0] = WSACreateEvent(); 
-   // Create and connect a socket on the server socket 
-   ahSocket[0]= ConnectToPort(); 
-
-   // the application wants to receive notification of a completed connection 
-   rc = WSAEventSelect(ahSocket[0], ahEvents[0], FD_CONNECT  ); 
-   if( rc == SOCKET_ERROR ) 
-   { 
-      printf( "WSAEventSelect() error %d\n", SOCKET_ERRNO ); 
-      exit(1); 
-   } 
-   while (TRUE) 
-   { 
-      // look for events 
-      dwEvent = WSAWaitForMultipleEvents( 1, ahEvents, FALSE, 1000, FALSE); 
-      switch (dwEvent) 
-      { 
-				case WSA_WAIT_FAILED: 
-					 printf("WSAEventSelect: %d\n", WSAGetLastError()); 
-					 break; 
-				case WAIT_IO_COMPLETION: 
-				case WSA_WAIT_TIMEOUT: 
-					 break; 
-				default: 
-					 printf("while\n"); 
-					 //if there is one dwEvent-WSA_WAIT_EVENT_0 has to be substracted so as to dwEvent correspond to the index of the concerned socket 
-					 dwEvent -= WSA_WAIT_EVENT_0; 
-					 // enumeration of the events on the socket[dwEvent] 
-					 if (SOCKET_ERROR == WSAEnumNetworkEvents(ahSocket[dwEvent], ahEvents[dwEvent], &NetworkEvents)) 
-					 { 
-							printf("WSAEnumNetworkEvent: %d lNetworkEvent %X\n", WSAGetLastError(), NetworkEvents.lNetworkEvents); 
-							NetworkEvents.lNetworkEvents = 0; 
-					 } 
-					 else  
-					 { 
-							if (FD_CONNECT & NetworkEvents.lNetworkEvents) 
+	// the application wants to receive notification of a completed connection 
+	int rc = WSAEventSelect(ahSocket[0], ahEvents[0], FD_CONNECT  ); 
+	if( rc == SOCKET_ERROR ) 
+	{ 
+		printf( "WSAEventSelect() error %d\n", SOCKET_ERRNO ); 
+		return 0; 
+	} 
+	while(true) 
+  { 
+    dwEvent = WSAWaitForMultipleEvents( 1, ahEvents, FALSE, 20, FALSE); 
+    switch (dwEvent) 
+    { 
+			case WSA_WAIT_FAILED: 
+				 printf("WSAEventSelect: %d\n", WSAGetLastError()); 
+				 break; 
+			case WAIT_IO_COMPLETION: 
+			case WSA_WAIT_TIMEOUT: 
+				 break; 
+			default: 
+				printf("while\n"); 
+				dwEvent -= WSA_WAIT_EVENT_0; 
+				if(SOCKET_ERROR == WSAEnumNetworkEvents(ahSocket[dwEvent], ahEvents[dwEvent], &NetworkEvents)) 
+				{ 
+					printf("WSAEnumNetworkEvent: %d lNetworkEvent %X\n", WSAGetLastError(), NetworkEvents.lNetworkEvents); 
+					NetworkEvents.lNetworkEvents = 0; 
+				} 
+				else  
+				{ 
+							if(FD_CONNECT & NetworkEvents.lNetworkEvents) 
 							{ 
 								 //connection is OK 
 								 printf( "FD_CONNECT ok (dwEvent=%d)\n", dwEvent ); 
@@ -130,7 +136,7 @@ void main()
 								 if( rc == SOCKET_ERROR ) 
 								 { 
 										printf( "WSAEventSelect() error %d\n", SOCKET_ERRNO ); 
-										exit(1); 
+										return 0;
 								 } 
 							} 
 							if (FD_CLOSE & NetworkEvents.lNetworkEvents) 
@@ -139,27 +145,28 @@ void main()
 								 printf( "press a key to exit\n" ); 
 								 _getch(); 
 								 WSACloseEvent( ahEvents[0] ); 
-								 exit(0); 
+								 return 0; 
 							} 
 							if(FD_WRITE & NetworkEvents.lNetworkEvents) 
 							{ 
-								 char szBuffer[256]; int cbBuffer; 
-								 printf( "FD_WRITE ok (dwEvent=%d)\n", dwEvent ); 
-								 // create string and return the size 
-								 cbBuffer = sprintf( szBuffer, "Hello, World!", dwEvent ); 
-								 // send the string with 0 at the end 
-								 rc = send( ahSocket[dwEvent], szBuffer, cbBuffer + 1, 0 ); 
-								 if(SOCKET_ERROR ==  rc) 
-								 { 
-										printf("WSAEnumNetworkEvent: %d lNetworkEvent %X\n",  WSAGetLastError(), NetworkEvents.lNetworkEvents); 
-								 } 
-								 // not sure if I have to use it 
-								 //WSAResetEvent(ahEvents[0]); 
+								g_thread_init( NULL );
+								g_thread_create(ThreadTransport, NULL, false, NULL);
+								//char szBuffer[256]; int cbBuffer; 
+								//printf( "FD_WRITE ok (dwEvent=%d)\n", dwEvent ); 
+								//// create string and return the size 
+								//cbBuffer = sprintf_s( szBuffer, "Hello, World!", dwEvent ); 
+								//// send the string with 0 at the end 
+								//rc = send( ahSocket[dwEvent], szBuffer, cbBuffer + 1, 0 ); 
+								//if(SOCKET_ERROR ==  rc) 
+								//{ 
+								//	printf("WSAEnumNetworkEvent: %d lNetworkEvent %X\n",  WSAGetLastError(), NetworkEvents.lNetworkEvents); 
+								//} 
 							} 
 
 					 } 
-      } 
-   } 
+    } 
+  } 
+  return 0;
 }
 /*
 #include <conio.h>

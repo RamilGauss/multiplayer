@@ -70,7 +70,7 @@ public:
 	TControlTraffic();
 	~TControlTraffic();
 
-	void LostPacket(INetTransport::TLostPacket* p);//INetTransport::TDescRecv* p);
+	//void LostPacket(INetTransport::TLostPacket* p);//INetTransport::TDescRecv* p);
   void Send(TIP_Port& ip_port, std::list<nsNetDoser::TDescSendPacket*>* pLDSP);
   bool Work();
   void SetTransport(INetTransport* pNT);

@@ -75,7 +75,7 @@ using namespace nsNetTransportStruct;
 
 //----------------------------------------------------------------------------
 TNetTransport::TNetTransport(char* pPathLog) : INetTransport(pPathLog),	
-mTimeOut(eTimeLivePacketDef), mCntTry(eCntTryDef)
+mTimeOut(eTimeLivePacket), mCntTry(eCntTry)
 {
   flgActive = false;
   mArrConnect.Sort(SortFreshInfoConnect);
@@ -196,7 +196,6 @@ void TNetTransport::Engine()
 			};
 		}
 		SendUnchecked();
-		NotifyLostPacket();
 	}
 	flgActive = false;
 }
@@ -216,7 +215,7 @@ void TNetTransport::Stop()
 	flgNeedStop = true;
 	while(IsActive())
 	{
-		ht_msleep(WaitThread());
+		ht_msleep(eWaitThread);
 	}
 	mUDP.close();
 }
@@ -306,15 +305,14 @@ void TNetTransport::SendUnchecked()
 		TBasePacketNetTransport* pDefPacket = (TBasePacketNetTransport*)mArrWaitCheck.Get(i);
 		if(pDefPacket)
 		{
-			if(pDefPacket->GetTime()+eTimeLivePacketDef<now_ms) 
+			if(pDefPacket->GetTime()+eTimeLivePacket<now_ms) 
 			{
-				TIP_Port ip_port;
-				ip_port.ip   = pDefPacket->GetIP_dst();
-				ip_port.port = pDefPacket->GetPort_dst();
-				AddEventLostPacket(ip_port, pDefPacket->GetCntTry());
 				if(Send(pDefPacket)==false)
 				{
-					Disconnect(&ip_port);
+          TIP_Port ip_port;
+          ip_port.ip   = pDefPacket->GetIP_dst();
+          ip_port.port = pDefPacket->GetPort_dst();
+          Disconnect(&ip_port);
 					i--;
 				}
 			}
@@ -331,9 +329,6 @@ void TNetTransport::Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCal
 		case eRecv:
       mCallBackRecv.Register(pFunc);
       break;
-		case eLostPacket:
-			mCallBackLostPacket.Register(pFunc);
-			break;
     case eDisconnect:
       mCallBackDisconnect.Register(pFunc);
       break;
@@ -347,9 +342,6 @@ void TNetTransport::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeC
 		case eRecv:
 			mCallBackRecv.Unregister(pFunc);
 			break;
-		case eLostPacket:
-			mCallBackLostPacket.Unregister(pFunc);
-			break;
 		case eDisconnect:
 			mCallBackDisconnect.Unregister(pFunc);
 			break;
@@ -359,7 +351,7 @@ void TNetTransport::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeC
 bool TNetTransport::Send(TBasePacketNetTransport* pDefPacket)
 {
   unsigned char cntTry = pDefPacket->GetCntTry();
-  if((unsigned char)(cntTry+1)>eCntTryDef)
+  if((unsigned char)(cntTry+1)>eCntTry)
     return false;
   
   pDefPacket->SetCntTry(cntTry+1);  
@@ -632,11 +624,11 @@ TInfoConnect* TNetTransport::GetInfoConnect(TIP_Port& v)
 	return pFoundFresh;
 }
 //----------------------------------------------------------------------------------
-bool TNetTransport::Synchro(unsigned int ip, unsigned short port)
+bool TNetTransport::Connect(unsigned int ip, unsigned short port)
 {
 	if(IsActive())
 	{
-		BL_MessageBug("Нельзя вызывать Synchro() после вызова Start().");
+		BL_MessageBug("Нельзя вызывать Connect() после вызова Start().");
 		return false;
 	}
 
@@ -655,16 +647,16 @@ bool TNetTransport::Synchro(unsigned int ip, unsigned short port)
 	unsigned int time_send = 0;
   while((start_ms+eWaitSynchro*1000)>now_ms)
   {
-		if(now_ms>time_send+eTimeLivePacketDef)
+		if(now_ms>time_send+eTimeLivePacket)
 		{
 			time_send	= ht_GetMSCount();
 			if(!SendSynchro(ip,port,cntTry)) {mUDP.close();return false;}
-		  if(cntTry>eCntTryDef) 
+		  if(cntTry>eCntTry) 
         return false;
       cntTry++;
 		}
     
-    int res = mUDP.read(mBuffer,eSizeBuffer,(eWaitSynchro*1000)/eCntTryDef, ip, port);
+    int res = mUDP.read(mBuffer,eSizeBuffer,(eWaitSynchro*1000)/eCntTry, ip, port);
     switch(res)
     {
       case RR_ERROR:
@@ -753,32 +745,5 @@ void TNetTransport::SetupBufferForSocket()
   bool resSetRecv = mUDP.SetRecvBuffer(eSizeBufferForRecv);
   bool resSetSend = mUDP.SetSendBuffer(eSizeBufferForSend);
   BL_ASSERT(resSetRecv&resSetSend);
-}
-//----------------------------------------------------------------------------------
-void TNetTransport::SetTimeOutPacket( int t_ms)
-{
-	mTimeOut = t_ms;
-}
-//----------------------------------------------------------------------------------
-void TNetTransport::SetCntTry( int c)
-{
-	mCntTry = c;
-}
-//----------------------------------------------------------------------------------
-void TNetTransport::AddEventLostPacket( TIP_Port& ip_port, unsigned char c)
-{
-	mListLostPacket.push_back(TLostPacket(ip_port,c));
-}
-//----------------------------------------------------------------------------------
-void TNetTransport::NotifyLostPacket()
-{
-	TListLPIt bit = mListLostPacket.begin();
-	TListLPIt eit = mListLostPacket.end();
-	while(bit!=eit)
-	{
-		mCallBackLostPacket.Notify((void*)&(*bit), sizeof(TLostPacket));
-		bit++;
-	}
-	mListLostPacket.clear();
 }
 //----------------------------------------------------------------------------------

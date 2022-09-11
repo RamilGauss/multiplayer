@@ -14,10 +14,9 @@ char packet[SIZE_PACKET];
 
 float freq_printf_recv_packet = 10.0f;// %
 float limit_recv_packet = 0;// %
-static int cntLostPacket = 0;
 
 //TMakerNetTransport
-TMakerNetDoser 
+TMakerNetTransport_TCP_UDP 
 g_MakerNetTransport;
 //-----------------------------------------------------------------------
 void Init()
@@ -95,16 +94,5 @@ void Recv(void* p, int s)
 			RecvStream(NULL,0);
 			break;
 	}
-}
-//-----------------------------------------------------------------------
-void LostPacket(void* p, int s)
-{
-	INetTransport::TLostPacket* pDesc = (INetTransport::TLostPacket*)p;
-	cntLostPacket++;
-}
-//-----------------------------------------------------------------------
-int GetCntLostPacket()
-{
-	return cntLostPacket;
 }
 //-----------------------------------------------------------------------

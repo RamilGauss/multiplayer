@@ -179,26 +179,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\AutomatRegularSpeed.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\BasePacketNetTransport.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\BigPacketNetDoser.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ControlTraffic.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DescSendPacket.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\dllmain.cpp"
 				>
 				<FileConfiguration
@@ -221,11 +201,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\DoserPacket.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DoserProtocolPacket.cpp"
+				RelativePath=".\INetControl.cpp"
 				>
 			</File>
 			<File
@@ -233,27 +209,27 @@
 				>
 			</File>
 			<File
-				RelativePath=".\NetDoser.cpp"
+				RelativePath=".\NetControlTCP.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\NetTransport.cpp"
+				RelativePath=".\NetControlUDP.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NetDeviceTCP.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NetDeviceUDP.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NetMakerEventWSA.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\NetTransport_TCP_UDP.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\OverloadNetDoser.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SinglePacketNetDoser.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\StateARS.cpp"
 				>
 			</File>
 		</Filter>
@@ -263,35 +239,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\AutomatRegularSpeed.h"
+				RelativePath=".\INetControl.h"
 				>
 			</File>
 			<File
-				RelativePath=".\BasePacketNetTransport.h"
+				RelativePath=".\INetDevice.h"
 				>
 			</File>
 			<File
-				RelativePath=".\BigPacketNetDoser.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ControlTraffic.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DescSendPacket.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DoserPacket.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DoserProtocolEnum.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DoserProtocolPacket.h"
+				RelativePath=".\INetMakerEvent.h"
 				>
 			</File>
 			<File
@@ -299,31 +255,27 @@
 				>
 			</File>
 			<File
-				RelativePath=".\NetDoser.h"
+				RelativePath=".\NetControlTCP.h"
 				>
 			</File>
 			<File
-				RelativePath=".\NetTransport.h"
+				RelativePath=".\NetControlUDP.h"
+				>
+			</File>
+			<File
+				RelativePath=".\NetDeviceTCP.h"
+				>
+			</File>
+			<File
+				RelativePath=".\NetDeviceUDP.h"
+				>
+			</File>
+			<File
+				RelativePath=".\NetMakerEventWSA.h"
 				>
 			</File>
 			<File
 				RelativePath=".\NetTransport_TCP_UDP.h"
-				>
-			</File>
-			<File
-				RelativePath=".\OverloadNetDoser.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SinglePacketNetDoser.h"
-				>
-			</File>
-			<File
-				RelativePath=".\StateARS.h"
-				>
-			</File>
-			<File
-				RelativePath=".\TransportProtocolPacket.h"
 				>
 			</File>
 		</Filter>

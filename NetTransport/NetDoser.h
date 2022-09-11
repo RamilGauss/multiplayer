@@ -67,8 +67,7 @@ class TNetDoser : public INetTransport
   GThread* thread;
 
 	TCallBackRegistrator mCallBackRecv;      // TDescRecv		
-	TCallBackRegistrator mCallBackLostPacket;// TLostPacket
-	TCallBackRegistrator mCallBackDisconnect;// TIP_Port
+  TCallBackRegistrator mCallBackDisconnect;// TIP_Port
 
 public:
 
@@ -95,17 +94,12 @@ public:
 	virtual bool IsActive();
 
   // синхронная функция
-  virtual bool Synchro(unsigned int ip, unsigned short port); // вызов только для клиента
-
-	virtual void SetTimeOutPacket( int t_ms){};
-	virtual void SetCntTry( int c){};
-
+  virtual bool Connect(unsigned int ip, unsigned short port); // вызов только для клиента
 
 private:
 	TNetTransport       mTransport;
   TDoserPacket        mDoserPacket;
   TControlTraffic   mControlTrafficTo;
-	//TControlTrafficFrom mControlTrafficFrom;
 
 protected:
   friend void* ThreadDoser(void*p);
@@ -115,11 +109,9 @@ protected:
 
 public:
   void Analiz(TDescRecv* p, int s);// анализ типов пакетов
-	void LostPacket(INetTransport::TLostPacket* p, int s);
   void Disconnect(TIP_Port* p, int s);
   void RecvBigPacket(TDescRecv* p, int s);
 
-	//void ControlTrafficFrom(TDescRecv* p);
 };
 
 #endif

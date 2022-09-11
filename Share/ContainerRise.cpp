@@ -38,7 +38,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@mail.ru, ramil2085@mail
 
 #include "ContainerRise.h"
 
-
 TContainerRise::TContainerRise()
 {
   mSizeUse = 0;

@@ -67,7 +67,7 @@ public:
 
 public:
 	UdpDevice();
-	~UdpDevice();
+	virtual ~UdpDevice();
 	void close(void);
 	bool open();
   int read(void *buffer, unsigned long len, unsigned long timeout, unsigned int &ip, unsigned short &port);
@@ -78,6 +78,8 @@ public:
   bool SetSendBuffer(unsigned int size);
   
   unsigned int GetMaxSizeBufferForSocket();// ???
+
+  int GetSocket(){return mSocket;}
 
 private:
 

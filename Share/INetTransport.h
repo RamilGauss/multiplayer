@@ -49,8 +49,7 @@ public:
   //типы callback вызовов
   typedef enum{
     eRecv       = 0, // TDescRecv		   
-    eLostPacket = 1, // TLostPacket
-    eDisconnect = 2, // TIP_Port
+    eDisconnect = 1, // TIP_Port
   }eTypeCallback;
 	typedef enum{
 		ePacket  = 0,		   
@@ -64,16 +63,6 @@ public:
     int   sizeData;
 		eTypeRecv type;
   };
-	struct TLostPacket
-	{
-		TIP_Port      mIP_Port;
-		unsigned char mCntTry;
-		TLostPacket( TIP_Port& ip_port, unsigned char c)
-		{
-			mIP_Port = ip_port;
-			mCntTry  = c;
-		}
-	};
 
   INetTransport(char* pPathLog = NULL);
   virtual ~INetTransport();
@@ -96,10 +85,7 @@ public:
 
   // синхронная функция
 	// вызывать до вызова Start()
-  virtual bool Synchro(unsigned int ip, unsigned short port) = 0; // вызов только для клиента
-
-	virtual void SetTimeOutPacket( int t_ms) = 0;
-	virtual void SetCntTry( int c) = 0;
+  virtual bool Connect(unsigned int ip, unsigned short port) = 0; // вызов только для клиента
 };
 
 

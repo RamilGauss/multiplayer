@@ -13,16 +13,13 @@ extern char packet[SIZE_PACKET];
 
 extern 
 //TMakerNetTransport
-TMakerNetDoser 
+TMakerNetTransport_TCP_UDP
 g_MakerNetTransport;
 
 extern void Init();
 
 extern void Recv(void* p, int s);
-extern void LostPacket(void* p, int s);
 extern void Disconnect(void* p, int s);
-
-extern int GetCntLostPacket();
 
 #endif
 

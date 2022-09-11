@@ -53,14 +53,14 @@ INetTransport* TWrapperMakerTransport::New()
 {
   // указать создателя интерфейса и сам интерфейс
   //TMakerNetDoser
-  TMakerNetTransport 
+  TMakerNetTransport_TCP_UDP 
   maker;
 	return maker.New();
 }
 //-------------------------------------------------------------------------
 void TWrapperMakerTransport::Delete(INetTransport* pTransport)
 {
-  TMakerNetTransport maker;
+  TMakerNetTransport_TCP_UDP maker;
   maker.Delete(pTransport);
 }
 //-------------------------------------------------------------------------

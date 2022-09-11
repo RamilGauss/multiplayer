@@ -2,11 +2,13 @@
 #include <Windows.h> 
 #include <conio.h> 
 #include <stdio.h>
+#include "NetSystem.h"
+#include "HiTimer.h"
 
 #pragma comment(lib, "ws2_32.lib") 
 
 #define SOCKET_ERRNO WSAGetLastError() 
-#define ADDRESS "127.0.0.1" 
+#define ADDRESS "192.168.23.226"//"127.0.0.1" 
 #define PORT 1234 
 
 static SOCKET ListenFirstFreePort() 
@@ -40,16 +42,44 @@ static SOCKET ListenFirstFreePort()
 	return hSocket; 
 } 
 //----------------------------------------------------
-void main() 
+#include "NetDeviceTCP.h"
+int main() 
 { 
-	WSADATA stack_info; 
+  // Initialize Winsock 
+  ns_Init();
+  //###
+  TNetDeviceTCP tcp;
+  int s = tcp.Open(true, 6666);
+  char* sLocalHost = ns_getSelfIP(0);
+  unsigned int   ip_client; 
+  unsigned short port_client;
+  int s_remote;
+  while(true)
+  {
+    s_remote = tcp.Accept(s, ip_client, port_client);
+    printf("Accept sock_remote=%d\n", s_remote);
+    if(s_remote!=SOCKET_ERROR)
+    {
+      printf("Accept port=%d\n", port_client);
+      break;
+    }
+    //ht_msleep(20);
+  }
+  while(true)
+  {
+    char buffer[1000];
+    int resRecv = tcp.Read(s_remote, buffer, sizeof(buffer), ip_client, port_client);
+    if(resRecv)
+      printf("Recv size=%d\n", resRecv);
+    ht_msleep(1000);
+  }
+  //###
+
 	SOCKET ahSocket[2]; 
 	WSAEVENT ahEvents[2]; 
 	DWORD dwEvent; 
 	WSANETWORKEVENTS NetworkEvents; 
 	int rc; 
-	// Initialize Winsock 
-	WSAStartup(MAKEWORD(2,0), &stack_info) ; 
 
 	// Create events 
 	ahEvents[0] = WSACreateEvent(); 
@@ -108,7 +138,7 @@ void main()
 							printf( "recv() error %d\n", SOCKET_ERRNO ); 
 							exit(1); 
 						} 
-						// we put the 0 in case it has been cut - unlikey to happen on local network 
+						// we put the 0 in case it has been cut - unlikely to happen on local network 
 						szBuffer[cbRecv] = 0; 
 						// write data in console window 
 						printf( "socket %d : '%s'\n", dwEvent, szBuffer ); 
@@ -123,6 +153,8 @@ void main()
 					printf( "accept ok (dwEvent=%d)\n", dwEvent ); 
 					// we create another socket to accept the connexion with the client socket 
 					ahSocket[1] = accept(ahSocket[dwEvent], (struct sockaddr *)&addrAccept, &lenAccept); 
+          unsigned short port = ntohs(addrAccept.sin_port);
+          unsigned int ip = addrAccept.sin_addr.s_addr;
 					// we want to be informed on when we'll be able read data from it 
 					rc = WSAEventSelect(ahSocket[1], ahEvents[1], FD_READ|FD_CLOSE  ); 
 					if( rc == SOCKET_ERROR ) 
@@ -133,6 +165,7 @@ void main()
 				} 
 		} 
 	} 
+  return 0;
 }
 /*
 #include <conio.h>

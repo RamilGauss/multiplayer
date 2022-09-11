@@ -57,14 +57,6 @@ void FuncRecv(void* p, int s)
   g_doser_unlock();
 }
 //-----------------------------------------------------------------------
-void FuncLostPacket(void* p, int s)
-{
-	g_doser_lock();
-	if(g_NetDoser)
-		g_NetDoser->LostPacket((INetTransport::TLostPacket*)p,s);
-	g_doser_unlock();
-}
-//-----------------------------------------------------------------------
 void FuncDisconnect(void* p, int s)
 {
   g_doser_lock();
@@ -121,10 +113,6 @@ void TNetDoser::Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallbac
       pDoserFunc = FuncRecv;
       mCallBackRecv.Register(pFunc);
       break;
-		case eLostPacket:
-      pDoserFunc = FuncLostPacket;
-			mCallBackLostPacket.Register(pFunc);
-			break;
     case eDisconnect:
       pDoserFunc = FuncDisconnect;
       mCallBackDisconnect.Register(pFunc);
@@ -142,10 +130,6 @@ void TNetDoser::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallb
       pDoserFunc = FuncRecv;
       mCallBackRecv.Unregister(pFunc);
       break;
-		case eLostPacket:
-      pDoserFunc = FuncLostPacket;
-			mCallBackLostPacket.Unregister(pFunc);
-			break; 
 		case eDisconnect:
       pDoserFunc = FuncDisconnect;
       mCallBackDisconnect.Unregister(pFunc);
@@ -154,9 +138,9 @@ void TNetDoser::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallb
   mTransport.Unregister(pDoserFunc,type);
 }
 //--------------------------------------------------------------------------
-bool TNetDoser::Synchro(unsigned int ip, unsigned short port)
+bool TNetDoser::Connect(unsigned int ip, unsigned short port)
 {
-	return mTransport.Synchro(ip,port);
+	return mTransport.Connect(ip,port);
 }
 //--------------------------------------------------------------------------
 void* ThreadDoser(void*p)
@@ -231,10 +215,6 @@ void TNetDoser::Analiz(TDescRecv* p, int s)
     case eSinglePacket:
       NotifyRecvSinglePacket(p);
       break;
-    //case eOverload:
-    //  // отреагировать на перегрузку
-    //  mControlTrafficTo.Recv(p);
-    //  break;
     default:BL_FIX_BUG();
   }
 }
@@ -252,23 +232,5 @@ void TNetDoser::RecvBigPacket(TDescRecv* p, int s)
   // пришло от DoserPacket, собранный пакет
   // не содержит заголовков, "чистые" данные
   mCallBackRecv.Notify(p,sizeof(TDescRecv)); // транслировать дальше
-}
-//----------------------------------------------------------------------------------
-//void TNetDoser::ControlTrafficFrom(TDescRecv* p)
-//{
-//	THeaderBasePacket* pPacket = (THeaderBasePacket*)(p->data);
-//	switch(pPacket->type)
-//	{
-//		case eBigPacket:
-//		case eSinglePacket:
-//			mControlTrafficFrom.Recv(p);
-//			break;
-//		default:;
-//	}
-//}
-//----------------------------------------------------------------------------------
-void TNetDoser::LostPacket(INetTransport::TLostPacket* p, int s)
-{
-	mCallBackLostPacket.Notify(p,s);
 }
 //----------------------------------------------------------------------------------
