@@ -1,6 +1,0 @@
-2013_10_14 14:35:28.578
-	TMaster::GetSlaveByIDSession() Slave id=1 is not founded.
-2013_10_14 14:36:17.281
-	TMaster::GetClientByIDSessionWait() Client id=2 is not founded.
-2013_10_14 14:37:26.093
-	TMaster::GetClientByID() Client id=2 is not founded.

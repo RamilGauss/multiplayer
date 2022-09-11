@@ -16,12 +16,13 @@ See for more information License.h.
 #include "ScenarioLoginMaster.h"
 #include "ScenarioFlow.h"
 #include "ScenarioSendToClient.h"
+#include "ScenarioLoginClient.h"
 
 using namespace nsMelissa;
 
 TSuperServer::TSuperServer()
 {
-
+  mControlSc->mLoginClient->SetBehavior(TScenarioLoginClient::eSuperServer);
 }
 //-------------------------------------------------------------------------
 TSuperServer::~TSuperServer()

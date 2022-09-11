@@ -95,11 +95,8 @@ void TServerDeveloperTool_SuperServerTank::Event(nsEvent::TEvent* pEvent)
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_SuperServerTank::InitLog()
 {
-  if(mFuncGetLogger)
-  {
-    mFuncGetLogger()->Register("Inner");// для логирования внутренних событий
-    mFuncGetLogger()->Init("SuperServerTank");
-  }
+  GetLogger()->Register("Inner");// для логирования внутренних событий
+  GetLogger()->Init("SuperServerTank");
 }
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_SuperServerTank::InitQtForm()

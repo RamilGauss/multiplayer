@@ -490,6 +490,66 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="LoginClient"
+				>
+				<Filter
+					Name="Header"
+					>
+					<File
+						RelativePath=".\Scenario\BaseScLoginClient.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\BaseScLoginClient_Struct.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScLoginClient_ClientImpl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScLoginClient_MasterImpl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScLoginClient_SlaveImpl.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScLoginClient_SuperServerImpl.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Source"
+					>
+					<File
+						RelativePath=".\Scenario\BaseScLoginClient.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\BaseScLoginClient_Struct.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScLoginClient_ClientImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScLoginClient_MasterImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScLoginClient_SlaveImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Scenario\ScLoginClient_SuperServerImpl.cpp"
+						>
+					</File>
+				</Filter>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="ContextScenario"

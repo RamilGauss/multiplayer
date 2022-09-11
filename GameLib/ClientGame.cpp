@@ -131,7 +131,7 @@ bool TClientGame::Init(int variant_use, const char* sNameDLL, vector<string>& ar
   // запустить потоки, в которых будут работать модули
   StartThreadModule();
   //------------------------------------------
-  mClientDeveloperTool->SetInitLogFunc(::GetLogger);
+  //mClientDeveloperTool->SetInitLogFunc(::GetLogger);
   mClientDeveloperTool->Init(&mCClient,arg);
 
   return true;

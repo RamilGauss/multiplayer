@@ -35,8 +35,6 @@ protected:
 
 	IMakerObjectCommon* mMakerObjectCommon;
 
-	typedef TLogger* (*TInitLogFunc)(); 
-	TInitLogFunc mFuncGetLogger;
 public:
   IDeveloperTool(){flgExit=false;}
   virtual ~IDeveloperTool(){};
@@ -48,7 +46,6 @@ public:
 
 	void Exit(){flgExit = true;}// закончить работу с движком
 	bool NeedExit(){return flgExit;}
-  void SetInitLogFunc(TInitLogFunc pFunc){mFuncGetLogger=pFunc;}
 };
 
 #endif

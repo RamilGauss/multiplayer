@@ -13,10 +13,10 @@ See for more information License.h.
 #define INDEX_I(M,k,n,I) \
 M I m[k][n]
 
-// M1 и M2 - TMatrix16 или D3DXMATRIX
-// OP - операция, например -=, +
-// I1 и I2 - как происходит адресация, через . или ->
-// k и n - индексы в матрице
+// M1 and M2 - TMatrix16 or D3DXMATRIX
+// OP - operation, for example -=, +
+// I1 and I2 - how access, by . or ->
+// k and n - indexes in matrix
 #define BASE_MATRIX_OP(M1,M2,OP,I1,I2,k,n) \
 INDEX_I(M1,k,n,I1) OP INDEX_I(M2,k,n,I2)
 
@@ -41,8 +41,8 @@ BASE_MATRIX_OP_VALUE(M,VALUE,OP,I,k,n);
 MATRIX_ALL_VALUE(M,VALUE,OP,I,4,4)
 
 //----------------------------------------------------------------------
-// Макросы для использования
-// OP - операция, например, a *= b; M1 = "a", M2 = "b", OP = "*="
+// Macros for use
+// OP - operation, for example, a *= b; M1 = "a", M2 = "b", OP = "*="
 // MATRIX16_OP_M_M( a, b, *= )
 //----------------------------------------------------------------------
 // матрица - матрица
@@ -289,9 +289,11 @@ class SHARE_EI TLine
 public:
   TLine(){mType=eUndef;}
 
-  // сформировать уравнение прямой при пересечении 2-ух плоскостей
+  // forms equation of line, when intersect of 2 planes, 
+	// сформировать уравнение прямой при пересечении 2-ух плоскостей
   bool FindAndSetIntersect(TPlane* pP1,TPlane* pP2);
-  // найти 2 вектора(нормальные) на прямой от точки
+  // find 2 vectors(normal) on line from point
+	// найти 2 вектора(нормальные) на прямой от точки
   bool FindVector(TVector3* pOut1, TVector3* pOut2, bool do_normal = false);
 
 protected:

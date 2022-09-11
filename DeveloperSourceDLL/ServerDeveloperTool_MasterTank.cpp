@@ -153,11 +153,8 @@ void TServerDeveloperTool_MasterTank::HandleFromMelissa(TBaseEvent* pBE)
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_MasterTank::InitLog()
 {
-  if(mFuncGetLogger)
-  {
-    mFuncGetLogger()->Register("Inner");// для логирования внутренних событий
-    mFuncGetLogger()->Init("MasterTank");
-  }
+  GetLogger()->Register("Inner");// для логирования внутренних событий
+  GetLogger()->Init("MasterTank");
 }
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_MasterTank::ConnectDown(TEventConnectDown* pEvent)

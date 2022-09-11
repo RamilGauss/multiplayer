@@ -27,6 +27,9 @@ See for more information License.h.
 #include "ShareMisc.h"
 #include "NetSystem.h"
 #include "BaseEvent.h"
+#include "file_operation.h"
+#include "StorePathResources.h"
+#include "MapXML_Field.h"
 
 using namespace std;
 using namespace nsStruct3D;
@@ -213,8 +216,14 @@ void TClientDeveloperTool_ClientTank::Init(TComponentClient* pComponent, vector<
   // подстроиться
   mComponent.mGUI->Resize();
   // HotKey
-  bool resLoadMSM = mComponent.mMStateMachine->Load("../game_param/ViewerModel.xml", mIDkey);
-  BL_ASSERT(resLoadMSM);
+	if(GetStorePathResources()->GetCount("game_param")>0)
+	{
+		string sGameParam = GetStorePathResources()->GetSecond("game_param");
+		bool resLoadMSM = mComponent.mMStateMachine->Load(sGameParam.data(), mIDkey);
+		BL_ASSERT(resLoadMSM);
+	}
+	else
+		BL_FIX_BUG();
 }
 //------------------------------------------------------------------------------------
 void TClientDeveloperTool_ClientTank::Done()
@@ -229,11 +238,8 @@ void TClientDeveloperTool_ClientTank::Done()
 //---------------------------------------------------------------------------------------------
 void TClientDeveloperTool_ClientTank::InitLog()
 {
-  if(mFuncGetLogger)
-  {
-    mFuncGetLogger()->Register("Inner");// для логирования внутренних событий
-    mFuncGetLogger()->Init("ClientTank");
-  }
+  GetLogger()->Register("Inner");// для логирования внутренних событий
+  GetLogger()->Init("ClientTank");
 }
 //---------------------------------------------------------------------------------------------
 string TClientDeveloperTool_ClientTank::GetPathXMLFile()

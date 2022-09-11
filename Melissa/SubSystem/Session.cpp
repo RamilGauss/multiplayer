@@ -37,7 +37,10 @@ void TSession::Work()
 void TSession::Send(TBreakPacket bp, bool check)
 {
   SendData(ePacket, bp, check);
-  RefreshLastTime();
+  // гарантия того что пакет дойдет
+  // иначе сессия на той стороне не освежит время
+  if(check)
+    RefreshLastTime();
 }
 //---------------------------------------------------------------------
 void TSession::SetTransport(INetTransport* pTransport)

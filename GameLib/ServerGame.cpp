@@ -117,7 +117,7 @@ bool TServerGame::Init(int variant_use, const char* sNameDLL, vector<string>& ar
   mCServer.mTimerLastEvent->SetSelfID(ID_SRC_EVENT_TIMER_LAST_EVENT);
   //------------------------------------------
   //------------------------------------------
-  mServerDeveloperTool->SetInitLogFunc(::GetLogger);
+  //mServerDeveloperTool->SetInitLogFunc(::GetLogger);
   mServerDeveloperTool->Init(&mCServer,arg);
 
   return true;

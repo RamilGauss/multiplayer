@@ -20,7 +20,7 @@ using namespace nsMelissa;
 
 TClient::TClient()
 {
-
+  mControlSc->mLoginClient->SetBehavior(TScenarioLoginClient::eClient);
 }
 //-------------------------------------------------------------------------
 TClient::~TClient()

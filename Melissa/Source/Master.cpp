@@ -30,6 +30,7 @@ using namespace nsMelissa;
 TMaster::TMaster()
 {
   mCurCounterGroup = 0;
+  mControlSc->mLoginClient->SetBehavior(TScenarioLoginClient::eMaster);
 }
 //-------------------------------------------------------------------------
 TMaster::~TMaster()

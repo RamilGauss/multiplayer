@@ -55,7 +55,7 @@ namespace nsMelissa
     virtual void DelayBegin();
     // отработка своих событий и ожиданий
     virtual void Work();
-  protected:
+  public:
     bool Begin();
     void End();
     // запрос на новую сессию, кто зарегистрировался выставит контекст с помощью SetContext()

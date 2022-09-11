@@ -1,3 +1,13 @@
+ Start project.
+
+Проект пока готов на 80% от того, что бы мне хотелось видеть в нем.
+Сетевой транспорт на 75% готов. Нет физики, нет звука, нет БД. Но есть
+GUI, графика и ядро.
+
+Game Engine Tornado, MMO, for example World of Tanks clone 
+
+MMOG
+
     English 
     
 Requires:

@@ -21,6 +21,8 @@ See for more information License.h.
 #include "IControlCamera.h"
 #include "IXML.h"
 #include "Client.h"
+#include "StorePathResources.h"
+#include "MapXML_Field.h"
 
 using namespace std;
 using namespace nsStruct3D;
@@ -240,11 +242,17 @@ void TClientDeveloperTool_ViewerModel::Init(TComponentClient* pComponent, vector
 #ifdef LOG_TIME_LOAD_EDITOR_MODEL
   start = ht_GetMSCount() - start;
   float v = start/float(cnt[0]*cnt[1]*cnt[2]);
-  mFuncGetLogger()->Get("Inner")->WriteF_time("ViewerModel: Время загрузки объектов t=%u мс,v=%f мс/об.\n",start,v);
+  GetLogger("Inner")->WriteF_time("ViewerModel: Время загрузки объектов t=%u мс,v=%f мс/об.\n",start,v);
 #endif
   // HotKey
-  bool resLoadMSM = mComponent.mMStateMachine->Load("../game_param/ViewerModel.xml", mIDkey);
-  BL_ASSERT(resLoadMSM);
+	if(GetStorePathResources()->GetCount("game_param")>0)
+	{
+		string sGameParam = GetStorePathResources()->GetSecond("game_param");
+		bool resLoadMSM = mComponent.mMStateMachine->Load(sGameParam.data(), mIDkey);
+		BL_ASSERT(resLoadMSM);
+	}
+	else
+		BL_FIX_BUG();
 }
 //------------------------------------------------------------------------------------
 void TClientDeveloperTool_ViewerModel::CreateObjects(int cntK,int cntJ,int cntI)
@@ -284,11 +292,8 @@ void TClientDeveloperTool_ViewerModel::Done()
 //---------------------------------------------------------------------------------------------
 void TClientDeveloperTool_ViewerModel::InitLog()
 {
-  if(mFuncGetLogger)
-  {
-    mFuncGetLogger()->Register("Inner");// для логирования внутренних событий
-    mFuncGetLogger()->Init("ViewerModel");
-  }
+  GetLogger()->Register("Inner");// для логирования внутренних событий
+  GetLogger()->Init("ViewerModel");
 }
 //---------------------------------------------------------------------------------------------
 string TClientDeveloperTool_ViewerModel::GetPathXMLFile()

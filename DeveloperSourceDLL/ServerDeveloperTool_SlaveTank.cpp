@@ -140,11 +140,8 @@ void TServerDeveloperTool_SlaveTank::HandleFromMelissa(TBaseEvent* pBE)
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_SlaveTank::InitLog()
 {
-  if(mFuncGetLogger)
-  {
-    mFuncGetLogger()->Register("Inner");// для логирования внутренних событий
-    mFuncGetLogger()->Init("SlaveTank");
-  }
+  GetLogger()->Register("Inner");// для логирования внутренних событий
+  GetLogger()->Init("SlaveTank");
 }
 //---------------------------------------------------------------------------------------------
 void TServerDeveloperTool_SlaveTank::InitQtForm()

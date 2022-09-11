@@ -27,6 +27,7 @@ using namespace std;
 TSlave::TSlave()
 {
   mTimeNeedSendSynchro = 0;
+  mControlSc->mLoginClient->SetBehavior(TScenarioLoginClient::eSlave);
 }
 //-------------------------------------------------------------------------
 TSlave::~TSlave()

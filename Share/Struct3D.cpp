@@ -90,10 +90,10 @@ TMatrix16* SetMatrixRotateZ(TMatrix16* pV, float ugol)
   return pV;
 }
 //-------------------------------------------------------------------------
-TMatrix16* SetMatrixRotationYawPitchRoll(nsStruct3D::TMatrix16* pV,
-                                                   float Yaw,
-                                                   float Pitch,
-                                                   float Roll )
+TMatrix16* SetMatrixRotationYawPitchRoll(TMatrix16* pV,
+                                         float Yaw,
+                                         float Pitch,
+                                         float Roll )
 {
 #ifdef WIN32
   D3DXMATRIX* InOut = (D3DXMATRIX*)pV;
@@ -663,26 +663,26 @@ bool TVector3::operator != ( const TVector3& pV) const
 //-------------------------------------------------------------------------
 bool TVector3::operator > ( const TVector3& v) const
 {
-  if(x>v.x) return true; // высший разряд
+  if(x>v.x) return true; // high assign,  высший разряд
   else if(x<v.x) return false;
   //---------------------------------
   if(y>v.y) return true;
   else if(y<v.y) return false;
   //---------------------------------
-  if(z>v.z)// низший разряд
+  if(z>v.z)// low assign, низший разряд
     return true;
   return false;
 }
 //-------------------------------------------------------------------------
 bool TVector3::operator < ( const TVector3& v) const
 {
-  if(x<v.x) return true; // высший разряд
+  if(x<v.x) return true; // high assign, высший разряд
   else if(x>v.x) return false;
   //---------------------------------
   if(y<v.y) return true;
   else if(y>v.y) return false;
   //---------------------------------
-  if(z<v.z)// низший разряд
+  if(z<v.z)// low assign, низший разряд
     return true;
   return false;
 }
@@ -787,20 +787,18 @@ bool TPlane::operator != ( const TPlane& p) const
   return ((p.a!=a)||(p.b!=b)||(p.c!=c)||(p.d!=d));
 }
 //-------------------------------------------------------------------------
-// сформировать уравнение прямой при пересечении 2-ух плоскостей
 bool TLine::FindAndSetIntersect(TPlane* pP1,TPlane* pP2)
 {
   //1 найдем тип прямой (зависит от того равны ли коэффициенты плоскости нулю)
-
-
-  if((*pP1==*pP2)           ||// линия выродилась в плоскость
-     (*pP1==TPlane(0,0,0,0))||// вырожденное уравнение
+	// find type of line (determinate by equal coefficient of plane equal zero)
+  if((*pP1==*pP2)           ||// line will plane, линия выродилась в плоскость
+     (*pP1==TPlane(0,0,0,0))||// will zero equal, вырожденное уравнение
      (*pP2==TPlane(0,0,0,0)))
   {
     SetType(eUndef);
     return false;
   }
-  //  через Х
+  //  by X, через Х
   if(pP1->c*pP2->b!=pP2->c*pP1->b)
   {
     float div = pP1->c*pP2->b - pP1->b*pP2->c;// c1*b2-b1*c2
@@ -809,7 +807,7 @@ bool TLine::FindAndSetIntersect(TPlane* pP1,TPlane* pP2)
     c = (pP1->b*pP2->a - pP1->a*pP2->b)/div;// b1*a2-b2*a1
     d = (pP1->b*pP2->d - pP1->d*pP2->b)/div;// b1*d2-b2*d1
     SetType(eX);
-  }// через Z
+  }// by Z, через Z
   else if(pP1->a*pP2->b!=pP2->a*pP1->b)
   {
     float div = pP1->b*pP2->a - pP1->a*pP2->b;// b1*a2-a1*b2 
@@ -819,7 +817,7 @@ bool TLine::FindAndSetIntersect(TPlane* pP1,TPlane* pP2)
     c = (pP1->c*pP2->a - pP1->a*pP2->c)/div;// c1*a2-a1*c2
     d = (pP1->d*pP2->a - pP1->a*pP2->d)/div;// d1*a2-a1*d2
     SetType(eZ);
-  }// через Y
+  }// by Y, через Y
   else
   {
     float div = pP1->a*pP2->c - pP1->c*pP2->a;// a1*c2-c1*a2
@@ -833,7 +831,6 @@ bool TLine::FindAndSetIntersect(TPlane* pP1,TPlane* pP2)
   return true;
 }
 //-------------------------------------------------------------------------
-// найти 2 вектора(нормальные) на прямой от точки
 bool TLine::FindVector(TVector3* pOut1, TVector3* pOut2, bool do_normal)
 {
   if(mType==eUndef)
