@@ -33,12 +33,10 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
 #ifndef StatisticValueH
 #define StatisticValueH
 
 #include <math.h>
-#include "BL_IOStream.h"
              
 //---------------------------------------------------------------------------
 //  лассы предназначены TStatXXX дл€ расчета статистических параметров
@@ -60,7 +58,7 @@ inline double calcSKO( int sum, int sum2, int count )
   return sqrt( disp );
 }
 //---------------------------------------------------------------------------
-inline double calcSKO( gint64 sum, gint64 sum2, int count )
+inline double calcSKO( unsigned __int64 sum, unsigned __int64 sum2, int count )
 {
   // ” Ќиконова:
   // disp = ( mSum2 - 2*(mSum/mCount)*mSum + ((mSum*mSum)/mCount) ) / mCount )
@@ -82,10 +80,10 @@ inline double calcSKO( double sum, double sum2, int count )
 }
 //---------------------------------------------------------------------------
 // ћакрос удобной детализации шаблона 
-#define TStatType_char    TStatValueT<char,   float, guchar>
-#define TStatType_short   TStatValueT<short,  float, guchar>
-#define TStatType_int     TStatValueT<int,    double,guchar>
-#define TStatType_double  TStatValueT<double, double,guchar>
+#define TStatType_char    TStatValueT<char,   float, unsigned char>
+#define TStatType_short   TStatValueT<short,  float, unsigned char>
+#define TStatType_int     TStatValueT<int,    double,unsigned char>
+#define TStatType_double  TStatValueT<double, double,unsigned char>
 
 //---------------------------------------------------------------------------
 // –асчет статистических параметров дл€ линейного набора значений
@@ -172,26 +170,26 @@ public:
     return mSKO;
   }
 
-  bool save( TIOStream& od ) const 
-  {
-    return 
-      od.put( mCount) &&
-      od.put( mSum  ) &&
-      od.put( mSum2 );
-  }
+  //bool save( TIOStream& od ) const 
+  //{
+  //  return 
+  //    od.put( mCount) &&
+  //    od.put( mSum  ) &&
+  //    od.put( mSum2 );
+  //}
 
-  bool load( TIOStream& od )
-  {
-    if( od.get( mCount) &&
-        od.get( mSum  ) &&
-        od.get( mSum2 ) )
-    {
-      mAverage = mCount ? mSum/mCount : 0;
-      mSKO = 0;
-      return true;
-    }
-    return false;
-  }
+  //bool load( TIOStream& od )
+  //{
+  //  if( od.get( mCount) &&
+  //      od.get( mSum  ) &&
+  //      od.get( mSum2 ) )
+  //  {
+  //    mAverage = mCount ? mSum/mCount : 0;
+  //    mSKO = 0;
+  //    return true;
+  //  }
+  //  return false;
+  //}
 
 	// кол-во элементов накоплени€ статистики
 	TCount GetCount()	    { return mCount; }
@@ -342,28 +340,28 @@ public:
     return mSKO;
   }
 
-  bool save( TIOStream& od ) const 
-  {
-    return 
-      od.put( *(signed char*)&mHasHiValue) &&
-      od.put( mCount) &&
-      od.put( mSum  ) &&
-      od.put( mSum2 );
-  }
+  //bool save( TIOStream& od ) const 
+  //{
+  //  return 
+  //    od.put( *(signed char*)&mHasHiValue) &&
+  //    od.put( mCount) &&
+  //    od.put( mSum  ) &&
+  //    od.put( mSum2 );
+  //}
 
-  bool load( TIOStream& od )
-  {
-    if( od.get( *(signed char*)&mHasHiValue ) &&
-        od.get( mCount) &&
-        od.get( mSum  ) &&
-        od.get( mSum2 ) )
-    {
-      mSKO = 0;
-      mAverage = (TAverage)(mCount ? mSum/mCount : 0);
-      return true;
-    }
-    return false;
-  }
+  //bool load( TIOStream& od )
+  //{
+  //  if( od.get( *(signed char*)&mHasHiValue ) &&
+  //      od.get( mCount) &&
+  //      od.get( mSum  ) &&
+  //      od.get( mSum2 ) )
+  //  {
+  //    mSKO = 0;
+  //    mAverage = (TAverage)(mCount ? mSum/mCount : 0);
+  //    return true;
+  //  }
+  //  return false;
+  //}
 
   // кол-во элементов накоплени€ статистики
   TCount GetCount()	{ return mCount; }

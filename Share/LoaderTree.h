@@ -38,7 +38,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 
 #include "TreeJoint.h"
-#include "BL_ConfigFile.h"
+//#include "BL_ConfigFile.h"
 #include "IXML.h"
 #include "TypeDef.h"
 

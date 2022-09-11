@@ -34,55 +34,45 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 
-#ifndef HiTimerH
-#define HiTimerH
+#ifndef NetTransport_BoostH
+#define NetTransport_BoostH
 
-#include "TypeDef.h"      // Базовые определения типов
 
-//------------------------------------------------------------------------------
-// Модуль работы с таймером высокого разрешения
-//------------------------------------------------------------------------------
+#include "INetTransport.h"
+#include "GCS.h"
+// Thread safe - Send поддерживает.
 
-// Изначальная инициализация
-bool GBASELIB_EI ht_Init();
-
-// Получение тиков процессора (с тактовой частотой процессора)
-unsigned __int64 GBASELIB_EI ht_GetTickCount();
-
-// Задержка на микросекунды
-void GBASELIB_EI ht_usleep( unsigned int us );
-
-// Задержка на миллисекунды
-void GBASELIB_EI ht_msleep( unsigned int ms );
-
-// Задержка на микросекунды c дополнительной проверкой состояния
-// Результат: true - выход по результату func, false - выход по таймауту
-typedef bool (*THT_CheckFunc)(void);
-bool GBASELIB_EI ht_sleep( unsigned int us, THT_CheckFunc func );
-
-// Перевод микросекунд в тики
-unsigned __int64 GBASELIB_EI ht_us2tick( unsigned int us );
-
-// Перевод тиков в микросекунд
-unsigned int GBASELIB_EI ht_tick2us( unsigned __int64 tick );
-
-// Получение тиков процессора пересчитанных в микросекунды
-inline unsigned int ht_GetUSCount()
+class TNetTransport_Boost : public INetTransport
 {
-  return ht_tick2us( ht_GetTickCount() );
-}
-// Время в миллисекундах с момента запуска ЭВМ или программы.
-// Точность от 55 мсек и выше
-unsigned int GBASELIB_EI ht_GetMSCount();
-//------------------------------------------------------------------------------
-#if !defined(MS2US)
-  // Перевести миллисекунды в микросекунды
-  #define MS2US( n )    ( (n) * 1000 )
-  // Перевести секунды в миллисекунды
-  #define SEC2MS( n )   ( (n) * 1000 )
-  // Перевести секунды в микросекунды
-  #define SEC2US( n )   MS2US( SEC2MS(n) )
-#endif
-//------------------------------------------------------------------------------
+  GCS mMutex;
+  void lock()  {mMutex.lock();}
+  void unlock(){mMutex.unlock();}
+
+public:
+	TNetTransport_Boost();
+	virtual ~TNetTransport_Boost();
+
+  virtual bool Open(unsigned short port, unsigned char numNetWork = 0);
+
+	virtual void Send(unsigned int ip, unsigned short port, 
+                    TBreakPacket packet,
+                    bool check = true);
+
+	// чтение - зарегистрируйся
+  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type);
+  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type);
+
+	virtual void Start();
+	virtual void Stop();
+	virtual bool IsActive();
+
+  // синхронная функция
+  virtual bool Connect(unsigned int ip, unsigned short port); // вызов только для клиента
+
+	virtual void Close(unsigned int ip, unsigned short port);
+protected:
+  void Done();
+};
+
 
 #endif

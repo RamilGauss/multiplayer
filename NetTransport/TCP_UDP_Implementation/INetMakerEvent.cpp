@@ -33,34 +33,58 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include <winsock.h>
 
-#ifndef BL_DebugH
-#define BL_DebugH
+#include "INetMakerEvent.h"
 
-#include "TypeDef.h"
+INetMakerEvent::INetMakerEvent()
+{
 
-// Вывести на экран сообщение об отказе.
-GBASELIB_EI bool BL_MessageBug( const char* lpszMsg );
+}
+//--------------------------------------------------------------------------
+INetMakerEvent::~INetMakerEvent()
+{
 
-// Вывести на экран сообщение об отказе.
-GBASELIB_EI void BL_MessageBug( const char* lpszFileName, int nLine );
+}
+//--------------------------------------------------------------------------
+void INetMakerEvent::AddIPSock(TIP_Port& ip_port, int sock)
+{
+  lockIPSock();
+  mMapDIPSock.Add(ip_port,sock);
+  unlockIPSock();
+}
+//----------------------------------------------------------------------------------
+void INetMakerEvent::RemoveSockIP(int sock)
+{
+  lockIPSock();
+  mMapDIPSock.RemoveValue(sock);
+  unlockIPSock();
+}
+//----------------------------------------------------------------------------------
+void INetMakerEvent::RemoveIPSock(TIP_Port& ip_port)
+{
+  lockIPSock();
+  mMapDIPSock.RemoveValueByKey(ip_port);
+  unlockIPSock();
+}
+//----------------------------------------------------------------------------------
+int INetMakerEvent::GetSocketByIpPort(TIP_Port& ip_port)
+{
+  int sock;
+  lockIPSock();
+  bool res = mMapDIPSock.GetValueByKey(ip_port,sock);
+  unlockIPSock();
 
-#ifdef _DEBUG
-  // Проверить выражение <f> и вывести на экран сообщение об отказе в случае его ложности
-  #define BL_ASSERT(f)          (void) ( (f) || (BL_MessageBug(__FILE__, __LINE__),0) )
-
-  // Выполнить действие описываемое выражением <f>
-  #define BL_DEBUG(f)           f
-
-  // Вывести на экран сообщение об отказе. Глюк уже наступил
-  #define BL_FIX_BUG()          BL_MessageBug(__FILE__, __LINE__)
-
-#else
-  #define BL_ASSERT(f)          
-  #define BL_DEBUG(f)           
-  #define BL_FIX_BUG()
-#endif  //_DEBUG
-
-
-#endif  //BL_DebugH
-
+  if(res==false)
+    return INVALID_SOCKET;
+  return sock;
+}
+//----------------------------------------------------------------------------------
+bool INetMakerEvent::GetIpPortBySocket(TIP_Port& ip_port, int sock)
+{
+  lockIPSock();
+  bool res = mMapDIPSock.GetKeyByValue(ip_port,sock);
+  unlockIPSock();
+  return res;
+}
+//--------------------------------------------------------------------------

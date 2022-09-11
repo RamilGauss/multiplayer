@@ -40,8 +40,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef __COMMON_DEFS_H__
 #define __COMMON_DEFS_H__
 
-//#include "glibconfig.h"
-
 // битовая маска на один бит nbit -номер установленного бита в маске
 #define BM( nbit ) (1 << (nbit))
 

@@ -33,29 +33,73 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "IManagerTime.h"
 
+#ifndef NetControlTCPH
+#define NetControlTCPH
 
-#ifndef ManagerTimeH
-#define ManagerTimeH
+#include <map>
 
-class TManagerTime : public IManagerTime
+#include "INetControl.h"
+#include "NetDeviceTCP.h"
+#include "ContainerRise.h"
+#include "GCS.h"
+#include "MapDual.h"
+
+class TNetControlTCP : public INetControl
 {
-protected:
-  
+  TNetDeviceTCP mDevice;
 
+  int mSocketUp;   // для соединения с сервером
+  int mSocketDown; // слушающий сокет, ждет подключения от клиентов
+
+  enum{
+       //eHeader    		 = 0xCC5C,
+       eSizeBuffer		 = 64000,  
+  };
+
+//#ifdef WIN32
+//#pragma pack(push, 1)
+//#endif
+//  struct THeaderTCP
+//  {
+//    short header;
+//    int   size;
+//    THeaderTCP(){header = short(eHeader);}
+//  };
+//#ifdef WIN32
+//#pragma pack(pop)
+//#endif
+
+  GCS gcsSendAccept;
+  void lockSA(){gcsSendAccept.lock();}
+  void unlockSA(){gcsSendAccept.unlock();}
 public:
-  TManagerTime();
-  virtual ~TManagerTime();
 
-  // управление игровым временем
-  virtual void SetTimeSpeed(float relative = 1.0f);// отношение реального к игровому
-  virtual void SetTimeToBegin();
-  virtual void SetTimeToEnd();
-  virtual int  GetCountTimeStamp();
-  virtual void SetTimeStamp(int stamp);
-  virtual unsigned int GetTime();
+  TNetControlTCP();
+  virtual ~TNetControlTCP();
+  // for INetMakerEvent
+	virtual void Work(INetMakerEventThread* pThreadContext, int sock, 
+    std::list<nsNetTypeEvent::eTypeEvent>& event);
+  // TNetTransport_XXX
+  virtual bool Open( unsigned short port, unsigned char numNetWork = 0);
+  virtual bool Connect(unsigned int ip, unsigned short port);
+  virtual void Send(unsigned int ip, unsigned short port, TBreakPacket bp);
 
+	virtual void Close(unsigned int ip, unsigned short port);
+	virtual void Close(int sock);
+protected:
+	void ReadEvent(INetMakerEventThread* pThreadContext, int sock);
+	void WriteEvent(INetMakerEventThread* pThreadContext, int sock);
+	void ConnectEvent(INetMakerEventThread* pThreadContext, int sock);
+	void AcceptEvent(INetMakerEventThread* pThreadContext, int sock);				
+	void CloseEvent(INetMakerEventThread* pThreadContext, int sock);
+
+	void AddToMakerEvent(int sock, bool without_delay);
+
+  void Notify(int sock, char* buffer, int size);
+
+  void Done();
 };
+
 
 #endif

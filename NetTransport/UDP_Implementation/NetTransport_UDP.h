@@ -39,8 +39,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include <set>
 
-#include "glib/gthread.h"
-
 #include "CallBackRegistrator.h"
 #include "UdpDevice.h"
 #include "GCS.h"
@@ -110,7 +108,7 @@ protected:
   };
 
 	char mBuffer[eSizeBuffer];
-	GThread* thread;
+	//GThread* thread;
 
 public:
 

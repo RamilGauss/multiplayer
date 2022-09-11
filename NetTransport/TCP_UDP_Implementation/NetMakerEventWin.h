@@ -34,75 +34,99 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 
-#ifndef NetMakerEventWSAH
-#define NetMakerEventWSAH
+#ifndef NetMakerEventWinH
+#define NetMakerEventWinH
 
 #include <list>
 #include <map>
 #include <vector>
 
-#include "glib/gthread.h"
-
 #include "INetMakerEvent.h"
+#include "ListMultiThread.h"
+#include "MapDual.h"
 
 class INetControl;
+class TNetMakerWorkThread;
 
-class TNetMakerEventWSA : public INetMakerEvent
+class TNetMakerEventWin : public INetMakerEvent
 {
+  typedef std::list<INetMakerEventThread*> TListPtr;
+  typedef TListPtr::iterator TListPtrIt;
+  
+  TListPtr mListThread;
+
+  void* mInternalEvent;
+
   volatile bool flgActive;
   volatile bool flgNeedStop;
-
-  GThread* thread;
 
   enum
   {
     eTimeRefreshEngine    = 100, // частота обновления движка, мс
-    eWaitFeedBack         = 50, // ждать пока активизируется двигатель, мс
-    eDefReserveSizeVector = 100,
+    eWaitFeedBack         = 50,  // ждать пока активизируется двигатель, мс
+    eMaxCountSocket       = 2,   //64 /*WSA_MAXIMUM_WAIT_EVENTS*/,
   };
-
-  typedef std::map<int,int> TMapIntInt;
-  typedef TMapIntInt::iterator TMapII_It;
-
-  TMapIntInt mMapSockEvent;
-
-  struct TDescSocket
+  struct TEvent
   {
-    int sock;
-    INetControl* pControl;
+    typedef enum{eAdd,eRemove}eType;
+    eType type;
+    int socket;                                  // add/remove
+    INetMakerEventThread* pThread;               // remove
+    INetControl* pControl;                       // add
+    std::list<nsNetTypeEvent::eTypeEvent> lEvent;// add
+    TEvent(eType v)
+    {
+      type     = v;
+      socket   = 0;
+      pControl = NULL;
+      pThread  = NULL;
+    }
   };
-
-  typedef std::vector<int>         TVecInt;
-  typedef std::vector<TDescSocket> TVecDS;
-
-  TVecInt mVecEvent;
-  TVecDS  mVecSocket;
+  TListMultiThread<TEvent> mListEvent;
 
 public:
-	TNetMakerEventWSA();
-	virtual ~TNetMakerEventWSA();
+	TNetMakerEventWin();
+	virtual ~TNetMakerEventWin();
 
-	virtual void Start();
-	virtual void Stop();
+  virtual void Start() ;// blocking
+  virtual void Stop()  ;// blocking
+  virtual void Sleep() ;// blocking
+  virtual void WakeUp();// blocking
 
   virtual bool IsActive(){return flgActive;}
 
   virtual void Add(int sock, INetControl* pControl, 
-                   std::list<INetControl::eTypeEvent>& lEvent);
-  virtual void Remove(int sock);
+                   std::list<nsNetTypeEvent::eTypeEvent>& lEvent);
+  virtual void AddWithoutDelay( int sock, INetControl* pControl, 
+                   std::list<nsNetTypeEvent::eTypeEvent>& lEvent);
+
+  virtual void Remove(INetMakerEventThread* pThread, int sock);
+  virtual void RemoveWithoutDelay( INetMakerEventThread* pThread, int socket);
+  
+  virtual void HandleFromWorkThread(INetMakerEventThread* pThread,
+                                    INetControl* pControl, int sock, 
+                                    std::list<nsNetTypeEvent::eTypeEvent>& lEvent);
 
 protected:
-  virtual void SetTypeEvent( int sock, std::list<INetControl::eTypeEvent>& lEvent);
-
   friend void* ThreadMakerEventWSA(void*p);
   void Engine();
 
   void Work();
-  void WSA_Event2Control( int event, std::list<INetControl::eTypeEvent>& lEvent);
-  void Control2WSA_Event( std::list<INetControl::eTypeEvent>& lEvent, int& event );
+  
+  void WakeUpMainThread();
+
+  void HandleInternalEvent();
+  void WaitEventFromOtherThread();
 
   void Done();
 
+  INetMakerEventThread* AddThread();
+  INetMakerEventThread* FindThreadWithLowerCount();
+
+  // усыпить главный поток
+  GCS mMutexSleep;
+  void lockSleep()  {mMutexSleep.lock();}
+  void unlockSleep(){mMutexSleep.unlock();}
 };
 
 

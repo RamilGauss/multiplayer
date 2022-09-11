@@ -37,10 +37,10 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef IGraphicEngineH
 #define IGraphicEngineH
 
-#include "glibconfig.h"
+#include <list>
+
 #include "Struct3D.h"
 #include "SrcEvent.h"
-#include <list>
 
 #define STR_NAME_GE "GE"
 

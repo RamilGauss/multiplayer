@@ -34,7 +34,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 #include <stddef.h>
-#include "glib\gthread.h"
 
 #include "IGame.h"
 
@@ -47,7 +46,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MakerLoaderDLL.h"
 #include "BL_Debug.h"
 #include "ShareMisc.h"
-#include "ErrorReg.h"
+//#include "ErrorReg.h"
 #include "HiTimer.h"
 #include "NetSystem.h"
 #include "Logger.h"
@@ -120,16 +119,8 @@ bool IGame::LoadDLL(int variant_use, const char* sNameDLL)
 //----------------------------------------------------------------------
 void IGame::Init()
 {
-  g_thread_init( NULL );
-  err_Init();
-  errSTR_Init();
-  errSTD_Init();
-  errSDK_Init();
-  if(ht_Init()==false)
-  {
-    GetLogger()->Get(STR_GAME)->WriteF_time("Error ht_Init().\n");
-    BL_FIX_BUG();
-  }
+  //g_thread_init( NULL );
+
   if(ns_Init()==false)
   {
     GetLogger()->Get(STR_GAME)->WriteF_time("Error ns_Init().\n");

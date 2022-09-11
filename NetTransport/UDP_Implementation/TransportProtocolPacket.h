@@ -39,7 +39,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include <stddef.h>
 #include <set>
-#include "TObject.h"
+//#include "TObject.h"
 #include "ShareMisc.h"
 
 namespace nsNetTransportStruct

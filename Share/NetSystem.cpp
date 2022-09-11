@@ -59,7 +59,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
     #include <Ws2tcpip.h>
   #endif
 
-  #include "ErrorReg.h"
+  //#include "ErrorReg.h"
 
   #define ioctl  ioctlsocket
   #define close  closesocket
@@ -146,7 +146,7 @@ bool ns_Init()
 {
   if( ns_IsInit ) return true;
   ns_IsInit = true;
-  errSource = err_RegisterSource( "Сетевая служба" );
+  //errSource = err_RegisterSource( "Сетевая служба" );
 #if defined(TD_WINDOWS)
   WSADATA data;
   #if defined(__BORLANDC__)
@@ -158,13 +158,13 @@ bool ns_Init()
       if( WSAStartup( MAKEWORD(2,0), &data ) )
   #endif
   {
-    errSDK_SETSOURCE( WSAGetLastError(), errSource );
+    //errSDK_SETSOURCE( WSAGetLastError(), errSource );
     return false;
   }
   else
     if( LOBYTE( data.wVersion ) != 2 )
     {
-      errStr_SETSOURCE( "WinSock2 не поддерживается системой", errSource );
+      //errStr_SETSOURCE( "WinSock2 не поддерживается системой", errSource );
       return false;
     }
 #endif
@@ -240,7 +240,7 @@ char* ns_getHostIP( const char* name, int numNetWork )
 					else
 						foundNet++;
       }
-      else SET_ERR_NET( GET_ERROR() );
+      //else SET_ERR_NET( GET_ERROR() );
       i++;
     }
     if( isLocalHost )
@@ -257,7 +257,7 @@ char* ns_getSelfIP(int numNetWork)
   {
     return ns_getHostIP( name, numNetWork );
   }
-  else SET_ERR_NET( GET_ERROR() );
+  //else SET_ERR_NET( GET_ERROR() );
   return NULL;
 }
 //---------------------------------------------------------------------------
@@ -271,7 +271,7 @@ char* ns_getSelfHost()
   {
     return (char*)hostname.get();
   }
-  else SET_ERR_NET( GET_ERROR() );
+  //else SET_ERR_NET( GET_ERROR() );
   return NULL;
 }
 //---------------------------------------------------------------------------

@@ -5,9 +5,6 @@
 #include <string>
 #include <windows.h>
 
-#include "glib\gthread.h"
-
-#include "ErrorReg.h"
 #include "HiTimer.h"
 #include "NetSystem.h"
 #include "SaveOnHDD.h"
@@ -21,10 +18,13 @@ float limit_recv_packet = 0;// %
 
 volatile bool flgDisconnect = false;
 
+static int cntRecv   = 0;
+static int cntStream = 0;
+
 void SetDisconnect();
 
-//TMakerNetTransport
-TMakerNetTransport_TCP_UDP 
+TMakerNetTransport_Boost
+//TMakerNetTransport_TCP_UDP 
 g_MakerNetTransport;
 //-----------------------------------------------------------------------
 void Init(char* nameLog)
@@ -39,40 +39,34 @@ void Init(char* nameLog)
 #else
   setlocale( LC_ALL, "ru_RU.koi8r" );
 #endif
-  bl_initLocale();
 
   g_thread_init( NULL );
-  err_Init();
-  errSTR_Init();
-  errSTD_Init();
-  errSDK_Init();
-  ht_Init();
   ns_Init();
 }
 //-----------------------------------------------------------------------
 void RecvPacket(void* p, int s)
 {
-  static int cntRecv;
   static unsigned int startRecvPacket;
   if(cntRecv==0)
     startRecvPacket = ht_GetMSCount();
   cntRecv++;
   if(float(cntRecv)/CNT_RECV_PACKET*100>limit_recv_packet)
   {
-    printf("RecvPacket, cnt=%d\n",cntRecv);
+    printf("RecvPacket, cnt=%d, size=%d\n",cntRecv, 
+      ((INetTransport::TDescRecv*)p)->sizeData);
     limit_recv_packet += freq_printf_recv_packet;
   }
   if(cntRecv==CNT_RECV_PACKET)
   {
     unsigned int now = ht_GetMSCount();
     unsigned int time_recv = now - startRecvPacket;
-    printf("Recv time=%u, v=%f\n", time_recv, float(sizeof(packet)*CNT_RECV_PACKET)/(time_recv*1000));
+    printf("Recv time=%u, v=%f\n", 
+      time_recv, float(sizeof(packet)*CNT_RECV_PACKET)/(time_recv*1000));
   }
 }
 //-----------------------------------------------------------------------
 void RecvStream(void* p, int s)
 {
-  static int cntStream;
   static unsigned int startRecvStream;
   if(cntStream==0)
     startRecvStream = ht_GetMSCount();
@@ -103,10 +97,10 @@ void Recv(void* p, int s)
 	switch(pDesc->type)
 	{
 		case INetTransport::ePacket:
-			RecvPacket(NULL,0);
+			RecvPacket(pDesc,0);
 			break;
 		case INetTransport::eStream:
-			RecvStream(NULL,0);
+			RecvStream(pDesc,0);
 			break;
 	}
 }
@@ -119,5 +113,10 @@ void SetDisconnect()
 bool IsDisconnect()
 {
   return flgDisconnect;
+}
+//-----------------------------------------------------------------------
+int GetCountRecv()
+{
+  return cntRecv;
 }
 //-----------------------------------------------------------------------

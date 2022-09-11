@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\glib-2.0;..\GBaseLib;..\Share"
+				AdditionalIncludeDirectories="..\glib-2.0;..\Share"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;MELISSA_EI=__declspec(dllexport);MELISSA_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,7 +62,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib glib-2.0.lib gthread-2.0.lib GBaseLib.lib Share.lib"
+				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib glib-2.0.lib gthread-2.0.lib Share.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"

@@ -49,13 +49,13 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include <list>
 #include <set>
-#include "glibconfig.h"
+#include <map>
+
 #include "Struct3D.h"
 #include "ShaderStack.h"
 #include "IGraphicEngine.h"
 #include "StateMachine.h"
 #include "MapSystemKey.h"
-#include <map>
 
 
 class IBaseObjectGE;

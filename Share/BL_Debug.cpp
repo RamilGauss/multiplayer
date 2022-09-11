@@ -38,20 +38,14 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <string>
 using namespace std;
 
-#include "BL_AppFile.h"
 //------------------------------------------------------------------------------
 #if defined(_WIN32)//-----------------------------------------------------------
 //------------------------------------------------------------------------------
 #include <shlwapi.h>
 #include "BL_Debug.h"
-#include "ErrorReg.h"
-#include <glib.h>
-#include "BL_Conv.h"
-#include "BL_AppFile.h"
 #if defined(__BORLANDC__)
 	#pragma link "shlwapi.lib"     
 #endif
-static FILE* ferr;
 
 //-----------------------------------------------------------------------------
 // Сообщение об ошибке зафиксированной в теле программы
@@ -89,26 +83,10 @@ void BL_MessageBug( const char* lpszFileName, int nLine )
   }
 }
 //------------------------------------------------------------------------------
-static bool prepareFERR()
-{
-  if( !ferr )
-  {
-    if( GetConsoleWindow() )
-      ferr = stderr;
-    else
-    {
-      char st[MAX_PATH];
-      ferr = fopen( BL_AppFile_Ext( st, ".log" ), "w" );
-    }
-  }
-	return ferr != 0;
-}
-//------------------------------------------------------------------------------
 #else //defined(_WIN32)//-------------------------------------------------------
 //------------------------------------------------------------------------------
 
 #include "BL_Debug.h"
-#include <glib.h>
 #include "BL_Conv.h"
 //------------------------------------------------------------------------------
 void BL_MessageBug( const char* lpszFileName, int nLine )

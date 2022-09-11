@@ -6,16 +6,12 @@
 #include <windows.h>
 #include <functional>
 
-#include "glib\gthread.h"
-
 #include "MakerNetTransport.h"
 #include "INetTransport.h"
 #include "GlobalParams.h"
-#include "ErrorReg.h"
 #include "HiTimer.h"
 #include "NetSystem.h"
 #include "SaveOnHDD.h"
-#include "TimerLog.h"
 #include "ListPtr.h"
 #include "BreakPacket.h"
 #include "share_test.h"
@@ -34,8 +30,8 @@ struct TArgData
   {
 		port_client = PORT_CLIENT;
     ip = ns_inet_addr(ns_getSelfIP(numNetWork));
-    cnt = 6;//190;
-    time_sleep = 20;
+    cnt = 1;//190;
+    time_sleep = 40;
   }
 };
 //-------------------------------------------------------------------

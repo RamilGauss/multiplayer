@@ -33,29 +33,18 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "IManagerTime.h"
 
+#ifndef NetTypeEventH
+#define NetTypeEventH
 
-#ifndef ManagerTimeH
-#define ManagerTimeH
-
-class TManagerTime : public IManagerTime
+namespace nsNetTypeEvent
 {
-protected:
-  
-
-public:
-  TManagerTime();
-  virtual ~TManagerTime();
-
-  // управление игровым временем
-  virtual void SetTimeSpeed(float relative = 1.0f);// отношение реального к игровому
-  virtual void SetTimeToBegin();
-  virtual void SetTimeToEnd();
-  virtual int  GetCountTimeStamp();
-  virtual void SetTimeStamp(int stamp);
-  virtual unsigned int GetTime();
-
-};
-
+  typedef enum{
+    eAccept = 0,// попытка к нам соединиться
+    eConnect,   // мы к кому-то соединились
+    eRead,      // есть что прочитать
+    eWrite,     // теперь можно писать
+    eClose,     // закрытие соединения
+  } eTypeEvent;
+}
 #endif

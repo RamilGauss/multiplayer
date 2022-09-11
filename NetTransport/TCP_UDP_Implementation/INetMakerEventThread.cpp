@@ -33,49 +33,47 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "INetMakerEventThread.h"
+#include "HistoryPacketTCP.h"
 
-#ifndef NetTransport_TCP_UDPH
-#define NetTransport_TCP_UDPH
-
-#include "INetTransport.h"
-#include "NetMakerEventWSA.h"
-#include "NetControlTCP.h"
-#include "NetControlUDP.h"
-
-// Thread safe - Send поддерживает.
-
-class TNetTransport_TCP_UDP : public INetTransport
+INetMakerEventThread::INetMakerEventThread()
 {
-  INetMakerEvent* mNetMakerEvent;
+  //mReadSize = 0;
+}
+//-----------------------------------------------------------
+INetMakerEventThread::~INetMakerEventThread()
+{
 
-  INetControl* mTCP;
-  INetControl* mUDP;
-
-public:
-	TNetTransport_TCP_UDP();
-	virtual ~TNetTransport_TCP_UDP();
-
-  virtual bool Open(unsigned short port, unsigned char numNetWork = 0);
-
-	virtual void Send(unsigned int ip, unsigned short port, 
-                    TBreakPacket packet,
-                    bool check = true);
-
-	// чтение - зарегистрируйся
-  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type);
-  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type);
-
-	virtual void Start();
-	virtual void Stop();
-	virtual bool IsActive();
-
-  // синхронная функция
-  virtual bool Connect(unsigned int ip, unsigned short port); // вызов только для клиента
-
-	virtual void Close(unsigned int ip, unsigned short port);
-protected:
-  void Done();
-};
-
-
-#endif
+}
+//-----------------------------------------------------------
+int INetMakerEventThread::GetSizeBuffer()
+{
+  return eSizeBuffer;
+}
+//----------------------------------------------------------------------------------
+char* INetMakerEventThread::GetBuffer()
+{
+  return &mBuffer[0];
+}
+//----------------------------------------------------------------------------------
+//void INetMakerEventThread::SetReadSize(int v)
+//{
+//  mReadSize = v;
+//}
+////----------------------------------------------------------------------------------
+//int INetMakerEventThread::GetReadSize()
+//{
+//  return mReadSize;
+//}
+////----------------------------------------------------------------------------------
+THistoryPacketTCP* INetMakerEventThread::GetHistoryBuffer(int sock)
+{
+  TMapIntDHIt fit = mMapHistory.find(sock);
+  if(fit==mMapHistory.end())
+  {
+    mMapHistory.insert(TMapIntDH::value_type(sock,THistoryPacketTCP()));
+    fit = mMapHistory.find(sock);
+  }
+  return &fit->second;
+}
+//----------------------------------------------------------------------------------

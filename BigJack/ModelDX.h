@@ -38,19 +38,20 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define ModelDXH
 
 #include "DXUT.h"
-#include "Struct3D.h"
 
-#include "EffectDX.h"
-#include "TObject.h"
 #include <d3dx9math.h>
-#include "ILoaderModelGE.h"
 #include <d3d9types.h>
 #include <vector>
 #include <map>
+#include <list>
+
+#include "Struct3D.h"
+#include "EffectDX.h"
+#include "ILoaderModelGE.h"
 #include "ShaderStack.h"
 #include "ExecShaderStack.h"
 #include "IModelGE.h"
-#include <list>
+
 
 class TManagerResourceDX;
 

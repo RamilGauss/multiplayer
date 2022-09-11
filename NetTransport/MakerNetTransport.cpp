@@ -35,8 +35,11 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "MakerNetTransport.h"
 
+#include "NetTransport_Boost.h"
 #include "NetTransport_TCP_UDP.h"
 #include "NetTransport_UDP.h"
+
+MACRO_MAKER_CPP_USE(NetTransport, NetTransport_Boost, NetTransport_Boost)
 
 MACRO_MAKER_CPP_USE(NetTransport, NetTransport_TCP_UDP, NetTransport_TCP_UDP)
 

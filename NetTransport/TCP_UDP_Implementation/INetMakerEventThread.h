@@ -33,29 +33,55 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "IManagerTime.h"
 
+#ifndef INetMakerEventThreadH
+#define INetMakerEventThreadH
 
-#ifndef ManagerTimeH
-#define ManagerTimeH
+#include <list>
+#include <map>
 
-class TManagerTime : public IManagerTime
+#include "ContainerRise.h"
+#include "TypeEvent.h"
+#include "ShareMisc.h"
+
+class INetControl;
+class THistoryPacketTCP;
+
+class INetMakerEventThread
 {
-protected:
-  
-
 public:
-  TManagerTime();
-  virtual ~TManagerTime();
 
-  // управление игровым временем
-  virtual void SetTimeSpeed(float relative = 1.0f);// отношение реального к игровому
-  virtual void SetTimeToBegin();
-  virtual void SetTimeToEnd();
-  virtual int  GetCountTimeStamp();
-  virtual void SetTimeStamp(int stamp);
-  virtual unsigned int GetTime();
+  INetMakerEventThread();
+  virtual ~INetMakerEventThread();
 
+  virtual void Start()  = 0;// blocking
+  virtual void Stop()   = 0;// blocking
+  virtual void Sleep()  = 0;// blocking
+  virtual void WakeUp() = 0;// blocking
+
+  virtual bool IsActive() = 0;
+  virtual int  GetCount() = 0;
+  virtual void Add(int sock, INetControl* pControl,
+         std::list<nsNetTypeEvent::eTypeEvent>& lEvent) = 0;
+  virtual void Remove(int sock) = 0;
+
+
+  virtual int   GetSizeBuffer();
+  virtual char* GetBuffer();
+
+  virtual THistoryPacketTCP* GetHistoryBuffer(int sock);
+protected:
+  enum{
+    eSizeBuffer = 64000,
+  };
+
+  char mBuffer[eSizeBuffer];
+
+  typedef std::map<int,THistoryPacketTCP> TMapIntDH;
+  typedef TMapIntDH::iterator TMapIntDHIt;
+
+  TMapIntDH mMapHistory;
 };
+
 
 #endif

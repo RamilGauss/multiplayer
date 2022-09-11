@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #ifndef LoaderListPathIDH
 #define LoaderListPathIDH
 
-#include "BL_ConfigFile.h"
+//#include "BL_ConfigFile.h"
 #include <map>
 #include <string>
 #include "IXML.h"

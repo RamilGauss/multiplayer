@@ -37,7 +37,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define BasePacketApplH
 
 #include "MarkUpContainer.h"
-#include "TObject.h"
+//#include "TObject.h"
 
 // готовые макросы:
 /*

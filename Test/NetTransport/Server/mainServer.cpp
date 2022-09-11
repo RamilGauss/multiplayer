@@ -4,17 +4,15 @@
 #include <string>
 #include <windows.h>
 
-#include "glib\gthread.h"
-
 #include "MakerNetTransport.h"
 #include "INetTransport.h"
 #include "GlobalParams.h"
-#include "ErrorReg.h"
 #include "HiTimer.h"
 #include "NetSystem.h"
 #include "share_test.h"
 
 #include "SaveOnHDD.h"
+#include "BL_Debug.h"
 
 using namespace std;
 //-----------------------------------------------------------------------
@@ -38,5 +36,8 @@ int main(int argc, char** argv)
   pNetTransport->Unregister(Disconnect, INetTransport::eDisconnect);
 
   g_MakerNetTransport.Delete(pNetTransport);
+  //------------------------------------------------
+  printf("CommonCountRecv=%d\n",GetCountRecv());
+  _getch();
   return 0;
 }

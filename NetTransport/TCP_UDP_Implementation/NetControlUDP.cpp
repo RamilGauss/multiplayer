@@ -33,6 +33,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include <winsock.h>
 
 #include "NetControlUDP.h"
 #include "BL_Debug.h"
@@ -47,6 +48,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define GET_ERROR WSAGetLastError()
 
 using namespace std;
+using namespace nsNetTypeEvent;
 
 TNetControlUDP::TNetControlUDP()
 {
@@ -60,7 +62,7 @@ TNetControlUDP::~TNetControlUDP()
   Done();
 }
 //------------------------------------------------------------------------------
-void TNetControlUDP::Work(int sock, list<eTypeEvent>& event)
+void TNetControlUDP::Work(INetMakerEventThread* pThreadContext, int sock, list<eTypeEvent>& event)
 {
   list<eTypeEvent>::iterator bit = event.begin();
   list<eTypeEvent>::iterator eit = event.end();
@@ -68,19 +70,19 @@ void TNetControlUDP::Work(int sock, list<eTypeEvent>& event)
   {
     switch(*bit)
     {
-      case INetControl::eRead:
+      case eRead:
 				ReadEvent();
         break;
-      case INetControl::eWrite:
+      case eWrite:
 				WriteEvent();
         break;
-      case INetControl::eConnect:
+      case eConnect:
 				ConnectEvent();
         break;
-      case INetControl::eAccept:
+      case eAccept:
 				AcceptEvent();				
         break;
-      case INetControl::eClose:
+      case eClose:
 				CloseEvent();
         break;
     }
@@ -90,20 +92,19 @@ void TNetControlUDP::Work(int sock, list<eTypeEvent>& event)
 //------------------------------------------------------------------------------
 bool TNetControlUDP::Open( unsigned short port, unsigned char numNetWork )
 {
-	Close(0,0);
   mSocketLocal = mDevice.Open(false, port, numNetWork);
+  if(mSocketLocal==INVALID_SOCKET)
+    return false;
 
 	bool res = mDevice.SetRecvBuffer(mSocketLocal, eSystemSizeForRecvBuffer_Socket);
-  res = mDevice.SetSendBuffer(mSocketLocal, eSystemSizeForSendBuffer_Socket);
+       res = mDevice.SetSendBuffer(mSocketLocal, eSystemSizeForSendBuffer_Socket);
 
-	GetMakerEvent()->Remove(mSocketLocal);
+  list<eTypeEvent> lEvent;
+  lEvent.push_back(eRead);
+  lEvent.push_back(eWrite);
+  GetMakerEvent()->AddWithoutDelay(mSocketLocal, this, lEvent);
 
-  list<INetControl::eTypeEvent> lEvent;
-  lEvent.push_back(INetControl::eRead);
-  lEvent.push_back(INetControl::eWrite);
-  GetMakerEvent()->Add(mSocketLocal, this, lEvent);
-	//GetMakerEvent()->SetTypeEvent(mSocketLocal, lEvent);
-  return (mSocketLocal!=-1);
+  return (mSocketLocal!=INVALID_SOCKET);
 }
 //------------------------------------------------------------------------------
 bool TNetControlUDP::Connect(unsigned int ip, unsigned short port)
@@ -123,11 +124,11 @@ void TNetControlUDP::Send(unsigned int ip, unsigned short port, TBreakPacket bp)
 	mDevice.Send(mSocketLocal, (char*)bp.GetCollectPtr(), bp.GetSize(), ip, port);
 }
 //------------------------------------------------------------------------------
-void TNetControlUDP::Close(unsigned int ip, unsigned short port)
-{
-	mDevice.Close(mSocketLocal);
-	mSocketLocal = -1;
-}
+//void TNetControlUDP::Close(unsigned int ip, unsigned short port)
+//{
+//	mDevice.Close(mSocketLocal);
+//	mSocketLocal = -1;
+//}
 //------------------------------------------------------------------------------
 bool TNetControlUDP::IsStreamFresh( TIP_Port& ip_port)
 {
@@ -222,11 +223,19 @@ void TNetControlUDP::SetCntInByIP_Port(TIP_Port& ip_port, unsigned short cnt_in)
 //----------------------------------------------------------------------------------
 void TNetControlUDP::Close(int sock)
 {
-  mDevice.Close(sock);
+  // ignore sock, mSocketLocal is true socket
+  if(mSocketLocal!=INVALID_SOCKET)
+    mDevice.Close(mSocketLocal);
+	mSocketLocal = INVALID_SOCKET;
 }
 //----------------------------------------------------------------------------------
 void TNetControlUDP::Done()
 {
-  mDevice.Close(mSocketLocal);
+
+}
+//----------------------------------------------------------------------------------
+void TNetControlUDP::Close(unsigned int ip, unsigned short port)
+{
+
 }
 //----------------------------------------------------------------------------------

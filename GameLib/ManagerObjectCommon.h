@@ -37,7 +37,6 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #define ManagerObjectCommonH
 
 #include "LoaderObjectCommon.h"
-#include "glib/gthread.h"
 #include "IManagerObjectCommon.h"
 
 class IBaseObjectCommon;
@@ -45,8 +44,6 @@ class IBaseObjectCommon;
 class TManagerObjectCommon : public IManagerObjectCommon
 {
 protected:
-  GThread* thread;
-
   enum{
     eLoadMapEnd=0,
   };

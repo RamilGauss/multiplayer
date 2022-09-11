@@ -39,13 +39,12 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "Struct3D.h"
 
-#include "TObject.h"
 #include <vector>
 #include <map>
 
 class TShaderStack;
 
-class IModelGE : public TObject
+class IModelGE
 {
 public:
   
@@ -68,7 +67,7 @@ public:
                     nsStruct3D::TMatrix16* pWorld,    // где и как расположен объект         
                     float alphaTransparency,  // прозрачность                       
                     const nsStruct3D::TMatrix16* pView, // расположение и ориентация камеры    
-                    void* pEffect = NULL) = 0;// полменять ли эффект
+                    void* pEffect = NULL) = 0;// поменять ли эффект
 
 
   virtual void SortPartByAlphabetic() = 0;

@@ -36,7 +36,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "ClientGame.h"
 
 #include <string>
-#include <glib/gthread.h>
+#include <boost/thread/thread.hpp>
 
 #include "IControlCamera.h"
 #include "IGraphicEngine.h"
@@ -292,9 +292,8 @@ void TClientGame::StartThreadModule()
   int cnt = mOtherThreadVecModule.size();
   for( int i = 0 ; i < cnt ; i++ )
   {
-    GThread* thread = g_thread_create(ThreadModule, 
-                      (gpointer)&mOtherThreadVecModule[i],
-                      true, NULL);
+    boost::thread thread_module(ThreadModule, &mOtherThreadVecModule[i]);
+
     while(mOtherThreadVecModule[i].flgActive==false)
       ht_msleep(eWaitFeedBack);
   }

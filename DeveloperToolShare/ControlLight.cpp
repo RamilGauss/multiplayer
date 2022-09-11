@@ -35,7 +35,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 #include "ControlLight.h"
 #include "..\BigJack\IGraphicEngine.h"
-#include "..\GBaseLib\BL_Debug.h"
+#include "..\Share\BL_Debug.h"
 #include "..\Share\MakerCamera.h"
 #include "..\GameLib\IClientDeveloperTool.h"
 #include "..\GameLib\IManagerObjectCommon.h"

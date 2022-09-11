@@ -44,6 +44,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 
 
 #include "NetTransport_UDP.h"
+
+#include <boost/thread/thread.hpp>
+
 #include "common_defs.h"
 #include "HiTimer.h"
 #include "NetSystem.h"
@@ -200,10 +203,8 @@ void TNetTransport_UDP::Engine()
 //----------------------------------------------------------------------------------
 void TNetTransport_UDP::Start()
 {
-  thread = g_thread_create(ThreadTransport,
-    (gpointer)this,
-    true,
-    NULL);
+  boost::thread work_thread(ThreadTransport, this);
+
 	while(IsActive()==false)
 		ht_msleep(eFeedBack);
 }

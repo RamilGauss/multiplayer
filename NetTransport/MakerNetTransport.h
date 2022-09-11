@@ -41,6 +41,8 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "MacroMaker.h"
 #include "TypeDef.h"
 
+MACRO_MAKER_H_EXPORT_USE(NET_TRANSPORT_EI,NetTransport,NetTransport_Boost)
+
 MACRO_MAKER_H_EXPORT_USE(NET_TRANSPORT_EI,NetTransport,NetTransport_TCP_UDP)
 
 MACRO_MAKER_H_EXPORT_USE(NET_TRANSPORT_EI,NetTransport,NetTransport_UDP)

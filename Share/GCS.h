@@ -33,75 +33,50 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#ifndef GCSH
+#define GCSH
 
-#include "GCS.h"
-#include "BL_Debug.h"
+#include <boost/thread/recursive_mutex.hpp>
 
-//===========================================================================
-#ifdef TD_WINDOWS //=========================================================
-//===========================================================================
+#include "TypeDef.h"
+//---------------------------------------------------------------------------
+// надстройка над рекурсивным мьютексом
+class SHARE_EI GCS
+{
+  boost::recursive_mutex m;
 
-#include <windows.h>
+  const char* mDbgName;
+public:
+  GCS( const char * _dbgname = NULL );
+  virtual ~GCS();
 
-#define UNIT  ((CRITICAL_SECTION*)unit)
+  void setDbgName( const char *_dbgname ) { mDbgName = _dbgname; }
+  const char * dbgName() { return mDbgName; }
+
+  bool tryLock();
+  void lock();
+  void unlock();
+};
+
 //---------------------------------------------------------------------------
-GCS::GCS( const char *_dbgname )
+// Класс автоматического блокиратора
+// Обеспечивает вход в критическую секцию при создании объекта
+// и выход из нее при удалении объекта.
+// Предназначен для создания объектов на стеке
+class TBL_Locker
 {
-  mDbgName = _dbgname;
-  unit = new CRITICAL_SECTION;
-  InitializeCriticalSection( UNIT );
-}
-//---------------------------------------------------------------------------
-GCS::~GCS()
-{
-#ifdef _DEBUG
-  if( TryEnterCriticalSection(UNIT) )
-    LeaveCriticalSection(UNIT);
-  else
-    BL_FIX_BUG();
-#endif
-  DeleteCriticalSection(UNIT);
-  delete UNIT;
-}
-//---------------------------------------------------------------------------
-void GCS::lock()
-{
-  EnterCriticalSection(UNIT);
-}
-//---------------------------------------------------------------------------
-bool GCS::tryLock()    
-{ 
-  return TryEnterCriticalSection(UNIT) != FALSE; 
-}
-//---------------------------------------------------------------------------
-void GCS::unlock()
-{
-  LeaveCriticalSection(UNIT);
-}
-//===========================================================================
-#else //TD_WINDOWS //========================================================
+  GCS* mCS;
+public:
+  TBL_Locker( GCS* cs )     { mCS = cs; mCS->lock(); }
+
+  virtual ~TBL_Locker()             { done(); }
+
+  void done()               { if( mCS ) { mCS->unlock(); mCS = NULL; } }
+};
+
+#define AUTO_LOCK( cs )     TBL_Locker locker( cs )
 //===========================================================================
 
-GCS::GCS( const char * _dbgname )
-{
-  mDbgName = _dbgname;
-  pthread_mutexattr_t mutexAttr;
-  pthread_mutexattr_settype( &mutexAttr, PTHREAD_MUTEX_RECURSIVE_NP );
-  pthread_mutex_init( &unit, &mutexAttr );
-}
-//---------------------------------------------------------------------------
-GCS::~GCS()
-{
-#ifdef _DEBUG
-  if( tryLock() )
-    unlock();
-  else
-    BL_FIX_BUG();
-#endif
-  pthread_mutex_destroy( &unit );
-}
-//---------------------------------------------------------------------------
-//===========================================================================
-#endif //TD_WINDOWS //=======================================================
-//===========================================================================
+
+#endif // GCSH
 

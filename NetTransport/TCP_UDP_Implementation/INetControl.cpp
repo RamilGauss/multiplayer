@@ -33,76 +33,59 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-
-#ifndef NetControlUDPH
-#define NetControlUDPH
-
-#include <map>
-
 #include "INetControl.h"
-#include "NetDeviceUDP.h"
-#include "GCS.h"
 
-class TNetControlUDP : public INetControl
+static TCallBackRegistrator mCallBackRecv;
+static TCallBackRegistrator mCallBackDisconnect;
+
+static INetMakerEvent* pNetMakerEvent = NULL;
+
+void INetControl::Register(TCallBackRegistrator::TCallBackFunc pFunc, INetTransport::eTypeCallback type)
 {
-	enum{
-		eSizeBuffer = 64000,
-	};
-
-	int mReadSize;
-	char mBuffer[eSizeBuffer];
-
-  TNetDeviceUDP mDevice;
-	int mSocketLocal;
-	//-----------------------------------------------------------------------------
-	GCS gcsSendRcv;
-	void lockSendRcv()  {gcsSendRcv.lock();};
-	void unlockSendRcv(){gcsSendRcv.unlock();};
-	//-----------------------------------------------------------------------------
-  struct TInfoConnect
+  GetCallBackByType(type)->Register(pFunc);
+}
+//------------------------------------------------------------------------------
+void INetControl::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, INetTransport::eTypeCallback type)
+{
+  GetCallBackByType(type)->Unregister(pFunc);
+}
+//------------------------------------------------------------------------------
+void INetControl::SetMakerEvent(INetMakerEvent* pME)
+{
+  pNetMakerEvent = pME;
+}
+//------------------------------------------------------------------------------
+INetMakerEvent* INetControl::GetMakerEvent()
+{
+  return pNetMakerEvent;
+}
+//------------------------------------------------------------------------------
+void INetControl::NotifyRecv(char* p, int size)
+{
+  lock();
+	mCallBackRecv.Notify(p, size);
+  unlock();
+}
+//------------------------------------------------------------------------------
+void INetControl::NotifyDisconnect(char* p, int size)
+{
+  lock();
+	mCallBackDisconnect.Notify(p, size);
+  unlock();
+}
+//------------------------------------------------------------------------------
+TCallBackRegistrator* INetControl::GetCallBackByType(INetTransport::eTypeCallback type)
+{
+  TCallBackRegistrator* pCallBack = NULL;
+  switch(type)
   {
-    unsigned short cnt_in; // определить свежесть пакета по входным данным
-    unsigned short cnt_out;// посылать наружу
-    TInfoConnect()
-    {
-      cnt_in  = -1;
-      cnt_out = 0;
-    }
-  };
-	//TArrayObject mArrConnect;
-
-	typedef std::map<TIP_Port, TInfoConnect> TMapIP_IC;
-	typedef TMapIP_IC::iterator TMapIP_ICIt;
-
-	TMapIP_IC mMapInfoConnect;
-public:
-
-  TNetControlUDP();
-  virtual ~TNetControlUDP();
-  // for INetMakerEvent
-	virtual void Work(int sock, std::list<eTypeEvent>& event);
-  // TNetTransport_XXX
-  virtual bool Open( unsigned short port, unsigned char numNetWork = 0);
-  virtual bool Connect(unsigned int ip, unsigned short port);
-  virtual void Send(unsigned int ip, unsigned short port, TBreakPacket bp);
-	virtual void Close(unsigned int ip, unsigned short port);
-  virtual void Close(int sock);
-protected:
-
-	bool IsStreamFresh(TIP_Port& ip_port);
-	bool A_more_B(unsigned short A, unsigned short B);
-
-	void ReadEvent();
-	void WriteEvent();
-	void ConnectEvent();
-	void AcceptEvent();				
-	void CloseEvent();
-
-	void GetInfoConnect(TIP_Port& v, TInfoConnect& info_out);
-	void SetCntInByIP_Port(TIP_Port& ip_port, unsigned short cnt_in);
-
-  void Done();
-};
-
-
-#endif
+    case INetTransport::eRecv:
+      pCallBack = &mCallBackRecv;
+      break;
+    case INetTransport::eDisconnect:
+      pCallBack = &mCallBackDisconnect;
+      break;
+  }
+  return pCallBack;
+}
+//------------------------------------------------------------------------------

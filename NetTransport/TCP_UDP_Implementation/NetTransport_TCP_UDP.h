@@ -33,29 +33,54 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "IManagerTime.h"
 
+#ifndef NetTransport_TCP_UDPH
+#define NetTransport_TCP_UDPH
 
-#ifndef ManagerTimeH
-#define ManagerTimeH
+#include "INetTransport.h"
+#include "GCS.h"
 
-class TManagerTime : public IManagerTime
+// Thread safe - Send поддерживает.
+
+class INetMakerEvent;
+class INetControl;
+
+class TNetTransport_TCP_UDP : public INetTransport
 {
-protected:
-  
+  INetMakerEvent* mNetMakerEvent;
+
+  INetControl* mTCP;
+  INetControl* mUDP;
+
+  GCS mMutex;
+  void lock()  {mMutex.lock();}
+  void unlock(){mMutex.unlock();}
 
 public:
-  TManagerTime();
-  virtual ~TManagerTime();
+	TNetTransport_TCP_UDP();
+	virtual ~TNetTransport_TCP_UDP();
 
-  // управление игровым временем
-  virtual void SetTimeSpeed(float relative = 1.0f);// отношение реального к игровому
-  virtual void SetTimeToBegin();
-  virtual void SetTimeToEnd();
-  virtual int  GetCountTimeStamp();
-  virtual void SetTimeStamp(int stamp);
-  virtual unsigned int GetTime();
+  virtual bool Open(unsigned short port, unsigned char numNetWork = 0);
 
+	virtual void Send(unsigned int ip, unsigned short port, 
+                    TBreakPacket packet,
+                    bool check = true);
+
+	// чтение - зарегистрируйся
+  virtual void Register(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type);
+  virtual void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, eTypeCallback type);
+
+	virtual void Start();
+	virtual void Stop();
+	virtual bool IsActive();
+
+  // синхронная функция
+  virtual bool Connect(unsigned int ip, unsigned short port); // вызов только для клиента
+
+	virtual void Close(unsigned int ip, unsigned short port);
+protected:
+  void Done();
 };
+
 
 #endif

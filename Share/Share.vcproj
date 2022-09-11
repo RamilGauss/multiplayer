@@ -42,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\glib-2.0;..\GBaseLib"
+				AdditionalIncludeDirectories="..\glib-2.0;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;MARKUP_STL;SHARE_EI=__declspec(dllexport);SHARE_EXPORTS"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib glib-2.0.lib gthread-2.0.lib GBaseLib.lib"
+				AdditionalDependencies="shlwapi.lib d3dx10d.lib d3dx9d.lib d3d9.lib ws2_32.lib dxerr.lib glib-2.0.lib gthread-2.0.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\Lib;..\Lib\$(ConfigurationName)"
 				GenerateDebugInformation="true"
@@ -191,6 +191,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BL_Debug.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\BoundingBox.cpp"
 				>
 			</File>
@@ -235,7 +239,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GCS.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\GlobalParams.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\HiTimer.cpp"
 				>
 			</File>
 			<File
@@ -377,7 +389,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\AutoCreateVar.h"
+				>
+			</File>
+			<File
 				RelativePath=".\BasePacket.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BL_Debug.h"
 				>
 			</File>
 			<File
@@ -445,7 +465,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GCS.h"
+				>
+			</File>
+			<File
 				RelativePath=".\GlobalParams.h"
+				>
+			</File>
+			<File
+				RelativePath=".\HiTimer.h"
 				>
 			</File>
 			<File
@@ -606,6 +634,10 @@
 			</File>
 			<File
 				RelativePath=".\TreeJoint.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TypeDef.h"
 				>
 			</File>
 			<File

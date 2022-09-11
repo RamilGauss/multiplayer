@@ -38,12 +38,24 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include "HiTimer.h"
 #include "NetSystem.h"
 
+#ifdef WIN32
+  #include "NetMakerEventWin.h"
+#else
+#endif
+
+#include "NetControlTCP.h"
+#include "NetControlUDP.h"
+
 using namespace std;
 
 //----------------------------------------------------------------------------
 TNetTransport_TCP_UDP::TNetTransport_TCP_UDP()
 {
-  mNetMakerEvent = new TNetMakerEventWSA;
+#ifdef WIN32
+  mNetMakerEvent = new TNetMakerEventWin;
+#else
+#endif
+
   mTCP = new TNetControlTCP;
   mUDP = new TNetControlUDP;
 
@@ -76,10 +88,12 @@ bool TNetTransport_TCP_UDP::Open(unsigned short port, unsigned char numNetWork)
 void TNetTransport_TCP_UDP::Send(unsigned int ip, unsigned short port, 
 							                   TBreakPacket packet, bool check)
 {
+  lock();
   if(check)
     mTCP->Send(ip, port, packet);
   else
     mUDP->Send(ip, port, packet);
+  unlock();
 }
 //----------------------------------------------------------------------------------
 void TNetTransport_TCP_UDP::Start()
@@ -109,7 +123,10 @@ void TNetTransport_TCP_UDP::Unregister(TCallBackRegistrator::TCallBackFunc pFunc
 //----------------------------------------------------------------------------------
 bool TNetTransport_TCP_UDP::Connect(unsigned int ip, unsigned short port)
 {
-  return mTCP->Connect(ip, port);
+  lock();
+  bool res = mTCP->Connect(ip, port);
+  unlock();
+  return res;
 }
 //----------------------------------------------------------------------------------
 void TNetTransport_TCP_UDP::Close(unsigned int ip, unsigned short port)

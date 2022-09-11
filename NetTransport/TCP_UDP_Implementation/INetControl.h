@@ -33,55 +33,65 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "INetControl.h"
 
-static TCallBackRegistrator mCallBackRecv;
-static TCallBackRegistrator mCallBackDisconnect;
+#ifndef INetControl_H
+#define INetControl_H
 
-static INetMakerEvent* pNetMakerEvent = NULL;
+#include <list>
 
-void INetControl::Register(TCallBackRegistrator::TCallBackFunc pFunc, INetTransport::eTypeCallback type)
+#include "GCS.h"
+
+#include "BreakPacket.h"
+#include "CallBackRegistrator.h"
+#include "INetTransport.h"
+#include "INetMakerEventThread.h"
+#include "TypeEvent.h"
+
+class INetMakerEvent;
+
+class INetControl
 {
-  GetCallBackByType(type)->Register(pFunc);
-}
-//------------------------------------------------------------------------------
-void INetControl::Unregister(TCallBackRegistrator::TCallBackFunc pFunc, INetTransport::eTypeCallback type)
-{
-  GetCallBackByType(type)->Unregister(pFunc);
-}
-//------------------------------------------------------------------------------
-void INetControl::SetMakerEvent(INetMakerEvent* pME)
-{
-  pNetMakerEvent = pME;
-}
-//------------------------------------------------------------------------------
-INetMakerEvent* INetControl::GetMakerEvent()
-{
-  return pNetMakerEvent;
-}
-//------------------------------------------------------------------------------
-void INetControl::NotifyRecv(char* p, int size)
-{
-	mCallBackRecv.Notify(p, size);
-}
-//------------------------------------------------------------------------------
-void INetControl::NotifyDisconnect(char* p, int size)
-{
-	mCallBackDisconnect.Notify(p, size);
-}
-//------------------------------------------------------------------------------
-TCallBackRegistrator* INetControl::GetCallBackByType(INetTransport::eTypeCallback type)
-{
-  TCallBackRegistrator* pCallBack = NULL;
-  switch(type)
-  {
-    case INetTransport::eRecv:
-      pCallBack = &mCallBackRecv;
-      break;
-    case INetTransport::eDisconnect:
-      pCallBack = &mCallBackDisconnect;
-      break;
-  }
-  return pCallBack;
-}
-//------------------------------------------------------------------------------
+protected:
+  unsigned short mLocalPort; 
+  unsigned char  mNumNetWork;
+
+public:
+  enum{
+    eSystemSizeForRecvBuffer_Socket = 3000000, // байт
+    eSystemSizeForSendBuffer_Socket = 3000000, // байт
+  };
+
+  INetControl(){};
+  virtual ~INetControl(){};
+  // for INetMakerEvent
+  virtual void Work(INetMakerEventThread* pThreadContext, int sock, 
+    std::list<nsNetTypeEvent::eTypeEvent>& event) = 0;
+  // TNetTransport_XXX
+  virtual bool Open( unsigned short port, unsigned char numNetWork = 0) = 0;
+  virtual bool Connect(unsigned int ip, unsigned short port) = 0;              // blocking
+  virtual void Send(unsigned int ip, unsigned short port, TBreakPacket bp) = 0;
+
+	virtual void Close(unsigned int ip, unsigned short port) = 0;
+	virtual void Close(int sock) = 0;
+
+  static void SetMakerEvent(INetMakerEvent* pME);
+
+  static void Register(TCallBackRegistrator::TCallBackFunc pFunc,   INetTransport::eTypeCallback type);
+  static void Unregister(TCallBackRegistrator::TCallBackFunc pFunc, INetTransport::eTypeCallback type);
+
+protected:
+  INetMakerEvent* GetMakerEvent();
+
+	void NotifyRecv(char* p, int size);
+	void NotifyDisconnect(char* p, int size);
+
+  static TCallBackRegistrator* GetCallBackByType(INetTransport::eTypeCallback type);
+
+  GCS mMutexNotify;
+  void lock()  {mMutexNotify.lock();}
+  void unlock(){mMutexNotify.unlock();}
+
+};
+
+
+#endif

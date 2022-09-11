@@ -33,29 +33,49 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "IManagerTime.h"
+
+#ifndef HistoryPacketTCPH
+#define HistoryPacketTCPH
+
+#include "ContainerRise.h"
+#include "TypeEvent.h"
+#include "ShareMisc.h"
+#include <map>
 
 
-#ifndef ManagerTimeH
-#define ManagerTimeH
-
-class TManagerTime : public IManagerTime
+class THistoryPacketTCP
 {
-protected:
-  
-
 public:
-  TManagerTime();
-  virtual ~TManagerTime();
+  struct TResult
+  {
+    TResult(){complete=false;}
+    void Set(char* b, int s){buffer=b;size=s;complete=true;}
+    bool complete;
+    char* buffer;
+    int size;
+  };
 
-  // управление игровым временем
-  virtual void SetTimeSpeed(float relative = 1.0f);// отношение реального к игровому
-  virtual void SetTimeToBegin();
-  virtual void SetTimeToEnd();
-  virtual int  GetCountTimeStamp();
-  virtual void SetTimeStamp(int stamp);
-  virtual unsigned int GetTime();
+
+  typedef enum{
+    eSearchBegin,
+    eSearchSize,
+    eSearchEnd,
+  }eStatePacket;
+
+  //TIP_Port ip_port;
+  int sizePacket;// предполагаемый размер пакета
+  TContainerRise c;    
+  eStatePacket   state;
+  THistoryPacketTCP();
+  void Clear();
+
+  void Analiz(int& beginPos, TResult& res, int readSize, char* buffer);
+protected:
+  int SearchBegin(int readSize, char* buffer, int beginPos);
+  int SearchSize(int readSize, char* buffer, int beginPos);
+  int SearchEnd(int readSize, char* buffer, TResult& res, int beginPos);
 
 };
+
 
 #endif

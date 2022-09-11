@@ -34,114 +34,71 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 
-#ifndef NetControlTCPH
-#define NetControlTCPH
+#ifndef NetControlUDPH
+#define NetControlUDPH
 
 #include <map>
 
 #include "INetControl.h"
-#include "NetDeviceTCP.h"
-#include "ContainerRise.h"
+#include "NetDeviceUDP.h"
 #include "GCS.h"
-#include "MapDual.h"
 
-class TNetControlTCP : public INetControl
+class TNetControlUDP : public INetControl
 {
-  TNetDeviceTCP mDevice;
+	enum{
+		eSizeBuffer = 64000,
+	};
 
-  int mSocketUp;   // для соединения с сервером
-  int mSocketDown; // слушающий сокет, ждет подключения от клиентов
+	int mReadSize;
+	char mBuffer[eSizeBuffer];
 
-  int mWorkSocket;// действительно только внутри методов XXXEvent()
-    
-  enum{
-       eHeader    		 = 0xCC5C,
-       eSizeBuffer		 = 64000,  
-  };
-
-#ifdef WIN32
-#pragma pack(push, 1)
-#endif
-  struct THeader
+  TNetDeviceUDP mDevice;
+	int mSocketLocal;
+	//-----------------------------------------------------------------------------
+	GCS gcsSendRcv;
+	void lockSendRcv()  {gcsSendRcv.lock();};
+	void unlockSendRcv(){gcsSendRcv.unlock();};
+	//-----------------------------------------------------------------------------
+  struct TInfoConnect
   {
-    short header;
-    int   size;
-    THeader(){header = short(eHeader);}
-  };
-#ifdef WIN32
-#pragma pack(pop)
-#endif
-
-  int mReadSize;
-  char mBuffer[eSizeBuffer];
-  //----------------------------------------------
-  typedef enum{
-    eSearchBegin,
-    eSearchSize,
-    eSearchEnd,
-  }eStatePacket;
-  struct TDescHistoryRead
-  {
-		TIP_Port ip_port;
-    int sizePacket;// предполагаемый размер пакета
-    TContainerRise c;    
-    eStatePacket   state;
-    TDescHistoryRead()
+    unsigned short cnt_in; // определить свежесть пакета по входным данным
+    unsigned short cnt_out;// посылать наружу
+    TInfoConnect()
     {
-      state = eSearchBegin;
-      sizePacket = 0;
-    }
-    void Clear()
-    {
-      state      = eSearchBegin;
-      sizePacket = 0;
+      cnt_in  = -1;
+      cnt_out = 0;
     }
   };
+	typedef std::map<TIP_Port, TInfoConnect> TMapIP_IC;
+	typedef TMapIP_IC::iterator TMapIP_ICIt;
 
-  typedef std::map<int,TDescHistoryRead> TMapIntDH;
-  typedef TMapIntDH::iterator TMapIntDHIt;
-
-	typedef TMapDual<TIP_Port,int> TMapD_IPInt;
-
-  TMapIntDH mMapHistory;
-	TMapD_IPInt mMapDIPSock;
-
-  GCS gcsSendAccept;
-  void lockSA(){gcsSendAccept.lock();}
-  void unlockSA(){gcsSendAccept.unlock();}
+	TMapIP_IC mMapInfoConnect;
 public:
 
-  TNetControlTCP();
-  virtual ~TNetControlTCP();
+  TNetControlUDP();
+  virtual ~TNetControlUDP();
   // for INetMakerEvent
-	virtual void Work(int sock, std::list<eTypeEvent>& event);
+  virtual void Work(INetMakerEventThread* pThreadContext, int sock, 
+    std::list<nsNetTypeEvent::eTypeEvent>& event);
   // TNetTransport_XXX
   virtual bool Open( unsigned short port, unsigned char numNetWork = 0);
   virtual bool Connect(unsigned int ip, unsigned short port);
   virtual void Send(unsigned int ip, unsigned short port, TBreakPacket bp);
-
 	virtual void Close(unsigned int ip, unsigned short port);
-	virtual void Close(int sock);
+  virtual void Close(int sock);
 protected:
+
+	bool IsStreamFresh(TIP_Port& ip_port);
+	bool A_more_B(unsigned short A, unsigned short B);
+
 	void ReadEvent();
 	void WriteEvent();
 	void ConnectEvent();
 	void AcceptEvent();				
 	void CloseEvent();
 
-  void Analiz();
-  int SearchBegin(TDescHistoryRead* pH, int beginPos);
-  int SearchSize(TDescHistoryRead* pH, int beginPos);
-  int SearchEnd(TDescHistoryRead* pH, int beginPos);
-
-	void AddToMakerEvent(int sock);
-  void RemoveFromMakerEvent(int sock);
-
-  TDescHistoryRead* GetHistoryBuffer(int sock);
-	int GetSocketByIpPort( TIP_Port& ip_port);
-	void GetIP_PortBySocket( TIP_Port& ip_port, int& sock );
-
-	void Notify(int sock, char* buffer, int size);
+	void GetInfoConnect(TIP_Port& v, TInfoConnect& info_out);
+	void SetCntInByIP_Port(TIP_Port& ip_port, unsigned short cnt_in);
 
   void Done();
 };

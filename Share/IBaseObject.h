@@ -39,7 +39,7 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 #include <map>
 #include <vector>
 
-#include "TObject.h"
+//#include "TObject.h"
 #include "Struct3D.h"
 #include "TreeJoint.h"
 #include "CallBackRegistrator.h"

@@ -34,8 +34,9 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 */ 
 
 #include "Container.h"
-#include <memory.h>
 
+#include <memory.h>
+#include <stddef.h>
 
 TContainer::TContainer()
 {

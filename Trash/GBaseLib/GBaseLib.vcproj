@@ -261,15 +261,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GCS.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\hArray.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\HiTimer.cpp"
 				>
 			</File>
 			<File
@@ -383,19 +375,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\GCS.h"
-				>
-			</File>
-			<File
 				RelativePath=".\GTime.h"
 				>
 			</File>
 			<File
 				RelativePath=".\hArray.h"
-				>
-			</File>
-			<File
-				RelativePath=".\HiTimer.h"
 				>
 			</File>
 			<File

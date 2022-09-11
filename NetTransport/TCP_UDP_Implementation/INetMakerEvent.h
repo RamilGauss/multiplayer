@@ -33,29 +33,58 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
-#include "IManagerTime.h"
 
+#ifndef INetMakerEventH
+#define INetMakerEventH
 
-#ifndef ManagerTimeH
-#define ManagerTimeH
+#include <list>
+#include "TypeEvent.h"
+#include "ShareMisc.h"
+#include "MapDual.h"
+#include "GCS.h"
 
-class TManagerTime : public IManagerTime
+class INetControl;
+class INetMakerEventThread;
+
+class INetMakerEvent
 {
-protected:
-  
-
 public:
-  TManagerTime();
-  virtual ~TManagerTime();
+  INetMakerEvent();
+  virtual ~INetMakerEvent();
 
-  // управление игровым временем
-  virtual void SetTimeSpeed(float relative = 1.0f);// отношение реального к игровому
-  virtual void SetTimeToBegin();
-  virtual void SetTimeToEnd();
-  virtual int  GetCountTimeStamp();
-  virtual void SetTimeStamp(int stamp);
-  virtual unsigned int GetTime();
+  virtual void Start()  = 0;// blocking
+  virtual void Stop()   = 0;// blocking
+  virtual void Sleep()  = 0;// blocking
+  virtual void WakeUp() = 0;// blocking
 
+  virtual bool IsActive() = 0;
+
+  virtual void Add(int sock, INetControl* pControl, 
+                   std::list<nsNetTypeEvent::eTypeEvent>& lEvent) = 0;
+  virtual void AddWithoutDelay( int sock, INetControl* pControl, 
+                   std::list<nsNetTypeEvent::eTypeEvent>& lEvent) = 0;
+
+  virtual void Remove(INetMakerEventThread* pThread, int sock) = 0;
+  virtual void RemoveWithoutDelay( INetMakerEventThread* pThread, int socket) = 0;
+
+  virtual void HandleFromWorkThread(INetMakerEventThread* pThread,
+                                    INetControl* pControl, int sock, 
+                                    std::list<nsNetTypeEvent::eTypeEvent>& lEvent) = 0;
+
+  virtual int  GetSocketByIpPort(TIP_Port& ip_port);
+  virtual bool GetIpPortBySocket(TIP_Port& ip_port, int sock);
+  virtual void AddIPSock(TIP_Port& ip_port, int sock);
+  virtual void RemoveSockIP(int sock);
+  virtual void RemoveIPSock(TIP_Port& ip_port);
+protected:
+  typedef TMapDual<TIP_Port,int> TMapD_IPInt;
+  TMapD_IPInt mMapDIPSock;
+
+  // доступ к mMapDIPSock
+  GCS mMutexIPSock;
+  void lockIPSock()  {mMutexIPSock.lock();}
+  void unlockIPSock(){mMutexIPSock.unlock();}
 };
+
 
 #endif

@@ -33,32 +33,57 @@ you may contact in writing [ramil2085@mail.ru, ramil2085@gmail.com].
 ===========================================================================
 */ 
 
+#include "HiTimer.h"
 
-#ifndef INetMakerEventH
-#define INetMakerEventH
+#include <boost/thread/thread.hpp>
+#include <boost/chrono/include.hpp>
+#include <boost/chrono/time_point.hpp>
 
-#include <list>
+using namespace boost;
 
-#include "INetControl.h"
-
-class INetMakerEvent
+//------------------------------------------------------------------------------
+unsigned __int64 ht_GetTickCount()
 {
-public:
-  INetMakerEvent(){};
-  virtual ~INetMakerEvent(){};
+  typedef chrono::process_real_cpu_clock type_clock;
 
-	virtual void Start() = 0;
-	virtual void Stop() = 0;
+  type_clock::time_point t = type_clock::now();
+  return t.time_since_epoch().count();
+}
+//------------------------------------------------------------------------------
+// Задержка на миллисекунды
+void ht_msleep( unsigned int ms )
+{
+  chrono::milliseconds time_sleep(ms);
+  this_thread::sleep_for( time_sleep );
+}
+//------------------------------------------------------------------------------
+unsigned int ht_GetMSCount()
+{
+  typedef chrono::process_real_cpu_clock type_clock;
 
-  virtual bool IsActive() = 0;
+  type_clock::time_point t = type_clock::now();
+  return (unsigned int)(t.time_since_epoch().count()/1000000);
+}
+// Задержка на микросекунды
+void ht_usleep( unsigned int us )
+{
+  unsigned __int64 start  = ht_GetTickCount();
+  unsigned __int64 finish = start + us;
+  for(; ht_GetTickCount() < finish ;)
+  {
+  }
+}
+//------------------------------------------------------------------------------
+// Задержка на микросекунды c дополнительной проверкой состояния
+// Результат: true - выход по результату func, false - выход по таймауту
+bool ht_usleep( unsigned int us, THT_CheckFunc func )
+{
+  unsigned __int64 start  = ht_GetTickCount();
+  unsigned __int64 finish = start + us;
+  for( ; ht_GetTickCount() < finish; )
+    if( func() )
+      return true;
+  return false;
+}
+//------------------------------------------------------------------------------
 
-  virtual void Add(int sock, INetControl* pControl, 
-                   std::list<INetControl::eTypeEvent>& lEvent) = 0;
-  virtual void Remove(int sock) = 0;
-
-protected:
-  virtual void SetTypeEvent( int sock, std::list<INetControl::eTypeEvent>& lEvent) = 0;
-};
-
-
-#endif
